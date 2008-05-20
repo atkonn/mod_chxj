@@ -37,11 +37,13 @@ libmod_chxj_la_SOURCES = mod_chxj.c \
     chxj_memcache.c \
     chxj_dbm.c \
     chxj_buffered_write.c \
-    chxj_apache.c
+    chxj_apache.c \
+    chxj_serf.c
 
 
-libmod_chxj_la_CFLAGS = -O2 -prefer-pic @QDEFS@ @DDEFS@ -I. -I../include -I@with_apache_header@ 
+libmod_chxj_la_CFLAGS = -O2 -prefer-pic @QDEFS@ @DDEFS@ -I. -I../include -I@with_apache_header@  -I./serf
 AM_CFLAGS = @CFLAGS@ -O2 -prefer-pic @QDEFS@ @DDEFS@ -I. -I../include -I@with_apache_header@
+libmod_chxj_la_LIBADD = serf/libserf-0.la
 
 lib_LTLIBRARIES = libmod_chxj.la
 
@@ -52,6 +54,9 @@ clean:
 	rm -fr .libs
 	rm -f *.o *.lo *.la
 	rm -f mod_chxj.so
+
+serf/libserf-0.la:
+	(cd serf; ./configure --with-apr=`dirname @APR_CONFIG@` --with-apr-util=`dirname @APU_CONFIG@`; make)
 
 install: make_so
 	@@APXS@ -i -n "chxj" @PACKAGE_NAME@.so 
