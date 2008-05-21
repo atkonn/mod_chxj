@@ -20707,16 +20707,6 @@ fi
 
 done
 
-#AC_CHECK_HEADERS([ap_regex.h],
-#  AC_DEFINE([HAVE_AP_REGEX_H], [], [Define to 1 if you have the <ap_regex.h> header file.]),[],
-#[[
-##ifdef HAVE_APR_H
-##include "apr.h"
-##endif
-##ifdef HAVE_AP_CONFIG_H
-##include "ap_config.h"
-##endif
-#]])
 
 for ac_header in ap_regex.h
 do
@@ -21406,6 +21396,8 @@ _ACEOF
 
 fi
 done
+
+
 
 
 
