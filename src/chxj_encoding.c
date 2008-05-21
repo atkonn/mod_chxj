@@ -303,6 +303,74 @@ chxj_encoding_parameter(request_rec *r, const char *value)
 
   return apr_pstrcat(r->pool, src_sv, "?", param, NULL);
 }
+
+
+char *
+chxj_iconv(request_rec *r, apr_pool_t *pool, const char *src, apr_size_t *len, const char *from, const char *to)
+{
+  char                *obuf;
+  char                *ibuf;
+  char                *spos;
+  
+  iconv_t             cd;
+  size_t              result;
+  apr_size_t          ilen;
+  apr_size_t          olen;
+  mod_chxj_config     *dconf;
+  chxjconvrule_entry  *entryp;
+
+
+  if ((int)*len < 0) {
+    ERR(r, "runtime exception: chxj_iconv(): invalid string size.[%d]", (int)*len);
+    return (char *)apr_pstrdup(pool, "");
+  }
+
+  ilen = *len;
+  ibuf = apr_palloc(pool, ilen+1);
+  if (ibuf == NULL) {
+    ERR(r, "runtime exception: chxj_iconv(): Out of memory.");
+    return (char *)src;
+  }
+  memset(ibuf, 0, ilen+1);
+  memcpy(ibuf, src, ilen);
+
+  olen = ilen * 4 + 1;
+  spos = obuf = apr_palloc(pool, olen);
+  if (obuf == NULL) {
+    ERR(r, "%s:%d runtime exception: chxj_iconv(): Out of memory", APLOG_MARK);
+    return ibuf;
+  }
+  memset(obuf, 0, olen);
+  cd = iconv_open(to, from);
+  if (cd == (iconv_t)-1) {
+    if (EINVAL == errno) {
+      ERR(r, "The conversion from %s to %s is not supported by the implementation.", from, to);
+    }
+    else {
+      ERR(r, "iconv open failed. from:[%s] to:[%s] errno:[%d]", from, to, errno);
+    }
+    return ibuf;
+  }
+  while (ilen > 0) {
+    result = iconv(cd, &ibuf, &ilen, &obuf, &olen);
+    if (result == (size_t)(-1)) {
+      if (E2BIG == errno) {
+        ERR(r, "There is not sufficient room at *outbuf.");
+      }
+      else if (EILSEQ == errno) {
+        ERR(r, "An invalid multibyte sequence has been encountered in the input. input:[%s]", ibuf);
+      }
+      else if (EINVAL == errno) {
+        ERR(r, "An incomplete multibyte sequence has been encountered in the input. input:[%s]", ibuf);
+      }
+      break;
+    }
+  }
+  *len = strlen(spos);
+  iconv_close(cd);
+
+  return spos;
+}
 /*
  * vim:ts=2 et
  */
