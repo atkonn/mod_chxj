@@ -39,8 +39,7 @@ typedef struct __css_selector_t {
   struct __css_selector_t **ref;
   /* has tag or/and class or/and id */
   char *name;
-  css_property_t *head;
-  css_property_t *tail;
+  css_property_t property_head;
 } css_selector_t;
 
 
@@ -49,8 +48,7 @@ typedef struct __css_selector_t {
  * Manager of css_selector_t.
  */
 typedef struct __css_stylesheet_t {
-  css_selector_t *head;
-  css_selector_t *tail;
+  css_selector_t selector_head;
 } css_stylesheet_t;
 
 
@@ -58,8 +56,7 @@ typedef struct __css_stylesheet_t {
  * CSS current_stylesheet.
  */
 typedef struct __css_current_stylesheet_t {
-  struct __css_property_t *head;
-  struct __css_property_t *tail;
+  struct __css_property_t property_head;
   struct __css_current_stylesheet_t *next;
   struct __css_current_stylesheet_t **ref;
 } css_current_stylesheet_t;
@@ -69,8 +66,8 @@ typedef struct __css_current_stylesheet_t {
  * CSS current_stylesheet_stack_t.
  */
 typedef struct __css_current_stylesheet_stack_t {
-  css_current_stylesheet_t *head;
-  css_current_stylesheet_t *tail;
+  css_current_stylesheet_t *stylesheet_head;
+  css_current_stylesheet_t *stylesheet_tail;
 } css_current_stylesheet_stack_t;
 
 #endif

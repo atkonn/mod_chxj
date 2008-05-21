@@ -48,6 +48,10 @@ struct __handler_ctx_t {
   char *response;
 };
 
+static char *s_chxj_serf_get(request_rec *r, apr_pool_t *ppool, const char *url_path);
+
+char *(*chxj_serf_get)(request_rec *r, apr_pool_t *ppool, const char *url_path) = s_chxj_serf_get;
+
 
 void
 s_init(apr_pool_t *ppool, apr_pool_t **pool)
@@ -195,8 +199,8 @@ s_setup_request(serf_request_t           *request,
     return APR_SUCCESS;
 }
 
-char *
-chxj_serf_get(request_rec *r, apr_pool_t *ppool, const char *url_path)
+static char *
+s_chxj_serf_get(request_rec *r, apr_pool_t *ppool, const char *url_path)
 {
   apr_pool_t *pool;
   apr_uri_t url;
