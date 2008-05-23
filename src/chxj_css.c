@@ -20,6 +20,8 @@
 #include "qs_parse_string.h"
 #include "apr_pools.h"
 
+#include <libgen.h>
+
 
 /*===========================================================================*/
 /* PARSER                                                                    */
@@ -32,6 +34,9 @@ static css_property_t *s_css_parser_copy_property(apr_pool_t *pool, css_property
 static css_selector_t *s_new_selector(apr_pool_t *pool, css_stylesheet_t *stylesheet, char *name);
 static css_selector_t *s_search_selector(css_stylesheet_t *stylesheet, const char *name);
 static void s_merge_property(css_selector_t *sel, css_property_t *tgt);
+static void s_css_parser_from_uri_import_style(CRDocHandler *a_this, GList *a_media_list, CRString *a_uri, CRString *a_uri_default_ns, CRParsingLocation *a_location);
+static char *s_path_to_fullurl(apr_pool_t *pool, const char *base_url, const char *base_path, const char *uri);
+static char *s_uri_to_base_url(apr_uri_t *uri, apr_pool_t *pool);
 
 struct css_app_data {
   css_stylesheet_t *stylesheet;
@@ -52,15 +57,20 @@ chxj_css_parse_from_uri(request_rec *r, apr_pool_t *pool, css_stylesheet_t *old_
   enum CRStatus ret;
   char         *css         = NULL;
   char         *charset     = NULL;
+  char         *full_url    = NULL;
   apr_size_t  srclen;
   apr_size_t  next_pos;
   css_stylesheet_t *stylesheet = NULL;
   struct css_app_data app_data;
+  char         *base_url;
   
 
   DBG(r, "start chxj_css_parse_from_uri()");
 
-  css = chxj_serf_get(r, pool, uri);
+  base_url = s_uri_to_base_url(&r->parsed_uri, pool);
+  full_url = s_path_to_fullurl(pool, base_url, r->parsed_uri.path, uri);
+
+  css = chxj_serf_get(r, pool, full_url);
   if (css == NULL) {
     ERR(r, "%s:%d end chxj_css_parse_from_uri(): serf_get failed: url:[%s]", APLOG_MARK, uri);
     return NULL;
@@ -94,18 +104,19 @@ chxj_css_parse_from_uri(request_rec *r, apr_pool_t *pool, css_stylesheet_t *old_
   stylesheet->selector_head.ref  = &stylesheet->selector_head.next;
 
   memset(&app_data, 0, sizeof(struct css_app_data));
-  app_data.stylesheet = stylesheet;
-  app_data.selector_list = NULL;
+  app_data.stylesheet     = stylesheet;
+  app_data.selector_list  = NULL;
   app_data.selector_count = 0;
-  app_data.pool = pool;
-  app_data.error_occured = 0;
-  app_data.r = r;
+  app_data.pool           = pool;
+  app_data.error_occured  = 0;
+  app_data.r              = r;
 
   sac_handler->app_data = &app_data;
 
   sac_handler->start_selector = s_css_parser_from_uri_start_selector;
   sac_handler->end_selector   = s_css_parser_from_uri_end_selector;
   sac_handler->property       = s_css_parser_from_uri_property;
+  sac_handler->import_style   = s_css_parser_from_uri_import_style;
 
   ret = cr_parser_set_sac_handler(parser, sac_handler);
   if (ret != CR_OK) {
@@ -135,14 +146,14 @@ chxj_css_parse_from_uri(request_rec *r, apr_pool_t *pool, css_stylesheet_t *old_
 #undef list_insert
 #undef list_remove
 #define list_insert(node, point) do {           \
-    node->ref = point->ref;                     \
+    node->ref  = point->ref;                    \
     *node->ref = node;                          \
     node->next = point;                         \
     point->ref = &node->next;                   \
 } while (0)
 
 #define list_remove(node) do {                  \
-    *node->ref = node->next;                    \
+    *node->ref      = node->next;               \
     node->next->ref = node->ref;                \
 } while (0)
 
@@ -348,6 +359,87 @@ s_css_parser_get_charset(apr_pool_t *pool, const char *src, apr_size_t *next_pos
   }
 #undef CUT_TOKEN
   return ret;
+}
+
+
+static void
+s_css_parser_from_uri_import_style(CRDocHandler *a_this, GList *a_media_list, CRString *a_uri, CRString *a_uri_default_ns, CRParsingLocation *a_location) 
+{
+  CB_INIT;
+  ERROR_OCCORED;
+  guint ii = 0;
+  guint len = g_list_length(a_media_list);
+  int flag = 0;
+
+  for (ii=0; ii<len; ii++) {
+    char *str = cr_string_peek_raw_str(g_list_nth_data(a_media_list, ii));
+    if (('h' == *str || 'H' == *str) && strcasecmp(str, "handheld") == 0) {
+      flag = 1;
+      break;
+    }
+    if (('a' == *str || 'A' == *str) && strcasecmp(str, "all") == 0) {
+      flag = 1;
+      break;
+    }
+  }
+  if (flag || len == 0) {
+    if (a_uri) {
+      apr_uri_t uri;
+      char      *new_url = NULL;
+      char      *import_url = cr_string_peek_raw_str(a_uri);
+      char      *base_url = NULL;
+
+      fprintf(stderr, "import_url:[%s]\n", import_url);
+      base_url = s_uri_to_base_url(&app_data->r->parsed_uri, app_data->pool);
+      new_url = s_path_to_fullurl(app_data->pool, base_url, app_data->r->parsed_uri.path, import_url);
+      fprintf(stderr, "base_url:[%s]\n", base_url);
+      fprintf(stderr, "new_url:[%s]\n", new_url);
+/*
+css_stylesheet_t * chxj_css_parse_from_uri(request_rec *r, apr_pool_t *pool, css_stylesheet_t *old_stylesheet, const char *uri)
+*/
+    }
+  }
+}
+
+
+static char *
+s_path_to_fullurl(apr_pool_t *pool, const char *base_url, const char *base_path, const char *uri)
+{
+  char *new_url = NULL;
+  if (chxj_starts_with(uri, "http")) {
+    return uri;
+  }
+
+  if (*uri == '/') {
+    return apr_pstrcat(pool, base_url, uri, NULL);
+  }
+
+  new_url = apr_pstrcat(pool, base_url, base_path, NULL);
+  if (new_url[strlen(new_url)-1] == '/') {
+    new_url = apr_pstrcat(pool, new_url, uri, NULL);
+  }
+  else {
+    new_url = apr_pstrcat(pool, new_url, "/", uri, NULL);
+  }
+  return new_url;
+}
+
+
+static char *
+s_uri_to_base_url(apr_uri_t *uri, apr_pool_t *pool)
+{
+  char *new_url = apr_psprintf(pool, "%s://%s", uri->scheme, uri->hostname);
+  if (strcmp(uri->scheme, "http") == 0) {
+    if (uri->port != 80 && uri->port != 0) {
+      new_url = apr_pstrcat(pool, new_url, apr_psprintf(pool, ":%d", uri->port), NULL);
+    }
+  }
+  else if (strcmp(uri->scheme, "https") == 0) {
+    if (uri->port != 443 && uri->port != 0) {
+      new_url = apr_pstrcat(pool, new_url, apr_psprintf(pool, ":%d", uri->port), NULL);
+    }
+  }
+  return new_url;
 }
 
 

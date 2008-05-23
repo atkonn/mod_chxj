@@ -26,6 +26,7 @@
 #  include "apr.h"
 #  include "apr_pools.h"
 #  include "apr_tables.h"
+#  include "apr_uri.h"
 #  define APLOG_EMERG 0   /* system is unusable */
 #  define APLOG_ALERT 1   /* action must be taken immediately */
 #  define APLOG_CRIT  2   /* critical conditions */
@@ -72,6 +73,7 @@ typedef struct test_request_rec {
   char *args;
   char *hostname;
   char *unparsed_uri;
+  apr_uri_t parsed_uri;
 } request_rec;
 
 
