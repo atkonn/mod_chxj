@@ -70,6 +70,8 @@ typedef struct __css_current_stylesheet_stack_t {
   css_current_stylesheet_t *stylesheet_tail;
 } css_current_stylesheet_stack_t;
 
+
+extern void chxj_css_stylesheet_dump(css_stylesheet_t *stylesheet);
 #endif
 /*
  * vim:ts=2 et

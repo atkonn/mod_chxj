@@ -69,11 +69,14 @@ static char *s_uri_to_base_url(apr_uri_t *uri, apr_pool_t *pool);
 static css_stylesheet_t *s_chxj_css_parse_from_uri(request_rec *r, apr_pool_t *pool, struct css_already_import_stack *imported_stack, css_stylesheet_t *old_stylesheet, const char *uri);
 static int s_is_already_imported(struct css_already_import_stack *imported_stack_head, const char *url);
 static css_stylesheet_t *s_merge_stylesheet(apr_pool_t *pool, css_stylesheet_t *old_stylesheet, css_stylesheet_t *new_stylesheet);
+static void s_copy_already_import_stack(apr_pool_t *pool, struct css_already_import_stack *base, struct css_already_import_stack *imported_stack);
 
 css_stylesheet_t *
 chxj_css_parse_from_uri(request_rec *r, apr_pool_t *pool, css_stylesheet_t *old_stylesheet, const char *uri)
 {
-  return s_chxj_css_parse_from_uri(r, pool, NULL, old_stylesheet, uri);
+  css_stylesheet_t *new_stylesheet = s_chxj_css_parse_from_uri(r, pool, NULL, old_stylesheet, uri);
+  chxj_css_stylesheet_dump(new_stylesheet);
+  return new_stylesheet;
 }
 
 static css_stylesheet_t *
@@ -93,7 +96,7 @@ s_chxj_css_parse_from_uri(request_rec *r, apr_pool_t *pool, struct css_already_i
   char         *base_url;
   
 
-  DBG(r, "start chxj_css_parse_from_uri()");
+  DBG(r, "start chxj_css_parse_from_uri() uri:[%s]", uri);
 
   base_url = s_uri_to_base_url(&r->parsed_uri, pool);
   full_url = s_path_to_fullurl(pool, base_url, r->parsed_uri.path, uri);
@@ -147,8 +150,7 @@ s_chxj_css_parse_from_uri(request_rec *r, apr_pool_t *pool, struct css_already_i
   app_data.error_occured  = 0;
   app_data.r              = r;
   if (imported_stack) {
-    app_data.imported_stack_head.next = imported_stack->next;
-    app_data.imported_stack_head.ref  = imported_stack->ref;
+    s_copy_already_import_stack(pool, &app_data.imported_stack_head, imported_stack);
   }
   else {
     app_data.imported_stack_head.next = &app_data.imported_stack_head;
@@ -159,8 +161,7 @@ s_chxj_css_parse_from_uri(request_rec *r, apr_pool_t *pool, struct css_already_i
   new_stack->next = new_stack;
   new_stack->ref  = &new_stack->next;
   new_stack->full_url = full_url;
-  list_insert(new_stack, app_data.imported_stack_head.next);
-  
+  list_insert(new_stack, (&app_data.imported_stack_head));
 
   sac_handler->app_data = &app_data;
 
@@ -178,7 +179,7 @@ s_chxj_css_parse_from_uri(request_rec *r, apr_pool_t *pool, struct css_already_i
 
   ret = cr_parser_parse(parser);
   cr_parser_destroy(parser);
-  DBG(r, "end chxj_css_parse_from_uri()");
+  DBG(r, "end chxj_css_parse_from_uri() url:[%s]", uri);
   return s_merge_stylesheet(pool, old_stylesheet, app_data.stylesheet);
 }
 
@@ -300,6 +301,7 @@ s_search_selector(css_stylesheet_t *stylesheet, const char *name)
   css_selector_t *cur;
   char l = tolower(*name);
   char u = toupper(*name);
+  if (! stylesheet) return NULL;
   for (cur = stylesheet->selector_head.next; cur != &stylesheet->selector_head; cur = cur->next) {
     if ((l == *cur->name || u == *cur->name) && strcasecmp(cur->name, name) == 0) {
       return cur;
@@ -408,6 +410,7 @@ s_css_parser_from_uri_import_style(CRDocHandler *a_this, GList *a_media_list, CR
   guint ii = 0;
   guint len = g_list_length(a_media_list);
   int flag = 0;
+  css_stylesheet_t *new_stylesheet = NULL;
 
   for (ii=0; ii<len; ii++) {
     char *str = cr_string_peek_raw_str(g_list_nth_data(a_media_list, ii));
@@ -427,13 +430,13 @@ s_css_parser_from_uri_import_style(CRDocHandler *a_this, GList *a_media_list, CR
       char      *import_url = cr_string_peek_raw_str(a_uri);
       char      *base_url = NULL;
 
-fprintf(stderr, "import_url:[%s]\n", import_url);
       base_url = s_uri_to_base_url(&app_data->r->parsed_uri, app_data->pool);
       new_url = s_path_to_fullurl(app_data->pool, base_url, app_data->r->parsed_uri.path, import_url);
       
-fprintf(stderr, "base_url:[%s]\n", base_url);
-fprintf(stderr, "new_url:[%s]\n", new_url);
-      app_data->stylesheet = s_chxj_css_parse_from_uri(app_data->r, app_data->pool, &app_data->imported_stack_head, app_data->stylesheet, new_url);
+      new_stylesheet = s_chxj_css_parse_from_uri(app_data->r, app_data->pool, &app_data->imported_stack_head, app_data->stylesheet, new_url);
+      if (new_stylesheet) {
+        app_data->stylesheet = new_stylesheet;
+      }
     }
   }
 }
@@ -486,7 +489,7 @@ s_is_already_imported(struct css_already_import_stack *imported_stack_head, cons
   char l = tolower(*url);
   char u = toupper(*url);
   for (cur = imported_stack_head->next; cur != imported_stack_head; cur = cur->next) {
-    if ((l == cur->full_url || u == cur->full_url) && strcasecmp(url, cur->full_url) == 0) {
+    if ((l == *cur->full_url || u == *cur->full_url) && strcasecmp(url, cur->full_url) == 0) {
       return 1;
     }
   }
@@ -496,9 +499,85 @@ s_is_already_imported(struct css_already_import_stack *imported_stack_head, cons
 static css_stylesheet_t *
 s_merge_stylesheet(apr_pool_t *pool, css_stylesheet_t *old_stylesheet, css_stylesheet_t *new_stylesheet)
 {
-  if (! old_stylesheet) return new_stylesheet;
-  /* このへんから */
+  css_selector_t *cur;
+  if (! old_stylesheet) {
+    return new_stylesheet;
+  }
+
+  for (cur = new_stylesheet->selector_head.next; cur != &new_stylesheet->selector_head; cur = cur->next) {
+    char *name = cur->name;
+    char l = tolower(*name);
+    char u = toupper(*name);
+    css_selector_t *cur_old;
+    int found;
+
+    found = 0;
+    for (cur_old = old_stylesheet->selector_head.next; cur_old != &old_stylesheet->selector_head; cur_old = cur_old->next) {
+      char *oldname = cur_old->name;
+      if ((l == *oldname || u == *oldname) && strcasecmp(name, oldname) == 0) {
+        css_property_t *cur_prop;
+        for (cur_prop = cur->property_head.next; cur_prop != &cur->property_head; cur_prop = cur_prop->next) {
+          css_property_t *target = s_css_parser_copy_property(pool, cur_prop);
+          s_merge_property(cur_old, target);
+        }
+        found = 1;
+        break;
+      }
+    }
+    if (! found) {
+      /* add new selector */
+      css_property_t *cur_prop;
+      css_selector_t *new_selector =  apr_palloc(pool, sizeof(*new_selector));
+      memset(new_selector, 0, sizeof(*new_selector));
+      new_selector->next = new_selector;
+      new_selector->ref  = &new_selector->next;
+      new_selector->property_head.next = &new_selector->property_head;
+      new_selector->property_head.ref  = &new_selector->property_head.next;
+      new_selector->name = apr_pstrdup(pool, name);
+      for (cur_prop = cur->property_head.next; cur_prop != &cur->property_head; cur_prop = cur_prop->next) {
+        css_property_t *target = s_css_parser_copy_property(pool, cur_prop);
+        list_insert(target, (&new_selector->property_head));
+      }
+      list_insert(new_selector, (&old_stylesheet->selector_head));
+    }
+  }
+
   return old_stylesheet;
+}
+
+
+static void
+s_copy_already_import_stack(apr_pool_t *pool, struct css_already_import_stack *base, struct css_already_import_stack *imported_stack)
+{
+  struct css_already_import_stack *cur;
+
+  base->next = base;
+  base->ref  = &base->next;
+  
+  for (cur = imported_stack->next; cur != imported_stack; cur = cur->next) {
+    struct css_already_import_stack *new_stack;
+    new_stack = apr_palloc(pool, sizeof(*new_stack));
+    memset(new_stack, 0, sizeof(*new_stack));
+    new_stack->full_url = apr_pstrdup(pool, cur->full_url);
+    list_insert(new_stack, base);
+  }
+}
+
+/* For DEBUG */
+void
+chxj_css_stylesheet_dump(css_stylesheet_t *stylesheet)
+{
+  css_selector_t *cur_sel; 
+  css_property_t *cur_prop;
+
+  for (cur_sel = stylesheet->selector_head.next; cur_sel != &stylesheet->selector_head; cur_sel = cur_sel->next) {
+    fprintf(stderr, "selector:[%s]\n", cur_sel->name);
+    for (cur_prop = cur_sel->property_head.next; cur_prop != &cur_sel->property_head; cur_prop = cur_prop->next) {
+      fprintf(stderr, "\tproperty:\n");
+      fprintf(stderr, "\t\t- name:%s\n", cur_prop->name);
+      fprintf(stderr, "\t\t- value:%s\n", cur_prop->value);
+    }
+  }
 }
 
 #if 0
