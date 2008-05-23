@@ -29,6 +29,7 @@ void test_chxj_css_parse_from_uri_005();
 void test_chxj_css_parse_from_uri_006();
 void test_chxj_css_parse_from_uri_007();
 void test_chxj_css_parse_from_uri_008();
+void test_chxj_css_parse_from_uri_009();
 /* pend */
 
 int
@@ -46,6 +47,7 @@ main()
   CU_add_test(css_suite, "test css 006",                                    test_chxj_css_parse_from_uri_006);
   CU_add_test(css_suite, "test css 007",                                    test_chxj_css_parse_from_uri_007);
   CU_add_test(css_suite, "test css 008",                                    test_chxj_css_parse_from_uri_008);
+  CU_add_test(css_suite, "test css 009",                                    test_chxj_css_parse_from_uri_009);
   /* aend */
 
   CU_basic_run_tests();
@@ -468,6 +470,54 @@ void test_chxj_css_parse_from_uri_008()
   apr_uri_parse(p, "http://localhost:888/abc", &r.parsed_uri); \
 
   ret = chxj_css_parse_from_uri(&r, r.pool, NULL, "/hoge.css");
+  CU_ASSERT(ret != NULL);
+  {
+    css_selector_t *cur;
+    int ii = 0;
+    int jj = 0;
+    for (cur = ret->selector_head.next; cur != &ret->selector_head; cur = cur->next) {
+      css_property_t *cur_prop;
+      switch(ii) {
+      case 0: CU_ASSERT(strcmp(cur->name, "html") == 0); break;
+      case 1: CU_ASSERT(strcmp(cur->name, "body") == 0); break;
+      }
+      jj = 0;
+      for (cur_prop = cur->property_head.next; cur_prop != &cur->property_head; cur_prop = cur_prop->next) {
+        switch (jj) {
+        case 0: 
+          CU_ASSERT(strcmp(cur_prop->name, "display") == 0);
+          CU_ASSERT(strcmp(cur_prop->value, "none") == 0);
+          break;
+        }
+        jj++;
+      }
+      CU_ASSERT(jj == 1);
+      ii++;
+    }
+    CU_ASSERT(ii == 2);
+  }
+
+
+  APR_TERM;
+}
+
+
+
+char *test_chxj_serf_get009(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+{
+  static char *css = "html,body { display: none }";
+
+  return css;
+}
+void test_chxj_css_parse_from_uri_009()
+{
+  css_stylesheet_t *ret;
+  APR_INIT;
+  chxj_serf_get = default_chxj_serf_get;
+
+  apr_uri_parse(p, "http://www.konno.net/a.css", &r.parsed_uri); 
+
+  ret = chxj_css_parse_from_uri(&r, r.pool, NULL, "/a.css");
   CU_ASSERT(ret != NULL);
   {
     css_selector_t *cur;
