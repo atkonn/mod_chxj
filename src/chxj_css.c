@@ -22,10 +22,39 @@
 
 #include <libgen.h>
 
+#undef list_insert
+#undef list_remove
+#define list_insert(node, point) do {           \
+    node->ref  = point->ref;                    \
+    *node->ref = node;                          \
+    node->next = point;                         \
+    point->ref = &node->next;                   \
+} while (0)
+
+#define list_remove(node) do {                  \
+    *node->ref      = node->next;               \
+    node->next->ref = node->ref;                \
+} while (0)
 
 /*===========================================================================*/
 /* PARSER                                                                    */
 /*===========================================================================*/
+struct css_already_import_stack {
+  char *full_url;
+  struct css_already_import_stack *next;
+  struct css_already_import_stack **ref;
+};
+
+struct css_app_data {
+  css_stylesheet_t *stylesheet;
+  char **selector_list;
+  int selector_count;
+  apr_pool_t *pool;
+  request_rec *r;
+  int error_occured;
+  css_property_t property_head;
+  struct css_already_import_stack imported_stack_head;
+};
 static char *s_css_parser_get_charset(apr_pool_t *pool, const char *src, apr_size_t *next_pos);
 static void s_css_parser_from_uri_start_selector(CRDocHandler * a_this, CRSelector *a_selector_list);
 static void s_css_parser_from_uri_end_selector(CRDocHandler * a_this, CRSelector *a_selector_list);
@@ -37,20 +66,18 @@ static void s_merge_property(css_selector_t *sel, css_property_t *tgt);
 static void s_css_parser_from_uri_import_style(CRDocHandler *a_this, GList *a_media_list, CRString *a_uri, CRString *a_uri_default_ns, CRParsingLocation *a_location);
 static char *s_path_to_fullurl(apr_pool_t *pool, const char *base_url, const char *base_path, const char *uri);
 static char *s_uri_to_base_url(apr_uri_t *uri, apr_pool_t *pool);
-
-struct css_app_data {
-  css_stylesheet_t *stylesheet;
-  char **selector_list;
-  int selector_count;
-  apr_pool_t *pool;
-  request_rec *r;
-  int error_occured;
-  css_property_t property_head;
-};
-
+static css_stylesheet_t *s_chxj_css_parse_from_uri(request_rec *r, apr_pool_t *pool, struct css_already_import_stack *imported_stack, css_stylesheet_t *old_stylesheet, const char *uri);
+static int s_is_already_imported(struct css_already_import_stack *imported_stack_head, const char *url);
+static css_stylesheet_t *s_merge_stylesheet(apr_pool_t *pool, css_stylesheet_t *old_stylesheet, css_stylesheet_t *new_stylesheet);
 
 css_stylesheet_t *
 chxj_css_parse_from_uri(request_rec *r, apr_pool_t *pool, css_stylesheet_t *old_stylesheet, const char *uri)
+{
+  return s_chxj_css_parse_from_uri(r, pool, NULL, old_stylesheet, uri);
+}
+
+static css_stylesheet_t *
+s_chxj_css_parse_from_uri(request_rec *r, apr_pool_t *pool, struct css_already_import_stack *imported_stack, css_stylesheet_t *old_stylesheet, const char *uri)
 {
   CRParser     *parser      = NULL;
   CRDocHandler *sac_handler = NULL;
@@ -61,6 +88,7 @@ chxj_css_parse_from_uri(request_rec *r, apr_pool_t *pool, css_stylesheet_t *old_
   apr_size_t  srclen;
   apr_size_t  next_pos;
   css_stylesheet_t *stylesheet = NULL;
+  struct css_already_import_stack *new_stack;
   struct css_app_data app_data;
   char         *base_url;
   
@@ -70,6 +98,13 @@ chxj_css_parse_from_uri(request_rec *r, apr_pool_t *pool, css_stylesheet_t *old_
   base_url = s_uri_to_base_url(&r->parsed_uri, pool);
   full_url = s_path_to_fullurl(pool, base_url, r->parsed_uri.path, uri);
 
+  /* check already import */
+  if (imported_stack && s_is_already_imported(imported_stack, full_url)) {
+    DBG(r, "end chxj_css_parse_from_uri(): already imported:[%s]", full_url); 
+    return NULL;
+  }
+
+  /* GET request */
   css = chxj_serf_get(r, pool, full_url);
   if (css == NULL) {
     ERR(r, "%s:%d end chxj_css_parse_from_uri(): serf_get failed: url:[%s]", APLOG_MARK, uri);
@@ -77,7 +112,7 @@ chxj_css_parse_from_uri(request_rec *r, apr_pool_t *pool, css_stylesheet_t *old_
   }
   srclen = strlen(css);
   
-
+  /* convert encoding */
   charset = s_css_parser_get_charset(pool, css, &next_pos);
   if (charset) {
     DBG(r, "charset:[%s]\n", charset);
@@ -86,6 +121,7 @@ chxj_css_parse_from_uri(request_rec *r, apr_pool_t *pool, css_stylesheet_t *old_
     css = chxj_iconv(r, pool, css, &srclen, charset, "UTF-8");
   }
 
+  /* create parser */
   parser = cr_parser_new_from_buf((guchar *)css, srclen, CR_UTF_8, FALSE);
   if (!parser) {
     ERR(r, "%s:%d end chxj_css_parse_from_uri(): cr_parser_new_from_buf() failed", APLOG_MARK);
@@ -110,6 +146,21 @@ chxj_css_parse_from_uri(request_rec *r, apr_pool_t *pool, css_stylesheet_t *old_
   app_data.pool           = pool;
   app_data.error_occured  = 0;
   app_data.r              = r;
+  if (imported_stack) {
+    app_data.imported_stack_head.next = imported_stack->next;
+    app_data.imported_stack_head.ref  = imported_stack->ref;
+  }
+  else {
+    app_data.imported_stack_head.next = &app_data.imported_stack_head;
+    app_data.imported_stack_head.ref  = &app_data.imported_stack_head.next;
+  }
+  new_stack = apr_palloc(pool, sizeof(*new_stack));
+  memset(new_stack, 0, sizeof(*new_stack));
+  new_stack->next = new_stack;
+  new_stack->ref  = &new_stack->next;
+  new_stack->full_url = full_url;
+  list_insert(new_stack, app_data.imported_stack_head.next);
+  
 
   sac_handler->app_data = &app_data;
 
@@ -128,7 +179,7 @@ chxj_css_parse_from_uri(request_rec *r, apr_pool_t *pool, css_stylesheet_t *old_
   ret = cr_parser_parse(parser);
   cr_parser_destroy(parser);
   DBG(r, "end chxj_css_parse_from_uri()");
-  return app_data.stylesheet;
+  return s_merge_stylesheet(pool, old_stylesheet, app_data.stylesheet);
 }
 
 
@@ -143,19 +194,6 @@ chxj_css_parse_from_uri(request_rec *r, apr_pool_t *pool, css_stylesheet_t *old_
 #define CB_INIT \
   struct css_app_data *app_data = (struct css_app_data *)a_this->app_data
 
-#undef list_insert
-#undef list_remove
-#define list_insert(node, point) do {           \
-    node->ref  = point->ref;                    \
-    *node->ref = node;                          \
-    node->next = point;                         \
-    point->ref = &node->next;                   \
-} while (0)
-
-#define list_remove(node) do {                  \
-    *node->ref      = node->next;               \
-    node->next->ref = node->ref;                \
-} while (0)
 
 
 static void 
@@ -389,14 +427,13 @@ s_css_parser_from_uri_import_style(CRDocHandler *a_this, GList *a_media_list, CR
       char      *import_url = cr_string_peek_raw_str(a_uri);
       char      *base_url = NULL;
 
-      fprintf(stderr, "import_url:[%s]\n", import_url);
+fprintf(stderr, "import_url:[%s]\n", import_url);
       base_url = s_uri_to_base_url(&app_data->r->parsed_uri, app_data->pool);
       new_url = s_path_to_fullurl(app_data->pool, base_url, app_data->r->parsed_uri.path, import_url);
-      fprintf(stderr, "base_url:[%s]\n", base_url);
-      fprintf(stderr, "new_url:[%s]\n", new_url);
-/*
-css_stylesheet_t * chxj_css_parse_from_uri(request_rec *r, apr_pool_t *pool, css_stylesheet_t *old_stylesheet, const char *uri)
-*/
+      
+fprintf(stderr, "base_url:[%s]\n", base_url);
+fprintf(stderr, "new_url:[%s]\n", new_url);
+      app_data->stylesheet = s_chxj_css_parse_from_uri(app_data->r, app_data->pool, &app_data->imported_stack_head, app_data->stylesheet, new_url);
     }
   }
 }
@@ -442,6 +479,27 @@ s_uri_to_base_url(apr_uri_t *uri, apr_pool_t *pool)
   return new_url;
 }
 
+static int
+s_is_already_imported(struct css_already_import_stack *imported_stack_head, const char *url)
+{
+  struct css_already_import_stack *cur;
+  char l = tolower(*url);
+  char u = toupper(*url);
+  for (cur = imported_stack_head->next; cur != imported_stack_head; cur = cur->next) {
+    if ((l == cur->full_url || u == cur->full_url) && strcasecmp(url, cur->full_url) == 0) {
+      return 1;
+    }
+  }
+  return 0;
+}
+
+static css_stylesheet_t *
+s_merge_stylesheet(apr_pool_t *pool, css_stylesheet_t *old_stylesheet, css_stylesheet_t *new_stylesheet)
+{
+  if (! old_stylesheet) return new_stylesheet;
+  /* このへんから */
+  return old_stylesheet;
+}
 
 #if 0
 css_stylesheet_t *
