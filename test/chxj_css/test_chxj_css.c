@@ -515,7 +515,7 @@ void test_chxj_css_parse_from_uri_009()
   APR_INIT;
   chxj_serf_get = default_chxj_serf_get;
 
-  apr_uri_parse(p, "http://www.konno.net/a.css", &r.parsed_uri); 
+  apr_uri_parse(p, "http://localhost/a.css", &r.parsed_uri); 
 
   ret = chxj_css_parse_from_uri(&r, r.pool, NULL, "/a.css");
   CU_ASSERT(ret != NULL);
