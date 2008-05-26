@@ -48,6 +48,7 @@ struct css_already_import_stack {
 struct css_app_data {
   css_stylesheet_t *stylesheet;
   char **selector_list;
+  enum Combinator *combinator_list;
   int selector_count;
   apr_pool_t *pool;
   request_rec *r;
@@ -215,13 +216,27 @@ s_css_parser_from_uri_start_selector(CRDocHandler * a_this, CRSelector *a_select
     app_data->error_occured = 1;
     return;
   }
+  app_data->combinator_list = apr_palloc(app_data->pool, sizeof(enum Combinator) * app_data->selector_count);
+  if (! app_data->selector_list) {
+    ERR(app_data->r, "%s:%d Out of memory", APLOG_MARK);
+    app_data->error_occured = 1;
+    return;
+  }
 
   ii = 0;
   for (cur = a_selector_list; cur; cur = cur->next) {
     if (cur->simple_sel) {
       guchar *tmp_str = cr_simple_sel_to_string(cur->simple_sel);
       if (tmp_str) {
-        app_data->selector_list[ii++] = apr_pstrdup(app_data->pool, (char *)tmp_str);
+        app_data->selector_list[ii] = apr_pstrdup(app_data->pool, (char *)tmp_str);
+        app_data->combinator_list[ii++] = cur->simple_sel->combinator;
+fprintf(stderr, "%d\n", cur->simple_sel->combinator);
+{
+CRSimpleSel *ccc;
+for (ccc = cur->simple_sel; ccc ; ccc = ccc->next) {
+fprintf(stderr, "%d\n", ccc->combinator);
+}
+}
         g_free (tmp_str);
         tmp_str = NULL;
       }
@@ -243,6 +258,7 @@ s_css_parser_from_uri_end_selector(CRDocHandler * a_this, CRSelector *a_selector
   if (app_data->property_head.next)  {
     for (ii=0; ii<app_data->selector_count; ii++) {
       css_selector_t *sel = s_new_selector(app_data->pool, app_data->stylesheet, app_data->selector_list[ii]); 
+      sel->combinator = app_data->combinator_list[ii];
 
       for (cur = app_data->property_head.next; cur && cur != &app_data->property_head; cur = cur->next) {
         css_property_t *tgt = s_css_parser_copy_property(app_data->pool, cur);
@@ -534,6 +550,7 @@ s_merge_stylesheet(apr_pool_t *pool, css_stylesheet_t *old_stylesheet, css_style
       new_selector->property_head.next = &new_selector->property_head;
       new_selector->property_head.ref  = &new_selector->property_head.next;
       new_selector->name = apr_pstrdup(pool, name);
+      new_selector->combinator = cur->combinator;
       for (cur_prop = cur->property_head.next; cur_prop != &cur->property_head; cur_prop = cur_prop->next) {
         css_property_t *target = s_css_parser_copy_property(pool, cur_prop);
         list_insert(target, (&new_selector->property_head));
@@ -571,13 +588,25 @@ chxj_css_stylesheet_dump(css_stylesheet_t *stylesheet)
   css_property_t *cur_prop;
 
   for (cur_sel = stylesheet->selector_head.next; cur_sel != &stylesheet->selector_head; cur_sel = cur_sel->next) {
-    fprintf(stderr, "selector:[%s]\n", cur_sel->name);
+    fprintf(stderr, "selector:[%s] combinator:[%d]\n", cur_sel->name, cur_sel->combinator);
     for (cur_prop = cur_sel->property_head.next; cur_prop != &cur_sel->property_head; cur_prop = cur_prop->next) {
       fprintf(stderr, "\tproperty:\n");
       fprintf(stderr, "\t\t- name:%s\n", cur_prop->name);
       fprintf(stderr, "\t\t- value:%s\n", cur_prop->value);
     }
   }
+}
+
+CRStyleSheet *
+chxj_css_stylesheet_to_croco_stylesheet(css_stylesheet_t *sheet)
+{
+  CRStyleSheet *stylesheet = NULL;
+  css_selector_t *cur;
+  stylesheet = cr_stylesheet_new (NULL);
+
+  for (cur = sheet->selector_head.next; cur != &sheet->selector_head; cur = cur->next) {
+  }
+  return stylesheet;
 }
 
 #if 0

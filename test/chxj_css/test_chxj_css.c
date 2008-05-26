@@ -457,7 +457,7 @@ void test_chxj_css_parse_from_uri_007()
 
 char *test_chxj_serf_get008(request_rec *r, apr_pool_t *ppool, const char *uri_path)
 {
-  static char *css = "html,body { display: none }";
+  static char *css = "html > body + h2 { display: none }";
 
   return css;
 }

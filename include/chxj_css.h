@@ -39,6 +39,7 @@ typedef struct __css_selector_t {
   struct __css_selector_t **ref;
   /* has tag or/and class or/and id */
   char *name;
+  enum Combinator combinator;
   css_property_t property_head;
 } css_selector_t;
 
@@ -72,6 +73,7 @@ typedef struct __css_current_stylesheet_stack_t {
 
 
 extern void chxj_css_stylesheet_dump(css_stylesheet_t *stylesheet);
+extern CRStyleSheet *chxj_css_stylesheet_to_croco_stylesheet(css_stylesheet_t *sheet);
 #endif
 /*
  * vim:ts=2 et
