@@ -32,6 +32,7 @@
  */
 #include "serf.h"
 
+
 extern char *default_chxj_serf_get(request_rec *r, apr_pool_t *ppool, const char *url_path);
 extern char * (*chxj_serf_get)(request_rec *r, apr_pool_t *ppool, const char *url_path);
 
