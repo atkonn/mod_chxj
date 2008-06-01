@@ -127,7 +127,7 @@ s_handle_response(serf_request_t *request, serf_bucket_t *response, void *handle
     char *buf;
     rv = serf_bucket_read(response, 2048, &data, &len);
     if (SERF_BUCKET_READ_ERROR(rv)) {
-      ctx->rv;
+      ctx->rv = rv;
       apr_atomic_dec32(&ctx->requests_outstanding);
       return rv;
     }
