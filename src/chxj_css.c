@@ -230,13 +230,6 @@ s_css_parser_from_uri_start_selector(CRDocHandler * a_this, CRSelector *a_select
       if (tmp_str) {
         app_data->selector_list[ii] = apr_pstrdup(app_data->pool, (char *)tmp_str);
         app_data->combinator_list[ii++] = cur->simple_sel->combinator;
-fprintf(stderr, "%d\n", cur->simple_sel->combinator);
-{
-CRSimpleSel *ccc;
-for (ccc = cur->simple_sel; ccc ; ccc = ccc->next) {
-fprintf(stderr, "%d\n", ccc->combinator);
-}
-}
         g_free (tmp_str);
         tmp_str = NULL;
       }
