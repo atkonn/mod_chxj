@@ -75,9 +75,7 @@ static void s_copy_already_import_stack(apr_pool_t *pool, struct css_already_imp
 css_stylesheet_t *
 chxj_css_parse_from_uri(request_rec *r, apr_pool_t *pool, css_stylesheet_t *old_stylesheet, const char *uri)
 {
-  css_stylesheet_t *new_stylesheet = s_chxj_css_parse_from_uri(r, pool, NULL, old_stylesheet, uri);
-  chxj_css_stylesheet_dump(new_stylesheet);
-  return new_stylesheet;
+  return s_chxj_css_parse_from_uri(r, pool, NULL, old_stylesheet, uri);
 }
 
 static css_stylesheet_t *
@@ -588,18 +586,6 @@ chxj_css_stylesheet_dump(css_stylesheet_t *stylesheet)
       fprintf(stderr, "\t\t- value:%s\n", cur_prop->value);
     }
   }
-}
-
-CRStyleSheet *
-chxj_css_stylesheet_to_croco_stylesheet(css_stylesheet_t *sheet)
-{
-  CRStyleSheet *stylesheet = NULL;
-  css_selector_t *cur;
-  stylesheet = cr_stylesheet_new (NULL);
-
-  for (cur = sheet->selector_head.next; cur != &sheet->selector_head; cur = cur->next) {
-  }
-  return stylesheet;
 }
 
 #if 0

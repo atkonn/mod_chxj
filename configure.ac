@@ -76,6 +76,19 @@ fi
 
 dnl ==================================================
 dnl
+dnl croco-config
+dnl
+dnl ==================================================
+AC_ARG_WITH(croco-config, [  --with-croco-config=ARG  Path of croco-config program file.])
+if test "x$with_croco_config" = "xyes" ; then
+    AC_MSG_ERROR([
+Please specify the --with-croco-config option. And, please specify the place of the croco-config program.
+])
+fi
+
+
+dnl ==================================================
+dnl
 dnl filename in img tag convertion.
 dnl
 dnl ==================================================
@@ -231,6 +244,21 @@ if test "x$with_apu_config" != "x" ; then
   APU_CONFIG=$with_apu_config
 fi
 
+if test "x$with_croco_config" = "x" ; then
+  AC_PATH_PROG(CROCO_CONFIG, croco-config, no, /usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin)
+  if test "x$CROCO_CONFIG" = "xno" ; then
+    AC_PATH_PROG(CROCO_06_CONFIG, croco-0.6-config, no, /usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin)
+    if test "x$CROCO_06_CONFIG" = "xno" ; then
+      AC_MSG_ERROR([croco-config and croco-0.6-config not found.])
+    else
+      CROCO_CONFIG="$CROCO_06_CONFIG"
+    fi
+  fi
+fi
+if test "x$with_apu_config" != "x" ; then
+  APU_CONFIG=$with_apu_config
+fi
+
 
 case $host_os in
   freebsd*)
@@ -247,11 +275,13 @@ LIBS="${LIBS} `${APR_CONFIG} --ldflags` `${APR_CONFIG} --libs` "
 LIBS="${LIBS} `${APU_CONFIG} --ldflags` `${APU_CONFIG} --libs` "
 LIBS="${LIBS} ${MYSQL_COOKIE_LIBS}"
 LIBS="${LIBS} ${MEMCACHE_COOKIE_LIBS} "
+LIBS="${LIBS} `${CROCO_CONFIG} --libs` "
 CFLAGS="${CFLAGS} `${WAND_CONFIG} --cppflags` `${WAND_CONFIG} --cflags`"
 CFLAGS="${CFLAGS} `${APR_CONFIG} --includes` `${APR_CONFIG} --cflags` `${APR_CONFIG} --cppflags`"
 CFLAGS="${CFLAGS} `${APU_CONFIG} --includes`"
 CFLAGS="${CFLAGS} ${MYSQL_COOKIE_DEFS}"
 CFLAGS="${CFLAGS} ${MEMCACHE_COOKIE_DEFS}"
+CFLAGS="${CFLAGS} `${CROCO_CONFIG} --cflags`"
 CPPFLAGS="${CPPFLAGS} `${APR_CONFIG} --includes` -I${with_apache_header}"
 CPPFLAGS="${CPPFLAGS} ${MYSQL_COOKIE_DEFS}"
 CPPFLAGS="${CPPFLAGS} ${MEMCACHE_COOKIE_DEFS}"

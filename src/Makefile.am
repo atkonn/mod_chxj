@@ -38,7 +38,8 @@ libmod_chxj_la_SOURCES = mod_chxj.c \
     chxj_dbm.c \
     chxj_buffered_write.c \
     chxj_apache.c \
-    chxj_serf.c
+    chxj_serf.c \
+    chxj_css.c
 
 
 libmod_chxj_la_CFLAGS = -O2 -prefer-pic @QDEFS@ @DDEFS@ -I. -I../include -I@with_apache_header@  -I./serf

@@ -71,9 +71,9 @@ typedef struct __css_current_stylesheet_stack_t {
   css_current_stylesheet_t *stylesheet_tail;
 } css_current_stylesheet_stack_t;
 
-
+#include "chxj_apache.h"
+extern css_stylesheet_t *chxj_css_parse_from_uri(request_rec *r, apr_pool_t *pool, css_stylesheet_t *old_stylesheet, const char *uri);
 extern void chxj_css_stylesheet_dump(css_stylesheet_t *stylesheet);
-extern CRStyleSheet *chxj_css_stylesheet_to_croco_stylesheet(css_stylesheet_t *sheet);
 #endif
 /*
  * vim:ts=2 et
