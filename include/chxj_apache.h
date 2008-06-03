@@ -69,6 +69,7 @@ typedef struct test_request_rec {
   ap_conf_vector_t *per_dir_config;
   apr_table_t *headers_in;
   apr_table_t *headers_out;
+  apr_table_t *err_headers_out;
   char *uri;
   char *args;
   char *hostname;
