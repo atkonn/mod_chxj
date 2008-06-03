@@ -29,6 +29,7 @@ void test_chxj_css_parse_from_uri_005();
 void test_chxj_css_parse_from_uri_006();
 void test_chxj_css_parse_from_uri_007();
 void test_chxj_css_parse_from_uri_008();
+void test_chxj_css_parse_from_uri_009();
 /* pend */
 
 int
@@ -46,6 +47,7 @@ main()
   CU_add_test(css_suite, "test css 006",                                    test_chxj_css_parse_from_uri_006);
   CU_add_test(css_suite, "test css 007",                                    test_chxj_css_parse_from_uri_007);
   CU_add_test(css_suite, "test css 008",                                    test_chxj_css_parse_from_uri_008);
+  CU_add_test(css_suite, "test css 009",                                    test_chxj_css_parse_from_uri_009);
   /* aend */
 
   CU_basic_run_tests();
@@ -495,6 +497,30 @@ void test_chxj_css_parse_from_uri_008()
   }
 
 
+  APR_TERM;
+}
+
+
+
+char *test_chxj_serf_get009(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+{
+  static char *css = "html { display: none }";
+
+  return css;
+}
+void test_chxj_css_parse_from_uri_009()
+{
+  css_stylesheet_t *ret;
+  css_selector_t *sel;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get009;
+
+  apr_uri_parse(p, "http://localhost:888/abc", &r.parsed_uri); \
+
+  ret = chxj_css_parse_from_uri(&r, r.pool, NULL, "/hoge.css");
+  CU_ASSERT(ret != NULL);
+
+  sel = chxj_css_find_selector(&r, r.pool, ret, "html", NULL, NULL);
   APR_TERM;
 }
 /*

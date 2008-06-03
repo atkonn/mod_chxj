@@ -74,6 +74,7 @@ typedef struct __css_current_stylesheet_stack_t {
 #include "chxj_apache.h"
 extern css_stylesheet_t *chxj_css_parse_from_uri(request_rec *r, apr_pool_t *pool, css_stylesheet_t *old_stylesheet, const char *uri);
 extern void chxj_css_stylesheet_dump(css_stylesheet_t *stylesheet);
+extern css_selector_t *chxj_css_find_selector(request_rec *r, apr_pool_t *pool, css_stylesheet_t *stylesheet, const char *tag_name, const char *class_name, const char *id);
 #endif
 /*
  * vim:ts=2 et

@@ -56,6 +56,12 @@ struct css_app_data {
   css_property_t property_head;
   struct css_already_import_stack imported_stack_head;
 };
+
+/*===========================================================================*/
+/*                                                                           */
+/* PROTOTYPE                                                                 */
+/*                                                                           */
+/*===========================================================================*/
 static char *s_css_parser_get_charset(apr_pool_t *pool, const char *src, apr_size_t *next_pos);
 static void s_css_parser_from_uri_start_selector(CRDocHandler * a_this, CRSelector *a_selector_list);
 static void s_css_parser_from_uri_end_selector(CRDocHandler * a_this, CRSelector *a_selector_list);
@@ -72,12 +78,52 @@ static int s_is_already_imported(struct css_already_import_stack *imported_stack
 static css_stylesheet_t *s_merge_stylesheet(apr_pool_t *pool, css_stylesheet_t *old_stylesheet, css_stylesheet_t *new_stylesheet);
 static void s_copy_already_import_stack(apr_pool_t *pool, struct css_already_import_stack *base, struct css_already_import_stack *imported_stack);
 
+/**
+ * Data is acquired from url specified by using libserf. 
+ * The acquired data is analyzed in the syntax and css_stylesheet_t is made. 
+ *
+ * @param r request_rec
+ * @param pool pool
+ * @param old_stylesheet old stylesheet
+ * @param uri url
+ *
+ * @return css_stylesheet_t
+ */
 css_stylesheet_t *
 chxj_css_parse_from_uri(request_rec *r, apr_pool_t *pool, css_stylesheet_t *old_stylesheet, const char *uri)
 {
   return s_chxj_css_parse_from_uri(r, pool, NULL, old_stylesheet, uri);
 }
 
+/**
+ * find selector engine.
+ * @param r request_rec
+ * @param pool pool
+ * @param stylesheet Retrieval object.
+ * @param tag_name tag name.
+ * @param class_name class name.
+ * @param id id.
+ * @return css_selector_t if any. null if not found.
+ *
+ */
+css_selector_t *
+chxj_css_find_selector(request_rec *r, apr_pool_t *pool, css_stylesheet_t *stylesheet, const char *tag_name, const char *class_name, const char *id)
+{
+  css_selector_t *sel = NULL;
+  css_selector_t *cur = NULL;
+  DBG(r, "start chxj_css_find_selector()");
+  for (cur = stylesheet->selector_head.next; cur != &stylesheet->selector_head; cur = cur->next) {
+    DBG(r, "cur->name:[%s]", cur->name);
+  }
+  DBG(r, "end chxj_css_find_selector()");
+  return sel;
+}
+
+/*===========================================================================*/
+/*                                                                           */
+/* STATIC                                                                    */
+/*                                                                           */
+/*===========================================================================*/
 static css_stylesheet_t *
 s_chxj_css_parse_from_uri(request_rec *r, apr_pool_t *pool, struct css_already_import_stack *imported_stack, css_stylesheet_t *old_stylesheet, const char *uri)
 {
@@ -599,13 +645,6 @@ css_stylesheet_t *
 chxj_css_parse_from_style_attribute(apr_pool_t *pool, css_stylesheet_t *old_stylesheet, const char *style_attribute_value)
 {
 
-/*===========================================================================*/
-/* find selector                                                             */
-/*===========================================================================*/
-css_selector_t *
-chxj_css_find_selector(apr_pool_t *pool, css_stylesheet_t *stylesheet, const char *tag_name, const char *class_name, const char *id)
-{
-}
 
 /*===========================================================================*/
 /* push/pop current_stylesheet_stack                                         */
