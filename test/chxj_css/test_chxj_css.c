@@ -18,6 +18,12 @@
 #include "chxj_url_encode.c"
 #include "chxj_apache.c"
 #include "chxj_str_util.c"
+#include "qs_malloc.c"
+#include "qs_parse_string.c"
+#include "qs_log.c"
+#include "qs_parse_tag.c"
+#include "qs_parse_attr.c"
+#include "qs_ignore_sp.c"
 
 
 
@@ -29,7 +35,35 @@ void test_chxj_css_parse_from_uri_005();
 void test_chxj_css_parse_from_uri_006();
 void test_chxj_css_parse_from_uri_007();
 void test_chxj_css_parse_from_uri_008();
-void test_chxj_css_parse_from_uri_009();
+
+/* chxj_css_find_selector */
+void test_chxj_css_find_selector_001();
+void test_chxj_css_find_selector_002();
+void test_chxj_css_find_selector_003();
+void test_chxj_css_find_selector_004();
+void test_chxj_css_find_selector_005();
+void test_chxj_css_find_selector_006();
+void test_chxj_css_find_selector_007();
+void test_chxj_css_find_selector_unmatch_pattern_001();
+void test_chxj_css_find_selector_unmatch_pattern_002();
+void test_chxj_css_find_selector_unmatch_pattern_003();
+/* E > F */
+void test_chxj_css_find_selector_p_001();
+void test_chxj_css_find_selector_p_002();
+void test_chxj_css_find_selector_p_003();
+void test_chxj_css_find_selector_p_004();
+void test_chxj_css_find_selector_p_005();
+void test_chxj_css_find_selector_p_006();
+void test_chxj_css_find_selector_p_007();
+void test_chxj_css_find_selector_p_008();
+void test_chxj_css_find_selector_p_009();
+
+/* E F */
+void test_chxj_css_find_selector_des_001();
+void test_chxj_css_find_selector_des_002();
+void test_chxj_css_find_selector_des_003();
+void test_chxj_css_find_selector_des_004();
+void test_chxj_css_find_selector_des_005();
 /* pend */
 
 int
@@ -47,7 +81,31 @@ main()
   CU_add_test(css_suite, "test css 006",                                    test_chxj_css_parse_from_uri_006);
   CU_add_test(css_suite, "test css 007",                                    test_chxj_css_parse_from_uri_007);
   CU_add_test(css_suite, "test css 008",                                    test_chxj_css_parse_from_uri_008);
-  CU_add_test(css_suite, "test css 009",                                    test_chxj_css_parse_from_uri_009);
+  CU_add_test(css_suite, "test css find_selector 001",                      test_chxj_css_find_selector_001);
+  CU_add_test(css_suite, "test css find_selector 002",                      test_chxj_css_find_selector_002);
+  CU_add_test(css_suite, "test css find_selector 003",                      test_chxj_css_find_selector_003);
+  CU_add_test(css_suite, "test css find_selector 004",                      test_chxj_css_find_selector_004);
+  CU_add_test(css_suite, "test css find_selector 005",                      test_chxj_css_find_selector_005);
+  CU_add_test(css_suite, "test css find_selector 006",                      test_chxj_css_find_selector_006);
+  CU_add_test(css_suite, "test css find_selector 007",                      test_chxj_css_find_selector_007);
+  CU_add_test(css_suite, "test css find_selector unmatch 001",              test_chxj_css_find_selector_unmatch_pattern_001);
+  CU_add_test(css_suite, "test css find_selector unmatch 002",              test_chxj_css_find_selector_unmatch_pattern_002);
+  CU_add_test(css_suite, "test css find_selector unmatch 003",              test_chxj_css_find_selector_unmatch_pattern_003);
+  CU_add_test(css_suite, "test css find_selector with '>' 001",             test_chxj_css_find_selector_p_001);
+  CU_add_test(css_suite, "test css find_selector with '>' 002",             test_chxj_css_find_selector_p_002);
+  CU_add_test(css_suite, "test css find_selector with '>' 003",             test_chxj_css_find_selector_p_003);
+  CU_add_test(css_suite, "test css find_selector with '>' 004",             test_chxj_css_find_selector_p_004);
+  CU_add_test(css_suite, "test css find_selector with '>' 005",             test_chxj_css_find_selector_p_005);
+  CU_add_test(css_suite, "test css find_selector with '>' 006",             test_chxj_css_find_selector_p_006);
+  CU_add_test(css_suite, "test css find_selector with '>' 007",             test_chxj_css_find_selector_p_007);
+  CU_add_test(css_suite, "test css find_selector with '>' 008",             test_chxj_css_find_selector_p_008);
+  CU_add_test(css_suite, "test css find_selector with '>' 009",             test_chxj_css_find_selector_p_009);
+
+  CU_add_test(css_suite, "test css find_selector with ' ' 001",             test_chxj_css_find_selector_des_001);
+  CU_add_test(css_suite, "test css find_selector with ' ' 002",             test_chxj_css_find_selector_des_002);
+  CU_add_test(css_suite, "test css find_selector with ' ' 003",             test_chxj_css_find_selector_des_003);
+  CU_add_test(css_suite, "test css find_selector with ' ' 004",             test_chxj_css_find_selector_des_004);
+  CU_add_test(css_suite, "test css find_selector with ' ' 005",             test_chxj_css_find_selector_des_005);
   /* aend */
 
   CU_basic_run_tests();
@@ -501,27 +559,1155 @@ void test_chxj_css_parse_from_uri_008()
 }
 
 
-
+/*===========================================================================*/
+/*                                                                           */
+/* chxj_css_find_selector                                                    */
+/*                                                                           */
+/*===========================================================================*/
 char *test_chxj_serf_get009(request_rec *r, apr_pool_t *ppool, const char *uri_path)
 {
-  static char *css = "html { display: none }";
+  static char *css = "html,body, hr.abc#id1 { display: none }";
 
   return css;
 }
-void test_chxj_css_parse_from_uri_009()
+void test_chxj_css_find_selector_001()
 {
+#define TEST_STRING "<html><head></head><body class=\"def\" id=\"id2\"><hr class=\"abc\" id=\"id1\"></body></html>"
+  Doc doc;
+  Node *node;
+  Node *tmp_node;
+  Node *node_sv;
   css_stylesheet_t *ret;
   css_selector_t *sel;
   APR_INIT;
   chxj_serf_get = test_chxj_serf_get009;
+  fprintf(stderr, "start %s\n", __func__);
+
+  doc.r = &r;
+  qs_init_malloc(&doc);
+  qs_init_root_node(&doc);
+  doc.parse_mode = PARSE_MODE_CHTML;
+
+  node_sv = node = qs_parse_string(&doc, TEST_STRING, sizeof(TEST_STRING)-1);
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->next;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
 
   apr_uri_parse(p, "http://localhost:888/abc", &r.parsed_uri); \
 
   ret = chxj_css_parse_from_uri(&r, r.pool, NULL, "/hoge.css");
   CU_ASSERT(ret != NULL);
 
-  sel = chxj_css_find_selector(&r, r.pool, ret, "html", NULL, NULL);
+  sel = chxj_css_find_selector(&doc, ret, node);
+  CU_ASSERT(sel != NULL);
   APR_TERM;
+#undef TEST_STRING
+  fprintf(stderr, "end %s\n", __func__);
+}
+
+
+
+char *test_chxj_serf_get010(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+{
+  static char *css = "html,body, .abc#id1 { display: none }";
+
+  return css;
+}
+void test_chxj_css_find_selector_002()
+{
+#define TEST_STRING "<html><head></head><body class=\"def\" id=\"id2\"><hr class=\"abc\" id=\"id1\"></body></html>"
+  Doc doc;
+  Node *node;
+  Node *tmp_node;
+  Node *node_sv;
+  css_stylesheet_t *ret;
+  css_selector_t *sel;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get010;
+
+  fprintf(stderr, "start %s\n", __func__);
+  doc.r = &r;
+  qs_init_malloc(&doc);
+  qs_init_root_node(&doc);
+  doc.parse_mode = PARSE_MODE_CHTML;
+
+  node_sv = node = qs_parse_string(&doc, TEST_STRING, sizeof(TEST_STRING)-1);
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->next;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+
+  apr_uri_parse(p, "http://localhost:888/abc", &r.parsed_uri); \
+
+  ret = chxj_css_parse_from_uri(&r, r.pool, NULL, "/hoge.css");
+  CU_ASSERT(ret != NULL);
+
+  sel = chxj_css_find_selector(&doc, ret, node);
+  CU_ASSERT(sel != NULL);
+  APR_TERM;
+  fprintf(stderr, "end %s\n", __func__);
+#undef TEST_STRING
+}
+
+
+
+char *test_chxj_serf_get011(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+{
+  static char *css = "html,body, #id1 { display: none }";
+
+  return css;
+}
+void test_chxj_css_find_selector_003()
+{
+#define TEST_STRING "<html><head></head><body class=\"def\" id=\"id2\"><hr class=\"abc\" id=\"id1\"></body></html>"
+  Doc doc;
+  Node *node;
+  Node *tmp_node;
+  Node *node_sv;
+  css_stylesheet_t *ret;
+  css_selector_t *sel;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get011;
+
+  fprintf(stderr, "start %s\n", __func__);
+  doc.r = &r;
+  qs_init_malloc(&doc);
+  qs_init_root_node(&doc);
+  doc.parse_mode = PARSE_MODE_CHTML;
+
+  node_sv = node = qs_parse_string(&doc, TEST_STRING, sizeof(TEST_STRING)-1);
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->next;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+
+  apr_uri_parse(p, "http://localhost:888/abc", &r.parsed_uri); \
+
+  ret = chxj_css_parse_from_uri(&r, r.pool, NULL, "/hoge.css");
+  CU_ASSERT(ret != NULL);
+
+  sel = chxj_css_find_selector(&doc, ret, node);
+  CU_ASSERT(sel != NULL);
+  APR_TERM;
+  fprintf(stderr, "end %s\n", __func__);
+#undef TEST_STRING
+}
+
+
+
+char *test_chxj_serf_get012(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+{
+  static char *css = "html,body, .abc { display: none }";
+
+  return css;
+}
+void test_chxj_css_find_selector_004()
+{
+#define TEST_STRING "<html><head></head><body class=\"def\" id=\"id2\"><hr class=\"abc\" id=\"id1\"></body></html>"
+  Doc doc;
+  Node *node;
+  Node *tmp_node;
+  Node *node_sv;
+  css_stylesheet_t *ret;
+  css_selector_t *sel;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get012;
+
+  fprintf(stderr, "start %s\n", __func__);
+  doc.r = &r;
+  qs_init_malloc(&doc);
+  qs_init_root_node(&doc);
+  doc.parse_mode = PARSE_MODE_CHTML;
+
+  node_sv = node = qs_parse_string(&doc, TEST_STRING, sizeof(TEST_STRING)-1);
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->next;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+
+  apr_uri_parse(p, "http://localhost:888/abc", &r.parsed_uri); \
+
+  ret = chxj_css_parse_from_uri(&r, r.pool, NULL, "/hoge.css");
+  CU_ASSERT(ret != NULL);
+
+  sel = chxj_css_find_selector(&doc, ret, node);
+  CU_ASSERT(sel != NULL);
+  APR_TERM;
+  fprintf(stderr, "end %s\n", __func__);
+#undef TEST_STRING
+}
+
+
+char *test_chxj_serf_get013(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+{
+  static char *css = "html,body, hr.abc { display: none }";
+
+  return css;
+}
+void test_chxj_css_find_selector_005()
+{
+#define TEST_STRING "<html><head></head><body class=\"def\" id=\"id2\"><hr class=\"abc\" id=\"id1\"></body></html>"
+  Doc doc;
+  Node *node;
+  Node *tmp_node;
+  Node *node_sv;
+  css_stylesheet_t *ret;
+  css_selector_t *sel;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get013;
+
+  fprintf(stderr, "start %s\n", __func__);
+  doc.r = &r;
+  qs_init_malloc(&doc);
+  qs_init_root_node(&doc);
+  doc.parse_mode = PARSE_MODE_CHTML;
+
+  node_sv = node = qs_parse_string(&doc, TEST_STRING, sizeof(TEST_STRING)-1);
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->next;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+
+  apr_uri_parse(p, "http://localhost:888/abc", &r.parsed_uri); \
+
+  ret = chxj_css_parse_from_uri(&r, r.pool, NULL, "/hoge.css");
+  CU_ASSERT(ret != NULL);
+
+  sel = chxj_css_find_selector(&doc, ret, node);
+  CU_ASSERT(sel != NULL);
+  APR_TERM;
+  fprintf(stderr, "end %s\n", __func__);
+#undef TEST_STRING
+}
+
+
+
+char *test_chxj_serf_get014(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+{
+  static char *css = "html,body, hr#id1 { display: none }";
+
+  return css;
+}
+void test_chxj_css_find_selector_006()
+{
+#define TEST_STRING "<html><head></head><body class=\"def\" id=\"id2\"><hr class=\"abc\" id=\"id1\"></body></html>"
+  Doc doc;
+  Node *node;
+  Node *tmp_node;
+  Node *node_sv;
+  css_stylesheet_t *ret;
+  css_selector_t *sel;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get014;
+
+  fprintf(stderr, "start %s\n", __func__);
+  doc.r = &r;
+  qs_init_malloc(&doc);
+  qs_init_root_node(&doc);
+  doc.parse_mode = PARSE_MODE_CHTML;
+
+  node_sv = node = qs_parse_string(&doc, TEST_STRING, sizeof(TEST_STRING)-1);
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->next;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+
+  apr_uri_parse(p, "http://localhost:888/abc", &r.parsed_uri); \
+
+  ret = chxj_css_parse_from_uri(&r, r.pool, NULL, "/hoge.css");
+  CU_ASSERT(ret != NULL);
+
+  sel = chxj_css_find_selector(&doc, ret, node);
+  CU_ASSERT(sel != NULL);
+  APR_TERM;
+  fprintf(stderr, "end %s\n", __func__);
+#undef TEST_STRING
+}
+
+
+
+char *test_chxj_serf_get015(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+{
+  static char *css = "html,body, hr { display: none }";
+
+  return css;
+}
+void test_chxj_css_find_selector_007()
+{
+#define TEST_STRING "<html><head></head><body class=\"def\" id=\"id2\"><hr class=\"abc\" id=\"id1\"></body></html>"
+  Doc doc;
+  Node *node;
+  Node *tmp_node;
+  Node *node_sv;
+  css_stylesheet_t *ret;
+  css_selector_t *sel;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get015;
+
+  fprintf(stderr, "start %s\n", __func__);
+  doc.r = &r;
+  qs_init_malloc(&doc);
+  qs_init_root_node(&doc);
+  doc.parse_mode = PARSE_MODE_CHTML;
+
+  node_sv = node = qs_parse_string(&doc, TEST_STRING, sizeof(TEST_STRING)-1);
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->next;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+
+  apr_uri_parse(p, "http://localhost:888/abc", &r.parsed_uri); \
+
+  ret = chxj_css_parse_from_uri(&r, r.pool, NULL, "/hoge.css");
+  CU_ASSERT(ret != NULL);
+
+  sel = chxj_css_find_selector(&doc, ret, node);
+  CU_ASSERT(sel != NULL);
+  APR_TERM;
+  fprintf(stderr, "end %s\n", __func__);
+#undef TEST_STRING
+}
+
+
+char *test_chxj_serf_get016(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+{
+  static char *css = "html,body, li { display: none }";
+
+  return css;
+}
+void test_chxj_css_find_selector_unmatch_pattern_001()
+{
+#define TEST_STRING "<html><head></head><body class=\"def\" id=\"id2\"><hr class=\"abc\" id=\"id1\"></body></html>"
+  Doc doc;
+  Node *node;
+  Node *tmp_node;
+  Node *node_sv;
+  css_stylesheet_t *ret;
+  css_selector_t *sel;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get016;
+
+  fprintf(stderr, "start %s\n", __func__);
+  doc.r = &r;
+  qs_init_malloc(&doc);
+  qs_init_root_node(&doc);
+  doc.parse_mode = PARSE_MODE_CHTML;
+
+  node_sv = node = qs_parse_string(&doc, TEST_STRING, sizeof(TEST_STRING)-1);
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->next;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+
+  apr_uri_parse(p, "http://localhost:888/abc", &r.parsed_uri); \
+
+  ret = chxj_css_parse_from_uri(&r, r.pool, NULL, "/hoge.css");
+  CU_ASSERT(ret != NULL);
+
+  sel = chxj_css_find_selector(&doc, ret, node);
+  CU_ASSERT(sel == NULL);
+  APR_TERM;
+  fprintf(stderr, "end %s\n", __func__);
+#undef TEST_STRING
+}
+
+char *test_chxj_serf_get017(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+{
+  static char *css = "html,body, hr.def { display: none }";
+
+  return css;
+}
+void test_chxj_css_find_selector_unmatch_pattern_002()
+{
+#define TEST_STRING "<html><head></head><body class=\"def\" id=\"id2\"><hr class=\"abc\" id=\"id1\"></body></html>"
+  Doc doc;
+  Node *node;
+  Node *tmp_node;
+  Node *node_sv;
+  css_stylesheet_t *ret;
+  css_selector_t *sel;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get017;
+
+  fprintf(stderr, "start %s\n", __func__);
+  doc.r = &r;
+  qs_init_malloc(&doc);
+  qs_init_root_node(&doc);
+  doc.parse_mode = PARSE_MODE_CHTML;
+
+  node_sv = node = qs_parse_string(&doc, TEST_STRING, sizeof(TEST_STRING)-1);
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->next;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+
+  apr_uri_parse(p, "http://localhost:888/abc", &r.parsed_uri); \
+
+  ret = chxj_css_parse_from_uri(&r, r.pool, NULL, "/hoge.css");
+  CU_ASSERT(ret != NULL);
+
+  sel = chxj_css_find_selector(&doc, ret, node);
+  CU_ASSERT(sel == NULL);
+  APR_TERM;
+  fprintf(stderr, "end %s\n", __func__);
+#undef TEST_STRING
+}
+char *test_chxj_serf_get018(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+{
+  static char *css = "html,body, hr#id2 { display: none }";
+
+  return css;
+}
+void test_chxj_css_find_selector_unmatch_pattern_003()
+{
+#define TEST_STRING "<html><head></head><body class=\"def\" id=\"id2\"><hr class=\"abc\" id=\"id1\"></body></html>"
+  Doc doc;
+  Node *node;
+  Node *tmp_node;
+  Node *node_sv;
+  css_stylesheet_t *ret;
+  css_selector_t *sel;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get018;
+
+  fprintf(stderr, "start %s\n", __func__);
+  doc.r = &r;
+  qs_init_malloc(&doc);
+  qs_init_root_node(&doc);
+  doc.parse_mode = PARSE_MODE_CHTML;
+
+  node_sv = node = qs_parse_string(&doc, TEST_STRING, sizeof(TEST_STRING)-1);
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->next;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+
+  apr_uri_parse(p, "http://localhost:888/abc", &r.parsed_uri); \
+
+  ret = chxj_css_parse_from_uri(&r, r.pool, NULL, "/hoge.css");
+  CU_ASSERT(ret != NULL);
+
+  sel = chxj_css_find_selector(&doc, ret, node);
+  CU_ASSERT(sel == NULL);
+  APR_TERM;
+  fprintf(stderr, "end %s\n", __func__);
+#undef TEST_STRING
+}
+
+/*===========================================================================*/
+/* E > F                                                                     */
+/*===========================================================================*/
+char *test_chxj_serf_get019(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+{
+  static char *css = "html,body, body>hr { display: none }";
+
+  return css;
+}
+void test_chxj_css_find_selector_p_001()
+{
+#define TEST_STRING "<html><head></head><body class=\"def\" id=\"id2\"><hr class=\"abc\" id=\"id1\"></body></html>"
+  Doc doc;
+  Node *node;
+  Node *tmp_node;
+  Node *node_sv;
+  css_stylesheet_t *ret;
+  css_selector_t *sel;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get019;
+
+  fprintf(stderr, "start %s\n", __func__);
+  doc.r = &r;
+  qs_init_malloc(&doc);
+  qs_init_root_node(&doc);
+  doc.parse_mode = PARSE_MODE_CHTML;
+
+  node_sv = node = qs_parse_string(&doc, TEST_STRING, sizeof(TEST_STRING)-1);
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->next;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+
+  apr_uri_parse(p, "http://localhost:888/abc", &r.parsed_uri); \
+
+  ret = chxj_css_parse_from_uri(&r, r.pool, NULL, "/hoge.css");
+  CU_ASSERT(ret != NULL);
+
+  sel = chxj_css_find_selector(&doc, ret, node);
+  CU_ASSERT(sel != NULL);
+  APR_TERM;
+  fprintf(stderr, "end %s\n", __func__);
+#undef TEST_STRING
+}
+char *test_chxj_serf_get020(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+{
+  static char *css = "html,body, html>body>hr { display: none }";
+
+  return css;
+}
+void test_chxj_css_find_selector_p_002()
+{
+#define TEST_STRING "<html><head></head><body class=\"def\" id=\"id2\"><hr class=\"abc\" id=\"id1\"></body></html>"
+  Doc doc;
+  Node *node;
+  Node *tmp_node;
+  Node *node_sv;
+  css_stylesheet_t *ret;
+  css_selector_t *sel;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get020;
+
+  fprintf(stderr, "start %s\n", __func__);
+  doc.r = &r;
+  qs_init_malloc(&doc);
+  qs_init_root_node(&doc);
+  doc.parse_mode = PARSE_MODE_CHTML;
+
+  node_sv = node = qs_parse_string(&doc, TEST_STRING, sizeof(TEST_STRING)-1);
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->next;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+
+  apr_uri_parse(p, "http://localhost:888/abc", &r.parsed_uri); \
+
+  ret = chxj_css_parse_from_uri(&r, r.pool, NULL, "/hoge.css");
+  CU_ASSERT(ret != NULL);
+
+  sel = chxj_css_find_selector(&doc, ret, node);
+  CU_ASSERT(sel != NULL);
+  APR_TERM;
+  fprintf(stderr, "end %s\n", __func__);
+#undef TEST_STRING
+}
+char *test_chxj_serf_get021(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+{
+  static char *css = "html,body, html>body>div>hr { display: none }";
+
+  return css;
+}
+void test_chxj_css_find_selector_p_003()
+{
+#define TEST_STRING "<html><head></head><body class=\"def\" id=\"id2\"><div><hr class=\"abc\" id=\"id1\"></div></body></html>"
+  Doc doc;
+  Node *node;
+  Node *tmp_node;
+  Node *node_sv;
+  css_stylesheet_t *ret;
+  css_selector_t *sel;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get021;
+
+  fprintf(stderr, "start %s\n", __func__);
+  doc.r = &r;
+  qs_init_malloc(&doc);
+  qs_init_root_node(&doc);
+  doc.parse_mode = PARSE_MODE_CHTML;
+
+  node_sv = node = qs_parse_string(&doc, TEST_STRING, sizeof(TEST_STRING)-1);
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->next;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+
+  apr_uri_parse(p, "http://localhost:888/abc", &r.parsed_uri); \
+
+  ret = chxj_css_parse_from_uri(&r, r.pool, NULL, "/hoge.css");
+  CU_ASSERT(ret != NULL);
+
+  sel = chxj_css_find_selector(&doc, ret, node);
+  CU_ASSERT(sel != NULL);
+  APR_TERM;
+  fprintf(stderr, "end %s\n", __func__);
+#undef TEST_STRING
+}
+char *test_chxj_serf_get022(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+{
+  static char *css = "html,body, html>body>div>div>hr { display: none }";
+
+  return css;
+}
+void test_chxj_css_find_selector_p_004()
+{
+#define TEST_STRING "<html><head></head><body class=\"def\" id=\"id2\"><div><div><hr class=\"abc\" id=\"id1\"></div></div></body></html>"
+  Doc doc;
+  Node *node;
+  Node *tmp_node;
+  Node *node_sv;
+  css_stylesheet_t *ret;
+  css_selector_t *sel;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get022;
+
+  fprintf(stderr, "start %s\n", __func__);
+  doc.r = &r;
+  qs_init_malloc(&doc);
+  qs_init_root_node(&doc);
+  doc.parse_mode = PARSE_MODE_CHTML;
+
+  node_sv = node = qs_parse_string(&doc, TEST_STRING, sizeof(TEST_STRING)-1);
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->next;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+
+  apr_uri_parse(p, "http://localhost:888/abc", &r.parsed_uri); \
+
+  ret = chxj_css_parse_from_uri(&r, r.pool, NULL, "/hoge.css");
+  CU_ASSERT(ret != NULL);
+
+  sel = chxj_css_find_selector(&doc, ret, node);
+  CU_ASSERT(sel != NULL);
+  APR_TERM;
+  fprintf(stderr, "end %s\n", __func__);
+#undef TEST_STRING
+}
+char *test_chxj_serf_get023(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+{
+  static char *css = "html,body, html>body>div.def#id2>hr { display: none }";
+
+  return css;
+}
+void test_chxj_css_find_selector_p_005()
+{
+#define TEST_STRING "<html><head></head><body class=\"def\" id=\"id2\"><div class=\"def\" id=\"id2\"><hr class=\"abc\" id=\"id1\"></div></body></html>"
+  Doc doc;
+  Node *node;
+  Node *tmp_node;
+  Node *node_sv;
+  css_stylesheet_t *ret;
+  css_selector_t *sel;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get023;
+
+  fprintf(stderr, "start %s\n", __func__);
+  doc.r = &r;
+  qs_init_malloc(&doc);
+  qs_init_root_node(&doc);
+  doc.parse_mode = PARSE_MODE_CHTML;
+
+  node_sv = node = qs_parse_string(&doc, TEST_STRING, sizeof(TEST_STRING)-1);
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->next;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+
+  apr_uri_parse(p, "http://localhost:888/abc", &r.parsed_uri); \
+
+  ret = chxj_css_parse_from_uri(&r, r.pool, NULL, "/hoge.css");
+  CU_ASSERT(ret != NULL);
+
+  sel = chxj_css_find_selector(&doc, ret, node);
+  CU_ASSERT(sel != NULL);
+  APR_TERM;
+  fprintf(stderr, "end %s\n", __func__);
+#undef TEST_STRING
+}
+char *test_chxj_serf_get024(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+{
+  static char *css = "html,body, html>body>div.abc#id2>hr { display: none }";
+
+  return css;
+}
+void test_chxj_css_find_selector_p_006()
+{
+#define TEST_STRING "<html><head></head><body class=\"def\" id=\"id2\"><div class=\"def\" id=\"id2\"><hr class=\"abc\" id=\"id1\"></div></body></html>"
+  Doc doc;
+  Node *node;
+  Node *tmp_node;
+  Node *node_sv;
+  css_stylesheet_t *ret;
+  css_selector_t *sel;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get024;
+
+  fprintf(stderr, "start %s\n", __func__);
+  doc.r = &r;
+  qs_init_malloc(&doc);
+  qs_init_root_node(&doc);
+  doc.parse_mode = PARSE_MODE_CHTML;
+
+  node_sv = node = qs_parse_string(&doc, TEST_STRING, sizeof(TEST_STRING)-1);
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->next;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+
+  apr_uri_parse(p, "http://localhost:888/abc", &r.parsed_uri); \
+
+  ret = chxj_css_parse_from_uri(&r, r.pool, NULL, "/hoge.css");
+  CU_ASSERT(ret != NULL);
+
+  sel = chxj_css_find_selector(&doc, ret, node);
+  CU_ASSERT(sel == NULL);
+  APR_TERM;
+  fprintf(stderr, "end %s\n", __func__);
+#undef TEST_STRING
+}
+char *test_chxj_serf_get025(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+{
+  static char *css = "html,body, body>*.def#id2>hr { display: none }";
+
+  return css;
+}
+void test_chxj_css_find_selector_p_007()
+{
+#define TEST_STRING "<html><head></head><body class=\"def\" id=\"id2\"><div class=\"def\" id=\"id2\"><hr class=\"abc\" id=\"id1\"></div></body></html>"
+  Doc doc;
+  Node *node;
+  Node *tmp_node;
+  Node *node_sv;
+  css_stylesheet_t *ret;
+  css_selector_t *sel;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get025;
+
+  fprintf(stderr, "start %s\n", __func__);
+  doc.r = &r;
+  qs_init_malloc(&doc);
+  qs_init_root_node(&doc);
+  doc.parse_mode = PARSE_MODE_CHTML;
+
+  node_sv = node = qs_parse_string(&doc, TEST_STRING, sizeof(TEST_STRING)-1);
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->next;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+
+  apr_uri_parse(p, "http://localhost:888/abc", &r.parsed_uri); \
+
+  ret = chxj_css_parse_from_uri(&r, r.pool, NULL, "/hoge.css");
+  CU_ASSERT(ret != NULL);
+
+  sel = chxj_css_find_selector(&doc, ret, node);
+  CU_ASSERT(sel != NULL);
+  APR_TERM;
+  fprintf(stderr, "end %s\n", __func__);
+#undef TEST_STRING
+}
+char *test_chxj_serf_get026(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+{
+  static char *css = "html,body, body.def#id2>*.def#id2>hr { display: none }";
+
+  return css;
+}
+void test_chxj_css_find_selector_p_008()
+{
+#define TEST_STRING "<html><head></head><body class=\"def\" id=\"id2\"><div class=\"def\" id=\"id2\"><hr class=\"abc\" id=\"id1\"></div></body></html>"
+  Doc doc;
+  Node *node;
+  Node *tmp_node;
+  Node *node_sv;
+  css_stylesheet_t *ret;
+  css_selector_t *sel;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get026;
+
+  fprintf(stderr, "start %s\n", __func__);
+  doc.r = &r;
+  qs_init_malloc(&doc);
+  qs_init_root_node(&doc);
+  doc.parse_mode = PARSE_MODE_CHTML;
+
+  node_sv = node = qs_parse_string(&doc, TEST_STRING, sizeof(TEST_STRING)-1);
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->next;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+
+  apr_uri_parse(p, "http://localhost:888/abc", &r.parsed_uri); \
+
+  ret = chxj_css_parse_from_uri(&r, r.pool, NULL, "/hoge.css");
+  CU_ASSERT(ret != NULL);
+
+  sel = chxj_css_find_selector(&doc, ret, node);
+  CU_ASSERT(sel != NULL);
+  APR_TERM;
+  fprintf(stderr, "end %s\n", __func__);
+#undef TEST_STRING
+}
+char *test_chxj_serf_get027(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+{
+  static char *css = "html,body, body.abc#id2>*.def#id2>hr { display: none }";
+
+  return css;
+}
+void test_chxj_css_find_selector_p_009()
+{
+#define TEST_STRING "<html><head></head><body class=\"def\" id=\"id2\"><div class=\"def\" id=\"id2\"><hr class=\"abc\" id=\"id1\"></div></body></html>"
+  Doc doc;
+  Node *node;
+  Node *tmp_node;
+  Node *node_sv;
+  css_stylesheet_t *ret;
+  css_selector_t *sel;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get027;
+
+  fprintf(stderr, "start %s\n", __func__);
+  doc.r = &r;
+  qs_init_malloc(&doc);
+  qs_init_root_node(&doc);
+  doc.parse_mode = PARSE_MODE_CHTML;
+
+  node_sv = node = qs_parse_string(&doc, TEST_STRING, sizeof(TEST_STRING)-1);
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->next;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+
+  apr_uri_parse(p, "http://localhost:888/abc", &r.parsed_uri); \
+
+  ret = chxj_css_parse_from_uri(&r, r.pool, NULL, "/hoge.css");
+  CU_ASSERT(ret != NULL);
+
+  sel = chxj_css_find_selector(&doc, ret, node);
+  CU_ASSERT(sel == NULL);
+  APR_TERM;
+  fprintf(stderr, "end %s\n", __func__);
+#undef TEST_STRING
+}
+
+char *test_chxj_serf_get028(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+{
+  static char *css = "html,body, body hr { display: none }";
+
+  return css;
+}
+void test_chxj_css_find_selector_des_001()
+{
+#define TEST_STRING "<html><head></head><body class=\"def\" id=\"id2\"><div class=\"def\" id=\"id2\"><div><hr class=\"abc\" id=\"id1\"></div></div></body></html>"
+  Doc doc;
+  Node *node;
+  Node *tmp_node;
+  Node *node_sv;
+  css_stylesheet_t *ret;
+  css_selector_t *sel;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get028;
+
+  fprintf(stderr, "start %s\n", __func__);
+  doc.r = &r;
+  qs_init_malloc(&doc);
+  qs_init_root_node(&doc);
+  doc.parse_mode = PARSE_MODE_CHTML;
+
+  node_sv = node = qs_parse_string(&doc, TEST_STRING, sizeof(TEST_STRING)-1);
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->next;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+
+  apr_uri_parse(p, "http://localhost:888/abc", &r.parsed_uri); \
+
+  ret = chxj_css_parse_from_uri(&r, r.pool, NULL, "/hoge.css");
+  CU_ASSERT(ret != NULL);
+
+  sel = chxj_css_find_selector(&doc, ret, node);
+  CU_ASSERT(sel != NULL);
+  APR_TERM;
+  fprintf(stderr, "end %s\n", __func__);
+#undef TEST_STRING
+}
+
+char *test_chxj_serf_get029(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+{
+  static char *css = "html,body, html body hr { display: none }";
+
+  return css;
+}
+void test_chxj_css_find_selector_des_002()
+{
+#define TEST_STRING "<html><head></head><body class=\"def\" id=\"id2\"><div class=\"def\" id=\"id2\"><div><hr class=\"abc\" id=\"id1\"></div></div></body></html>"
+  Doc doc;
+  Node *node;
+  Node *tmp_node;
+  Node *node_sv;
+  css_stylesheet_t *ret;
+  css_selector_t *sel;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get029;
+
+  fprintf(stderr, "start %s\n", __func__);
+  doc.r = &r;
+  qs_init_malloc(&doc);
+  qs_init_root_node(&doc);
+  doc.parse_mode = PARSE_MODE_CHTML;
+
+  node_sv = node = qs_parse_string(&doc, TEST_STRING, sizeof(TEST_STRING)-1);
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->next;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+
+  apr_uri_parse(p, "http://localhost:888/abc", &r.parsed_uri); \
+
+  ret = chxj_css_parse_from_uri(&r, r.pool, NULL, "/hoge.css");
+  CU_ASSERT(ret != NULL);
+
+  sel = chxj_css_find_selector(&doc, ret, node);
+  CU_ASSERT(sel != NULL);
+  APR_TERM;
+  fprintf(stderr, "end %s\n", __func__);
+#undef TEST_STRING
+}
+
+char *test_chxj_serf_get030(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+{
+  static char *css = "html,body, html body.def#id2 hr { display: none }";
+
+  return css;
+}
+void test_chxj_css_find_selector_des_003()
+{
+#define TEST_STRING "<html><head></head><body class=\"def\" id=\"id2\"><div class=\"def\" id=\"id2\"><div><hr class=\"abc\" id=\"id1\"></div></div></body></html>"
+  Doc doc;
+  Node *node;
+  Node *tmp_node;
+  Node *node_sv;
+  css_stylesheet_t *ret;
+  css_selector_t *sel;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get030;
+
+  fprintf(stderr, "start %s\n", __func__);
+  doc.r = &r;
+  qs_init_malloc(&doc);
+  qs_init_root_node(&doc);
+  doc.parse_mode = PARSE_MODE_CHTML;
+
+  node_sv = node = qs_parse_string(&doc, TEST_STRING, sizeof(TEST_STRING)-1);
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->next;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+
+  apr_uri_parse(p, "http://localhost:888/abc", &r.parsed_uri); \
+
+  ret = chxj_css_parse_from_uri(&r, r.pool, NULL, "/hoge.css");
+  CU_ASSERT(ret != NULL);
+
+  sel = chxj_css_find_selector(&doc, ret, node);
+  CU_ASSERT(sel != NULL);
+  APR_TERM;
+  fprintf(stderr, "end %s\n", __func__);
+#undef TEST_STRING
+}
+
+char *test_chxj_serf_get031(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+{
+  static char *css = "html,body, html body.abc#id2 hr { display: none }";
+
+  return css;
+}
+void test_chxj_css_find_selector_des_004()
+{
+#define TEST_STRING "<html><head></head><body class=\"def\" id=\"id2\"><div class=\"def\" id=\"id2\"><div><hr class=\"abc\" id=\"id1\"></div></div></body></html>"
+  Doc doc;
+  Node *node;
+  Node *tmp_node;
+  Node *node_sv;
+  css_stylesheet_t *ret;
+  css_selector_t *sel;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get031;
+
+  fprintf(stderr, "start %s\n", __func__);
+  doc.r = &r;
+  qs_init_malloc(&doc);
+  qs_init_root_node(&doc);
+  doc.parse_mode = PARSE_MODE_CHTML;
+
+  node_sv = node = qs_parse_string(&doc, TEST_STRING, sizeof(TEST_STRING)-1);
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->next;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+
+  apr_uri_parse(p, "http://localhost:888/abc", &r.parsed_uri); \
+
+  ret = chxj_css_parse_from_uri(&r, r.pool, NULL, "/hoge.css");
+  CU_ASSERT(ret != NULL);
+
+  sel = chxj_css_find_selector(&doc, ret, node);
+  CU_ASSERT(sel == NULL);
+  APR_TERM;
+  fprintf(stderr, "end %s\n", __func__);
+#undef TEST_STRING
+}
+
+char *test_chxj_serf_get032(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+{
+  static char *css = "html,body, html body.def hr { display: none }";
+
+  return css;
+}
+void test_chxj_css_find_selector_des_005()
+{
+#define TEST_STRING "<html><head></head><body class=\"def\" id=\"id2\"><div class=\"def\" id=\"id2\"><div><hr class=\"abc\" id=\"id1\"></div></div></body></html>"
+  Doc doc;
+  Node *node;
+  Node *tmp_node;
+  Node *node_sv;
+  css_stylesheet_t *ret;
+  css_selector_t *sel;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get032;
+
+  fprintf(stderr, "start %s\n", __func__);
+  doc.r = &r;
+  qs_init_malloc(&doc);
+  qs_init_root_node(&doc);
+  doc.parse_mode = PARSE_MODE_CHTML;
+
+  node_sv = node = qs_parse_string(&doc, TEST_STRING, sizeof(TEST_STRING)-1);
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->next;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+  tmp_node = node->child;
+  node = tmp_node;
+
+  apr_uri_parse(p, "http://localhost:888/abc", &r.parsed_uri); \
+
+  ret = chxj_css_parse_from_uri(&r, r.pool, NULL, "/hoge.css");
+  CU_ASSERT(ret != NULL);
+
+  sel = chxj_css_find_selector(&doc, ret, node);
+  CU_ASSERT(sel != NULL);
+  APR_TERM;
+  fprintf(stderr, "end %s\n", __func__);
+#undef TEST_STRING
 }
 /*
  * vim:ts=2 et

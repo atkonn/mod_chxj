@@ -15,6 +15,8 @@
  * limitations under the License.
  */
 #include "chxj_str_util.h"
+#if !defined (__CHXJ_STR_UTIL_C__)
+#define __CHXJ_STR_UTIL_C__
 
 int
 chxj_chk_numeric(const char *s)
@@ -159,6 +161,27 @@ chxj_starts_with(const char *str, const char *word)
   if (len == 0) len = 1;
   return strncasecmp(s, w, len) == 0;
 }
+
+
+int
+chxj_strcount(const char *s, const char *str)
+{
+  register char *p = (char *)s;
+  register char i;
+  int len = strlen(str);
+  int count = 0;
+  while (*p) {
+    for (i=0; i<len; i++) {
+      if (*p == (char)str[i]) {
+        count++;
+        break;
+      }
+    }
+    p++;
+  }
+  return count;
+}
+#endif
 /*
  * vim:ts=2 et
  */
