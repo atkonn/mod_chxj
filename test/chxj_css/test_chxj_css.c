@@ -87,6 +87,12 @@ void test_chxj_css_find_selector_mix_001();
 void test_chxj_css_find_selector_mix_002(); /* p + div p + hr */
 void test_chxj_css_find_selector_mix_003();
 void test_chxj_css_find_selector_mix_004();
+
+/* pseudo */
+void test_chxj_css_find_selector_pseudo_001();
+void test_chxj_css_find_selector_pseudo_002();
+void test_chxj_css_find_selector_pseudo_003();
+void test_chxj_css_find_selector_pseudo_004();
 /* pend */
 
 int
@@ -150,6 +156,11 @@ main()
   CU_add_test(css_suite, "test css find_selector with 'mix' 002",           test_chxj_css_find_selector_mix_002);
   CU_add_test(css_suite, "test css find_selector with 'mix' 003",           test_chxj_css_find_selector_mix_003);
   CU_add_test(css_suite, "test css find_selector with 'mix' 004",           test_chxj_css_find_selector_mix_004);
+
+  CU_add_test(css_suite, "test css find_pseudo_selector 001",               test_chxj_css_find_selector_pseudo_001);
+  CU_add_test(css_suite, "test css find_pseudo_selector 002",               test_chxj_css_find_selector_pseudo_002);
+  CU_add_test(css_suite, "test css find_pseudo_selector 003",               test_chxj_css_find_selector_pseudo_003);
+  CU_add_test(css_suite, "test css find_pseudo_selector 004",               test_chxj_css_find_selector_pseudo_004);
   /* aend */
 
   CU_basic_run_tests();
@@ -2732,6 +2743,205 @@ void test_chxj_css_find_selector_mix_004()
 
   sel = chxj_css_find_selector(&doc, ret, node);
   CU_ASSERT(sel != NULL);
+  APR_TERM;
+  fprintf(stderr, "end %s\n", __func__);
+#undef TEST_STRING
+}
+
+
+/* pseudo selector */
+char *test_chxj_serf_get052(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+{
+  static char *css = "a:link { display: none }";
+
+  return css;
+}
+void test_chxj_css_find_selector_pseudo_001()
+{
+  Doc doc;
+  Node *node;
+  Node *tmp_node;
+  Node *node_sv;
+  css_stylesheet_t *ret;
+  css_selector_t *sel;
+  int ii;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get052;
+
+  fprintf(stderr, "start %s\n", __func__);
+  doc.r = &r;
+  qs_init_malloc(&doc);
+  qs_init_root_node(&doc);
+  doc.parse_mode = PARSE_MODE_CHTML;
+
+
+  apr_uri_parse(p, "http://localhost:888/abc", &r.parsed_uri); \
+
+  ret = chxj_css_parse_from_uri(&r, r.pool, NULL, "/hoge.css");
+  CU_ASSERT(ret != NULL);
+
+  ret = chxj_find_pseudo_selectors(&doc, ret);
+  CU_ASSERT(ret != NULL);
+  ii = 0;
+  for (sel = ret->selector_head.next;ret && sel != &ret->selector_head; sel = sel->next) {
+    fprintf(stderr, "%s\n", sel->name);
+    switch(ii) {
+    case 0:
+      CU_ASSERT(strcasecmp(sel->name, "a:link") == 0);
+      break;
+    }
+    ii++;
+  }
+  APR_TERM;
+  fprintf(stderr, "end %s\n", __func__);
+#undef TEST_STRING
+}
+char *test_chxj_serf_get053(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+{
+  static char *css = "a:visited { display: none }";
+
+  return css;
+}
+void test_chxj_css_find_selector_pseudo_002()
+{
+  Doc doc;
+  Node *node;
+  Node *tmp_node;
+  Node *node_sv;
+  css_stylesheet_t *ret;
+  css_selector_t *sel;
+  int ii;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get053;
+
+  fprintf(stderr, "start %s\n", __func__);
+  doc.r = &r;
+  qs_init_malloc(&doc);
+  qs_init_root_node(&doc);
+  doc.parse_mode = PARSE_MODE_CHTML;
+
+
+  apr_uri_parse(p, "http://localhost:888/abc", &r.parsed_uri); \
+
+  ret = chxj_css_parse_from_uri(&r, r.pool, NULL, "/hoge.css");
+  CU_ASSERT(ret != NULL);
+
+  ret = chxj_find_pseudo_selectors(&doc, ret);
+  CU_ASSERT(ret != NULL);
+  ii = 0;
+  for (sel = ret->selector_head.next;ret && sel != &ret->selector_head; sel = sel->next) {
+    fprintf(stderr, "%s\n", sel->name);
+    switch(ii) {
+    case 0:
+      CU_ASSERT(strcasecmp(sel->name, "a:visited") == 0);
+      break;
+    }
+    ii++;
+  }
+  APR_TERM;
+  fprintf(stderr, "end %s\n", __func__);
+#undef TEST_STRING
+}
+
+char *test_chxj_serf_get054(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+{
+  static char *css = "a:focus { display: none }";
+
+  return css;
+}
+void test_chxj_css_find_selector_pseudo_003()
+{
+  Doc doc;
+  Node *node;
+  Node *tmp_node;
+  Node *node_sv;
+  css_stylesheet_t *ret;
+  css_selector_t *sel;
+  int ii;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get054;
+
+  fprintf(stderr, "start %s\n", __func__);
+  doc.r = &r;
+  qs_init_malloc(&doc);
+  qs_init_root_node(&doc);
+  doc.parse_mode = PARSE_MODE_CHTML;
+
+
+  apr_uri_parse(p, "http://localhost:888/abc", &r.parsed_uri); \
+
+  ret = chxj_css_parse_from_uri(&r, r.pool, NULL, "/hoge.css");
+  CU_ASSERT(ret != NULL);
+
+  ret = chxj_find_pseudo_selectors(&doc, ret);
+  CU_ASSERT(ret != NULL);
+  ii = 0;
+  for (sel = ret->selector_head.next;ret && sel != &ret->selector_head; sel = sel->next) {
+    fprintf(stderr, "%s\n", sel->name);
+    switch(ii) {
+    case 0:
+      CU_ASSERT(strcasecmp(sel->name, "a:focus") == 0);
+      break;
+    }
+    ii++;
+  }
+  APR_TERM;
+  fprintf(stderr, "end %s\n", __func__);
+#undef TEST_STRING
+}
+
+char *test_chxj_serf_get055(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }";
+
+  return css;
+}
+void test_chxj_css_find_selector_pseudo_004()
+{
+  Doc doc;
+  Node *node;
+  Node *tmp_node;
+  Node *node_sv;
+  css_stylesheet_t *ret;
+  css_selector_t *sel;
+  int ii;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get055;
+
+  fprintf(stderr, "start %s\n", __func__);
+  doc.r = &r;
+  qs_init_malloc(&doc);
+  qs_init_root_node(&doc);
+  doc.parse_mode = PARSE_MODE_CHTML;
+
+
+  apr_uri_parse(p, "http://localhost:888/abc", &r.parsed_uri); \
+
+  ret = chxj_css_parse_from_uri(&r, r.pool, NULL, "/hoge.css");
+  CU_ASSERT(ret != NULL);
+
+  ret = chxj_find_pseudo_selectors(&doc, ret);
+  CU_ASSERT(ret != NULL);
+  ii = 0;
+  for (sel = ret->selector_head.next;ret && sel != &ret->selector_head; sel = sel->next) {
+    fprintf(stderr, "%s\n", sel->name);
+    switch(ii) {
+    case 0:
+      CU_ASSERT(strcasecmp(sel->name, "a:focus") == 0);
+      break;
+    case 1:
+      CU_ASSERT(strcasecmp(sel->name, "a:link") == 0);
+      break;
+    case 2:
+      CU_ASSERT(strcasecmp(sel->name, "a:visited") == 0);
+      break;
+    }
+    ii++;
+  }
   APR_TERM;
   fprintf(stderr, "end %s\n", __func__);
 #undef TEST_STRING

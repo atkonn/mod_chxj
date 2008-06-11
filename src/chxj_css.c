@@ -261,6 +261,7 @@ s_search_selector_regexp(Doc *doc, request_rec *r, apr_pool_t *pool, css_stylesh
           if (chxj_ap_regexec(pattern3, src, pattern3->re_nsub + 1, match, 0) == 0) {
             DBG(r, "has any parent");
             one = chxj_ap_pregsub(pool, "$1",src, pattern3->re_nsub + 1, match);
+
             char *ret = s_cmp_now_node_vs_current_style(doc, r, pool, strrchr(src, *one)+1, pattern4, node->parent);
             if (ret) {
               DBG(r, "continue do while");
@@ -599,7 +600,7 @@ s_search_selector(css_stylesheet_t *stylesheet, const char *name)
   char u = toupper(*name);
   if (! stylesheet) return NULL;
   for (cur = stylesheet->selector_head.next; cur != &stylesheet->selector_head; cur = cur->next) {
-    if ((l == *cur->name || u == *cur->name) && strcasecmp(cur->name, name) == 0) {
+    if (cur->name && (l == *cur->name || u == *cur->name) && strcasecmp(cur->name, name) == 0) {
       return cur;
     }
   }
@@ -945,6 +946,47 @@ s_cmp_now_node_vs_current_style(Doc *doc, request_rec *r, apr_pool_t *pool, char
     DBG(r, "unmatch(tag) tag:[%s] vs [%s]", tag_name, node_tag_name);
   }
   return NULL;
+}
+
+
+/**
+ * find selector with pseudo class.
+ * @return new css_stylesheet_t
+ */
+css_stylesheet_t *
+chxj_find_pseudo_selectors(Doc *doc, css_stylesheet_t *stylesheet)
+{
+  css_selector_t *cur_sel; 
+  css_property_t *cur_prop;
+  css_stylesheet_t *result;
+  char *pattern_str = "^a:(link|focus|visited)$";
+  ap_regex_t *pattern1 = chxj_ap_pregcomp(doc->pool, pattern_str, AP_REG_EXTENDED|AP_REG_ICASE);
+
+  result = apr_palloc(doc->pool, sizeof(*result));
+  if (! result) {
+    ERR(doc->r, "%s:%d Out of Memory", APLOG_MARK);
+    return NULL;
+  }
+  memset(result, 0, sizeof(*result));
+  result->selector_head.next = &result->selector_head;
+  result->selector_head.ref  = &result->selector_head.next;
+
+  for (cur_sel = stylesheet->selector_head.next; cur_sel != &stylesheet->selector_head; cur_sel = cur_sel->next) {
+    ap_regmatch_t match[256];
+    if (chxj_ap_regexec(pattern1, cur_sel->name, pattern1->re_nsub + 1, match, 0) == 0) {
+      css_selector_t *new_sel = s_new_selector(doc->pool, result, cur_sel->name);
+      css_property_t *cur_prop;
+      for (cur_prop = cur_sel->property_head.next; cur_prop != &cur_sel->property_head; cur_prop = cur_prop->next) {
+        css_property_t *to_prop = s_css_parser_copy_property(doc->pool, cur_prop);
+        list_insert(to_prop, (&new_sel->property_head));
+      }
+      list_insert(new_sel, (&result->selector_head));
+    }
+  }
+
+  chxj_ap_pregfree(doc->pool, pattern1);
+
+  return result;
 }
 
 #if 0
