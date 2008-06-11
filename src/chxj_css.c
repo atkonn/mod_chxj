@@ -254,6 +254,7 @@ s_search_selector_regexp(Doc *doc, request_rec *r, apr_pool_t *pool, css_stylesh
       do {
         DBG(r, "start do while");
         *strrchr(src, *one) = 0;
+        DBG(r, "src:[%s] one:[%c]", src, *one);
         switch (*one) {
         case '>': /* Child selectors */
           DBG(r, "child selectors");
@@ -264,6 +265,8 @@ s_search_selector_regexp(Doc *doc, request_rec *r, apr_pool_t *pool, css_stylesh
             if (ret) {
               DBG(r, "continue do while");
               node = node->parent;
+              DBG(r, "new node:[%x]", node);
+              DBG(r, "new node->prev:[%x]", node->prev);
               loop = 1;
             }
           }
@@ -281,7 +284,7 @@ s_search_selector_regexp(Doc *doc, request_rec *r, apr_pool_t *pool, css_stylesh
 
 
         case '+': /* Adjacent sibling selectors */
-          DBG(r, "descendant selectors");
+          DBG(r, "sibling selectors");
           if (chxj_ap_regexec(pattern3, src, pattern3->re_nsub + 1, match, 0) == 0) {
             DBG(r, "has any parent");
             one = chxj_ap_pregsub(pool, "$1",src, pattern3->re_nsub + 1, match);
@@ -289,26 +292,17 @@ s_search_selector_regexp(Doc *doc, request_rec *r, apr_pool_t *pool, css_stylesh
             if (ret) {
               DBG(r, "continue do while");
               loop = 1;
-              if (*one == '+') {
-                if (sib_node) {
-                  sib_node = node;
-                }
-                node = node->prev;
-              }
-              else {
-                if (sib_node) {
-                  node = sib_node->parent;
-                  sib_node = NULL;
-                }
-                else {
-                  node = node->parent;
-                }
-              }
+              node = node->prev;
               break;
             }
           }
           else {
-            DBG(r, "prev:[%x]", node->prev);
+            DBG(r, "now node:[%s][%x]", node->name, node);
+            if (! node->prev) {
+              ret_sel = NULL;
+              goto end_of_search;
+            }
+            DBG(r, "prev:[%x] now:[%s]", node->prev, node->name);
             DBG(r, "prev->name:[%s] src:[%s]", node->prev->name, src);
             char *ret = s_cmp_now_node_vs_current_style(doc, r, pool, src, pattern4, node->prev);
             if (ret) {
