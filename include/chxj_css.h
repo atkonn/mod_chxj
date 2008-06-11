@@ -76,6 +76,7 @@ typedef struct __css_current_stylesheet_stack_t {
 extern css_stylesheet_t *chxj_css_parse_from_uri(request_rec *r, apr_pool_t *pool, css_stylesheet_t *old_stylesheet, const char *uri);
 extern void chxj_css_stylesheet_dump(css_stylesheet_t *stylesheet);
 extern css_selector_t *chxj_css_find_selector(Doc *doc, css_stylesheet_t *stylesheet, Node *node);
+extern css_stylesheet_t *chxj_find_pseudo_selectors(Doc *doc, css_stylesheet_t *stylesheet);
 #endif
 /*
  * vim:ts=2 et
