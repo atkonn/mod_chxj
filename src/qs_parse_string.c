@@ -403,7 +403,7 @@ qs_dump_node(Doc *doc, Node *node, int indent)
                       (char *)qs_get_node_value(doc,p));
     }
     else {
-      DBG(doc->r,"%*.*sNode:[%s]\n", indent,indent," ", qs_get_node_name(doc,p));
+      DBG(doc->r,"%*.*sNode:[%s] prev:[%x]\n", indent,indent," ", qs_get_node_name(doc,p), p->prev);
     }
     for (attr = (Attr *)qs_get_attr(doc,p); attr; attr = (Attr *)qs_get_next_attr(doc,attr)) {
       DBG(doc->r,"%*.*s  ATTR:[%s]\n", indent,indent," ", (char *)qs_get_attr_name(doc,attr));
