@@ -520,6 +520,7 @@ qs_init_root_node(Doc *doc)
     QX_LOGGER_FATAL("Out Of Memory");
   }
 
+  doc->root_node->prev   = NULL;
   doc->root_node->next   = NULL;
   doc->root_node->parent = NULL;
   doc->root_node->child  = NULL;
@@ -540,6 +541,7 @@ qs_init_root_node(Doc *doc)
 void
 qs_add_child_node(Doc *doc,Node *node) 
 {
+  node->prev       = NULL;
   node->next       = NULL;
   node->child      = NULL;
   node->child_tail = NULL;
@@ -552,6 +554,7 @@ qs_add_child_node(Doc *doc,Node *node)
 #ifdef DEBUG
     QX_LOGGER_DEBUG("search child free node");
 #endif
+    node->prev = doc->now_parent_node->child_tail;
     doc->now_parent_node->child_tail->next = node;
     doc->now_parent_node->child_tail       = node;
   }
@@ -592,14 +595,23 @@ qs_get_child_node(Doc *UNUSED(doc), Node *node) {
 
 
 Node *
-qs_get_next_node(Doc *UNUSED(doc), Node *node) {
+qs_get_next_node(Doc *UNUSED(doc), Node *node) 
+{
   return node->next;
+}
+
+
+Node *
+qs_get_prev_node(Doc *UNUSED(doc), Node *node) 
+{
+  return node->prev;
 }
 
 
 
 Attr *
-qs_get_attr(Doc *UNUSED(doc), Node *node) {
+qs_get_attr(Doc *UNUSED(doc), Node *node) 
+{
   return node->attr;
 }
 

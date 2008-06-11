@@ -223,6 +223,8 @@ static css_selector_t *
 s_search_selector_regexp(Doc *doc, request_rec *r, apr_pool_t *pool, css_stylesheet_t *stylesheet, const char *pattern_str1, const char *pattern_str2, Node *node)
 {
   Node *node_sv = node;
+  Node *sib_node = NULL;
+  css_selector_t *ret_sel = NULL;
   css_selector_t *tail;
   css_selector_t *cur;
   DBG(r, "pattern1:[%s]", pattern_str1);
@@ -230,7 +232,7 @@ s_search_selector_regexp(Doc *doc, request_rec *r, apr_pool_t *pool, css_stylesh
   ap_regex_t *pattern1 = chxj_ap_pregcomp(pool, pattern_str1, AP_REG_EXTENDED|AP_REG_ICASE);
   ap_regex_t *pattern2 = chxj_ap_pregcomp(pool, pattern_str2, AP_REG_EXTENDED|AP_REG_ICASE);
   ap_regex_t *pattern3 = chxj_ap_pregcomp(pool, "^.*([>+ ])([^>+ ]+?)$", AP_REG_EXTENDED|AP_REG_ICASE);
-  ap_regex_t *pattern4 = chxj_ap_pregcomp(pool, "^([^.#]+?)(\\.[^#]+?)?(#.+?)?$", AP_REG_EXTENDED|AP_REG_ICASE);
+  ap_regex_t *pattern4 = chxj_ap_pregcomp(pool, "^([^.#]+?)?(\\.[^#]+?)?(#.+?)?$", AP_REG_EXTENDED|AP_REG_ICASE);
                               
   tail = (css_selector_t *)((apr_size_t)stylesheet->selector_head.ref - (apr_size_t)APR_OFFSETOF(css_selector_t, next));
   for (cur = tail; 
@@ -240,7 +242,8 @@ s_search_selector_regexp(Doc *doc, request_rec *r, apr_pool_t *pool, css_stylesh
     DBG(r, "cur->name:[%s]", cur->name);
     if (chxj_ap_regexec(pattern1, cur->name, pattern1->re_nsub + 1, match, 0) == 0) {
       DBG(r, "match(independent of)");
-      return cur;
+      ret_sel = cur;
+      goto end_of_search;
     }
     else 
     if (chxj_ap_regexec(pattern2, cur->name, pattern2->re_nsub + 1, match, 0) == 0) {
@@ -250,7 +253,6 @@ s_search_selector_regexp(Doc *doc, request_rec *r, apr_pool_t *pool, css_stylesh
       int loop = 0;
       do {
         DBG(r, "start do while");
-        node = node->parent;
         *strrchr(src, *one) = 0;
         switch (*one) {
         case '>': /* Child selectors */
@@ -258,38 +260,81 @@ s_search_selector_regexp(Doc *doc, request_rec *r, apr_pool_t *pool, css_stylesh
           if (chxj_ap_regexec(pattern3, src, pattern3->re_nsub + 1, match, 0) == 0) {
             DBG(r, "has any parent");
             one = chxj_ap_pregsub(pool, "$1",src, pattern3->re_nsub + 1, match);
-            char *ret = s_cmp_now_node_vs_current_style(doc, r, pool, strrchr(src, *one)+1, pattern4, node);
+            char *ret = s_cmp_now_node_vs_current_style(doc, r, pool, strrchr(src, *one)+1, pattern4, node->parent);
             if (ret) {
               DBG(r, "continue do while");
+              node = node->parent;
               loop = 1;
             }
           }
           else {
-            DBG(r, "parent:[%x]", node);
-            DBG(r, "parent->name:[%s] src:[%s]", node->name, src);
-            char *ret = s_cmp_now_node_vs_current_style(doc, r, pool, src, pattern4, node);
-            if (ret) return ret;
+            DBG(r, "parent:[%x]", node->parent);
+            DBG(r, "parent->name:[%s] src:[%s]", node->parent->name, src);
+            char *ret = s_cmp_now_node_vs_current_style(doc, r, pool, src, pattern4, node->parent);
+            if (ret) {
+              ret_sel = cur;
+              goto end_of_search;
+            }
             loop = 0;
           }
           break;
+
+
         case '+': /* Adjacent sibling selectors */
-          loop = 0;
+          DBG(r, "descendant selectors");
+          if (chxj_ap_regexec(pattern3, src, pattern3->re_nsub + 1, match, 0) == 0) {
+            DBG(r, "has any parent");
+            one = chxj_ap_pregsub(pool, "$1",src, pattern3->re_nsub + 1, match);
+            char *ret = s_cmp_now_node_vs_current_style(doc, r, pool, strrchr(src, *one)+1, pattern4, node->prev);
+            if (ret) {
+              DBG(r, "continue do while");
+              loop = 1;
+              if (*one == '+') {
+                if (sib_node) {
+                  sib_node = node;
+                }
+                node = node->prev;
+              }
+              else {
+                if (sib_node) {
+                  node = sib_node->parent;
+                  sib_node = NULL;
+                }
+                else {
+                  node = node->parent;
+                }
+              }
+              break;
+            }
+          }
+          else {
+            DBG(r, "prev:[%x]", node->prev);
+            DBG(r, "prev->name:[%s] src:[%s]", node->prev->name, src);
+            char *ret = s_cmp_now_node_vs_current_style(doc, r, pool, src, pattern4, node->prev);
+            if (ret) {
+              ret_sel = cur;
+              goto end_of_search;
+            }
+          }
           break;
+
+
         case ' ': /* Descendant selectors */
           DBG(r, "descendant selectors");
           if (chxj_ap_regexec(pattern3, src, pattern3->re_nsub + 1, match, 0) == 0) {
             DBG(r, "has any parent");
             one = chxj_ap_pregsub(pool, "$1",src, pattern3->re_nsub + 1, match);
-            for (; node; node = node->parent) {
-              if (strcasecmp(node->name, "ROOT") == 0) {
+            for (; node && node->parent; node = node->parent) {
+              if (strcasecmp(node->name, "ROOT") == 0 || strcasecmp(node->parent->name, "ROOT") == 0) {
                 DBG(r, "unmatch");
                 loop = 0;
                 break;
               }
-              char *ret = s_cmp_now_node_vs_current_style(doc, r, pool, strrchr(src, *one)+1, pattern4, node);
+              char *ret = s_cmp_now_node_vs_current_style(doc, r, pool, strrchr(src, *one)+1, pattern4, node->parent);
               if (ret) {
                 DBG(r, "continue do while");
                 loop = 1;
+                node = node->parent;
                 break;
               }
             }
@@ -297,14 +342,17 @@ s_search_selector_regexp(Doc *doc, request_rec *r, apr_pool_t *pool, css_stylesh
           else {
             DBG(r, "parent:[%x]", node);
             DBG(r, "parent->name:[%s] src:[%s]", node->name, src);
-            for (; node; node = node->parent) {
-              if (strcasecmp(node->name, "ROOT") == 0) {
+            for (; node && node->parent; node = node->parent) {
+              if (strcasecmp(node->name, "ROOT") == 0 || strcasecmp(node->parent->name, "ROOT") == 0) {
                 DBG(r, "unmatch");
                 loop = 0;
                 break;
               }
-              char *ret = s_cmp_now_node_vs_current_style(doc, r, pool, src, pattern4, node);
-              if (ret) return ret;
+              char *ret = s_cmp_now_node_vs_current_style(doc, r, pool, src, pattern4, node->parent);
+              if (ret) {
+                ret_sel = cur;
+                goto end_of_search;
+              }
             }
           }
           break;
@@ -317,9 +365,13 @@ s_search_selector_regexp(Doc *doc, request_rec *r, apr_pool_t *pool, css_stylesh
     }
     DBG(r, "unmatch [%s]", cur->name);
   }
+
+end_of_search:
   chxj_ap_pregfree(pool, pattern1);
   chxj_ap_pregfree(pool, pattern2);
-  return NULL;
+  chxj_ap_pregfree(pool, pattern3);
+  chxj_ap_pregfree(pool, pattern4);
+  return ret_sel;
 }
 static css_stylesheet_t *
 s_chxj_css_parse_from_uri(request_rec *r, apr_pool_t *pool, struct css_already_import_stack *imported_stack, css_stylesheet_t *old_stylesheet, const char *uri)
@@ -858,6 +910,7 @@ static char *
 s_cmp_now_node_vs_current_style(Doc *doc, request_rec *r, apr_pool_t *pool, char *src, ap_regex_t *pattern4, Node *node)
 {
   ap_regmatch_t match[256];
+  DBG(r, "src:[%s]", src);
   if (chxj_ap_regexec(pattern4, src, pattern4->re_nsub + 1, match, 0) == 0) {
     char *tag_name   = chxj_ap_pregsub(pool, "$1", src, pattern4->re_nsub + 1, match);
     char *class_name = chxj_ap_pregsub(pool, "$2", src, pattern4->re_nsub + 1, match);
@@ -871,14 +924,22 @@ s_cmp_now_node_vs_current_style(Doc *doc, request_rec *r, apr_pool_t *pool, char
     char *node_class_name = NULL;
     char *node_id_name    = NULL;
     s_get_tag_and_class_and_id(doc, node, &node_tag_name, &node_class_name, &node_id_name);
-    if (strcasecmp(node_tag_name, tag_name) == 0 || strcmp("*", tag_name) == 0) {
+    if (*tag_name == 0 || strcasecmp(node_tag_name, tag_name) == 0 || strcmp("*", tag_name) == 0) {
       if (class_name && *class_name != 0) {
+        if (!node_class_name) {
+          DBG(r, "unmatch (class) node:[NULL]");
+          return NULL;
+        }
         if (strcasecmp(node_class_name, &class_name[1]) != 0) {
           DBG(r, "unmatch (class) node:[%s] style:[%s]", node_class_name, &class_name[1]);
           return NULL;
         }
       }
       if (id_name && *id_name != 0) {
+        if (!node_id_name) {
+          DBG(r, "unmatch (id) node:[NULL]");
+          return NULL;
+        }
         if (strcasecmp(node_id_name, &id_name[1]) != 0) {
           DBG(r, "unmatch (id)");
           return NULL;

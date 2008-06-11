@@ -110,6 +110,7 @@ typedef struct Node Node;
 struct Node {
   struct Node   *next;
   struct Node   *parent;
+  struct Node   *prev;
   struct Node   *child;
   struct Node   *child_tail;
   struct Attr   *attr;
@@ -192,8 +193,9 @@ extern char* qs_get_node_name(
 
 extern int qs_get_node_size(Doc* doc, Node* node) ;
 
-extern Node *qs_get_child_node(Doc *doc, Node *node) ;
-extern Node *qs_get_next_node(Doc *doc, Node *node) ;
+extern Node *qs_get_child_node(Doc *doc, Node *node);
+extern Node *qs_get_next_node(Doc *doc, Node *node);
+extern Node *qs_get_prev_node(Doc *doc, Node *node);
 
 Attr* qs_get_attr(Doc* doc, Node* node) ;
 Attr* qs_get_next_attr(Doc* doc, Attr* attr) ;
