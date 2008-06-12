@@ -273,6 +273,7 @@ typedef enum {
   tagPLAINTEXT,
   tagBLINK,
   tagMARQUEE,
+  tagLINK,
 } tag_type;
 
 typedef struct mod_chxj_config mod_chxj_config;
@@ -362,11 +363,14 @@ struct mod_chxj_config {
 #define CONVRULE_ENGINE_ON_BIT        (0x00000001)
 #define CONVRULE_ENGINE_OFF_BIT       (0x00000002)
 #define CONVRULE_COOKIE_ON_BIT        (0x00000004)
+#define CONVRULE_CSS_ON_BIT           (0x00000008)
 
 #define CONVRULE_ENGINE_ON_CMD        "EngineOn"
 #define CONVRULE_ENGINE_OFF_CMD       "EngineOff"
 #define CONVRULE_COOKIE_ON_CMD        "CookieOn"
 #define CONVRULE_COOKIE_OFF_CMD       "CookieOff"
+#define CONVRULE_CSS_ON_CMD           "CssOn"
+#define CONVRULE_CSS_OFF_CMD          "CssOff"
 
 
 #define CONVRULE_FLAG_NOTMATCH        (0x00000001)
@@ -376,6 +380,8 @@ struct mod_chxj_config {
 #define CONVRULE_PC_FLAG_ON_BIT       (0x00000001)
 #define CONVRULE_PC_FLAG_OFF_BIT      (0x00000002)
 
+
+#define IS_CSS_ON(X)                  ((X)->action & CONVRULE_CSS_ON_BIT)
 
 typedef struct {
   apr_global_mutex_t* cookie_db_lock;

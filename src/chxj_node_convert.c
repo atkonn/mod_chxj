@@ -355,6 +355,19 @@ chxj_node_convert(
         if (handlers[tagLABEL].end_tag_handler)
           handlers[tagLABEL].end_tag_handler(pdoc, child);
       }
+      else
+      /*----------------------------------------------------------------------*/
+      /* <LINK>                                                               */
+      /*----------------------------------------------------------------------*/
+      if (strcasecmp(name, "link") == 0) {
+        if (handlers[tagLINK].start_tag_handler) 
+          handlers[tagLINK].start_tag_handler(pdoc, child);
+
+        chxj_node_convert(spec, r, pdoc, doc, child, indent+1);
+
+        if (handlers[tagLINK].end_tag_handler)
+          handlers[tagLINK].end_tag_handler(pdoc, child);
+      }
       else {
         chxj_node_convert(spec, r, pdoc, doc, child, indent+1);
       }

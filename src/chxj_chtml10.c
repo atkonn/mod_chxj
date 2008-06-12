@@ -108,6 +108,7 @@ static char *s_chtml10_end_menu_tag       (void *pdoc, Node *node);
 static char *s_chtml10_start_plaintext_tag(void *pdoc, Node *node);
 static char *s_chtml10_start_plaintext_tag_inner(void  *pdoc, Node *node);
 static char *s_chtml10_end_plaintext_tag  (void *pdoc, Node *node);
+static char *s_chtml10_start_link_tag     (void *pdoc, Node *node);
 
 static void  s_init_chtml10(chtml10_t *chtml, Doc *doc, request_rec *r, device_table *spec);
 
@@ -379,6 +380,11 @@ tag_handler chtml10_handler[] = {
   /* tagMARQUEE */
   {
     NULL,
+    NULL,
+  },
+  /* tagLINK */
+  {
+    s_chtml10_start_link_tag,
     NULL,
   },
 };
@@ -3293,7 +3299,7 @@ s_chtml10_start_plaintext_tag_inner(void *pdoc, Node *node)
 
 
 /**
- * It is a hanplaintexter who processes the PLAINTEXT tag.
+ * It is a handler who processes the PLAINTEXT tag.
  *
  * @param pdoc  [i/o] The pointer to the CHTML structure at the output
  *                     destination is specified.
@@ -3304,6 +3310,63 @@ static char *
 s_chtml10_end_plaintext_tag(void *pdoc, Node *UNUSED(child))
 {
   chtml10_t *chtml10 = GET_CHTML10(pdoc);
+  return chtml10->out;
+}
+
+
+/**
+ * It is a handler who processes the LINK tag.
+ *
+ * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The PLAINTEXT tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_chtml10_start_link_tag(void *pdoc, Node *node)
+{
+  chtml10_t     *chtml10;
+  Doc           *doc;
+  Attr          *attr;
+  char          *rel  = NULL;
+  char          *href = NULL;
+  char          *type = NULL;
+
+  chtml10 = GET_CHTML10(pdoc);
+  doc     = chtml10->doc;
+
+  if (! IS_CSS_ON(chtml10->entryp)) {
+    return chtml10->out;
+  }
+
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *name  = qs_get_attr_name(doc,attr);
+    char *value = qs_get_attr_value(doc,attr);
+    if (STRCASEEQ('r','R',"rel", name)) {
+      if (value && *value) {
+        rel = value;
+      }
+    }
+    else if (STRCASEEQ('h','H',"href", name)) {
+      if (value && *value) {
+        href = value;
+      }
+    }
+    else if (STRCASEEQ('t','T',"type", name)) {
+      if (value && *value) {
+        type = value;
+      }
+    }
+  }
+
+  if (rel && href && type) {
+
+    /* この辺でCSSを読み込む */
+
+  }
+
   return chtml10->out;
 }
 /*
