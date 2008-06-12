@@ -239,7 +239,6 @@ s_search_selector_regexp(Doc *doc, request_rec *r, apr_pool_t *pool, css_stylesh
        cur != &stylesheet->selector_head; 
        cur = (css_selector_t *)((apr_size_t)cur->ref - (apr_size_t)APR_OFFSETOF(css_selector_t, next))) {
     ap_regmatch_t match[256];
-    DBG(r, "cur->name:[%s]", cur->name);
     if (chxj_ap_regexec(pattern1, cur->name, pattern1->re_nsub + 1, match, 0) == 0) {
       DBG(r, "match(independent of)");
       ret_sel = cur;
@@ -247,19 +246,14 @@ s_search_selector_regexp(Doc *doc, request_rec *r, apr_pool_t *pool, css_stylesh
     }
     else 
     if (chxj_ap_regexec(pattern2, cur->name, pattern2->re_nsub + 1, match, 0) == 0) {
-      DBG(r, "match(depend on) [%s]", cur->name);
       char *src = apr_pstrdup(pool, cur->name);
       char *one = chxj_ap_pregsub(pool, "$1",src, pattern2->re_nsub + 1, match);
       int loop = 0;
       do {
-        DBG(r, "start do while");
         *strrchr(src, *one) = 0;
-        DBG(r, "src:[%s] one:[%c]", src, *one);
         switch (*one) {
         case '>': /* Child selectors */
-          DBG(r, "child selectors");
           if (chxj_ap_regexec(pattern3, src, pattern3->re_nsub + 1, match, 0) == 0) {
-            DBG(r, "has any parent");
             one = chxj_ap_pregsub(pool, "$1",src, pattern3->re_nsub + 1, match);
 
             char *ret = s_cmp_now_node_vs_current_style(doc, r, pool, strrchr(src, *one)+1, pattern4, node->parent);
@@ -272,8 +266,6 @@ s_search_selector_regexp(Doc *doc, request_rec *r, apr_pool_t *pool, css_stylesh
             }
           }
           else {
-            DBG(r, "parent:[%x]", node->parent);
-            DBG(r, "parent->name:[%s] src:[%s]", node->parent->name, src);
             char *ret = s_cmp_now_node_vs_current_style(doc, r, pool, src, pattern4, node->parent);
             if (ret) {
               ret_sel = cur;
@@ -285,26 +277,20 @@ s_search_selector_regexp(Doc *doc, request_rec *r, apr_pool_t *pool, css_stylesh
 
 
         case '+': /* Adjacent sibling selectors */
-          DBG(r, "sibling selectors");
           if (chxj_ap_regexec(pattern3, src, pattern3->re_nsub + 1, match, 0) == 0) {
-            DBG(r, "has any parent");
             one = chxj_ap_pregsub(pool, "$1",src, pattern3->re_nsub + 1, match);
             char *ret = s_cmp_now_node_vs_current_style(doc, r, pool, strrchr(src, *one)+1, pattern4, node->prev);
             if (ret) {
-              DBG(r, "continue do while");
               loop = 1;
               node = node->prev;
               break;
             }
           }
           else {
-            DBG(r, "now node:[%s][%x]", node->name, node);
             if (! node->prev) {
               ret_sel = NULL;
               goto end_of_search;
             }
-            DBG(r, "prev:[%x] now:[%s]", node->prev, node->name);
-            DBG(r, "prev->name:[%s] src:[%s]", node->prev->name, src);
             char *ret = s_cmp_now_node_vs_current_style(doc, r, pool, src, pattern4, node->prev);
             if (ret) {
               ret_sel = cur;
@@ -315,19 +301,15 @@ s_search_selector_regexp(Doc *doc, request_rec *r, apr_pool_t *pool, css_stylesh
 
 
         case ' ': /* Descendant selectors */
-          DBG(r, "descendant selectors");
           if (chxj_ap_regexec(pattern3, src, pattern3->re_nsub + 1, match, 0) == 0) {
-            DBG(r, "has any parent");
             one = chxj_ap_pregsub(pool, "$1",src, pattern3->re_nsub + 1, match);
             for (; node && node->parent; node = node->parent) {
               if (strcasecmp(node->name, "ROOT") == 0 || strcasecmp(node->parent->name, "ROOT") == 0) {
-                DBG(r, "unmatch");
                 loop = 0;
                 break;
               }
               char *ret = s_cmp_now_node_vs_current_style(doc, r, pool, strrchr(src, *one)+1, pattern4, node->parent);
               if (ret) {
-                DBG(r, "continue do while");
                 loop = 1;
                 node = node->parent;
                 break;
@@ -335,11 +317,8 @@ s_search_selector_regexp(Doc *doc, request_rec *r, apr_pool_t *pool, css_stylesh
             }
           }
           else {
-            DBG(r, "parent:[%x]", node);
-            DBG(r, "parent->name:[%s] src:[%s]", node->name, src);
             for (; node && node->parent; node = node->parent) {
               if (strcasecmp(node->name, "ROOT") == 0 || strcasecmp(node->parent->name, "ROOT") == 0) {
-                DBG(r, "unmatch");
                 loop = 0;
                 break;
               }
@@ -353,12 +332,10 @@ s_search_selector_regexp(Doc *doc, request_rec *r, apr_pool_t *pool, css_stylesh
           break;
         default:
           loop = 0;
-          DBG(r, "unmatch(unknown separator)");
         }
       } while(loop);
       node = node_sv;
     }
-    DBG(r, "unmatch [%s]", cur->name);
   }
 
 end_of_search:
