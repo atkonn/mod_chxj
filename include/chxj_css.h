@@ -77,6 +77,7 @@ extern css_stylesheet_t *chxj_css_parse_from_uri(request_rec *r, apr_pool_t *poo
 extern void chxj_css_stylesheet_dump(css_stylesheet_t *stylesheet);
 extern css_selector_t *chxj_css_find_selector(Doc *doc, css_stylesheet_t *stylesheet, Node *node);
 extern css_stylesheet_t *chxj_find_pseudo_selectors(Doc *doc, css_stylesheet_t *stylesheet);
+extern css_stylesheet_t *chxj_css_parse_style_attr(Doc *doc, css_stylesheet_t *old_stylesheet, char *tag_name, char *class_name, char *id_name, char *style_attr_value);
 #endif
 /*
  * vim:ts=2 et

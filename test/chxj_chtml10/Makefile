@@ -8,7 +8,8 @@ TOP_DIR=../..
 INC_DIR=-I$(TOP_DIR)/include \
   -I/usr/include/apache2 \
   -I/usr/include/apr-1.0 \
-  -I$(TOP_DIR)/src
+  -I$(TOP_DIR)/src \
+  -I$(TOP_DIR)/src/serf
 
 all:test
 

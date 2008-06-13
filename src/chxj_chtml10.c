@@ -3363,9 +3363,9 @@ s_chtml10_start_link_tag(void *pdoc, Node *node)
   }
 
   if (rel && href && type) {
-
-    /* この辺でCSSを読み込む */
-
+    DBG(doc->r, "start load CSS. url:[%s]", href);
+    chtml10->style = chxj_css_parse_from_uri(doc->r, doc->pool, chtml10->style, href);
+    DBG(doc->r, "end load CSS. url:[%s]", href);
   }
 
   return chtml10->out;
