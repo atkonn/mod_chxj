@@ -10375,6 +10375,36 @@ void test_chtml10_font_tag_003()
 #undef TEST_STRING
 #undef RESULT_STRING
 }
+void test_chtml10_css_001() 
+{
+#define  TEST_STRING "<link rel=\"http://localhost/a.css\" type=\"text/css\" />"
+#define  RESULT_STRING "ﾊﾝｶｸ"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_chtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+/* test CSS */
 /*
  * vim:ts=2 et
  */

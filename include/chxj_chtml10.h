@@ -21,6 +21,7 @@
 
 #include "mod_chxj.h"
 #include "chxj_cookie.h"
+#include "chxj_css.h"
 
 /*----------------------------------------------------------------------------*/
 /* Structure for HDML                                                         */
@@ -28,16 +29,17 @@
 typedef struct ctml10_t chtml10_t;
 
 struct ctml10_t {
-    Doc                 *doc;
-    char                *out;
-    int                 out_len;
-    int                 pre_flag;
-    int                 textarea_flag;
+  Doc                 *doc;
+  char                *out;
+  int                 out_len;
+  int                 pre_flag;
+  int                 textarea_flag;
 
-    device_table        *spec;
-    mod_chxj_config     *conf;
-    chxjconvrule_entry  *entryp;
-    cookie_t            *cookie;
+  device_table        *spec;
+  mod_chxj_config     *conf;
+  chxjconvrule_entry  *entryp;
+  cookie_t            *cookie;
+  css_stylesheet_t    *style;
 };
 
 /*----------------------------------------------------------------------------*/
