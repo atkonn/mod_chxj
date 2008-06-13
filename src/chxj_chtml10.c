@@ -513,6 +513,7 @@ s_init_chtml10(
   chtml10->out  = qs_alloc_zero_byte_string(r->pool);
   chtml10->conf = chxj_get_module_config(r->per_dir_config, &chxj_module);
   chtml10->doc->parse_mode = PARSE_MODE_CHTML;
+  chtml10->style = NULL;
 }
 
 
@@ -3345,7 +3346,7 @@ s_chtml10_start_link_tag(void *pdoc, Node *node)
     char *name  = qs_get_attr_name(doc,attr);
     char *value = qs_get_attr_value(doc,attr);
     if (STRCASEEQ('r','R',"rel", name)) {
-      if (value && *value) {
+      if (value && *value && STRCASEEQ('s','S',"stylesheet", value)) {
         rel = value;
       }
     }
@@ -3355,7 +3356,7 @@ s_chtml10_start_link_tag(void *pdoc, Node *node)
       }
     }
     else if (STRCASEEQ('t','T',"type", name)) {
-      if (value && *value) {
+      if (value && *value && STRCASEEQ('t','T',"text/css",value)) {
         type = value;
       }
     }
