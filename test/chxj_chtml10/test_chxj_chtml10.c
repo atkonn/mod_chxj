@@ -34,6 +34,10 @@
 #include "chxj_dbm.c"
 #include "chxj_str_util.c"
 #include <iconv.h>
+#include "chxj_serf.h"
+#include "chxj_css.h"
+#include "chxj_serf.c"
+#include "chxj_css.c"
 
 
 
@@ -413,6 +417,9 @@ void test_chtml10_marquee_tag_019();
 void test_chtml10_font_tag_001(); 
 void test_chtml10_font_tag_002(); 
 void test_chtml10_font_tag_003(); 
+
+/* CSS */
+void test_chtml10_css_001();
 /* pend */
 
 int
@@ -792,6 +799,11 @@ main()
   CU_add_test(chtml10_suite, "test <font> 1." ,                                   test_chtml10_font_tag_001); 
   CU_add_test(chtml10_suite, "test <font> 2." ,                                   test_chtml10_font_tag_002); 
   CU_add_test(chtml10_suite, "test <font> 3." ,                                   test_chtml10_font_tag_003); 
+
+
+  /* CSS */
+  CU_add_test(chtml10_suite, "test css 001." ,                                    test_chtml10_css_001); 
+
   /* aend */
 
   CU_basic_run_tests();
@@ -10375,9 +10387,20 @@ void test_chtml10_font_tag_003()
 #undef TEST_STRING
 #undef RESULT_STRING
 }
+
+char *test_chxj_serf_get001(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }";
+
+  return css;
+}
 void test_chtml10_css_001() 
 {
-#define  TEST_STRING "<link rel=\"http://localhost/a.css\" type=\"text/css\" />"
+#define  TEST_STRING "<link rel=\"stylesheet\" href=\"http://localhost/a.css\" type=\"text/css\" />"
 #define  RESULT_STRING "ﾊﾝｶｸ"
   char  *ret;
   char  *tmp;
@@ -10386,6 +10409,7 @@ void test_chtml10_css_001()
   cookie_t cookie;
   apr_size_t destlen;
   APR_INIT;
+  chxj_serf_get = test_chxj_serf_get001;
 
   COOKIE_INIT(cookie);
 
