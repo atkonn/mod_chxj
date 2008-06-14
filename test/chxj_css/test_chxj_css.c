@@ -98,6 +98,9 @@ void test_chxj_css_find_selector_pseudo_004();
 void test_chxj_css_parse_style_attr_001();
 void test_chxj_css_parse_style_attr_002();
 void test_chxj_css_parse_style_attr_003();
+
+/* style value */
+void test_chxj_css_parse_style_attr_001();
 /* pend */
 
 int
@@ -3124,6 +3127,56 @@ void test_chxj_css_parse_style_attr_003()
   ret = chxj_css_parse_style_attr(&doc, ret, "br", "abc", "id1", "clear:both");
   CU_ASSERT(ret != NULL);
 
+  ii = 0;
+  for (sel = ret->selector_head.next;ret && sel != &ret->selector_head; sel = sel->next) {
+    fprintf(stderr, "%d %s\n", ii, sel->name);
+    switch (ii) {
+    case 5:
+      jj = 0;
+      for (cur_prop = sel->property_head.next; cur_prop != &sel->property_head; cur_prop = cur_prop->next) {
+        fprintf(stderr, "%d %s\n", jj, cur_prop->name);
+        switch (jj) {
+        case 0: 
+          CU_ASSERT(strcasecmp(cur_prop->name,  "clear") == 0);
+          CU_ASSERT(strcasecmp(cur_prop->value, "both") == 0);
+          break;
+        }
+        jj++;
+      }
+    }
+    ii++;
+  }
+  APR_TERM;
+  fprintf(stderr, "end %s\n", __func__);
+#undef TEST_STRING
+}
+
+/* style tag */
+void test_chxj_css_parse_style_value_001()
+{
+#define TEST_STRING "a { color: rgb(1,2,3); }"
+  Doc doc;
+  Node *node;
+  Node *tmp_node;
+  Node *node_sv;
+  css_stylesheet_t *ret;
+  css_selector_t *sel;
+  css_property_t *cur_prop;
+  int ii;
+  int jj;
+  APR_INIT;
+
+  fprintf(stderr, "start %s\n", __func__);
+  doc.r = &r;
+  qs_init_malloc(&doc);
+  qs_init_root_node(&doc);
+  doc.parse_mode = PARSE_MODE_CHTML;
+
+
+  apr_uri_parse(p, "http://localhost:888/abc", &r.parsed_uri); \
+
+  ret = chxj_css_parse_style_value(&doc, NULL, );
+  CU_ASSERT(ret != NULL);
   ii = 0;
   for (sel = ret->selector_head.next;ret && sel != &ret->selector_head; sel = sel->next) {
     fprintf(stderr, "%d %s\n", ii, sel->name);

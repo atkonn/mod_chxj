@@ -1119,6 +1119,27 @@ s_dup_stylesheet(Doc *doc, css_stylesheet_t *stylesheet)
   return result;
 }
 
+/**
+ * style value parser.
+ * <style>css</style>
+ * @return merged new css_stylesheet_t object.
+ */
+css_stylesheet_t *
+chxj_css_parse_style_value(Doc *doc, css_stylesheet_t *old_stylesheet, char *style_attr_value)
+{
+  css_stylesheet_t *new_stylesheet;
+  css_stylesheet_t *dup_stylesheet = NULL;
+
+  DBG(doc->r, "start chxj_css_parse_style_value()");
+
+  if (old_stylesheet) {
+    dup_stylesheet = s_dup_stylesheet(doc, old_stylesheet);
+  }
+  new_stylesheet = s_chxj_css_parse_from_buf(doc->r, doc->pool, NULL, dup_stylesheet, style_attr_value);
+
+  DBG(doc->r, "end   chxj_css_parse_style_value()");
+  return new_stylesheet;
+}
 
 #if 0
 css_stylesheet_t *
