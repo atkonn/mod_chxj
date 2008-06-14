@@ -106,7 +106,8 @@ static char *s_chtml10_end_menu_tag       (void *pdoc, Node *node);
 static char *s_chtml10_start_plaintext_tag(void *pdoc, Node *node);
 static char *s_chtml10_start_plaintext_tag_inner(void  *pdoc, Node *node);
 static char *s_chtml10_end_plaintext_tag  (void *pdoc, Node *node);
-static char *s_chtml10_start_link_tag     (void *pdoc, Node *node);
+static char *s_chtml10_link_tag           (void *pdoc, Node *node);
+static char *s_chtml10_style_tag          (void *pdoc, Node *node);
 
 static void  s_init_chtml10(chtml10_t *chtml, Doc *doc, request_rec *r, device_table *spec);
 
@@ -297,7 +298,7 @@ tag_handler chtml10_handler[] = {
   },
   /* tagSTYLE */
   {
-    NULL,
+    s_chtml10_style_tag,
     NULL,
   },
   /* tagSPAN */
@@ -382,7 +383,7 @@ tag_handler chtml10_handler[] = {
   },
   /* tagLINK */
   {
-    s_chtml10_start_link_tag,
+    s_chtml10_link_tag,
     NULL,
   },
 };
@@ -3280,11 +3281,11 @@ s_chtml10_end_plaintext_tag(void *pdoc, Node *UNUSED(child))
  *
  * @param pdoc  [i/o] The pointer to the CHTML structure at the output
  *                     destination is specified.
- * @param node   [i]   The PLAINTEXT tag node is specified.
+ * @param node   [i]   The LINK tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_chtml10_start_link_tag(void *pdoc, Node *node)
+s_chtml10_link_tag(void *pdoc, Node *node)
 {
   chtml10_t     *chtml10;
   Doc           *doc;
@@ -3326,6 +3327,55 @@ s_chtml10_start_link_tag(void *pdoc, Node *node)
     DBG(doc->r, "start load CSS. url:[%s]", href);
     chtml10->style = chxj_css_parse_from_uri(doc->r, doc->pool, chtml10->style, href);
     DBG(doc->r, "end load CSS. url:[%s]", href);
+  }
+
+  return chtml10->out;
+}
+
+/**
+ * It is a handler who processes the STYLE tag.
+ *
+ * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The STYLE tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_chtml10_style_tag(void *pdoc, Node *node)
+{
+  chtml10_t     *chtml10;
+  Doc           *doc;
+  Attr          *attr;
+  char          *type = NULL;
+
+  chtml10 = GET_CHTML10(pdoc);
+  doc     = chtml10->doc;
+
+  if (! IS_CSS_ON(chtml10->entryp)) {
+    return chtml10->out;
+  }
+
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *name  = qs_get_attr_name(doc,attr);
+    char *value = qs_get_attr_value(doc,attr);
+    if (STRCASEEQ('t','T',"type", name)) {
+      if (value && *value && STRCASEEQ('t','T',"text/css",value)) {
+        type = value;
+      }
+    }
+  }
+
+  Node *child = qs_get_child_node(doc, node);
+  if (type && child) {
+    char *name  = qs_get_node_name(doc, child);
+    if (STRCASEEQ('t','T',"text", name)) {
+      char *value = qs_get_node_value(doc, child);
+      DBG(doc->r, "start load CSS. buf:[%s]", value);
+      chtml10->style = chxj_css_parse_style_value(doc, chtml10->style, value);
+      DBG(doc->r, "end load CSS. value:[%s]", value);
+    }
   }
 
   return chtml10->out;
