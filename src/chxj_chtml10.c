@@ -75,8 +75,6 @@ static char *s_chtml10_start_br_tag       (void *pdoc, Node *node);
 static char *s_chtml10_end_br_tag         (void *pdoc, Node *node);
 static char *s_chtml10_start_tr_tag       (void *pdoc, Node *node);
 static char *s_chtml10_end_tr_tag         (void *pdoc, Node *node);
-static char *s_chtml10_start_font_tag     (void *pdoc, Node *node);
-static char *s_chtml10_end_font_tag       (void *pdoc, Node *node);
 static char *s_chtml10_start_input_tag    (void *pdoc, Node *node);
 static char *s_chtml10_end_input_tag      (void *pdoc, Node *node);
 static char *s_chtml10_start_form_tag     (void *pdoc, Node *node);
@@ -239,8 +237,8 @@ tag_handler chtml10_handler[] = {
   },
   /* tagFONT */
   {
-    s_chtml10_start_font_tag,
-    s_chtml10_end_font_tag,
+    NULL,
+    NULL,
   },
   /* tagFORM */
   {
@@ -1762,44 +1760,6 @@ s_chtml10_end_tr_tag(void *pdoc, Node *UNUSED(child))
 
   W_L("<br>");
   W_NLCODE();
-
-  return chtml10->out;
-}
-
-
-/**
- * It is a handler who processes the FONT tag.
- *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
- *                     destination is specified.
- * @param node   [i]   The FONT tag node is specified.
- * @return The conversion result is returned.
- */
-static char *
-s_chtml10_start_font_tag(void *pdoc, Node *UNUSED(node)) 
-{
-  chtml10_t *chtml10 = GET_CHTML10(pdoc);
-
-  /* Ignore */
-
-  return chtml10->out;
-}
-
-
-/**
- * It is a handler who processes the FONT tag.
- *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
- *                     destination is specified.
- * @param node   [i]   The FONT tag node is specified.
- * @return The conversion result is returned.
- */
-static char *
-s_chtml10_end_font_tag(void *pdoc, Node *UNUSED(child)) 
-{
-  chtml10_t *chtml10 = GET_CHTML10(pdoc);
-
-  /* ignore */
 
   return chtml10->out;
 }
