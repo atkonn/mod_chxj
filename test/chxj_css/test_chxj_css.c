@@ -96,6 +96,8 @@ void test_chxj_css_find_selector_pseudo_004();
 
 /* style attribute */
 void test_chxj_css_parse_style_attr_001();
+void test_chxj_css_parse_style_attr_002();
+void test_chxj_css_parse_style_attr_003();
 /* pend */
 
 int
@@ -166,6 +168,8 @@ main()
   CU_add_test(css_suite, "test css find_pseudo_selector 004",               test_chxj_css_find_selector_pseudo_004);
 
   CU_add_test(css_suite, "test css parse style attr 001",                   test_chxj_css_parse_style_attr_001);
+  CU_add_test(css_suite, "test css parse style attr 002",                   test_chxj_css_parse_style_attr_002);
+  CU_add_test(css_suite, "test css parse style attr 003",                   test_chxj_css_parse_style_attr_003);
   /* aend */
 
   CU_basic_run_tests();
@@ -2991,6 +2995,133 @@ void test_chxj_css_parse_style_attr_001()
   ret = chxj_css_parse_from_uri(&r, r.pool, NULL, "/hoge.css");
   CU_ASSERT(ret != NULL);
   ret = chxj_css_parse_style_attr(&doc, ret, "br", NULL, NULL, "clear:both");
+  CU_ASSERT(ret != NULL);
+
+  ii = 0;
+  for (sel = ret->selector_head.next;ret && sel != &ret->selector_head; sel = sel->next) {
+    fprintf(stderr, "%d %s\n", ii, sel->name);
+    switch (ii) {
+    case 5:
+      jj = 0;
+      for (cur_prop = sel->property_head.next; cur_prop != &sel->property_head; cur_prop = cur_prop->next) {
+        fprintf(stderr, "%d %s\n", jj, cur_prop->name);
+        switch (jj) {
+        case 0: 
+          CU_ASSERT(strcasecmp(cur_prop->name,  "clear") == 0);
+          CU_ASSERT(strcasecmp(cur_prop->value, "both") == 0);
+          break;
+        }
+        jj++;
+      }
+    }
+    ii++;
+  }
+  APR_TERM;
+  fprintf(stderr, "end %s\n", __func__);
+#undef TEST_STRING
+}
+
+
+char *test_chxj_serf_get057(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }";
+
+  return css;
+}
+void test_chxj_css_parse_style_attr_002()
+{
+  Doc doc;
+  Node *node;
+  Node *tmp_node;
+  Node *node_sv;
+  css_stylesheet_t *ret;
+  css_selector_t *sel;
+  css_property_t *cur_prop;
+  int ii;
+  int jj;
+  APR_INIT;
+
+  chxj_serf_get = test_chxj_serf_get057;
+
+  fprintf(stderr, "start %s\n", __func__);
+  doc.r = &r;
+  qs_init_malloc(&doc);
+  qs_init_root_node(&doc);
+  doc.parse_mode = PARSE_MODE_CHTML;
+
+
+  apr_uri_parse(p, "http://localhost:888/abc", &r.parsed_uri); \
+
+  ret = chxj_css_parse_from_uri(&r, r.pool, NULL, "/hoge.css");
+  CU_ASSERT(ret != NULL);
+  ret = chxj_css_parse_style_attr(&doc, ret, "br", "abc", NULL, "clear:both");
+  CU_ASSERT(ret != NULL);
+
+  ii = 0;
+  for (sel = ret->selector_head.next;ret && sel != &ret->selector_head; sel = sel->next) {
+    fprintf(stderr, "%d %s\n", ii, sel->name);
+    switch (ii) {
+    case 5:
+      jj = 0;
+      for (cur_prop = sel->property_head.next; cur_prop != &sel->property_head; cur_prop = cur_prop->next) {
+        fprintf(stderr, "%d %s\n", jj, cur_prop->name);
+        switch (jj) {
+        case 0: 
+          CU_ASSERT(strcasecmp(cur_prop->name,  "clear") == 0);
+          CU_ASSERT(strcasecmp(cur_prop->value, "both") == 0);
+          break;
+        }
+        jj++;
+      }
+    }
+    ii++;
+  }
+  APR_TERM;
+  fprintf(stderr, "end %s\n", __func__);
+#undef TEST_STRING
+}
+
+char *test_chxj_serf_get058(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }";
+
+  return css;
+}
+void test_chxj_css_parse_style_attr_003()
+{
+  Doc doc;
+  Node *node;
+  Node *tmp_node;
+  Node *node_sv;
+  css_stylesheet_t *ret;
+  css_selector_t *sel;
+  css_property_t *cur_prop;
+  int ii;
+  int jj;
+  APR_INIT;
+
+  chxj_serf_get = test_chxj_serf_get058;
+
+  fprintf(stderr, "start %s\n", __func__);
+  doc.r = &r;
+  qs_init_malloc(&doc);
+  qs_init_root_node(&doc);
+  doc.parse_mode = PARSE_MODE_CHTML;
+
+
+  apr_uri_parse(p, "http://localhost:888/abc", &r.parsed_uri); \
+
+  ret = chxj_css_parse_from_uri(&r, r.pool, NULL, "/hoge.css");
+  CU_ASSERT(ret != NULL);
+  ret = chxj_css_parse_style_attr(&doc, ret, "br", "abc", "id1", "clear:both");
   CU_ASSERT(ret != NULL);
 
   ii = 0;
