@@ -100,7 +100,7 @@ void test_chxj_css_parse_style_attr_002();
 void test_chxj_css_parse_style_attr_003();
 
 /* style value */
-void test_chxj_css_parse_style_attr_001();
+void test_chxj_css_parse_style_value_001();
 /* pend */
 
 int
@@ -173,6 +173,8 @@ main()
   CU_add_test(css_suite, "test css parse style attr 001",                   test_chxj_css_parse_style_attr_001);
   CU_add_test(css_suite, "test css parse style attr 002",                   test_chxj_css_parse_style_attr_002);
   CU_add_test(css_suite, "test css parse style attr 003",                   test_chxj_css_parse_style_attr_003);
+
+  CU_add_test(css_suite, "test css parse style value 001",                  test_chxj_css_parse_style_value_001);
   /* aend */
 
   CU_basic_run_tests();
@@ -3175,24 +3177,20 @@ void test_chxj_css_parse_style_value_001()
 
   apr_uri_parse(p, "http://localhost:888/abc", &r.parsed_uri); \
 
-  ret = chxj_css_parse_style_value(&doc, NULL, );
+  ret = chxj_css_parse_style_value(&doc, NULL, TEST_STRING);
   CU_ASSERT(ret != NULL);
   ii = 0;
   for (sel = ret->selector_head.next;ret && sel != &ret->selector_head; sel = sel->next) {
     fprintf(stderr, "%d %s\n", ii, sel->name);
-    switch (ii) {
-    case 5:
-      jj = 0;
-      for (cur_prop = sel->property_head.next; cur_prop != &sel->property_head; cur_prop = cur_prop->next) {
-        fprintf(stderr, "%d %s\n", jj, cur_prop->name);
-        switch (jj) {
-        case 0: 
-          CU_ASSERT(strcasecmp(cur_prop->name,  "clear") == 0);
-          CU_ASSERT(strcasecmp(cur_prop->value, "both") == 0);
-          break;
-        }
-        jj++;
+    jj = 0;
+    for (cur_prop = sel->property_head.next; cur_prop != &sel->property_head; cur_prop = cur_prop->next) {
+      fprintf(stderr, "%d %s:%s\n", jj, cur_prop->name, cur_prop->value);
+      switch (jj) {
+      case 0:
+        CU_ASSERT(strcasecmp(cur_prop->name, "color") == 0);
+        CU_ASSERT(strcasecmp(cur_prop->value, "rgb(1, 2, 3)") == 0);
       }
+      jj++;
     }
     ii++;
   }
