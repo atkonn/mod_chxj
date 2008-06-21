@@ -40,7 +40,6 @@ typedef struct __css_selector_t {
   struct __css_selector_t **ref;
   /* has tag or/and class or/and id */
   char *name;
-  enum Combinator combinator;
   css_property_t property_head;
 } css_selector_t;
 
