@@ -446,6 +446,11 @@ chxj_convert_chtml10(
   qs_init_malloc(&doc);
   qs_init_root_node(&doc);
 
+  if (IS_CSS_ON(chtml10.entryp)) {
+    /* current property list */
+    chtml10.css_prop_stack = chxj_new_prop_list_stack(&doc);
+  }
+
   ss = apr_pcalloc(r->pool, srclen + 1);
   memset(ss, 0,   srclen + 1);
   memcpy(ss, src, srclen);
@@ -582,16 +587,30 @@ s_chtml10_search_emoji(chtml10_t *chtml10, char *txt, char **rslt)
  * @return The conversion result is returned.
  */
 static char *
-s_chtml10_start_html_tag(void *pdoc, Node *UNUSED(node)) 
+s_chtml10_start_html_tag(void *pdoc, Node *node) 
 {
-  Doc           *doc;
-  request_rec   *r;
-  chtml10_t     *chtml10;
+  css_prop_list_t *last_css = NULL;
+  Doc             *doc;
+  request_rec     *r;
+  chtml10_t       *chtml10;
 
   chtml10 = GET_CHTML10(pdoc);
   doc     = chtml10->doc;
   r       = doc->r;
 
+  if (IS_CSS_ON(chtml10->entryp)) {
+    css_prop_list_t *dup_css;
+    css_selector_t  *selector;
+
+    last_css = chxj_css_get_last_prop_list(chtml10->css_prop_stack);
+    dup_css  = chxj_dup_css_prop_list(doc, last_css);
+    selector = chxj_css_find_selector(doc, chtml10->style, node);
+    if (selector) {
+      chxj_css_prop_list_merge_property(doc, dup_css, selector);
+    }
+    chxj_css_push_prop_list(chtml10->css_prop_stack, dup_css);
+    last_css = chxj_css_get_last_prop_list(chtml10->css_prop_stack);
+  }
   /*--------------------------------------------------------------------------*/
   /* start HTML tag                                                           */
   /*--------------------------------------------------------------------------*/
@@ -621,6 +640,10 @@ s_chtml10_end_html_tag(void *pdoc, Node *UNUSED(child))
   chtml10 = GET_CHTML10(pdoc);
   doc     = chtml10->doc;
   r       = doc->r;
+
+  if (IS_CSS_ON(chtml10->entryp)) {
+    chxj_css_pop_prop_list(chtml10->css_prop_stack);
+  }
 
   W_L("</html>");
   W_NLCODE();

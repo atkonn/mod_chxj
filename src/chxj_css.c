@@ -126,6 +126,10 @@ chxj_css_find_selector(Doc *doc, css_stylesheet_t *stylesheet, Node *node)
   Attr *attr;
   DBG(r, "start chxj_css_find_selector()");
 
+  if (! stylesheet) {
+    /* NOT FOUND */
+    return NULL;
+  }
   s_get_tag_and_class_and_id(doc, node, &tag_name, &class_name, &id);
   
   if (! tag_name || strcasecmp("ROOT", tag_name) == 0) {
@@ -1128,6 +1132,124 @@ chxj_css_parse_style_value(Doc *doc, css_stylesheet_t *old_stylesheet, char *sty
 
   DBG(doc->r, "end   chxj_css_parse_style_value()");
   return new_stylesheet;
+}
+
+
+/**
+ * allocate prop_list_stack.
+ */
+css_prop_list_stack_t *
+chxj_new_prop_list_stack(Doc *doc)
+{
+  css_prop_list_stack_t *new_stack = apr_palloc(doc->pool, sizeof(css_prop_list_stack_t));
+  if (! new_stack) {
+    ERR(doc->r, "%s:%d Out of memory.", APLOG_MARK);
+    return NULL;
+  }
+  new_stack->head.next = &new_stack->head;
+  new_stack->head.ref  = &new_stack->head.next;
+  return new_stack;
+}
+
+css_prop_list_t *
+chxj_css_create_prop_list(Doc *doc, css_selector_t *sel)
+{
+  css_prop_list_t *prop_list;
+  prop_list = apr_palloc(doc->pool, sizeof(*prop_list));
+  if (! prop_list) {
+    ERR(doc->r, "%s:%d Out of memory.", APLOG_MARK);
+    return NULL;
+  }
+  prop_list->head.next = &prop_list->head;
+  prop_list->head.ref  = &prop_list->head.next;
+  if (sel)  {
+    css_property_t *cur_prop;
+    for (cur_prop = sel->property_head.next; 
+         cur_prop != &sel->property_head; 
+         cur_prop = cur_prop->next) {
+      css_property_t *cp_prop = s_css_parser_copy_property(doc->pool, cur_prop);
+      list_insert(cp_prop, (&prop_list->head));
+    }
+  }
+  return prop_list;
+}
+
+/**
+ * PUSH
+ */
+void
+chxj_css_push_prop_list(css_prop_list_stack_t *stack, css_prop_list_t *prop_list)
+{
+  list_insert(prop_list, (&stack->head));
+}
+
+/**
+ * POP
+ */
+css_prop_list_t *
+chxj_css_pop_prop_list(css_prop_list_stack_t *stack)
+{
+  css_prop_list_t *tail = chxj_css_get_last_prop_list(stack);
+  if (! tail) {
+    return NULL;
+  }
+
+  list_remove(tail);
+  return tail;
+}
+
+
+/**
+ * POP but delete.
+ */
+css_prop_list_t *
+chxj_css_get_last_prop_list(css_prop_list_stack_t *stack)
+{
+  css_prop_list_t *tail = (css_prop_list_t *)((apr_size_t)stack->head.ref - (apr_size_t)APR_OFFSETOF(css_prop_list_t, next));
+  if (tail == &stack->head) {
+    return NULL;
+  }
+  return tail;
+}
+
+css_prop_list_t *
+chxj_dup_css_prop_list(Doc *doc, css_prop_list_t *old)
+{
+  css_property_t *cur_prop;
+  css_prop_list_t *new_prop_list;
+
+  new_prop_list = chxj_css_create_prop_list(doc, NULL);
+  if (! new_prop_list) {
+    ERR(doc->r, "%s:%d Out of memory.", APLOG_MARK);
+    return NULL;
+  }
+  if (old) {
+    for (cur_prop = old->head.next; cur_prop != &old->head; cur_prop = cur_prop->next) {
+      css_property_t *cp_prop = s_css_parser_copy_property(doc->pool, cur_prop);
+      list_insert(cp_prop, (&new_prop_list->head));
+    }
+  }
+  return new_prop_list;
+}
+void
+chxj_css_prop_list_merge_property(Doc *doc, css_prop_list_t *base, css_selector_t *sel)
+{
+  css_property_t *cur_prop;
+  css_property_t *b_prop;
+  for (cur_prop = sel->property_head.next; cur_prop != &sel->property_head; cur_prop = cur_prop->next) {
+    int found = 0;
+    for (b_prop = base->head.next; b_prop != &base->head; b_prop = b_prop->next) {
+      if (cur_prop->name && b_prop->name && strcasecmp(cur_prop->name, b_prop->name) == 0) {
+        found = 1;
+        b_prop->value = apr_pstrdup(doc->pool, cur_prop->value);
+      }
+    }
+    if (! found) {
+      css_property_t *cp_prop = s_css_parser_copy_property(doc->pool, cur_prop);
+      list_insert(cp_prop, (&base->head));
+    }
+  }
+  
 }
 
 #if 0
