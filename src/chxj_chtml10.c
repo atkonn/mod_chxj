@@ -106,12 +106,9 @@ static char *s_chtml10_end_menu_tag       (void *pdoc, Node *node);
 static char *s_chtml10_start_plaintext_tag(void *pdoc, Node *node);
 static char *s_chtml10_start_plaintext_tag_inner(void  *pdoc, Node *node);
 static char *s_chtml10_end_plaintext_tag  (void *pdoc, Node *node);
-<<<<<<< HEAD:src/chxj_chtml10.c
 static char *s_chtml10_link_tag           (void *pdoc, Node *node);
 static char *s_chtml10_style_tag          (void *pdoc, Node *node);
-=======
 static char *s_chtml10_newline_mark       (void *pdoc, Node *node);
->>>>>>> master:src/chxj_chtml10.c
 
 static void  s_init_chtml10(chtml10_t *chtml, Doc *doc, request_rec *r, device_table *spec);
 
@@ -385,17 +382,14 @@ tag_handler chtml10_handler[] = {
     NULL,
     NULL,
   },
-<<<<<<< HEAD:src/chxj_chtml10.c
   /* tagLINK */
-=======
-  /* tagNLMARK */
->>>>>>> master:src/chxj_chtml10.c
   {
-<<<<<<< HEAD:src/chxj_chtml10.c
     s_chtml10_link_tag,
-=======
+    NULL,
+  },
+  /* tagNLMARK */
+  {
     s_chtml10_newline_mark,
->>>>>>> master:src/chxj_chtml10.c
     NULL,
   },
 };
