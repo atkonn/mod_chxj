@@ -273,11 +273,8 @@ typedef enum {
   tagPLAINTEXT,
   tagBLINK,
   tagMARQUEE,
-<<<<<<< HEAD:include/mod_chxj.h
   tagLINK,
-=======
   tagNLMARK,      /* New Line Code */
->>>>>>> master:include/mod_chxj.h
 } tag_type;
 
 typedef struct mod_chxj_config mod_chxj_config;
