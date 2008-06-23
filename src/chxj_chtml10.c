@@ -3256,25 +3256,16 @@ s_chtml10_end_plaintext_tag(void *pdoc, Node *UNUSED(child))
 
 
 /**
-<<<<<<< HEAD:src/chxj_chtml10.c
  * It is a handler who processes the LINK tag.
  *
  * @param pdoc  [i/o] The pointer to the CHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The LINK tag node is specified.
  * @return The conversion result is returned.
-=======
- * It is handler who processes the New Line Code.
->>>>>>> master:src/chxj_chtml10.c
  */
 static char *
-<<<<<<< HEAD:src/chxj_chtml10.c
 s_chtml10_link_tag(void *pdoc, Node *node)
-=======
-s_chtml10_newline_mark(void *pdoc, Node *UNUSED(node))
->>>>>>> master:src/chxj_chtml10.c
 {
-<<<<<<< HEAD:src/chxj_chtml10.c
   chtml10_t     *chtml10;
   Doc           *doc;
   Attr          *attr;
@@ -3365,12 +3356,16 @@ s_chtml10_style_tag(void *pdoc, Node *node)
       DBG(doc->r, "end load CSS. value:[%s]", value);
     }
   }
+  return chtml10->out;
+}
 
-=======
+
+static char *
+s_chtml10_newline_mark(void *pdoc, Node *UNUSED(node))
+{
   chtml10_t *chtml10 = GET_CHTML10(pdoc);
   Doc *doc = chtml10->doc;
   W_NLCODE();
->>>>>>> master:src/chxj_chtml10.c
   return chtml10->out;
 }
 /*
