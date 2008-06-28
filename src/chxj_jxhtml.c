@@ -117,6 +117,7 @@ static char *s_jxhtml_end_blink_tag    (void *pdoc, Node *node);
 static char *s_jxhtml_start_marquee_tag(void *pdoc, Node *node);
 static char *s_jxhtml_end_marquee_tag  (void *pdoc, Node *node);
 static char *s_jxhtml_newline_mark       (void *pdoc, Node *node);
+static char *s_jxhtml_link_tag           (void *pdoc, Node *node);
 
 static void  s_init_jxhtml(jxhtml_t *jxhtml, Doc *doc, request_rec *r, device_table *spec);
 
@@ -391,6 +392,11 @@ tag_handler jxhtml_handler[] = {
   {
     s_jxhtml_start_marquee_tag,
     s_jxhtml_end_marquee_tag,
+  },
+  /* tagLINK */
+  {
+    s_jxhtml_link_tag,
+    NULL,
   },
   /* tagNLMARK */
   {
@@ -1400,10 +1406,12 @@ s_jxhtml_end_font_tag(void *pdoc, Node *UNUSED(child))
 static char *
 s_jxhtml_start_form_tag(void *pdoc, Node *node) 
 {
-  jxhtml_t      *jxhtml;
+  jxhtml_t     *jxhtml;
   Doc          *doc;
   request_rec  *r;
   Attr         *attr;
+  int          dcflag = 0;
+  char         *dc = NULL;
 
   jxhtml = GET_JXHTML(pdoc);
   doc   = jxhtml->doc;
@@ -1422,10 +1430,13 @@ s_jxhtml_start_form_tag(void *pdoc, Node *node)
       /*----------------------------------------------------------------------*/
       /* CHTML 1.0                                                            */
       /*----------------------------------------------------------------------*/
-      value = chxj_add_cookie_parameter(r, value, jxhtml->cookie);
       W_L(" action=\"");
       W_V(value);
       W_L("\"");
+      dc = chxj_add_cookie_parameter(r, value, jxhtml->cookie);
+      if (strcmp(dc, value)) {
+        dcflag = 1;
+      }
     }
     else if (STRCASEEQ('m','M',"method",name)) {
       /*----------------------------------------------------------------------*/
@@ -1444,6 +1455,21 @@ s_jxhtml_start_form_tag(void *pdoc, Node *node)
     }
   }
   W_L(">");
+  /*-------------------------------------------------------------------------*/
+  /* ``action=""''                                                           */
+  /*-------------------------------------------------------------------------*/
+  if (! dc) {
+    dcflag = 1;
+  }
+  /*-------------------------------------------------------------------------*/
+  /* Add cookie parameter                                                    */
+  /*-------------------------------------------------------------------------*/
+  if (jxhtml->cookie && jxhtml->cookie->cookie_id && dcflag == 1) {
+    char *vv = apr_psprintf(doc->buf.pool, "<input type='hidden' name='%s' value='%s' />",
+                            CHXJ_COOKIE_PARAM,
+                            chxj_url_decode(doc->buf.pool, jxhtml->cookie->cookie_id));
+    W_V(vv);
+  }
   return jxhtml->out;
 }
 
@@ -3464,6 +3490,63 @@ s_jxhtml_newline_mark(void *pdoc, Node *UNUSED(node))
   jxhtml_t *jxhtml = GET_JXHTML(pdoc);
   Doc *doc = jxhtml->doc;
   W_NLCODE();
+  return jxhtml->out;
+}
+
+
+/**
+ * It is a handler who processes the LINK tag.
+ *
+ * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The LINK tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_jxhtml_link_tag(void *pdoc, Node *node)
+{
+  jxhtml_t      *jxhtml;
+  Doc           *doc;
+  Attr          *attr;
+  char          *rel  = NULL;
+  char          *href = NULL;
+  char          *type = NULL;
+
+  jxhtml = GET_JXHTML(pdoc);
+  doc    = jxhtml->doc;
+
+  if (! IS_CSS_ON(jxhtml->entryp)) {
+    return jxhtml->out;
+  }
+
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *name  = qs_get_attr_name(doc,attr);
+    char *value = qs_get_attr_value(doc,attr);
+    if (STRCASEEQ('r','R',"rel", name)) {
+      if (value && *value && STRCASEEQ('s','S',"stylesheet", value)) {
+        rel = value;
+      }
+    }
+    else if (STRCASEEQ('h','H',"href", name)) {
+      if (value && *value) {
+        href = value;
+      }
+    }
+    else if (STRCASEEQ('t','T',"type", name)) {
+      if (value && *value && STRCASEEQ('t','T',"text/css",value)) {
+        type = value;
+      }
+    }
+  }
+
+  if (rel && href && type) {
+    DBG(doc->r, "start load CSS. url:[%s]", href);
+    jxhtml->style = chxj_css_parse_from_uri(doc->r, doc->pool, jxhtml->style, href);
+    DBG(doc->r, "end load CSS. url:[%s]", href);
+  }
+
   return jxhtml->out;
 }
 /*
