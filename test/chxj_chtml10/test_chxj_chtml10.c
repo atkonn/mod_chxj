@@ -10405,14 +10405,14 @@ void test_chtml10_font_tag_003()
 
 
 static int call_check = 0;
-char *test_chxj_serf_get001(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get001(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
 {
   static char *css = "a:focus { display: none }\n"
                      "a:link  { display: none }\n"
                      "a       { display: none }\n"
                      "hr      { display: none }\n"
                      "a:visited { display:none }";
-
+  *len = strlen(css);
   call_check = 1;
   return css;
 }

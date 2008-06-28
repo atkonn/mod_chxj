@@ -24,7 +24,7 @@
 #include "qs_parse_tag.c"
 #include "qs_parse_attr.c"
 #include "qs_ignore_sp.c"
-
+#include "chxj_tag_util.c"
 
 
 void test_chxj_css_parse_from_uri_001();
@@ -259,10 +259,10 @@ void test_log_error(const char *file, int line, int level, apr_status_t status, 
 
 
 /** TEST CASE START */
-char *test_chxj_serf_get001(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get001(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_parse_from_uri_001()
@@ -304,10 +304,10 @@ void test_chxj_css_parse_from_uri_001()
 
 
 
-char *test_chxj_serf_get002(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get002(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body { display: none }\nhtml,body { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_parse_from_uri_002()
@@ -350,10 +350,10 @@ void test_chxj_css_parse_from_uri_002()
 
 
 
-char *test_chxj_serf_get003(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get003(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "@import url(\"hoge.css\");\nhtml,body { display: none }\nhtml,body { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_parse_from_uri_003()
@@ -397,10 +397,10 @@ void test_chxj_css_parse_from_uri_003()
 
 
 
-char *test_chxj_serf_get004(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get004(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "@import url(\"hoge.css\");\nhtml,body { display: none }\nhtml,body { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_parse_from_uri_004()
@@ -442,10 +442,10 @@ void test_chxj_css_parse_from_uri_004()
 }
 
 
-char *test_chxj_serf_get005(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get005(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_parse_from_uri_005()
@@ -488,10 +488,10 @@ void test_chxj_css_parse_from_uri_005()
 
 
 
-char *test_chxj_serf_get006(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get006(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_parse_from_uri_006()
@@ -534,10 +534,10 @@ void test_chxj_css_parse_from_uri_006()
 
 
 
-char *test_chxj_serf_get007(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get007(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_parse_from_uri_007()
@@ -582,10 +582,10 @@ void test_chxj_css_parse_from_uri_007()
 
 
 
-char *test_chxj_serf_get008(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get008(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html > body + h2 { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_parse_from_uri_008()
@@ -633,10 +633,10 @@ void test_chxj_css_parse_from_uri_008()
 /* chxj_css_find_selector                                                    */
 /*                                                                           */
 /*===========================================================================*/
-char *test_chxj_serf_get009(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get009(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, hr.abc#id1 { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_001()
@@ -681,10 +681,10 @@ void test_chxj_css_find_selector_001()
 
 
 
-char *test_chxj_serf_get010(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get010(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, .abc#id1 { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_002()
@@ -729,10 +729,10 @@ void test_chxj_css_find_selector_002()
 
 
 
-char *test_chxj_serf_get011(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get011(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, #id1 { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_003()
@@ -777,10 +777,10 @@ void test_chxj_css_find_selector_003()
 
 
 
-char *test_chxj_serf_get012(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get012(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, .abc { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_004()
@@ -824,10 +824,10 @@ void test_chxj_css_find_selector_004()
 }
 
 
-char *test_chxj_serf_get013(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get013(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, hr.abc { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_005()
@@ -872,10 +872,10 @@ void test_chxj_css_find_selector_005()
 
 
 
-char *test_chxj_serf_get014(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get014(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, hr#id1 { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_006()
@@ -920,7 +920,7 @@ void test_chxj_css_find_selector_006()
 
 
 
-char *test_chxj_serf_get015(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get015(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, hr { display: none }";
 
@@ -967,10 +967,10 @@ void test_chxj_css_find_selector_007()
 }
 
 
-char *test_chxj_serf_get016(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get016(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, li { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_unmatch_pattern_001()
@@ -1013,10 +1013,10 @@ void test_chxj_css_find_selector_unmatch_pattern_001()
 #undef TEST_STRING
 }
 
-char *test_chxj_serf_get017(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get017(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, hr.def { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_unmatch_pattern_002()
@@ -1058,10 +1058,10 @@ void test_chxj_css_find_selector_unmatch_pattern_002()
   fprintf(stderr, "end %s\n", __func__);
 #undef TEST_STRING
 }
-char *test_chxj_serf_get018(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get018(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, hr#id2 { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_unmatch_pattern_003()
@@ -1107,10 +1107,10 @@ void test_chxj_css_find_selector_unmatch_pattern_003()
 /*===========================================================================*/
 /* E > F                                                                     */
 /*===========================================================================*/
-char *test_chxj_serf_get019(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get019(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, body>hr { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_p_001()
@@ -1152,10 +1152,10 @@ void test_chxj_css_find_selector_p_001()
   fprintf(stderr, "end %s\n", __func__);
 #undef TEST_STRING
 }
-char *test_chxj_serf_get020(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get020(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, html>body>hr { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_p_002()
@@ -1197,10 +1197,10 @@ void test_chxj_css_find_selector_p_002()
   fprintf(stderr, "end %s\n", __func__);
 #undef TEST_STRING
 }
-char *test_chxj_serf_get021(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get021(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, html>body>div>hr { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_p_003()
@@ -1244,10 +1244,10 @@ void test_chxj_css_find_selector_p_003()
   fprintf(stderr, "end %s\n", __func__);
 #undef TEST_STRING
 }
-char *test_chxj_serf_get022(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get022(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, html>body>div>div>hr { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_p_004()
@@ -1293,10 +1293,10 @@ void test_chxj_css_find_selector_p_004()
   fprintf(stderr, "end %s\n", __func__);
 #undef TEST_STRING
 }
-char *test_chxj_serf_get023(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get023(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, html>body>div.def#id2>hr { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_p_005()
@@ -1340,10 +1340,10 @@ void test_chxj_css_find_selector_p_005()
   fprintf(stderr, "end %s\n", __func__);
 #undef TEST_STRING
 }
-char *test_chxj_serf_get024(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get024(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, html>body>div.abc#id2>hr { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_p_006()
@@ -1387,10 +1387,10 @@ void test_chxj_css_find_selector_p_006()
   fprintf(stderr, "end %s\n", __func__);
 #undef TEST_STRING
 }
-char *test_chxj_serf_get025(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get025(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, body>*.def#id2>hr { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_p_007()
@@ -1434,10 +1434,10 @@ void test_chxj_css_find_selector_p_007()
   fprintf(stderr, "end %s\n", __func__);
 #undef TEST_STRING
 }
-char *test_chxj_serf_get026(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get026(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, body.def#id2>*.def#id2>hr { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_p_008()
@@ -1481,10 +1481,10 @@ void test_chxj_css_find_selector_p_008()
   fprintf(stderr, "end %s\n", __func__);
 #undef TEST_STRING
 }
-char *test_chxj_serf_get027(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get027(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, body.abc#id2>*.def#id2>hr { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_p_009()
@@ -1529,10 +1529,10 @@ void test_chxj_css_find_selector_p_009()
 #undef TEST_STRING
 }
 
-char *test_chxj_serf_get028(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get028(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, body hr { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_des_001()
@@ -1579,10 +1579,10 @@ void test_chxj_css_find_selector_des_001()
 #undef TEST_STRING
 }
 
-char *test_chxj_serf_get029(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get029(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, html body hr { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_des_002()
@@ -1629,10 +1629,10 @@ void test_chxj_css_find_selector_des_002()
 #undef TEST_STRING
 }
 
-char *test_chxj_serf_get030(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get030(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, html body.def#id2 hr { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_des_003()
@@ -1679,10 +1679,10 @@ void test_chxj_css_find_selector_des_003()
 #undef TEST_STRING
 }
 
-char *test_chxj_serf_get031(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get031(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, html body.abc#id2 hr { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_des_004()
@@ -1729,10 +1729,10 @@ void test_chxj_css_find_selector_des_004()
 #undef TEST_STRING
 }
 
-char *test_chxj_serf_get032(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get032(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, html body.def hr { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_des_005()
@@ -1779,10 +1779,10 @@ void test_chxj_css_find_selector_des_005()
 #undef TEST_STRING
 }
 
-char *test_chxj_serf_get033(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get033(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, .def hr { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_des_006()
@@ -1829,10 +1829,10 @@ void test_chxj_css_find_selector_des_006()
 #undef TEST_STRING
 }
 
-char *test_chxj_serf_get034(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get034(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, .abc hr { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_des_007()
@@ -1879,10 +1879,10 @@ void test_chxj_css_find_selector_des_007()
 #undef TEST_STRING
 }
 
-char *test_chxj_serf_get035(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get035(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, .abc hr { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_des_008()
@@ -1929,10 +1929,10 @@ void test_chxj_css_find_selector_des_008()
 #undef TEST_STRING
 }
 
-char *test_chxj_serf_get036(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get036(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, #id2 hr { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_des_009()
@@ -1979,10 +1979,10 @@ void test_chxj_css_find_selector_des_009()
 #undef TEST_STRING
 }
 
-char *test_chxj_serf_get037(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get037(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, #id3 hr { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_des_010()
@@ -2029,10 +2029,10 @@ void test_chxj_css_find_selector_des_010()
 #undef TEST_STRING
 }
 
-char *test_chxj_serf_get038(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get038(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, p + hr { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_shib_001()
@@ -2081,10 +2081,10 @@ void test_chxj_css_find_selector_shib_001()
 #undef TEST_STRING
 }
 
-char *test_chxj_serf_get039(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get039(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, p.pclass#pid + hr { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_shib_002()
@@ -2132,10 +2132,10 @@ void test_chxj_css_find_selector_shib_002()
   fprintf(stderr, "end %s\n", __func__);
 #undef TEST_STRING
 }
-char *test_chxj_serf_get040(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get040(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, .pclass#pid + hr { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_shib_003()
@@ -2183,10 +2183,10 @@ void test_chxj_css_find_selector_shib_003()
   fprintf(stderr, "end %s\n", __func__);
 #undef TEST_STRING
 }
-char *test_chxj_serf_get041(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get041(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, #pid + hr { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_shib_004()
@@ -2234,10 +2234,10 @@ void test_chxj_css_find_selector_shib_004()
   fprintf(stderr, "end %s\n", __func__);
 #undef TEST_STRING
 }
-char *test_chxj_serf_get042(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get042(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, .pclass + hr { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_shib_005()
@@ -2285,10 +2285,10 @@ void test_chxj_css_find_selector_shib_005()
   fprintf(stderr, "end %s\n", __func__);
 #undef TEST_STRING
 }
-char *test_chxj_serf_get043(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get043(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, p.pclass + hr { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_shib_006()
@@ -2336,10 +2336,10 @@ void test_chxj_css_find_selector_shib_006()
   fprintf(stderr, "end %s\n", __func__);
 #undef TEST_STRING
 }
-char *test_chxj_serf_get044(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get044(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, p#pid + hr { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_shib_007()
@@ -2387,10 +2387,10 @@ void test_chxj_css_find_selector_shib_007()
   fprintf(stderr, "end %s\n", __func__);
 #undef TEST_STRING
 }
-char *test_chxj_serf_get045(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get045(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, p.aclass#pid + hr { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_shib_008()
@@ -2438,10 +2438,10 @@ void test_chxj_css_find_selector_shib_008()
   fprintf(stderr, "end %s\n", __func__);
 #undef TEST_STRING
 }
-char *test_chxj_serf_get046(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get046(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, p.pclass#did + hr { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_shib_009()
@@ -2489,10 +2489,10 @@ void test_chxj_css_find_selector_shib_009()
   fprintf(stderr, "end %s\n", __func__);
 #undef TEST_STRING
 }
-char *test_chxj_serf_get047(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get047(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, hr +  p + hr { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_shib_010()
@@ -2544,10 +2544,10 @@ void test_chxj_css_find_selector_shib_010()
 }
 
 /* MIX */
-char *test_chxj_serf_get048(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get048(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, p + div >  p + hr { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_mix_001()
@@ -2598,10 +2598,10 @@ void test_chxj_css_find_selector_mix_001()
   fprintf(stderr, "end %s\n", __func__);
 #undef TEST_STRING
 }
-char *test_chxj_serf_get049(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get049(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, p + div  p + hr { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_mix_002()
@@ -2653,10 +2653,10 @@ void test_chxj_css_find_selector_mix_002()
 #undef TEST_STRING
 }
 
-char *test_chxj_serf_get050(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get050(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, p + div  p > hr { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_mix_003()
@@ -2707,10 +2707,10 @@ void test_chxj_css_find_selector_mix_003()
   fprintf(stderr, "end %s\n", __func__);
 #undef TEST_STRING
 }
-char *test_chxj_serf_get051(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get051(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "html,body, p > div  p + hr { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_mix_004()
@@ -2764,10 +2764,10 @@ void test_chxj_css_find_selector_mix_004()
 
 
 /* pseudo selector */
-char *test_chxj_serf_get052(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get052(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "a:link { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_pseudo_001()
@@ -2810,10 +2810,10 @@ void test_chxj_css_find_selector_pseudo_001()
   fprintf(stderr, "end %s\n", __func__);
 #undef TEST_STRING
 }
-char *test_chxj_serf_get053(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get053(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "a:visited { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_pseudo_002()
@@ -2857,10 +2857,10 @@ void test_chxj_css_find_selector_pseudo_002()
 #undef TEST_STRING
 }
 
-char *test_chxj_serf_get054(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get054(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "a:focus { display: none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_pseudo_003()
@@ -2904,14 +2904,14 @@ void test_chxj_css_find_selector_pseudo_003()
 #undef TEST_STRING
 }
 
-char *test_chxj_serf_get055(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get055(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "a:focus { display: none }\n"
                      "a:link  { display: none }\n"
                      "a       { display: none }\n"
                      "hr      { display: none }\n"
                      "a:visited { display:none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_find_selector_pseudo_004()
@@ -2963,14 +2963,14 @@ void test_chxj_css_find_selector_pseudo_004()
 
 
 /* parse style attr */
-char *test_chxj_serf_get056(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get056(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "a:focus { display: none }\n"
                      "a:link  { display: none }\n"
                      "a       { display: none }\n"
                      "hr      { display: none }\n"
                      "a:visited { display:none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_parse_style_attr_001()
@@ -3027,14 +3027,14 @@ void test_chxj_css_parse_style_attr_001()
 }
 
 
-char *test_chxj_serf_get057(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get057(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "a:focus { display: none }\n"
                      "a:link  { display: none }\n"
                      "a       { display: none }\n"
                      "hr      { display: none }\n"
                      "a:visited { display:none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_parse_style_attr_002()
@@ -3090,14 +3090,14 @@ void test_chxj_css_parse_style_attr_002()
 #undef TEST_STRING
 }
 
-char *test_chxj_serf_get058(request_rec *r, apr_pool_t *ppool, const char *uri_path)
+char *test_chxj_serf_get058(request_rec *r, apr_pool_t *ppool, const char *uri_path, int set_headers_flag, apr_size_t *sz)
 {
   static char *css = "a:focus { display: none }\n"
                      "a:link  { display: none }\n"
                      "a       { display: none }\n"
                      "hr      { display: none }\n"
                      "a:visited { display:none }";
-
+  *sz = strlen(css);
   return css;
 }
 void test_chxj_css_parse_style_attr_003()
