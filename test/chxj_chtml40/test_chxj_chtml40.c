@@ -12777,6 +12777,7 @@ void test_chtml40_link_001()
 
   SPEC_INIT(spec);
   destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
 
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml40(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
@@ -12808,6 +12809,7 @@ void test_chtml40_link_002()
 
   SPEC_INIT(spec);
   destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
 
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml40(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
@@ -12839,6 +12841,7 @@ void test_chtml40_link_003()
 
   SPEC_INIT(spec);
   destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
 
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml40(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
@@ -12870,6 +12873,7 @@ void test_chtml40_link_004()
 
   SPEC_INIT(spec);
   destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
 
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml40(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
@@ -12901,6 +12905,7 @@ void test_chtml40_link_005()
 
   SPEC_INIT(spec);
   destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
 
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml40(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
@@ -12932,6 +12937,7 @@ void test_chtml40_link_006()
 
   SPEC_INIT(spec);
   destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
 
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml40(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
@@ -12963,6 +12969,7 @@ void test_chtml40_link_007()
 
   SPEC_INIT(spec);
   destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
 
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml40(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
@@ -12994,6 +13001,7 @@ void test_chtml40_link_008()
 
   SPEC_INIT(spec);
   destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
 
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml40(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
@@ -13025,6 +13033,7 @@ void test_chtml40_link_009()
 
   SPEC_INIT(spec);
   destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
 
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml40(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
@@ -13074,6 +13083,7 @@ void test_chtml40_html_tag_with_css_001()
 
   SPEC_INIT(spec);
   destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
 
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml40(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);

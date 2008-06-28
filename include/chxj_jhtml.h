@@ -21,6 +21,7 @@
 
 #include "mod_chxj.h"
 #include "chxj_cookie.h"
+#include "chxj_css.h"
 
 /*----------------------------------------------------------------------------*/
 /* Structure for J-PHONE HTML                                                 */
@@ -28,23 +29,25 @@
 typedef struct jhtml_t jhtml_t;
 
 struct jhtml_t {
-    Doc                 *doc;
-    char                *out;
-    int                 out_len;
-    int                 pre_flag;
-    int                 textarea_flag;
-    int                 h1_align_flag;
-    int                 h2_align_flag;
-    int                 h3_align_flag;
-    int                 h4_align_flag;
-    int                 h5_align_flag;
-    int                 h6_align_flag;
-    int                 font_flag;
+  Doc                 *doc;
+  char                *out;
+  int                 out_len;
+  int                 pre_flag;
+  int                 textarea_flag;
+  int                 h1_align_flag;
+  int                 h2_align_flag;
+  int                 h3_align_flag;
+  int                 h4_align_flag;
+  int                 h5_align_flag;
+  int                 h6_align_flag;
+  int                 font_flag;
 
-    device_table        *spec;
-    mod_chxj_config     *conf;
-    chxjconvrule_entry  *entryp;
-    cookie_t            *cookie;
+  device_table        *spec;
+  mod_chxj_config     *conf;
+  chxjconvrule_entry  *entryp;
+  cookie_t            *cookie;
+  css_stylesheet_t    *style;
+  css_prop_list_stack_t *css_prop_stack;
 };
 
 /*----------------------------------------------------------------------------*/
