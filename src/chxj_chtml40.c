@@ -114,6 +114,7 @@ static char *s_chtml40_start_plaintext_tag       (void *pdoc, Node *node);
 static char *s_chtml40_start_plaintext_tag_inner (void *pdoc, Node *node);
 static char *s_chtml40_end_plaintext_tag         (void *pdoc, Node *node);
 static char *s_chtml40_newline_mark       (void *pdoc, Node *node);
+static char *s_chtml40_link_tag           (void *pdoc, Node *node);
 
 static void  s_init_chtml40(chtml40_t *chtml, Doc *doc, request_rec *r, device_table *spec);
 
@@ -385,6 +386,11 @@ tag_handler chtml40_handler[] = {
   {
     s_chtml40_start_marquee_tag,
     s_chtml40_end_marquee_tag,
+  },
+  /* tagLINK */
+  {
+    s_chtml40_link_tag,
+    NULL,
   },
   /* tagNLMARK */
   {
@@ -3240,14 +3246,71 @@ s_chtml40_end_plaintext_tag(void *pdoc, Node *UNUSED(child))
 
 
 /**
- *  * It is handler who processes the New Line Code.
- *   */
+ * It is handler who processes the New Line Code.
+ */
 static char *
 s_chtml40_newline_mark(void *pdoc, Node *UNUSED(node))
 {
   chtml40_t *chtml40 = GET_CHTML40(pdoc);
   Doc *doc = chtml40->doc;
   W_NLCODE();
+  return chtml40->out;
+}
+
+
+/**
+ * It is a handler who processes the LINK tag.
+ *
+ * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The LINK tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_chtml40_link_tag(void *pdoc, Node *node)
+{
+  chtml40_t     *chtml40;
+  Doc           *doc;
+  Attr          *attr;
+  char          *rel  = NULL;
+  char          *href = NULL;
+  char          *type = NULL;
+
+  chtml40 = GET_CHTML40(pdoc);
+  doc     = chtml40->doc;
+
+  if (! IS_CSS_ON(chtml40->entryp)) {
+    return chtml40->out;
+  }
+
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *name  = qs_get_attr_name(doc,attr);
+    char *value = qs_get_attr_value(doc,attr);
+    if (STRCASEEQ('r','R',"rel", name)) {
+      if (value && *value && STRCASEEQ('s','S',"stylesheet", value)) {
+        rel = value;
+      }
+    }
+    else if (STRCASEEQ('h','H',"href", name)) {
+      if (value && *value) {
+        href = value;
+      }
+    }
+    else if (STRCASEEQ('t','T',"type", name)) {
+      if (value && *value && STRCASEEQ('t','T',"text/css",value)) {
+        type = value;
+      }
+    }
+  }
+
+  if (rel && href && type) {
+    DBG(doc->r, "start load CSS. url:[%s]", href);
+    chtml40->style = chxj_css_parse_from_uri(doc->r, doc->pool, chtml40->style, href);
+    DBG(doc->r, "end load CSS. url:[%s]", href);
+  }
+
   return chtml40->out;
 }
 /*
