@@ -490,6 +490,7 @@ void test_jhtml_link_008();
 void test_jhtml_link_009();
 
 void test_jhtml_html_tag_with_css_001();
+void test_jhtml_meta_tag_with_css_001();
 /* pend */
 
 int
@@ -1059,6 +1060,7 @@ main()
   CU_add_test(jhtml_suite, "test link 009." ,                                    test_jhtml_link_009);
 
   CU_add_test(jhtml_suite, "test html with css 001",                             test_jhtml_html_tag_with_css_001);
+  CU_add_test(jhtml_suite, "test meta with css 001",                             test_jhtml_meta_tag_with_css_001);
   /* aend */
 
   CU_basic_run_tests();
@@ -13459,6 +13461,55 @@ void test_jhtml_html_tag_with_css_001()
   apr_size_t destlen;
   APR_INIT;
   chxj_serf_get = test_chxj_serf_get002;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+/******************************************************************************/
+/* meta with CSS                                                              */
+/******************************************************************************/
+char *test_chxj_serf_get003(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "meta    { display: none }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_jhtml_meta_tag_with_css_001()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "<META http-equiv=\"Content-Type\" content=\"text/html; charset=SHIFT_JIS\"></head><body></body></html>"
+#define  RESULT_STRING "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=Windows-31J\"></head><body></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get003;
   call_check = 0;
 
   COOKIE_INIT(cookie);
