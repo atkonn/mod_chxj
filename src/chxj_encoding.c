@@ -316,8 +316,6 @@ chxj_iconv(request_rec *r, apr_pool_t *pool, const char *src, apr_size_t *len, c
   size_t              result;
   apr_size_t          ilen;
   apr_size_t          olen;
-  mod_chxj_config     *dconf;
-  chxjconvrule_entry  *entryp;
 
 
   if ((int)*len < 0) {

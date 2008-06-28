@@ -215,6 +215,7 @@ chxj_strcount(const char *s, const char *str)
   }
   return count;
 }
+#endif
 /*
  * vim:ts=2 et
  */
