@@ -163,6 +163,40 @@ chxj_starts_with(const char *str, const char *word)
 }
 
 
+char *
+chxj_add_slash_to_doublequote(apr_pool_t *pool, const char *str)
+{
+  char *ret;
+  int  len;
+  int  tlen;
+  int  ii;
+  int  pos;
+  int  cnt;
+
+  len = strlen(str);
+  cnt = 0;
+  for (ii=0; ii<len; ii++) {
+    if (str[ii] == '"') {
+      cnt++;
+    }
+  }
+  tlen = (len - cnt)  + (cnt * (sizeof("&quot;")-1)) + 1;
+  ret = apr_palloc(pool, tlen);
+  memset(ret, 0, tlen);
+  pos = 0;
+  for (ii=0; ii<len; ii++) {
+    if (str[ii] == '"') {
+      strcpy(&ret[pos], "&quot;");
+      pos += sizeof("&quot;")-1;
+    }
+    else {
+      ret[pos++] = str[ii];
+    }
+  }
+  return ret;
+}
+
+
 int
 chxj_strcount(const char *s, const char *str)
 {
@@ -181,7 +215,6 @@ chxj_strcount(const char *s, const char *str)
   }
   return count;
 }
-#endif
 /*
  * vim:ts=2 et
  */

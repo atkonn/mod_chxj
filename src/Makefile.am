@@ -51,10 +51,14 @@ lib_LTLIBRARIES = libmod_chxj.la
 make_so:
 	@if test ! -L mod_chxj.so ; then ln -s .libs/libmod_chxj.so mod_chxj.so ; fi
 
+serf/libserf-0.la:
+	(cd serf; ./configure --with-apr=`dirname @APR_CONFIG@` --with-apr-util=`dirname @APU_CONFIG@`; make)
+
 clean:
 	rm -fr .libs
 	rm -f *.o *.lo *.la
 	rm -f mod_chxj.so
+	(cd serf; make clean)
 
 serf/libserf-0.la:
 	(cd serf; ./configure --with-apr=`dirname @APR_CONFIG@` --with-apr-util=`dirname @APU_CONFIG@`; make)

@@ -1,3 +1,20 @@
+libapache2-mod-chxj (0.12.5-1) unstable; urgency=low
+
+  * Fixed bug.
+    - The bug that was not able to be displayed correctly when a double quart
+      was included in value.
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Fri, 27 Jun 2008 16:37:26 +0900
+
+libapache2-mod-chxj (0.12.4-1) unstable; urgency=low
+
+  * Fixed Bug.
+    - Because Input_filter of Apache is a fuck-shit, it abolishes it.
+      Proxy is made at one's own expense by using libserf instead.
+      (Reported by tiruda1600 _at_ users.sourceforge.jp. thanks!)
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Thu, 26 Jun 2008 10:32:44 +0900
+
 libapache2-mod-chxj (0.12.3-1) unstable; urgency=low
 
   * Fixed bug.
