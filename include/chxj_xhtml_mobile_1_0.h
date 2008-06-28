@@ -18,6 +18,7 @@
 #define __CHXJ_XHTML_MOBILE_1_0_H__
 
 #include "mod_chxj.h"
+#include "chxj_css.h"
 
 /*----------------------------------------------------------------------------*/
 /* Structure for HDML                                                         */
@@ -25,18 +26,20 @@
 typedef struct xhtml_t xhtml_t;
 
 struct xhtml_t {
-    Doc                 *doc;
-    char                *out;
-    int                 out_len;
-    int                 pre_flag;
-    int                 textarea_flag;
-    int                 font_color_flag;
-    int                 font_size_flag;
+  Doc                 *doc;
+  char                *out;
+  int                 out_len;
+  int                 pre_flag;
+  int                 textarea_flag;
+  int                 font_color_flag;
+  int                 font_size_flag;
 
-    device_table        *spec;
-    mod_chxj_config     *conf;
-    chxjconvrule_entry  *entryp;
-    cookie_t            *cookie;
+  device_table        *spec;
+  mod_chxj_config     *conf;
+  chxjconvrule_entry  *entryp;
+  cookie_t            *cookie;
+  css_stylesheet_t    *style;
+  css_prop_list_stack_t *css_prop_stack;
 };
 
 /*----------------------------------------------------------------------------*/

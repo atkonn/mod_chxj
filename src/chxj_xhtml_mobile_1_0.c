@@ -116,6 +116,7 @@ static char *s_xhtml_1_0_end_blink_tag       (void *pdoc, Node *node);
 static char *s_xhtml_1_0_start_marquee_tag   (void *pdoc, Node *node);
 static char *s_xhtml_1_0_end_marquee_tag     (void *pdoc, Node *node);
 static char *s_xhtml_1_0_newline_mark       (void *pdoc, Node *node);
+static char *s_xhtml_1_0_link_tag           (void *pdoc, Node *node);
 
 static void  s_init_xhtml(xhtml_t *xhtml, Doc *doc, request_rec *r, device_table *spec);
 static int   s_xhtml_search_emoji(xhtml_t *xhtml, char *txt, char **rslt);
@@ -387,6 +388,11 @@ tag_handler xhtml_handler[] = {
   {
     s_xhtml_1_0_start_marquee_tag,
     s_xhtml_1_0_end_marquee_tag,
+  },
+  /* tagLINK */
+  {
+    s_xhtml_1_0_link_tag,
+    NULL,
   },
   /* tagNLMARK */
   {
@@ -3259,6 +3265,63 @@ s_xhtml_1_0_newline_mark(void *pdoc, Node *UNUSED(node))
   xhtml_t *xhtml = GET_XHTML(pdoc);
   Doc *doc = xhtml->doc;
   W_NLCODE();
+  return xhtml->out;
+}
+
+
+/**
+ * It is a handler who processes the LINK tag.
+ *
+ * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The LINK tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_xhtml_1_0_link_tag(void *pdoc, Node *node)
+{
+  xhtml_t       *xhtml;
+  Doc           *doc;
+  Attr          *attr;
+  char          *rel  = NULL;
+  char          *href = NULL;
+  char          *type = NULL;
+
+  xhtml = GET_XHTML(pdoc);
+  doc   = xhtml->doc;
+
+  if (! IS_CSS_ON(xhtml->entryp)) {
+    return xhtml->out;
+  }
+
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *name  = qs_get_attr_name(doc,attr);
+    char *value = qs_get_attr_value(doc,attr);
+    if (STRCASEEQ('r','R',"rel", name)) {
+      if (value && *value && STRCASEEQ('s','S',"stylesheet", value)) {
+        rel = value;
+      }
+    }
+    else if (STRCASEEQ('h','H',"href", name)) {
+      if (value && *value) {
+        href = value;
+      }
+    }
+    else if (STRCASEEQ('t','T',"type", name)) {
+      if (value && *value && STRCASEEQ('t','T',"text/css",value)) {
+        type = value;
+      }
+    }
+  }
+
+  if (rel && href && type) {
+    DBG(doc->r, "start load CSS. url:[%s]", href);
+    xhtml->style = chxj_css_parse_from_uri(doc->r, doc->pool, xhtml->style, href);
+    DBG(doc->r, "end load CSS. url:[%s]", href);
+  }
+
   return xhtml->out;
 }
 /*

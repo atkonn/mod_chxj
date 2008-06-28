@@ -118,12 +118,9 @@ chxj_css_find_selector(Doc *doc, css_stylesheet_t *stylesheet, Node *node)
   request_rec *r    = doc->r;
   apr_pool_t  *pool = doc->pool;
   css_selector_t *sel = NULL;
-  css_selector_t *cur = NULL;
-  css_selector_t *tail = NULL;
   char *tag_name   = NULL;
   char *class_name = NULL;
   char *id         = NULL;
-  Attr *attr;
   DBG(r, "start chxj_css_find_selector()");
 
   if (! stylesheet) {
@@ -228,7 +225,6 @@ static css_selector_t *
 s_search_selector_regexp(Doc *doc, request_rec *r, apr_pool_t *pool, css_stylesheet_t *stylesheet, const char *pattern_str1, const char *pattern_str2, Node *node)
 {
   Node *node_sv = node;
-  Node *sib_node = NULL;
   css_selector_t *ret_sel = NULL;
   css_selector_t *tail;
   css_selector_t *cur;
@@ -601,7 +597,6 @@ s_css_parser_from_uri_end_selector(CRDocHandler * a_this, CRSelector *a_selector
 
       for (cur = app_data->property_head.next; cur && cur != &app_data->property_head; cur = cur->next) {
         css_property_t *tgt = s_css_parser_copy_property(app_data->pool, cur);
-        css_property_t *pnt = &sel->property_head;
         s_merge_property(sel, tgt);
       }
       css_selector_t *point_selector = &app_data->stylesheet->selector_head;
@@ -768,7 +763,7 @@ s_css_parser_from_uri_import_style(CRDocHandler *a_this, GList *a_media_list, CR
   css_stylesheet_t *new_stylesheet = NULL;
 
   for (ii=0; ii<len; ii++) {
-    char *str = cr_string_peek_raw_str(g_list_nth_data(a_media_list, ii));
+    char *str = (char *)cr_string_peek_raw_str(g_list_nth_data(a_media_list, ii));
     if (('h' == *str || 'H' == *str) && strcasecmp(str, "handheld") == 0) {
       flag = 1;
       break;
@@ -780,9 +775,8 @@ s_css_parser_from_uri_import_style(CRDocHandler *a_this, GList *a_media_list, CR
   }
   if (flag || len == 0) {
     if (a_uri) {
-      apr_uri_t uri;
       char      *new_url = NULL;
-      char      *import_url = cr_string_peek_raw_str(a_uri);
+      char      *import_url = (char *)cr_string_peek_raw_str(a_uri);
       char      *base_url = NULL;
 
       base_url = s_uri_to_base_url(&app_data->r->parsed_uri, app_data->pool);
@@ -802,7 +796,7 @@ s_path_to_fullurl(apr_pool_t *pool, const char *base_url, const char *base_path,
 {
   char *new_url = NULL;
   if (chxj_starts_with(uri, "http")) {
-    return uri;
+    return apr_pstrdup(pool, uri);
   }
 
   if (*uri == '/') {
@@ -1014,7 +1008,6 @@ css_stylesheet_t *
 chxj_find_pseudo_selectors(Doc *doc, css_stylesheet_t *stylesheet)
 {
   css_selector_t *cur_sel; 
-  css_property_t *cur_prop;
   css_stylesheet_t *result;
   char *pattern_str = "^a:(link|focus|visited)$";
   ap_regex_t *pattern1 = chxj_ap_pregcomp(doc->pool, pattern_str, AP_REG_EXTENDED|AP_REG_ICASE);
@@ -1088,7 +1081,6 @@ static css_stylesheet_t *
 s_dup_stylesheet(Doc *doc, css_stylesheet_t *stylesheet)
 {
   css_selector_t   *cur_sel; 
-  css_property_t   *cur_prop;
   css_stylesheet_t *result;
 
   result = apr_palloc(doc->pool, sizeof(*result));
