@@ -365,6 +365,7 @@ s_chxj_css_parse_from_uri(request_rec *r, apr_pool_t *pool, struct css_already_i
   struct css_already_import_stack *new_stack;
   struct css_app_data app_data;
   char         *base_url;
+  apr_size_t   css_len;
   
 
   DBG(r, "start chxj_css_parse_from_uri() uri:[%s]", uri);
@@ -379,7 +380,7 @@ s_chxj_css_parse_from_uri(request_rec *r, apr_pool_t *pool, struct css_already_i
   }
 
   /* GET request */
-  css = chxj_serf_get(r, pool, full_url);
+  css = chxj_serf_get(r, pool, full_url, 0, &css_len);
   if (css == NULL) {
     ERR(r, "%s:%d end chxj_css_parse_from_uri(): serf_get failed: url:[%s]", APLOG_MARK, uri);
     return NULL;
@@ -575,7 +576,7 @@ s_css_parser_from_uri_start_selector(CRDocHandler * a_this, CRSelector *a_select
     if (cur->simple_sel) {
       guchar *tmp_str = cr_simple_sel_to_string(cur->simple_sel);
       if (tmp_str) {
-        app_data->selector_list[ii] = apr_pstrdup(app_data->pool, (char *)tmp_str);
+        app_data->selector_list[ii++] = apr_pstrdup(app_data->pool, (char *)tmp_str);
         g_free (tmp_str);
         tmp_str = NULL;
       }
