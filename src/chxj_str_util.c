@@ -206,7 +206,7 @@ chxj_strcount(const char *s, const char *str)
   int count = 0;
   while (*p) {
     for (i=0; i<len; i++) {
-      if (*p == (char)str[i]) {
+      if (*p == str[(unsigned int)i]) {
         count++;
         break;
       }
