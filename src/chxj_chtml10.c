@@ -596,7 +596,6 @@ s_chtml10_search_emoji(chtml10_t *chtml10, char *txt, char **rslt)
 static char *
 s_chtml10_start_html_tag(void *pdoc, Node *node) 
 {
-  css_prop_list_t *last_css = NULL;
   Doc             *doc;
   request_rec     *r;
   chtml10_t       *chtml10;
@@ -605,6 +604,8 @@ s_chtml10_start_html_tag(void *pdoc, Node *node)
   doc     = chtml10->doc;
   r       = doc->r;
 
+#if 0
+  css_prop_list_t *last_css = NULL;
   if (IS_CSS_ON(chtml10->entryp)) {
     css_prop_list_t *dup_css;
     css_selector_t  *selector;
@@ -618,6 +619,7 @@ s_chtml10_start_html_tag(void *pdoc, Node *node)
     chxj_css_push_prop_list(chtml10->css_prop_stack, dup_css);
     last_css = chxj_css_get_last_prop_list(chtml10->css_prop_stack);
   }
+#endif
   /*--------------------------------------------------------------------------*/
   /* start HTML tag                                                           */
   /*--------------------------------------------------------------------------*/
