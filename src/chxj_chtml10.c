@@ -116,6 +116,8 @@ static void  s_init_chtml10(chtml10_t *chtml, Doc *doc, request_rec *r, device_t
 static int   s_chtml10_search_emoji(chtml10_t *chtml, char *txt, char **rslt);
 static char *s_chtml10_chxjif_tag        (void *pdoc, Node *node);
 static char *s_chtml10_text              (void *pdoc, Node *node);
+static css_prop_list_t *s_push_and_get_now_style(void *pdoc, Node *node);
+static css_prop_list_t *s_nopush_and_get_now_style(void *pdoc, Node *node);
 
 tag_handler chtml10_handler[] = {
   /* tagHTML */
@@ -604,22 +606,6 @@ s_chtml10_start_html_tag(void *pdoc, Node *node)
   doc     = chtml10->doc;
   r       = doc->r;
 
-#if 0
-  css_prop_list_t *last_css = NULL;
-  if (IS_CSS_ON(chtml10->entryp)) {
-    css_prop_list_t *dup_css;
-    css_selector_t  *selector;
-
-    last_css = chxj_css_get_last_prop_list(chtml10->css_prop_stack);
-    dup_css  = chxj_dup_css_prop_list(doc, last_css);
-    selector = chxj_css_find_selector(doc, chtml10->style, node);
-    if (selector) {
-      chxj_css_prop_list_merge_property(doc, dup_css, selector);
-    }
-    chxj_css_push_prop_list(chtml10->css_prop_stack, dup_css);
-    last_css = chxj_css_get_last_prop_list(chtml10->css_prop_stack);
-  }
-#endif
   /*--------------------------------------------------------------------------*/
   /* start HTML tag                                                           */
   /*--------------------------------------------------------------------------*/
@@ -2810,15 +2796,14 @@ s_chtml10_end_p_tag(void *pdoc, Node *UNUSED(child))
 static char *
 s_chtml10_start_textarea_tag(void *pdoc, Node *node) 
 {
-  Doc         *doc;
-  request_rec *r;
-  chtml10_t   *chtml10;
-  Attr        *attr;
+  Doc             *doc;
+  request_rec     *r;
+  chtml10_t       *chtml10;
+  Attr            *attr;
 
   chtml10 = GET_CHTML10(pdoc);
   doc     = chtml10->doc;
   r       = doc->r;
-
 
   chtml10->textarea_flag++;
 
@@ -3370,6 +3355,50 @@ s_chtml10_newline_mark(void *pdoc, Node *UNUSED(node))
   Doc *doc = chtml10->doc;
   W_NLCODE();
   return chtml10->out;
+}
+
+static css_prop_list_t *
+s_push_and_get_now_style(void *pdoc, Node *node)
+{
+  chtml10_t *chtml10 = GET_CHTML10(pdoc);
+  Doc *doc = chtml10->doc;
+  css_prop_list_t *last_css = NULL;
+  if (IS_CSS_ON(chtml10->entryp)) {
+    css_prop_list_t *dup_css;
+    css_selector_t  *selector;
+
+    last_css = chxj_css_get_last_prop_list(chtml10->css_prop_stack);
+    dup_css  = chxj_dup_css_prop_list(doc, last_css);
+    selector = chxj_css_find_selector(doc, chtml10->style, node);
+    if (selector) {
+      chxj_css_prop_list_merge_property(doc, dup_css, selector);
+    }
+    chxj_css_push_prop_list(chtml10->css_prop_stack, dup_css);
+    last_css = chxj_css_get_last_prop_list(chtml10->css_prop_stack);
+  }
+  return last_css;
+}
+
+
+static css_prop_list_t *
+s_nopush_and_get_now_style(void *pdoc, Node *node)
+{
+  chtml10_t *chtml10 = GET_CHTML10(pdoc);
+  Doc *doc = chtml10->doc;
+  css_prop_list_t *last_css = NULL;
+  if (IS_CSS_ON(chtml10->entryp)) {
+    css_prop_list_t *dup_css;
+    css_selector_t  *selector;
+
+    last_css = chxj_css_get_last_prop_list(chtml10->css_prop_stack);
+    dup_css  = chxj_dup_css_prop_list(doc, last_css);
+    selector = chxj_css_find_selector(doc, chtml10->style, node);
+    if (selector) {
+      chxj_css_prop_list_merge_property(doc, dup_css, selector);
+    }
+    last_css = dup_css;
+  }
+  return last_css;
 }
 /*
  * vim:ts=2 et
