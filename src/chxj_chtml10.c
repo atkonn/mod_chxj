@@ -116,8 +116,8 @@ static void  s_init_chtml10(chtml10_t *chtml, Doc *doc, request_rec *r, device_t
 static int   s_chtml10_search_emoji(chtml10_t *chtml, char *txt, char **rslt);
 static char *s_chtml10_chxjif_tag        (void *pdoc, Node *node);
 static char *s_chtml10_text              (void *pdoc, Node *node);
-static css_prop_list_t *s_push_and_get_now_style(void *pdoc, Node *node);
-static css_prop_list_t *s_nopush_and_get_now_style(void *pdoc, Node *node);
+static css_prop_list_t *s_chtml10_push_and_get_now_style(void *pdoc, Node *node);
+static css_prop_list_t *s_chtml10_nopush_and_get_now_style(void *pdoc, Node *node);
 
 tag_handler chtml10_handler[] = {
   /* tagHTML */
@@ -3358,7 +3358,7 @@ s_chtml10_newline_mark(void *pdoc, Node *UNUSED(node))
 }
 
 static css_prop_list_t *
-s_push_and_get_now_style(void *pdoc, Node *node)
+s_chtml10_push_and_get_now_style(void *pdoc, Node *node)
 {
   chtml10_t *chtml10 = GET_CHTML10(pdoc);
   Doc *doc = chtml10->doc;
@@ -3381,7 +3381,7 @@ s_push_and_get_now_style(void *pdoc, Node *node)
 
 
 static css_prop_list_t *
-s_nopush_and_get_now_style(void *pdoc, Node *node)
+s_chtml10_nopush_and_get_now_style(void *pdoc, Node *node)
 {
   chtml10_t *chtml10 = GET_CHTML10(pdoc);
   Doc *doc = chtml10->doc;
