@@ -49,10 +49,10 @@ struct _SCSSDoc_t {
 /**
  * for DEBUG. dump Node tree.
  *
- * @param nowNode for dump node object.
+ * @param doc     for dump doc object.
  * @param level   please set 0.
  */
-extern void scss_dump_nodes(SCSSNodePtr_t nowNode, int level);
+extern void scss_dump_nodes(SCSSDocPtr_t doc);
 
 /**
  * CSS Parser.

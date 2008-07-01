@@ -13,7 +13,8 @@ main(int argc, char *argv[])
   apr_initialize();
   doc = scss_parser(NULL,  s);
 
-  scss_dump_nodes(doc->rootNode->child, 0);
+  scss_dump_nodes(doc);
+
   apr_terminate();
   return 0;
 }

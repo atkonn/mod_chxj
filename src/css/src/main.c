@@ -723,33 +723,3 @@ s_cut_url_function(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len)
   ret[*pass_len] = 0;
   return ret;
 }
-
-
-void
-scss_dump_nodes(SCSSNodePtr_t nowNode, int level)
-{
-  SCSSNodePtr_t curNode;
-  int ii;
-
-  for (curNode = nowNode->next; curNode != nowNode; curNode = curNode->next) {
-    for (ii=0; ii<level; ii++) {
-      printf("  ");
-    }
-    if (IS_STYLESHEET(curNode)) {
-      printf("stylesheet:");
-    }
-    else if (IS_ATKEYWORD(curNode)) {
-      printf("atkeyword:");
-    }
-    else if (IS_SELECTOR(curNode)) {
-      printf("selector:");
-    }
-    else if (IS_PROPERTY(curNode)) {
-      printf("property:");
-    }
-    printf("name:[%s] value1:[%s] value2:[%s]\n", curNode->name, curNode->value1, curNode->value2);
-    if (curNode->child != NULL) {
-      scss_dump_nodes(curNode->child, level + 1);
-    } 
-  }
-}
