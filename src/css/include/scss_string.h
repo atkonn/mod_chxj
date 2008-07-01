@@ -17,6 +17,8 @@
 #if !defined(__SCSS_STRING_H__)
 #define __SCSS_STRING_H__
 
+#include "apr_pools.h"
+
 /**
  * Count white-space.
  * @param str       strings.
@@ -36,6 +38,18 @@ extern int scss_starts_with(const char *s, const char *w);
  * ignore spaces.
  */
 extern int scss_ignore_space(const char *s, int len);
+
+/**
+ * trim string.
+ *
+ * @param pool - use pool object.
+ * @param s    - target string.
+ * @return trimed string.
+ */
+extern char *scss_trim(apr_pool_t *pool, const char *s);
+
+
+
 
 #if !defined is_white_space
 #define is_white_space(c)   (' '  == (unsigned char)(c&0xff)  \

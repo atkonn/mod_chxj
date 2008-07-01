@@ -1,38 +1,30 @@
-
+/*
+ * Copyright (C) 2008 Atsushi Konno All rights reserved.
+ * Copyright (C) 2008 QSDN,Inc. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 #if !defined(__SCSS_H__)
 #define __SCSS_H__
 
 #include "apr_pools.h"
 #include "apr_strings.h"
+#include "scss_node.h"
 
 #define ROOT_NODE_SIGNATURE "<rootNode>"
 
 typedef struct _SCSSDoc_t SCSSDoc_t;
 typedef SCSSDoc_t *SCSSDocPtr_t;
-
-
-
-typedef enum _SCSSType_t SCSSType_t;
-enum _SCSSType_t {
-  SCSSTYPE_STYLESHEET = 0,
-  SCSSTYPE_ATKEYWORD = 1,
-  SCSSTYPE_SELECTOR,
-  SCSSTYPE_PROPERTY,
-};
-
-
-typedef struct _SCSSNode_t SCSSNode_t;
-typedef SCSSNode_t *SCSSNodePtr_t;
-
-struct _SCSSNode_t {
-  SCSSType_t type; 
-  SCSSNodePtr_t next;
-  SCSSNodePtr_t *ref;
-  SCSSNodePtr_t child;
-  char *name;
-  char *value1;
-  char *value2;
-};
 
 struct _SCSSDoc_t {
   apr_pool_t *pool;
@@ -45,6 +37,8 @@ struct _SCSSDoc_t {
 #define IS_SELECTOR(X)   ((X)->type == SCSSTYPE_SELECTOR  )
 #define IS_PROPERTY(X)   ((X)->type == SCSSTYPE_PROPERTY  )
 
+
+#include "scss_sac.h"
 
 /**
  * for DEBUG. dump Node tree.

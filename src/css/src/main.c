@@ -58,14 +58,12 @@
     }                     
 
 static SCSSDocPtr_t s_create_doc(apr_pool_t *ppool);
-static SCSSNodePtr_t s_create_node(apr_pool_t *pool);
 static char *s_cut_ident(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len);
 static const char *s_pass_comment(const char *s);
 static char *s_cut_before_next_semicoron_or_block(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len);
 static char *s_cut_before_white_space_or_semicoron(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len);
 static char *s_cut_before_block_closer(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len);
 static char *s_cut_before_semicoron(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len);
-static char *s_trim(SCSSDocPtr_t doc, const char *s);
 static void s_add_child_node(SCSSDocPtr_t doc, SCSSNodePtr_t nowNode, SCSSNodePtr_t node);
 static char *s_get_one_selector(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len);
 static char *s_replace_refstring(SCSSDocPtr_t doc, const char *s);
@@ -96,7 +94,7 @@ scss_parser(apr_pool_t *ppool,  const char *src)
       continue;
     }
     if (*s == '@') {
-      SCSSNodePtr_t atnode = s_create_node(doc->pool);
+      SCSSNodePtr_t atnode = scss_create_node(doc->pool);
       char *name;
       char *value1 = "";
       char *value2 = "";
@@ -105,16 +103,16 @@ scss_parser(apr_pool_t *ppool,  const char *src)
       name  = apr_psprintf(doc->pool, "@%s", s_cut_ident(doc, s, &pass_len));
       s += pass_len;
       if (strcasecmp(name, "@import") == 0) {
-        value1 = s_trim(doc, s_cut_before_white_space_or_semicoron(doc, s, &pass_len));
+        value1 = scss_trim(doc->pool, s_cut_before_white_space_or_semicoron(doc, s, &pass_len));
         if (scss_starts_with(value1, "url")) {
-          value1 = s_trim(doc, s_cut_url_function(doc, s, &pass_len));
+          value1 = scss_trim(doc->pool, s_cut_url_function(doc, s, &pass_len));
           s += pass_len;
         }
         else {
           s += pass_len + 1;
         }
         if (*s != ';') {
-          value2 = s_trim(doc, s_cut_before_semicoron(doc, s, &pass_len));
+          value2 = scss_trim(doc->pool, s_cut_before_semicoron(doc, s, &pass_len));
           s += pass_len + 1;
         }
         else {
@@ -122,19 +120,26 @@ scss_parser(apr_pool_t *ppool,  const char *src)
         }
       }
       else if (strcasecmp(name, "@media") == 0) {
-        value2 = s_trim(doc, s_cut_before_next_semicoron_or_block(doc, s, &pass_len));
+        value2 = scss_trim(doc->pool, s_cut_before_next_semicoron_or_block(doc, s, &pass_len));
         s += pass_len + 1;
         if (*s == '{') {
-          value1 = s_trim(doc, s_cut_before_block_closer(doc, ++s, &pass_len));
+          value1 = scss_trim(doc->pool, s_cut_before_block_closer(doc, ++s, &pass_len));
           s += pass_len + 1;
-          SCSSNodePtr_t selector_node = s_create_node(doc->pool);
-          selector_node->type = SCSSTYPE_SELECTOR;
-          selector_node->name = s_get_one_selector(doc, value1, &pass_len);
-          value1 += pass_len;
-          if (*value1 == '{') value1++;
-          selector_node->value1 = s_trim(doc, s_cut_before_block_closer(doc, value1, &pass_len));
-          s_get_property_list(doc, selector_node, selector_node->value1);
-          s_add_child_node(doc, atnode, selector_node);
+          char *one_selector = s_get_one_selector(doc, value1, &pass_len);
+          while (*one_selector) {
+            SCSSNodePtr_t selector_node = scss_create_node(doc->pool);
+            selector_node->type = SCSSTYPE_SELECTOR;
+            selector_node->name = one_selector;
+            value1 += pass_len;
+            if (*value1 == '{') value1++;
+            selector_node->value1 = scss_trim(doc->pool, s_cut_before_block_closer(doc, value1, &pass_len));
+            s_get_property_list(doc, selector_node, selector_node->value1);
+            s_add_child_node(doc, atnode, selector_node);
+            value1 += pass_len;
+            value1 = scss_trim(doc->pool, value1);
+            if (*value1 == '}') value1++;
+            one_selector = s_get_one_selector(doc, value1, &pass_len);
+          }
         }
         else {
           /* ERROR */
@@ -144,14 +149,57 @@ scss_parser(apr_pool_t *ppool,  const char *src)
         }
       }
       else if (strcasecmp(name, "@charset") == 0) {
-        value1 = s_trim(doc, s_cut_before_semicoron(doc, s, &pass_len));
+        value1 = scss_trim(doc->pool, s_cut_before_semicoron(doc, s, &pass_len));
         s += pass_len + 1;
       }
       else if (strcasecmp(name, "@page") == 0) {
-        value2 = s_trim(doc, s_cut_before_next_semicoron_or_block(doc, s, &pass_len));
+        value1 = scss_trim(doc->pool, s_cut_before_next_semicoron_or_block(doc, s, &pass_len));
         s += pass_len + 1;
         if (*s == '{') {
-          value1 = s_trim(doc, s_cut_before_block_closer(doc, ++s, &pass_len));
+          value2 = scss_trim(doc->pool, s_cut_before_block_closer(doc, ++s, &pass_len));
+          s += pass_len + 1;
+        }
+        else {
+          /* ERROR */
+          value2 = "";
+          value1 = "";
+          name   = "";
+        }
+      }
+      else if (strcasecmp(name, "@page:first") == 0) {
+        value1 = scss_trim(doc->pool, s_cut_before_next_semicoron_or_block(doc, s, &pass_len));
+        s += pass_len + 1;
+        if (*s == '{') {
+          value2 = scss_trim(doc->pool, s_cut_before_block_closer(doc, ++s, &pass_len));
+          s += pass_len + 1;
+        }
+        else {
+          /* ERROR */
+          value2 = "";
+          value1 = "";
+          name   = "";
+        }
+      }
+      else if (strcasecmp(name, "@page:right") == 0) {
+        value1 = scss_trim(doc->pool, s_cut_before_next_semicoron_or_block(doc, s, &pass_len));
+        s += pass_len + 1;
+        value2 = apr_pstrdup(doc->pool, "right");
+        if (*s == '{') {
+          value2 = scss_trim(doc->pool, s_cut_before_block_closer(doc, ++s, &pass_len));
+          s += pass_len + 1;
+        }
+        else {
+          /* ERROR */
+          value2 = "";
+          value1 = "";
+          name   = "";
+        }
+      }
+      else if (strcasecmp(name, "@page:left") == 0) {
+        value1 = scss_trim(doc->pool, s_cut_before_next_semicoron_or_block(doc, s, &pass_len));
+        s += pass_len + 1;
+        if (*s == '{') {
+          value2 = scss_trim(doc->pool, s_cut_before_block_closer(doc, ++s, &pass_len));
           s += pass_len + 1;
         }
         else {
@@ -165,7 +213,7 @@ scss_parser(apr_pool_t *ppool,  const char *src)
         s_cut_before_next_semicoron_or_block(doc, s, &pass_len);
         s += pass_len + 1;
         if (*s == '{') {
-          value1 = s_trim(doc, s_cut_before_block_closer(doc, ++s, &pass_len));
+          value1 = scss_trim(doc->pool, s_cut_before_block_closer(doc, ++s, &pass_len));
           s += pass_len + 1;
         }
         else {
@@ -176,7 +224,7 @@ scss_parser(apr_pool_t *ppool,  const char *src)
         }
       }
       else {
-        value1 = s_trim(doc, s_cut_before_next_semicoron_or_block(doc, s, &pass_len));
+        value1 = scss_trim(doc->pool, s_cut_before_next_semicoron_or_block(doc, s, &pass_len));
         s += pass_len + 1;
       }
       atnode->name = apr_pstrdup(doc->pool, name);
@@ -185,16 +233,18 @@ scss_parser(apr_pool_t *ppool,  const char *src)
       s_add_child_node(doc, doc->rootNode, atnode);
     }
     else if (! is_white_space(*s)) {
-      SCSSNodePtr_t selector_node = s_create_node(doc->pool);
-      /* selector */
-      selector_node->type = SCSSTYPE_SELECTOR;
-      selector_node->name = s_get_one_selector(doc, s, &pass_len);
-      s += pass_len;
-      if (*s == '{') s++;
-      selector_node->value1 = s_trim(doc, s_cut_before_block_closer(doc, s, &pass_len));
-      s_get_property_list(doc, selector_node, selector_node->value1);
-      s_add_child_node(doc, doc->rootNode, selector_node);
-      s += pass_len + 1;
+      char *one_selector = s_get_one_selector(doc, s, &pass_len);
+      if (*one_selector) {
+        SCSSNodePtr_t selector_node = scss_create_node(doc->pool);
+        selector_node->type = SCSSTYPE_SELECTOR;
+        selector_node->name = s_get_one_selector(doc, s, &pass_len);
+        s += pass_len;
+        if (*s == '{') s++;
+        selector_node->value1 = scss_trim(doc->pool, s_cut_before_block_closer(doc, s, &pass_len));
+        s_get_property_list(doc, selector_node, selector_node->value1);
+        s_add_child_node(doc, doc->rootNode, selector_node);
+        s += pass_len + 1;
+      }
     }
     s++;
   }
@@ -227,24 +277,6 @@ s_create_doc(apr_pool_t *ppool)
   doc->nowNode = doc->rootNode;
 
   return doc;
-}
-
-
-static SCSSNodePtr_t
-s_create_node(apr_pool_t *pool)
-{
-  SCSSNodePtr_t node;
-  node = apr_palloc(pool, sizeof(SCSSNode_t));
-
-  node->type      = SCSSTYPE_STYLESHEET; 
-  node->next      = node;
-  node->ref       = &node->next;
-  node->child     = NULL;
-  node->name      = NULL;
-  node->value1    = NULL;
-  node->value2    = NULL;
-
-  return node;
 }
 
 
@@ -498,30 +530,12 @@ s_add_child_node(SCSSDocPtr_t doc, SCSSNodePtr_t nowNode, SCSSNodePtr_t node)
     list_insert(node, nowNode->child);
   }
   else {
-    SCSSNodePtr_t sentinelNode = s_create_node(doc->pool);
+    SCSSNodePtr_t sentinelNode = scss_create_node(doc->pool);
     nowNode->child = sentinelNode;
     list_insert(node, sentinelNode);
   }
 }
 
-
-static char *
-s_trim(SCSSDocPtr_t doc, const char *s)
-{
-  char *ss = apr_pstrdup(doc->pool, s);
-  int len = strlen(s);
-  int ii;
-
-  ii = 0;
-  for (ii = 0;is_white_space(*ss) && ii < len; ss++, ii++);
-
-  ii = strlen(ss);
-  for(;is_white_space(ss[ii-1]) && ii > 0; ii--);
-
-  ss[ii] = '\0';
-
-  return ss;
-}
 
 static char *
 s_get_one_selector(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len)
@@ -556,7 +570,7 @@ s_get_one_selector(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len)
   cand = apr_palloc(doc->pool, *pass_len + 1);
   memcpy(cand, spos, *pass_len);
   cand[*pass_len] = 0;
-  cand = s_trim(doc, cand);
+  cand = scss_trim(doc->pool, cand);
   ret = apr_palloc(doc->pool, *pass_len + 1);
   spos = cand;
   npos = 0;
@@ -620,10 +634,10 @@ s_get_property_list(SCSSDocPtr_t doc, SCSSNodePtr_t nowNode, const char *s)
     char *pstat2;
     char *key = apr_strtok(pair, ":", &pstat2);
     char *val = apr_strtok(NULL, ":", &pstat2);
-    key = s_trim(doc, key);
-    val = s_trim(doc, val);
+    key = scss_trim(doc->pool, key);
+    val = scss_trim(doc->pool, val);
 
-    SCSSNodePtr_t node = s_create_node(doc->pool);
+    SCSSNodePtr_t node = scss_create_node(doc->pool);
     node->name   = key;
     node->value1 = val;
     node->value2 = NULL;
@@ -642,7 +656,7 @@ s_replace_refstring(SCSSDocPtr_t doc, const char *s)
   int npos;
   apr_pool_t *pool = doc->pool;
 
-  ss = (char *)s_trim(doc, s);
+  ss = (char *)scss_trim(doc->pool, s);
   if (! ss) return apr_pstrdup(pool, "");
   if (! *ss) return apr_pstrdup(pool, "");
 
