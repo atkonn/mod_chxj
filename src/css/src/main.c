@@ -81,10 +81,13 @@ scss_parser(apr_pool_t *ppool,  const char *src)
   SCSSDocPtr_t doc;
   apr_size_t pass_len;
 
+  doc = s_create_doc(ppool);
+
   len = strlen(src);
+  if (len == 0) return doc;
+
   s = (char *)src;
 
-  doc = s_create_doc(ppool);
   
   while (*s) {
     int pass = scss_ignore_space(src, len);
