@@ -725,9 +725,8 @@ s_cut_url_function(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len)
 }
 
 
-#ifdef __TEST__
 void
-dump_nodes(SCSSNodePtr_t nowNode, int level)
+scss_dump_nodes(SCSSNodePtr_t nowNode, int level)
 {
   SCSSNodePtr_t curNode;
   int ii;
@@ -750,25 +749,7 @@ dump_nodes(SCSSNodePtr_t nowNode, int level)
     }
     printf("name:[%s] value1:[%s] value2:[%s]\n", curNode->name, curNode->value1, curNode->value2);
     if (curNode->child != NULL) {
-      dump_nodes(curNode->child, level + 1);
+      scss_dump_nodes(curNode->child, level + 1);
     } 
   }
 }
-
-
-int
-main(void)
-{
-  SCSSDocPtr_t doc;
-  char *s = "@charset     \"UTF-8\";\n@/* abc */import   url( \"http://aaa.bbb.ccc\") all;\n@import url(\"http://www.google.co.jp/\");\n@media print   { br { abc:\"}none\";bcd:none;}   }\n         @page narrow { margin: 2cm }\n@page { margin: 3cm }\n   br > a hr { color: #ff0000 }\nbr>a>hr { bgcolor: #ff0000; display: none }\n"
-  "a,hr,br+html { bgcolor: rbg(   100%,  200%,300%); }";
-  apr_initialize(); \
-  doc = scss_parser(NULL,  s);
-  dump_nodes(doc->rootNode->child, 0);
-  
-  apr_terminate();
-  return 0;
-}
-#endif
-
-

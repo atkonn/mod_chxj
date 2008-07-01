@@ -45,4 +45,22 @@ struct _SCSSDoc_t {
 #define IS_SELECTOR(X)   ((X)->type == SCSSTYPE_SELECTOR  )
 #define IS_PROPERTY(X)   ((X)->type == SCSSTYPE_PROPERTY  )
 
+
+/**
+ * for DEBUG. dump Node tree.
+ *
+ * @param nowNode for dump node object.
+ * @param level   please set 0.
+ */
+extern void scss_dump_nodes(SCSSNodePtr_t nowNode, int level);
+
+/**
+ * CSS Parser.
+ *
+ * @param ppool - parrent pool.
+ * @param src   - CSS source.
+ * @return SCSSDocPtr_t
+ */
+extern SCSSDocPtr_t scss_parser(apr_pool_t *ppool,  const char *src);
+
 #endif
