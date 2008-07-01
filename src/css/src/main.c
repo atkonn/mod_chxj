@@ -233,11 +233,12 @@ scss_parser(apr_pool_t *ppool,  const char *src)
       s_add_child_node(doc, doc->rootNode, atnode);
     }
     else if (! is_white_space(*s)) {
+      PASS_COMMENT(s); 
       char *one_selector = s_get_one_selector(doc, s, &pass_len);
       if (*one_selector) {
         SCSSNodePtr_t selector_node = scss_create_node(doc->pool);
         selector_node->type = SCSSTYPE_SELECTOR;
-        selector_node->name = s_get_one_selector(doc, s, &pass_len);
+        selector_node->name = one_selector;
         s += pass_len;
         if (*s == '{') s++;
         selector_node->value1 = scss_trim(doc->pool, s_cut_before_block_closer(doc, s, &pass_len));
@@ -627,20 +628,27 @@ s_get_property_list(SCSSDocPtr_t doc, SCSSNodePtr_t nowNode, const char *s)
   char *pstat;
   block = s_replace_refstring(doc, block);
   while(1) {
+    char *pstat2;
+    char *key, *val;
+    char *valtmp;
+    char *imp;
     char *pair = apr_strtok(block, ";", &pstat);
     if (!pair) {
       break;
     }
-    char *pstat2;
-    char *key = apr_strtok(pair, ":", &pstat2);
-    char *val = apr_strtok(NULL, ":", &pstat2);
+    key = apr_strtok(pair, ":", &pstat2);
+    val = apr_strtok(NULL, ":", &pstat2);
     key = scss_trim(doc->pool, key);
     val = scss_trim(doc->pool, val);
 
+    valtmp = val;
+    val = apr_strtok(valtmp, "!", &pstat2);
+    imp = apr_strtok(NULL, "!", &pstat2);
+    
     SCSSNodePtr_t node = scss_create_node(doc->pool);
     node->name   = key;
     node->value1 = val;
-    node->value2 = NULL;
+    node->value2 = (imp) ? apr_pstrcat(doc->pool, "!", imp, NULL) : NULL;
     node->type   = SCSSTYPE_PROPERTY;
     s_add_child_node(doc, nowNode, node);
     block = NULL;

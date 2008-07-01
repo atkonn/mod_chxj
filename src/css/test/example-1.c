@@ -2,6 +2,8 @@
 #include "scss.h"
 #include "apr.h"
 #include "apr_pools.h"
+#include "apr_mmap.h"
+
 #include <stdio.h>
 
 static void s_import(SCSSParserPtr_t parser, const char *uri, const char **media, const char *defaultNamespaceURI);
@@ -17,37 +19,50 @@ static void s_end_font_face(SCSSParserPtr_t parser);
 static void s_start_selector(SCSSParserPtr_t parser, SCSSNodePtr_t selectors);
 static void s_end_selector(SCSSParserPtr_t parser, SCSSNodePtr_t selectors);
 static void s_property(SCSSParserPtr_t parser, const char *propertyName, const char *value, int important);
+static void print_usage(const char * const argv[]);
+static void s_close_file(apr_mmap_t *mm);
+static apr_mmap_t *s_open_file(apr_pool_t *pool, const char *filename);
 
 static int level = 0;
 int
-main(int argc, char *argv[])
+main(int argc, const char * const argv[])
 {
+  apr_pool_t *pool;
   SCSSParserPtr_t parser;
   SCSSSACHandlerPtr_t handler;
-  char *s = "@import url(aaa.css) handheld, tty, all;\n"
-            "@media handheld, print {\n"
-            "}\n"
-            "@media all {\n"
-            " br+a { color: #ff0000; }\n"
-            " br,a { color: #ff0000; }\n"
-            "}\n"
-            "@page { margin-top: 2ch; }\n"
-            "@page abc { margin-top: 2ch; }\n"
-            "@font-face { margin-top: 2ch; }\n"
-            "a,br { margin-top: 2ch; }\n"
-            "br { margin-top: 2ch; }\n"
-            "hr > center { margin-top: 2ch; }\n";
-
+  apr_mmap_t *mm;
+  char *s;
+  
+  /*===================*/
   /* 1) APR initialize */
+  /*===================*/
   apr_initialize();
+  apr_pool_create(&pool, NULL);
+  if (argc != 2) {
+    print_usage(argv);
+    return -1;
+  }
 
+  mm = s_open_file(pool, argv[1]);
+  if (mm == NULL) {
+    fprintf(stderr, "failed: open %s\n", argv[1]);
+    return -2;
+  }
+  s = (char *)mm->mm;
+
+  /*=========================*/
   /* 2) create parser object */
-  parser = scss_parser_new_from_buf(NULL, s, "");
+  /*=========================*/
+  parser = scss_parser_new_from_buf(pool, s, "");
 
+  /*==========================*/
   /* 3) create handler object */
+  /*==========================*/
   handler = scss_doc_handler_new(parser);
 
-  /* 4) register handler */
+  /*==========================*/
+  /* 4) register handler      */
+  /*==========================*/
   handler->startDocument = s_start_document;
   handler->endDocument   = s_end_document;
   handler->import        = s_import;
@@ -61,10 +76,16 @@ main(int argc, char *argv[])
   handler->endSelector   = s_end_selector;
   handler->property      = s_property;
 
-  /* 5) do parse. */
+  /*==========================*/
+  /* 5) do parse.             */
+  /*==========================*/
   scss_parse_stylesheet(parser);
 
-  /* 6) APR terminate */
+  /*==========================*/
+  /* 6) APR terminate         */
+  /*==========================*/
+  s_close_file(mm);
+  apr_pool_destroy(pool);
   apr_terminate();
   return 0;
 }
@@ -194,8 +215,43 @@ s_property(SCSSParserPtr_t parser, const char *propertyName, const char *value, 
   print_level(); fprintf(stderr, "\tvalue:[%s]\n", value);
   print_level(); fprintf(stderr, "\timportant:[%d]\n", important);
 }
-#if 0
-typedef void (*SCSSSAC_startSelector_fn)(SCSSParserPtr_t parser, SCSSNodePtr_t selectors);
-typedef void (*SCSSSAC_endSelector_fn)(SCSSParserPtr_t parser, SCSSNodePtr_t selectors);
-typedef void (*SCSSSAC_property_fn)(SCSSParserPtr_t parser, const char *propertyName, const char *value, int impotant);
-#endif
+
+static void
+print_usage(const char * const argv[])
+{
+  fprintf(stderr, "Usage: %s filename\n", argv[0]);
+}
+
+static apr_mmap_t *
+s_open_file(apr_pool_t *pool, const char *filename)
+{
+  apr_mmap_t *mm;
+  apr_status_t rv;
+  apr_file_t *fp;
+  apr_finfo_t finfo;
+  rv = apr_stat(&finfo, filename, APR_FINFO_SIZE, pool);
+  if (rv != APR_SUCCESS) {
+    return NULL;
+  }
+  if (finfo.size == 0) {
+    return NULL;
+  }
+  rv = apr_file_open(&fp, filename, APR_READ | APR_BINARY, 0, pool);
+  if (rv != APR_SUCCESS) {
+    return NULL;
+  }
+  rv = apr_mmap_create(&mm, fp, 0, finfo.size, APR_MMAP_READ, pool);
+  apr_file_close(fp);
+  if (rv != APR_SUCCESS) {
+    apr_file_close(fp);
+    return NULL;
+  }
+
+  return mm;
+}
+
+static void
+s_close_file(apr_mmap_t *mm)
+{
+  apr_mmap_delete(mm);
+}

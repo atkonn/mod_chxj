@@ -21,9 +21,13 @@
 char *
 scss_trim(apr_pool_t *pool, const char *s)
 {
-  char *ss = apr_pstrdup(pool, s);
-  int len = strlen(s);
+  char *ss;
+  int len;
   int ii;
+
+  if (! s) return apr_pstrdup(pool, "");
+  ss = apr_pstrdup(pool, s);
+  len = strlen(s);
 
   ii = 0;
   for (ii = 0;is_white_space(*ss) && ii < len; ss++, ii++);
