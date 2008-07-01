@@ -53,7 +53,8 @@ libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libscss_la_LIBADD =
 am_libscss_la_OBJECTS = libscss_la-main.lo libscss_la-ignore_sp.lo \
-	libscss_la-starts_with.lo libscss_la-dump_nodes.lo
+	libscss_la-starts_with.lo libscss_la-dump_nodes.lo \
+	libscss_la-sac.lo libscss_la-trim.lo libscss_la-create_node.lo
 libscss_la_OBJECTS = $(am_libscss_la_OBJECTS)
 libscss_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(libscss_la_CFLAGS) \
@@ -192,7 +193,10 @@ top_srcdir = ..
 libscss_la_SOURCES = main.c \
   ignore_sp.c \
   starts_with.c  \
-  dump_nodes.c
+  dump_nodes.c \
+  sac.c \
+  trim.c \
+  create_node.c
 
 libscss_la_CFLAGS = -O2 -prefer-pic -I. -I../include -I./serf
 AM_CFLAGS = -g -O2  -I/usr/include/apr-1.0   -pipe -Wall -g -O2 -pthread  -DLINUX=2 -D_REENTRANT -D_GNU_SOURCE -D_LARGEFILE64_SOURCE  -I/usr/include/apr-1.0 -I/usr/include/postgresql -O2 -prefer-pic -I. -I../include 
@@ -266,10 +270,13 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+include ./$(DEPDIR)/libscss_la-create_node.Plo
 include ./$(DEPDIR)/libscss_la-dump_nodes.Plo
 include ./$(DEPDIR)/libscss_la-ignore_sp.Plo
 include ./$(DEPDIR)/libscss_la-main.Plo
+include ./$(DEPDIR)/libscss_la-sac.Plo
 include ./$(DEPDIR)/libscss_la-starts_with.Plo
+include ./$(DEPDIR)/libscss_la-trim.Plo
 
 .c.o:
 	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -319,6 +326,27 @@ libscss_la-dump_nodes.lo: dump_nodes.c
 #	source='dump_nodes.c' object='libscss_la-dump_nodes.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
 #	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libscss_la_CFLAGS) $(CFLAGS) -c -o libscss_la-dump_nodes.lo `test -f 'dump_nodes.c' || echo '$(srcdir)/'`dump_nodes.c
+
+libscss_la-sac.lo: sac.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libscss_la_CFLAGS) $(CFLAGS) -MT libscss_la-sac.lo -MD -MP -MF $(DEPDIR)/libscss_la-sac.Tpo -c -o libscss_la-sac.lo `test -f 'sac.c' || echo '$(srcdir)/'`sac.c
+	mv -f $(DEPDIR)/libscss_la-sac.Tpo $(DEPDIR)/libscss_la-sac.Plo
+#	source='sac.c' object='libscss_la-sac.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libscss_la_CFLAGS) $(CFLAGS) -c -o libscss_la-sac.lo `test -f 'sac.c' || echo '$(srcdir)/'`sac.c
+
+libscss_la-trim.lo: trim.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libscss_la_CFLAGS) $(CFLAGS) -MT libscss_la-trim.lo -MD -MP -MF $(DEPDIR)/libscss_la-trim.Tpo -c -o libscss_la-trim.lo `test -f 'trim.c' || echo '$(srcdir)/'`trim.c
+	mv -f $(DEPDIR)/libscss_la-trim.Tpo $(DEPDIR)/libscss_la-trim.Plo
+#	source='trim.c' object='libscss_la-trim.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libscss_la_CFLAGS) $(CFLAGS) -c -o libscss_la-trim.lo `test -f 'trim.c' || echo '$(srcdir)/'`trim.c
+
+libscss_la-create_node.lo: create_node.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libscss_la_CFLAGS) $(CFLAGS) -MT libscss_la-create_node.lo -MD -MP -MF $(DEPDIR)/libscss_la-create_node.Tpo -c -o libscss_la-create_node.lo `test -f 'create_node.c' || echo '$(srcdir)/'`create_node.c
+	mv -f $(DEPDIR)/libscss_la-create_node.Tpo $(DEPDIR)/libscss_la-create_node.Plo
+#	source='create_node.c' object='libscss_la-create_node.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libscss_la_CFLAGS) $(CFLAGS) -c -o libscss_la-create_node.lo `test -f 'create_node.c' || echo '$(srcdir)/'`create_node.c
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -508,7 +536,6 @@ uninstall-am: uninstall-libLTLIBRARIES
 clean:
 	rm -fr .libs
 	rm -f *.o *.lo *.la
-	rm -rf .deps
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:
