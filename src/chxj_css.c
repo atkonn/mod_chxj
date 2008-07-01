@@ -199,20 +199,22 @@ chxj_css_find_selector(Doc *doc, css_stylesheet_t *stylesheet, Node *node)
     }
   }
   else {
+    DBG(r, " ");
     pattern_str1 = apr_psprintf(pool, 
                                 "^(%s|\\*)$",
                                 tag_name);
     pattern_str2 = apr_psprintf(pool,
                                 ".*([ >+])(%s|\\*)$",
                                 tag_name);
+    DBG(r, " ");
     sel = s_search_selector_regexp(doc, r, pool, stylesheet, pattern_str1, pattern_str2, node);
     if (sel) {
-      DBG(r, "end chxj_css_find_selector()");
+      DBG(r, "end chxj_css_find_selector() (FOUND)");
       return sel;
     }
   }
 
-  DBG(r, "end chxj_css_find_selector()");
+  DBG(r, "end chxj_css_find_selector() (Not FOUND)");
   return sel;
 }
 
@@ -573,6 +575,7 @@ s_css_parser_from_uri_start_selector(CRDocHandler * a_this, CRSelector *a_select
       guchar *tmp_str = cr_simple_sel_to_string(cur->simple_sel);
       if (tmp_str) {
         app_data->selector_list[ii++] = apr_pstrdup(app_data->pool, (char *)tmp_str);
+fprintf(stderr, "%s:%d selector:[%s]\n", __FILE__,__LINE__, tmp_str);
         g_free (tmp_str);
         tmp_str = NULL;
       }
@@ -597,6 +600,7 @@ s_css_parser_from_uri_end_selector(CRDocHandler * a_this, CRSelector *a_selector
 
       for (cur = app_data->property_head.next; cur && cur != &app_data->property_head; cur = cur->next) {
         css_property_t *tgt = s_css_parser_copy_property(app_data->pool, cur);
+fprintf(stderr, "%s:%d property:[%s] value:[%s]\n", __FILE__,__LINE__, tgt->name, tgt->value);
         s_merge_property(sel, tgt);
       }
       css_selector_t *point_selector = &app_data->stylesheet->selector_head;
@@ -1244,6 +1248,22 @@ chxj_css_prop_list_merge_property(Doc *doc, css_prop_list_t *base, css_selector_
   }
   
 }
+
+char *
+chxj_css_get_property_value(Doc *doc, css_prop_list_t *base, const char *name)
+{
+  css_property_t *b_prop;
+fprintf(stderr, "%s:%d\n", __FILE__,__LINE__);
+  for (b_prop = base->head.next; b_prop != &base->head; b_prop = b_prop->next) {
+fprintf(stderr, "%s:%d b_prop:[%s]\n", __FILE__,__LINE__,b_prop->name);
+    if (b_prop->name && strcasecmp(name, b_prop->name) == 0) {
+      return apr_pstrdup(doc->pool, b_prop->value);
+    }
+  }
+fprintf(stderr, "%s:%d\n", __FILE__,__LINE__);
+  return NULL;
+}
+
 
 #if 0
 css_stylesheet_t *

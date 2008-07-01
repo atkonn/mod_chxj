@@ -495,6 +495,11 @@ void test_chtml20_link_009();
 void test_chtml20_html_tag_with_css_001();
 
 void test_chtml20_meta_tag_with_css_001();
+
+void test_chtml20_textarea_tag_with_css_001();
+void test_chtml20_textarea_tag_with_css_002();
+void test_chtml20_textarea_tag_with_css_003();
+void test_chtml20_textarea_tag_with_css_004();
 /* pend */
 
 int
@@ -951,6 +956,11 @@ main()
   CU_add_test(chtml20_suite, "test html with css 001",                             test_chtml20_html_tag_with_css_001);
 
   CU_add_test(chtml20_suite, "test meta with css 001",                             test_chtml20_meta_tag_with_css_001);
+
+  CU_add_test(chtml20_suite, "test textarea with css 001",                         test_chtml20_textarea_tag_with_css_001);
+  CU_add_test(chtml20_suite, "test textarea with css 002",                         test_chtml20_textarea_tag_with_css_002);
+  CU_add_test(chtml20_suite, "test textarea with css 003",                         test_chtml20_textarea_tag_with_css_003);
+  CU_add_test(chtml20_suite, "test textarea with css 004",                         test_chtml20_textarea_tag_with_css_004);
   /* aend */
 
   CU_basic_run_tests();
@@ -12686,6 +12696,193 @@ void test_chtml20_meta_tag_with_css_001()
   apr_size_t destlen;
   APR_INIT;
   chxj_serf_get = test_chxj_serf_get003;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_chtml20(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+/******************************************************************************/
+/* TEXTAREA with CSS                                                          */
+/******************************************************************************/
+char *test_chxj_serf_get004(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "textarea { -wap-input-format: &quot;*&lt;ja:h&gt;&quot; }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_chtml20_textarea_tag_with_css_001()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><textarea></textarea></body></html>"
+#define  RESULT_STRING "<html><head></head><body><textarea istyle=\"1\"></textarea></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get004;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_chtml20(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+char *test_chxj_serf_get005(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "textarea { -wap-input-format: &quot;*&lt;ja:hk&gt;&quot; }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_chtml20_textarea_tag_with_css_002()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><textarea></textarea></body></html>"
+#define  RESULT_STRING "<html><head></head><body><textarea istyle=\"2\"></textarea></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get005;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_chtml20(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+char *test_chxj_serf_get006(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "textarea { -wap-input-format: &quot;*&lt;ja:en&gt;&quot; }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_chtml20_textarea_tag_with_css_003()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><textarea></textarea></body></html>"
+#define  RESULT_STRING "<html><head></head><body><textarea istyle=\"3\"></textarea></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get006;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_chtml20(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+char *test_chxj_serf_get007(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "textarea { wap-input-format: *<ja:n>; }\n"
+                     "br      { display: none }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_chtml20_textarea_tag_with_css_004()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><textarea></textarea></body></html>"
+#define  RESULT_STRING "<html><head></head><body><textarea istyle=\"4\"></textarea></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get007;
   call_check = 0;
 
   COOKIE_INIT(cookie);
