@@ -54,7 +54,8 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 libscss_la_LIBADD =
 am_libscss_la_OBJECTS = libscss_la-main.lo libscss_la-ignore_sp.lo \
 	libscss_la-starts_with.lo libscss_la-dump_nodes.lo \
-	libscss_la-sac.lo libscss_la-trim.lo libscss_la-create_node.lo
+	libscss_la-sac.lo libscss_la-trim.lo libscss_la-create_node.lo \
+	libscss_la-doc.lo
 libscss_la_OBJECTS = $(am_libscss_la_OBJECTS)
 libscss_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(libscss_la_CFLAGS) \
@@ -196,7 +197,8 @@ libscss_la_SOURCES = main.c \
   dump_nodes.c \
   sac.c \
   trim.c \
-  create_node.c
+  create_node.c \
+  doc.c
 
 libscss_la_CFLAGS = -O2 -prefer-pic -I. -I../include -I./serf
 AM_CFLAGS = -g -O2  -I/usr/include/apr-1.0   -pipe -Wall -g -O2 -pthread  -DLINUX=2 -D_REENTRANT -D_GNU_SOURCE -D_LARGEFILE64_SOURCE  -I/usr/include/apr-1.0 -I/usr/include/postgresql -O2 -prefer-pic -I. -I../include 
@@ -271,6 +273,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 include ./$(DEPDIR)/libscss_la-create_node.Plo
+include ./$(DEPDIR)/libscss_la-doc.Plo
 include ./$(DEPDIR)/libscss_la-dump_nodes.Plo
 include ./$(DEPDIR)/libscss_la-ignore_sp.Plo
 include ./$(DEPDIR)/libscss_la-main.Plo
@@ -347,6 +350,13 @@ libscss_la-create_node.lo: create_node.c
 #	source='create_node.c' object='libscss_la-create_node.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
 #	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libscss_la_CFLAGS) $(CFLAGS) -c -o libscss_la-create_node.lo `test -f 'create_node.c' || echo '$(srcdir)/'`create_node.c
+
+libscss_la-doc.lo: doc.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libscss_la_CFLAGS) $(CFLAGS) -MT libscss_la-doc.lo -MD -MP -MF $(DEPDIR)/libscss_la-doc.Tpo -c -o libscss_la-doc.lo `test -f 'doc.c' || echo '$(srcdir)/'`doc.c
+	mv -f $(DEPDIR)/libscss_la-doc.Tpo $(DEPDIR)/libscss_la-doc.Plo
+#	source='doc.c' object='libscss_la-doc.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libscss_la_CFLAGS) $(CFLAGS) -c -o libscss_la-doc.lo `test -f 'doc.c' || echo '$(srcdir)/'`doc.c
 
 mostlyclean-libtool:
 	-rm -f *.lo

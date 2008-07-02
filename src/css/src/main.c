@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2008 Atsushi Konno All rights reserved.
+ * Copyright (C) 2008 QSDN,Inc. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 #include "scss.h"
 #include "scss_string.h"
 #include "apr_pools.h"
@@ -57,7 +73,6 @@
       }                   \
     }                     
 
-static SCSSDocPtr_t s_create_doc(apr_pool_t *ppool);
 static char *s_cut_ident(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len, apr_size_t *nl_counter);
 static const char *s_pass_comment(const char *s, apr_size_t *nl_counter);
 static char *s_cut_before_next_semicoron_or_block(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len, apr_size_t *nl_counter);
@@ -74,15 +89,12 @@ static void s_default_error_log(void *userData, const char *func, const char *fn
 SCSSParserError_fn scss_parser_error = s_default_error_log;
 
 SCSSDocPtr_t
-scss_parser(apr_pool_t *ppool,  const char *src)
+scss_parser(SCSSDocPtr_t doc, apr_pool_t *ppool,  const char *src)
 {
   register const char *s;
   int len;
-  SCSSDocPtr_t doc;
   apr_size_t pass_len;
   apr_size_t nl_counter = 1;
-
-  doc = s_create_doc(ppool);
 
   len = strlen(src);
   if (len == 0) return doc;
@@ -263,34 +275,6 @@ scss_parser(apr_pool_t *ppool,  const char *src)
     }
     s++;
   }
-  return doc;
-}
-
-
-static SCSSDocPtr_t
-s_create_doc(apr_pool_t *ppool)
-{
-  apr_pool_t *pool;
-  SCSSDocPtr_t doc;
-
-  apr_pool_create(&pool, ppool);
-  doc = apr_palloc(pool, sizeof(*doc));
-  memset(doc , 0, sizeof(*doc));
-
-  doc->pool = pool;
-
-  doc->rootNode = apr_palloc(pool, sizeof(SCSSNode_t));
-
-  doc->rootNode->type      = SCSSTYPE_STYLESHEET; 
-  doc->rootNode->next      = doc->rootNode;
-  doc->rootNode->ref       = &doc->rootNode->next;
-  doc->rootNode->child     = NULL;
-  doc->rootNode->name      = apr_pstrdup(pool, ROOT_NODE_SIGNATURE);
-  doc->rootNode->value1    = NULL;
-  doc->rootNode->value2    = NULL;
-
-  doc->nowNode = doc->rootNode;
-
   return doc;
 }
 
