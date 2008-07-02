@@ -310,6 +310,25 @@ s_get_selectors_list(apr_pool_t *pool, const char *src)
   }
   return headNode;
 }
+
+
+void *
+scss_get_user_data(SCSSParserPtr_t parser)
+{
+  if (parser->doc) {
+    return parser->doc->userData;
+  }
+  return NULL;
+}
+
+
+void
+scss_set_user_data(SCSSParserPtr_t parser, void *userData)
+{
+  if (parser->doc) {
+    parser->doc->userData = userData;
+  }
+}
 /*
  * vim:ts=2 et
  */

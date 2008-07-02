@@ -84,7 +84,7 @@ static char *s_get_one_selector(SCSSDocPtr_t doc, const char *s, apr_size_t *pas
 static char *s_replace_refstring(SCSSDocPtr_t doc, const char *s);
 static void s_get_property_list(SCSSDocPtr_t doc, SCSSNodePtr_t nowNode, const char *s);
 static char *s_cut_url_function(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len, apr_size_t *nl_counter);
-static void s_default_error_log(void *userData, const char *func, const char *fname, int line, int srcline, char *fmt, ...);
+static void s_default_error_log(void *userData, const char *func, const char *fname, int line, const char *src, int srcline, char *fmt, ...);
 
 SCSSParserError_fn scss_parser_error = s_default_error_log;
 
@@ -103,7 +103,7 @@ scss_parser(SCSSDocPtr_t doc, apr_pool_t *ppool,  const char *src)
 
   
   while (*s) {
-    int pass = scss_ignore_space(src, len, &nl_counter);
+    int pass = scss_ignore_space(s, len, &nl_counter);
     if (pass) {
       s += pass;
       continue;
@@ -121,7 +121,7 @@ scss_parser(SCSSDocPtr_t doc, apr_pool_t *ppool,  const char *src)
       if (strcasecmp(name, "@import") == 0) {
         if (! *s) {
           /* XXX ERROR XXX */
-          scss_parser_error(doc->userData, __func__,__FILE__,__LINE__,nl_counter,"@import parse error");
+          scss_parser_error(doc->userData, __func__,__FILE__,__LINE__,(s - pass_len - 1), nl_counter ,"@import parse error");
           value1 = apr_pstrdup(doc->pool, "");
           value2 = apr_pstrdup(doc->pool, "all");
         }
@@ -589,7 +589,7 @@ s_get_one_selector(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len, apr_si
     }
     s++;
   }
-  *nl_counter += counter;
+  *nl_counter = counter + *nl_counter;
   *pass_len = s - spos;
 
   cand = apr_palloc(doc->pool, *pass_len + 1);
@@ -736,6 +736,7 @@ s_cut_url_function(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len, apr_si
   int pcnt = 0;
   apr_size_t counter = 0;
 
+  counter = *nl_counter;
   while(*s) {
     PASS_COMMENT(s, &counter);
     if (*s == '\\') {
@@ -770,7 +771,7 @@ s_cut_url_function(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len, apr_si
   }
 
   *pass_len = s - spos;
-  *nl_counter += counter;
+  *nl_counter = counter;
 
   char *ret = apr_palloc(doc->pool, *pass_len + 1);
   memcpy(ret, spos, *pass_len);
@@ -780,12 +781,18 @@ s_cut_url_function(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len, apr_si
 
 
 static void
-s_default_error_log(void *userData, const char *func, const char *fname, int line, int srcline, char *fmt, ...)
+s_default_error_log(void *userData, const char *func, const char *fname, int line, const char *src, int srcline, char *fmt, ...)
 {
   va_list ap;
   va_start(ap, fmt);
-  fprintf(stderr, "func:[%s] file:[%s] line:[%d] srcline:[%d] ", func, fname, line, srcline);
+  fprintf(stderr, "func:[%s] file:[%s] line:[%d] src:[%.*s] srcline:[%d]", func, fname, line, 10, src, srcline);
   vfprintf(stderr, fmt, ap);
   va_end(ap);
   fprintf(stderr, "\n");
+}
+
+void 
+scss_doc_set_user_data(SCSSDocPtr_t doc, void *userData)
+{
+  doc->userData = userData;
 }

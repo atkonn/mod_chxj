@@ -25,7 +25,6 @@ typedef struct _SCSSSACHandler_t *SCSSSACHandlerPtr_t;
 struct _SCSSParser_t {
   SCSSDocPtr_t        doc;
   SCSSSACHandlerPtr_t handler;
-  void                *userData;
 };
 
 
@@ -87,4 +86,22 @@ extern const char *scss_get_perser_version(SCSSParserPtr_t parser);
  * do parse.
  */
 extern int scss_parse_stylesheet(SCSSParserPtr_t parser);
+
+
+/**
+ * get user's data.
+ *
+ * @param parser - SCSSParser_t Object.
+ * @return user's data if any.
+ */
+extern void *scss_get_user_data(SCSSParserPtr_t parser);
+
+
+/**
+ * set user's data.
+ *
+ * @param parser - SCSSParser_t Object.
+ * @param userData - user's data.
+ */
+extern void scss_set_user_data(SCSSParserPtr_t parser, void *userData);
 #endif

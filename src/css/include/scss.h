@@ -43,7 +43,7 @@ struct _SCSSDoc_t {
 
 #include "scss_sac.h"
 
-typedef void (*SCSSParserError_fn)(void *userData, const char *func, const char *fname, int line, int srcline, char *fmt, ...);
+typedef void (*SCSSParserError_fn)(void *userData, const char *func, const char *fname, int line, const char *src, int srcline, char *fmt, ...);
 
 
 
@@ -77,4 +77,12 @@ extern SCSSParserError_fn scss_parser_error;
  * @return SCSSDoc_t object.
  */
 extern SCSSDocPtr_t scss_create_doc(apr_pool_t *pool);
+
+/**
+ * set user data.
+ *
+ * @param doc      - SCSSDoc Object.
+ * @param userData - user's data.
+ */
+extern void scss_doc_set_user_data(SCSSDocPtr_t doc, void *userData);
 #endif
