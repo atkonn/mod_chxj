@@ -5,10 +5,14 @@
 #include "scss.h"
 
 
+#define CU_ASSERT_OR_GOTO_END(X) { CU_ASSERT((X)); if (CU_get_number_of_failures() != 0) goto end; }
+
 
 void test_import_001();
 void test_import_002();
 void test_import_003();
+void test_import_004();
+void test_import_005();
 /* pend */
 
 int
@@ -20,6 +24,8 @@ main()
   CU_add_test(atkeyword_suite, "@import 001",  test_import_001);
   CU_add_test(atkeyword_suite, "@import 002",  test_import_002);
   CU_add_test(atkeyword_suite, "@import 003",  test_import_003);
+  CU_add_test(atkeyword_suite, "@import 004",  test_import_004);
+  CU_add_test(atkeyword_suite, "@import 005",  test_import_005);
   /* aend */
 
   CU_basic_run_tests();
@@ -130,6 +136,81 @@ void test_import_003()
   CU_ASSERT(strcasecmp(doc->rootNode->child->next->next->value2, "all") == 0);
 
 
+  apr_terminate();
+  fprintf(stderr, "end %s\n", __func__);
+#undef TEST_STRING
+}
+void test_import_004()
+{
+#define TEST_STRING "@import\n;@import"
+  SCSSDocPtr_t doc;
+  apr_pool_t *pool;
+
+  fprintf(stderr, "start %s\n", __func__);
+  apr_initialize();
+  apr_pool_create(&pool, NULL);
+
+  doc = scss_create_doc(pool);
+  scss_parser(doc, pool,  TEST_STRING);
+
+  CU_ASSERT(doc != NULL);
+  CU_ASSERT(doc->rootNode != NULL);
+  CU_ASSERT(doc->rootNode->type == SCSSTYPE_STYLESHEET);
+  CU_ASSERT(doc->rootNode->child != NULL);
+  CU_ASSERT(doc->rootNode->child->name != NULL);
+  CU_ASSERT(strcasecmp(doc->rootNode->child->name, "<sentinel>") == 0);
+  CU_ASSERT(doc->rootNode->child->next != NULL);
+  CU_ASSERT(doc->rootNode->child->next->type == SCSSTYPE_ATKEYWORD);
+  CU_ASSERT(doc->rootNode->child->next->name != NULL);
+  CU_ASSERT(strcasecmp(doc->rootNode->child->next->name, "@import") == 0);
+  CU_ASSERT(strcasecmp(doc->rootNode->child->next->value1, "") == 0);
+  CU_ASSERT(strcasecmp(doc->rootNode->child->next->value2, "all") == 0);
+  CU_ASSERT(doc->rootNode->child->next->next != NULL);
+  CU_ASSERT(doc->rootNode->child->next->next->type == SCSSTYPE_ATKEYWORD);
+  CU_ASSERT(doc->rootNode->child->next->next->name != NULL);
+  CU_ASSERT(strcasecmp(doc->rootNode->child->next->next->name, "@import") == 0);
+  CU_ASSERT(strcasecmp(doc->rootNode->child->next->next->value1, "") == 0);
+  CU_ASSERT(strcasecmp(doc->rootNode->child->next->next->value2, "all") == 0);
+
+
+  apr_terminate();
+  fprintf(stderr, "end %s\n", __func__);
+#undef TEST_STRING
+}
+void test_import_005()
+{
+#define TEST_STRING "\n\n@import\n/*abc*/abc /*abc*/all;\n@import"
+  SCSSDocPtr_t doc;
+  apr_pool_t *pool;
+
+  fprintf(stderr, "start %s\n", __func__);
+  apr_initialize();
+  apr_pool_create(&pool, NULL);
+
+  doc = scss_create_doc(pool);
+  scss_parser(doc, pool,  TEST_STRING);
+
+  CU_ASSERT_OR_GOTO_END(doc != NULL);
+  CU_ASSERT_OR_GOTO_END(doc->rootNode != NULL);
+  CU_ASSERT_OR_GOTO_END(doc->rootNode->type == SCSSTYPE_STYLESHEET);
+  CU_ASSERT_OR_GOTO_END(doc->rootNode->child != NULL);
+  CU_ASSERT_OR_GOTO_END(doc->rootNode->child->name != NULL);
+  CU_ASSERT_OR_GOTO_END(strcasecmp(doc->rootNode->child->name, "<sentinel>") == 0);
+  CU_ASSERT(doc->rootNode->child->next != NULL); if (CU_get_number_of_failures() != 0) goto end;
+  CU_ASSERT(doc->rootNode->child->next->type == SCSSTYPE_ATKEYWORD); if (CU_get_number_of_failures() != 0) goto end;
+  CU_ASSERT(doc->rootNode->child->next->name != NULL); if (CU_get_number_of_failures() != 0) goto end;
+  CU_ASSERT(strcasecmp(doc->rootNode->child->next->name, "@import") == 0); if (CU_get_number_of_failures() != 0) goto end;
+  CU_ASSERT(strcasecmp(doc->rootNode->child->next->value1, "abc") == 0); if (CU_get_number_of_failures() != 0) goto end;
+  CU_ASSERT(strcasecmp(doc->rootNode->child->next->value2, "all") == 0); if (CU_get_number_of_failures() != 0) goto end;
+  CU_ASSERT(doc->rootNode->child->next->next != NULL); if (CU_get_number_of_failures() != 0) goto end;
+  CU_ASSERT(doc->rootNode->child->next->next->type == SCSSTYPE_ATKEYWORD); if (CU_get_number_of_failures() != 0) goto end;
+  CU_ASSERT(doc->rootNode->child->next->next->name != NULL); if (CU_get_number_of_failures() != 0) goto end;
+  CU_ASSERT(strcasecmp(doc->rootNode->child->next->next->name, "@import") == 0); if (CU_get_number_of_failures() != 0) goto end;
+  CU_ASSERT(strcasecmp(doc->rootNode->child->next->next->value1, "") == 0); if (CU_get_number_of_failures() != 0) goto end;
+  CU_ASSERT(strcasecmp(doc->rootNode->child->next->next->value2, "all") == 0); if (CU_get_number_of_failures() != 0) goto end;
+
+
+end:
   apr_terminate();
   fprintf(stderr, "end %s\n", __func__);
 #undef TEST_STRING
