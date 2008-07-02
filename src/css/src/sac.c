@@ -56,7 +56,10 @@ scss_parser_new_from_buf(apr_pool_t *pool, const char *buf, char *defaultEncodin
   SCSSParserPtr_t parser;
   SCSSDocPtr_t doc;
 
-  doc    = scss_parser(pool,  buf);
+  doc    = scss_create_doc(pool);
+  doc->source = apr_pstrdup(pool, buf);
+  doc->defaultEncoding = apr_pstrdup(pool, defaultEncoding);
+
   parser = (SCSSParserPtr_t)apr_palloc(doc->pool, sizeof(*parser));
   parser->doc = doc;
   parser->handler = NULL;
@@ -87,6 +90,7 @@ scss_parse_stylesheet(SCSSParserPtr_t parser)
   if (parser->handler->startDocument) {
     parser->handler->startDocument(parser);
   }
+  scss_parser(parser->doc, parser->doc->pool, parser->doc->source);
   ret = s_parse_stylesheet(parser, parser->doc->rootNode->child);
 
   if (parser->handler->endDocument) {

@@ -27,10 +27,12 @@ typedef struct _SCSSDoc_t SCSSDoc_t;
 typedef SCSSDoc_t *SCSSDocPtr_t;
 
 struct _SCSSDoc_t {
-  apr_pool_t *pool;
+  apr_pool_t    *pool;
   SCSSNodePtr_t rootNode;
   SCSSNodePtr_t nowNode;
-  void *userData;
+  void          *userData;
+  char          *source;
+  char          *defaultEncoding;
 };
 
 #define IS_STYLESHEET(X) ((X)->type == SCSSTYPE_STYLESHEET)
@@ -56,14 +58,23 @@ extern void scss_dump_nodes(SCSSDocPtr_t doc);
 /**
  * CSS Parser.
  *
- * @param ppool - parrent pool.
+ * @param doc   - SCSSDoc_t Object.
+ * @param ppool - parent pool.
  * @param src   - CSS source.
  * @return SCSSDocPtr_t
  */
-extern SCSSDocPtr_t scss_parser(apr_pool_t *ppool,  const char *src);
+extern SCSSDocPtr_t scss_parser(SCSSDocPtr_t doc, apr_pool_t *ppool,  const char *src);
 
 /**
  * CSS Parser Error log.
  */
 extern SCSSParserError_fn scss_parser_error;
+
+/**
+ * create new doc.
+ *
+ * @param pool - use pool object.
+ * @return SCSSDoc_t object.
+ */
+extern SCSSDocPtr_t scss_create_doc(apr_pool_t *pool);
 #endif

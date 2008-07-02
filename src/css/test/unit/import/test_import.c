@@ -39,7 +39,8 @@ void test_import_001()
   apr_initialize();
   apr_pool_create(&pool, NULL);
 
-  doc = scss_parser(pool,  TEST_STRING);
+  doc = scss_create_doc(pool);
+  scss_parser(doc, pool,  TEST_STRING);
 
   CU_ASSERT(doc != NULL);
   CU_ASSERT(doc->rootNode != NULL);
@@ -72,7 +73,8 @@ void test_import_002()
   apr_initialize();
   apr_pool_create(&pool, NULL);
 
-  doc = scss_parser(pool,  TEST_STRING);
+  doc = scss_create_doc(pool);
+  scss_parser(doc, pool,  TEST_STRING);
 
   CU_ASSERT(doc != NULL);
   CU_ASSERT(doc->rootNode != NULL);
@@ -105,7 +107,8 @@ void test_import_003()
   apr_initialize();
   apr_pool_create(&pool, NULL);
 
-  doc = scss_parser(pool,  TEST_STRING);
+  doc = scss_create_doc(pool);
+  scss_parser(doc, pool,  TEST_STRING);
 
   CU_ASSERT(doc != NULL);
   CU_ASSERT(doc->rootNode != NULL);
