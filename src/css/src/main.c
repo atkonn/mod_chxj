@@ -33,9 +33,9 @@
     node->next->ref = node->ref;                \
 } while (0)
 
-#define PASS_COMMENT(S)                     \
+#define PASS_COMMENT(S,NL)                  \
     if (*(S) == '/' && *((S) + 1) == '*') { \
-      (S) = s_pass_comment((S));            \
+      (S) = s_pass_comment((S),(NL));       \
       continue;                             \
     }
 
@@ -58,18 +58,20 @@
     }                     
 
 static SCSSDocPtr_t s_create_doc(apr_pool_t *ppool);
-static char *s_cut_ident(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len);
-static const char *s_pass_comment(const char *s);
-static char *s_cut_before_next_semicoron_or_block(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len);
-static char *s_cut_before_white_space_or_semicoron(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len);
-static char *s_cut_before_block_closer(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len);
-static char *s_cut_before_semicoron(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len);
+static char *s_cut_ident(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len, apr_size_t *nl_counter);
+static const char *s_pass_comment(const char *s, apr_size_t *nl_counter);
+static char *s_cut_before_next_semicoron_or_block(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len, apr_size_t *nl_counter);
+static char *s_cut_before_white_space_or_semicoron(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len, apr_size_t *nl_counter);
+static char *s_cut_before_block_closer(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len, apr_size_t *nl_counter);
+static char *s_cut_before_semicoron(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len, apr_size_t *nl_counter);
 static void s_add_child_node(SCSSDocPtr_t doc, SCSSNodePtr_t nowNode, SCSSNodePtr_t node);
-static char *s_get_one_selector(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len);
+static char *s_get_one_selector(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len, apr_size_t *nl_counter);
 static char *s_replace_refstring(SCSSDocPtr_t doc, const char *s);
 static void s_get_property_list(SCSSDocPtr_t doc, SCSSNodePtr_t nowNode, const char *s);
-static char *s_cut_url_function(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len);
+static char *s_cut_url_function(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len, apr_size_t *nl_counter);
+static void s_default_error_log(void *userData, const char *func, const char *fname, int line, int srcline, char *fmt, ...);
 
+SCSSParserError_fn scss_parser_error = s_default_error_log;
 
 SCSSDocPtr_t
 scss_parser(apr_pool_t *ppool,  const char *src)
@@ -78,6 +80,7 @@ scss_parser(apr_pool_t *ppool,  const char *src)
   int len;
   SCSSDocPtr_t doc;
   apr_size_t pass_len;
+  apr_size_t nl_counter = 1;
 
   doc = s_create_doc(ppool);
 
@@ -88,7 +91,7 @@ scss_parser(apr_pool_t *ppool,  const char *src)
 
   
   while (*s) {
-    int pass = scss_ignore_space(src, len);
+    int pass = scss_ignore_space(src, len, &nl_counter);
     if (pass) {
       s += pass;
       continue;
@@ -100,45 +103,55 @@ scss_parser(apr_pool_t *ppool,  const char *src)
       char *value2 = "";
       s++;
       atnode->type = SCSSTYPE_ATKEYWORD;
-      name  = apr_psprintf(doc->pool, "@%s", s_cut_ident(doc, s, &pass_len));
+      atnode->line = nl_counter;
+      name  = apr_psprintf(doc->pool, "@%s", s_cut_ident(doc, s, &pass_len, &nl_counter));
       s += pass_len;
       if (strcasecmp(name, "@import") == 0) {
-        value1 = scss_trim(doc->pool, s_cut_before_white_space_or_semicoron(doc, s, &pass_len));
-        if (scss_starts_with(value1, "url")) {
-          value1 = scss_trim(doc->pool, s_cut_url_function(doc, s, &pass_len));
-          s += pass_len;
-        }
-        else {
-          s += pass_len + 1;
-        }
-        if (*s != ';') {
-          value2 = scss_trim(doc->pool, s_cut_before_semicoron(doc, s, &pass_len));
-          s += pass_len + 1;
-        }
-        else {
+        if (! *s) {
+          /* XXX ERROR XXX */
+          scss_parser_error(doc->userData, __func__,__FILE__,__LINE__,nl_counter,"@import parse error");
+          value1 = apr_pstrdup(doc->pool, "");
           value2 = apr_pstrdup(doc->pool, "all");
+        }
+        else {
+          value1 = scss_trim(doc->pool, s_cut_before_white_space_or_semicoron(doc, s, &pass_len, &nl_counter));
+          if (scss_starts_with(value1, "url")) {
+            value1 = scss_trim(doc->pool, s_cut_url_function(doc, s, &pass_len, &nl_counter));
+            s += pass_len;
+          }
+          else {
+            s += pass_len + 1;
+          }
+          if (*s != ';') {
+            value2 = scss_trim(doc->pool, s_cut_before_semicoron(doc, s, &pass_len, &nl_counter));
+            s += pass_len + 1;
+          }
+          else {
+            value2 = apr_pstrdup(doc->pool, "all");
+          }
         }
       }
       else if (strcasecmp(name, "@media") == 0) {
-        value2 = scss_trim(doc->pool, s_cut_before_next_semicoron_or_block(doc, s, &pass_len));
+        value2 = scss_trim(doc->pool, s_cut_before_next_semicoron_or_block(doc, s, &pass_len, &nl_counter));
         s += pass_len + 1;
         if (*s == '{') {
-          value1 = scss_trim(doc->pool, s_cut_before_block_closer(doc, ++s, &pass_len));
+          value1 = scss_trim(doc->pool, s_cut_before_block_closer(doc, ++s, &pass_len, &nl_counter));
           s += pass_len + 1;
-          char *one_selector = s_get_one_selector(doc, value1, &pass_len);
+          char *one_selector = s_get_one_selector(doc, value1, &pass_len, &nl_counter);
           while (*one_selector) {
             SCSSNodePtr_t selector_node = scss_create_node(doc->pool);
             selector_node->type = SCSSTYPE_SELECTOR;
             selector_node->name = one_selector;
+            selector_node->line = nl_counter;
             value1 += pass_len;
             if (*value1 == '{') value1++;
-            selector_node->value1 = scss_trim(doc->pool, s_cut_before_block_closer(doc, value1, &pass_len));
+            selector_node->value1 = scss_trim(doc->pool, s_cut_before_block_closer(doc, value1, &pass_len, &nl_counter));
             s_get_property_list(doc, selector_node, selector_node->value1);
             s_add_child_node(doc, atnode, selector_node);
             value1 += pass_len;
             value1 = scss_trim(doc->pool, value1);
             if (*value1 == '}') value1++;
-            one_selector = s_get_one_selector(doc, value1, &pass_len);
+            one_selector = s_get_one_selector(doc, value1, &pass_len, &nl_counter);
           }
         }
         else {
@@ -149,14 +162,14 @@ scss_parser(apr_pool_t *ppool,  const char *src)
         }
       }
       else if (strcasecmp(name, "@charset") == 0) {
-        value1 = scss_trim(doc->pool, s_cut_before_semicoron(doc, s, &pass_len));
+        value1 = scss_trim(doc->pool, s_cut_before_semicoron(doc, s, &pass_len, &nl_counter));
         s += pass_len + 1;
       }
       else if (strcasecmp(name, "@page") == 0) {
-        value1 = scss_trim(doc->pool, s_cut_before_next_semicoron_or_block(doc, s, &pass_len));
+        value1 = scss_trim(doc->pool, s_cut_before_next_semicoron_or_block(doc, s, &pass_len, &nl_counter));
         s += pass_len + 1;
         if (*s == '{') {
-          value2 = scss_trim(doc->pool, s_cut_before_block_closer(doc, ++s, &pass_len));
+          value2 = scss_trim(doc->pool, s_cut_before_block_closer(doc, ++s, &pass_len, &nl_counter));
           s += pass_len + 1;
         }
         else {
@@ -167,10 +180,10 @@ scss_parser(apr_pool_t *ppool,  const char *src)
         }
       }
       else if (strcasecmp(name, "@page:first") == 0) {
-        value1 = scss_trim(doc->pool, s_cut_before_next_semicoron_or_block(doc, s, &pass_len));
+        value1 = scss_trim(doc->pool, s_cut_before_next_semicoron_or_block(doc, s, &pass_len, &nl_counter));
         s += pass_len + 1;
         if (*s == '{') {
-          value2 = scss_trim(doc->pool, s_cut_before_block_closer(doc, ++s, &pass_len));
+          value2 = scss_trim(doc->pool, s_cut_before_block_closer(doc, ++s, &pass_len, &nl_counter));
           s += pass_len + 1;
         }
         else {
@@ -181,11 +194,11 @@ scss_parser(apr_pool_t *ppool,  const char *src)
         }
       }
       else if (strcasecmp(name, "@page:right") == 0) {
-        value1 = scss_trim(doc->pool, s_cut_before_next_semicoron_or_block(doc, s, &pass_len));
+        value1 = scss_trim(doc->pool, s_cut_before_next_semicoron_or_block(doc, s, &pass_len, &nl_counter));
         s += pass_len + 1;
         value2 = apr_pstrdup(doc->pool, "right");
         if (*s == '{') {
-          value2 = scss_trim(doc->pool, s_cut_before_block_closer(doc, ++s, &pass_len));
+          value2 = scss_trim(doc->pool, s_cut_before_block_closer(doc, ++s, &pass_len, &nl_counter));
           s += pass_len + 1;
         }
         else {
@@ -196,10 +209,10 @@ scss_parser(apr_pool_t *ppool,  const char *src)
         }
       }
       else if (strcasecmp(name, "@page:left") == 0) {
-        value1 = scss_trim(doc->pool, s_cut_before_next_semicoron_or_block(doc, s, &pass_len));
+        value1 = scss_trim(doc->pool, s_cut_before_next_semicoron_or_block(doc, s, &pass_len, &nl_counter));
         s += pass_len + 1;
         if (*s == '{') {
-          value2 = scss_trim(doc->pool, s_cut_before_block_closer(doc, ++s, &pass_len));
+          value2 = scss_trim(doc->pool, s_cut_before_block_closer(doc, ++s, &pass_len, &nl_counter));
           s += pass_len + 1;
         }
         else {
@@ -210,10 +223,10 @@ scss_parser(apr_pool_t *ppool,  const char *src)
         }
       }
       else if (strcasecmp(name, "@font-face") == 0) {
-        s_cut_before_next_semicoron_or_block(doc, s, &pass_len);
+        s_cut_before_next_semicoron_or_block(doc, s, &pass_len, &nl_counter);
         s += pass_len + 1;
         if (*s == '{') {
-          value1 = scss_trim(doc->pool, s_cut_before_block_closer(doc, ++s, &pass_len));
+          value1 = scss_trim(doc->pool, s_cut_before_block_closer(doc, ++s, &pass_len, &nl_counter));
           s += pass_len + 1;
         }
         else {
@@ -224,7 +237,7 @@ scss_parser(apr_pool_t *ppool,  const char *src)
         }
       }
       else {
-        value1 = scss_trim(doc->pool, s_cut_before_next_semicoron_or_block(doc, s, &pass_len));
+        value1 = scss_trim(doc->pool, s_cut_before_next_semicoron_or_block(doc, s, &pass_len, &nl_counter));
         s += pass_len + 1;
       }
       atnode->name = apr_pstrdup(doc->pool, name);
@@ -233,15 +246,16 @@ scss_parser(apr_pool_t *ppool,  const char *src)
       s_add_child_node(doc, doc->rootNode, atnode);
     }
     else if (! is_white_space(*s)) {
-      PASS_COMMENT(s); 
-      char *one_selector = s_get_one_selector(doc, s, &pass_len);
+      PASS_COMMENT(s, &nl_counter); 
+      char *one_selector = s_get_one_selector(doc, s, &pass_len, &nl_counter);
       if (*one_selector) {
         SCSSNodePtr_t selector_node = scss_create_node(doc->pool);
+        selector_node->line = nl_counter;
         selector_node->type = SCSSTYPE_SELECTOR;
         selector_node->name = one_selector;
         s += pass_len;
         if (*s == '{') s++;
-        selector_node->value1 = scss_trim(doc->pool, s_cut_before_block_closer(doc, s, &pass_len));
+        selector_node->value1 = scss_trim(doc->pool, s_cut_before_block_closer(doc, s, &pass_len, &nl_counter));
         s_get_property_list(doc, selector_node, selector_node->value1);
         s_add_child_node(doc, doc->rootNode, selector_node);
         s += pass_len + 1;
@@ -282,28 +296,38 @@ s_create_doc(apr_pool_t *ppool)
 
 
 static char *
-s_cut_ident(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len)
+s_cut_ident(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len, apr_size_t *nl_counter)
 {
   const char *spos = s;
   char *ret;
   int npos;
+  apr_size_t counter = 0;
   while (*s) {
-    PASS_COMMENT(s);
+    if (!is_white_space(*s)) break;
+    if (*s == '\n') (*nl_counter)++;
+    s++;
+  }
+  while (*s) {
+    PASS_COMMENT(s, &counter);
     if (is_white_space(*s)) {
       break;
     }
+    if (*s == ';' || *s == '{' || *s == '}') break;
     s++;
   }
   
   *pass_len = s - spos;
+  *nl_counter += counter;
+
   ret = apr_palloc(doc->pool, *pass_len + 1);
   s = spos;
   npos = 0;
   while (*s) {
-    PASS_COMMENT(s);
+    PASS_COMMENT(s, &counter);
     if (is_white_space(*s)) {
       break;
     }
+    if (*s == ';' || *s == '{' || *s == '}') break;
     ret[npos++] = *s;
     s++;
   }
@@ -313,31 +337,35 @@ s_cut_ident(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len)
 
 
 static const char *
-s_pass_comment(const char *s)
+s_pass_comment(const char *s, apr_size_t *nl_counter)
 {
+  apr_size_t counter = 0;
   while(*s) {
     if (*s == '*' && *(s+1) == '/') {
       ++s;
       return ++s;
     }
+    if (*s == '\n') counter++;
     s++;
   }
+  *nl_counter += counter;
   return s;
 }
 
   
 
 static char *
-s_cut_before_next_semicoron_or_block(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len)
+s_cut_before_next_semicoron_or_block(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len, apr_size_t *nl_counter)
 {
   const char *spos = s;
   char *ret;
   int npos;
   int sq, dq;
+  apr_size_t counter = 0;
 
   sq = dq = 0;
   while (*s) {
-    PASS_COMMENT(s);
+    PASS_COMMENT(s, &counter);
     JUDGE_STRINGS(s);
     if (!sq && !dq && (*s == '{' || *s == ';')) {
       break;
@@ -345,6 +373,7 @@ s_cut_before_next_semicoron_or_block(SCSSDocPtr_t doc, const char *s, apr_size_t
     s++;
   }
 
+  *nl_counter += counter;
   *pass_len = s - spos - 1;
 
   ret = apr_palloc(doc->pool, *pass_len + 1);
@@ -353,7 +382,7 @@ s_cut_before_next_semicoron_or_block(SCSSDocPtr_t doc, const char *s, apr_size_t
   npos = 0;
   sq = dq = 0;
   while (*s) {
-    PASS_COMMENT(s);
+    PASS_COMMENT(s, &counter);
     JUDGE_STRINGS(s);
     if (!sq && !dq && (*s == '{' || *s == ';')) {
       break;
@@ -365,17 +394,18 @@ s_cut_before_next_semicoron_or_block(SCSSDocPtr_t doc, const char *s, apr_size_t
 }
 
 static char *
-s_cut_before_block_closer(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len)
+s_cut_before_block_closer(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len, apr_size_t *nl_counter)
 {
   const char *spos = s;
   char *ret;
   int npos;
   int nest = 0;
   int dq, sq;
+  apr_size_t counter = 0;
 
   dq = sq = 0;
   while (*s) {
-    PASS_COMMENT(s);
+    PASS_COMMENT(s, &counter);
     JUDGE_STRINGS(s);
     if (!sq && !dq && *s == '{') {
       nest++;
@@ -389,6 +419,7 @@ s_cut_before_block_closer(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len)
     s++;
   }
 
+  *nl_counter += counter;
   *pass_len = s - spos - 1;
 
   ret = apr_palloc(doc->pool, *pass_len + 1);
@@ -397,7 +428,7 @@ s_cut_before_block_closer(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len)
   npos = 0;
   dq = sq = 0;
   while (*s) {
-    PASS_COMMENT(s);
+    PASS_COMMENT(s, &counter);
     JUDGE_STRINGS(s);
     if (!sq && !dq && *s == '{') {
       nest++;
@@ -416,14 +447,15 @@ s_cut_before_block_closer(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len)
 
 
 static char *
-s_cut_before_white_space_or_semicoron(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len)
+s_cut_before_white_space_or_semicoron(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len, apr_size_t *nl_counter)
 {
   const char *spos = s;
   char *ret;
   int npos;
   int sq, dq;
+  apr_size_t counter = 0;
   while (*s) {
-    PASS_COMMENT(s);
+    PASS_COMMENT(s, &counter);
     if (! is_white_space(*s)) {
       break;
     }
@@ -432,7 +464,7 @@ s_cut_before_white_space_or_semicoron(SCSSDocPtr_t doc, const char *s, apr_size_
 
   dq = sq = 0;
   while (*s) {
-    PASS_COMMENT(s);
+    PASS_COMMENT(s, &counter);
     JUDGE_STRINGS(s);
     if (!sq && !dq && is_white_space(*s)) {
       break;
@@ -443,6 +475,7 @@ s_cut_before_white_space_or_semicoron(SCSSDocPtr_t doc, const char *s, apr_size_
     s++;
   }
 
+  *nl_counter += counter;
   *pass_len = s - spos - 1;
 
   ret = apr_palloc(doc->pool, *pass_len + 1);
@@ -451,14 +484,14 @@ s_cut_before_white_space_or_semicoron(SCSSDocPtr_t doc, const char *s, apr_size_
   npos = 0;
   dq = sq = 0;
   while (*s) {
-    PASS_COMMENT(s);
+    PASS_COMMENT(s, &counter);
     if (! is_white_space(*s)) {
       break;
     }
     s++;
   }
   while (*s) {
-    PASS_COMMENT(s);
+    PASS_COMMENT(s, &counter);
     JUDGE_STRINGS(s);
     if (!dq && !sq && is_white_space(*s)) {
       break;
@@ -474,15 +507,16 @@ s_cut_before_white_space_or_semicoron(SCSSDocPtr_t doc, const char *s, apr_size_
 
 
 static char *
-s_cut_before_semicoron(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len)
+s_cut_before_semicoron(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len, apr_size_t *nl_counter)
 {
   const char *spos = s;
   char *ret;
   int npos;
   int sq = 0;
   int dq = 0;
+  apr_size_t counter = 0;
   while (*s) {
-    PASS_COMMENT(s);
+    PASS_COMMENT(s, &counter);
     if (! is_white_space(*s)) {
       break;
     }
@@ -490,7 +524,7 @@ s_cut_before_semicoron(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len)
   }
 
   while (*s) {
-    PASS_COMMENT(s);
+    PASS_COMMENT(s, &counter);
     JUDGE_STRINGS(s);
     if (*s == ';' && ! dq && ! sq) {
       break;
@@ -498,6 +532,7 @@ s_cut_before_semicoron(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len)
     s++;
   }
 
+  *nl_counter += counter;
   *pass_len = s - spos - 1;
 
   ret = apr_palloc(doc->pool, *pass_len + 1);
@@ -505,7 +540,7 @@ s_cut_before_semicoron(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len)
 
   npos = 0;
   while (*s) {
-    PASS_COMMENT(s);
+    PASS_COMMENT(s, &counter);
     if (! is_white_space(*s)) {
       break;
     }
@@ -513,7 +548,7 @@ s_cut_before_semicoron(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len)
   }
   sq = dq = 0;
   while (*s) {
-    PASS_COMMENT(s);
+    PASS_COMMENT(s, &counter);
     JUDGE_STRINGS(s);
     if (! dq && ! sq && *s == ';') {
       break;
@@ -532,6 +567,8 @@ s_add_child_node(SCSSDocPtr_t doc, SCSSNodePtr_t nowNode, SCSSNodePtr_t node)
   }
   else {
     SCSSNodePtr_t sentinelNode = scss_create_node(doc->pool);
+    sentinelNode->type = SCSSTYPE_SENTINEL;
+    sentinelNode->name = apr_pstrdup(doc->pool, "<sentinel>");
     nowNode->child = sentinelNode;
     list_insert(node, sentinelNode);
   }
@@ -539,7 +576,7 @@ s_add_child_node(SCSSDocPtr_t doc, SCSSNodePtr_t nowNode, SCSSNodePtr_t node)
 
 
 static char *
-s_get_one_selector(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len)
+s_get_one_selector(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len, apr_size_t *nl_counter)
 {
   const char *spos = s;
   char *cand;
@@ -547,8 +584,9 @@ s_get_one_selector(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len)
   int npos;
   int dq = 0;
   int sq = 0;
+  apr_size_t counter = 0;
   while(*s) {
-    PASS_COMMENT(s);
+    PASS_COMMENT(s, &counter);
     if (*s == '\\') {
       s += 2;
       continue;
@@ -560,14 +598,16 @@ s_get_one_selector(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len)
   }
 
   while(*s) {
-    PASS_COMMENT(s);
+    PASS_COMMENT(s, &counter);
     JUDGE_STRINGS(s);
     if (! sq && !dq && *s == '{') {
       break;
     }
     s++;
   }
+  *nl_counter += counter;
   *pass_len = s - spos;
+
   cand = apr_palloc(doc->pool, *pass_len + 1);
   memcpy(cand, spos, *pass_len);
   cand[*pass_len] = 0;
@@ -706,13 +746,14 @@ s_replace_refstring(SCSSDocPtr_t doc, const char *s)
 
 
 static char *
-s_cut_url_function(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len)
+s_cut_url_function(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len, apr_size_t *nl_counter)
 {
   const char *spos = s;
   int pcnt = 0;
+  apr_size_t counter = 0;
 
   while(*s) {
-    PASS_COMMENT(s);
+    PASS_COMMENT(s, &counter);
     if (*s == '\\') {
       s += 2;
       continue;
@@ -720,11 +761,12 @@ s_cut_url_function(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len)
     if (! is_white_space(*s)) {
       break;
     }
+    if (*s == '\n') counter++;
     s++;
   }
 
   while(*s) {
-    PASS_COMMENT(s);
+    PASS_COMMENT(s, &counter);
     if (*s == '\\') {
       s += 2;
       continue;
@@ -739,12 +781,27 @@ s_cut_url_function(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len)
     if (*s == '(') {
       pcnt++;
     }
+    if (*s == '\n') counter++;
     s++;
   }
 
   *pass_len = s - spos;
+  *nl_counter += counter;
+
   char *ret = apr_palloc(doc->pool, *pass_len + 1);
   memcpy(ret, spos, *pass_len);
   ret[*pass_len] = 0;
   return ret;
+}
+
+
+static void
+s_default_error_log(void *userData, const char *func, const char *fname, int line, int srcline, char *fmt, ...)
+{
+  va_list ap;
+  va_start(ap, fmt);
+  fprintf(stderr, "func:[%s] file:[%s] line:[%d] srcline:[%d] ", func, fname, line, srcline);
+  vfprintf(stderr, fmt, ap);
+  va_end(ap);
+  fprintf(stderr, "\n");
 }
