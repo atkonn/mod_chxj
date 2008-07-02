@@ -30,6 +30,7 @@ struct _SCSSDoc_t {
   apr_pool_t *pool;
   SCSSNodePtr_t rootNode;
   SCSSNodePtr_t nowNode;
+  void *userData;
 };
 
 #define IS_STYLESHEET(X) ((X)->type == SCSSTYPE_STYLESHEET)
@@ -39,6 +40,10 @@ struct _SCSSDoc_t {
 
 
 #include "scss_sac.h"
+
+typedef void (*SCSSParserError_fn)(void *userData, const char *func, const char *fname, int line, int srcline, char *fmt, ...);
+
+
 
 /**
  * for DEBUG. dump Node tree.
@@ -57,4 +62,8 @@ extern void scss_dump_nodes(SCSSDocPtr_t doc);
  */
 extern SCSSDocPtr_t scss_parser(apr_pool_t *ppool,  const char *src);
 
+/**
+ * CSS Parser Error log.
+ */
+extern SCSSParserError_fn scss_parser_error;
 #endif

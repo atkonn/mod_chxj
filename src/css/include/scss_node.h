@@ -21,8 +21,9 @@
 
 typedef enum _SCSSType_t SCSSType_t;
 enum _SCSSType_t {
-  SCSSTYPE_STYLESHEET = 0,
-  SCSSTYPE_ATKEYWORD = 1,
+  SCSSTYPE_SENTINEL = 0,
+  SCSSTYPE_STYLESHEET = 1,
+  SCSSTYPE_ATKEYWORD = 2,
   SCSSTYPE_SELECTOR,
   SCSSTYPE_PROPERTY,
 };
@@ -39,6 +40,7 @@ struct _SCSSNode_t {
   char *name;
   char *value1;
   char *value2;
+  int line;
 };
 
 /**

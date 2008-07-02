@@ -20,7 +20,7 @@
  * ignore space
  */
 int
-scss_ignore_space(const char *s, int len) 
+scss_ignore_space(const char *s, int len, apr_size_t *nl_counter)
 {
   register int ii;
   register char *sp;
@@ -34,7 +34,7 @@ scss_ignore_space(const char *s, int len)
   for(ii=0;
       *sp && is_white_space(*sp) && ii<len;
       ii++, sp++)
-    ;
+    if (*sp == '\n') (*nl_counter)++;
 
   return (sp - s);
 }

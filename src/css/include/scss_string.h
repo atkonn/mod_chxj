@@ -37,7 +37,7 @@ extern int scss_starts_with(const char *s, const char *w);
 /**
  * ignore spaces.
  */
-extern int scss_ignore_space(const char *s, int len);
+extern int scss_ignore_space(const char *s, int len, apr_size_t *nl_counter);
 
 /**
  * trim string.
