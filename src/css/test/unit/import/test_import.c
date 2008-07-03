@@ -196,19 +196,18 @@ void test_import_005()
   CU_ASSERT_OR_GOTO_END(doc->rootNode->child != NULL);
   CU_ASSERT_OR_GOTO_END(doc->rootNode->child->name != NULL);
   CU_ASSERT_OR_GOTO_END(strcasecmp(doc->rootNode->child->name, "<sentinel>") == 0);
-  CU_ASSERT(doc->rootNode->child->next != NULL); if (CU_get_number_of_failures() != 0) goto end;
-  CU_ASSERT(doc->rootNode->child->next->type == SCSSTYPE_ATKEYWORD); if (CU_get_number_of_failures() != 0) goto end;
-  CU_ASSERT(doc->rootNode->child->next->name != NULL); if (CU_get_number_of_failures() != 0) goto end;
-  CU_ASSERT(strcasecmp(doc->rootNode->child->next->name, "@import") == 0); if (CU_get_number_of_failures() != 0) goto end;
-  CU_ASSERT(strcasecmp(doc->rootNode->child->next->value1, "abc") == 0); if (CU_get_number_of_failures() != 0) goto end;
-  CU_ASSERT(strcasecmp(doc->rootNode->child->next->value2, "all") == 0); if (CU_get_number_of_failures() != 0) goto end;
-  CU_ASSERT(doc->rootNode->child->next->next != NULL); if (CU_get_number_of_failures() != 0) goto end;
-  CU_ASSERT(doc->rootNode->child->next->next->type == SCSSTYPE_ATKEYWORD); if (CU_get_number_of_failures() != 0) goto end;
-  CU_ASSERT(doc->rootNode->child->next->next->name != NULL); if (CU_get_number_of_failures() != 0) goto end;
-  CU_ASSERT(strcasecmp(doc->rootNode->child->next->next->name, "@import") == 0); if (CU_get_number_of_failures() != 0) goto end;
-  CU_ASSERT(strcasecmp(doc->rootNode->child->next->next->value1, "") == 0); if (CU_get_number_of_failures() != 0) goto end;
-  CU_ASSERT(strcasecmp(doc->rootNode->child->next->next->value2, "all") == 0); if (CU_get_number_of_failures() != 0) goto end;
-
+  CU_ASSERT_OR_GOTO_END(doc->rootNode->child->next != NULL);
+  CU_ASSERT_OR_GOTO_END(doc->rootNode->child->next->type == SCSSTYPE_ATKEYWORD);
+  CU_ASSERT_OR_GOTO_END(doc->rootNode->child->next->name != NULL);
+  CU_ASSERT_OR_GOTO_END(strcasecmp(doc->rootNode->child->next->name, "@import") == 0);
+  CU_ASSERT_OR_GOTO_END(strcasecmp(doc->rootNode->child->next->value1, "abc") == 0);
+  CU_ASSERT_OR_GOTO_END(strcasecmp(doc->rootNode->child->next->value2, "all") == 0);
+  CU_ASSERT_OR_GOTO_END(doc->rootNode->child->next->next != NULL);
+  CU_ASSERT_OR_GOTO_END(doc->rootNode->child->next->next->type == SCSSTYPE_ATKEYWORD);
+  CU_ASSERT_OR_GOTO_END(doc->rootNode->child->next->next->name != NULL);
+  CU_ASSERT_OR_GOTO_END(strcasecmp(doc->rootNode->child->next->next->name, "@import") == 0);
+  CU_ASSERT_OR_GOTO_END(strcasecmp(doc->rootNode->child->next->next->value1, "") == 0);
+  CU_ASSERT_OR_GOTO_END(strcasecmp(doc->rootNode->child->next->next->value2, "all") == 0);
 
 end:
   apr_terminate();
