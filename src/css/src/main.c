@@ -152,16 +152,12 @@ scss_parser(SCSSDocPtr_t doc, apr_pool_t *ppool,  const char *src)
         }
         else {
           value2 = scss_trim(doc->pool, s_cut_before_next_semicoron_or_block(doc, s, &pass_len, &nl_counter));
-fprintf(stderr, "%s:%d s:[%s]\n", __FILE__,__LINE__,s);
           s += pass_len + 1;
-fprintf(stderr, "%s:%d s:[%s]\n", __FILE__,__LINE__,s);
           if (*s == '{') {
             value1 = scss_trim(doc->pool, s_cut_before_block_closer(doc, ++s, &pass_len, &nl_counter));
-fprintf(stderr, "%s:%d s:[%s]\n", __FILE__,__LINE__,s);
-            s += pass_len + 1;
-fprintf(stderr, "%s:%d s:[%s] value1:[%s]\n", __FILE__,__LINE__,s, value1);
+            s += pass_len;
+            if (*s == '}') s++;
             if (*value1) {
-fprintf(stderr, "value1:[%s]\n", value1);
               char *one_selector = s_get_one_selector(doc, value1, &pass_len, &nl_counter);
               char *vv = value1;
               while (*one_selector) {
@@ -175,12 +171,9 @@ fprintf(stderr, "value1:[%s]\n", value1);
                 selector_node->value1 = scss_trim(doc->pool, s_cut_before_block_closer(doc, vv, &pass_len, &nl_counter));
                 s_get_property_list(doc, selector_node, selector_node->value1);
                 s_add_child_node(doc, atnode, selector_node);
-fprintf(stderr, "a [%s]\n", vv);
                 vv += pass_len;
-fprintf(stderr, "b [%s]\n", vv);
                 vv = scss_trim(doc->pool, vv);
                 if (*vv == '}') vv++;
-fprintf(stderr, "c [%s]\n", vv);
                 one_selector = s_get_one_selector(doc, vv, &pass_len, &nl_counter);
               }
             }
@@ -687,7 +680,7 @@ s_get_property_list(SCSSDocPtr_t doc, SCSSNodePtr_t nowNode, const char *s)
     
     SCSSNodePtr_t node = scss_create_node(doc->pool);
     node->name   = key;
-    node->value1 = val;
+    node->value1 = (val) ? apr_pstrdup(doc->pool, val) : apr_pstrdup(doc->pool, "");
     node->value2 = (imp) ? apr_pstrcat(doc->pool, "!", imp, NULL) : NULL;
     node->type   = SCSSTYPE_PROPERTY;
     s_add_child_node(doc, nowNode, node);
