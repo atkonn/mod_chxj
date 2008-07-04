@@ -144,33 +144,47 @@ scss_parser(SCSSDocPtr_t doc, apr_pool_t *ppool,  const char *src)
         }
       }
       else if (strcasecmp(name, "@media") == 0) {
-        value2 = scss_trim(doc->pool, s_cut_before_next_semicoron_or_block(doc, s, &pass_len, &nl_counter));
-        s += pass_len + 1;
-        if (*s == '{') {
-          value1 = scss_trim(doc->pool, s_cut_before_block_closer(doc, ++s, &pass_len, &nl_counter));
-          s += pass_len + 1;
-          char *one_selector = s_get_one_selector(doc, value1, &pass_len, &nl_counter);
-          while (*one_selector) {
-            SCSSNodePtr_t selector_node = scss_create_node(doc->pool);
-            selector_node->type = SCSSTYPE_SELECTOR;
-            selector_node->name = one_selector;
-            selector_node->line = nl_counter;
-            value1 += pass_len;
-            if (*value1 == '{') value1++;
-            selector_node->value1 = scss_trim(doc->pool, s_cut_before_block_closer(doc, value1, &pass_len, &nl_counter));
-            s_get_property_list(doc, selector_node, selector_node->value1);
-            s_add_child_node(doc, atnode, selector_node);
-            value1 += pass_len;
-            value1 = scss_trim(doc->pool, value1);
-            if (*value1 == '}') value1++;
-            one_selector = s_get_one_selector(doc, value1, &pass_len, &nl_counter);
-          }
+        if (! *s) {
+          /* XXX ERROR XXX */
+          scss_parser_error(doc->userData, __func__,__FILE__,__LINE__,(s - pass_len - 1), nl_counter ,"@media parse error");
+          value1 = apr_pstrdup(doc->pool, "");
+          value2 = apr_pstrdup(doc->pool, "all");
         }
         else {
-          /* ERROR */
-          value2 = "";
-          value1 = "";
-          name   = "";
+          value2 = scss_trim(doc->pool, s_cut_before_next_semicoron_or_block(doc, s, &pass_len, &nl_counter));
+fprintf(stderr, "%s:%d s:[%s]\n", __FILE__,__LINE__,s);
+          s += pass_len + 1;
+fprintf(stderr, "%s:%d s:[%s]\n", __FILE__,__LINE__,s);
+          if (*s == '{') {
+            value1 = scss_trim(doc->pool, s_cut_before_block_closer(doc, ++s, &pass_len, &nl_counter));
+fprintf(stderr, "%s:%d s:[%s]\n", __FILE__,__LINE__,s);
+            s += pass_len + 1;
+fprintf(stderr, "%s:%d s:[%s] value1:[%s]\n", __FILE__,__LINE__,s, value1);
+            if (*value1) {
+fprintf(stderr, "value1:[%s]\n", value1);
+              char *one_selector = s_get_one_selector(doc, value1, &pass_len, &nl_counter);
+              char *vv = value1;
+              while (*one_selector) {
+                SCSSNodePtr_t selector_node = scss_create_node(doc->pool);
+                selector_node->type = SCSSTYPE_SELECTOR;
+                selector_node->name = one_selector;
+                selector_node->line = nl_counter;
+                selector_node->value2 = apr_pstrdup(doc->pool, "");
+                vv += pass_len;
+                if (*vv == '{') vv++;
+                selector_node->value1 = scss_trim(doc->pool, s_cut_before_block_closer(doc, vv, &pass_len, &nl_counter));
+                s_get_property_list(doc, selector_node, selector_node->value1);
+                s_add_child_node(doc, atnode, selector_node);
+fprintf(stderr, "a [%s]\n", vv);
+                vv += pass_len;
+fprintf(stderr, "b [%s]\n", vv);
+                vv = scss_trim(doc->pool, vv);
+                if (*vv == '}') vv++;
+fprintf(stderr, "c [%s]\n", vv);
+                one_selector = s_get_one_selector(doc, vv, &pass_len, &nl_counter);
+              }
+            }
+          }
         }
       }
       else if (strcasecmp(name, "@charset") == 0) {
@@ -252,10 +266,12 @@ scss_parser(SCSSDocPtr_t doc, apr_pool_t *ppool,  const char *src)
         value1 = scss_trim(doc->pool, s_cut_before_next_semicoron_or_block(doc, s, &pass_len, &nl_counter));
         s += pass_len + 1;
       }
-      atnode->name = apr_pstrdup(doc->pool, name);
-      atnode->value1 = apr_pstrdup(doc->pool, value1);
-      atnode->value2 = apr_pstrdup(doc->pool, value2);
-      s_add_child_node(doc, doc->rootNode, atnode);
+      if (*name) {
+        atnode->name = apr_pstrdup(doc->pool, name);
+        atnode->value1 = apr_pstrdup(doc->pool, value1);
+        atnode->value2 = apr_pstrdup(doc->pool, value2);
+        s_add_child_node(doc, doc->rootNode, atnode);
+      }
     }
     else if (! is_white_space(*s)) {
       PASS_COMMENT(s, &nl_counter); 
@@ -273,6 +289,7 @@ scss_parser(SCSSDocPtr_t doc, apr_pool_t *ppool,  const char *src)
         s += pass_len + 1;
       }
     }
+    if (! *s) break;
     s++;
   }
   return doc;
@@ -404,7 +421,7 @@ s_cut_before_block_closer(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len,
   }
 
   *nl_counter += counter;
-  *pass_len = s - spos - 1;
+  *pass_len = s - spos;
 
   ret = apr_palloc(doc->pool, *pass_len + 1);
   s = spos; 
