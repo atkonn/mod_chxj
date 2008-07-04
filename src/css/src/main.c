@@ -134,7 +134,7 @@ scss_parser(SCSSDocPtr_t doc, apr_pool_t *ppool,  const char *src)
           else {
             s += pass_len + 1;
           }
-          if (*s != ';') {
+          if (*s != ';' && *s) {
             value2 = scss_trim(doc->pool, s_cut_before_semicoron(doc, s, &pass_len, &nl_counter));
             s += pass_len + 1;
           }
@@ -445,7 +445,6 @@ s_cut_before_white_space_or_semicoron(SCSSDocPtr_t doc, const char *s, apr_size_
     }
     s++;
   }
-
   dq = sq = 0;
   while (*s) {
     PASS_COMMENT(s, &counter);
