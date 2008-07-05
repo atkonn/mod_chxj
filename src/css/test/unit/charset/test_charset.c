@@ -19,6 +19,7 @@ void test_charset_007();
 void test_charset_008();
 void test_charset_009();
 void test_charset_010();
+void test_charset_011();
 /* pend */
 
 int
@@ -37,6 +38,7 @@ main()
   CU_add_test(atkeyword_suite, "@charset 008",  test_charset_008);
   CU_add_test(atkeyword_suite, "@charset 009",  test_charset_009);
   CU_add_test(atkeyword_suite, "@charset 010",  test_charset_010);
+  CU_add_test(atkeyword_suite, "@charset 011",  test_charset_011);
   /* aend */
 
   CU_basic_run_tests();
@@ -413,6 +415,47 @@ void test_charset_010()
   CU_ASSERT_OR_GOTO_END(doc->rootNode->child->next->next->child != NULL);
   CU_ASSERT_OR_GOTO_END(strcasecmp(doc->rootNode->child->next->next->child->next->name, "\x82\xa0\x82\xa2\x82\xa4\x82\xa6\x82\xa8") == 0);
   CU_ASSERT_OR_GOTO_END(strcasecmp(doc->rootNode->child->next->next->child->next->value1, "none") == 0);
+
+
+end:
+  apr_terminate();
+  fprintf(stderr, "end %s\n", __func__);
+#undef TEST_STRING
+}
+void test_charset_011()
+{
+#define TEST_STRING "@charset;@charset \"UTF-8\";"
+  SCSSDocPtr_t doc;
+  apr_pool_t *pool;
+
+  fprintf(stderr, "start %s\n", __func__);
+  apr_initialize();
+  apr_pool_create(&pool, NULL);
+
+  doc = scss_create_doc(pool);
+  scss_parser(doc, pool,  TEST_STRING);
+
+  CU_ASSERT_OR_GOTO_END(doc != NULL);
+  CU_ASSERT_OR_GOTO_END(doc->rootNode != NULL);
+  CU_ASSERT_OR_GOTO_END(doc->rootNode->type == SCSSTYPE_STYLESHEET);
+  CU_ASSERT_OR_GOTO_END(doc->rootNode->child != NULL);
+  CU_ASSERT_OR_GOTO_END(doc->rootNode->child->name != NULL);
+  CU_ASSERT_OR_GOTO_END(strcasecmp(doc->rootNode->child->name, "<sentinel>") == 0);
+  CU_ASSERT_OR_GOTO_END(doc->rootNode->child->next != NULL);
+  CU_ASSERT_OR_GOTO_END(doc->rootNode->child->next->type == SCSSTYPE_ATKEYWORD);
+  CU_ASSERT_OR_GOTO_END(doc->rootNode->child->next->name != NULL);
+  CU_ASSERT_OR_GOTO_END(strcasecmp(doc->rootNode->child->next->name, "@charset") == 0);
+  CU_ASSERT_OR_GOTO_END(strcasecmp(doc->rootNode->child->next->value1, "") == 0);
+  CU_ASSERT_OR_GOTO_END(strcasecmp(doc->rootNode->child->next->value2, "") == 0);
+  CU_ASSERT_OR_GOTO_END(doc->rootNode->child->next->next != NULL);
+  CU_ASSERT_OR_GOTO_END(doc->rootNode->child->next->next->type == SCSSTYPE_ATKEYWORD);
+  CU_ASSERT_OR_GOTO_END(doc->rootNode->child->next->next->name != NULL);
+  CU_ASSERT_OR_GOTO_END(strcasecmp(doc->rootNode->child->next->next->name, "@charset") == 0);
+  CU_ASSERT_OR_GOTO_END(strcasecmp(doc->rootNode->child->next->next->value1, "UTF-8") == 0);
+
+  CU_ASSERT_OR_GOTO_END(doc->rootNode->child->next->next->next == doc->rootNode->child);
+  CU_ASSERT_OR_GOTO_END(doc->rootNode->child->next->next->ref == &doc->rootNode->child->next->next);
+  CU_ASSERT_OR_GOTO_END(doc->rootNode->child->next->next->child == NULL);
 
 
 end:
