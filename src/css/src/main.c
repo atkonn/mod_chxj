@@ -213,7 +213,8 @@ scss_parser(SCSSDocPtr_t doc, apr_pool_t *ppool,  const char *src)
           s += pass_len + 1;
           if (*s == '{') {
             value2 = scss_trim(doc->pool, s_cut_before_block_closer(doc, ++s, &pass_len, &nl_counter));
-            s += pass_len + 1;
+            s += pass_len;
+            if (*s) s++;
           }
           else {
             scss_parser_error(doc->userData, __func__,__FILE__,__LINE__,(s - pass_len - 1), nl_counter ,"@page parse error");
@@ -223,46 +224,66 @@ scss_parser(SCSSDocPtr_t doc, apr_pool_t *ppool,  const char *src)
         }
       }
       else if (strcasecmp(name, "@page:first") == 0) {
-        value1 = scss_trim(doc->pool, s_cut_before_next_semicoron_or_block(doc, s, &pass_len, &nl_counter));
-        s += pass_len + 1;
-        if (*s == '{') {
-          value2 = scss_trim(doc->pool, s_cut_before_block_closer(doc, ++s, &pass_len, &nl_counter));
-          s += pass_len + 1;
+        if (! *s || *s == ';') {
+          scss_parser_error(doc->userData, __func__,__FILE__,__LINE__,(s - pass_len - 1), nl_counter ,"@page:first parse error");
+          value1 = apr_pstrdup(doc->pool, "");
+          value2 = apr_pstrdup(doc->pool, "");
         }
         else {
-          /* ERROR */
-          value2 = "";
-          value1 = "";
-          name   = "";
+          value1 = scss_trim(doc->pool, s_cut_before_next_semicoron_or_block(doc, s, &pass_len, &nl_counter));
+          s += pass_len + 1;
+          if (*s == '{') {
+            value2 = scss_trim(doc->pool, s_cut_before_block_closer(doc, ++s, &pass_len, &nl_counter));
+            s += pass_len;
+            if (*s) s++;
+          }
+          else {
+            scss_parser_error(doc->userData, __func__,__FILE__,__LINE__,(s - pass_len - 1), nl_counter ,"@page:first parse error");
+            value1 = apr_pstrdup(doc->pool, "");
+            value2 = apr_pstrdup(doc->pool, "");
+          }
         }
       }
       else if (strcasecmp(name, "@page:right") == 0) {
-        value1 = scss_trim(doc->pool, s_cut_before_next_semicoron_or_block(doc, s, &pass_len, &nl_counter));
-        s += pass_len + 1;
-        value2 = apr_pstrdup(doc->pool, "right");
-        if (*s == '{') {
-          value2 = scss_trim(doc->pool, s_cut_before_block_closer(doc, ++s, &pass_len, &nl_counter));
-          s += pass_len + 1;
+        if (! *s || *s == ';') {
+          scss_parser_error(doc->userData, __func__,__FILE__,__LINE__,(s - pass_len - 1), nl_counter ,"@page:right parse error");
+          value1 = apr_pstrdup(doc->pool, "");
+          value2 = apr_pstrdup(doc->pool, "");
         }
         else {
-          /* ERROR */
-          value2 = "";
-          value1 = "";
-          name   = "";
+          value1 = scss_trim(doc->pool, s_cut_before_next_semicoron_or_block(doc, s, &pass_len, &nl_counter));
+          s += pass_len + 1;
+          if (*s == '{') {
+            value2 = scss_trim(doc->pool, s_cut_before_block_closer(doc, ++s, &pass_len, &nl_counter));
+            s += pass_len;
+            if (*s) s++;
+          }
+          else {
+            scss_parser_error(doc->userData, __func__,__FILE__,__LINE__,(s - pass_len - 1), nl_counter ,"@page:right parse error");
+            value1 = apr_pstrdup(doc->pool, "");
+            value2 = apr_pstrdup(doc->pool, "");
+          }
         }
       }
       else if (strcasecmp(name, "@page:left") == 0) {
-        value1 = scss_trim(doc->pool, s_cut_before_next_semicoron_or_block(doc, s, &pass_len, &nl_counter));
-        s += pass_len + 1;
-        if (*s == '{') {
-          value2 = scss_trim(doc->pool, s_cut_before_block_closer(doc, ++s, &pass_len, &nl_counter));
-          s += pass_len + 1;
+        if (! *s || *s == ';') {
+          scss_parser_error(doc->userData, __func__,__FILE__,__LINE__,(s - pass_len - 1), nl_counter ,"@page:left parse error");
+          value1 = apr_pstrdup(doc->pool, "");
+          value2 = apr_pstrdup(doc->pool, "");
         }
         else {
-          /* ERROR */
-          value2 = "";
-          value1 = "";
-          name   = "";
+          value1 = scss_trim(doc->pool, s_cut_before_next_semicoron_or_block(doc, s, &pass_len, &nl_counter));
+          s += pass_len + 1;
+          if (*s == '{') {
+            value2 = scss_trim(doc->pool, s_cut_before_block_closer(doc, ++s, &pass_len, &nl_counter));
+            s += pass_len;
+            if (*s) s++;
+          }
+          else {
+            scss_parser_error(doc->userData, __func__,__FILE__,__LINE__,(s - pass_len - 1), nl_counter ,"@page:left parse error");
+            value1 = apr_pstrdup(doc->pool, "");
+            value2 = apr_pstrdup(doc->pool, "");
+          }
         }
       }
       else if (strcasecmp(name, "@font-face") == 0) {
