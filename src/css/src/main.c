@@ -287,17 +287,27 @@ scss_parser(SCSSDocPtr_t doc, apr_pool_t *ppool,  const char *src)
         }
       }
       else if (strcasecmp(name, "@font-face") == 0) {
-        s_cut_before_next_semicoron_or_block(doc, s, &pass_len, &nl_counter);
-        s += pass_len + 1;
-        if (*s == '{') {
-          value1 = scss_trim(doc->pool, s_cut_before_block_closer(doc, ++s, &pass_len, &nl_counter));
-          s += pass_len + 1;
+        if (! *s || *s == ';') {
+          scss_parser_error(doc->userData, __func__,__FILE__,__LINE__,(s - pass_len - 1), nl_counter ,"@font-face parse error");
+          value1 = apr_pstrdup(doc->pool, "");
+          value2 = apr_pstrdup(doc->pool, "");
         }
         else {
-          /* ERROR */
-          value2 = "";
-          value1 = "";
-          name   = "";
+          s_cut_before_next_semicoron_or_block(doc, s, &pass_len, &nl_counter);
+          s += pass_len + 1;
+          if (*s == '{') {
+            value1 = scss_trim(doc->pool, s_cut_before_block_closer(doc, ++s, &pass_len, &nl_counter));
+            s += pass_len;
+            if (*s == '}') s++;
+            if (*value1) {
+              s_get_property_list(doc, atnode, value1);
+            }
+          }
+          else {
+            scss_parser_error(doc->userData, __func__,__FILE__,__LINE__,(s - pass_len - 1), nl_counter ,"@font-face parse error");
+            value1 = apr_pstrdup(doc->pool, "");
+            value2 = apr_pstrdup(doc->pool, "");
+          }
         }
       }
       else {
