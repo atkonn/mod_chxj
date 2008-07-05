@@ -119,7 +119,7 @@ scss_parser(SCSSDocPtr_t doc, apr_pool_t *ppool,  const char *src)
       name  = apr_psprintf(doc->pool, "@%s", s_cut_ident(doc, s, &pass_len, &nl_counter));
       s += pass_len;
       if (strcasecmp(name, "@import") == 0) {
-        if (! *s) {
+        if (! *s || *s == ';') {
           /* XXX ERROR XXX */
           scss_parser_error(doc->userData, __func__,__FILE__,__LINE__,(s - pass_len - 1), nl_counter ,"@import parse error");
           value1 = apr_pstrdup(doc->pool, "");
@@ -144,7 +144,7 @@ scss_parser(SCSSDocPtr_t doc, apr_pool_t *ppool,  const char *src)
         }
       }
       else if (strcasecmp(name, "@media") == 0) {
-        if (! *s) {
+        if (! *s || *s == ';') {
           scss_parser_error(doc->userData, __func__,__FILE__,__LINE__,(s - pass_len - 1), nl_counter ,"@media parse error");
           value1 = apr_pstrdup(doc->pool, "");
           value2 = apr_pstrdup(doc->pool, "all");
