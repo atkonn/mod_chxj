@@ -12,6 +12,7 @@
 #include "apr_uri.h"
 #include "chxj_serf.h"
 #include "chxj_css.h"
+#include "chxj_str_util.h"
 #include "chxj_serf.c"
 #include "chxj_css.c"
 #include "chxj_encoding.c"
@@ -2773,9 +2774,6 @@ char *test_chxj_serf_get052(request_rec *r, apr_pool_t *ppool, const char *uri_p
 void test_chxj_css_find_selector_pseudo_001()
 {
   Doc doc;
-  Node *node;
-  Node *tmp_node;
-  Node *node_sv;
   css_stylesheet_t *ret;
   css_selector_t *sel;
   int ii;
@@ -2819,9 +2817,6 @@ char *test_chxj_serf_get053(request_rec *r, apr_pool_t *ppool, const char *uri_p
 void test_chxj_css_find_selector_pseudo_002()
 {
   Doc doc;
-  Node *node;
-  Node *tmp_node;
-  Node *node_sv;
   css_stylesheet_t *ret;
   css_selector_t *sel;
   int ii;
@@ -2866,9 +2861,6 @@ char *test_chxj_serf_get054(request_rec *r, apr_pool_t *ppool, const char *uri_p
 void test_chxj_css_find_selector_pseudo_003()
 {
   Doc doc;
-  Node *node;
-  Node *tmp_node;
-  Node *node_sv;
   css_stylesheet_t *ret;
   css_selector_t *sel;
   int ii;
@@ -2917,9 +2909,6 @@ char *test_chxj_serf_get055(request_rec *r, apr_pool_t *ppool, const char *uri_p
 void test_chxj_css_find_selector_pseudo_004()
 {
   Doc doc;
-  Node *node;
-  Node *tmp_node;
-  Node *node_sv;
   css_stylesheet_t *ret;
   css_selector_t *sel;
   int ii;
@@ -2976,9 +2965,6 @@ char *test_chxj_serf_get056(request_rec *r, apr_pool_t *ppool, const char *uri_p
 void test_chxj_css_parse_style_attr_001()
 {
   Doc doc;
-  Node *node;
-  Node *tmp_node;
-  Node *node_sv;
   css_stylesheet_t *ret;
   css_selector_t *sel;
   css_property_t *cur_prop;
@@ -3040,9 +3026,6 @@ char *test_chxj_serf_get057(request_rec *r, apr_pool_t *ppool, const char *uri_p
 void test_chxj_css_parse_style_attr_002()
 {
   Doc doc;
-  Node *node;
-  Node *tmp_node;
-  Node *node_sv;
   css_stylesheet_t *ret;
   css_selector_t *sel;
   css_property_t *cur_prop;
@@ -3103,9 +3086,6 @@ char *test_chxj_serf_get058(request_rec *r, apr_pool_t *ppool, const char *uri_p
 void test_chxj_css_parse_style_attr_003()
 {
   Doc doc;
-  Node *node;
-  Node *tmp_node;
-  Node *node_sv;
   css_stylesheet_t *ret;
   css_selector_t *sel;
   css_property_t *cur_prop;
@@ -3158,9 +3138,6 @@ void test_chxj_css_parse_style_value_001()
 {
 #define TEST_STRING "a { color: rgb(1,2,3); }"
   Doc doc;
-  Node *node;
-  Node *tmp_node;
-  Node *node_sv;
   css_stylesheet_t *ret;
   css_selector_t *sel;
   css_property_t *cur_prop;
@@ -3188,7 +3165,7 @@ void test_chxj_css_parse_style_value_001()
       switch (jj) {
       case 0:
         CU_ASSERT(strcasecmp(cur_prop->name, "color") == 0);
-        CU_ASSERT(strcasecmp(cur_prop->value, "rgb(1, 2, 3)") == 0);
+        CU_ASSERT(strcasecmp(cur_prop->value, "rgb(1,2,3)") == 0);
       }
       jj++;
     }

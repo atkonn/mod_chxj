@@ -870,3 +870,9 @@ scss_doc_set_user_data(SCSSDocPtr_t doc, void *userData)
 {
   doc->userData = userData;
 }
+
+void *
+scss_doc_get_user_data(SCSSDocPtr_t doc)
+{
+  return doc->userData;
+}

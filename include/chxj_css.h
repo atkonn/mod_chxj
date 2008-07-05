@@ -18,7 +18,6 @@
 #define __CHXJ_CSS_H__
 
 #include "mod_chxj.h"
-#include <libcroco/libcroco.h>
 
 
 /**
