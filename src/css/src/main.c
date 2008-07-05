@@ -165,14 +165,19 @@ scss_parser(SCSSDocPtr_t doc, apr_pool_t *ppool,  const char *src)
                 selector_node->name = one_selector;
                 selector_node->line = nl_counter;
                 selector_node->value2 = apr_pstrdup(doc->pool, "");
-                vv += pass_len;
-                if (*vv == '{') vv++;
-                selector_node->value1 = scss_trim(doc->pool, s_cut_before_block_closer(doc, vv, &pass_len, &nl_counter));
-                s_get_property_list(doc, selector_node, selector_node->value1);
                 s_add_child_node(doc, atnode, selector_node);
                 vv += pass_len;
-                vv = scss_trim(doc->pool, vv);
-                if (*vv == '}') vv++;
+                if (*vv != ';') {
+                  if (*vv == '{') vv++;
+                  selector_node->value1 = scss_trim(doc->pool, s_cut_before_block_closer(doc, vv, &pass_len, &nl_counter));
+                  s_get_property_list(doc, selector_node, selector_node->value1);
+                  vv += pass_len;
+                  vv = scss_trim(doc->pool, vv);
+                  if (*vv == '}') vv++;
+                }
+                else {
+                  selector_node->value1 = apr_pstrdup(doc->pool, "");
+                }
                 one_selector = s_get_one_selector(doc, vv, &pass_len, &nl_counter);
               }
             }
@@ -329,12 +334,17 @@ scss_parser(SCSSDocPtr_t doc, apr_pool_t *ppool,  const char *src)
         selector_node->line = nl_counter;
         selector_node->type = SCSSTYPE_SELECTOR;
         selector_node->name = one_selector;
-        s += pass_len;
-        if (*s == '{') s++;
-        selector_node->value1 = scss_trim(doc->pool, s_cut_before_block_closer(doc, s, &pass_len, &nl_counter));
-        s_get_property_list(doc, selector_node, selector_node->value1);
         s_add_child_node(doc, doc->rootNode, selector_node);
-        s += pass_len + 1;
+        s += pass_len;
+        if (*s != ';') {
+          if (*s == '{') s++;
+          selector_node->value1 = scss_trim(doc->pool, s_cut_before_block_closer(doc, s, &pass_len, &nl_counter));
+          s_get_property_list(doc, selector_node, selector_node->value1);
+          s += pass_len + 1;
+        }
+        else {
+          selector_node->value1 = apr_pstrdup(doc->pool, "");
+        }
       }
     }
     if (! *s) break;
@@ -648,7 +658,7 @@ s_get_one_selector(SCSSDocPtr_t doc, const char *s, apr_size_t *pass_len, apr_si
   while(*s) {
     PASS_COMMENT(s, &counter);
     JUDGE_STRINGS(s);
-    if (! sq && !dq && *s == '{') {
+    if (! sq && !dq && (*s == '{' || *s == ';')) {
       break;
     }
     s++;
