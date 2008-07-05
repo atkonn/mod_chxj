@@ -86,4 +86,11 @@ extern SCSSDocPtr_t scss_create_doc(apr_pool_t *pool);
  * @param userData - user's data.
  */
 extern void scss_doc_set_user_data(SCSSDocPtr_t doc, void *userData);
+
+/**
+ * get user data.
+ *
+ * @param doc      - SCSSDoc Object.
+ */
+extern void *scss_doc_get_user_data(SCSSDocPtr_t doc);
 #endif

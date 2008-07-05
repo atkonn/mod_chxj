@@ -19,6 +19,7 @@
 #include "chxj_encoding.h"
 #include "qs_parse_string.h"
 #include "apr_pools.h"
+#include "scss.h"
 
 #include <libgen.h>
 
@@ -66,15 +67,14 @@ struct css_app_data {
 /* PROTOTYPE                                                                 */
 /*                                                                           */
 /*===========================================================================*/
-static char *s_css_parser_get_charset(apr_pool_t *pool, const char *src, apr_size_t *next_pos);
-static void s_css_parser_from_uri_start_selector(CRDocHandler * a_this, CRSelector *a_selector_list);
-static void s_css_parser_from_uri_end_selector(CRDocHandler * a_this, CRSelector *a_selector_list);
-static void s_css_parser_from_uri_property(CRDocHandler *a_this, CRString *a_name, CRTerm *a_expression, gboolean a_is_important);
+static void s_css_parser_from_uri_start_selector(SCSSParserPtr_t parser, SCSSNodePtr_t selectors);
+static void s_css_parser_from_uri_end_selector(SCSSParserPtr_t parser, SCSSNodePtr_t selectors);
+static void s_css_parser_from_uri_property(SCSSParserPtr_t parser, const char *propertyName, const char *value, int impotant);
 static css_property_t *s_css_parser_copy_property(apr_pool_t *pool, css_property_t *from);
 static css_selector_t *s_new_selector(apr_pool_t *pool, css_stylesheet_t *stylesheet, char *name);
 static css_selector_t *s_search_selector(css_stylesheet_t *stylesheet, const char *name);
 static void s_merge_property(css_selector_t *sel, css_property_t *tgt);
-static void s_css_parser_from_uri_import_style(CRDocHandler *a_this, GList *a_media_list, CRString *a_uri, CRString *a_uri_default_ns, CRParsingLocation *a_location);
+static void s_css_parser_from_uri_import_style(SCSSParserPtr_t parser, const char *uri, const char **media, const char *defaultNamespaceURI);
 static char *s_path_to_fullurl(apr_pool_t *pool, const char *base_url, const char *base_path, const char *uri);
 static char *s_uri_to_base_url(apr_uri_t *uri, apr_pool_t *pool);
 static css_stylesheet_t *s_chxj_css_parse_from_uri(request_rec *r, apr_pool_t *pool, struct css_already_import_stack *imported_stack, css_stylesheet_t *old_stylesheet, const char *uri);
@@ -351,14 +351,11 @@ end_of_search:
 static css_stylesheet_t *
 s_chxj_css_parse_from_uri(request_rec *r, apr_pool_t *pool, struct css_already_import_stack *imported_stack, css_stylesheet_t *old_stylesheet, const char *uri)
 {
-  CRParser     *parser      = NULL;
-  CRDocHandler *sac_handler = NULL;
-  enum CRStatus ret;
+  SCSSParserPtr_t     parser  = NULL;
+  SCSSSACHandlerPtr_t handler = NULL;
   char         *css         = NULL;
-  char         *charset     = NULL;
   char         *full_url    = NULL;
   apr_size_t  srclen;
-  apr_size_t  next_pos;
   css_stylesheet_t *stylesheet = NULL;
   struct css_already_import_stack *new_stack;
   struct css_app_data app_data;
@@ -385,25 +382,17 @@ s_chxj_css_parse_from_uri(request_rec *r, apr_pool_t *pool, struct css_already_i
   }
   srclen = strlen(css);
   
-  /* convert encoding */
-  charset = s_css_parser_get_charset(pool, css, &next_pos);
-  if (charset) {
-    DBG(r, "charset:[%s]\n", charset);
-    css += next_pos;
-    srclen = strlen(css);
-    css = chxj_iconv(r, pool, css, &srclen, charset, "UTF-8");
-  }
-
   /* create parser */
-  parser = cr_parser_new_from_buf((guchar *)css, srclen, CR_UTF_8, FALSE);
+  parser = scss_parser_new_from_buf(pool, css, "");
   if (!parser) {
     ERR(r, "%s:%d end chxj_css_parse_from_uri(): cr_parser_new_from_buf() failed", APLOG_MARK);
     return NULL;
   }
-  sac_handler = cr_doc_handler_new();
-  if (!sac_handler) {
+
+  /* create handler */
+  handler = scss_doc_handler_new(parser);
+  if (!handler) {
     ERR(r, "%s:%d end chxj_css_parse_from_uri(): cr_doc_handler_new() failed", APLOG_MARK);
-    cr_parser_destroy(parser);
     return NULL;
   }
 
@@ -433,23 +422,16 @@ s_chxj_css_parse_from_uri(request_rec *r, apr_pool_t *pool, struct css_already_i
   new_stack->full_url = full_url;
   list_insert(new_stack, (&app_data.imported_stack_head));
 
-  sac_handler->app_data = &app_data;
+  scss_doc_set_user_data(parser->doc, &app_data);
 
-  sac_handler->start_selector = s_css_parser_from_uri_start_selector;
-  sac_handler->end_selector   = s_css_parser_from_uri_end_selector;
-  sac_handler->property       = s_css_parser_from_uri_property;
-  sac_handler->import_style   = s_css_parser_from_uri_import_style;
+  handler->startSelector = s_css_parser_from_uri_start_selector;
+  handler->endSelector   = s_css_parser_from_uri_end_selector;
+  handler->property      = s_css_parser_from_uri_property;
+  handler->import        = s_css_parser_from_uri_import_style;
 
-  ret = cr_parser_set_sac_handler(parser, sac_handler);
-  if (ret != CR_OK) {
-    ERR(r, "%s:%d end chxj_css_parse_from_uri(): cr_parser_set_sac_handler() failed: ret:[%d]", APLOG_MARK, ret);
-    cr_parser_destroy(parser);
-    return NULL;
-  }
-
-  ret = cr_parser_parse(parser);
-  cr_parser_destroy(parser);
+  scss_parse_stylesheet(parser);
   DBG(r, "end chxj_css_parse_from_uri() url:[%s]", uri);
+
   return s_merge_stylesheet(pool, old_stylesheet, app_data.stylesheet);
 }
 
@@ -457,11 +439,8 @@ static css_stylesheet_t *
 s_chxj_css_parse_from_buf(request_rec *r, apr_pool_t *pool, struct css_already_import_stack *imported_stack, css_stylesheet_t *old_stylesheet, const char *css)
 {
   apr_size_t  srclen;
-  apr_size_t  next_pos;
-  char         *charset     = NULL;
-  CRParser     *parser      = NULL;
-  CRDocHandler *sac_handler = NULL;
-  enum CRStatus ret;
+  SCSSParserPtr_t     parser  = NULL;
+  SCSSSACHandlerPtr_t handler = NULL;
   css_stylesheet_t *stylesheet = NULL;
   struct css_app_data app_data;
   struct css_already_import_stack *new_stack;
@@ -469,25 +448,15 @@ s_chxj_css_parse_from_buf(request_rec *r, apr_pool_t *pool, struct css_already_i
   DBG(r, "end chxj_css_parse_from_buf() css:[%s]", css);
   srclen = strlen(css);
   
-  /* convert encoding */
-  charset = s_css_parser_get_charset(pool, css, &next_pos);
-  if (charset) {
-    DBG(r, "charset:[%s]\n", charset);
-    css += next_pos;
-    srclen = strlen(css);
-    css = chxj_iconv(r, pool, css, &srclen, charset, "UTF-8");
-  }
-
   /* create parser */
-  parser = cr_parser_new_from_buf((guchar *)css, srclen, CR_UTF_8, FALSE);
+  parser = scss_parser_new_from_buf(pool, css, "");
   if (!parser) {
-    ERR(r, "%s:%d end chxj_css_parse_from_uri(): cr_parser_new_from_buf() failed", APLOG_MARK);
+    ERR(r, "%s:%d end chxj_css_parse_from_uri(): scss_parser_new_from_buf() failed", APLOG_MARK);
     return NULL;
   }
-  sac_handler = cr_doc_handler_new();
-  if (!sac_handler) {
-    ERR(r, "%s:%d end chxj_css_parse_from_uri(): cr_doc_handler_new() failed", APLOG_MARK);
-    cr_parser_destroy(parser);
+  handler = scss_doc_handler_new(parser);
+  if (!handler) {
+    ERR(r, "%s:%d end chxj_css_parse_from_uri(): scss_doc_handler_new() failed", APLOG_MARK);
     return NULL;
   }
 
@@ -510,7 +479,8 @@ s_chxj_css_parse_from_buf(request_rec *r, apr_pool_t *pool, struct css_already_i
     app_data.imported_stack_head.next = &app_data.imported_stack_head;
     app_data.imported_stack_head.ref  = &app_data.imported_stack_head.next;
   }
-  sac_handler->app_data = &app_data;
+
+  scss_doc_set_user_data(parser->doc, &app_data);
 
   new_stack = apr_palloc(pool, sizeof(*new_stack));
   memset(new_stack, 0, sizeof(*new_stack));
@@ -519,20 +489,12 @@ s_chxj_css_parse_from_buf(request_rec *r, apr_pool_t *pool, struct css_already_i
   new_stack->full_url = "";
   list_insert(new_stack, (&app_data.imported_stack_head));
 
-  sac_handler->start_selector = s_css_parser_from_uri_start_selector;
-  sac_handler->end_selector   = s_css_parser_from_uri_end_selector;
-  sac_handler->property       = s_css_parser_from_uri_property;
-  sac_handler->import_style   = s_css_parser_from_uri_import_style;
+  handler->startSelector = s_css_parser_from_uri_start_selector;
+  handler->endSelector   = s_css_parser_from_uri_end_selector;
+  handler->property      = s_css_parser_from_uri_property;
+  handler->import        = s_css_parser_from_uri_import_style;
 
-  ret = cr_parser_set_sac_handler(parser, sac_handler);
-  if (ret != CR_OK) {
-    ERR(r, "%s:%d end chxj_css_parse_from_uri(): cr_parser_set_sac_handler() failed: ret:[%d]", APLOG_MARK, ret);
-    cr_parser_destroy(parser);
-    return NULL;
-  }
-
-  ret = cr_parser_parse(parser);
-  cr_parser_destroy(parser);
+  scss_parse_stylesheet(parser);
   DBG(r, "end chxj_css_parse_from_buf() css:[%s]", css);
   return s_merge_stylesheet(pool, old_stylesheet, app_data.stylesheet);
 }
@@ -547,20 +509,20 @@ s_chxj_css_parse_from_buf(request_rec *r, apr_pool_t *pool, struct css_already_i
 
 
 #define CB_INIT \
-  struct css_app_data *app_data = (struct css_app_data *)a_this->app_data
+  struct css_app_data *app_data = (struct css_app_data *)scss_doc_get_user_data(parser->doc)
 
 
 
 static void 
-s_css_parser_from_uri_start_selector(CRDocHandler * a_this, CRSelector *a_selector_list)
+s_css_parser_from_uri_start_selector(SCSSParserPtr_t parser, SCSSNodePtr_t selectors)
 {
   int ii;
-  CRSelector *cur = NULL;
+  SCSSNodePtr_t cur = NULL;
   CB_INIT;
   ERROR_OCCORED;
 
   app_data->selector_count = 0;
-  for (cur = a_selector_list; cur; cur = cur->next)
+  for (cur = selectors->next; cur != selectors; cur = cur->next)
     app_data->selector_count++;
 
   app_data->selector_list = apr_palloc(app_data->pool, sizeof(char *) * app_data->selector_count);
@@ -570,16 +532,8 @@ s_css_parser_from_uri_start_selector(CRDocHandler * a_this, CRSelector *a_select
     return;
   }
   ii = 0;
-  for (cur = a_selector_list; cur; cur = cur->next) {
-    if (cur->simple_sel) {
-      guchar *tmp_str = cr_simple_sel_to_string(cur->simple_sel);
-      if (tmp_str) {
-        app_data->selector_list[ii++] = apr_pstrdup(app_data->pool, (char *)tmp_str);
-fprintf(stderr, "%s:%d selector:[%s]\n", __FILE__,__LINE__, tmp_str);
-        g_free (tmp_str);
-        tmp_str = NULL;
-      }
-    }
+  for (cur = selectors->next; cur != selectors; cur = cur->next) {
+    app_data->selector_list[ii++] = apr_pstrdup(app_data->pool, (char *)cur->name);
   }
   app_data->property_head.next = &app_data->property_head;
   app_data->property_head.ref  = &app_data->property_head.next;
@@ -587,7 +541,7 @@ fprintf(stderr, "%s:%d selector:[%s]\n", __FILE__,__LINE__, tmp_str);
 
 
 static void 
-s_css_parser_from_uri_end_selector(CRDocHandler * a_this, CRSelector *a_selector_list)
+s_css_parser_from_uri_end_selector(SCSSParserPtr_t parser, SCSSNodePtr_t selectors)
 {
   int ii;
   css_property_t *cur = NULL;
@@ -600,7 +554,6 @@ s_css_parser_from_uri_end_selector(CRDocHandler * a_this, CRSelector *a_selector
 
       for (cur = app_data->property_head.next; cur && cur != &app_data->property_head; cur = cur->next) {
         css_property_t *tgt = s_css_parser_copy_property(app_data->pool, cur);
-fprintf(stderr, "%s:%d property:[%s] value:[%s]\n", __FILE__,__LINE__, tgt->name, tgt->value);
         s_merge_property(sel, tgt);
       }
       css_selector_t *point_selector = &app_data->stylesheet->selector_head;
@@ -679,21 +632,17 @@ s_css_parser_copy_property(apr_pool_t *pool, css_property_t *from)
 
 
 static void
-s_css_parser_from_uri_property(CRDocHandler *a_this, CRString *a_name, CRTerm *a_expression, gboolean a_is_important)
+s_css_parser_from_uri_property(SCSSParserPtr_t parser, const char *propertyName, const char *value, int impotant)
 {
   CB_INIT;
   ERROR_OCCORED;
   css_property_t *property;
 
-  if (a_name && a_expression) {
-    guchar *tmp_str;
+  if (propertyName && value) {
     property = apr_palloc(app_data->pool, sizeof(*property));
     memset(property, 0, sizeof(*property));
-    property->name = apr_pstrdup(app_data->pool, cr_string_peek_raw_str(a_name));
-    tmp_str = cr_term_one_to_string(a_expression);
-    property->value = apr_pstrdup(app_data->pool, (char *)tmp_str);
-    g_free(tmp_str);
-    tmp_str = NULL;
+    property->name = apr_pstrdup(app_data->pool, propertyName);
+    property->value = apr_pstrdup(app_data->pool, value);
 
     css_property_t *point_property = &app_data->property_head;
     list_insert(property, point_property);
@@ -701,90 +650,34 @@ s_css_parser_from_uri_property(CRDocHandler *a_this, CRString *a_name, CRTerm *a
 }
 
 
-static char *
-s_css_parser_get_charset(apr_pool_t *pool, const char *src, apr_size_t *next_pos)
-{
-  register char *p = (char *)src;
-  char *sv;
-  char *ret = NULL;
-   
-  if (! p) {
-    return NULL;
-  }
-
-  for (; *p && is_white_space(*p); p++)
-    ;
-
-#define CUT_TOKEN(X) \
-        do { \
-          sv = ++p; \
-          for (;*p && (X); p++) \
-            ; \
-          ret = apr_palloc(pool, p - sv + 1); \
-          memset(ret, 0, p - sv + 1); \
-          memcpy(ret, sv, p - sv);  \
-        } \
-        while (0)
-
-  if (*p == '@') {
-    if (strncasecmp(p, "@charset", sizeof("@charset")-1) == 0) {
-      p += sizeof("@charset");
-      for (; *p && is_white_space(*p); p++)
-        ;
-      if (*p == '"') {
-        CUT_TOKEN(*p != '"');
-        if (! *p) return NULL;
-      }
-      else if (*p == '\'') {
-        CUT_TOKEN(*p != '\'');
-        if (! *p) return NULL;
-      }
-      else {
-        CUT_TOKEN(! is_white_space(*p));
-        if (! *p) return NULL;
-      }
-    }
-  }
-  if (ret) {
-    *next_pos = p - src + 1;
-  }
-  else {
-    *next_pos = 0;
-  }
-#undef CUT_TOKEN
-  return ret;
-}
 
 
 static void
-s_css_parser_from_uri_import_style(CRDocHandler *a_this, GList *a_media_list, CRString *a_uri, CRString *a_uri_default_ns, CRParsingLocation *a_location) 
+s_css_parser_from_uri_import_style(SCSSParserPtr_t parser, const char *uri, const char **media, const char *defaultNamespaceURI)
 {
   CB_INIT;
   ERROR_OCCORED;
-  guint ii = 0;
-  guint len = g_list_length(a_media_list);
   int flag = 0;
+  int ii;
   css_stylesheet_t *new_stylesheet = NULL;
 
-  for (ii=0; ii<len; ii++) {
-    char *str = (char *)cr_string_peek_raw_str(g_list_nth_data(a_media_list, ii));
-    if (('h' == *str || 'H' == *str) && strcasecmp(str, "handheld") == 0) {
+  for (ii=0; ii<SCSS_MEDIA_TYPE_NUM; ii++) {
+    if (('h' == *media[ii] || 'H' == *media[ii]) && strcasecmp(media[ii], "handheld") == 0) {
       flag = 1;
       break;
     }
-    if (('a' == *str || 'A' == *str) && strcasecmp(str, "all") == 0) {
+    if (('a' == *media[ii] || 'A' == *media[ii]) && strcasecmp(media[ii], "all") == 0) {
       flag = 1;
       break;
     }
   }
-  if (flag || len == 0) {
-    if (a_uri) {
+  if (flag) {
+    if (uri) {
       char      *new_url = NULL;
-      char      *import_url = (char *)cr_string_peek_raw_str(a_uri);
       char      *base_url = NULL;
 
       base_url = s_uri_to_base_url(&app_data->r->parsed_uri, app_data->pool);
-      new_url = s_path_to_fullurl(app_data->pool, base_url, app_data->r->parsed_uri.path, import_url);
+      new_url = s_path_to_fullurl(app_data->pool, base_url, app_data->r->parsed_uri.path, uri);
       
       new_stylesheet = s_chxj_css_parse_from_uri(app_data->r, app_data->pool, &app_data->imported_stack_head, app_data->stylesheet, new_url);
       if (new_stylesheet) {

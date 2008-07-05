@@ -28,7 +28,7 @@ struct _SCSSParser_t {
 };
 
 
-#define MEDIA_TYPE_NUM   (10)
+#define SCSS_MEDIA_TYPE_NUM   (10)
 
 typedef void (*SCSSSAC_import_fn)(SCSSParserPtr_t parser, 
                  const char *uri,

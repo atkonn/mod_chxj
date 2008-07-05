@@ -259,8 +259,8 @@ static char **
 s_get_import_media(SCSSParserPtr_t parser, SCSSNodePtr_t node)
 {
   int ii;
-  char **media = (char **)apr_palloc(parser->doc->pool, sizeof(char *) * MEDIA_TYPE_NUM);
-  for (ii=0; ii<MEDIA_TYPE_NUM;ii++) {
+  char **media = (char **)apr_palloc(parser->doc->pool, sizeof(char *) * SCSS_MEDIA_TYPE_NUM);
+  for (ii=0; ii<SCSS_MEDIA_TYPE_NUM;ii++) {
     media[ii] = NULL;
   }
 
@@ -274,7 +274,7 @@ s_get_import_media(SCSSParserPtr_t parser, SCSSNodePtr_t node)
     }
     src = NULL;
     media[ii] = scss_trim(parser->doc->pool, tmp);
-    if (++ii>=MEDIA_TYPE_NUM) break;
+    if (++ii>=SCSS_MEDIA_TYPE_NUM) break;
   }
   return media;
 }
