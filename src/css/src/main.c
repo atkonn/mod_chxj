@@ -182,7 +182,19 @@ scss_parser(SCSSDocPtr_t doc, apr_pool_t *ppool,  const char *src)
       }
       else if (strcasecmp(name, "@charset") == 0) {
         value1 = scss_trim(doc->pool, s_cut_before_semicoron(doc, s, &pass_len, &nl_counter));
+        value1 = scss_strip_quote(doc->pool, value1);
         s += pass_len + 1;
+        if (strcasecmp(value1, "UTF-8") != 0) {
+          apr_size_t enc_len = strlen(s);
+          apr_status_t rv = 0;
+          char *err_msg;
+          char *dst;
+          dst = scss_iconv(doc->pool, s, &enc_len, value1, "UTF-8", &rv, &err_msg);
+          if (rv != 0) {
+            scss_parser_error(doc->userData, __func__,__FILE__,__LINE__,(s - pass_len - 1), nl_counter, err_msg);
+          }
+          s = dst;
+        }
       }
       else if (strcasecmp(name, "@page") == 0) {
         value1 = scss_trim(doc->pool, s_cut_before_next_semicoron_or_block(doc, s, &pass_len, &nl_counter));

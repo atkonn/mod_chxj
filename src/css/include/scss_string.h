@@ -48,6 +48,15 @@ extern int scss_ignore_space(const char *s, int len, apr_size_t *nl_counter);
  */
 extern char *scss_trim(apr_pool_t *pool, const char *s);
 
+/**
+ * strip quote.
+ *
+ * @param pool - use pool object.
+ * @param s    - target string.
+ * @return stripped string.
+ */
+extern char *scss_strip_quote(apr_pool_t *pool, const char *s);
+
 
 
 

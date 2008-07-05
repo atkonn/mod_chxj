@@ -5,7 +5,9 @@ libscss_la_SOURCES = main.c \
   sac.c \
   trim.c \
   create_node.c \
-  doc.c
+  doc.c \
+  strip_quote.c \
+  iconv.c
 
 libscss_la_CFLAGS = -O2 -prefer-pic -I. -I../include -I./serf
 AM_CFLAGS = @CFLAGS@ -O2 -prefer-pic -I. -I../include 

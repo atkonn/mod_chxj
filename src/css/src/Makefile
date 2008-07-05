@@ -55,7 +55,8 @@ libscss_la_LIBADD =
 am_libscss_la_OBJECTS = libscss_la-main.lo libscss_la-ignore_sp.lo \
 	libscss_la-starts_with.lo libscss_la-dump_nodes.lo \
 	libscss_la-sac.lo libscss_la-trim.lo libscss_la-create_node.lo \
-	libscss_la-doc.lo
+	libscss_la-doc.lo libscss_la-strip_quote.lo \
+	libscss_la-iconv.lo
 libscss_la_OBJECTS = $(am_libscss_la_OBJECTS)
 libscss_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(libscss_la_CFLAGS) \
@@ -198,7 +199,9 @@ libscss_la_SOURCES = main.c \
   sac.c \
   trim.c \
   create_node.c \
-  doc.c
+  doc.c \
+  strip_quote.c \
+  iconv.c
 
 libscss_la_CFLAGS = -O2 -prefer-pic -I. -I../include -I./serf
 AM_CFLAGS = -g -O2  -I/usr/include/apr-1.0   -pipe -Wall -g -O2 -pthread  -DLINUX=2 -D_REENTRANT -D_GNU_SOURCE -D_LARGEFILE64_SOURCE  -I/usr/include/apr-1.0 -I/usr/include/postgresql -O2 -prefer-pic -I. -I../include 
@@ -275,10 +278,12 @@ distclean-compile:
 include ./$(DEPDIR)/libscss_la-create_node.Plo
 include ./$(DEPDIR)/libscss_la-doc.Plo
 include ./$(DEPDIR)/libscss_la-dump_nodes.Plo
+include ./$(DEPDIR)/libscss_la-iconv.Plo
 include ./$(DEPDIR)/libscss_la-ignore_sp.Plo
 include ./$(DEPDIR)/libscss_la-main.Plo
 include ./$(DEPDIR)/libscss_la-sac.Plo
 include ./$(DEPDIR)/libscss_la-starts_with.Plo
+include ./$(DEPDIR)/libscss_la-strip_quote.Plo
 include ./$(DEPDIR)/libscss_la-trim.Plo
 
 .c.o:
@@ -357,6 +362,20 @@ libscss_la-doc.lo: doc.c
 #	source='doc.c' object='libscss_la-doc.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
 #	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libscss_la_CFLAGS) $(CFLAGS) -c -o libscss_la-doc.lo `test -f 'doc.c' || echo '$(srcdir)/'`doc.c
+
+libscss_la-strip_quote.lo: strip_quote.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libscss_la_CFLAGS) $(CFLAGS) -MT libscss_la-strip_quote.lo -MD -MP -MF $(DEPDIR)/libscss_la-strip_quote.Tpo -c -o libscss_la-strip_quote.lo `test -f 'strip_quote.c' || echo '$(srcdir)/'`strip_quote.c
+	mv -f $(DEPDIR)/libscss_la-strip_quote.Tpo $(DEPDIR)/libscss_la-strip_quote.Plo
+#	source='strip_quote.c' object='libscss_la-strip_quote.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libscss_la_CFLAGS) $(CFLAGS) -c -o libscss_la-strip_quote.lo `test -f 'strip_quote.c' || echo '$(srcdir)/'`strip_quote.c
+
+libscss_la-iconv.lo: iconv.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libscss_la_CFLAGS) $(CFLAGS) -MT libscss_la-iconv.lo -MD -MP -MF $(DEPDIR)/libscss_la-iconv.Tpo -c -o libscss_la-iconv.lo `test -f 'iconv.c' || echo '$(srcdir)/'`iconv.c
+	mv -f $(DEPDIR)/libscss_la-iconv.Tpo $(DEPDIR)/libscss_la-iconv.Plo
+#	source='iconv.c' object='libscss_la-iconv.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libscss_la_CFLAGS) $(CFLAGS) -c -o libscss_la-iconv.lo `test -f 'iconv.c' || echo '$(srcdir)/'`iconv.c
 
 mostlyclean-libtool:
 	-rm -f *.lo

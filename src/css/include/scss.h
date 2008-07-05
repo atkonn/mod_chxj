@@ -20,6 +20,7 @@
 #include "apr_pools.h"
 #include "apr_strings.h"
 #include "scss_node.h"
+#include "scss_iconv.h"
 
 #define ROOT_NODE_SIGNATURE "<rootNode>"
 
