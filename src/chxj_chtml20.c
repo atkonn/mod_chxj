@@ -3021,6 +3021,18 @@ fprintf(stderr, "%s:%d\n", __FILE__,__LINE__);
 fprintf(stderr, "%s:%d\n", __FILE__,__LINE__);
     if (wap_input_format) {
 fprintf(stderr, "%s:%d %s\n", __FILE__,__LINE__,wap_input_format);
+      if (strcasecmp(wap_input_format, "*<ja:n>") == 0) {
+        attr_istyle = "4";
+      }
+      else if (strcasecmp(wap_input_format, "*<ja:en>") == 0) {
+        attr_istyle = "3";
+      }
+      else if (strcasecmp(wap_input_format, "*<ja:hk>") == 0) {
+        attr_istyle = "2";
+      }
+      else if (strcasecmp(wap_input_format, "*<ja:h>") == 0) {
+        attr_istyle = "1";
+      }
     }
 fprintf(stderr, "%s:%d\n", __FILE__,__LINE__);
   }
