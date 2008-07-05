@@ -102,7 +102,7 @@ s_import(SCSSParserPtr_t parser, const char *uri, const char **media, const char
   int ii;
   print_level(); fprintf(stderr, "IMPORT\n");
   print_level(); fprintf(stderr, "\turi:[%s]\n", uri);
-  for (ii=0; ii < MEDIA_TYPE_NUM; ii++) {
+  for (ii=0; ii < SCSS_MEDIA_TYPE_NUM; ii++) {
     if (media[ii]) {
       print_level(); fprintf(stderr, "\tmedia:[%s]\n", media[ii]);
     }
@@ -132,7 +132,7 @@ s_start_media(SCSSParserPtr_t parser, const char **media)
 {
   int ii;
   print_level(); fprintf(stderr, "START MEDIA\n");
-  for (ii=0; ii < MEDIA_TYPE_NUM; ii++) {
+  for (ii=0; ii < SCSS_MEDIA_TYPE_NUM; ii++) {
     if (media[ii]) {
       print_level(); fprintf(stderr, "\tmedia:[%s]\n", media[ii]);
     }
@@ -146,7 +146,7 @@ s_end_media(SCSSParserPtr_t parser, const char **media)
   int ii;
   level--;
   print_level(); fprintf(stderr, "END MEDIA\n");
-  for (ii=0; ii < MEDIA_TYPE_NUM; ii++) {
+  for (ii=0; ii < SCSS_MEDIA_TYPE_NUM; ii++) {
     if (media[ii]) {
       print_level(); fprintf(stderr, "\tmedia:[%s]\n", media[ii]);
     }

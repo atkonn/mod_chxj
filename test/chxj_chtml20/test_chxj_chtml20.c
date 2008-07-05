@@ -12864,8 +12864,9 @@ char *test_chxj_serf_get007(request_rec *r, apr_pool_t *ppool, const char *uri_p
                      "a       { display: none }\n"
                      "hr      { display: none }\n"
                      "a:visited { display:none }\n"
-                     "textarea { wap-input-format: *<ja:n>; }\n"
+                     "textarea { -wap-input-format: &quot;*<ja:n>&quot;; }\n"
                      "br      { display: none }\n";
+fprintf(stderr, "%s\n", css);
   *len = strlen(css);
   call_check = 1;
   return css;

@@ -734,8 +734,12 @@ s_get_property_list(SCSSDocPtr_t doc, SCSSNodePtr_t nowNode, const char *s)
     if (!pair) {
       break;
     }
-    key = apr_strtok(pair, ":", &pstat2);
-    val = apr_strtok(NULL, ":", &pstat2);
+    key = apr_pstrdup(doc->pool, pair);
+    val = strchr(key, ':');
+    if (val) {
+      *val = 0;
+      val++;
+    }
     key = scss_trim(doc->pool, key);
     val = scss_trim(doc->pool, val);
 
@@ -745,7 +749,7 @@ s_get_property_list(SCSSDocPtr_t doc, SCSSNodePtr_t nowNode, const char *s)
     
     SCSSNodePtr_t node = scss_create_node(doc->pool);
     node->name   = key;
-    node->value1 = (val) ? apr_pstrdup(doc->pool, val) : apr_pstrdup(doc->pool, "");
+    node->value1 = (val) ? scss_strip_quote(doc->pool, apr_pstrdup(doc->pool, val)) : apr_pstrdup(doc->pool, "");
     node->value2 = (imp) ? apr_pstrcat(doc->pool, "!", imp, NULL) : NULL;
     node->type   = SCSSTYPE_PROPERTY;
     s_add_child_node(doc, nowNode, node);
@@ -771,20 +775,20 @@ s_replace_refstring(SCSSDocPtr_t doc, const char *s)
   npos = 0;
   while(*ss) {
     if (*ss == '&') {
-      if (strncasecmp(&ss[1], "&quot;", sizeof("&quot;")-1) == 0) {
+      if (strncasecmp(ss, "&quot;", sizeof("&quot;")-1) == 0) {
         ret[npos++] = '"';
         ss += sizeof("&quot;")-1;
         
       }
-      else if (strncasecmp(&ss[1], "&amp;", sizeof("&amp;")-1) == 0) {
+      else if (strncasecmp(ss, "&amp;", sizeof("&amp;")-1) == 0) {
         ret[npos++] = '&';
         ss += sizeof("&amp;")-1;
       }
-      else if (strncasecmp(&ss[1], "&lt;", sizeof("&lt;")-1) == 0) {
+      else if (strncasecmp(ss, "&lt;", sizeof("&lt;")-1) == 0) {
         ret[npos++] = '<';
         ss += sizeof("&lt;")-1;
       }
-      else if (strncasecmp(&ss[1], "&gt;", sizeof("&gt;")-1) == 0) {
+      else if (strncasecmp(ss, "&gt;", sizeof("&gt;")-1) == 0) {
         ret[npos++] = '>';
         ss += sizeof("&gt;")-1;
       }
