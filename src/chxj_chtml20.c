@@ -3014,29 +3014,24 @@ s_chtml20_start_textarea_tag(void *pdoc, Node *node)
   }
 
   css_prop_list_t *style = s_chtml20_nopush_and_get_now_style(pdoc, node);
-fprintf(stderr, "%s:%d node:[%s]\n", __FILE__,__LINE__, node->name);
   if (style) {
-fprintf(stderr, "%s:%d\n", __FILE__,__LINE__);
-    char *wap_input_format = chxj_css_get_property_value(doc, style, "-wap-input-format");
-fprintf(stderr, "%s:%d\n", __FILE__,__LINE__);
-    if (wap_input_format) {
-fprintf(stderr, "%s:%d %s\n", __FILE__,__LINE__,wap_input_format);
-      if (strcasecmp(wap_input_format, "*<ja:n>") == 0) {
+    css_property_t *wap_input_format = chxj_css_get_property_value(doc, style, "-wap-input-format");
+    css_property_t *cur;
+    for (cur = wap_input_format->next; cur != wap_input_format; cur = cur->next) {
+      if (strcasecmp(cur->value, "*<ja:n>") == 0) {
         attr_istyle = "4";
       }
-      else if (strcasecmp(wap_input_format, "*<ja:en>") == 0) {
+      else if (strcasecmp(cur->value, "*<ja:en>") == 0) {
         attr_istyle = "3";
       }
-      else if (strcasecmp(wap_input_format, "*<ja:hk>") == 0) {
+      else if (strcasecmp(cur->value, "*<ja:hk>") == 0) {
         attr_istyle = "2";
       }
-      else if (strcasecmp(wap_input_format, "*<ja:h>") == 0) {
+      else if (strcasecmp(cur->value, "*<ja:h>") == 0) {
         attr_istyle = "1";
       }
     }
-fprintf(stderr, "%s:%d\n", __FILE__,__LINE__);
   }
-fprintf(stderr, "%s:%d\n", __FILE__,__LINE__);
   
   W_L("<textarea");
   if (attr_accesskey) {
@@ -3634,7 +3629,6 @@ s_chtml20_nopush_and_get_now_style(void *pdoc, Node *node)
     dup_css  = chxj_dup_css_prop_list(doc, last_css);
     selector = chxj_css_find_selector(doc, chtml20->style, node);
     if (selector) {
-fprintf(stderr, "%s:%d name:[%s]\n", __FILE__,__LINE__, selector->name);
       chxj_css_prop_list_merge_property(doc, dup_css, selector);
     }
     last_css = dup_css;

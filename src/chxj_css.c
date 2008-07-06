@@ -1142,19 +1142,31 @@ chxj_css_prop_list_merge_property(Doc *doc, css_prop_list_t *base, css_selector_
   
 }
 
-char *
+css_property_t *
 chxj_css_get_property_value(Doc *doc, css_prop_list_t *base, const char *name)
 {
   css_property_t *b_prop;
-fprintf(stderr, "%s:%d\n", __FILE__,__LINE__);
+  css_property_t *result;
+
+  result = apr_palloc(doc->pool, sizeof(*result));
+  memset(result, 0, sizeof(*result));
+  result->next = result;
+  result->ref  = &result->next;
+
   for (b_prop = base->head.next; b_prop != &base->head; b_prop = b_prop->next) {
-fprintf(stderr, "%s:%d b_prop:[%s]\n", __FILE__,__LINE__,b_prop->name);
     if (b_prop->name && strcasecmp(name, b_prop->name) == 0) {
-      return apr_pstrdup(doc->pool, b_prop->value);
+      css_property_t *tmp;
+
+      tmp = apr_palloc(doc->pool, sizeof(*tmp));
+      memset(tmp, 0, sizeof(*tmp));
+      tmp->next = tmp;
+      tmp->ref  = &tmp->next;
+
+      tmp->value = apr_pstrdup(doc->pool, b_prop->value);
+      list_insert(tmp, result);
     }
   }
-fprintf(stderr, "%s:%d\n", __FILE__,__LINE__);
-  return NULL;
+  return result;
 }
 
 

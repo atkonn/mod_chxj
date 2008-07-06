@@ -99,7 +99,7 @@ extern css_prop_list_t *chxj_css_pop_prop_list(css_prop_list_stack_t *stack);
 extern css_prop_list_t *chxj_dup_css_prop_list(Doc *doc, css_prop_list_t *old);
 extern void chxj_css_prop_list_merge_property(Doc *doc, css_prop_list_t *base, css_selector_t *sel);
 extern css_prop_list_t *chxj_css_get_last_prop_list(css_prop_list_stack_t *stack);
-extern char *chxj_css_get_property_value(Doc *doc, css_prop_list_t *list, const char *name);
+extern css_property_t *chxj_css_get_property_value(Doc *doc, css_prop_list_t *base, const char *name);
 #endif
 /*
  * vim:ts=2 et
