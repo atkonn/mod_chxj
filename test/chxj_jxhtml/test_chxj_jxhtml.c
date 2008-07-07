@@ -7281,7 +7281,7 @@ void test_jxhtml_input_tag_004()
 void test_jxhtml_input_tag_005() 
 {
 #define  TEST_STRING "<input type=\"password\">"
-#define  RESULT_STRING "<input type=\"password\" mode=\"numeric\" />"
+#define  RESULT_STRING "<input type=\"password\" style=\"-wap-input-format: &quot;*&lt;ja:n&gt;&quot;;\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -8241,7 +8241,7 @@ void test_jxhtml_input_tag_036()
 void test_jxhtml_input_tag_037() 
 {
 #define  TEST_STRING "<input istyle=\"1\">"
-#define  RESULT_STRING "<input mode=\"hiragana\" />"
+#define  RESULT_STRING "<input style=\"-wap-input-format: &quot;*&lt;ja:h&gt;&quot;;\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -8271,7 +8271,7 @@ void test_jxhtml_input_tag_037()
 void test_jxhtml_input_tag_038() 
 {
 #define  TEST_STRING "<input istyle=\"2\">"
-#define  RESULT_STRING "<input mode=\"hankakukana\" />"
+#define  RESULT_STRING "<input style=\"-wap-input-format: &quot;*&lt;ja:hk&gt;&quot;;\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -8301,7 +8301,7 @@ void test_jxhtml_input_tag_038()
 void test_jxhtml_input_tag_039() 
 {
 #define  TEST_STRING "<input istyle=\"3\">"
-#define  RESULT_STRING "<input mode=\"alphabet\" />"
+#define  RESULT_STRING "<input style=\"-wap-input-format: &quot;*&lt;ja:en&gt;&quot;;\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -8331,7 +8331,7 @@ void test_jxhtml_input_tag_039()
 void test_jxhtml_input_tag_040() 
 {
 #define  TEST_STRING "<input istyle=\"4\">"
-#define  RESULT_STRING "<input mode=\"numeric\" />"
+#define  RESULT_STRING "<input style=\"-wap-input-format: &quot;*&lt;ja:n&gt;&quot;;\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -8421,7 +8421,7 @@ void test_jxhtml_input_tag_042()
 void test_jxhtml_input_tag_043()
 {
 #define  TEST_STRING   "<input istyle=\"1\" maxlength=\"10\">"
-#define  RESULT_STRING "<input mode=\"hiragana\" maxlength=\"10\" />"
+#define  RESULT_STRING "<input style=\"-wap-input-format: &quot;*&lt;ja:h&gt;&quot;;\" maxlength=\"10\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -8451,7 +8451,7 @@ void test_jxhtml_input_tag_043()
 void test_jxhtml_input_tag_044()
 {
 #define  TEST_STRING   "<input istyle=\"2\" maxlength=\"10\">"
-#define  RESULT_STRING "<input mode=\"hankakukana\" maxlength=\"10\" />"
+#define  RESULT_STRING "<input style=\"-wap-input-format: &quot;*&lt;ja:hk&gt;&quot;;\" maxlength=\"10\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -8481,7 +8481,7 @@ void test_jxhtml_input_tag_044()
 void test_jxhtml_input_tag_045()
 {
 #define  TEST_STRING   "<input istyle=\"3\" maxlength=\"10\">"
-#define  RESULT_STRING "<input mode=\"alphabet\" maxlength=\"10\" />"
+#define  RESULT_STRING "<input style=\"-wap-input-format: &quot;*&lt;ja:en&gt;&quot;;\" maxlength=\"10\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -8511,7 +8511,7 @@ void test_jxhtml_input_tag_045()
 void test_jxhtml_input_tag_046()
 {
 #define  TEST_STRING "<input istyle=\"4\" maxlength=\"10\">"
-#define  RESULT_STRING "<input mode=\"numeric\" maxlength=\"10\" />"
+#define  RESULT_STRING "<input style=\"-wap-input-format: &quot;*&lt;ja:n&gt;&quot;;\" maxlength=\"10\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -11736,7 +11736,7 @@ void test_jxhtml_textarea_tag_021()
 void test_jxhtml_textarea_tag_022() 
 {
 #define  TEST_STRING "<textarea istyle=\"1\"></textarea>"
-#define  RESULT_STRING "<textarea mode=\"hiragana\"></textarea>"
+#define  RESULT_STRING "<textarea style=\"-wap-input-format: &quot;*&lt;ja:h&gt;&quot;;\"></textarea>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -11766,7 +11766,7 @@ void test_jxhtml_textarea_tag_022()
 void test_jxhtml_textarea_tag_023() 
 {
 #define  TEST_STRING "<textarea istyle=\"2\"></textarea>"
-#define  RESULT_STRING "<textarea mode=\"hankakukana\"></textarea>"
+#define  RESULT_STRING "<textarea style=\"-wap-input-format: &quot;*&lt;ja:hk&gt;&quot;;\"></textarea>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -11796,7 +11796,7 @@ void test_jxhtml_textarea_tag_023()
 void test_jxhtml_textarea_tag_024() 
 {
 #define  TEST_STRING "<textarea istyle=\"3\"></textarea>"
-#define  RESULT_STRING "<textarea mode=\"alphabet\"></textarea>"
+#define  RESULT_STRING "<textarea style=\"-wap-input-format: &quot;*&lt;ja:en&gt;&quot;;\"></textarea>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -11826,7 +11826,7 @@ void test_jxhtml_textarea_tag_024()
 void test_jxhtml_textarea_tag_025() 
 {
 #define  TEST_STRING "<textarea istyle=\"4\"></textarea>"
-#define  RESULT_STRING "<textarea mode=\"numeric\"></textarea>"
+#define  RESULT_STRING "<textarea style=\"-wap-input-format: &quot;*&lt;ja:n&gt;&quot;;\"></textarea>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -14411,7 +14411,7 @@ void test_jxhtml_textarea_tag_with_css_001()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><body><textarea></textarea></body></html>"
-#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\"><html><head></head><body><div><textarea mode=\"hiragana\"></textarea></div></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\"><html><head></head><body><div><textarea style=\"-wap-input-format: &quot;*&lt;ja:h&gt;&quot;;\"></textarea></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -14456,7 +14456,7 @@ void test_jxhtml_textarea_tag_with_css_002()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><body><textarea></textarea></body></html>"
-#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\"><html><head></head><body><div><textarea mode=\"hankakukana\"></textarea></div></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\"><html><head></head><body><div><textarea style=\"-wap-input-format: &quot;*&lt;ja:hk&gt;&quot;;\"></textarea></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -14504,7 +14504,7 @@ void test_jxhtml_textarea_tag_with_css_003()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><body><textarea></textarea></body></html>"
-#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\"><html><head></head><body><div><textarea mode=\"alphabet\"></textarea></div></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\"><html><head></head><body><div><textarea style=\"-wap-input-format: &quot;*&lt;ja:en&gt;&quot;;\"></textarea></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -14551,7 +14551,7 @@ void test_jxhtml_textarea_tag_with_css_004()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><body><textarea></textarea></body></html>"
-#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\"><html><head></head><body><div><textarea mode=\"numeric\"></textarea></div></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\"><html><head></head><body><div><textarea style=\"-wap-input-format: &quot;*&lt;ja:n&gt;&quot;;\"></textarea></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -14591,7 +14591,7 @@ void test_jxhtml_textarea_tag_with_css_005()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><body><textarea style=\"-wap-input-format: &quot;*&lt;ja:h&gt;&quot;\"></textarea></body></html>"
-#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\"><html><head></head><body><div><textarea mode=\"hiragana\"></textarea></div></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\"><html><head></head><body><div><textarea style=\"-wap-input-format: &quot;*&lt;ja:h&gt;&quot;;\"></textarea></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -14624,7 +14624,7 @@ void test_jxhtml_textarea_tag_with_css_006()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><body><textarea style=\"-wap-input-format: &quot;*&lt;ja:hk&gt;&quot;\"></textarea></body></html>"
-#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\"><html><head></head><body><div><textarea mode=\"hankakukana\"></textarea></div></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\"><html><head></head><body><div><textarea style=\"-wap-input-format: &quot;*&lt;ja:hk&gt;&quot;;\"></textarea></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -14660,7 +14660,7 @@ void test_jxhtml_textarea_tag_with_css_007()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><body><textarea style=\"-wap-input-format: &quot;*&lt;ja:en&gt;&quot;;\"></textarea></body></html>"
-#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\"><html><head></head><body><div><textarea mode=\"alphabet\"></textarea></div></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\"><html><head></head><body><div><textarea style=\"-wap-input-format: &quot;*&lt;ja:en&gt;&quot;;\"></textarea></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -14694,7 +14694,7 @@ void test_jxhtml_textarea_tag_with_css_008()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><body><textarea style=\"-wap-input-format: &quot;*&lt;ja:n&gt;&quot;;\"></textarea></body></html>"
-#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\"><html><head></head><body><div><textarea mode=\"numeric\"></textarea></div></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\"><html><head></head><body><div><textarea style=\"-wap-input-format: &quot;*&lt;ja:n&gt;&quot;;\"></textarea></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
