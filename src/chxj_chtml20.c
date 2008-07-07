@@ -3013,22 +3013,24 @@ s_chtml20_start_textarea_tag(void *pdoc, Node *node)
     }
   }
 
-  css_prop_list_t *style = s_chtml20_nopush_and_get_now_style(pdoc, node);
-  if (style) {
-    css_property_t *wap_input_format = chxj_css_get_property_value(doc, style, "-wap-input-format");
-    css_property_t *cur;
-    for (cur = wap_input_format->next; cur != wap_input_format; cur = cur->next) {
-      if (strcasecmp(cur->value, "*<ja:n>") == 0) {
-        attr_istyle = "4";
-      }
-      else if (strcasecmp(cur->value, "*<ja:en>") == 0) {
-        attr_istyle = "3";
-      }
-      else if (strcasecmp(cur->value, "*<ja:hk>") == 0) {
-        attr_istyle = "2";
-      }
-      else if (strcasecmp(cur->value, "*<ja:h>") == 0) {
-        attr_istyle = "1";
+  if (IS_CSS_ON(chtml20->entryp)) {
+    css_prop_list_t *style = s_chtml20_nopush_and_get_now_style(pdoc, node);
+    if (style) {
+      css_property_t *wap_input_format = chxj_css_get_property_value(doc, style, "-wap-input-format");
+      css_property_t *cur;
+      for (cur = wap_input_format->next; cur != wap_input_format; cur = cur->next) {
+        if (strcasecmp(cur->value, "*<ja:n>") == 0) {
+          attr_istyle = "4";
+        }
+        else if (strcasecmp(cur->value, "*<ja:en>") == 0) {
+          attr_istyle = "3";
+        }
+        else if (strcasecmp(cur->value, "*<ja:hk>") == 0) {
+          attr_istyle = "2";
+        }
+        else if (strcasecmp(cur->value, "*<ja:h>") == 0) {
+          attr_istyle = "1";
+        }
       }
     }
   }
