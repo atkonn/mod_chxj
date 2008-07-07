@@ -518,6 +518,11 @@ void test_jxhtml_link_009();
 
 void test_jxhtml_html_tag_with_css_001();
 void test_jxhtml_meta_tag_with_css_001();
+
+void test_jxhtml_textarea_tag_with_css_001();
+void test_jxhtml_textarea_tag_with_css_002();
+void test_jxhtml_textarea_tag_with_css_003();
+void test_jxhtml_textarea_tag_with_css_004();
 /* pend */
 
 int
@@ -1084,6 +1089,11 @@ main()
 
   CU_add_test(jxhtml_suite, "test html with css 001",                             test_jxhtml_html_tag_with_css_001);
   CU_add_test(jxhtml_suite, "test meta with css 001",                             test_jxhtml_meta_tag_with_css_001);
+
+  CU_add_test(jxhtml_suite, "test textarea with css 001",                         test_jxhtml_textarea_tag_with_css_001);
+  CU_add_test(jxhtml_suite, "test textarea with css 002",                         test_jxhtml_textarea_tag_with_css_002);
+  CU_add_test(jxhtml_suite, "test textarea with css 003",                         test_jxhtml_textarea_tag_with_css_003);
+  CU_add_test(jxhtml_suite, "test textarea with css 004",                         test_jxhtml_textarea_tag_with_css_004);
   /* aend */
 
   CU_basic_run_tests();
@@ -1173,6 +1183,9 @@ char *test_ap_escape_html(apr_pool_t *pool, const char *s)
 #define COOKIE_INIT(X) \
   do { \
     X.cookie_id = "test_cookie_id"; \
+    memset(&entry, 0, sizeof(chxjconvrule_entry)); \
+    entry.action |= CONVRULE_COOKIE_ON_BIT; \
+    entry.action |= CONVRULE_ENGINE_ON_BIT; \
   } while (0) \
 
 #define SPEC_INIT(X) \
@@ -1379,7 +1392,7 @@ void test_jxhtml_a_tag_name_attribute_004()
 void test_jxhtml_a_tag_href_attribute_001() 
 {
 #define  TEST_STRING "<a href=\"\">abc</a>"
-#define  RESULT_STRING "<a href=\"?_chxj_cc=test_cookie_id\">abc</a>"
+#define  RESULT_STRING "<a href=\"\">abc</a>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -1439,7 +1452,7 @@ void test_jxhtml_a_tag_href_attribute_002()
 void test_jxhtml_a_tag_href_attribute_003() 
 {
 #define  TEST_STRING "<a href=\"a.html\">abc</a>"
-#define  RESULT_STRING "<a href=\"a.html?_chxj_cc=test_cookie_id\">abc</a>"
+#define  RESULT_STRING "<a href=\"a.html\">abc</a>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -1469,7 +1482,7 @@ void test_jxhtml_a_tag_href_attribute_003()
 void test_jxhtml_a_tag_href_attribute_004() 
 {
 #define  TEST_STRING "<a href=\"a.html#abc\">abc</a>"
-#define  RESULT_STRING "<a href=\"a.html#abc?_chxj_cc=test_cookie_id\">abc</a>"
+#define  RESULT_STRING "<a href=\"a.html#abc\">abc</a>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -1499,7 +1512,7 @@ void test_jxhtml_a_tag_href_attribute_004()
 void test_jxhtml_a_tag_href_attribute_005() 
 {
 #define  TEST_STRING "<a href=\"a.html#\">abc</a>"
-#define  RESULT_STRING "<a href=\"a.html#?_chxj_cc=test_cookie_id\">abc</a>"
+#define  RESULT_STRING "<a href=\"a.html#\">abc</a>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -3205,7 +3218,7 @@ void test_jxhtml_div_tag_007()
 void test_jxhtml_form_tag_001() 
 {
 #define  TEST_STRING "<form></form>"
-#define  RESULT_STRING "<form><input type='hidden' name='_chxj_cc' value='test_cookie_id' /></form>"
+#define  RESULT_STRING "<form></form>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -3235,7 +3248,7 @@ void test_jxhtml_form_tag_001()
 void test_jxhtml_form_tag_002() 
 {
 #define  TEST_STRING   "<form method></form>"
-#define  RESULT_STRING "<form method=\"\"><input type='hidden' name='_chxj_cc' value='test_cookie_id' /></form>"
+#define  RESULT_STRING "<form method=\"\"></form>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -3265,7 +3278,7 @@ void test_jxhtml_form_tag_002()
 void test_jxhtml_form_tag_003() 
 {
 #define  TEST_STRING "<form method=\"post\"></form>"
-#define  RESULT_STRING "<form method=\"post\"><input type='hidden' name='_chxj_cc' value='test_cookie_id' /></form>"
+#define  RESULT_STRING "<form method=\"post\"></form>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -3295,7 +3308,7 @@ void test_jxhtml_form_tag_003()
 void test_jxhtml_form_tag_004() 
 {
 #define  TEST_STRING   "<form method=\"get\"></form>"
-#define  RESULT_STRING "<form method=\"get\"><input type='hidden' name='_chxj_cc' value='test_cookie_id' /></form>"
+#define  RESULT_STRING "<form method=\"get\"></form>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -3325,7 +3338,7 @@ void test_jxhtml_form_tag_004()
 void test_jxhtml_form_tag_005() 
 {
 #define  TEST_STRING   "<form method=\"abc\"></form>"
-#define  RESULT_STRING "<form method=\"abc\"><input type='hidden' name='_chxj_cc' value='test_cookie_id' /></form>"
+#define  RESULT_STRING "<form method=\"abc\"></form>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -3353,7 +3366,7 @@ void test_jxhtml_form_tag_005()
 void test_jxhtml_form_tag_006() 
 {
 #define  TEST_STRING   "<form action></form>"
-#define  RESULT_STRING "<form action=\"\"><input type='hidden' name='_chxj_cc' value='test_cookie_id' /></form>"
+#define  RESULT_STRING "<form action=\"\"></form>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -3443,7 +3456,7 @@ void test_jxhtml_form_tag_008()
 void test_jxhtml_form_tag_009() 
 {
 #define  TEST_STRING   "<form method=\"post\" action=\"hogehoge\"></form>"
-#define  RESULT_STRING "<form method=\"post\" action=\"hogehoge\"><input type='hidden' name='_chxj_cc' value='test_cookie_id' /></form>"
+#define  RESULT_STRING "<form method=\"post\" action=\"hogehoge\"></form>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -6025,7 +6038,7 @@ void test_jxhtml_img_tag_001()
 void test_jxhtml_img_tag_002() 
 {
 #define  TEST_STRING "<img src>"
-#define  RESULT_STRING "<img src=\"?_chxj_cc=test_cookie_id&_chxj_nc=true\" alt=\"\" />"
+#define  RESULT_STRING "<img src=\"\" alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -6055,7 +6068,7 @@ void test_jxhtml_img_tag_002()
 void test_jxhtml_img_tag_003() 
 {
 #define  TEST_STRING "<img src=\"\">"
-#define  RESULT_STRING "<img src=\"?_chxj_cc=test_cookie_id&_chxj_nc=true\" alt=\"\" />"
+#define  RESULT_STRING "<img src=\"\" alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -6085,7 +6098,7 @@ void test_jxhtml_img_tag_003()
 void test_jxhtml_img_tag_004() 
 {
 #define  TEST_STRING "<img src=\"aaa\">"
-#define  RESULT_STRING "<img src=\"aaa?_chxj_cc=test_cookie_id&_chxj_nc=true\" alt=\"\" />"
+#define  RESULT_STRING "<img src=\"aaa\" alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -6115,7 +6128,7 @@ void test_jxhtml_img_tag_004()
 void test_jxhtml_img_tag_005() 
 {
 #define  TEST_STRING "<img src=\"亀さん\">"
-#define  RESULT_STRING "<img src=\"亀さん?_chxj_cc=test_cookie_id&_chxj_nc=true\" alt=\"\" />"
+#define  RESULT_STRING "<img src=\"亀さん\" alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -6145,7 +6158,7 @@ void test_jxhtml_img_tag_005()
 void test_jxhtml_img_tag_006() 
 {
 #define  TEST_STRING "<img src=\"ﾊﾝｶｸ\">"
-#define  RESULT_STRING "<img src=\"ﾊﾝｶｸ?_chxj_cc=test_cookie_id&_chxj_nc=true\" alt=\"\" />"
+#define  RESULT_STRING "<img src=\"ﾊﾝｶｸ\" alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -14358,6 +14371,198 @@ void test_jxhtml_meta_tag_with_css_001()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_jxhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+
+/******************************************************************************/
+/* TEXTAREA with CSS                                                          */
+/******************************************************************************/
+char *test_chxj_serf_get004(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "textarea { -wap-input-format: &quot;*&lt;ja:h&gt;&quot; }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_jxhtml_textarea_tag_with_css_001()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><textarea></textarea></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\"><html><head></head><body><div><textarea mode=\"hiragana\"></textarea></div></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get004;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jxhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+char *test_chxj_serf_get005(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "textarea { -wap-input-format: &quot;*&lt;ja:hk&gt;&quot; }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_jxhtml_textarea_tag_with_css_002()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><textarea></textarea></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\"><html><head></head><body><div><textarea mode=\"hankakukana\"></textarea></div></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get005;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jxhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  fprintf(stderr, "actual:[%s]\n", ret);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+char *test_chxj_serf_get006(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "textarea { -wap-input-format: &quot;*&lt;ja:en&gt;&quot; }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_jxhtml_textarea_tag_with_css_003()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><textarea></textarea></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\"><html><head></head><body><div><textarea mode=\"alphabet\"></textarea></div></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get006;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jxhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+char *test_chxj_serf_get007(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "textarea { -wap-input-format: &quot;*&lt;ja:n&gt;&quot;; }\n"
+                     "br      { display: none }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_jxhtml_textarea_tag_with_css_004()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><textarea></textarea></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\"><html><head></head><body><div><textarea mode=\"numeric\"></textarea></div></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get007;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jxhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+fprintf(stderr, "actual:[%s]\n", ret);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
