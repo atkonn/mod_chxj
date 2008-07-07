@@ -2723,16 +2723,16 @@ s_chtml30_start_textarea_tag(void *pdoc, Node *node)
       css_property_t *wap_input_format = chxj_css_get_property_value(doc, style, "-wap-input-format");
       css_property_t *cur;
       for (cur = wap_input_format->next; cur != wap_input_format; cur = cur->next) {
-        if (strcasecmp(cur->value, "*<ja:n>") == 0) {
+        if (strcasestr(cur->value, "<ja:n>")) {
           attr_istyle = "4";
         }
-        else if (strcasecmp(cur->value, "*<ja:en>") == 0) {
+        else if (strcasestr(cur->value, "<ja:en>")) {
           attr_istyle = "3";
         }
-        else if (strcasecmp(cur->value, "*<ja:hk>") == 0) {
+        else if (strcasestr(cur->value, "<ja:hk>")) {
           attr_istyle = "2";
         }
-        else if (strcasecmp(cur->value, "*<ja:h>") == 0) {
+        else if (strcasestr(cur->value, "<ja:h>")) {
           attr_istyle = "1";
         }
       }
