@@ -2862,13 +2862,15 @@ s_chtml20_start_p_tag(void *pdoc, Node *node)
   Doc         *doc;
   request_rec *r;
   Attr        *attr;
-  char        *align = NULL;
+  char        *attr_align = NULL;
+  char        *attr_style = NULL;
+  char        *attr_color = NULL;
+  char        *attr_blink = NULL;
 
   chtml20 = GET_CHTML20(pdoc);
   doc     = chtml20->doc;
   r       = doc->r;
 
-  W_L("<p");
   for (attr = qs_get_attr(doc,node);
        attr;
        attr = qs_get_next_attr(doc,attr)) {
@@ -2879,17 +2881,65 @@ s_chtml20_start_p_tag(void *pdoc, Node *node)
       /* CHTML 1.0 (W3C version 3.2)                                          */
       /*----------------------------------------------------------------------*/
       if (val && (STRCASEEQ('l','L',"left",val) || STRCASEEQ('r','R',"right",val) || STRCASEEQ('c','C',"center",val))) {
-        align = apr_pstrdup(doc->buf.pool, val);
+        attr_align = apr_pstrdup(doc->buf.pool, val);
         break;
       }
     }
+    else if (STRCASEEQ('s','S',"style", nm) && val && *val) {
+      attr_style = apr_pstrdup(doc->buf.pool, val);
+    }
   }
-  if (align) {
+  if (IS_CSS_ON(chtml20->entryp)) {
+    css_prop_list_t *style = s_chtml20_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *text_align_prop = chxj_css_get_property_value(doc, style, "text-align");
+      css_property_t *color_prop      = chxj_css_get_property_value(doc, style, "color");
+      css_property_t *text_deco_prop  = chxj_css_get_property_value(doc, style, "text-decoration");
+      css_property_t *cur;
+      for (cur = text_align_prop->next; cur != text_align_prop; cur = cur->next) {
+        if (STRCASEEQ('l','L',"left",cur->value)) {
+          attr_align = apr_pstrdup(doc->pool, "left");
+        }
+        else if (STRCASEEQ('c','C',"center",cur->value)) {
+          attr_align = apr_pstrdup(doc->pool, "center");
+        }
+        else if (STRCASEEQ('r','R',"right",cur->value)) {
+          attr_align = apr_pstrdup(doc->pool, "right");
+        }
+      }
+      for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          attr_color = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+      for (cur = text_deco_prop->next; cur != text_deco_prop; cur = cur->next) {
+        if (cur->value && *cur->value && STRCASEEQ('b','B',"blink",cur->value)) {
+          attr_blink = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+    }
+  }
+  W_L("<p");
+  if (attr_align) {
     W_L(" align=\"");
-    W_V(align);
+    W_V(attr_align);
     W_L("\"");
   }
   W_L(">");
+  chtml20_flags_t *flg = (chtml20_flags_t *)apr_palloc(doc->pool, sizeof(chtml20_flags_t));
+  memset(flg, 0, sizeof(*flg));
+  if (attr_color) {
+    attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
+    W_L("<font color=\"");
+    W_V(attr_color);
+    W_L("\">");
+    flg->with_font_flag = 1;
+  }
+  if (attr_blink) {
+    W_L("<blink>");
+    flg->with_blink_flag = 1;
+  }
+  node->userData = (void *)flg;
   return chtml20->out;
 }
 
@@ -2903,7 +2953,7 @@ s_chtml20_start_p_tag(void *pdoc, Node *node)
  * @return The conversion result is returned.
  */
 static char *
-s_chtml20_end_p_tag(void *pdoc, Node *UNUSED(child)) 
+s_chtml20_end_p_tag(void *pdoc, Node *node) 
 {
   chtml20_t   *chtml20;
   Doc         *doc;
@@ -2913,6 +2963,13 @@ s_chtml20_end_p_tag(void *pdoc, Node *UNUSED(child))
   doc     = chtml20->doc;
   r       = doc->r;
 
+  chtml20_flags_t *flg = (chtml20_flags_t *)node->userData;
+  if (flg->with_font_flag) {
+    W_L("</font>");
+  }
+  if (flg->with_blink_flag) {
+    W_L("</blink>");
+  }
   W_L("</p>");
   return chtml20->out;
 }
@@ -3414,7 +3471,7 @@ s_chtml20_start_plaintext_tag_inner(void *pdoc, Node *node)
 
 
 /**
- * It is a hanplaintexter who processes the PLAINTEXT tag.
+ * It is a handler who processes the PLAINTEXT tag.
  *
  * @param pdoc  [i/o] The pointer to the CHTML structure at the output
  *                     destination is specified.
@@ -3429,7 +3486,7 @@ s_chtml20_end_plaintext_tag(void *pdoc, Node *UNUSED(child))
 }
 
 /**
- * It is a hanblinker who processes the BLINK tag.
+ * It is a handler who processes the BLINK tag.
  *
  * @param pdoc  [i/o] The pointer to the CHTML structure at the output
  *                     destination is specified.
@@ -3447,7 +3504,7 @@ s_chtml20_start_blink_tag(void *pdoc, Node *UNUSED(child))
 
 
 /**
- * It is a hanblinker who processes the BLINK tag.
+ * It is a handler who processes the BLINK tag.
  *
  * @param pdoc  [i/o] The pointer to the CHTML structure at the output
  *                     destination is specified.
