@@ -124,8 +124,8 @@ static void  s_init_jxhtml(jxhtml_t *jxhtml, Doc *doc, request_rec *r, device_ta
 static int   s_jxhtml_search_emoji(jxhtml_t *jxhtml, char *txt, char **rslt);
 
 static char *s_jxhtml_istyle_to_mode(apr_pool_t *p, const char *s);
-static css_prop_list_t *s_jxhtml_nopush_and_get_now_style(void *pdoc, Node *node);
-static css_prop_list_t *s_jxhtml_push_and_get_now_style(void *pdoc, Node *node);
+static css_prop_list_t *s_jxhtml_nopush_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value);
+static css_prop_list_t *s_jxhtml_push_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value);
 
 
 
@@ -2461,6 +2461,7 @@ s_jxhtml_start_textarea_tag(void *pdoc, Node *node)
   char          *attr_rows      = NULL;
   char          *attr_cols      = NULL;
   char          *attr_istyle    = NULL;
+  char          *attr_style     = NULL;
 
 
   jxhtml = GET_JXHTML(pdoc);
@@ -2488,9 +2489,12 @@ s_jxhtml_start_textarea_tag(void *pdoc, Node *node)
     else if (STRCASEEQ('c','C',"cols", name) && value && *value) {
       attr_cols = value;
     }
+    else if (STRCASEEQ('s','S',"style", name) && value && *value) {
+      attr_style = value;
+    }
   }
   if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node);
+    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *wap_input_format = chxj_css_get_property_value(doc, style, "-wap-input-format");
       css_property_t *cur;
@@ -3571,7 +3575,7 @@ s_jxhtml_link_tag(void *pdoc, Node *node)
 
 
 static css_prop_list_t *
-s_jxhtml_push_and_get_now_style(void *pdoc, Node *node)
+s_jxhtml_push_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value)
 {
   jxhtml_t *jxhtml = GET_JXHTML(pdoc);
   Doc *doc = jxhtml->doc;
@@ -3588,13 +3592,20 @@ s_jxhtml_push_and_get_now_style(void *pdoc, Node *node)
     }
     chxj_css_push_prop_list(jxhtml->css_prop_stack, dup_css);
     last_css = chxj_css_get_last_prop_list(jxhtml->css_prop_stack);
+
+    if (style_attr_value) {
+      css_stylesheet_t *ssheet = chxj_css_parse_style_attr(doc, NULL, apr_pstrdup(doc->pool, node->name), NULL, NULL, apr_pstrdup(doc->pool, style_attr_value));
+      if (ssheet) {
+        chxj_css_prop_list_merge_property(doc, last_css, ssheet->selector_head.next);
+      }
+    }
   }
   return last_css;
 }
 
 
 static css_prop_list_t *
-s_jxhtml_nopush_and_get_now_style(void *pdoc, Node *node)
+s_jxhtml_nopush_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value)
 {
   jxhtml_t *jxhtml = GET_JXHTML(pdoc);
   Doc *doc = jxhtml->doc;
@@ -3610,6 +3621,13 @@ s_jxhtml_nopush_and_get_now_style(void *pdoc, Node *node)
       chxj_css_prop_list_merge_property(doc, dup_css, selector);
     }
     last_css = dup_css;
+
+    if (style_attr_value) {
+      css_stylesheet_t *ssheet = chxj_css_parse_style_attr(doc, NULL, apr_pstrdup(doc->pool, node->name), NULL, NULL, apr_pstrdup(doc->pool, style_attr_value));
+      if (ssheet) {
+        chxj_css_prop_list_merge_property(doc, last_css, ssheet->selector_head.next);
+      }
+    }
   }
   return last_css;
 }
