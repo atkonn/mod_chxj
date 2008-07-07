@@ -44,6 +44,13 @@ struct ctml20_t {
   css_prop_list_stack_t *css_prop_stack;
 };
 
+typedef struct _chtml20_flags_t chtml20_flags_t;
+
+struct _chtml20_flags_t {
+  int with_font_flag;
+  int with_blink_flag;
+};
+
 /*----------------------------------------------------------------------------*/
 /* Prototype                                                                  */
 /*----------------------------------------------------------------------------*/

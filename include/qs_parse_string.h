@@ -123,6 +123,7 @@ struct Node {
   char          *otext;
   int           line;
   int           closed_by_itself;
+  void          *userData;
 };
 
 typedef struct pointer_table_t {

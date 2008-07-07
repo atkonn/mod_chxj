@@ -1170,6 +1170,50 @@ chxj_css_get_property_value(Doc *doc, css_prop_list_t *base, const char *name)
 }
 
 
+char *
+chxj_css_rgb_func_to_value(apr_pool_t *pool, const char *rgb_func_string)
+{
+  char *s = apr_pstrdup(pool, rgb_func_string);
+  if (chxj_starts_with(s, "rgb")) {
+    s += 3;
+    s = qs_trim_string(pool, s);
+    if (*s == '(') s++;
+    int len = strlen(s);
+    if (s[len - 1] == ')') s[len-1] = 0;
+    char *pstat;
+    char *red   = qs_trim_string(pool, apr_strtok(s, ",", &pstat));
+    char *green = qs_trim_string(pool, apr_strtok(NULL, ",", &pstat));
+    char *blue  = qs_trim_string(pool, apr_strtok(NULL, ",", &pstat));
+    if (red && (pstat = strchr(red, '%'))) {
+      *pstat = 0;
+    }
+    else {
+      red = "0";
+    }
+    if (green && (pstat = strchr(green, '%'))) {
+      *pstat = 0;
+    }
+    else {
+      green = "0";
+    }
+    if (blue && (pstat = strchr(blue, '%'))) {
+      *pstat = 0;
+    }
+    else {
+      blue = "0";
+    }
+    double d_red = ((double)chxj_atoi(red) / 100.0);
+    double d_green = ((double)chxj_atoi(green) / 100.0);
+    double d_blue = ((double)chxj_atoi(blue) / 100.0);
+    d_red   *= 255;
+    d_green *= 255;
+    d_blue  *= 255;
+    char *ret = apr_psprintf(pool, "#%02x%02x%02x", (int)d_red, (int)d_green, (int)d_blue);
+    return ret;
+  }
+  return s;
+}
+
 #if 0
 css_stylesheet_t *
 chxj_css_parse_from_style_tag(apr_pool_t *pool, css_stylesheet_t *old_stylesheet, const char *style_value)
