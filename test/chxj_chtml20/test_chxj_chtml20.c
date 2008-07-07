@@ -500,6 +500,10 @@ void test_chtml20_textarea_tag_with_css_001();
 void test_chtml20_textarea_tag_with_css_002();
 void test_chtml20_textarea_tag_with_css_003();
 void test_chtml20_textarea_tag_with_css_004();
+void test_chtml20_textarea_tag_with_css_005();
+void test_chtml20_textarea_tag_with_css_006();
+void test_chtml20_textarea_tag_with_css_007();
+void test_chtml20_textarea_tag_with_css_008();
 /* pend */
 
 int
@@ -961,6 +965,11 @@ main()
   CU_add_test(chtml20_suite, "test textarea with css 002",                         test_chtml20_textarea_tag_with_css_002);
   CU_add_test(chtml20_suite, "test textarea with css 003",                         test_chtml20_textarea_tag_with_css_003);
   CU_add_test(chtml20_suite, "test textarea with css 004",                         test_chtml20_textarea_tag_with_css_004);
+
+  CU_add_test(chtml20_suite, "test textarea with css 005",                         test_chtml20_textarea_tag_with_css_005);
+  CU_add_test(chtml20_suite, "test textarea with css 006",                         test_chtml20_textarea_tag_with_css_006);
+  CU_add_test(chtml20_suite, "test textarea with css 007",                         test_chtml20_textarea_tag_with_css_007);
+  CU_add_test(chtml20_suite, "test textarea with css 008",                         test_chtml20_textarea_tag_with_css_008);
   /* aend */
 
   CU_basic_run_tests();
@@ -12898,6 +12907,142 @@ void test_chtml20_textarea_tag_with_css_004()
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
   CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+/*===========================================================================*/
+/* TEXTAREA with style="-wap-input-format"                                   */
+/*===========================================================================*/
+void test_chtml20_textarea_tag_with_css_005()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><textarea style=\"-wap-input-format: &quot;*&lt;ja:h&gt;&quot;\"></textarea></body></html>"
+#define  RESULT_STRING "<html><head></head><body><textarea istyle=\"1\"></textarea></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get007;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_chtml20(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_chtml20_textarea_tag_with_css_006()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><textarea style=\"-wap-input-format: &quot;*&lt;ja:hk&gt;&quot;\"></textarea></body></html>"
+#define  RESULT_STRING "<html><head></head><body><textarea istyle=\"2\"></textarea></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get007;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_chtml20(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_chtml20_textarea_tag_with_css_007()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><textarea style=\"-wap-input-format: &quot;*&lt;ja:en&gt;&quot;\"></textarea></body></html>"
+#define  RESULT_STRING "<html><head></head><body><textarea istyle=\"3\"></textarea></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get007;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_chtml20(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_chtml20_textarea_tag_with_css_008()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><textarea style=\"-wap-input-format: &quot;*&lt;ja:n&gt;&quot;\"></textarea></body></html>"
+#define  RESULT_STRING "<html><head></head><body><textarea istyle=\"4\"></textarea></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get007;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_chtml20(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
 
   APR_TERM;
 #undef TEST_STRING
