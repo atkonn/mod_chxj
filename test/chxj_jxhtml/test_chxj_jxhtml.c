@@ -523,6 +523,11 @@ void test_jxhtml_textarea_tag_with_css_001();
 void test_jxhtml_textarea_tag_with_css_002();
 void test_jxhtml_textarea_tag_with_css_003();
 void test_jxhtml_textarea_tag_with_css_004();
+
+void test_jxhtml_textarea_tag_with_css_005();
+void test_jxhtml_textarea_tag_with_css_006();
+void test_jxhtml_textarea_tag_with_css_007();
+void test_jxhtml_textarea_tag_with_css_008();
 /* pend */
 
 int
@@ -1094,6 +1099,11 @@ main()
   CU_add_test(jxhtml_suite, "test textarea with css 002",                         test_jxhtml_textarea_tag_with_css_002);
   CU_add_test(jxhtml_suite, "test textarea with css 003",                         test_jxhtml_textarea_tag_with_css_003);
   CU_add_test(jxhtml_suite, "test textarea with css 004",                         test_jxhtml_textarea_tag_with_css_004);
+
+  CU_add_test(jxhtml_suite, "test textarea with css 005",                         test_jxhtml_textarea_tag_with_css_005);
+  CU_add_test(jxhtml_suite, "test textarea with css 006",                         test_jxhtml_textarea_tag_with_css_006);
+  CU_add_test(jxhtml_suite, "test textarea with css 007",                         test_jxhtml_textarea_tag_with_css_007);
+  CU_add_test(jxhtml_suite, "test textarea with css 008",                         test_jxhtml_textarea_tag_with_css_008);
   /* aend */
 
   CU_basic_run_tests();
@@ -14567,6 +14577,149 @@ fprintf(stderr, "actual:[%s]\n", ret);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
   CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+
+/******************************************************************************/
+/* TEXTAREA with style attribute                                              */
+/******************************************************************************/
+void test_jxhtml_textarea_tag_with_css_005()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><textarea style=\"-wap-input-format: &quot;*&lt;ja:h&gt;&quot;\"></textarea></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\"><html><head></head><body><div><textarea mode=\"hiragana\"></textarea></div></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get004;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jxhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_jxhtml_textarea_tag_with_css_006()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><textarea style=\"-wap-input-format: &quot;*&lt;ja:hk&gt;&quot;\"></textarea></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\"><html><head></head><body><div><textarea mode=\"hankakukana\"></textarea></div></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get005;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jxhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  fprintf(stderr, "actual:[%s]\n", ret);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+void test_jxhtml_textarea_tag_with_css_007()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><textarea style=\"-wap-input-format: &quot;*&lt;ja:en&gt;&quot;;\"></textarea></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\"><html><head></head><body><div><textarea mode=\"alphabet\"></textarea></div></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get006;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jxhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+void test_jxhtml_textarea_tag_with_css_008()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><textarea style=\"-wap-input-format: &quot;*&lt;ja:n&gt;&quot;;\"></textarea></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\"><html><head></head><body><div><textarea mode=\"numeric\"></textarea></div></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get007;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jxhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+fprintf(stderr, "actual:[%s]\n", ret);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
 
   APR_TERM;
 #undef TEST_STRING
