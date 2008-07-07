@@ -124,6 +124,8 @@ static void  s_init_jhtml(jhtml_t *jhtml, Doc *doc, request_rec *r, device_table
 static int   s_jhtml_search_emoji(jhtml_t *jhtml, char *txt, char **rslt);
 
 static char *chxj_istyle_to_mode(apr_pool_t *p, const char *s);
+static css_prop_list_t *s_jhtml_push_and_get_now_style(void *pdoc, Node *node);
+static css_prop_list_t *s_jhtml_nopush_and_get_now_style(void *pdoc, Node *node);
 
 
 
@@ -470,6 +472,10 @@ chxj_convert_jhtml(
 #ifdef DUMP_LOG
   chxj_dump_out("[src] CHTML -> JHTML", ss, srclen);
 #endif
+  if (IS_CSS_ON(jhtml.entryp)) {
+    /* current property list */
+    jhtml.css_prop_stack = chxj_new_prop_list_stack(&doc);
+  }
 
   qs_parse_string(&doc,ss,strlen(ss));
 
@@ -2400,44 +2406,85 @@ s_jhtml_start_textarea_tag(void *pdoc, Node *node)
   Doc           *doc;
   request_rec   *r;
   Attr          *attr;
+  char          *attr_accesskey = NULL;
+  char          *attr_name      = NULL;
+  char          *attr_rows      = NULL;
+  char          *attr_cols      = NULL;
+  char          *attr_istyle    = NULL;
 
   jhtml = GET_JHTML(pdoc);
   doc   = jhtml->doc;
   r     = doc->r;
 
   jhtml->textarea_flag++;
-  W_L("<textarea");
   for (attr = qs_get_attr(doc,node);
        attr;
        attr = qs_get_next_attr(doc,attr)) {
     char *name  = qs_get_attr_name(doc,attr);
     char *value = qs_get_attr_value(doc,attr);
     if (STRCASEEQ('a','A',"accesskey",name) && value && *value != 0) {
-      W_L(" accesskey=\"");
-      W_V(value);
-      W_L("\"");
+      attr_accesskey = value;
     }
     else if (STRCASEEQ('i','I',"istyle", name) && value && (*value == '1' || *value == '2' || *value == '3' || *value == '4')) {
-      char *vv = chxj_istyle_to_mode(doc->buf.pool,value);
-      W_L(" mode=\"");
-      W_V(vv);
-      W_L("\"");
+      attr_istyle = value;
     }
     else if (STRCASEEQ('n','N',"name", name) && value && *value) {
-      W_L(" name=\"");
-      W_V(value);
-      W_L("\"");
+      attr_name = value;
     }
     else if (STRCASEEQ('r','R',"rows", name) && value && *value) {
-      W_L(" rows=\"");
-      W_V(value);
-      W_L("\"");
+      attr_rows = value;
     }
     else if (STRCASEEQ('c','C',"cols", name) && value && *value) {
-      W_L(" cols=\"");
-      W_V(value);
-      W_L("\"");
+      attr_cols = value;
     }
+  }
+  if (IS_CSS_ON(jhtml->entryp)) {
+    css_prop_list_t *style = s_jhtml_nopush_and_get_now_style(pdoc, node);
+    if (style) {
+      css_property_t *wap_input_format = chxj_css_get_property_value(doc, style, "-wap-input-format");
+      css_property_t *cur;
+      for (cur = wap_input_format->next; cur != wap_input_format; cur = cur->next) {
+        if (strcasestr(cur->value, "<ja:n>")) {
+          attr_istyle = "4";
+        }
+        else if (strcasestr(cur->value, "<ja:en>")) {
+          attr_istyle = "3";
+        }
+        else if (strcasestr(cur->value, "<ja:hk>")) {
+          attr_istyle = "2";
+        }
+        else if (strcasestr(cur->value, "<ja:h>")) {
+          attr_istyle = "1";
+        }
+      }
+    }
+  }
+  W_L("<textarea");
+  if (attr_accesskey) {
+    W_L(" accesskey=\"");
+    W_V(attr_accesskey);
+    W_L("\"");
+  }
+  if (attr_name) {
+    W_L(" name=\"");
+    W_V(attr_name);
+    W_L("\"");
+  }
+  if (attr_rows) {
+    W_L(" rows=\"");
+    W_V(attr_rows);
+    W_L("\"");
+  }
+  if (attr_cols) {
+    W_L(" cols=\"");
+    W_V(attr_cols);
+    W_L("\"");
+  }
+  if (attr_istyle) {
+    char *vv = chxj_istyle_to_mode(doc->buf.pool,attr_istyle);
+    W_L(" mode=\"");
+    W_V(vv);
+    W_L("\"");
   }
   W_L(">");
   return jhtml->out;
@@ -3435,6 +3482,51 @@ s_jhtml_link_tag(void *pdoc, Node *node)
   }
 
   return jhtml->out;
+}
+
+
+static css_prop_list_t *
+s_jhtml_push_and_get_now_style(void *pdoc, Node *node)
+{
+  jhtml_t *jhtml = GET_JHTML(pdoc);
+  Doc *doc = jhtml->doc;
+  css_prop_list_t *last_css = NULL;
+  if (IS_CSS_ON(jhtml->entryp)) {
+    css_prop_list_t *dup_css;
+    css_selector_t  *selector;
+
+    last_css = chxj_css_get_last_prop_list(jhtml->css_prop_stack);
+    dup_css  = chxj_dup_css_prop_list(doc, last_css);
+    selector = chxj_css_find_selector(doc, jhtml->style, node);
+    if (selector) {
+      chxj_css_prop_list_merge_property(doc, dup_css, selector);
+    }
+    chxj_css_push_prop_list(jhtml->css_prop_stack, dup_css);
+    last_css = chxj_css_get_last_prop_list(jhtml->css_prop_stack);
+  }
+  return last_css;
+}
+
+
+static css_prop_list_t *
+s_jhtml_nopush_and_get_now_style(void *pdoc, Node *node)
+{
+  jhtml_t *jhtml = GET_JHTML(pdoc);
+  Doc *doc = jhtml->doc;
+  css_prop_list_t *last_css = NULL;
+  if (IS_CSS_ON(jhtml->entryp)) {
+    css_prop_list_t *dup_css;
+    css_selector_t  *selector;
+
+    last_css = chxj_css_get_last_prop_list(jhtml->css_prop_stack);
+    dup_css  = chxj_dup_css_prop_list(doc, last_css);
+    selector = chxj_css_find_selector(doc, jhtml->style, node);
+    if (selector) {
+      chxj_css_prop_list_merge_property(doc, dup_css, selector);
+    }
+    last_css = dup_css;
+  }
+  return last_css;
 }
 /*
  * vim:ts=2 et

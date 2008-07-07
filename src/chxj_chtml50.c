@@ -2778,7 +2778,7 @@ s_chtml50_start_textarea_tag(void *pdoc, Node *node)
     }
   }
   if (IS_CSS_ON(chtml50->entryp)) {
-    css_prop_list_t *style = s_chtml40_nopush_and_get_now_style(pdoc, node);
+    css_prop_list_t *style = s_chtml50_nopush_and_get_now_style(pdoc, node);
     if (style) {
       css_property_t *wap_input_format = chxj_css_get_property_value(doc, style, "-wap-input-format");
       css_property_t *cur;
@@ -3414,6 +3414,51 @@ s_chtml50_link_tag(void *pdoc, Node *node)
   }
 
   return chtml50->out;
+}
+
+
+static css_prop_list_t *
+s_chtml50_push_and_get_now_style(void *pdoc, Node *node)
+{
+  chtml50_t *chtml50 = GET_CHTML50(pdoc);
+  Doc *doc = chtml50->doc;
+  css_prop_list_t *last_css = NULL;
+  if (IS_CSS_ON(chtml50->entryp)) {
+    css_prop_list_t *dup_css;
+    css_selector_t  *selector;
+
+    last_css = chxj_css_get_last_prop_list(chtml50->css_prop_stack);
+    dup_css  = chxj_dup_css_prop_list(doc, last_css);
+    selector = chxj_css_find_selector(doc, chtml50->style, node);
+    if (selector) {
+      chxj_css_prop_list_merge_property(doc, dup_css, selector);
+    }
+    chxj_css_push_prop_list(chtml50->css_prop_stack, dup_css);
+    last_css = chxj_css_get_last_prop_list(chtml50->css_prop_stack);
+  }
+  return last_css;
+}
+
+
+static css_prop_list_t *
+s_chtml50_nopush_and_get_now_style(void *pdoc, Node *node)
+{
+  chtml50_t *chtml50 = GET_CHTML50(pdoc);
+  Doc *doc = chtml50->doc;
+  css_prop_list_t *last_css = NULL;
+  if (IS_CSS_ON(chtml50->entryp)) {
+    css_prop_list_t *dup_css;
+    css_selector_t  *selector;
+
+    last_css = chxj_css_get_last_prop_list(chtml50->css_prop_stack);
+    dup_css  = chxj_dup_css_prop_list(doc, last_css);
+    selector = chxj_css_find_selector(doc, chtml50->style, node);
+    if (selector) {
+      chxj_css_prop_list_merge_property(doc, dup_css, selector);
+    }
+    last_css = dup_css;
+  }
+  return last_css;
 }
 /*
  * vim:ts=2 et
