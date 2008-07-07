@@ -116,8 +116,10 @@ static void  s_init_chtml10(chtml10_t *chtml, Doc *doc, request_rec *r, device_t
 static int   s_chtml10_search_emoji(chtml10_t *chtml, char *txt, char **rslt);
 static char *s_chtml10_chxjif_tag        (void *pdoc, Node *node);
 static char *s_chtml10_text              (void *pdoc, Node *node);
-static css_prop_list_t *s_chtml10_push_and_get_now_style(void *pdoc, Node *node);
-static css_prop_list_t *s_chtml10_nopush_and_get_now_style(void *pdoc, Node *node);
+static css_prop_list_t *s_chtml10_push_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value);
+static css_prop_list_t *s_chtml10_nopush_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value);
+
+/* pend */
 
 tag_handler chtml10_handler[] = {
   /* tagHTML */
@@ -2728,13 +2730,13 @@ s_chtml10_start_p_tag(void *pdoc, Node *node)
   request_rec *r;
   chtml10_t   *chtml10;
   Attr        *attr;
-  char        *align = NULL;
+  char        *attr_align = NULL;
+  char        *attr_style = NULL;
 
   chtml10 = GET_CHTML10(pdoc);
   doc     = chtml10->doc;
   r       = doc->r;
 
-  W_L("<p");
   for (attr = qs_get_attr(doc,node);
        attr;
        attr = qs_get_next_attr(doc,attr)) {
@@ -2745,17 +2747,38 @@ s_chtml10_start_p_tag(void *pdoc, Node *node)
       /* CHTML 1.0 (W3C version 3.2)                                          */
       /*----------------------------------------------------------------------*/
       if (val && (STRCASEEQ('l','L',"left",val) || STRCASEEQ('r','R',"right",val) || STRCASEEQ('c','C',"center",val))) {
-        align = apr_pstrdup(doc->buf.pool, val);
+        attr_align = apr_pstrdup(doc->buf.pool, val);
         break;
       }
     }
+    else if (val && STRCASEEQ('s','S',"style", nm)) {
+      attr_style = val;
+    }
   }
-  if (align) {
+  if (IS_CSS_ON(chtml10->entryp)) {
+    css_prop_list_t *style = s_chtml10_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *text_align = chxj_css_get_property_value(doc, style, "text-align");
+      css_property_t *cur;
+      for (cur = text_align->next; cur != text_align; cur = cur->next) {
+        if (STRCASEEQ('l','L',"left",cur->value)) {
+          attr_align = apr_pstrdup(doc->pool, "left");
+        }
+        else if (STRCASEEQ('c','C',"center",cur->value)) {
+          attr_align = apr_pstrdup(doc->pool, "center");
+        }
+        else if (STRCASEEQ('r','R',"right",cur->value)) {
+          attr_align = apr_pstrdup(doc->pool, "right");
+        }
+      }
+    }
+  }
+  W_L("<p");
+  if (attr_align) {
     W_L(" align=\"");
-    W_V(align);
+    W_V(attr_align);
     W_L("\"");
   }
-
   W_L(">");
   return chtml10->out;
 }
@@ -2781,6 +2804,9 @@ s_chtml10_end_p_tag(void *pdoc, Node *UNUSED(child))
   r       = doc->r;
 
   W_L("</p>");
+  if (IS_CSS_ON(chtml10->entryp)) {
+    chxj_css_pop_prop_list(chtml10->css_prop_stack);
+  }
   return chtml10->out;
 }
 
@@ -3358,7 +3384,7 @@ s_chtml10_newline_mark(void *pdoc, Node *UNUSED(node))
 }
 
 static css_prop_list_t *
-s_chtml10_push_and_get_now_style(void *pdoc, Node *node)
+s_chtml10_push_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value)
 {
   chtml10_t *chtml10 = GET_CHTML10(pdoc);
   Doc *doc = chtml10->doc;
@@ -3375,13 +3401,20 @@ s_chtml10_push_and_get_now_style(void *pdoc, Node *node)
     }
     chxj_css_push_prop_list(chtml10->css_prop_stack, dup_css);
     last_css = chxj_css_get_last_prop_list(chtml10->css_prop_stack);
+
+    if (style_attr_value) {
+      css_stylesheet_t *ssheet = chxj_css_parse_style_attr(doc, NULL, apr_pstrdup(doc->pool, node->name), NULL, NULL, apr_pstrdup(doc->pool, style_attr_value));
+      if (ssheet) {
+        chxj_css_prop_list_merge_property(doc, last_css, ssheet->selector_head.next);
+      }
+    }
   }
   return last_css;
 }
 
 
 static css_prop_list_t *
-s_chtml10_nopush_and_get_now_style(void *pdoc, Node *node)
+s_chtml10_nopush_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value)
 {
   chtml10_t *chtml10 = GET_CHTML10(pdoc);
   Doc *doc = chtml10->doc;
@@ -3397,6 +3430,13 @@ s_chtml10_nopush_and_get_now_style(void *pdoc, Node *node)
       chxj_css_prop_list_merge_property(doc, dup_css, selector);
     }
     last_css = dup_css;
+
+    if (style_attr_value) {
+      css_stylesheet_t *ssheet = chxj_css_parse_style_attr(doc, NULL, apr_pstrdup(doc->pool, node->name), NULL, NULL, apr_pstrdup(doc->pool, style_attr_value));
+      if (ssheet) {
+        chxj_css_prop_list_merge_property(doc, last_css, ssheet->selector_head.next);
+      }
+    }
   }
   return last_css;
 }
