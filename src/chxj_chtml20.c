@@ -122,8 +122,9 @@ static int   s_chtml20_search_emoji(chtml20_t *chtml, char *txt, char **rslt);
 
 static char *s_chtml20_chxjif_tag(void *pdoc, Node *node); 
 static char *s_chtml20_text_tag(void *pdoc, Node *node);
-static css_prop_list_t *s_chtml20_nopush_and_get_now_style(void *pdoc, Node *node);
+static css_prop_list_t *s_chtml20_nopush_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value);
 static css_prop_list_t *s_chtml20_push_and_get_now_style(void *pdoc, Node *node);
+/* pend */
 
 
 tag_handler chtml20_handler[] = {
@@ -2961,6 +2962,7 @@ s_chtml20_start_textarea_tag(void *pdoc, Node *node)
   char        *attr_rows      = NULL;
   char        *attr_cols      = NULL;
   char        *attr_istyle    = NULL;
+  char        *attr_style     = NULL;
 
   chtml20 = GET_CHTML20(pdoc);
   doc     = chtml20->doc;
@@ -3007,6 +3009,12 @@ s_chtml20_start_textarea_tag(void *pdoc, Node *node)
         attr_istyle = value;
       }
       break;
+    case 's':
+    case 'S':
+      if (strcasecmp(name, "style") == 0 && value && *value) {
+        attr_style = value;
+      }
+      break;
 
     default:
       break;
@@ -3014,7 +3022,7 @@ s_chtml20_start_textarea_tag(void *pdoc, Node *node)
   }
 
   if (IS_CSS_ON(chtml20->entryp)) {
-    css_prop_list_t *style = s_chtml20_nopush_and_get_now_style(pdoc, node);
+    css_prop_list_t *style = s_chtml20_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *wap_input_format = chxj_css_get_property_value(doc, style, "-wap-input-format");
       css_property_t *cur;
@@ -3618,7 +3626,7 @@ s_chtml20_push_and_get_now_style(void *pdoc, Node *node)
 
 
 static css_prop_list_t *
-s_chtml20_nopush_and_get_now_style(void *pdoc, Node *node)
+s_chtml20_nopush_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value)
 {
   chtml20_t *chtml20 = GET_CHTML20(pdoc);
   Doc *doc = chtml20->doc;
@@ -3634,6 +3642,13 @@ s_chtml20_nopush_and_get_now_style(void *pdoc, Node *node)
       chxj_css_prop_list_merge_property(doc, dup_css, selector);
     }
     last_css = dup_css;
+    
+    if (style_attr_value) {
+      css_stylesheet_t *ssheet = chxj_css_parse_style_attr(doc, NULL, apr_pstrdup(doc->pool, node->name), NULL, NULL, apr_pstrdup(doc->pool, style_attr_value));
+      if (ssheet) {
+        chxj_css_prop_list_merge_property(doc, last_css, ssheet->selector_head.next);
+      }
+    }
   }
   return last_css;
 }
