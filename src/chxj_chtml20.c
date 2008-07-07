@@ -123,7 +123,7 @@ static int   s_chtml20_search_emoji(chtml20_t *chtml, char *txt, char **rslt);
 static char *s_chtml20_chxjif_tag(void *pdoc, Node *node); 
 static char *s_chtml20_text_tag(void *pdoc, Node *node);
 static css_prop_list_t *s_chtml20_nopush_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value);
-static css_prop_list_t *s_chtml20_push_and_get_now_style(void *pdoc, Node *node);
+static css_prop_list_t *s_chtml20_push_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value);
 /* pend */
 
 
@@ -3603,7 +3603,7 @@ s_chtml20_link_tag(void *pdoc, Node *node)
 
 
 static css_prop_list_t *
-s_chtml20_push_and_get_now_style(void *pdoc, Node *node)
+s_chtml20_push_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value)
 {
   chtml20_t *chtml20 = GET_CHTML20(pdoc);
   Doc *doc = chtml20->doc;
@@ -3620,6 +3620,12 @@ s_chtml20_push_and_get_now_style(void *pdoc, Node *node)
     }
     chxj_css_push_prop_list(chtml20->css_prop_stack, dup_css);
     last_css = chxj_css_get_last_prop_list(chtml20->css_prop_stack);
+    if (style_attr_value) {
+      css_stylesheet_t *ssheet = chxj_css_parse_style_attr(doc, NULL, apr_pstrdup(doc->pool, node->name), NULL, NULL, apr_pstrdup(doc->pool, style_attr_value));
+      if (ssheet) {
+        chxj_css_prop_list_merge_property(doc, last_css, ssheet->selector_head.next);
+      }
+    }
   }
   return last_css;
 }
