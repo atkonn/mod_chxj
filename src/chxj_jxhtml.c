@@ -124,6 +124,8 @@ static void  s_init_jxhtml(jxhtml_t *jxhtml, Doc *doc, request_rec *r, device_ta
 static int   s_jxhtml_search_emoji(jxhtml_t *jxhtml, char *txt, char **rslt);
 
 static char *s_jxhtml_istyle_to_mode(apr_pool_t *p, const char *s);
+static css_prop_list_t *s_jxhtml_nopush_and_get_now_style(void *pdoc, Node *node);
+static css_prop_list_t *s_jxhtml_push_and_get_now_style(void *pdoc, Node *node);
 
 
 
@@ -465,6 +467,10 @@ chxj_convert_jxhtml(
   memset(ss,   0, srclen + 1);
   memcpy(ss, src, srclen);
 
+  if (IS_CSS_ON(jxhtml.entryp)) {
+    /* current property list */
+    jxhtml.css_prop_stack = chxj_new_prop_list_stack(&doc);
+  }
 #ifdef DUMP_LOG
   chxj_dump_out("[src] CHTML -> JXHTML", ss, srclen);
 #endif
@@ -500,7 +506,7 @@ chxj_convert_jxhtml(
 
 
 /**
- * The CHTML structure is initialized.
+ * The JXHTML structure is initialized.
  *
  * @param jxhtml [i/o] The pointer to the JXHTML structure that wants to be
  *                   initialized is specified.
@@ -528,7 +534,7 @@ s_init_jxhtml(jxhtml_t *jxhtml, Doc *doc, request_rec *r, device_table *spec)
  * Corresponding EMOJI to a current character-code is retrieved. 
  * The substitution character string is stored in the rslt pointer if agreeing.
  *
- * @param jxhtml   [i]   The pointer to the CHTML structure is specified. 
+ * @param jxhtml   [i]   The pointer to the JXHTML structure is specified. 
  * @param txt     [i]   The character string to want to examine whether it is 
  *                      EMOJI is specified. 
  * @param rslt    [o]   The pointer to the pointer that stores the result is 
@@ -595,7 +601,7 @@ s_jxhtml_search_emoji(jxhtml_t *jxhtml, char *txt, char **rslt)
 /**
  * It is a handler who processes the HTML tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The HTML tag node is specified.
  * @return The conversion result is returned.
@@ -632,7 +638,7 @@ s_jxhtml_start_html_tag(void *pdoc, Node *UNUSED(node))
 /**
  * It is a handler who processes the HTML tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The HTML tag node is specified.
  * @return The conversion result is returned.
@@ -652,7 +658,7 @@ s_jxhtml_end_html_tag(void *pdoc, Node *UNUSED(child))
 /**
  * It is a handler who processes the META tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The META tag node is specified.
  * @return The conversion result is returned.
@@ -759,7 +765,7 @@ s_jxhtml_start_meta_tag(void *pdoc, Node *node)
 /**
  * It is a handler who processes the META tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The META tag node is specified.
  * @return The conversion result is returned.
@@ -776,7 +782,7 @@ s_jxhtml_end_meta_tag(void *pdoc, Node *UNUSED(child))
 /**
  * It is a handler who processes the HEAD tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The HEAD tag node is specified.
  * @return The conversion result is returned.
@@ -784,7 +790,7 @@ s_jxhtml_end_meta_tag(void *pdoc, Node *UNUSED(child))
 static char *
 s_jxhtml_start_head_tag(void *pdoc, Node *UNUSED(node)) 
 {
-  jxhtml_t       *jxhtml;
+  jxhtml_t      *jxhtml;
   Doc           *doc;
   request_rec   *r;
 
@@ -800,7 +806,7 @@ s_jxhtml_start_head_tag(void *pdoc, Node *UNUSED(node))
 /**
  * It is a handler who processes the HEAD tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The HEAD tag node is specified.
  * @return The conversion result is returned.
@@ -824,7 +830,7 @@ s_jxhtml_end_head_tag(void *pdoc, Node *UNUSED(child))
 /**
  * It is a handler who processes the TITLE tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The TITLE tag node is specified.
  * @return The conversion result is returned.
@@ -848,7 +854,7 @@ s_jxhtml_start_title_tag(void *pdoc, Node *UNUSED(node))
 /**
  * It is a handler who processes the TITLE tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The TITLE tag node is specified.
  * @return The conversion result is returned.
@@ -856,7 +862,7 @@ s_jxhtml_start_title_tag(void *pdoc, Node *UNUSED(node))
 static char *
 s_jxhtml_end_title_tag(void *pdoc, Node *UNUSED(child)) 
 {
-  jxhtml_t       *jxhtml;
+  jxhtml_t      *jxhtml;
   Doc           *doc;
   request_rec   *r;
 
@@ -872,7 +878,7 @@ s_jxhtml_end_title_tag(void *pdoc, Node *UNUSED(child))
 /**
  * It is a handler who processes the BASE tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The BASE tag node is specified.
  * @return The conversion result is returned.
@@ -880,7 +886,7 @@ s_jxhtml_end_title_tag(void *pdoc, Node *UNUSED(child))
 static char *
 s_jxhtml_start_base_tag(void *pdoc, Node *node) 
 {
-  jxhtml_t       *jxhtml;
+  jxhtml_t      *jxhtml;
   Attr          *attr;
   Doc           *doc;
   request_rec   *r;
@@ -912,7 +918,7 @@ s_jxhtml_start_base_tag(void *pdoc, Node *node)
 /**
  * It is a handler who processes the BASE tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The BASE tag node is specified.
  * @return The conversion result is returned.
@@ -928,7 +934,7 @@ s_jxhtml_end_base_tag(void *pdoc, Node *UNUSED(child))
 /**
  * It is a handler who processes the BODY tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The BODY tag node is specified.
  * @return The conversion result is returned.
@@ -999,7 +1005,7 @@ s_jxhtml_start_body_tag(void *pdoc, Node *node)
 /**
  * It is a handler who processes the BODY tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The BODY tag node is specified.
  * @return The conversion result is returned.
@@ -1023,7 +1029,7 @@ s_jxhtml_end_body_tag(void *pdoc, Node *UNUSED(child))
 /**
  * It is a handler who processes the A tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The A tag node is specified.
  * @return The conversion result is returned.
@@ -1146,7 +1152,7 @@ s_jxhtml_start_a_tag(void *pdoc, Node *node)
 /**
  * It is a handler who processes the A tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The A tag node is specified.
  * @return The conversion result is returned.
@@ -1170,7 +1176,7 @@ s_jxhtml_end_a_tag(void *pdoc, Node *UNUSED(child))
 /**
  * It is a handler who processes the BR tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The BR tag node is specified.
  * @return The conversion result is returned.
@@ -1212,7 +1218,7 @@ s_jxhtml_start_br_tag(void *pdoc, Node *node)
 /**
  * It is a handler who processes the BR tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The BR tag node is specified.
  * @return The conversion result is returned.
@@ -1228,7 +1234,7 @@ s_jxhtml_end_br_tag(void *pdoc, Node *UNUSED(child))
 /**
  * It is a handler who processes the TR tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The TR tag node is specified.
  * @return The conversion result is returned.
@@ -1252,7 +1258,7 @@ s_jxhtml_start_tr_tag(void *pdoc, Node *UNUSED(node))
 /**
  * It is a handler who processes the TR tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The TR tag node is specified.
  * @return The conversion result is returned.
@@ -1268,7 +1274,7 @@ s_jxhtml_end_tr_tag(void *pdoc, Node *UNUSED(child))
 /**
  * It is a handler who processes the FONT tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The FONT tag node is specified.
  * @return The conversion result is returned.
@@ -1365,7 +1371,7 @@ s_jxhtml_start_font_tag(void *pdoc, Node *node)
 /**
  * It is a handler who processes the FONT tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The FONT tag node is specified.
  * @return The conversion result is returned.
@@ -1396,7 +1402,7 @@ s_jxhtml_end_font_tag(void *pdoc, Node *UNUSED(child))
 /**
  * It is a handler who processes the FORM tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The FORM tag node is specified.
  * @return The conversion result is returned.
@@ -1408,8 +1414,6 @@ s_jxhtml_start_form_tag(void *pdoc, Node *node)
   Doc          *doc;
   request_rec  *r;
   Attr         *attr;
-  int          dcflag = 0;
-  char         *dc = NULL;
 
   jxhtml = GET_JXHTML(pdoc);
   doc   = jxhtml->doc;
@@ -1431,10 +1435,6 @@ s_jxhtml_start_form_tag(void *pdoc, Node *node)
       W_L(" action=\"");
       W_V(value);
       W_L("\"");
-      dc = chxj_add_cookie_parameter(r, value, jxhtml->cookie);
-      if (strcmp(dc, value)) {
-        dcflag = 1;
-      }
     }
     else if (STRCASEEQ('m','M',"method",name)) {
       /*----------------------------------------------------------------------*/
@@ -1453,21 +1453,6 @@ s_jxhtml_start_form_tag(void *pdoc, Node *node)
     }
   }
   W_L(">");
-  /*-------------------------------------------------------------------------*/
-  /* ``action=""''                                                           */
-  /*-------------------------------------------------------------------------*/
-  if (! dc) {
-    dcflag = 1;
-  }
-  /*-------------------------------------------------------------------------*/
-  /* Add cookie parameter                                                    */
-  /*-------------------------------------------------------------------------*/
-  if (jxhtml->cookie && jxhtml->cookie->cookie_id && dcflag == 1) {
-    char *vv = apr_psprintf(doc->buf.pool, "<input type='hidden' name='%s' value='%s' />",
-                            CHXJ_COOKIE_PARAM,
-                            chxj_url_decode(doc->buf.pool, jxhtml->cookie->cookie_id));
-    W_V(vv);
-  }
   return jxhtml->out;
 }
 
@@ -1475,7 +1460,7 @@ s_jxhtml_start_form_tag(void *pdoc, Node *node)
 /**
  * It is a handler who processes the FORM tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The FORM tag node is specified.
  * @return The conversion result is returned.
@@ -1493,7 +1478,7 @@ s_jxhtml_end_form_tag(void *pdoc, Node *UNUSED(child))
 /**
  * It is a handler who processes the INPUT tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The INPUT tag node is specified.
  * @return The conversion result is returned.
@@ -1614,7 +1599,7 @@ s_jxhtml_start_input_tag(void *pdoc, Node *node)
 /**
  * It is a handler who processes the INPUT tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The INPUT tag node is specified.
  * @return The conversion result is returned.
@@ -1630,7 +1615,7 @@ s_jxhtml_end_input_tag(void *pdoc, Node *UNUSED(child))
 /**
  * It is a handler who processes the CENTER tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The CENTER tag node is specified.
  * @return The conversion result is returned.
@@ -1648,7 +1633,7 @@ s_jxhtml_start_center_tag(void *pdoc, Node *UNUSED(node))
 /**
  * It is a handler who processes the CENTER tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The CENTER tag node is specified.
  * @return The conversion result is returned.
@@ -1672,7 +1657,7 @@ s_jxhtml_end_center_tag(void *pdoc, Node *UNUSED(child))
 /**
  * It is a handler who processes the li tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The li tag node is specified.
  * @return The conversion result is returned.
@@ -1719,7 +1704,7 @@ s_jxhtml_start_li_tag(void *pdoc, Node *node)
 /**
  * It is a handler who processes the li tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The li tag node is specified.
  * @return The conversion result is returned.
@@ -1743,7 +1728,7 @@ s_jxhtml_end_li_tag(void *pdoc, Node *UNUSED(child))
 /**
  * It is a handler who processes the OL tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The OL tag node is specified.
  * @return The conversion result is returned.
@@ -1788,7 +1773,7 @@ s_jxhtml_start_ol_tag(void *pdoc, Node *node)
 /**
  * It is a handler who processes the OL tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The OL tag node is specified.
  * @return The conversion result is returned.
@@ -1812,7 +1797,7 @@ s_jxhtml_end_ol_tag(void *pdoc, Node *UNUSED(child))
 /**
  * It is a handler who processes the P tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The P tag node is specified.
  * @return The conversion result is returned.
@@ -1859,7 +1844,7 @@ s_jxhtml_start_p_tag(void *pdoc, Node *node)
 /**
  * It is a handler who processes the P tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The P tag node is specified.
  * @return The conversion result is returned.
@@ -1878,7 +1863,7 @@ s_jxhtml_end_p_tag(void *pdoc, Node *UNUSED(child))
 /**
  * It is a handler who processes the PRE tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The PRE tag node is specified.
  * @return The conversion result is returned.
@@ -1898,7 +1883,7 @@ s_jxhtml_start_pre_tag(void *pdoc, Node *UNUSED(node))
 /**
  * It is a handler who processes the PRE tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The PRE tag node is specified.
  * @return The conversion result is returned.
@@ -1919,7 +1904,7 @@ s_jxhtml_end_pre_tag(void *pdoc, Node *UNUSED(child))
 /**
  * It is a handler who processes the UL tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The UL tag node is specified.
  * @return The conversion result is returned.
@@ -1955,7 +1940,7 @@ s_jxhtml_start_ul_tag(void *pdoc, Node *node)
 /**
  * It is a handler who processes the UL tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The UL tag node is specified.
  * @return The conversion result is returned.
@@ -1974,7 +1959,7 @@ s_jxhtml_end_ul_tag(void *pdoc, Node *UNUSED(child))
 /**
  * It is a handler who processes the HR tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The HR tag node is specified.
  * @return The conversion result is returned.
@@ -2041,7 +2026,7 @@ s_jxhtml_start_hr_tag(void *pdoc, Node *node)
 /**
  * It is a handler who processes the HR tag.
  *
- * @param jxhtml  [i/o] The pointer to the CHTML structure at the output
+ * @param jxhtml  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The HR tag node is specified.
  * @return The conversion result is returned.
@@ -2057,7 +2042,7 @@ s_jxhtml_end_hr_tag(void *pdoc, Node *UNUSED(child))
 /**
  * It is a handler who processes the IMG tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The IMG tag node is specified.
  * @return The conversion result is returned.
@@ -2091,10 +2076,8 @@ s_jxhtml_start_img_tag(void *pdoc, Node *node)
       value = chxj_encoding_parameter(r, value);
       if (value) {
         value = apr_psprintf(r->pool,
-                             "%s%c%s=true",
-                             value,
-                             (strchr(value, '?')) ? '&' : '?',
-                             CHXJ_COOKIE_NOUPDATE_PARAM);
+                             "%s",
+                             value);
       }
       W_L(" src=\"");
       W_V(value);
@@ -2104,10 +2087,8 @@ s_jxhtml_start_img_tag(void *pdoc, Node *node)
       value = chxj_encoding_parameter(r, value);
       if (value) {
         value = apr_psprintf(r->pool,
-                             "%s%c%s=true",
-                             value,
-                             (strchr(value, '?')) ? '&' : '?',
-                             CHXJ_COOKIE_NOUPDATE_PARAM);
+                             "%s",
+                             value);
       }
       W_L(" src=\"");
       W_V(value);
@@ -2184,7 +2165,7 @@ s_jxhtml_start_img_tag(void *pdoc, Node *node)
 /**
  * It is a handler who processes the IMG tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The IMG tag node is specified.
  * @return The conversion result is returned.
@@ -2200,7 +2181,7 @@ s_jxhtml_end_img_tag(void *pdoc, Node *UNUSED(child))
 /**
  * It is a handler who processes the SELECT tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The SELECT tag node is specified.
  * @return The conversion result is returned.
@@ -2261,7 +2242,7 @@ s_jxhtml_start_select_tag(void *pdoc, Node *child)
 /**
  * It is a handler who processes the SELECT tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The SELECT tag node is specified.
  * @return The conversion result is returned.
@@ -2279,7 +2260,7 @@ s_jxhtml_end_select_tag(void *pdoc, Node *UNUSED(child))
 /**
  * It is a handler who processes the OPTION tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The OPTION tag node is specified.
  * @return The conversion result is returned.
@@ -2329,7 +2310,7 @@ s_jxhtml_start_option_tag(void *pdoc, Node *child)
 /**
  * It is a handler who processes the OPTION tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The OPTION tag node is specified.
  * @return The conversion result is returned.
@@ -2347,7 +2328,7 @@ s_jxhtml_end_option_tag(void *pdoc, Node *UNUSED(child))
 /**
  * It is a handler who processes the DIV tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The DIV tag node is specified.
  * @return The conversion result is returned.
@@ -2393,7 +2374,7 @@ s_jxhtml_start_div_tag(void *pdoc, Node *child)
 /**
  * It is a handler who processes the DIV tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The DIV tag node is specified.
  * @return The conversion result is returned.
@@ -2463,7 +2444,7 @@ s_jxhtml_chxjif_tag(void *pdoc, Node *node)
 /**
  * It is a handler who processes the TEXTARE tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The TEXTAREA tag node is specified.
  * @return The conversion result is returned.
@@ -2471,48 +2452,90 @@ s_jxhtml_chxjif_tag(void *pdoc, Node *node)
 static char *
 s_jxhtml_start_textarea_tag(void *pdoc, Node *node) 
 {
-  jxhtml_t       *jxhtml;
+  jxhtml_t      *jxhtml;
   Doc           *doc;
   request_rec   *r;
   Attr          *attr;
+  char          *attr_accesskey = NULL;
+  char          *attr_name      = NULL;
+  char          *attr_rows      = NULL;
+  char          *attr_cols      = NULL;
+  char          *attr_istyle    = NULL;
+
 
   jxhtml = GET_JXHTML(pdoc);
   doc   = jxhtml->doc;
   r     = doc->r;
 
   jxhtml->textarea_flag++;
-  W_L("<textarea");
   for (attr = qs_get_attr(doc,node);
        attr;
        attr = qs_get_next_attr(doc,attr)) {
     char *name  = qs_get_attr_name(doc,attr);
     char *value = qs_get_attr_value(doc,attr);
     if (STRCASEEQ('a','A',"accesskey",name) && value && *value != 0) {
-      W_L(" accesskey=\"");
-      W_V(value);
-      W_L("\"");
+      attr_accesskey = value;
     }
     else if (STRCASEEQ('i','I',"istyle", name) && value && (*value == '1' || *value == '2' || *value == '3' || *value == '4')) {
-      char *vv = s_jxhtml_istyle_to_mode(doc->buf.pool,value);
-      W_L(" mode=\"");
-      W_V(vv);
-      W_L("\"");
+      attr_istyle = value;
     }
     else if (STRCASEEQ('n','N',"name", name) && value && *value) {
-      W_L(" name=\"");
-      W_V(value);
-      W_L("\"");
+      attr_name = value;
     }
     else if (STRCASEEQ('r','R',"rows", name) && value && *value) {
-      W_L(" rows=\"");
-      W_V(value);
-      W_L("\"");
+      attr_rows = value;
     }
     else if (STRCASEEQ('c','C',"cols", name) && value && *value) {
-      W_L(" cols=\"");
-      W_V(value);
-      W_L("\"");
+      attr_cols = value;
     }
+  }
+  if (IS_CSS_ON(jxhtml->entryp)) {
+    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node);
+    if (style) {
+      css_property_t *wap_input_format = chxj_css_get_property_value(doc, style, "-wap-input-format");
+      css_property_t *cur;
+      for (cur = wap_input_format->next; cur != wap_input_format; cur = cur->next) {
+        if (strcasestr(cur->value, "<ja:n>")) {
+          attr_istyle = "4";
+        }
+        else if (strcasestr(cur->value, "<ja:en>")) {
+          attr_istyle = "3";
+        }
+        else if (strcasestr(cur->value, "<ja:hk>")) {
+          attr_istyle = "2";
+        }
+        else if (strcasestr(cur->value, "<ja:h>")) {
+          attr_istyle = "1";
+        }
+      }
+    }
+  }
+  W_L("<textarea");
+  if (attr_accesskey) {
+    W_L(" accesskey=\"");
+    W_V(attr_accesskey);
+    W_L("\"");
+  }
+  if (attr_name) {
+    W_L(" name=\"");
+    W_V(attr_name);
+    W_L("\"");
+  }
+  if (attr_rows) {
+    W_L(" rows=\"");
+    W_V(attr_rows);
+    W_L("\"");
+  }
+  if (attr_cols) {
+    W_L(" cols=\"");
+    W_V(attr_cols);
+    W_L("\"");
+  }
+  if (attr_istyle) {
+    char *vv = s_jxhtml_istyle_to_mode(doc->buf.pool,attr_istyle);
+    W_L(" mode=\"");
+    W_V(vv);
+    W_L("\"");
   }
   W_L(">");
   return jxhtml->out;
@@ -2522,7 +2545,7 @@ s_jxhtml_start_textarea_tag(void *pdoc, Node *node)
 /**
  * It is a handler who processes the TEXTAREA tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The TEXTAREA tag node is specified.
  * @return The conversion result is returned.
@@ -2548,7 +2571,7 @@ s_jxhtml_end_textarea_tag(void *pdoc, Node *UNUSED(child))
 /**
  * It is a handler who processes the B tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The B tag node is specified.
  * @return The conversion result is returned.
@@ -2572,7 +2595,7 @@ s_jxhtml_start_b_tag(void* pdoc, Node* UNUSED(node))
 /**
  * It is a handler who processes the B tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The B tag node is specified.
  * @return The conversion result is returned.
@@ -3493,7 +3516,7 @@ s_jxhtml_newline_mark(void *pdoc, Node *UNUSED(node))
 /**
  * It is a handler who processes the LINK tag.
  *
- * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The LINK tag node is specified.
  * @return The conversion result is returned.
@@ -3544,6 +3567,51 @@ s_jxhtml_link_tag(void *pdoc, Node *node)
   }
 
   return jxhtml->out;
+}
+
+
+static css_prop_list_t *
+s_jxhtml_push_and_get_now_style(void *pdoc, Node *node)
+{
+  jxhtml_t *jxhtml = GET_JXHTML(pdoc);
+  Doc *doc = jxhtml->doc;
+  css_prop_list_t *last_css = NULL;
+  if (IS_CSS_ON(jxhtml->entryp)) {
+    css_prop_list_t *dup_css;
+    css_selector_t  *selector;
+
+    last_css = chxj_css_get_last_prop_list(jxhtml->css_prop_stack);
+    dup_css  = chxj_dup_css_prop_list(doc, last_css);
+    selector = chxj_css_find_selector(doc, jxhtml->style, node);
+    if (selector) {
+      chxj_css_prop_list_merge_property(doc, dup_css, selector);
+    }
+    chxj_css_push_prop_list(jxhtml->css_prop_stack, dup_css);
+    last_css = chxj_css_get_last_prop_list(jxhtml->css_prop_stack);
+  }
+  return last_css;
+}
+
+
+static css_prop_list_t *
+s_jxhtml_nopush_and_get_now_style(void *pdoc, Node *node)
+{
+  jxhtml_t *jxhtml = GET_JXHTML(pdoc);
+  Doc *doc = jxhtml->doc;
+  css_prop_list_t *last_css = NULL;
+  if (IS_CSS_ON(jxhtml->entryp)) {
+    css_prop_list_t *dup_css;
+    css_selector_t  *selector;
+
+    last_css = chxj_css_get_last_prop_list(jxhtml->css_prop_stack);
+    dup_css  = chxj_dup_css_prop_list(doc, last_css);
+    selector = chxj_css_find_selector(doc, jxhtml->style, node);
+    if (selector) {
+      chxj_css_prop_list_merge_property(doc, dup_css, selector);
+    }
+    last_css = dup_css;
+  }
+  return last_css;
 }
 /*
  * vim:ts=2 et
