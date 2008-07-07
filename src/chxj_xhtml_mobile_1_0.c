@@ -121,6 +121,9 @@ static char *s_xhtml_1_0_link_tag           (void *pdoc, Node *node);
 static void  s_init_xhtml(xhtml_t *xhtml, Doc *doc, request_rec *r, device_table *spec);
 static int   s_xhtml_search_emoji(xhtml_t *xhtml, char *txt, char **rslt);
 static char *s_xhtml_1_0_text_tag(void *pdoc, Node *child);
+static css_prop_list_t *s_xhtml_1_0_nopush_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value);
+static css_prop_list_t *s_xhtml_1_0_push_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value);
+/* pend */
 
 
 tag_handler xhtml_handler[] = {
@@ -456,6 +459,10 @@ chxj_convert_xhtml_mobile_1_0(
   memset(ss,   0, srclen + 1);
   memcpy(ss, src, srclen);
 
+  if (IS_CSS_ON(xhtml.entryp)) {
+    /* current property list */
+    xhtml.css_prop_stack = chxj_new_prop_list_stack(&doc);
+  }
 #ifdef DUMP_LOG
   chxj_dump_out("[src] CHTML->XHTML", ss, srclen);
 #endif
@@ -2725,40 +2732,91 @@ s_xhtml_1_0_start_textarea_tag(void *pdoc, Node *node)
   xhtml_t *xhtml = GET_XHTML(pdoc);
   Doc     *doc   = xhtml->doc;
   Attr    *attr;
+  char    *attr_accesskey = NULL;
+  char    *attr_name      = NULL;
+  char    *attr_rows      = NULL;
+  char    *attr_cols      = NULL;
+  char    *attr_istyle    = NULL;
+  char    *attr_style     = NULL;
 
   xhtml->textarea_flag++;
-  W_L("<textarea");
   for (attr = qs_get_attr(doc,node);
        attr;
        attr = qs_get_next_attr(doc,attr)) {
     char *name  = qs_get_attr_name(doc,attr);
     char *value = qs_get_attr_value(doc,attr);
     if (STRCASEEQ('n','N',"name",name) && value && *value) {
-      W_L(" name=\"");
-      W_V(value);
-      W_L("\"");
+      attr_name = value;
     }
     else if (STRCASEEQ('r','R',"rows",name) && value && *value) {
-      W_L(" rows=\"");
-      W_V(value);
-      W_L("\"");
+      attr_rows = value;
     }
     else if (STRCASEEQ('c','C',"cols",name) && value && *value) {
-      W_L(" cols=\"");
-      W_V(value);
-      W_L("\"");
+      attr_cols = value;
     }
     else if (STRCASEEQ('i','I',"istyle", name) && value && (*value == '1' || *value == '2' || *value == '3' || *value == '4')) {
+      attr_istyle = value;
+#if 0
       char *fmt = qs_conv_istyle_to_format(doc->r,value);
       W_L(" FORMAT=\"*");
       W_V(fmt);
       W_L("\"");
+#endif
     }
     else if (STRCASEEQ('a','A',"accesskey",name) && value && *value != 0) {
-      W_L(" accesskey=\"");
-      W_V(value);
-      W_L("\"");
+      attr_accesskey = value;
     }
+    else if (STRCASEEQ('s','S',"style",name) && value && *value != 0) {
+      attr_style = value;
+    }
+  }
+  if (IS_CSS_ON(xhtml->entryp)) {
+    css_prop_list_t *style = s_xhtml_1_0_nopush_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *wap_input_format = chxj_css_get_property_value(doc, style, "-wap-input-format");
+      css_property_t *cur;
+      for (cur = wap_input_format->next; cur != wap_input_format; cur = cur->next) {
+        if (strcasestr(cur->value, "<ja:n>")) {
+          attr_istyle = "4";
+        }
+        else if (strcasestr(cur->value, "<ja:en>")) {
+          attr_istyle = "3";
+        }
+        else if (strcasestr(cur->value, "<ja:hk>")) {
+          attr_istyle = "2";
+        }
+        else if (strcasestr(cur->value, "<ja:h>")) {
+          attr_istyle = "1";
+        }
+      }
+    }
+  }
+  W_L("<textarea");
+  if (attr_accesskey) {
+    W_L(" accesskey=\"");
+    W_V(attr_accesskey);
+    W_L("\"");
+  }
+  if (attr_name) {
+    W_L(" name=\"");
+    W_V(attr_name);
+    W_L("\"");
+  }
+  if (attr_rows) {
+    W_L(" rows=\"");
+    W_V(attr_rows);
+    W_L("\"");
+  }
+  if (attr_cols) {
+    W_L(" cols=\"");
+    W_V(attr_cols);
+    W_L("\"");
+  }
+  if (attr_istyle) {
+    char *fmt = qs_conv_istyle_to_format(doc->r, attr_istyle);
+    W_L(" FORMAT=\"*");
+    W_V(fmt);
+    W_L("\"");
   }
   W_L(">");
   return xhtml->out;
@@ -3323,6 +3381,64 @@ s_xhtml_1_0_link_tag(void *pdoc, Node *node)
   }
 
   return xhtml->out;
+}
+
+static css_prop_list_t *
+s_xhtml_1_0_push_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value)
+{
+  xhtml_t *xhtml = GET_XHTML(pdoc);
+  Doc *doc = xhtml->doc;
+  css_prop_list_t *last_css = NULL;
+  if (IS_CSS_ON(xhtml->entryp)) {
+    css_prop_list_t *dup_css;
+    css_selector_t  *selector;
+
+    last_css = chxj_css_get_last_prop_list(xhtml->css_prop_stack);
+    dup_css  = chxj_dup_css_prop_list(doc, last_css);
+    selector = chxj_css_find_selector(doc, xhtml->style, node);
+    if (selector) {
+      chxj_css_prop_list_merge_property(doc, dup_css, selector);
+    }
+    chxj_css_push_prop_list(xhtml->css_prop_stack, dup_css);
+    last_css = chxj_css_get_last_prop_list(xhtml->css_prop_stack);
+
+    if (style_attr_value) {
+      css_stylesheet_t *ssheet = chxj_css_parse_style_attr(doc, NULL, apr_pstrdup(doc->pool, node->name), NULL, NULL, apr_pstrdup(doc->pool, style_attr_value));
+      if (ssheet) {
+        chxj_css_prop_list_merge_property(doc, last_css, ssheet->selector_head.next);
+      }
+    }
+  }
+  return last_css;
+}
+
+
+static css_prop_list_t *
+s_xhtml_1_0_nopush_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value)
+{
+  xhtml_t *xhtml = GET_XHTML(pdoc);
+  Doc *doc = xhtml->doc;
+  css_prop_list_t *last_css = NULL;
+  if (IS_CSS_ON(xhtml->entryp)) {
+    css_prop_list_t *dup_css;
+    css_selector_t  *selector;
+
+    last_css = chxj_css_get_last_prop_list(xhtml->css_prop_stack);
+    dup_css  = chxj_dup_css_prop_list(doc, last_css);
+    selector = chxj_css_find_selector(doc, xhtml->style, node);
+    if (selector) {
+      chxj_css_prop_list_merge_property(doc, dup_css, selector);
+    }
+    last_css = dup_css;
+
+    if (style_attr_value) {
+      css_stylesheet_t *ssheet = chxj_css_parse_style_attr(doc, NULL, apr_pstrdup(doc->pool, node->name), NULL, NULL, apr_pstrdup(doc->pool, style_attr_value));
+      if (ssheet) {
+        chxj_css_prop_list_merge_property(doc, last_css, ssheet->selector_head.next);
+      }
+    }
+  }
+  return last_css;
 }
 /*
  * vim:ts=2 et
