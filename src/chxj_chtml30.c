@@ -2037,10 +2037,26 @@ s_chtml30_end_div_tag(void *pdoc, Node *UNUSED(node))
  * @return The conversion result is returned.
  */
 static char *
-s_chtml30_start_ul_tag(void *pdoc, Node *UNUSED(node)) 
+s_chtml30_start_ul_tag(void *pdoc, Node *node)
 {
   chtml30_t   *chtml30 = GET_CHTML30(pdoc);
   Doc         *doc     = chtml30->doc;
+  Attr        *attr;
+  char        *attr_style = NULL;
+
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *nm  = qs_get_attr_name(doc,attr);
+    char *val = qs_get_attr_value(doc,attr);
+    if (val && STRCASEEQ('s','S',"style", nm)) {
+      attr_style = val;
+    }
+  }
+
+  if (IS_CSS_ON(chtml30->entryp)) {
+    s_chtml30_push_and_get_now_style(pdoc, node, attr_style);
+  }
 
   W_L("<ul>");
 
@@ -2062,6 +2078,9 @@ s_chtml30_end_ul_tag(void *pdoc, Node *UNUSED(child))
   chtml30_t     *chtml30 = GET_CHTML30(pdoc);
   Doc           *doc     = chtml30->doc;
 
+  if (IS_CSS_ON(chtml30->entryp)) {
+    chxj_css_pop_prop_list(chtml30->css_prop_stack);
+  }
   W_L("</ul>");
 
   return chtml30->out;
