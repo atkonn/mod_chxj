@@ -790,15 +790,32 @@ s_chtml10_end_ol_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_chtml10_start_ul_tag(void *pdoc, Node *UNUSED(node)) 
+s_chtml10_start_ul_tag(void *pdoc, Node *node)
 {
-  Doc           *doc;
-  request_rec   *r;
-  chtml10_t     *chtml10;
+  Doc         *doc;
+  request_rec *r;
+  chtml10_t   *chtml10;
+  Attr        *attr;
+  char        *attr_style = NULL;
 
   chtml10    = GET_CHTML10(pdoc);
   doc        = chtml10->doc;
   r          = doc->r;
+
+
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *nm  = qs_get_attr_name(doc,attr);
+    char *val = qs_get_attr_value(doc,attr);
+    if (val && STRCASEEQ('s','S',"style", nm)) {
+      attr_style = val;
+    }
+  }
+
+  if (IS_CSS_ON(chtml10->entryp)) {
+    s_chtml10_push_and_get_now_style(pdoc, node, attr_style);
+  }
 
   W_L("<ul>");
 
@@ -826,6 +843,9 @@ s_chtml10_end_ul_tag(void *pdoc, Node *UNUSED(child))
   r       = doc->r;
 
   W_L("</ul>");
+  if (IS_CSS_ON(chtml10->entryp)) {
+    chxj_css_pop_prop_list(chtml10->css_prop_stack);
+  }
 
   return chtml10->out;
 }
