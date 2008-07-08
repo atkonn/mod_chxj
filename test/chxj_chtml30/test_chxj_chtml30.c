@@ -504,6 +504,9 @@ void test_chtml30_textarea_tag_with_css_006();
 void test_chtml30_textarea_tag_with_css_007();
 void test_chtml30_textarea_tag_with_css_008();
 
+void test_chtml30_p_tag_with_css_001();
+void test_chtml30_p_tag_with_css_002();
+void test_chtml30_p_tag_with_css_003();
 void test_chtml30_p_tag_with_css_004();
 void test_chtml30_p_tag_with_css_005();
 void test_chtml30_p_tag_with_css_006();
@@ -980,6 +983,9 @@ main()
   CU_add_test(chtml30_suite, "test textarea with css 007",                         test_chtml30_textarea_tag_with_css_007);
   CU_add_test(chtml30_suite, "test textarea with css 008",                         test_chtml30_textarea_tag_with_css_008);
 
+  CU_add_test(chtml30_suite, "test p with css 001",                                test_chtml30_p_tag_with_css_001);
+  CU_add_test(chtml30_suite, "test p with css 002",                                test_chtml30_p_tag_with_css_002);
+  CU_add_test(chtml30_suite, "test p with css 003",                                test_chtml30_p_tag_with_css_003);
   CU_add_test(chtml30_suite, "test p with css 004",                                test_chtml30_p_tag_with_css_004);
   CU_add_test(chtml30_suite, "test p with css 005",                                test_chtml30_p_tag_with_css_005);
   CU_add_test(chtml30_suite, "test p with css 006",                                test_chtml30_p_tag_with_css_006);
