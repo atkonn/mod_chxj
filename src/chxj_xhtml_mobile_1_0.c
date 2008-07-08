@@ -1658,10 +1658,26 @@ s_xhtml_1_0_end_hr_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_xhtml_1_0_start_pre_tag(void* pdoc, Node* UNUSED(node)) 
+s_xhtml_1_0_start_pre_tag(void *pdoc, Node *node)
 {
   xhtml_t *xhtml = GET_XHTML(pdoc);
   Doc     *doc   = xhtml->doc;
+  Attr    *attr;
+  char    *attr_style = NULL;
+
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *nm  = qs_get_attr_name(doc,attr);
+    char *val = qs_get_attr_value(doc,attr);
+    if (val && STRCASEEQ('s','S',"style", nm)) {
+      attr_style = val;
+    }
+  }
+
+  if (IS_CSS_ON(xhtml->entryp)) {
+    s_xhtml_1_0_push_and_get_now_style(pdoc, node, attr_style);
+  }
 
   xhtml->pre_flag++;
   W_L("<pre>");
@@ -1685,6 +1701,9 @@ s_xhtml_1_0_end_pre_tag(void *pdoc, Node *UNUSED(child))
 
   W_L("</pre>");
   xhtml->pre_flag--;
+  if (IS_CSS_ON(xhtml->entryp)) {
+    chxj_css_pop_prop_list(xhtml->css_prop_stack);
+  }
 
   return xhtml->out;
 }
