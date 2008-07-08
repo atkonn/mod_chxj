@@ -1838,7 +1838,8 @@ s_xhtml_1_0_start_ul_tag(void *pdoc, Node *node)
   xhtml_t *xhtml = GET_XHTML(pdoc);
   Doc     *doc   = xhtml->doc;
   Attr    *attr;
-  W_L("<ul");
+  char        *attr_type = NULL;
+  char        *attr_style = NULL;
   /*--------------------------------------------------------------------------*/
   /* Get Attributes                                                           */
   /*--------------------------------------------------------------------------*/
@@ -1849,11 +1850,38 @@ s_xhtml_1_0_start_ul_tag(void *pdoc, Node *node)
     char *value  = qs_get_attr_value(doc,attr);
     if (STRCASEEQ('t','T',"type",name)) {
       if (value && (STRCASEEQ('d','D',"disc",value) || STRCASEEQ('c','C',"circle",value) || STRCASEEQ('s','S',"square",value))) {
-        W_L(" type=\"");
-        W_V(value);
-        W_L("\"");
+        attr_type = value;
       }
     }
+    else if (value && *value && STRCASEEQ('s','S',"style", name)) {
+      attr_style = value;
+    }
+  }
+  if (IS_CSS_ON(xhtml->entryp)) {
+    css_prop_list_t *style = s_xhtml_1_0_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *list_style_type_prop = chxj_css_get_property_value(doc, style, "list-style-type");
+      css_property_t *cur;
+      for (cur = list_style_type_prop->next; cur != list_style_type_prop; cur = cur->next) {
+        if (STRCASEEQ('d','D',"disc",cur->value)) {
+          attr_type = apr_pstrdup(doc->pool, "disc");
+        }
+        else if (STRCASEEQ('c','C',"circle",cur->value)) {
+          attr_type = apr_pstrdup(doc->pool, "circle");
+        }
+        else if (STRCASEEQ('s','S',"square",cur->value)) {
+          attr_type = apr_pstrdup(doc->pool, "square");
+        }
+      }
+    }
+  }
+  W_L("<ul");
+  if (attr_type) {
+    W_L(" style=\"");
+    W_L("list-style-type:");
+    W_V(attr_type);
+    W_L(";");
+    W_L("\"");
   }
   W_L(">");
   return xhtml->out;
@@ -1875,6 +1903,9 @@ s_xhtml_1_0_end_ul_tag(void *pdoc, Node *UNUSED(child))
   Doc     *doc   = xhtml->doc;
 
   W_L("</ul>");
+  if (IS_CSS_ON(xhtml->entryp)) {
+    chxj_css_pop_prop_list(xhtml->css_prop_stack);
+  }
   return xhtml->out;
 }
 
