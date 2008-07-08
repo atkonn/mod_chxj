@@ -537,6 +537,20 @@ void test_xhtml_textarea_tag_with_css_005();
 void test_xhtml_textarea_tag_with_css_006();
 void test_xhtml_textarea_tag_with_css_007();
 void test_xhtml_textarea_tag_with_css_008();
+
+void test_xhtml_p_tag_with_css_001();
+void test_xhtml_p_tag_with_css_002();
+void test_xhtml_p_tag_with_css_003();
+void test_xhtml_p_tag_with_css_004();
+void test_xhtml_p_tag_with_css_005();
+void test_xhtml_p_tag_with_css_006();
+void test_xhtml_p_tag_with_css_007();
+void test_xhtml_p_tag_with_css_008();
+void test_xhtml_p_tag_with_css_009();
+void test_xhtml_p_tag_with_css_010();
+void test_xhtml_p_tag_with_css_011();
+void test_xhtml_p_tag_with_css_012();
+void test_xhtml_p_tag_with_css_013();
 /* pend */
 
 int
@@ -1111,6 +1125,19 @@ main()
   CU_add_test(xhtml_suite, "test textarea with css 006",                         test_xhtml_textarea_tag_with_css_006);
   CU_add_test(xhtml_suite, "test textarea with css 007",                         test_xhtml_textarea_tag_with_css_007);
   CU_add_test(xhtml_suite, "test textarea with css 008",                         test_xhtml_textarea_tag_with_css_008);
+
+  CU_add_test(xhtml_suite, "test p with css 001",                                test_xhtml_p_tag_with_css_001);
+  CU_add_test(xhtml_suite, "test p with css 002",                                test_xhtml_p_tag_with_css_002);
+  CU_add_test(xhtml_suite, "test p with css 003",                                test_xhtml_p_tag_with_css_003);
+  CU_add_test(xhtml_suite, "test p with css 004",                                test_xhtml_p_tag_with_css_004);
+  CU_add_test(xhtml_suite, "test p with css 005",                                test_xhtml_p_tag_with_css_005);
+  CU_add_test(xhtml_suite, "test p with css 006",                                test_xhtml_p_tag_with_css_006);
+  CU_add_test(xhtml_suite, "test p with css 007",                                test_xhtml_p_tag_with_css_007);
+  CU_add_test(xhtml_suite, "test p with css 008",                                test_xhtml_p_tag_with_css_008);
+  CU_add_test(xhtml_suite, "test p with css 010",                                test_xhtml_p_tag_with_css_010);
+  CU_add_test(xhtml_suite, "test p with css 011",                                test_xhtml_p_tag_with_css_011);
+  CU_add_test(xhtml_suite, "test p with css 012",                                test_xhtml_p_tag_with_css_012);
+  CU_add_test(xhtml_suite, "test p with css 013",                                test_xhtml_p_tag_with_css_013);
   /* aend */
 
   CU_basic_run_tests();
@@ -10112,7 +10139,7 @@ void test_xhtml_p_tag_004()
 void test_xhtml_p_tag_005() 
 {
 #define  TEST_STRING "<p align=\"right\">あああ</p>"
-#define  RESULT_STRING "<p align=\"right\">あああ</p>"
+#define  RESULT_STRING "<p style=\"text-align:right;\">あああ</p>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -10141,7 +10168,7 @@ void test_xhtml_p_tag_005()
 void test_xhtml_p_tag_006() 
 {
 #define  TEST_STRING "<p align=\"left\">あああ</p>"
-#define  RESULT_STRING "<p align=\"left\">あああ</p>"
+#define  RESULT_STRING "<p style=\"text-align:left;\">あああ</p>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -10170,7 +10197,7 @@ void test_xhtml_p_tag_006()
 void test_xhtml_p_tag_007() 
 {
 #define  TEST_STRING "<p align=\"center\">あああ</p>"
-#define  RESULT_STRING "<p align=\"center\">あああ</p>"
+#define  RESULT_STRING "<p style=\"text-align:center;\">あああ</p>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -14580,6 +14607,542 @@ void test_xhtml_textarea_tag_with_css_008()
   ret = chxj_rencoding(&r, ret, &destlen);
 fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
 fprintf(stderr, "actual:[%s]\n", ret);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+
+/*===========================================================================*/
+/* p with CSS                                                                */
+/*===========================================================================*/
+char *test_chxj_serf_get008(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "p       { text-align: left }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_xhtml_p_tag_with_css_001()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><p>あいう</p></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?><!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><p style=\"text-align:left;\">あいう</p></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get008;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+char *test_chxj_serf_get009(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "p       { text-align: center }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_xhtml_p_tag_with_css_002()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><p>あいう</p></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?><!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><p style=\"text-align:center;\">あいう</p></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get009;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+char *test_chxj_serf_get010(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "p       { text-align: right }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_xhtml_p_tag_with_css_003()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><p>あいう</p></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?><!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><p style=\"text-align:right;\">あいう</p></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get010;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+void test_xhtml_p_tag_with_css_004()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><p style=\"text-align: left\">あいう</p></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?><!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><p style=\"text-align:left;\">あいう</p></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get010;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_xhtml_p_tag_with_css_005()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><p style=\"text-align: center\">あいう</p></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?><!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><p style=\"text-align:center;\">あいう</p></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get010;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_xhtml_p_tag_with_css_006()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><p style=\"text-align: right\">あいう</p></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?><!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><p style=\"text-align:right;\">あいう</p></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get010;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_xhtml_p_tag_with_css_007()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><p style=\"text-align: right\"><p>あいう</p></p></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?><!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><p style=\"text-align:right;\"><p style=\"text-align:right;\">あいう</p></p></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get010;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+/*=======================*/
+/* p with color property */
+/*=======================*/
+char *test_chxj_serf_get011(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "p       { color: #ff0000 }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_xhtml_p_tag_with_css_008()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><p>あいう</p></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?><!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><p style=\"color:#ff0000;\">あいう</p></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get011;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+char *test_chxj_serf_get012(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "p       { color: rgb(100%, 100%, 100%) }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_xhtml_p_tag_with_css_009()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><p>あいう</p></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?><!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><p style=\"color:#ffffff;\">あいう</p></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get012;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_xhtml_p_tag_with_css_010()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><p style=\"color: #ff0000\">あいう</p></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?><!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><p style=\"color:#ff0000;\">あいう</p></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get011;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_xhtml_p_tag_with_css_011()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><p style=\"color: rgb(100%, 100%, 100%)\">あいう</p></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?><!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><p style=\"color:#ffffff;\">あいう</p></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get012;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+char *test_chxj_serf_get013(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "p       { text-decoration: blink }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_xhtml_p_tag_with_css_012()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><p>あいう</p></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?><!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><p style=\"text-decoration:blink;\">あいう</p></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get013;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_xhtml_p_tag_with_css_013()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><p style=\"text-decoration: blink\">あいう</p></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?><!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><p style=\"text-decoration:blink;\">あいう</p></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get013;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);

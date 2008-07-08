@@ -1704,9 +1704,11 @@ s_xhtml_1_0_start_p_tag(void *pdoc, Node *node)
   xhtml_t *xhtml = GET_XHTML(pdoc);
   Doc     *doc   = xhtml->doc;
   Attr    *attr;
-  char    *align = NULL;
+  char    *attr_align = NULL;
+  char    *attr_style = NULL;
+  char    *attr_color = NULL;
+  char    *attr_blink = NULL;
 
-  W_L("<p");
   for (attr = qs_get_attr(doc,node);
        attr;
        attr = qs_get_next_attr(doc,attr)) {
@@ -1717,14 +1719,63 @@ s_xhtml_1_0_start_p_tag(void *pdoc, Node *node)
       /* CHTML 1.0 (W3C version 3.2)                                          */
       /*----------------------------------------------------------------------*/
       if (val && (STRCASEEQ('l','L',"left",val) || STRCASEEQ('r','R',"right",val) || STRCASEEQ('c','C',"center",val))) {
-        align = apr_pstrdup(doc->buf.pool, val);
+        attr_align = apr_pstrdup(doc->buf.pool, val);
         break;
       }
     }
+    else if (STRCASEEQ('s','S',"style", nm) && val && *val) {
+      attr_style = apr_pstrdup(doc->buf.pool, val);
+    }
   }
-  if (align) {
-    W_L(" align=\"");
-    W_V(align);
+  if (IS_CSS_ON(xhtml->entryp)) {
+    css_prop_list_t *style = s_xhtml_1_0_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *text_align_prop = chxj_css_get_property_value(doc, style, "text-align");
+      css_property_t *color_prop      = chxj_css_get_property_value(doc, style, "color");
+      css_property_t *text_deco_prop  = chxj_css_get_property_value(doc, style, "text-decoration");
+      css_property_t *cur;
+      for (cur = text_align_prop->next; cur != text_align_prop; cur = cur->next) {
+        if (STRCASEEQ('l','L',"left",cur->value)) {
+          attr_align = apr_pstrdup(doc->pool, "left");
+        }
+        else if (STRCASEEQ('c','C',"center",cur->value)) {
+          attr_align = apr_pstrdup(doc->pool, "center");
+        }
+        else if (STRCASEEQ('r','R',"right",cur->value)) {
+          attr_align = apr_pstrdup(doc->pool, "right");
+        }
+      }
+      for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          attr_color = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+      for (cur = text_deco_prop->next; cur != text_deco_prop; cur = cur->next) {
+        if (cur->value && *cur->value && STRCASEEQ('b','B',"blink",cur->value)) {
+          attr_blink = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+    }
+  }
+  W_L("<p");
+  if ((attr_align && *attr_align) || (attr_color && *attr_color) || (attr_blink && *attr_blink)) {
+    W_L(" style=\"");
+    if (attr_align) {
+      W_L("text-align:");
+      W_V(attr_align);
+      W_L(";");
+    }
+    if (attr_color) {
+      attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
+      W_L("color:");
+      W_V(attr_color);
+      W_L(";");
+    }
+    if (attr_blink) {
+      W_L("text-decoration:");
+      W_V(attr_blink);
+      W_L(";");
+    }
     W_L("\"");
   }
   W_L(">");
@@ -1747,6 +1798,9 @@ s_xhtml_1_0_end_p_tag(void *pdoc, Node *UNUSED(child))
   Doc     *doc   = xhtml->doc;
 
   W_L("</p>");
+  if (IS_CSS_ON(xhtml->entryp)) {
+    chxj_css_pop_prop_list(xhtml->css_prop_stack);
+  }
   return xhtml->out;
 }
 
