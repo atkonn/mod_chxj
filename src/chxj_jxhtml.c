@@ -1925,7 +1925,7 @@ static char *
 s_jxhtml_start_pre_tag(void *pdoc, Node *node)
 {
   jxhtml_t  *jxhtml = GET_JXHTML(pdoc);
-  Doc      *doc   = jxhtml->doc;
+  Doc       *doc   = jxhtml->doc;
   Attr      *attr;
   char      *attr_style = NULL;
 
