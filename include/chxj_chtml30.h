@@ -44,6 +44,13 @@ struct chtml30_t {
   css_prop_list_stack_t *css_prop_stack;
 };
 
+typedef struct _chtml30_flags_t chtml30_flags_t;
+
+struct _chtml30_flags_t {
+  int with_font_flag;
+  int with_blink_flag;
+};
+
 /*----------------------------------------------------------------------------*/
 /* Prototype                                                                  */
 /*----------------------------------------------------------------------------*/
