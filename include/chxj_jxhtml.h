@@ -51,6 +51,12 @@ struct jxhtml_t {
   css_prop_list_stack_t *css_prop_stack;
 };
 
+typedef struct _jxhtml_flags_t jxhtml_flags_t;
+struct _jxhtml_flags_t {
+  int with_font_flag;
+  int with_blink_flag;
+};
+
 /*----------------------------------------------------------------------------*/
 /* Prototype                                                                  */
 /*----------------------------------------------------------------------------*/

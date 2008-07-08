@@ -2971,6 +2971,9 @@ s_chtml20_end_p_tag(void *pdoc, Node *node)
     W_L("</blink>");
   }
   W_L("</p>");
+  if (IS_CSS_ON(chtml20->entryp)) {
+    chxj_css_pop_prop_list(chtml20->css_prop_stack);
+  }
   return chtml20->out;
 }
 

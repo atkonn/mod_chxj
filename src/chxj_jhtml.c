@@ -1883,6 +1883,11 @@ s_jhtml_end_p_tag(void *pdoc, Node *node)
     W_L("</blink>");
   }
   W_L("</p>");
+
+  if (IS_CSS_ON(jhtml->entryp)) {
+    chxj_css_pop_prop_list(jhtml->css_prop_stack);
+  }
+
   return jhtml->out;
 }
 

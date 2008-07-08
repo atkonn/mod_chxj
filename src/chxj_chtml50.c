@@ -2293,6 +2293,9 @@ s_chtml50_end_p_tag(void *pdoc, Node *node)
     W_L("</blink>");
   }
   W_L("</p>");
+  if (IS_CSS_ON(chtml50->entryp)) {
+    chxj_css_pop_prop_list(chtml50->css_prop_stack);
+  }
 
   return chtml50->out;
 }
