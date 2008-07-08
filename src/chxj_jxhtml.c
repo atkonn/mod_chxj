@@ -1922,10 +1922,26 @@ s_jxhtml_end_p_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_pre_tag(void *pdoc, Node *UNUSED(node)) 
+s_jxhtml_start_pre_tag(void *pdoc, Node *node)
 {
   jxhtml_t  *jxhtml = GET_JXHTML(pdoc);
   Doc      *doc   = jxhtml->doc;
+  Attr      *attr;
+  char      *attr_style = NULL;
+
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *nm  = qs_get_attr_name(doc,attr);
+    char *val = qs_get_attr_value(doc,attr);
+    if (val && STRCASEEQ('s','S',"style", nm)) {
+      attr_style = val;
+    }
+  }
+
+  if (IS_CSS_ON(jxhtml->entryp)) {
+    s_jxhtml_push_and_get_now_style(pdoc, node, attr_style);
+  }
 
   jxhtml->pre_flag++;
   W_L("<pre>");
@@ -1949,6 +1965,9 @@ s_jxhtml_end_pre_tag(void *pdoc, Node *UNUSED(child))
 
   W_L("</pre>");
   jxhtml->pre_flag--;
+  if (IS_CSS_ON(jxhtml->entryp)) {
+    chxj_css_pop_prop_list(jxhtml->css_prop_stack);
+  }
 
   return jxhtml->out;
 }
