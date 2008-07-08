@@ -1874,6 +1874,7 @@ s_jxhtml_start_p_tag(void *pdoc, Node *node)
       W_L(";");
     }
     if (attr_color) {
+      attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
       W_L("color:");
       W_V(attr_color);
       W_L(";");
@@ -1901,8 +1902,8 @@ s_jxhtml_start_p_tag(void *pdoc, Node *node)
 static char *
 s_jxhtml_end_p_tag(void *pdoc, Node *UNUSED(child)) 
 {
-  jxhtml_t   *jxhtml = GET_JXHTML(pdoc);
-  Doc       *doc   = jxhtml->doc;
+  jxhtml_t  *jxhtml = GET_JXHTML(pdoc);
+  Doc       *doc    = jxhtml->doc;
 
   W_L("</p>");
   if (IS_CSS_ON(jxhtml->entryp)) {
