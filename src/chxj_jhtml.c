@@ -1775,14 +1775,17 @@ s_jhtml_start_p_tag(void *pdoc, Node *node)
   jhtml_t     *jhtml;
   Doc         *doc;
   request_rec *r;
-  char        *align = NULL;
   Attr        *attr;
+  char        *attr_align = NULL;
+  char        *attr_style = NULL;
+  char        *attr_color = NULL;
+  char        *attr_blink = NULL;
+
 
   jhtml = GET_JHTML(pdoc);
   doc   = jhtml->doc;
   r     = doc->r;
 
-  W_L("<p");
   for (attr = qs_get_attr(doc,node);
        attr;
        attr = qs_get_next_attr(doc,attr)) {
@@ -1793,17 +1796,67 @@ s_jhtml_start_p_tag(void *pdoc, Node *node)
       /* CHTML 1.0 (W3C version 3.2)                                          */
       /*----------------------------------------------------------------------*/
       if (val && (STRCASEEQ('l','L',"left",val) || STRCASEEQ('r','R',"right",val) || STRCASEEQ('c','C',"center",val))) {
-        align = apr_pstrdup(doc->buf.pool, val);
+        attr_align = apr_pstrdup(doc->buf.pool, val);
         break;
       }
     }
+    else if (STRCASEEQ('s','S',"style", nm) && val && *val) {
+      attr_style = apr_pstrdup(doc->buf.pool, val);
+    }
   }
-  if (align) {
+  if (IS_CSS_ON(jhtml->entryp)) {
+    css_prop_list_t *style = s_jhtml_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *text_align_prop = chxj_css_get_property_value(doc, style, "text-align");
+      css_property_t *color_prop      = chxj_css_get_property_value(doc, style, "color");
+      css_property_t *text_deco_prop  = chxj_css_get_property_value(doc, style, "text-decoration");
+      css_property_t *cur;
+      for (cur = text_align_prop->next; cur != text_align_prop; cur = cur->next) {
+        if (STRCASEEQ('l','L',"left",cur->value)) {
+          attr_align = apr_pstrdup(doc->pool, "left");
+        }
+        else if (STRCASEEQ('c','C',"center",cur->value)) {
+          attr_align = apr_pstrdup(doc->pool, "center");
+        }
+        else if (STRCASEEQ('r','R',"right",cur->value)) {
+          attr_align = apr_pstrdup(doc->pool, "right");
+        }
+      }
+      for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          attr_color = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+      for (cur = text_deco_prop->next; cur != text_deco_prop; cur = cur->next) {
+        if (cur->value && *cur->value && STRCASEEQ('b','B',"blink",cur->value)) {
+          attr_blink = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+    }
+  }
+  W_L("<p");
+  if (attr_align) {
     W_L(" align=\"");
-    W_V(align);
+    W_V(attr_align);
     W_L("\"");
   }
   W_L(">");
+
+  jhtml_flags_t *flg = (jhtml_flags_t *)apr_palloc(doc->pool, sizeof(jhtml_flags_t));
+  memset(flg, 0, sizeof(*flg));
+  if (attr_color) {
+    attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
+    W_L("<font color=\"");
+    W_V(attr_color);
+    W_L("\">");
+    flg->with_font_flag = 1;
+  }
+  if (attr_blink) {
+    W_L("<blink>");
+    flg->with_blink_flag = 1;
+  }
+  node->userData = (void *)flg;
+
   return jhtml->out;
 }
 
@@ -1817,11 +1870,18 @@ s_jhtml_start_p_tag(void *pdoc, Node *node)
  * @return The conversion result is returned.
  */
 static char *
-s_jhtml_end_p_tag(void *pdoc, Node *UNUSED(child)) 
+s_jhtml_end_p_tag(void *pdoc, Node *node)
 {
   jhtml_t   *jhtml = GET_JHTML(pdoc);
   Doc       *doc   = jhtml->doc;
 
+  jhtml_flags_t *flg = (jhtml_flags_t *)node->userData;
+  if (flg->with_font_flag) {
+    W_L("</font>");
+  }
+  if (flg->with_blink_flag) {
+    W_L("</blink>");
+  }
   W_L("</p>");
   return jhtml->out;
 }
