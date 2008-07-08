@@ -2238,7 +2238,7 @@ s_chtml40_end_p_tag(void *pdoc, Node *node)
   chtml40 = GET_CHTML40(pdoc);
   doc     = chtml40->doc;
 
-  chtml30_flags_t *flg = (chtml30_flags_t *)node->userData;
+  chtml40_flags_t *flg = (chtml40_flags_t *)node->userData;
   if (flg->with_font_flag) {
     W_L("</font>");
   }
