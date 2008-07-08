@@ -2089,10 +2089,26 @@ s_chtml40_end_ul_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_chtml40_start_pre_tag(void *pdoc, Node *UNUSED(node)) 
+s_chtml40_start_pre_tag(void *pdoc, Node *node)
 {
   chtml40_t *chtml40 = GET_CHTML40(pdoc);
   Doc       *doc     = chtml40->doc;
+  Attr      *attr;
+  char      *attr_style = NULL;
+
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *nm  = qs_get_attr_name(doc,attr);
+    char *val = qs_get_attr_value(doc,attr);
+    if (val && STRCASEEQ('s','S',"style", nm)) {
+      attr_style = val;
+    }
+  }
+
+  if (IS_CSS_ON(chtml40->entryp)) {
+    s_chtml40_push_and_get_now_style(pdoc, node, attr_style);
+  }
 
   chtml40->pre_flag++;
   W_L("<pre>");
@@ -2117,6 +2133,9 @@ s_chtml40_end_pre_tag(void *pdoc, Node *UNUSED(child))
 
   W_L("</pre>");
   chtml40->pre_flag--;
+  if (IS_CSS_ON(chtml40->entryp)) {
+    chxj_css_pop_prop_list(chtml40->css_prop_stack);
+  }
 
   return chtml40->out;
 }
