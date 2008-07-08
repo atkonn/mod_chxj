@@ -2234,6 +2234,9 @@ s_chtml30_end_p_tag(void *pdoc, Node *node)
     W_L("</blink>");
   }
   W_L("</p>");
+  if (IS_CSS_ON(chtml30->entryp)) {
+    chxj_css_pop_prop_list(chtml30->css_prop_stack);
+  }
 
   return chtml30->out;
 }
