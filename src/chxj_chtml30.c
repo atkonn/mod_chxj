@@ -2092,7 +2092,7 @@ s_chtml30_start_pre_tag(void *pdoc, Node *UNUSED(node))
 /**
  * It is a handler who processes the PRE tag.
  *
- * @param pdoc  [i/o] The pointer to the XHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the CHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The PRE tag node is specified.
  * @return The conversion result is returned.
@@ -2113,7 +2113,7 @@ s_chtml30_end_pre_tag(void *pdoc, Node *UNUSED(child))
 /**
  * It is a handler who processes the P tag.
  *
- * @param pdoc  [i/o] The pointer to the XHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the CHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The P tag node is specified.
  * @return The conversion result is returned.
