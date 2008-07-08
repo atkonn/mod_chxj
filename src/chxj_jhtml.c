@@ -1961,10 +1961,26 @@ s_jhtml_end_pre_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_jhtml_start_ul_tag(void *pdoc, Node *UNUSED(node)) 
+s_jhtml_start_ul_tag(void *pdoc, Node *node)
 {
   jhtml_t *jhtml = GET_JHTML(pdoc);
   Doc     *doc   = jhtml->doc;
+  Attr        *attr;
+  char        *attr_style = NULL;
+
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *nm  = qs_get_attr_name(doc,attr);
+    char *val = qs_get_attr_value(doc,attr);
+    if (val && STRCASEEQ('s','S',"style", nm)) {
+      attr_style = val;
+    }
+  }
+
+  if (IS_CSS_ON(jhtml->entryp)) {
+    s_jhtml_push_and_get_now_style(pdoc, node, attr_style);
+  }
 
   W_L("<ul>");
   return jhtml->out;
@@ -1986,6 +2002,9 @@ s_jhtml_end_ul_tag(void *pdoc, Node *UNUSED(child))
   Doc     *doc   = jhtml->doc;
 
   W_L("</ul>");
+  if (IS_CSS_ON(jhtml->entryp)) {
+    chxj_css_pop_prop_list(jhtml->css_prop_stack);
+  }
   return jhtml->out;
 }
 
