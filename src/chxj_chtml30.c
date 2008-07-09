@@ -2377,6 +2377,9 @@ s_chtml30_start_li_tag(void *pdoc, Node *node)
     else if (STRCASEEQ('v','V',"value", name) && value && *value) {
       attr_value = value;
     }
+    else if (STRCASEEQ('s','S',"style", name) && value && *value) {
+      attr_style = value;
+    }
   }
   if (IS_CSS_ON(chtml30->entryp)) {
     css_prop_list_t *style = s_chtml30_push_and_get_now_style(pdoc, node, attr_style);
