@@ -2428,30 +2428,67 @@ s_chtml50_start_li_tag(void *pdoc, Node *node)
   chtml50_t   *chtml50 = GET_CHTML50(pdoc);
   Doc         *doc     = chtml50->doc;
   Attr        *attr;
+  char        *attr_type  = NULL;
+  char        *attr_value = NULL;
+  char        *attr_style = NULL;
 
-  W_L("<li");
-  /*--------------------------------------------------------------------------*/
-  /* Get Attributes                                                           */
-  /*--------------------------------------------------------------------------*/
   for (attr = qs_get_attr(doc,node);
        attr;
        attr = qs_get_next_attr(doc,attr)) {
-    char *name = qs_get_attr_name(doc,attr);
+    char *name  = qs_get_attr_name(doc,attr);
     char *value = qs_get_attr_value(doc,attr);
     if (STRCASEEQ('t','T',"type",name)) {
       if (value && (*value == '1' || *value == 'a' || *value == 'A' || STRCASEEQ('d','D',"disc",value) || STRCASEEQ('s','S',"square",value) || STRCASEEQ('c','C',"circle",value))) {
-        W_L(" type=\"");
-        W_V(value);
-        W_L("\"");
+        attr_type = value;
       }
     }
     else if (STRCASEEQ('v','V',"value", name) && value && *value) {
-      W_L(" value=\"");
-      W_V(value);
-      W_L("\"");
+      attr_value = value;
+    }
+    else if (STRCASEEQ('s','S',"style", name) && value && *value) {
+      attr_style = value;
     }
   }
+  if (IS_CSS_ON(chtml50->entryp)) {
+    css_prop_list_t *style = s_chtml50_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *list_style_type_prop = chxj_css_get_property_value(doc, style, "list-style-type");
+      css_property_t *cur;
+      for (cur = list_style_type_prop->next; cur != list_style_type_prop; cur = cur->next) {
+        if (STRCASEEQ('d','D',"decimal", cur->value)) {
+          attr_type = apr_pstrdup(doc->pool, "1");
+        }
+        else if (STRCASEEQ('u','U',"upper-alpha", cur->value)) {
+          attr_type = apr_pstrdup(doc->pool, "A");
+        }
+        else if (STRCASEEQ('l','L',"lower-alpha", cur->value)) {
+          attr_type = apr_pstrdup(doc->pool, "a");
+        }
+        else if (STRCASEEQ('d','D',"disc", cur->value)) {
+          attr_type = apr_pstrdup(doc->pool, "disc");
+        }
+        else if (STRCASEEQ('s','S',"square", cur->value)) {
+          attr_type = apr_pstrdup(doc->pool, "square");
+        }
+        else if (STRCASEEQ('c','C',"circle", cur->value)) {
+          attr_type = apr_pstrdup(doc->pool, "circle");
+        }
+      }
+    }
+  }
+  W_L("<li");
+  if (attr_type) {
+    W_L(" type=\"");
+    W_V(attr_type);
+    W_L("\"");
+  }
+  if (attr_value) {
+    W_L(" value=\"");
+    W_V(attr_value);
+    W_L("\"");
+  }
   W_L(">");
+
   return chtml50->out;
 }
 
@@ -2468,6 +2505,10 @@ static char *
 s_chtml50_end_li_tag(void *pdoc, Node *UNUSED(child)) 
 {
   chtml50_t *chtml50 = GET_CHTML50(pdoc);
+
+  if (IS_CSS_ON(chtml50->entryp)) {
+    chxj_css_pop_prop_list(chtml50->css_prop_stack);
+  }
 
   return chtml50->out;
 }
