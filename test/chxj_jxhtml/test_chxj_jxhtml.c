@@ -552,6 +552,19 @@ void test_jxhtml_ul_tag_with_css_006();
 void test_jxhtml_ul_tag_with_css_007();
 void test_jxhtml_ul_tag_with_css_008();
 void test_jxhtml_ul_tag_with_css_009();
+
+void test_jxhtml_li_tag_with_css_001();
+void test_jxhtml_li_tag_with_css_002();
+void test_jxhtml_li_tag_with_css_003();
+void test_jxhtml_li_tag_with_css_004();
+void test_jxhtml_li_tag_with_css_005();
+void test_jxhtml_li_tag_with_css_006();
+void test_jxhtml_li_tag_with_css_007();
+void test_jxhtml_li_tag_with_css_008();
+void test_jxhtml_li_tag_with_css_009();
+void test_jxhtml_li_tag_with_css_010();
+void test_jxhtml_li_tag_with_css_011();
+void test_jxhtml_li_tag_with_css_012();
 /* pend */
 
 int
@@ -1151,6 +1164,19 @@ main()
   CU_add_test(jxhtml_suite, "test ul with css 007",                               test_jxhtml_ul_tag_with_css_007);
   CU_add_test(jxhtml_suite, "test ul with css 008",                               test_jxhtml_ul_tag_with_css_008);
   CU_add_test(jxhtml_suite, "test ul with css 009",                               test_jxhtml_ul_tag_with_css_009);
+
+  CU_add_test(jxhtml_suite, "test li with css 001",                               test_jxhtml_li_tag_with_css_001);
+  CU_add_test(jxhtml_suite, "test li with css 002",                               test_jxhtml_li_tag_with_css_002);
+  CU_add_test(jxhtml_suite, "test li with css 003",                               test_jxhtml_li_tag_with_css_003);
+  CU_add_test(jxhtml_suite, "test li with css 004",                               test_jxhtml_li_tag_with_css_004);
+  CU_add_test(jxhtml_suite, "test li with css 005",                               test_jxhtml_li_tag_with_css_005);
+  CU_add_test(jxhtml_suite, "test li with css 006",                               test_jxhtml_li_tag_with_css_006);
+  CU_add_test(jxhtml_suite, "test li with css 007",                               test_jxhtml_li_tag_with_css_007);
+  CU_add_test(jxhtml_suite, "test li with css 008",                               test_jxhtml_li_tag_with_css_008);
+  CU_add_test(jxhtml_suite, "test li with css 009",                               test_jxhtml_li_tag_with_css_009);
+  CU_add_test(jxhtml_suite, "test li with css 010",                               test_jxhtml_li_tag_with_css_010);
+  CU_add_test(jxhtml_suite, "test li with css 011",                               test_jxhtml_li_tag_with_css_011);
+  CU_add_test(jxhtml_suite, "test li with css 012",                               test_jxhtml_li_tag_with_css_012);
   /* aend */
 
   CU_basic_run_tests();
@@ -8831,7 +8857,7 @@ void test_jxhtml_li_tag_007()
 void test_jxhtml_li_tag_008() 
 {
 #define  TEST_STRING "<li type=\"1\">ﾊﾝｶｸ</li>"
-#define  RESULT_STRING "<li type=\"1\">ﾊﾝｶｸ</li>"
+#define  RESULT_STRING "<li style=\"list-style-type:decimal;\">ﾊﾝｶｸ</li>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -8861,7 +8887,7 @@ void test_jxhtml_li_tag_008()
 void test_jxhtml_li_tag_009() 
 {
 #define  TEST_STRING "<li type=\"a\">ﾊﾝｶｸ</li>"
-#define  RESULT_STRING "<li type=\"a\">ﾊﾝｶｸ</li>"
+#define  RESULT_STRING "<li style=\"list-style-type:lower-alpha;\">ﾊﾝｶｸ</li>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -8891,7 +8917,7 @@ void test_jxhtml_li_tag_009()
 void test_jxhtml_li_tag_010() 
 {
 #define  TEST_STRING "<li type=\"A\">ﾊﾝｶｸ</li>"
-#define  RESULT_STRING "<li type=\"A\">ﾊﾝｶｸ</li>"
+#define  RESULT_STRING "<li style=\"list-style-type:upper-alpha;\">ﾊﾝｶｸ</li>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -9011,7 +9037,7 @@ void test_jxhtml_li_tag_013()
 void test_jxhtml_li_tag_014() 
 {
 #define  TEST_STRING "<li type=\"disc\">ﾊﾝｶｸ</li>"
-#define  RESULT_STRING "<li type=\"disc\">ﾊﾝｶｸ</li>"
+#define  RESULT_STRING "<li style=\"list-style-type:disc;\">ﾊﾝｶｸ</li>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -9041,7 +9067,7 @@ void test_jxhtml_li_tag_014()
 void test_jxhtml_li_tag_015() 
 {
 #define  TEST_STRING "<li type=\"circle\">ﾊﾝｶｸ</li>"
-#define  RESULT_STRING "<li type=\"circle\">ﾊﾝｶｸ</li>"
+#define  RESULT_STRING "<li style=\"list-style-type:circle;\">ﾊﾝｶｸ</li>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -9071,7 +9097,7 @@ void test_jxhtml_li_tag_015()
 void test_jxhtml_li_tag_016() 
 {
 #define  TEST_STRING "<li type=\"square\">ﾊﾝｶｸ</li>"
-#define  RESULT_STRING "<li type=\"square\">ﾊﾝｶｸ</li>"
+#define  RESULT_STRING "<li style=\"list-style-type:square;\">ﾊﾝｶｸ</li>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -15623,6 +15649,492 @@ void test_jxhtml_ul_tag_with_css_009()
   apr_size_t destlen;
   APR_INIT;
   chxj_serf_get = test_chxj_serf_get013;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jxhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+
+
+/*===========================================================================*/
+/* li tag with CSS                                                           */
+/*===========================================================================*/
+char *test_chxj_serf_get017(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "li      { list-style-type: decimal }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_jxhtml_li_tag_with_css_001()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><ul><li>あいう</li><li>かきく</li></ul></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
+                       "<html><head></head><body><div><ul><li style=\"list-style-type:decimal;\">あいう</li><li style=\"list-style-type:decimal;\">かきく</li></ul></div></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get017;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jxhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+char *test_chxj_serf_get018(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "li      { list-style-type: upper-alpha }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_jxhtml_li_tag_with_css_002()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><ul><li>あいう</li><li>かきく</li></ul></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
+                       "<html><head></head><body><div><ul><li style=\"list-style-type:upper-alpha;\">あいう</li><li style=\"list-style-type:upper-alpha;\">かきく</li></ul></div></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get018;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jxhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+char *test_chxj_serf_get019(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "li      { list-style-type: lower-alpha }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_jxhtml_li_tag_with_css_003()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><ul><li>あいう</li><li>かきく</li></ul></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
+                       "<html><head></head><body><div><ul><li style=\"list-style-type:lower-alpha;\">あいう</li><li style=\"list-style-type:lower-alpha;\">かきく</li></ul></div></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get019;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jxhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+char *test_chxj_serf_get020(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "li      { list-style-type: disc }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_jxhtml_li_tag_with_css_004()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><ul><li>あいう</li><li>かきく</li></ul></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
+                       "<html><head></head><body><div><ul><li style=\"list-style-type:disc;\">あいう</li><li style=\"list-style-type:disc;\">かきく</li></ul></div></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get020;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jxhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+char *test_chxj_serf_get021(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "li      { list-style-type: circle }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_jxhtml_li_tag_with_css_005()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><ul><li>あいう</li><li>かきく</li></ul></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
+                       "<html><head></head><body><div><ul><li style=\"list-style-type:circle;\">あいう</li><li style=\"list-style-type:circle;\">かきく</li></ul></div></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get021;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jxhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+char *test_chxj_serf_get022(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "li      { list-style-type: square }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_jxhtml_li_tag_with_css_006()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><ul><li>あいう</li><li>かきく</li></ul></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
+                       "<html><head></head><body><div><ul><li style=\"list-style-type:square;\">あいう</li><li style=\"list-style-type:square;\">かきく</li></ul></div></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get022;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jxhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_jxhtml_li_tag_with_css_007()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><ul><li style=\"list-style-type: decimal\">あいう</li><li>かきく</li></ul></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
+                       "<html><head></head><body><div><ul><li style=\"list-style-type:decimal;\">あいう</li><li>かきく</li></ul></div></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get022;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jxhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_jxhtml_li_tag_with_css_008()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><ul><li style=\"list-style-type: upper-alpha\">あいう</li><li>かきく</li></ul></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
+                       "<html><head></head><body><div><ul><li style=\"list-style-type:upper-alpha;\">あいう</li><li>かきく</li></ul></div></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get022;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jxhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_jxhtml_li_tag_with_css_009()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><ul><li style=\"list-style-type: lower-alpha\">あいう</li><li>かきく</li></ul></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
+                       "<html><head></head><body><div><ul><li style=\"list-style-type:lower-alpha;\">あいう</li><li>かきく</li></ul></div></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get022;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jxhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_jxhtml_li_tag_with_css_010()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><ul><li style=\"list-style-type: disc\">あいう</li><li>かきく</li></ul></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
+                       "<html><head></head><body><div><ul><li style=\"list-style-type:disc;\">あいう</li><li>かきく</li></ul></div></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get022;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jxhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_jxhtml_li_tag_with_css_011()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><ul><li style=\"list-style-type: circle\">あいう</li><li>かきく</li></ul></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
+                       "<html><head></head><body><div><ul><li style=\"list-style-type:circle;\">あいう</li><li>かきく</li></ul></div></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get022;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jxhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_jxhtml_li_tag_with_css_012()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><ul><li style=\"list-style-type: square\">あいう</li><li>かきく</li></ul></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
+                       "<html><head></head><body><div><ul><li style=\"list-style-type:square;\">あいう</li><li>かきく</li></ul></div></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get022;
   call_check = 0;
 
   COOKIE_INIT(cookie);
