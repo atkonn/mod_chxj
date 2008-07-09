@@ -1869,12 +1869,14 @@ s_chtml20_start_li_tag(void *pdoc, Node *node)
   Doc         *doc;
   request_rec *r;
   Attr        *attr;
+  char        *attr_type = NULL;
+  char        *attr_value = NULL;
+  char        *attr_style = NULL;
 
   chtml20 = GET_CHTML20(pdoc);
   doc     = chtml20->doc;
   r       = doc->r;
 
-  W_L("<li");
   /*--------------------------------------------------------------------------*/
   /* Get Attributes                                                           */
   /*--------------------------------------------------------------------------*/
@@ -1884,15 +1886,40 @@ s_chtml20_start_li_tag(void *pdoc, Node *node)
     char *name = qs_get_attr_name(doc,attr);
     char *value = qs_get_attr_value(doc,attr);
     if (STRCASEEQ('t','T',"type",name) && value && (*value == '1' || *value == 'a' || *value == 'A')) {
-      W_L(" type=\"");
-      W_V(value);
-      W_L("\"");
+      attr_type = value;
     }
     else if (STRCASEEQ('v','V',"value", name) && value && *value) {
-      W_L(" value=\"");
-      W_V(value);
-      W_L("\"");
+      attr_value = value;
     }
+  }
+  if (IS_CSS_ON(chtml20->entryp)) {
+    css_prop_list_t *style = s_chtml20_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *list_style_type_prop = chxj_css_get_property_value(doc, style, "list-style-type");
+      css_property_t *cur;
+      for (cur = list_style_type_prop->next; cur != list_style_type_prop; cur = cur->next) {
+        if (STRCASEEQ('d','D',"decimal", cur->value)) {
+          attr_type = apr_pstrdup(doc->pool, "1");
+        }
+        else if (STRCASEEQ('u','U',"upper-alpha", cur->value)) {
+          attr_type = apr_pstrdup(doc->pool, "A");
+        }
+        else if (STRCASEEQ('l','L',"lower-alpha", cur->value)) {
+          attr_type = apr_pstrdup(doc->pool, "a");
+        }
+      }
+    }
+  }
+  W_L("<li");
+  if (attr_type) {
+    W_L(" type=\"");
+    W_V(attr_type);
+    W_L("\"");
+  }
+  if (attr_value) {
+    W_L(" value=\"");
+    W_V(attr_value);
+    W_L("\"");
   }
   W_L(">");
   return chtml20->out;
@@ -1911,6 +1938,9 @@ static char *
 s_chtml20_end_li_tag(void *pdoc, Node *UNUSED(child)) 
 {
   chtml20_t *chtml20 = GET_CHTML20(pdoc);
+  if (IS_CSS_ON(chtml20->entryp)) {
+    chxj_css_pop_prop_list(chtml20->css_prop_stack);
+  }
   return chtml20->out;
 }
 
