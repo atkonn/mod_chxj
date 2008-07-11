@@ -2359,16 +2359,18 @@ s_chtml50_end_p_tag(void *pdoc, Node *node)
 static char *
 s_chtml50_start_ol_tag(void *pdoc, Node *node)
 {
-  chtml50_t     *chtml50;
-  Doc           *doc;
-  request_rec   *r;
-  Attr          *attr;
+  chtml50_t   *chtml50;
+  Doc         *doc;
+  request_rec *r;
+  Attr        *attr;
+  char        *attr_style = NULL;
+  char        *attr_start = NULL;
+  char        *attr_type = NULL;
 
   chtml50 = GET_CHTML50(pdoc);
   doc     = chtml50->doc;
   r       = doc->r;
 
-  W_L("<ol");
   /*--------------------------------------------------------------------------*/
   /* Get Attributes                                                           */
   /*--------------------------------------------------------------------------*/
@@ -2378,15 +2380,43 @@ s_chtml50_start_ol_tag(void *pdoc, Node *node)
     char *name = qs_get_attr_name(doc,attr);
     char *value = qs_get_attr_value(doc,attr);
     if (STRCASEEQ('t','T',"type",name) && value && (*value == '1' || *value == 'a' || *value == 'A')) {
-      W_L(" type=\"");
-      W_V(value);
-      W_L("\"");
+      attr_type = value;
     }
     else if (STRCASEEQ('s','S',"start",name) && value && *value) {
-      W_L(" start=\"");
-      W_V(value);
-      W_L("\"");
+      attr_start = value;
     }
+    else if (STRCASEEQ('s','S',"style", name) && value && *value) {
+      attr_style = value;
+    }
+  }
+  if (IS_CSS_ON(chtml50->entryp)) {
+    css_prop_list_t *style = s_chtml50_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *list_style_type_prop = chxj_css_get_property_value(doc, style, "list-style-type");
+      css_property_t *cur;
+      for (cur = list_style_type_prop->next; cur != list_style_type_prop; cur = cur->next) {
+        if (STRCASEEQ('d','D',"decimal", cur->value)) {
+          attr_type = apr_pstrdup(doc->pool, "1");
+        }
+        else if (STRCASEEQ('u','U',"upper-alpha", cur->value)) {
+          attr_type = apr_pstrdup(doc->pool, "A");
+        }
+        else if (STRCASEEQ('l','L',"lower-alpha", cur->value)) {
+          attr_type = apr_pstrdup(doc->pool, "a");
+        }
+      }
+    }
+  }
+  W_L("<ol");
+  if (attr_type) {
+    W_L(" type=\"");
+    W_V(attr_type);
+    W_L("\"");
+  }
+  if (attr_start) {
+    W_L(" start=\"");
+    W_V(attr_start);
+    W_L("\"");
   }
   W_L(">");
 
@@ -2409,6 +2439,9 @@ s_chtml50_end_ol_tag(void *pdoc, Node *UNUSED(node))
   Doc       *doc     = chtml50->doc;
 
   W_L("</ol>");
+  if (IS_CSS_ON(chtml50->entryp)) {
+    chxj_css_pop_prop_list(chtml50->css_prop_stack);
+  }
 
   return chtml50->out;
 }
