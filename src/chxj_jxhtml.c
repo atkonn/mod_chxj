@@ -1789,16 +1789,18 @@ s_jxhtml_end_li_tag(void *pdoc, Node *UNUSED(child))
 static char *
 s_jxhtml_start_ol_tag(void *pdoc, Node *node)
 {
-  jxhtml_t     *jxhtml;
+  jxhtml_t    *jxhtml;
   Doc         *doc;
   request_rec *r;
   Attr        *attr;
+  char        *attr_style = NULL;
+  char        *attr_start = NULL;
+  char        *attr_type  = NULL;
 
   jxhtml = GET_JXHTML(pdoc);
   doc   = jxhtml->doc;
   r     = doc->r;
 
-  W_L("<ol");
   /*--------------------------------------------------------------------------*/
   /* Get Attributes                                                           */
   /*--------------------------------------------------------------------------*/
@@ -1807,18 +1809,57 @@ s_jxhtml_start_ol_tag(void *pdoc, Node *node)
        attr = qs_get_next_attr(doc,attr)) {
     char *name = qs_get_attr_name(doc,attr);
     char *value = qs_get_attr_value(doc,attr);
-    if (STRCASEEQ('t','T',"type",name) && value && (*value == '1' || *value == 'a' || *value == 'A')) {
-      W_L(" type=\"");
-      W_V(value);
-      W_L("\"");
+    if (STRCASEEQ('t','T',"type",name) && value) {
+      if (*value == '1') {
+        attr_type = apr_pstrdup(doc->pool, "decimal");
+      }
+      else if (*value == 'a') {
+        attr_type = apr_pstrdup(doc->pool, "lower-alpha");
+      }
+      else if (*value == 'A') {
+        attr_type = apr_pstrdup(doc->pool, "upper-alpha");
+      }
     }
     else if (STRCASEEQ('s','S',"start",name) && value && *value) {
-      W_L(" start=\"");
-      W_V(value);
-      W_L("\"");
+      attr_start = value;
+    }
+    else if (STRCASEEQ('s','S',"style", name) && value && *value) {
+      attr_style = value;
     }
   }
+  if (IS_CSS_ON(jxhtml->entryp)) {
+    css_prop_list_t *style = s_jxhtml_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *list_style_type_prop = chxj_css_get_property_value(doc, style, "list-style-type");
+      css_property_t *cur;
+      for (cur = list_style_type_prop->next; cur != list_style_type_prop; cur = cur->next) {
+        if (STRCASEEQ('d','D',"decimal", cur->value)) {
+          attr_type = apr_pstrdup(doc->pool, "decimal");
+        }
+        else if (STRCASEEQ('u','U',"upper-alpha", cur->value)) {
+          attr_type = apr_pstrdup(doc->pool, "upper-alpha");
+        }
+        else if (STRCASEEQ('l','L',"lower-alpha", cur->value)) {
+          attr_type = apr_pstrdup(doc->pool, "lower-alpha");
+        }
+      }
+    }
+  }
+  W_L("<ol");
+  if (attr_type) {
+    W_L(" style=\"");
+    W_L("list-style-type:");
+    W_V(attr_type);
+    W_L(";");
+    W_L("\"");
+  }
+  if (attr_start) {
+    W_L(" start=\"");
+    W_V(attr_start);
+    W_L("\"");
+  }
   W_L(">");
+
   return jxhtml->out;
 }
 
@@ -1843,6 +1884,9 @@ s_jxhtml_end_ol_tag(void *pdoc, Node *UNUSED(child))
   r     = doc->r;
 
   W_L("</ol>");
+  if (IS_CSS_ON(jxhtml->entryp)) {
+    chxj_css_pop_prop_list(jxhtml->css_prop_stack);
+  }
   return jxhtml->out;
 }
 

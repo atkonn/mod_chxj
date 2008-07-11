@@ -1740,7 +1740,7 @@ s_jhtml_start_ol_tag(void *pdoc, Node *node)
   Attr        *attr;
   char        *attr_style = NULL;
   char        *attr_start = NULL;
-  char        *attr_type = NULL;
+  char        *attr_type  = NULL;
 
   jhtml = GET_JHTML(pdoc);
   doc   = jhtml->doc;
