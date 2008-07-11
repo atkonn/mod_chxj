@@ -3097,15 +3097,16 @@ s_jxhtml_end_dd_tag(void *pdoc, Node *UNUSED(child))
 static char *
 s_jxhtml_start_h1_tag(void *pdoc, Node *node)
 {
-  jxhtml_t       *jxhtml;
-  Doc           *doc;
-  request_rec   *r;
-  Attr          *attr;
-  char          *align = NULL;
+  jxhtml_t    *jxhtml;
+  Doc         *doc;
+  request_rec *r;
+  Attr        *attr;
+  char        *attr_style = NULL;
+  char        *attr_align = NULL;
 
-  jxhtml   = GET_JXHTML(pdoc);
-  doc     = jxhtml->doc;
-  r       = doc->r;
+  jxhtml = GET_JXHTML(pdoc);
+  doc    = jxhtml->doc;
+  r      = doc->r;
 
   for (attr = qs_get_attr(doc,node);
        attr;
@@ -3114,17 +3115,41 @@ s_jxhtml_start_h1_tag(void *pdoc, Node *node)
     char *value = qs_get_attr_value(doc,attr);
     if (STRCASEEQ('a','A',"align", name)) {
       if (value && (STRCASEEQ('l','L',"left",value) || STRCASEEQ('r','R',"right",value) || STRCASEEQ('c','C',"center",value))) {
-        jxhtml->h1_align_flag++;
-        align = apr_pstrdup(doc->buf.pool, value);
-        break;
+        attr_align = value;
+      }
+    }
+    else if (STRCASEEQ('s','S',"style",name) && value && *value) {
+      attr_style = value;
+    }
+  }
+  if (IS_CSS_ON(jxhtml->entryp)) {
+    css_prop_list_t *style = s_jxhtml_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *list_style_type_prop = chxj_css_get_property_value(doc, style, "text-align");
+      css_property_t *cur;
+      for (cur = list_style_type_prop->next; cur != list_style_type_prop; cur = cur->next) {
+        if (STRCASEEQ('l','L',"left", cur->value)) {
+          attr_align = apr_pstrdup(doc->pool, "left");
+        }
+        else if (STRCASEEQ('c','C',"center",cur->value)) {
+          attr_align = apr_pstrdup(doc->pool, "center");
+        }
+        else if (STRCASEEQ('r','R',"right",cur->value)) {
+          attr_align = apr_pstrdup(doc->pool, "right");
+        }
       }
     }
   }
-  if (align) {
-    W_L("<div align=\"");
-    W_V(align);
-    W_L("\">");
+  W_L("<div");
+  W_L(" style=\""); 
+  W_L("font-size:xx-large;");
+  if (attr_align) {
+    W_L("text-align:");
+    W_V(attr_align);
+    W_L(";");
   }
+  W_L("\">");
+
   return jxhtml->out;
 }
 
@@ -3148,10 +3173,8 @@ s_jxhtml_end_h1_tag(void *pdoc, Node *UNUSED(child))
   doc     = jxhtml->doc;
   r       = doc->r;
   
-  if (jxhtml->h1_align_flag) {
-    jxhtml->h1_align_flag--;
-    W_L("</div>");
-  }
+  W_L("</div>");
+
   return jxhtml->out;
 }
 
