@@ -565,6 +565,13 @@ void test_jxhtml_li_tag_with_css_009();
 void test_jxhtml_li_tag_with_css_010();
 void test_jxhtml_li_tag_with_css_011();
 void test_jxhtml_li_tag_with_css_012();
+
+void test_jxhtml_ol_tag_with_css_001();
+void test_jxhtml_ol_tag_with_css_002();
+void test_jxhtml_ol_tag_with_css_003();
+void test_jxhtml_ol_tag_with_css_004();
+void test_jxhtml_ol_tag_with_css_005();
+void test_jxhtml_ol_tag_with_css_006();
 /* pend */
 
 int
@@ -1177,6 +1184,13 @@ main()
   CU_add_test(jxhtml_suite, "test li with css 010",                               test_jxhtml_li_tag_with_css_010);
   CU_add_test(jxhtml_suite, "test li with css 011",                               test_jxhtml_li_tag_with_css_011);
   CU_add_test(jxhtml_suite, "test li with css 012",                               test_jxhtml_li_tag_with_css_012);
+
+  CU_add_test(jxhtml_suite, "test ol with css 001",                               test_jxhtml_ol_tag_with_css_001);
+  CU_add_test(jxhtml_suite, "test ol with css 002",                               test_jxhtml_ol_tag_with_css_002);
+  CU_add_test(jxhtml_suite, "test ol with css 003",                               test_jxhtml_ol_tag_with_css_003);
+  CU_add_test(jxhtml_suite, "test ol with css 004",                               test_jxhtml_ol_tag_with_css_004);
+  CU_add_test(jxhtml_suite, "test ol with css 005",                               test_jxhtml_ol_tag_with_css_005);
+  CU_add_test(jxhtml_suite, "test ol with css 006",                               test_jxhtml_ol_tag_with_css_006);
   /* aend */
 
   CU_basic_run_tests();
