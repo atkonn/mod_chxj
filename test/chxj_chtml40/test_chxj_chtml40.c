@@ -546,6 +546,13 @@ void test_chtml40_li_tag_with_css_009();
 void test_chtml40_li_tag_with_css_010();
 void test_chtml40_li_tag_with_css_011();
 void test_chtml40_li_tag_with_css_012();
+
+void test_chtml40_ol_tag_with_css_001();
+void test_chtml40_ol_tag_with_css_002();
+void test_chtml40_ol_tag_with_css_003();
+void test_chtml40_ol_tag_with_css_004();
+void test_chtml40_ol_tag_with_css_005();
+void test_chtml40_ol_tag_with_css_006();
 /* pend */
 
 int
@@ -1054,6 +1061,13 @@ main()
   CU_add_test(chtml40_suite, "test li with css 010",                               test_chtml40_li_tag_with_css_010);
   CU_add_test(chtml40_suite, "test li with css 011",                               test_chtml40_li_tag_with_css_011);
   CU_add_test(chtml40_suite, "test li with css 012",                               test_chtml40_li_tag_with_css_012);
+
+  CU_add_test(chtml40_suite, "test ol with css 001",                               test_chtml40_ol_tag_with_css_001);
+  CU_add_test(chtml40_suite, "test ol with css 002",                               test_chtml40_ol_tag_with_css_002);
+  CU_add_test(chtml40_suite, "test ol with css 003",                               test_chtml40_ol_tag_with_css_003);
+  CU_add_test(chtml40_suite, "test ol with css 004",                               test_chtml40_ol_tag_with_css_004);
+  CU_add_test(chtml40_suite, "test ol with css 005",                               test_chtml40_ol_tag_with_css_005);
+  CU_add_test(chtml40_suite, "test ol with css 006",                               test_chtml40_ol_tag_with_css_006);
   /* aend */
 
   CU_basic_run_tests();
@@ -14759,6 +14773,246 @@ void test_chtml40_li_tag_with_css_012()
   apr_size_t destlen;
   APR_INIT;
   chxj_serf_get = test_chxj_serf_get022;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_chtml40(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+
+
+/*===========================================================================*/
+/* ol tag with CSS                                                           */
+/*===========================================================================*/
+char *test_chxj_serf_get030(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "ol      { list-style-type: decimal }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_chtml40_ol_tag_with_css_001()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><ol><li>あいう</li><li>かきく</li></ul></body></html>"
+#define  RESULT_STRING "<html><head></head><body><ol type=\"1\"><li type=\"1\">あいう<li type=\"1\">かきく</ol></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get030;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_chtml40(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+char *test_chxj_serf_get031(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "ol      { list-style-type: lower-alpha }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_chtml40_ol_tag_with_css_002()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><ol><li>あいう</li><li>かきく</li></ul></body></html>"
+#define  RESULT_STRING "<html><head></head><body><ol type=\"a\"><li type=\"a\">あいう<li type=\"a\">かきく</ol></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get031;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_chtml40(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+char *test_chxj_serf_get032(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "ol      { list-style-type: upper-alpha }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_chtml40_ol_tag_with_css_003()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><ol><li>あいう</li><li>かきく</li></ul></body></html>"
+#define  RESULT_STRING "<html><head></head><body><ol type=\"A\"><li type=\"A\">あいう<li type=\"A\">かきく</ol></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get032;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_chtml40(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_chtml40_ol_tag_with_css_004()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><ol style=\"list-style-type:decimal\"><li>あいう</li><li>かきく</li></ul></body></html>"
+#define  RESULT_STRING "<html><head></head><body><ol type=\"1\"><li type=\"1\">あいう<li type=\"1\">かきく</ol></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get032;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_chtml40(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_chtml40_ol_tag_with_css_005()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><ol style=\"list-style-type:lower-alpha\"><li>あいう</li><li>かきく</li></ul></body></html>"
+#define  RESULT_STRING "<html><head></head><body><ol type=\"a\"><li type=\"a\">あいう<li type=\"a\">かきく</ol></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get032;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_chtml40(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_chtml40_ol_tag_with_css_006()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><ol style=\"list-style-type:upper-alpha\"><li>あいう</li><li>かきく</li></ul></body></html>"
+#define  RESULT_STRING "<html><head></head><body><ol type=\"A\"><li type=\"A\">あいう<li type=\"A\">かきく</ol></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get032;
   call_check = 0;
 
   COOKIE_INIT(cookie);
