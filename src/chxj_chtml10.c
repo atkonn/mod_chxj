@@ -1037,11 +1037,12 @@ s_chtml10_start_h2_tag(void *pdoc, Node *node)
   Doc           *doc;
   Attr          *attr;
   chtml10_t     *chtml10;
+  char          *attr_style = NULL;
+  char          *attr_align = NULL;
 
   chtml10 = GET_CHTML10(pdoc);
   doc     = chtml10->doc;
 
-  W_L("<h2");
   for (attr = qs_get_attr(doc,node);
        attr;
        attr = qs_get_next_attr(doc,attr)) {
@@ -1049,12 +1050,36 @@ s_chtml10_start_h2_tag(void *pdoc, Node *node)
     char *value = qs_get_attr_value(doc,attr);
     if (STRCASEEQ('a','A',"align", name)) {
       if (value && (STRCASEEQ('l','L',"left",value) || STRCASEEQ('r','R',"right",value) || STRCASEEQ('c','C',"center",value))) {
-        W_L(" align=\"");
-        W_V(value);
-        W_L("\"");
-        break;
+        attr_align = value;
       }
     }
+    else if (STRCASEEQ('s','S',"style",name) && value && *value) {
+      attr_style = value;
+    }
+  }
+  if (IS_CSS_ON(chtml10->entryp)) {
+    css_prop_list_t *style = s_chtml10_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *list_style_type_prop = chxj_css_get_property_value(doc, style, "text-align");
+      css_property_t *cur;
+      for (cur = list_style_type_prop->next; cur != list_style_type_prop; cur = cur->next) {
+        if (STRCASEEQ('l','L',"left", cur->value)) {
+          attr_align = apr_pstrdup(doc->pool, "left");
+        }
+        else if (STRCASEEQ('c','C',"center",cur->value)) {
+          attr_align = apr_pstrdup(doc->pool, "center");
+        }
+        else if (STRCASEEQ('r','R',"right",cur->value)) {
+          attr_align = apr_pstrdup(doc->pool, "right");
+        }
+      }
+    }
+  }
+  W_L("<h2");
+  if (attr_align) {
+    W_L(" align=\"");
+    W_V(attr_align);
+    W_L("\"");
   }
   W_L(">");
 
@@ -1082,6 +1107,9 @@ s_chtml10_end_h2_tag(void *pdoc, Node *UNUSED(child))
   r       = doc->r;
 
   W_L("</h2>");
+  if (IS_CSS_ON(chtml10->entryp)) {
+    chxj_css_pop_prop_list(chtml10->css_prop_stack);
+  }
 
   return chtml10->out;
 }
