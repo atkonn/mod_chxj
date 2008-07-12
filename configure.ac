@@ -1,6 +1,6 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
-AC_INIT([mod_chxj],[0.12.6-1])
+AC_INIT([mod_chxj],[0.12.7-1])
 AC_PREREQ(2.59)
 AC_CONFIG_SRCDIR([src/mod_chxj.c])
 AC_CANONICAL_TARGET
@@ -275,7 +275,7 @@ LIBS="${LIBS} `${APR_CONFIG} --ldflags` `${APR_CONFIG} --libs` "
 LIBS="${LIBS} `${APU_CONFIG} --ldflags` `${APU_CONFIG} --libs` "
 LIBS="${LIBS} ${MYSQL_COOKIE_LIBS}"
 LIBS="${LIBS} ${MEMCACHE_COOKIE_LIBS} "
-LIBS="${LIBS} `${CROCO_CONFIG} --libs` "
+LIBS="${LIBS} serf/.libs/libserf-0.a"
 CFLAGS="${CFLAGS} `${WAND_CONFIG} --cppflags` `${WAND_CONFIG} --cflags`"
 CFLAGS="${CFLAGS} `${APR_CONFIG} --includes` `${APR_CONFIG} --cflags` `${APR_CONFIG} --cppflags`"
 CFLAGS="${CFLAGS} `${APU_CONFIG} --includes`"
