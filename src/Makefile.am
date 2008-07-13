@@ -42,9 +42,9 @@ libmod_chxj_la_SOURCES = mod_chxj.c \
     chxj_css.c
 
 
-libmod_chxj_la_CFLAGS = -O2 -prefer-pic @QDEFS@ @DDEFS@ -I. -I../include -I@with_apache_header@  -I./serf
+libmod_chxj_la_CFLAGS = -O2 -prefer-pic @QDEFS@ @DDEFS@ -I. -I../include -I@with_apache_header@  -I./serf -I./css/include
 AM_CFLAGS = @CFLAGS@ -O2 -prefer-pic @QDEFS@ @DDEFS@ -I. -I../include -I@with_apache_header@
-libmod_chxj_la_DEPENDENCIES = serf/libserf-0.la
+libmod_chxj_la_DEPENDENCIES = serf/libserf-0.la css/src/libscss.la
 lib_LTLIBRARIES = libmod_chxj.la
 
 make_so:
@@ -53,14 +53,15 @@ make_so:
 serf/libserf-0.la:
 	(cd serf; ./configure --with-apr=`dirname @APR_CONFIG@` --with-apr-util=`dirname @APU_CONFIG@`; make)
 
+css/src/libscss.la:
+	(cd css; ./configure --with-apr-config=@APR_CONFIG@ --with-apu-config=@APU_CONFIG@; make)
+
 clean:
 	rm -fr .libs
 	rm -f *.o *.lo *.la
 	rm -f mod_chxj.so
-	(cd serf; make clean)
-
-serf/libserf-0.la:
-	(cd serf; ./configure --with-apr=`dirname @APR_CONFIG@` --with-apr-util=`dirname @APU_CONFIG@`; make)
+	@(cd serf; make clean)
+	@(cd css; make clean)
 
 install: make_so
 	@@APXS@ -i -n "chxj" @PACKAGE_NAME@.so 

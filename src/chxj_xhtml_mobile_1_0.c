@@ -2014,37 +2014,51 @@ s_xhtml_1_0_start_h2_tag(void *pdoc, Node *node)
   xhtml_t *xhtml = GET_XHTML(pdoc);
   Doc     *doc = xhtml->doc;
   Attr    *attr;
+  char    *attr_style = NULL;
+  char    *attr_align = NULL;
 
-  W_L("<h2");
   for (attr = qs_get_attr(doc,node);
        attr;
        attr = qs_get_next_attr(doc,attr)) {
-    char* name;
-    char* value;
-    name  = qs_get_attr_name(doc,attr);
-    value = qs_get_attr_value(doc,attr);
+    char *name  = qs_get_attr_name(doc,attr);
+    char *value = qs_get_attr_value(doc,attr);
     if (STRCASEEQ('a','A',"align", name)) {
-      if (value) {
-        if (STRCASEEQ('l','L',"left",value)) {
-          W_L(" style=\"");
-          W_L("text-align:left");
-          W_L("\"");
+      if (value && (STRCASEEQ('l','L',"left",value) || STRCASEEQ('r','R',"right",value) || STRCASEEQ('c','C',"center",value))) {
+        attr_align = value;
+      }
+    }
+    else if (STRCASEEQ('s','S',"style",name) && value && *value) {
+      attr_style = value;
+    }
+  }
+  if (IS_CSS_ON(xhtml->entryp)) {
+    css_prop_list_t *style = s_xhtml_1_0_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *list_style_type_prop = chxj_css_get_property_value(doc, style, "text-align");
+      css_property_t *cur;
+      for (cur = list_style_type_prop->next; cur != list_style_type_prop; cur = cur->next) {
+        if (STRCASEEQ('l','L',"left", cur->value)) {
+          attr_align = apr_pstrdup(doc->pool, "left");
         }
-        else if (STRCASEEQ('r','R',"right",value)) {
-          W_L(" style=\"");
-          W_L("text-align:right");
-          W_L("\"");
+        else if (STRCASEEQ('c','C',"center",cur->value)) {
+          attr_align = apr_pstrdup(doc->pool, "center");
         }
-        else if (STRCASEEQ('c','C',"center",value)) {
-          W_L(" style=\"");
-          W_L("text-align:center");
-          W_L("\"");
+        else if (STRCASEEQ('r','R',"right",cur->value)) {
+          attr_align = apr_pstrdup(doc->pool, "right");
         }
-        break;
       }
     }
   }
+  W_L("<h2");
+  if (attr_align) {
+    W_L(" style=\"");
+    W_L("text-align:");
+    W_V(attr_align);
+    W_L(";");
+    W_L("\"");
+  }
   W_L(">");
+
   return xhtml->out;
 }
 
@@ -2064,6 +2078,9 @@ s_xhtml_1_0_end_h2_tag(void *pdoc, Node *UNUSED(child))
   Doc     *doc   = xhtml->doc;
 
   W_L("</h2>");
+  if (IS_CSS_ON(xhtml->entryp)) {
+    chxj_css_pop_prop_list(xhtml->css_prop_stack);
+  }
   return xhtml->out;
 }
 
