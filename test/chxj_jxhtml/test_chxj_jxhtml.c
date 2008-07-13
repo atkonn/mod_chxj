@@ -4283,7 +4283,7 @@ void test_jxhtml_h2_tag_010()
 void test_jxhtml_h3_tag_001() 
 {
 #define  TEST_STRING "<h3></h3>"
-#define  RESULT_STRING "\n"
+#define  RESULT_STRING "<div style=\"font-size:large;\"></div>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -4313,7 +4313,7 @@ void test_jxhtml_h3_tag_001()
 void test_jxhtml_h3_tag_002() 
 {
 #define  TEST_STRING "<h3>abc</h3>"
-#define  RESULT_STRING "abc"
+#define  RESULT_STRING "<div style=\"font-size:large;\">abc</div>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -4343,7 +4343,7 @@ void test_jxhtml_h3_tag_002()
 void test_jxhtml_h3_tag_003() 
 {
 #define  TEST_STRING "<h3>亀さん</h3>"
-#define  RESULT_STRING "亀さん"
+#define  RESULT_STRING "<div style=\"font-size:large;\">亀さん</div>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -4373,7 +4373,7 @@ void test_jxhtml_h3_tag_003()
 void test_jxhtml_h3_tag_004() 
 {
 #define  TEST_STRING "<h3>ﾊﾝｶｸ</h3>"
-#define  RESULT_STRING "ﾊﾝｶｸ"
+#define  RESULT_STRING "<div style=\"font-size:large;\">ﾊﾝｶｸ</div>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -4403,7 +4403,7 @@ void test_jxhtml_h3_tag_004()
 void test_jxhtml_h3_tag_005() 
 {
 #define  TEST_STRING "<h3 align></h3>"
-#define  RESULT_STRING "\n"
+#define  RESULT_STRING "<div style=\"font-size:large;\"></div>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -4433,7 +4433,7 @@ void test_jxhtml_h3_tag_005()
 void test_jxhtml_h3_tag_006() 
 {
 #define  TEST_STRING "<h3 align=\"\"></h3>"
-#define  RESULT_STRING "\n"
+#define  RESULT_STRING "<div style=\"font-size:large;\"></div>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -4463,7 +4463,7 @@ void test_jxhtml_h3_tag_006()
 void test_jxhtml_h3_tag_007() 
 {
 #define  TEST_STRING "<h3 align=\"left\"></h3>"
-#define  RESULT_STRING "<div align=\"left\"></div>"
+#define  RESULT_STRING "<div style=\"font-size:large;text-align:left;\"></div>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -4493,7 +4493,7 @@ void test_jxhtml_h3_tag_007()
 void test_jxhtml_h3_tag_008() 
 {
 #define  TEST_STRING "<h3 align=\"right\"></h3>"
-#define  RESULT_STRING "<div align=\"right\"></div>"
+#define  RESULT_STRING "<div style=\"font-size:large;text-align:right;\"></div>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -4523,7 +4523,7 @@ void test_jxhtml_h3_tag_008()
 void test_jxhtml_h3_tag_009() 
 {
 #define  TEST_STRING "<h3 align=\"center\"></h3>"
-#define  RESULT_STRING "<div align=\"center\"></div>"
+#define  RESULT_STRING "<div style=\"font-size:large;text-align:center;\"></div>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -4553,7 +4553,7 @@ void test_jxhtml_h3_tag_009()
 void test_jxhtml_h3_tag_010() 
 {
 #define  TEST_STRING "<h3 align=\"unkown\"></h3>"
-#define  RESULT_STRING "\n"
+#define  RESULT_STRING "<div style=\"font-size:large;\"></div>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -16915,6 +16915,252 @@ void test_jxhtml_h2_tag_with_css_006()
   apr_size_t destlen;
   APR_INIT;
   chxj_serf_get = test_chxj_serf_get045;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jxhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+
+
+/*===========================================================================*/
+/* h3 tag with CSS                                                           */
+/*===========================================================================*/
+char *test_chxj_serf_get046(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "h3      { text-align: right }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_jxhtml_h3_tag_with_css_001()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><h3>あいう</h3></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
+                       "<html><head></head><body><div><div style=\"font-size:x-large;text-align:right;\">あいう</div></div></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get046;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jxhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+char *test_chxj_serf_get047(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "h3      { text-align: center }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_jxhtml_h3_tag_with_css_002()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><h3>あいう</h3></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
+                       "<html><head></head><body><div><div style=\"font-size:x-large;text-align:center;\">あいう</div></div></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get047;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jxhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+char *test_chxj_serf_get048(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "h3      { text-align: right }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_jxhtml_h3_tag_with_css_003()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><h3>あいう</h3></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
+                       "<html><head></head><body><div><div style=\"font-size:x-large;text-align:right;\">あいう</div></div></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get048;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jxhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_jxhtml_h3_tag_with_css_004()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><h3 style=\"text-align: left\">あいう</h3></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
+                       "<html><head></head><body><div><div style=\"font-size:x-large;text-align:left;\">あいう</div></div></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get048;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jxhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_jxhtml_h3_tag_with_css_005()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><h3 style=\"text-align: center\">あいう</h3></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
+                       "<html><head></head><body><div><div style=\"font-size:x-large;text-align:center;\">あいう</div></div></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get048;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jxhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_jxhtml_h3_tag_with_css_006()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><h3 style=\"text-align: right\">あいう</h3></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
+                       "<html><head></head><body><div><div style=\"font-size:x-large;text-align:right;\">あいう</div></div></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get048;
   call_check = 0;
 
   COOKIE_INIT(cookie);
