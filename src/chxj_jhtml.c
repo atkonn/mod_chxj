@@ -3191,11 +3191,12 @@ s_jhtml_end_h2_tag(void *pdoc, Node *node)
 static char *
 s_jhtml_start_h3_tag(void *pdoc, Node *node)
 {
-  jhtml_t       *jhtml;
-  Doc           *doc;
-  request_rec   *r;
-  Attr          *attr;
-  char          *align = NULL;
+  jhtml_t     *jhtml;
+  Doc         *doc;
+  request_rec *r;
+  Attr        *attr;
+  char        *attr_style = NULL;
+  char        *attr_align = NULL;
 
   jhtml   = GET_JHTML(pdoc);
   doc     = jhtml->doc;
@@ -3204,23 +3205,48 @@ s_jhtml_start_h3_tag(void *pdoc, Node *node)
   for (attr = qs_get_attr(doc,node);
        attr;
        attr = qs_get_next_attr(doc,attr)) {
-    char* name;
-    char* value;
-    name  = qs_get_attr_name(doc,attr);
-    value = qs_get_attr_value(doc,attr);
+    char *name  = qs_get_attr_name(doc,attr);
+    char *value = qs_get_attr_value(doc,attr);
     if (STRCASEEQ('a','A',"align", name)) {
       if (value && (STRCASEEQ('l','L',"left",value) || STRCASEEQ('r','R',"right",value) || STRCASEEQ('c','C',"center",value))) {
-        jhtml->h3_align_flag++;
-        align = apr_pstrdup(doc->buf.pool, value);
-        break;
+        attr_align = value;
+      }
+    }
+    else if (STRCASEEQ('s','S',"style",name) && value && *value) {
+      attr_style = value;
+    }
+  }
+  if (IS_CSS_ON(jhtml->entryp)) {
+    css_prop_list_t *style = s_jhtml_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *list_style_type_prop = chxj_css_get_property_value(doc, style, "text-align");
+      css_property_t *cur;
+      for (cur = list_style_type_prop->next; cur != list_style_type_prop; cur = cur->next) {
+        if (STRCASEEQ('l','L',"left", cur->value)) {
+          attr_align = apr_pstrdup(doc->pool, "left");
+        }
+        else if (STRCASEEQ('c','C',"center",cur->value)) {
+          attr_align = apr_pstrdup(doc->pool, "center");
+        }
+        else if (STRCASEEQ('r','R',"right",cur->value)) {
+          attr_align = apr_pstrdup(doc->pool, "right");
+        }
       }
     }
   }
-  if (align) {
+  if (attr_align) {
     W_L("<div align=\"");
-    W_V(align);
+    W_V(attr_align);
     W_L("\">");
+    jhtml_flags_t *flg = apr_palloc(doc->pool, sizeof(*flg));
+    memset(flg, 0, sizeof(*flg));
+    flg->with_div_align_flag = 1;
+    node->userData = (void *)flg;
   }
+  else {
+    node->userData = NULL;
+  }
+
   return jhtml->out;
 }
 
@@ -3234,7 +3260,7 @@ s_jhtml_start_h3_tag(void *pdoc, Node *node)
  * @return The conversion result is returned.
  */
 static char *
-s_jhtml_end_h3_tag(void *pdoc, Node *UNUSED(child)) 
+s_jhtml_end_h3_tag(void *pdoc, Node *node)
 {
   jhtml_t*    jhtml;
   Doc*          doc;
@@ -3244,10 +3270,15 @@ s_jhtml_end_h3_tag(void *pdoc, Node *UNUSED(child))
   doc     = jhtml->doc;
   r       = doc->r;
   
-  if (jhtml->h3_align_flag) {
-    jhtml->h3_align_flag--;
+  jhtml_flags_t *flg = node->userData;
+  if (flg && flg->with_div_align_flag) {
     W_L("</div>");
+    node->userData = NULL;
   }
+  if (IS_CSS_ON(jhtml->entryp)) {
+    chxj_css_pop_prop_list(jhtml->css_prop_stack);
+  }
+
   return jhtml->out;
 }
 
