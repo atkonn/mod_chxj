@@ -1099,10 +1099,11 @@ s_jxhtml_end_body_tag(void *pdoc, Node *UNUSED(child))
 static char *
 s_jxhtml_start_a_tag(void *pdoc, Node *node) 
 {
-  jxhtml_t       *jxhtml;
-  Doc           *doc;
-  request_rec   *r;
-  Attr          *attr;
+  jxhtml_t    *jxhtml;
+  Doc         *doc;
+  request_rec *r;
+  Attr        *attr;
+  char        *attr_style = NULL;
 
   jxhtml = GET_JXHTML(pdoc);
   doc   = jxhtml->doc;
@@ -1205,8 +1206,19 @@ s_jxhtml_start_a_tag(void *pdoc, Node *node)
       /*----------------------------------------------------------------------*/
       /* ignore */
     }
+    else if (STRCASEEQ('s','S',"style",name) && value && *value) {
+      /*----------------------------------------------------------------------*/
+      /* CHTML 5.0                                                            */
+      /*----------------------------------------------------------------------*/
+      attr_style = value;
+    }
   }
   W_L(">");
+
+  if (IS_CSS_ON(jxhtml->entryp)) {
+    s_jxhtml_push_and_get_now_style(pdoc, node, attr_style);
+  }
+
   return jxhtml->out;
 }
 
@@ -1231,6 +1243,10 @@ s_jxhtml_end_a_tag(void *pdoc, Node *UNUSED(child))
   r     = doc->r;
 
   W_L("</a>");
+  if (IS_CSS_ON(jxhtml->entryp)) {
+    chxj_css_pop_prop_list(jxhtml->css_prop_stack);
+  }
+
   return jxhtml->out;
 }
 
