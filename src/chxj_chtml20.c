@@ -929,12 +929,15 @@ s_chtml20_start_body_tag(void *pdoc, Node *node)
   Doc         *doc;
   request_rec *r;
   Attr        *attr;
+  char        *attr_bgcolor = NULL;
+  char        *attr_text    = NULL;
+  char        *attr_link    = NULL;
+  char        *attr_style   = NULL;
 
   chtml20 = GET_CHTML20(pdoc);
   doc     = chtml20->doc;
   r       = doc->r;
 
-  W_L("<body");
   /*--------------------------------------------------------------------------*/
   /* Get Attributes                                                           */
   /*--------------------------------------------------------------------------*/
@@ -950,9 +953,7 @@ s_chtml20_start_body_tag(void *pdoc, Node *node)
         /*----------------------------------------------------------------------*/
         /* CHTML 2.0                                                            */
         /*----------------------------------------------------------------------*/
-        W_L(" bgcolor=\"");
-        W_V(value);
-        W_L("\"");
+        attr_bgcolor = value;
       }
       break;
 
@@ -962,9 +963,14 @@ s_chtml20_start_body_tag(void *pdoc, Node *node)
         /*----------------------------------------------------------------------*/
         /* CHTML 2.0                                                            */
         /*----------------------------------------------------------------------*/
-        W_L(" text=\"");
-        W_V(value);
-        W_L("\"");
+        attr_text = value;
+      }
+      break;
+
+    case 's':
+    case 'S':
+      if (strcasecmp(name, "style") == 0 && value && *value != 0) {
+        attr_style = value;
       }
       break;
 
@@ -974,9 +980,7 @@ s_chtml20_start_body_tag(void *pdoc, Node *node)
         /*----------------------------------------------------------------------*/
         /* CHTML 2.0                                                            */
         /*----------------------------------------------------------------------*/
-        W_L(" link=\"");
-        W_V(value);
-        W_L("\"");
+        attr_link = value;
       }
       break;
 
@@ -1003,6 +1007,56 @@ s_chtml20_start_body_tag(void *pdoc, Node *node)
     default:
       break;
     }
+  }
+  if (IS_CSS_ON(chtml20->entryp)) {
+    css_prop_list_t *style = s_chtml20_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *color_prop      = chxj_css_get_property_value(doc, style, "color");
+      css_property_t *bgcolor_prop    = chxj_css_get_property_value(doc, style, "background-color");
+      css_property_t *cur;
+      for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          attr_text = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+      for (cur = bgcolor_prop->next; cur != bgcolor_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          attr_bgcolor = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+    }
+    if (chtml20->style) {
+      css_stylesheet_t *pseudos = chxj_find_pseudo_selectors(doc, chtml20->style);
+      css_selector_t *cur_sel;
+      for (cur_sel = pseudos->selector_head.next; cur_sel != &pseudos->selector_head; cur_sel = cur_sel->next) {
+        if (cur_sel->name && strcasecmp(cur_sel->name, "a:link") == 0) {
+          css_property_t *cur;
+          for (cur = cur_sel->property_head.next; cur != &cur_sel->property_head; cur = cur->next) {
+            if (cur->name && strcasecmp(cur->name, "color") == 0) {
+              attr_link = apr_pstrdup(doc->pool, cur->value);
+              break;
+            }
+          }
+          break;
+        }
+      }
+    }
+  }
+  W_L("<body");
+  if (attr_bgcolor) {
+    W_L(" bgcolor=\"");
+    W_V(attr_bgcolor);
+    W_L("\"");
+  }
+  if (attr_text) {
+    W_L(" text=\"");
+    W_V(attr_text);
+    W_L("\"");
+  }
+  if (attr_link) {
+    W_L(" link=\"");
+    W_V(attr_link);
+    W_L("\"");
   }
   W_L(">");
 
@@ -3614,7 +3668,7 @@ s_chtml20_end_dl_tag(void *pdoc, Node *UNUSED(child))
 
 
 /**
- * It is a handter who processes the DT tag.
+ * It is a handler who processes the DT tag.
  *
  * @param pdoc  [i/o] The pointer to the CHTML structure at the output
  *                     destination is specified.
@@ -3632,7 +3686,7 @@ s_chtml20_start_dt_tag(void *pdoc, Node *UNUSED(child))
 
 
 /**
- * It is a handter who processes the DT tag.
+ * It is a handler who processes the DT tag.
  *
  * @param pdoc  [i/o] The pointer to the CHTML structure at the output
  *                     destination is specified.
@@ -3649,7 +3703,7 @@ s_chtml20_end_dt_tag(void *pdoc, Node *UNUSED(child))
 
 
 /**
- * It is a handder who processes the DD tag.
+ * It is a handler who processes the DD tag.
  *
  * @param pdoc  [i/o] The pointer to the CHTML structure at the output
  *                     destination is specified.
@@ -3667,7 +3721,7 @@ s_chtml20_start_dd_tag(void *pdoc, Node *UNUSED(child))
 
 
 /**
- * It is a handder who processes the DD tag.
+ * It is a handler who processes the DD tag.
  *
  * @param pdoc  [i/o] The pointer to the CHTML structure at the output
  *                     destination is specified.
@@ -3684,7 +3738,7 @@ s_chtml20_end_dd_tag(void *pdoc, Node *UNUSED(child))
 
 
 /**
- * It is a hanmenuer who processes the MENU tag.
+ * It is a handler who processes the MENU tag.
  *
  * @param pdoc  [i/o] The pointer to the CHTML structure at the output
  *                     destination is specified.
@@ -3703,7 +3757,7 @@ s_chtml20_start_menu_tag(void *pdoc, Node *UNUSED(child))
 
 
 /**
- * It is a hanmenuer who processes the MENU tag.
+ * It is a handler who processes the MENU tag.
  *
  * @param pdoc  [i/o] The pointer to the CHTML structure at the output
  *                     destination is specified.
@@ -3722,7 +3776,7 @@ s_chtml20_end_menu_tag(void *pdoc, Node *UNUSED(child))
 
 
 /**
- * It is a hanplaintexter who processes the PLAINTEXT tag.
+ * It is a handler who processes the PLAINTEXT tag.
  *
  * @param pdoc  [i/o] The pointer to the CHTML structure at the output
  *                     destination is specified.
