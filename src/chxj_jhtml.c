@@ -1375,7 +1375,8 @@ s_jhtml_start_font_tag(void *pdoc, Node *node)
   Doc           *doc;
   request_rec   *r;
   Attr          *attr;
-  char          *color = NULL;
+  char          *attr_color = NULL;
+  char          *attr_style = NULL;
 
   jhtml = GET_JHTML(pdoc);
   doc   = jhtml->doc;
@@ -1390,7 +1391,7 @@ s_jhtml_start_font_tag(void *pdoc, Node *node)
     char *name  = qs_get_attr_name(doc,attr);
     char *value = qs_get_attr_value(doc,attr);
     if (STRCASEEQ('c','C',"color",name) && value && *value) {
-      color = apr_pstrdup(doc->buf.pool, value);
+      attr_color = apr_pstrdup(doc->buf.pool, value);
       break;
     }
     else if (STRCASEEQ('s','S',"size",name)) {
@@ -1399,13 +1400,36 @@ s_jhtml_start_font_tag(void *pdoc, Node *node)
       /*----------------------------------------------------------------------*/
       /* ignore */
     }
+    else if (STRCASEEQ('s','S',"style",name) && value && *value) {
+      attr_style = apr_pstrdup(doc->buf.pool, value);
+    }
   }
-  if (color) {
+  if (IS_CSS_ON(jhtml->entryp)) {
+    css_prop_list_t *style = s_jhtml_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *color_prop = chxj_css_get_property_value(doc, style, "color");
+      css_property_t *cur;
+      for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          attr_color = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+    }
+  }
+  if (attr_color) {
+    attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
     W_L("<font color=\"");
-    W_V(color);
+    W_V(attr_color);
     W_L("\">");
-    jhtml->font_flag++;
+
+    jhtml_flags_t *flg = (jhtml_flags_t *)apr_palloc(doc->pool, sizeof(*flg));
+    flg->with_font_flag = 1;
+    node->userData = flg;
   }
+  else {
+    node->userData = NULL;
+  }
+
   return jhtml->out;
 }
 
@@ -1419,7 +1443,7 @@ s_jhtml_start_font_tag(void *pdoc, Node *node)
  * @return The conversion result is returned.
  */
 static char *
-s_jhtml_end_font_tag(void *pdoc, Node *UNUSED(child)) 
+s_jhtml_end_font_tag(void *pdoc, Node *node)
 {
   jhtml_t      *jhtml;
   request_rec  *r;
@@ -1429,10 +1453,14 @@ s_jhtml_end_font_tag(void *pdoc, Node *UNUSED(child))
   doc   = jhtml->doc;
   r     = jhtml->doc->r;
 
-  if (jhtml->font_flag) {
+  jhtml_flags_t *flg = (jhtml_flags_t *)node->userData;
+  if (flg && flg->with_font_flag) {
     W_L("</font>");
-    jhtml->font_flag--;
   }
+  if (IS_CSS_ON(jhtml->entryp)) {
+    chxj_css_pop_prop_list(jhtml->css_prop_stack);
+  }
+
   return jhtml->out;
 }
 
