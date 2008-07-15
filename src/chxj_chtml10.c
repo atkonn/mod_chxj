@@ -1594,18 +1594,19 @@ s_chtml10_start_body_tag(void *pdoc, Node *node)
   chtml10_t    *chtml10;
   Doc          *doc;
   Attr         *attr;
+  char         *attr_style = NULL;
 
   chtml10 = GET_CHTML10(pdoc);
   doc     = chtml10->doc;
 
-  W_L("<body");
   /*--------------------------------------------------------------------------*/
   /* Get Attributes                                                           */
   /*--------------------------------------------------------------------------*/
   for (attr = qs_get_attr(doc,node);
        attr;
        attr = qs_get_next_attr(doc,attr)) {
-    char *name  = qs_get_attr_name(doc,attr);
+    char *name   = qs_get_attr_name(doc,attr);
+    char *value  = qs_get_attr_value(doc,attr);
     switch(*name) {
     case 'a':
     case 'A':
@@ -1657,12 +1658,23 @@ s_chtml10_start_body_tag(void *pdoc, Node *node)
       }
       break;
 
+    case 's':
+    case 'S':
+      if (strcasecmp("style", name) == 0 && value && *value) {
+        attr_style = value;
+      }
+      break;
+
     default:
       break;
     }
   }
 
-  W_L(">");
+  if (IS_CSS_ON(chtml10->entryp)) {
+    s_chtml10_push_and_get_now_style(pdoc, node, attr_style);
+  }
+
+  W_L("<body>");
 
   return chtml10->out;
 }
@@ -1686,6 +1698,9 @@ s_chtml10_end_body_tag(void *pdoc, Node *UNUSED(child))
   doc     = chtml10->doc;
 
   W_L("</body>");
+  if (IS_CSS_ON(chtml10->entryp)) {
+    chxj_css_pop_prop_list(chtml10->css_prop_stack);
+  }
 
   return chtml10->out;
 }
