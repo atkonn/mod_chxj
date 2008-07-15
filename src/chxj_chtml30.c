@@ -1327,11 +1327,12 @@ s_chtml30_end_tr_tag(void *pdoc, Node *UNUSED(child))
 static char *
 s_chtml30_start_font_tag(void *pdoc, Node *node) 
 {
-  Attr          *attr;
-  chtml30_t     *chtml30;
-  Doc           *doc;
-  request_rec   *r;
-  char          *color = NULL;
+  Attr        *attr;
+  chtml30_t   *chtml30;
+  Doc         *doc;
+  request_rec *r;
+  char        *attr_color = NULL;
+  char        *attr_style = NULL;
 
   chtml30 = GET_CHTML30(pdoc);
   doc     = chtml30->doc;
@@ -1341,13 +1342,12 @@ s_chtml30_start_font_tag(void *pdoc, Node *node)
   /* Get Attributes                                                           */
   /*--------------------------------------------------------------------------*/
   for (attr = qs_get_attr(doc,node);
-       attr && color == NULL; 
+       attr; 
        attr = qs_get_next_attr(doc,attr)) {
     char *name  = qs_get_attr_name(doc,attr);
     char *value = qs_get_attr_value(doc,attr);
     if (STRCASEEQ('c','C',"color", name) && value && *value) {
-      color = apr_pstrdup(doc->buf.pool, value);
-      break;
+      attr_color = apr_pstrdup(doc->buf.pool, value);
     }
     else if (STRCASEEQ('s','S',"size", name)) {
       /*----------------------------------------------------------------------*/
@@ -1355,12 +1355,33 @@ s_chtml30_start_font_tag(void *pdoc, Node *node)
       /*----------------------------------------------------------------------*/
       /* ignore */
     }
+    else if (STRCASEEQ('s','S',"style", name) && value && *value) {
+      attr_style = value;
+    }
   }
-  if (color) {
+  if (IS_CSS_ON(chtml30->entryp)) {
+    css_prop_list_t *style = s_chtml30_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *color_prop = chxj_css_get_property_value(doc, style, "color");
+      css_property_t *cur;
+      for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          attr_color = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+    }
+  }
+  if (attr_color) {
     W_L("<font color=\"");
-    W_V(color);
+    W_V(attr_color);
     W_L("\">");
-    chtml30->font_flag++;
+
+    chtml30_flags_t *flg = (chtml30_flags_t *)apr_palloc(doc->pool, sizeof(*flg));
+    flg->with_font_flag = 1;
+    node->userData = flg;
+  }
+  else {
+    node->userData = NULL;
   }
   return chtml30->out;
 }
@@ -1375,7 +1396,7 @@ s_chtml30_start_font_tag(void *pdoc, Node *node)
  * @return The conversion result is returned.
  */
 static char *
-s_chtml30_end_font_tag(void *pdoc, Node *UNUSED(child)) 
+s_chtml30_end_font_tag(void *pdoc, Node *node)
 {
   chtml30_t     *chtml30;
   Doc           *doc;
@@ -1385,9 +1406,12 @@ s_chtml30_end_font_tag(void *pdoc, Node *UNUSED(child))
   doc     = chtml30->doc;
   r       = doc->r;
 
-  if (chtml30->font_flag) {
+  chtml30_flags_t *flg = (chtml30_flags_t *)node->userData;
+  if (flg && flg->with_font_flag) {
     W_L("</font>");
-    chtml30->font_flag--;
+  }
+  if (IS_CSS_ON(chtml30->entryp)) {
+    chxj_css_pop_prop_list(chtml30->css_prop_stack);
   }
 
   return chtml30->out;

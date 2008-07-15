@@ -1442,7 +1442,7 @@ s_chtml20_start_font_tag(void *pdoc, Node *node)
   /* Get Attributes                                                           */
   /*--------------------------------------------------------------------------*/
   for (attr = qs_get_attr(doc,node);
-       attr && attr_color == NULL;
+       attr;
        attr = qs_get_next_attr(doc,attr)) {
     char *name  = qs_get_attr_name(doc,attr);
     char *value = qs_get_attr_value(doc,attr);
