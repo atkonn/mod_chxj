@@ -1049,6 +1049,9 @@ s_chtml40_end_body_tag(void *pdoc, Node *UNUSED(child))
   doc     = chtml40->doc;
 
   W_L("</body>");
+  if (IS_CSS_ON(chtml40->entryp)) {
+    chxj_css_pop_prop_list(chtml40->css_prop_stack);
+  }
 
   return chtml40->out;
 }
