@@ -55,6 +55,8 @@ typedef struct _jxhtml_flags_t jxhtml_flags_t;
 struct _jxhtml_flags_t {
   int with_font_flag;
   int with_blink_flag;
+  int font_color_flag;
+  int font_size_flag;
 };
 
 /*----------------------------------------------------------------------------*/
