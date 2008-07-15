@@ -1000,10 +1000,8 @@ s_chtml30_start_body_tag(void *pdoc, Node *node)
           for (cur = cur_sel->property_head.next; cur != &cur_sel->property_head; cur = cur->next) {
             if (cur->name && strcasecmp(cur->name, "color") == 0) {
               attr_link = apr_pstrdup(doc->pool, cur->value);
-              break;
             }
           }
-          break;
         }
       }
     }
