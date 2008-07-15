@@ -1072,6 +1072,7 @@ s_chtml30_start_a_tag(void *pdoc, Node *node)
   Doc           *doc;
   request_rec   *r;
   Attr          *attr;
+  char          *attr_style = NULL;
 
   chtml30 = GET_CHTML30(pdoc);
   doc     = chtml30->doc;
@@ -1175,8 +1176,16 @@ s_chtml30_start_a_tag(void *pdoc, Node *node)
       /*----------------------------------------------------------------------*/
       /* ignore */
     }
+    else if (STRCASEEQ('s','S',"style", name) && value && *value) {
+      attr_style = value;
+    }
   }
   W_L(">");
+
+  if (IS_CSS_ON(chtml30->entryp)) {
+    s_chtml30_push_and_get_now_style(pdoc, node, attr_style);
+  }
+
   return chtml30->out;
 }
 
@@ -1199,6 +1208,9 @@ s_chtml30_end_a_tag(void *pdoc, Node *UNUSED(child))
   doc     = chtml30->doc;
 
   W_L("</a>");
+  if (IS_CSS_ON(chtml30->entryp)) {
+    chxj_css_pop_prop_list(chtml30->css_prop_stack);
+  }
 
   return chtml30->out;
 }
