@@ -1430,7 +1430,8 @@ s_chtml20_start_font_tag(void *pdoc, Node *node)
   Doc         *doc;
   request_rec *r;
   Attr        *attr;
-  char        *color = NULL;
+  char        *attr_color = NULL;
+  char        *attr_style = NULL;
 
   chtml20 = GET_CHTML20(pdoc);
   doc     = chtml20->doc;
@@ -1441,7 +1442,7 @@ s_chtml20_start_font_tag(void *pdoc, Node *node)
   /* Get Attributes                                                           */
   /*--------------------------------------------------------------------------*/
   for (attr = qs_get_attr(doc,node);
-       attr && color == NULL;
+       attr && attr_color == NULL;
        attr = qs_get_next_attr(doc,attr)) {
     char *name  = qs_get_attr_name(doc,attr);
     char *value = qs_get_attr_value(doc,attr);
@@ -1449,7 +1450,7 @@ s_chtml20_start_font_tag(void *pdoc, Node *node)
     case 'c':
     case 'C':
       if (strcasecmp(name, "color") == 0 && value && *value) {
-        color = apr_pstrdup(doc->buf.pool, value);
+        attr_color = apr_pstrdup(doc->buf.pool, value);
       }
       break;
 
@@ -1461,17 +1462,38 @@ s_chtml20_start_font_tag(void *pdoc, Node *node)
         /*--------------------------------------------------------------------*/
         /* ignore */
       }
+      else if (strcasecmp(name, "style") == 0 && value && *value) {
+        attr_style = value;
+      }
       break;
 
     default:
       break;
     }
   }
-  if (color) {
+  if (IS_CSS_ON(chtml20->entryp)) {
+    css_prop_list_t *style = s_chtml20_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *color_prop = chxj_css_get_property_value(doc, style, "color");
+      css_property_t *cur;
+      for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          attr_color = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+    }
+  }
+  if (attr_color) {
     W_L("<font color=\"");
-    W_V(color);
+    W_V(attr_color);
     W_L("\">");
-    chtml20->font_flag++;
+    chtml20_flags_t *flg = apr_palloc(doc->pool, sizeof(*flg));
+    memset(flg, 0, sizeof(*flg));
+    flg->with_font_flag = 1;
+    node->userData = flg;
+  }
+  else {
+    node->userData = NULL;
   }
   return chtml20->out;
 }
@@ -1486,7 +1508,7 @@ s_chtml20_start_font_tag(void *pdoc, Node *node)
  * @return The conversion result is returned.
  */
 static char *
-s_chtml20_end_font_tag(void *pdoc, Node *UNUSED(child)) 
+s_chtml20_end_font_tag(void *pdoc, Node *node)
 {
   chtml20_t   *chtml20;
   Doc         *doc;
@@ -1496,9 +1518,12 @@ s_chtml20_end_font_tag(void *pdoc, Node *UNUSED(child))
   doc     = chtml20->doc;
   r       = doc->r;
 
-  if (chtml20->font_flag) {
+  chtml20_flags_t *flg = (chtml20_flags_t *)node->userData;
+  if (flg && flg->with_font_flag) {
     W_L("</font>");
-    chtml20->font_flag--;
+  }
+  if (IS_CSS_ON(chtml20->entryp)) {
+    chxj_css_pop_prop_list(chtml20->css_prop_stack);
   }
   return chtml20->out;
 }
@@ -3322,10 +3347,10 @@ s_chtml20_end_p_tag(void *pdoc, Node *node)
   r       = doc->r;
 
   chtml20_flags_t *flg = (chtml20_flags_t *)node->userData;
-  if (flg->with_font_flag) {
+  if (flg && flg->with_font_flag) {
     W_L("</font>");
   }
-  if (flg->with_blink_flag) {
+  if (flg && flg->with_blink_flag) {
     W_L("</blink>");
   }
   W_L("</p>");
