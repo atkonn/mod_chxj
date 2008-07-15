@@ -895,58 +895,137 @@ s_chtml30_start_body_tag(void *pdoc, Node *node)
   Doc         *doc;
   request_rec *r;
   Attr        *attr;
+  char        *attr_bgcolor = NULL;
+  char        *attr_text    = NULL;
+  char        *attr_link    = NULL;
+  char        *attr_style   = NULL;
 
   chtml30 = GET_CHTML30(pdoc);
   doc     = chtml30->doc;
   r       = doc->r;
 
-  W_L("<body");
   /*--------------------------------------------------------------------------*/
   /* Get Attributes                                                           */
   /*--------------------------------------------------------------------------*/
   for (attr = qs_get_attr(doc,node);
        attr;
        attr = qs_get_next_attr(doc,attr)) {
-    char *name   = qs_get_attr_name(doc,attr);
-    char *value  = qs_get_attr_value(doc,attr);
-    if (STRCASEEQ('b','B', "bgcolor", name) && value && *value) {
-      /*----------------------------------------------------------------------*/
-      /* CHTML 2.0                                                            */
-      /*----------------------------------------------------------------------*/
-      W_L(" bgcolor=\"");
-      W_V(value);
-      W_L("\"");
-    }
-    else if (STRCASEEQ('t','T', "text", name) && value && *value) {
-      /*----------------------------------------------------------------------*/
-      /* CHTML 2.0                                                            */
-      /*----------------------------------------------------------------------*/
-      W_L(" text=\"");
-      W_V(value);
-      W_L("\"");
-    }
-    else if (STRCASEEQ('l','L',"link", name) && value && *value) {
-      /*----------------------------------------------------------------------*/
-      /* CHTML 2.0                                                            */
-      /*----------------------------------------------------------------------*/
-      W_L(" link=\"");
-      W_V(value);
-      W_L("\"");
-    }
-    else if (STRCASEEQ('a','A',"alink", name)) {
-      /*----------------------------------------------------------------------*/
-      /* CHTML 4.0                                                            */
-      /*----------------------------------------------------------------------*/
-      /* ignore */
-    }
-    else if (STRCASEEQ('v','V',"vlink", name)) {
-      /*----------------------------------------------------------------------*/
-      /* CHTML 4.0                                                            */
-      /*----------------------------------------------------------------------*/
-      /* ignore */
+    char *name = qs_get_attr_name(doc,attr);
+    char *value = qs_get_attr_value(doc,attr);
+    switch(*name) {
+    case 'b':
+    case 'B':
+      if (strcasecmp(name, "bgcolor") == 0 && value && *value != 0) {
+        /*----------------------------------------------------------------------*/
+        /* CHTML 2.0                                                            */
+        /*----------------------------------------------------------------------*/
+        attr_bgcolor = value;
+      }
+      break;
+
+    case 't':
+    case 'T':
+      if (strcasecmp(name, "text") == 0 && value && *value != 0) {
+        /*----------------------------------------------------------------------*/
+        /* CHTML 2.0                                                            */
+        /*----------------------------------------------------------------------*/
+        attr_text = value;
+      }
+      break;
+
+    case 's':
+    case 'S':
+      if (strcasecmp(name, "style") == 0 && value && *value != 0) {
+        attr_style = value;
+      }
+      break;
+
+    case 'l':
+    case 'L':
+      if (strcasecmp(name, "link") == 0 && value && *value != 0) {
+        /*----------------------------------------------------------------------*/
+        /* CHTML 2.0                                                            */
+        /*----------------------------------------------------------------------*/
+        attr_link = value;
+      }
+      break;
+
+    case 'a':
+    case 'A':
+      if (strcasecmp(name, "alink") == 0) {
+        /*----------------------------------------------------------------------*/
+        /* CHTML 4.0                                                            */
+        /*----------------------------------------------------------------------*/
+        /* ignore */
+      }
+      break;
+
+    case 'v':
+    case 'V':
+      if (strcasecmp(name, "vlink") == 0) {
+        /*----------------------------------------------------------------------*/
+        /* CHTML 4.0                                                            */
+        /*----------------------------------------------------------------------*/
+        /* ignore */
+      }
+      break;
+
+    default:
+      break;
     }
   }
+  if (IS_CSS_ON(chtml30->entryp)) {
+    css_prop_list_t *style = s_chtml30_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *color_prop      = chxj_css_get_property_value(doc, style, "color");
+      css_property_t *bgcolor_prop    = chxj_css_get_property_value(doc, style, "background-color");
+      css_property_t *cur;
+      for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          attr_text = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+      for (cur = bgcolor_prop->next; cur != bgcolor_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          attr_bgcolor = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+    }
+    if (chtml30->style) {
+      css_stylesheet_t *pseudos = chxj_find_pseudo_selectors(doc, chtml30->style);
+      css_selector_t *cur_sel;
+      for (cur_sel = pseudos->selector_head.next; cur_sel != &pseudos->selector_head; cur_sel = cur_sel->next) {
+        if (cur_sel->name && strcasecmp(cur_sel->name, "a:link") == 0) {
+          css_property_t *cur;
+          for (cur = cur_sel->property_head.next; cur != &cur_sel->property_head; cur = cur->next) {
+            if (cur->name && strcasecmp(cur->name, "color") == 0) {
+              attr_link = apr_pstrdup(doc->pool, cur->value);
+              break;
+            }
+          }
+          break;
+        }
+      }
+    }
+  }
+  W_L("<body");
+  if (attr_bgcolor) {
+    W_L(" bgcolor=\"");
+    W_V(attr_bgcolor);
+    W_L("\"");
+  }
+  if (attr_text) {
+    W_L(" text=\"");
+    W_V(attr_text);
+    W_L("\"");
+  }
+  if (attr_link) {
+    W_L(" link=\"");
+    W_V(attr_link);
+    W_L("\"");
+  }
   W_L(">");
+
   return chtml30->out;
 }
 
@@ -969,6 +1048,9 @@ s_chtml30_end_body_tag(void *pdoc, Node *UNUSED(child))
   doc     = chtml30->doc;
 
   W_L("</body>");
+  if (IS_CSS_ON(chtml30->entryp)) {
+    chxj_css_pop_prop_list(chtml30->css_prop_stack);
+  }
 
   return chtml30->out;
 }

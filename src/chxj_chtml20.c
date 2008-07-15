@@ -1084,6 +1084,9 @@ s_chtml20_end_body_tag(void *pdoc, Node *UNUSED(child))
   r       = doc->r;
 
   W_L("</body>");
+  if (IS_CSS_ON(chtml20->entryp)) {
+    chxj_css_pop_prop_list(chtml20->css_prop_stack);
+  }
 
   return chtml20->out;
 }
