@@ -614,6 +614,11 @@ void test_jxhtml_h6_tag_with_css_003();
 void test_jxhtml_h6_tag_with_css_004();
 void test_jxhtml_h6_tag_with_css_005();
 void test_jxhtml_h6_tag_with_css_006();
+
+void test_jxhtml_body_tag_with_css_001();
+void test_jxhtml_body_tag_with_css_002();
+void test_jxhtml_body_tag_with_css_003();
+void test_jxhtml_body_tag_with_css_004();
 /* pend */
 
 int
@@ -1275,6 +1280,11 @@ main()
   CU_add_test(jxhtml_suite, "test h6 with css 004",                               test_jxhtml_h6_tag_with_css_004);
   CU_add_test(jxhtml_suite, "test h6 with css 005",                               test_jxhtml_h6_tag_with_css_005);
   CU_add_test(jxhtml_suite, "test h6 with css 006",                               test_jxhtml_h6_tag_with_css_006);
+
+  CU_add_test(jxhtml_suite, "test body with css 001",                             test_jxhtml_body_tag_with_css_001);
+  CU_add_test(jxhtml_suite, "test body with css 002",                             test_jxhtml_body_tag_with_css_002);
+  CU_add_test(jxhtml_suite, "test body with css 003",                             test_jxhtml_body_tag_with_css_003);
+  CU_add_test(jxhtml_suite, "test body with css 004",                             test_jxhtml_body_tag_with_css_004);
   /* aend */
 
   CU_basic_run_tests();
@@ -2204,7 +2214,7 @@ void test_jxhtml_body_tag_003()
 void test_jxhtml_body_tag_004() 
 {
 #define  TEST_STRING "<body bgcolor=\"#ff0000\"></body>"
-#define  RESULT_STRING "<body bgcolor=\"#ff0000\"><div></div></body>"
+#define  RESULT_STRING "<body style=\"background-color:#ff0000;\"><div></div></body>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -2294,7 +2304,7 @@ void test_jxhtml_body_tag_006()
 void test_jxhtml_body_tag_007() 
 {
 #define  TEST_STRING "<body text=\"#ff0000\"></body>"
-#define  RESULT_STRING "<body text=\"#ff0000\"><div></div></body>"
+#define  RESULT_STRING "<body style=\"color:#ff0000;\"><div></div></body>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -17964,6 +17974,183 @@ void test_jxhtml_h6_tag_with_css_006()
   apr_size_t destlen;
   APR_INIT;
   chxj_serf_get = test_chxj_serf_get057;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jxhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+
+
+/*===========================================================================*/
+/* body tag with CSS                                                         */
+/*===========================================================================*/
+char *test_chxj_serf_get058(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "body    { color:#ff0000 }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_jxhtml_body_tag_with_css_001()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body>あいう</body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?>" \
+                       "<!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
+                       "<html><head></head><body style=\"color:#ff0000;\"><div>あいう</div></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get058;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jxhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+
+char *test_chxj_serf_get059(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "body    { background-color:#ff0000 }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_jxhtml_body_tag_with_css_002()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body>あいう</body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?>" \
+                       "<!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
+                       "<html><head></head><body style=\"background-color:#ff0000;\"><div>あいう</div></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get059;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jxhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+void test_jxhtml_body_tag_with_css_003()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body style=\"color:#ffff00\">あいう</body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?>" \
+                       "<!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
+                       "<html><head></head><body style=\"color:#ffff00;\"><div>あいう</div></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get059;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jxhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_jxhtml_body_tag_with_css_004()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body style=\"background-color:#ffff00\">あいう</body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?>" \
+                       "<!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
+                       "<html><head></head><body style=\"background-color:#ffff00;\"><div>あいう</div></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get059;
   call_check = 0;
 
   COOKIE_INIT(cookie);
