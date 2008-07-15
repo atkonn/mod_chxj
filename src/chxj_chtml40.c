@@ -1380,6 +1380,7 @@ s_chtml40_start_font_tag(void *pdoc, Node *node)
     }
   }
   if (attr_color) {
+    attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
     W_L("<font color=\"");
     W_V(attr_color);
     W_L("\">");

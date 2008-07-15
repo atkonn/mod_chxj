@@ -1338,8 +1338,9 @@ s_chtml50_start_font_tag(void *pdoc, Node *node)
   chtml50_t     *chtml50;
   Doc           *doc;
   request_rec   *r;
-  char          *color = NULL;
-  char          *size = NULL;
+  char          *attr_color = NULL;
+  char          *attr_size  = NULL;
+  char          *attr_style = NULL;
 
   chtml50 = GET_CHTML50(pdoc);
   doc     = chtml50->doc;
@@ -1349,19 +1350,19 @@ s_chtml50_start_font_tag(void *pdoc, Node *node)
   /* Get Attributes                                                           */
   /*--------------------------------------------------------------------------*/
   for (attr = qs_get_attr(doc,node);
-       attr && (color == NULL || size == NULL); 
+       attr; 
        attr = qs_get_next_attr(doc,attr)) {
     char *name  = qs_get_attr_name(doc,attr);
     char *value = qs_get_attr_value(doc,attr);
     if (STRCASEEQ('c','C',"color", name) && value && *value) {
-      color = apr_pstrdup(doc->buf.pool, value);
+      attr_color = apr_pstrdup(doc->buf.pool, value);
     }
     else if (STRCASEEQ('s','S',"size", name) && value && *value) {
       /*----------------------------------------------------------------------*/
       /* CHTML 5.0                                                            */
       /*----------------------------------------------------------------------*/
-      size = apr_pstrdup(doc->buf.pool, value);
-      switch (*size) {
+      attr_size = apr_pstrdup(doc->buf.pool, value);
+      switch (*attr_size) {
       case '1':
       case '2':
       case '3':
@@ -1369,45 +1370,93 @@ s_chtml50_start_font_tag(void *pdoc, Node *node)
       case '5':
       case '6':
       case '7':
-        if (*(size + 1) == 0) {
+        if (*(attr_size + 1) == 0) {
           break;
         }
-        size = NULL;
+        attr_size = NULL;
         break;
 
       case '+':
       case '-':
         {
-          char ch = *(size + 1);
+          char ch = *(attr_size + 1);
           if (ch == '1' || ch == '2' || ch == '3') {
-            if (*(size + 2) == 0) {
+            if (*(attr_size + 2) == 0) {
               break;
             }
           }
         }
-        size = NULL;
+        attr_size = NULL;
         break;
 
       default:
-        size = NULL;
+        attr_size = NULL;
       }
     }
-    if (color && size) break;
+    else if (STRCASEEQ('s','S',"style",name) && value && *value) {
+      attr_style = value;
+    }
   }
-  if (color || size) {
+  if (IS_CSS_ON(chtml50->entryp)) {
+    css_prop_list_t *style = s_chtml50_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *color_prop = chxj_css_get_property_value(doc, style, "color");
+      css_property_t *size_prop  = chxj_css_get_property_value(doc, style, "font-size");
+      css_property_t *cur;
+      for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          attr_color = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+      for (cur = size_prop->next; cur != size_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          attr_size = apr_pstrdup(doc->pool, cur->value);
+          if (STRCASEEQ('x','X',"xx-small",attr_size)) {
+            attr_size = apr_pstrdup(doc->pool, "1");
+          }
+          else if (STRCASEEQ('x','X',"x-small",attr_size)) {
+            attr_size = apr_pstrdup(doc->pool, "2");
+          }
+          else if (STRCASEEQ('s','S',"small",attr_size)) {
+            attr_size = apr_pstrdup(doc->pool, "3");
+          }
+          else if (STRCASEEQ('m','M',"medium",attr_size)) {
+            attr_size = apr_pstrdup(doc->pool, "4");
+          }
+          else if (STRCASEEQ('l','L',"large",attr_size)) {
+            attr_size = apr_pstrdup(doc->pool, "5");
+          }
+          else if (STRCASEEQ('x','X',"x-large",attr_size)) {
+            attr_size = apr_pstrdup(doc->pool, "6");
+          }
+          else if (STRCASEEQ('x','X',"xx-large",attr_size)) {
+            attr_size = apr_pstrdup(doc->pool, "7");
+          }
+        }
+      }
+    }
+  }
+
+  if (attr_color || attr_size) {
     W_L("<font");
-    if (color) {
+    if (attr_color) {
+      attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
       W_L(" color=\"");
-      W_V(color);
+      W_V(attr_color);
       W_L("\"");
     }
-    if (size) {
+    if (attr_size) {
       W_L(" size=\"");
-      W_V(size);
+      W_V(attr_size);
       W_L("\"");
     }
     W_L(">");
-    chtml50->font_flag++;
+    chtml50_flags_t *flg = (chtml50_flags_t *)apr_palloc(doc->pool, sizeof(*flg));
+    flg->with_font_flag = 1;
+    node->userData = flg;
+  }
+  else {
+    node->userData = NULL;
   }
   return chtml50->out;
 }
@@ -1422,7 +1471,7 @@ s_chtml50_start_font_tag(void *pdoc, Node *node)
  * @return The conversion result is returned.
  */
 static char *
-s_chtml50_end_font_tag(void *pdoc, Node *UNUSED(child)) 
+s_chtml50_end_font_tag(void *pdoc, Node *node)
 {
   chtml50_t     *chtml50;
   Doc           *doc;
@@ -1432,9 +1481,12 @@ s_chtml50_end_font_tag(void *pdoc, Node *UNUSED(child))
   doc     = chtml50->doc;
   r       = doc->r;
 
-  if (chtml50->font_flag) {
+  chtml50_flags_t *flg = (chtml50_flags_t *)node->userData;
+  if (flg && flg->with_font_flag) {
     W_L("</font>");
-    chtml50->font_flag--;
+  }
+  if (IS_CSS_ON(chtml50->entryp)) {
+    chxj_css_pop_prop_list(chtml50->css_prop_stack);
   }
 
   return chtml50->out;
