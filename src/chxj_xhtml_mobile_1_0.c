@@ -1084,10 +1084,11 @@ s_xhtml_1_0_end_body_tag(void *pdoc, Node *UNUSED(child))
 static char *
 s_xhtml_1_0_start_a_tag(void *pdoc, Node *node) 
 {
-  xhtml_t       *xhtml = GET_XHTML(pdoc);
-  Doc           *doc   = xhtml->doc;
-  request_rec   *r     = doc->r;
-  Attr          *attr;
+  xhtml_t     *xhtml = GET_XHTML(pdoc);
+  Doc         *doc   = xhtml->doc;
+  request_rec *r     = doc->r;
+  Attr        *attr;
+  char        *attr_style = NULL;
 
   W_L("<a");
   /*--------------------------------------------------------------------------*/
@@ -1145,8 +1146,16 @@ s_xhtml_1_0_start_a_tag(void *pdoc, Node *node)
     else if (STRCASEEQ('i','I',"irst",name)) {
       /* ignore */
     }
+    else if (STRCASEEQ('s','S',"style",name) && value && *value) {
+      attr_style = value;
+    }
   }
   W_L(">");
+
+  if (IS_CSS_ON(xhtml->entryp)) {
+    s_xhtml_1_0_push_and_get_now_style(pdoc, node, attr_style);
+  }
+
   return xhtml->out;
 }
 
@@ -1166,6 +1175,10 @@ s_xhtml_1_0_end_a_tag(void *pdoc, Node *UNUSED(child))
   Doc     *doc   = xhtml->doc;
 
   W_L("</a>");
+
+  if (IS_CSS_ON(xhtml->entryp)) {
+    chxj_css_pop_prop_list(xhtml->css_prop_stack);
+  }
 
   return xhtml->out;
 }

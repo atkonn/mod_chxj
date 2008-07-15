@@ -1243,6 +1243,7 @@ s_jxhtml_end_a_tag(void *pdoc, Node *UNUSED(child))
   r     = doc->r;
 
   W_L("</a>");
+
   if (IS_CSS_ON(jxhtml->entryp)) {
     chxj_css_pop_prop_list(jxhtml->css_prop_stack);
   }
