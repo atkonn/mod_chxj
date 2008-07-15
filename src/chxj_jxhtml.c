@@ -1365,8 +1365,9 @@ s_jxhtml_start_font_tag(void *pdoc, Node *node)
   Doc           *doc;
   request_rec   *r;
   Attr          *attr;
-  char          *color = NULL;
-  char          *size  = NULL;
+  char          *attr_color = NULL;
+  char          *attr_size  = NULL;
+  char          *attr_style = NULL;
 
   jxhtml = GET_JXHTML(pdoc);
   doc   = jxhtml->doc;
@@ -1381,24 +1382,69 @@ s_jxhtml_start_font_tag(void *pdoc, Node *node)
     char *name  = qs_get_attr_name(doc,attr);
     char *value = qs_get_attr_value(doc,attr);
     if (STRCASEEQ('c','C',"color",name) && value && *value) {
-      color = apr_pstrdup(doc->buf.pool, value);
+      attr_color = apr_pstrdup(doc->buf.pool, value);
     }
     else if (STRCASEEQ('s','S',"size",name) && value && *value) {
       /*----------------------------------------------------------------------*/
       /* CHTML 5.0                                                            */
       /*----------------------------------------------------------------------*/
-      size = apr_pstrdup(doc->buf.pool, value);
+      attr_size = apr_pstrdup(doc->buf.pool, value);
+    }
+    else if (STRCASEEQ('s','S',"style",name) && value && *value) {
+      attr_style = apr_pstrdup(doc->buf.pool, value);
     }
   }
-  if (color) {
-    W_L("<font color=\"");
-    W_V(color);
-    W_L("\">");
-    jxhtml->font_flag++;
+  if (IS_CSS_ON(jxhtml->entryp)) {
+    css_prop_list_t *style = s_jxhtml_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *color_prop = chxj_css_get_property_value(doc, style, "color");
+      css_property_t *size_prop  = chxj_css_get_property_value(doc, style, "font-size");
+      css_property_t *cur;
+      for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          attr_color = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+      for (cur = size_prop->next; cur != size_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          attr_size = apr_pstrdup(doc->pool, cur->value);
+          if (STRCASEEQ('x','X',"xx-small",attr_size)) {
+            attr_size = apr_pstrdup(doc->pool, "1");
+          }
+          else if (STRCASEEQ('x','X',"x-small",attr_size)) {
+            attr_size = apr_pstrdup(doc->pool, "2");
+          }
+          else if (STRCASEEQ('s','S',"small",attr_size)) {
+            attr_size = apr_pstrdup(doc->pool, "3");
+          }
+          else if (STRCASEEQ('m','M',"medium",attr_size)) {
+            attr_size = apr_pstrdup(doc->pool, "4");
+          }
+          else if (STRCASEEQ('l','L',"large",attr_size)) {
+            attr_size = apr_pstrdup(doc->pool, "5");
+          }
+          else if (STRCASEEQ('x','X',"x-large",attr_size)) {
+            attr_size = apr_pstrdup(doc->pool, "6");
+          }
+          else if (STRCASEEQ('x','X',"xx-large",attr_size)) {
+            attr_size = apr_pstrdup(doc->pool, "7");
+          }
+        }
+      }
+    }
   }
-  if (size) {
-    jxhtml->font_size_flag++;
-    switch(*size) {
+  jxhtml_flags_t *flg = (jxhtml_flags_t *)apr_palloc(doc->pool, sizeof(*flg));
+  memset(flg, 0, sizeof(*flg));
+  if (attr_color) {
+    attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
+    W_L("<font color=\"");
+    W_V(attr_color);
+    W_L("\">");
+    flg->font_color_flag = 1;
+  }
+  if (attr_size) {
+    flg->font_size_flag = 1;
+    switch(*attr_size) {
     case '1': W_L("<span style=\"font-size: xx-small\">"); break;
     case '2': W_L("<span style=\"font-size: x-small\">");  break;
     case '3': W_L("<span style=\"font-size: small\">");    break;
@@ -1407,42 +1453,43 @@ s_jxhtml_start_font_tag(void *pdoc, Node *node)
     case '6': W_L("<span style=\"font-size: x-large\">");  break;
     case '7': W_L("<span style=\"font-size: xx-large\">"); break;
     case '-':
-      if (*(size + 1) == '1') {
+      if (*(attr_size + 1) == '1') {
         W_L("<span style=\"font-size: small\">");
         break;
       }
-      if (*(size + 1) == '2') {
+      if (*(attr_size + 1) == '2') {
         W_L("<span style=\"font-size: x-small\">");
         break;
       }
-      if (*(size + 1) == '3') {
+      if (*(attr_size + 1) == '3') {
         W_L("<span style=\"font-size: xx-small\">");
         break;
       }
-      jxhtml->font_size_flag--;
+      flg->font_size_flag = 0;
       break;
 
     case '+':
-      if (*(size + 1) == '1') {
+      if (*(attr_size + 1) == '1') {
         W_L("<span style=\"font-size: large\">");
         break;
       }
-      if (*(size + 1) == '2') {
+      if (*(attr_size + 1) == '2') {
         W_L("<span style=\"font-size: x-large\">");
         break;
       }
-      if (*(size + 1) == '3') {
+      if (*(attr_size + 1) == '3') {
         W_L("<span style=\"font-size: xx-large\">");
         break;
       }
-      jxhtml->font_size_flag--;
+      flg->font_size_flag = 0;
       break;
 
     default:
-      WRN(doc->r, "invlalid font size. [%s] != (1|2|3|4|5|6|7|+1|+2|+3|-1|-2|-3)", size);
-      jxhtml->font_size_flag--;
+      WRN(doc->r, "invlalid font size. [%s] != (1|2|3|4|5|6|7|+1|+2|+3|-1|-2|-3)", attr_size);
+      flg->font_size_flag = 0;
     }
   }
+  node->userData = flg;
   return jxhtml->out;
 }
 
@@ -1456,7 +1503,7 @@ s_jxhtml_start_font_tag(void *pdoc, Node *node)
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_font_tag(void *pdoc, Node *UNUSED(child)) 
+s_jxhtml_end_font_tag(void *pdoc, Node *node)
 {
   jxhtml_t      *jxhtml;
   request_rec  *r;
@@ -1466,14 +1513,17 @@ s_jxhtml_end_font_tag(void *pdoc, Node *UNUSED(child))
   doc   = jxhtml->doc;
   r     = jxhtml->doc->r;
 
-  if (jxhtml->font_size_flag) {
-    W_L("</span>");  
-    jxhtml->font_size_flag--;
+  jxhtml_flags_t *flg = (jxhtml_flags_t *)node->userData;
+  if (flg && flg->font_size_flag) {
+    W_L("</span>");
   }
-  if (jxhtml->font_flag) {
+  if (flg && flg->font_color_flag) {
     W_L("</font>");
-    jxhtml->font_flag--;
   }
+  if (IS_CSS_ON(jxhtml->entryp)) {
+    chxj_css_pop_prop_list(jxhtml->css_prop_stack);
+  }
+
   return jxhtml->out;
 }
 
