@@ -1002,26 +1002,31 @@ s_chtml50_start_body_tag(void *pdoc, Node *node)
 
   W_L("<body");
   if (attr_bgcolor) {
+    attr_bgcolor = chxj_css_rgb_func_to_value(doc->pool, attr_bgcolor);
     W_L(" bgcolor=\"");
     W_V(attr_bgcolor);
     W_L("\"");
   }
   if (attr_text) {
+    attr_text = chxj_css_rgb_func_to_value(doc->pool, attr_text);
     W_L(" text=\"");
     W_V(attr_text);
     W_L("\"");
   }
   if (attr_link) {
+    attr_link = chxj_css_rgb_func_to_value(doc->pool, attr_link);
     W_L(" link=\"");
     W_V(attr_link);
     W_L("\"");
   }
   if (attr_alink) {
+    attr_alink = chxj_css_rgb_func_to_value(doc->pool, attr_alink);
     W_L(" alink=\"");
     W_V(attr_alink);
     W_L("\"");
   }
   if (attr_vlink) {
+    attr_vlink = chxj_css_rgb_func_to_value(doc->pool, attr_vlink);
     W_L(" vlink=\"");
     W_V(attr_vlink);
     W_L("\"");
