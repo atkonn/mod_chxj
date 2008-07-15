@@ -1108,6 +1108,7 @@ s_chtml20_start_a_tag(void *pdoc, Node *node)
   chtml20_t   *chtml20;
   Doc         *doc;
   request_rec *r;
+  char        *attr_style = NULL;
 
   chtml20 = GET_CHTML20(pdoc);
   doc     = chtml20->doc;
@@ -1251,11 +1252,23 @@ s_chtml20_start_a_tag(void *pdoc, Node *node)
       }
       break;
 
+    case 's':
+    case 'S':
+      if (strcasecmp(name, "style") == 0 && value && *value) {
+        attr_style = value;
+      }
+      break;
+
     default:
       break;
     }
   }
   W_L(">");
+
+  if (IS_CSS_ON(chtml20->entryp)) {
+    s_chtml20_push_and_get_now_style(pdoc, node, attr_style);
+  }
+
   return chtml20->out;
 }
 
@@ -1280,6 +1293,9 @@ s_chtml20_end_a_tag(void *pdoc, Node *UNUSED(child))
   r       = doc->r;
 
   W_L("</a>");
+  if (IS_CSS_ON(chtml20->entryp)) {
+    chxj_css_pop_prop_list(chtml20->css_prop_stack);
+  }
 
   return chtml20->out;
 }
