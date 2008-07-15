@@ -1074,10 +1074,11 @@ s_chtml50_end_body_tag(void *pdoc, Node *UNUSED(child))
 static char *
 s_chtml50_start_a_tag(void *pdoc, Node *node) 
 {
-  chtml50_t     *chtml50;
-  Doc           *doc;
-  request_rec   *r;
-  Attr          *attr;
+  chtml50_t   *chtml50;
+  Doc         *doc;
+  request_rec *r;
+  Attr        *attr;
+  char        *attr_style = NULL;
 
   chtml50 = GET_CHTML50(pdoc);
   doc     = chtml50->doc;
@@ -1181,8 +1182,16 @@ s_chtml50_start_a_tag(void *pdoc, Node *node)
       /*----------------------------------------------------------------------*/
       /* ignore */
     }
+    else if (STRCASEEQ('s','S',"style",name) && value && *value) {
+      attr_style = value;
+    }
   }
   W_L(">");
+
+  if (IS_CSS_ON(chtml50->entryp)) {
+    s_chtml50_push_and_get_now_style(pdoc, node, attr_style);
+  }
+
   return chtml50->out;
 }
 
@@ -1205,6 +1214,10 @@ s_chtml50_end_a_tag(void *pdoc, Node *UNUSED(child))
   doc     = chtml50->doc;
 
   W_L("</a>");
+
+  if (IS_CSS_ON(chtml50->entryp)) {
+    chxj_css_pop_prop_list(chtml50->css_prop_stack);
+  }
 
   return chtml50->out;
 }
