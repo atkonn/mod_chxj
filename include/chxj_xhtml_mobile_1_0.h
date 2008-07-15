@@ -21,7 +21,7 @@
 #include "chxj_css.h"
 
 /*----------------------------------------------------------------------------*/
-/* Structure for HDML                                                         */
+/* Structure for XHTML                                                        */
 /*----------------------------------------------------------------------------*/
 typedef struct xhtml_t xhtml_t;
 
@@ -40,6 +40,14 @@ struct xhtml_t {
   cookie_t            *cookie;
   css_stylesheet_t    *style;
   css_prop_list_stack_t *css_prop_stack;
+};
+
+typedef struct _xhtml_flags_t xhtml_flags_t;
+struct _xhtml_flags_t {
+  int with_font_flag;
+  int with_blink_flag;
+  int font_color_flag;
+  int font_size_flag;
 };
 
 /*----------------------------------------------------------------------------*/
