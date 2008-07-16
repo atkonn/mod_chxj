@@ -1892,6 +1892,7 @@ s_chtml20_start_center_tag(void *pdoc, Node *node)
   request_rec *r;
   Attr        *attr;
   char        *attr_style = NULL;
+  char        *attr_color = NULL;
 
   chtml20 = GET_CHTML20(pdoc);
   doc     = chtml20->doc;
@@ -1907,10 +1908,30 @@ s_chtml20_start_center_tag(void *pdoc, Node *node)
     }
   }
 
-  W_L("<center>");
   if (IS_CSS_ON(chtml20->entryp)) {
-    s_chtml20_push_and_get_now_style(pdoc, node, attr_style);
+    css_prop_list_t *style = s_chtml20_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *color_prop      = chxj_css_get_property_value(doc, style, "color");
+      css_property_t *cur;
+      for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          attr_color = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+    }
   }
+
+  W_L("<center>");
+  chtml20_flags_t *flg = (chtml20_flags_t *)apr_palloc(doc->pool, sizeof(chtml20_flags_t));
+  memset(flg, 0, sizeof(*flg));
+  if (attr_color) {
+    attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
+    W_L("<font color=\"");
+    W_V(attr_color);
+    W_L("\">");
+    flg->with_font_flag = 1;
+  }
+  node->userData = flg;
 
   return chtml20->out;
 }
@@ -1925,7 +1946,7 @@ s_chtml20_start_center_tag(void *pdoc, Node *node)
  * @return The conversion result is returned.
  */
 static char *
-s_chtml20_end_center_tag(void *pdoc, Node *UNUSED(child)) 
+s_chtml20_end_center_tag(void *pdoc, Node *node)
 {
   chtml20_t   *chtml20;
   Doc         *doc;
@@ -1935,10 +1956,14 @@ s_chtml20_end_center_tag(void *pdoc, Node *UNUSED(child))
   doc     = chtml20->doc;
   r       = doc->r;
 
-  W_L("</center>");
   if (IS_CSS_ON(chtml20->entryp)) {
     chxj_css_pop_prop_list(chtml20->css_prop_stack);
   }
+  chtml20_flags_t *flg = (chtml20_flags_t *)node->userData;
+  if (flg && flg->with_font_flag) {
+    W_L("</font>");
+  }
+  W_L("</center>");
 
   return chtml20->out;
 }
