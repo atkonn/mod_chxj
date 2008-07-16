@@ -1918,12 +1918,64 @@ s_xhtml_1_0_end_input_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_xhtml_1_0_start_center_tag(void *pdoc, Node *UNUSED(node)) 
+s_xhtml_1_0_start_center_tag(void *pdoc, Node *node)
 {
-  xhtml_t *xhtml = GET_XHTML(pdoc);
-  Doc     *doc   = xhtml->doc;
+  xhtml_t *xhtml;
+  Doc     *doc;
+  Attr    *attr;
+  char    *attr_style = NULL;
+  char    *attr_color = NULL;
+  char    *attr_size  = NULL;
 
-  W_L("<center>");
+  xhtml = GET_XHTML(pdoc);
+  doc    = xhtml->doc;
+
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *name  = qs_get_attr_name(doc,attr);
+    char *value = qs_get_attr_value(doc,attr);
+    if (STRCASEEQ('s','S',"style",name) && value && *value) {
+      attr_style = value;
+    }
+  }
+  if (IS_CSS_ON(xhtml->entryp)) {
+    css_prop_list_t *style = s_xhtml_1_0_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *color_prop      = chxj_css_get_property_value(doc, style, "color");
+      css_property_t *size_prop       = chxj_css_get_property_value(doc, style, "font-size");
+      css_property_t *cur;
+      for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          attr_color = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+      for (cur = size_prop->next; cur != size_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          attr_size = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+    }
+  }
+
+  W_L("<center");
+  if (attr_size || attr_color) {
+    W_L(" style=\"");
+    if (attr_size) {
+      W_L("font-size:");
+      W_V(attr_size);
+      W_L(";");
+    }
+    if (attr_color) {
+      attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
+      W_L("color:");
+      W_V(attr_color);
+      W_L(";");
+    }
+    W_L("\"");
+  }
+  W_L(">");
+  
   return xhtml->out;
 }
 
@@ -1937,12 +1989,15 @@ s_xhtml_1_0_start_center_tag(void *pdoc, Node *UNUSED(node))
  * @return The conversion result is returned.
  */
 static char *
-s_xhtml_1_0_end_center_tag(void *pdoc, Node *UNUSED(child)) 
+s_xhtml_1_0_end_center_tag(void *pdoc, Node *UNUSED(node))
 {
   xhtml_t *xhtml = GET_XHTML(pdoc);
   Doc     *doc   = xhtml->doc;
 
   W_L("</center>");
+  if (IS_CSS_ON(xhtml->entryp)) {
+    chxj_css_pop_prop_list(xhtml->css_prop_stack);
+  }
   return xhtml->out;
 }
 
