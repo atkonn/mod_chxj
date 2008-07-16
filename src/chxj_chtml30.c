@@ -1755,7 +1755,7 @@ s_chtml30_end_input_tag(void *pdoc, Node *node)
   Doc         *doc;
   request_rec *r;
 
-  chtml30 = GET_CHTML20(pdoc);
+  chtml30 = GET_CHTML30(pdoc);
   doc     = chtml30->doc;
   r       = doc->r;
 

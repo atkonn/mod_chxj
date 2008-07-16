@@ -1621,7 +1621,7 @@ s_chtml40_start_input_tag(void *pdoc, Node *node)
   char        *attr_checked    = NULL;
   char        *attr_style      = NULL;
 
-  chtml40 = GET_CHTML30(pdoc);
+  chtml40 = GET_CHTML40(pdoc);
   doc     = chtml40->doc;
   r       = doc->r;
 
