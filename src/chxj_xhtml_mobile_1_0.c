@@ -1623,15 +1623,171 @@ s_xhtml_1_0_start_input_tag(void *pdoc, Node *node)
   xhtml_t     *xhtml       = GET_XHTML(pdoc);
   Doc         *doc         = xhtml->doc;
   request_rec *r           = doc->r;
-  char        *max_length  = NULL;
-  char        *type        = NULL;
-  char        *name        = NULL;
-  char        *value       = NULL;
-  char        *istyle      = NULL;
-  char        *size        = NULL;
-  char        *checked     = NULL;
-  char        *accesskey   = NULL;
+  Attr        *attr;
+  char        *attr_max_length  = NULL;
+  char        *attr_type        = NULL;
+  char        *attr_name        = NULL;
+  char        *attr_value       = NULL;
+  char        *attr_istyle      = NULL;
+  char        *attr_size        = NULL;
+  char        *attr_checked     = NULL;
+  char        *attr_accesskey   = NULL;
+  char        *attr_style       = NULL;
 
+  /*--------------------------------------------------------------------------*/
+  /* Get Attributes                                                           */
+  /*--------------------------------------------------------------------------*/
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *name  = qs_get_attr_name(doc,attr);
+    char *value = qs_get_attr_value(doc,attr);
+    if (STRCASEEQ('t','T',"type",name) && value && *value) {
+      char *tmp_type = qs_trim_string(doc->buf.pool, value);
+      if (tmp_type && (STRCASEEQ('t','T',"text",    tmp_type) ||
+                       STRCASEEQ('p','P',"password",tmp_type) ||
+                       STRCASEEQ('c','C',"checkbox",tmp_type) ||
+                       STRCASEEQ('r','R',"radio",   tmp_type) ||
+                       STRCASEEQ('h','H',"hidden",  tmp_type) ||
+                       STRCASEEQ('s','S',"submit",  tmp_type) ||
+                       STRCASEEQ('r','R',"reset",   tmp_type))) {
+        attr_type = tmp_type;
+      }
+    }
+    else if (STRCASEEQ('n','N',"name",name) && value && *value) {
+      attr_name = value;
+    }
+    else if (STRCASEEQ('v','V',"value",name) && value && *value) {
+      attr_value = value;
+    }
+    else if (STRCASEEQ('i','I',"istyle",name) && value && *value) {
+      attr_istyle = value;
+    }
+    else if (STRCASEEQ('m','M',"maxlength",name) && value && *value) {
+      attr_max_length = value;
+    }
+    else if (STRCASEEQ('c','C',"checked", name)) {
+      attr_checked = value;
+    }
+    else if (STRCASEEQ('a','A',"accesskey", name) && value && *value) {
+      attr_accesskey = value;
+    }
+    else if (STRCASEEQ('s','S',"size", name) && value && *value) {
+      attr_size = value;
+    }
+    else if (STRCASEEQ('s','S',"style", name) && value && *value) {
+      attr_style = value;
+    }
+  }
+
+  if (IS_CSS_ON(xhtml->entryp)) {
+    css_prop_list_t *style = s_xhtml_1_0_nopush_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *wap_input_format = chxj_css_get_property_value(doc, style, "-wap-input-format");
+      css_property_t *cur;
+      for (cur = wap_input_format->next; cur != wap_input_format; cur = cur->next) {
+        if (strcasestr(cur->value, "<ja:n>")) {
+          attr_istyle = "4";
+        }
+        else if (strcasestr(cur->value, "<ja:en>")) {
+          attr_istyle = "3";
+        }
+        else if (strcasestr(cur->value, "<ja:hk>")) {
+          attr_istyle = "2";
+        }
+        else if (strcasestr(cur->value, "<ja:h>")) {
+          attr_istyle = "1";
+        }
+      }
+    }
+  }
+  W_L("<input");
+  if (attr_type) {
+    attr_type = qs_trim_string(doc->buf.pool, attr_type);
+    if (attr_type && (STRCASEEQ('t','T',"text",    attr_type) ||
+                      STRCASEEQ('p','P',"password",attr_type) ||
+                      STRCASEEQ('c','C',"checkbox",attr_type) ||
+                      STRCASEEQ('r','R',"radio",   attr_type) ||
+                      STRCASEEQ('h','H',"hidden",  attr_type) ||
+                      STRCASEEQ('s','S',"submit",  attr_type) ||
+                      STRCASEEQ('r','R',"reset",   attr_type))) {
+      W_L(" type=\"");
+      W_V(attr_type);
+      W_L("\"");
+    }
+  }
+  if (attr_size && *attr_size) {
+    W_L(" size=\"");
+    W_V(attr_size);
+    W_L("\"");
+  }
+  if (attr_name && *attr_name) {
+    W_L(" name=\"");
+    W_V(attr_name);
+    W_L("\"");
+  }
+  if (attr_value && *attr_value) {
+    W_L(" value=\"");
+    W_V(chxj_add_slash_to_doublequote(doc->pool, attr_value));
+    W_L("\"");
+  }
+  if (attr_accesskey && *attr_accesskey) {
+    W_L(" accesskey=\"");
+    W_V(attr_accesskey);
+    W_L("\"");
+  }
+  if (attr_istyle && *attr_istyle && (*attr_istyle == '1' || *attr_istyle == '2' || *attr_istyle == '3' || *attr_istyle == '4')) {
+    char *fmt = qs_conv_istyle_to_format(r,attr_istyle);
+    if (attr_max_length && *attr_max_length) {
+      int ii;
+      for (ii=0; (unsigned int)ii<strlen(attr_max_length); ii++) {
+        if (attr_max_length[ii] < '0' || attr_max_length[ii] > '9') {
+          attr_max_length = apr_psprintf(r->pool, "0");
+          break;
+        }
+      }
+
+      if (strcmp(attr_max_length, "0")) {
+        char *vv = apr_psprintf(r->pool, " FORMAT=\"%d%s\"", atoi(attr_max_length), fmt);
+        W_V(vv);
+      }
+    }
+    else {
+      W_L(" FORMAT=\"");
+      W_L("*");
+      W_V(fmt);
+      W_L("\"");
+    }
+  }
+  else {
+    if (attr_max_length && *attr_max_length) {
+      if (chxj_chk_numeric(attr_max_length) != 0) {
+        attr_max_length = apr_psprintf(r->pool, "0");
+      }
+      if (strcmp(attr_max_length, "0")) {
+        char *vv = apr_psprintf(r->pool, " FORMAT=\"%dm\"", atoi(attr_max_length));
+        W_V(vv);
+      }
+    }
+  }
+  /*--------------------------------------------------------------------------*/
+  /* The figure is default for the password.                                  */
+  /*--------------------------------------------------------------------------*/
+  if (attr_type && (attr_istyle == NULL || *attr_istyle == 0) && STRCASEEQ('p','P',"password", attr_type) && ! xhtml->entryp->pc_flag) {
+    if (attr_max_length) {
+      W_L(" FORMAT=\"");
+      W_V(attr_max_length);
+      W_L("N\"");
+    }
+    else {
+      W_L(" FORMAT=\"*N\"");
+    }
+  }
+  if (attr_checked) {
+    W_L(" checked=\"checked\"");
+  }
+  W_L(" />");
+#if 0
   W_L("<input");
   /*--------------------------------------------------------------------------*/
   /* Get Attributes                                                           */
@@ -1730,6 +1886,7 @@ s_xhtml_1_0_start_input_tag(void *pdoc, Node *node)
     W_L(" checked=\"checked\"");
   }
   W_L(" />");
+#endif
 
   return xhtml->out;
 }
