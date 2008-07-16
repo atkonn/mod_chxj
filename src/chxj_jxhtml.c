@@ -2045,11 +2045,6 @@ s_jxhtml_start_center_tag(void *pdoc, Node *node)
   }
   W_L(">");
   
-#if 0
-  jxhtml_t *jxhtml = GET_JXHTML(pdoc);
-  Doc     *doc   = jxhtml->doc;
-  W_L("<center>");
-#endif
   return jxhtml->out;
 }
 
