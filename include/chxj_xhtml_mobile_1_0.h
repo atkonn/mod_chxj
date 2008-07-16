@@ -48,6 +48,7 @@ struct _xhtml_flags_t {
   int with_blink_flag;
   int font_color_flag;
   int font_size_flag;
+  int with_div_flag;
 };
 
 /*----------------------------------------------------------------------------*/
