@@ -49,6 +49,7 @@ typedef struct _chtml30_flags_t chtml30_flags_t;
 struct _chtml30_flags_t {
   int with_font_flag;
   int with_blink_flag;
+  int with_div_flag;
 };
 
 /*----------------------------------------------------------------------------*/

@@ -1430,16 +1430,20 @@ s_chtml30_end_font_tag(void *pdoc, Node *node)
 static char *
 s_chtml30_start_form_tag(void *pdoc, Node *node) 
 {
-  chtml30_t     *chtml30;
-  Doc           *doc;
-  request_rec   *r;
-  Attr          *attr;
+  chtml30_t   *chtml30;
+  Doc         *doc;
+  request_rec *r;
+  Attr        *attr;
+  char        *attr_action = NULL;
+  char        *attr_method = NULL;
+  char        *attr_style  = NULL;
+  char        *attr_color  = NULL;
+  char        *attr_align  = NULL;
 
   chtml30 = GET_CHTML30(pdoc);
   doc     = chtml30->doc;
   r       = doc->r;
 
-  W_L("<form");
   /*--------------------------------------------------------------------------*/
   /* Get Attributes                                                           */
   /*--------------------------------------------------------------------------*/
@@ -1448,33 +1452,102 @@ s_chtml30_start_form_tag(void *pdoc, Node *node)
        attr = qs_get_next_attr(doc,attr)) {
     char *name  = qs_get_attr_name(doc,attr);
     char *value = qs_get_attr_value(doc,attr);
-    if (STRCASEEQ('a','A',"action", name)) {
-      /*----------------------------------------------------------------------*/
-      /* CHTML 1.0                                                            */
-      /*----------------------------------------------------------------------*/
-      value = chxj_encoding_parameter(r, value);
-      value = chxj_add_cookie_parameter(r, value, chtml30->cookie);
-      W_L(" action=\"");
-      W_V(value);
-      W_L("\"");
-    }
-    else if (STRCASEEQ('m','M',"method", name)) {
-      /*----------------------------------------------------------------------*/
-      /* CHTML 1.0                                                            */
-      /*----------------------------------------------------------------------*/
-      W_L(" method=\"");
-      W_V(value);
-      W_L("\"");
-    }
-    else if (STRCASEEQ('u','U',"utn", name)) {
-      /*----------------------------------------------------------------------*/
-      /* CHTML 3.0                                                            */
-      /* It is special only for CHTML.                                        */
-      /*----------------------------------------------------------------------*/
-      W_L(" utn");
+    switch(*name) {
+    case 'a':
+    case 'A':
+      if (strcasecmp(name, "action") == 0) {
+        /*--------------------------------------------------------------------*/
+        /* CHTML 1.0                                                          */
+        /*--------------------------------------------------------------------*/
+        attr_action = value;
+      }
+      break;
+
+    case 'm':
+    case 'M':
+      if (strcasecmp(name, "method") == 0) {
+        /*--------------------------------------------------------------------*/
+        /* CHTML 1.0                                                          */
+        /*--------------------------------------------------------------------*/
+        attr_method = value;
+      }
+      break;
+
+    case 'u':
+    case 'U':
+      if (strcasecmp(name, "utn") == 0) {
+        /*--------------------------------------------------------------------*/
+        /* CHTML 3.0                                                          */
+        /*--------------------------------------------------------------------*/
+        /* ignore */
+      }
+      break;
+
+    case 's':
+    case 'S':
+      if (strcasecmp(name, "style") == 0) {
+        attr_style = value;
+      }
+      break;
+
+    default:
+      break;
     }
   }
+  if (IS_CSS_ON(chtml30->entryp)) {
+    css_prop_list_t *style = s_chtml30_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *text_align_prop = chxj_css_get_property_value(doc, style, "text-align");
+      css_property_t *color_prop      = chxj_css_get_property_value(doc, style, "color");
+      css_property_t *cur;
+      for (cur = text_align_prop->next; cur != text_align_prop; cur = cur->next) {
+        if (STRCASEEQ('l','L',"left", cur->value)) {
+          attr_align = apr_pstrdup(doc->pool, "left");
+        }
+        else if (STRCASEEQ('c','C',"center",cur->value)) {
+          attr_align = apr_pstrdup(doc->pool, "center");
+        }
+        else if (STRCASEEQ('r','R',"right",cur->value)) {
+          attr_align = apr_pstrdup(doc->pool, "right");
+        }
+      }
+      for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
+        attr_color = apr_pstrdup(doc->pool, cur->value);
+      }
+    }
+  }
+  W_L("<form");
+  if (attr_action) {
+    attr_action = chxj_encoding_parameter(r, attr_action);
+    attr_action = chxj_add_cookie_parameter(r, attr_action, chtml30->cookie);
+    W_L(" action=\"");
+    W_V(attr_action);
+    W_L("\"");
+  }
+  if (attr_method) {
+    W_L(" method=\"");
+    W_V(attr_method);
+    W_L("\"");
+  }
   W_L(">");
+
+  chtml30_flags_t *flg = (chtml30_flags_t *)apr_palloc(doc->pool, sizeof(chtml30_flags_t));
+  memset(flg, 0, sizeof(*flg));
+  if (attr_color) {
+    attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
+    W_L("<font color=\"");
+    W_V(attr_color);
+    W_L("\">");
+    flg->with_font_flag = 1;
+  }
+  if (attr_align) {
+    W_L("<div align=\"");
+    W_V(attr_align);
+    W_L("\">");
+    flg->with_div_flag = 1;
+  }
+  node->userData = flg;
+
   return chtml30->out;
 }
 
@@ -1488,7 +1561,7 @@ s_chtml30_start_form_tag(void *pdoc, Node *node)
  * @return The conversion result is returned.
  */
 static char *
-s_chtml30_end_form_tag(void *pdoc, Node *UNUSED(child)) 
+s_chtml30_end_form_tag(void *pdoc, Node *node)
 {
   chtml30_t    *chtml30;
   Doc          *doc;
@@ -1496,7 +1569,17 @@ s_chtml30_end_form_tag(void *pdoc, Node *UNUSED(child))
   chtml30 = GET_CHTML30(pdoc);
   doc     = chtml30->doc;
 
+  chtml30_flags_t *flg = (chtml30_flags_t *)node->userData;
+  if (flg && flg->with_div_flag) {
+    W_L("</div>");
+  }
+  if (flg && flg->with_font_flag) {
+    W_L("</font>");
+  }
   W_L("</form>");
+  if (IS_CSS_ON(chtml30->entryp)) {
+    chxj_css_pop_prop_list(chtml30->css_prop_stack);
+  }
 
   return chtml30->out;
 }
