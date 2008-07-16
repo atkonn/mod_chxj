@@ -1896,6 +1896,7 @@ s_chtml20_start_center_tag(void *pdoc, Node *node)
   chtml20 = GET_CHTML20(pdoc);
   doc     = chtml20->doc;
   r       = doc->r;
+
   for (attr = qs_get_attr(doc,node);
        attr;
        attr = qs_get_next_attr(doc,attr)) {
