@@ -55,6 +55,7 @@ struct _jhtml_flags_t {
   int with_font_flag;
   int with_blink_flag;
   int with_div_align_flag;
+  int with_div_flag;
 };
 
 /*----------------------------------------------------------------------------*/
