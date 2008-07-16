@@ -2028,16 +2028,17 @@ s_chtml10_end_tr_tag(void *pdoc, Node *UNUSED(child))
 static char *
 s_chtml10_start_form_tag(void *pdoc, Node *node) 
 {
-  chtml10_t    *chtml10;
-  Doc          *doc;
-  request_rec  *r;
-  Attr         *attr;
+  chtml10_t   *chtml10;
+  Doc         *doc;
+  request_rec *r;
+  Attr        *attr;
+  char        *attr_style  = NULL;
+  char        *attr_action = NULL;
+  char        *attr_method = NULL;
 
   chtml10 = GET_CHTML10(pdoc);
   doc     = chtml10->doc;
   r       = doc->r;
-
-  W_L("<form");
 
   /*--------------------------------------------------------------------------*/
   /* Get Attributes                                                           */
@@ -2054,12 +2055,7 @@ s_chtml10_start_form_tag(void *pdoc, Node *node)
         /*--------------------------------------------------------------------*/
         /* CHTML 1.0                                                          */
         /*--------------------------------------------------------------------*/
-        value = chxj_encoding_parameter(r, value);
-        value = chxj_add_cookie_parameter(r, value, chtml10->cookie);
-  
-        W_L(" action=\"");
-        W_V(value);
-        W_L("\"");
+        attr_action = value;
       }
       break;
 
@@ -2069,9 +2065,7 @@ s_chtml10_start_form_tag(void *pdoc, Node *node)
         /*--------------------------------------------------------------------*/
         /* CHTML 1.0                                                          */
         /*--------------------------------------------------------------------*/
-        W_L(" method=\"");
-        W_V(value);
-        W_L("\"");
+        attr_method = value;
       }
       break;
 
@@ -2085,11 +2079,33 @@ s_chtml10_start_form_tag(void *pdoc, Node *node)
       }
       break;
 
+    case 's':
+    case 'S':
+      if (strcasecmp(name, "style") == 0 && value && *value) {
+        attr_style = value;
+      }
+      break;
+
     default:
       break;
     }
   }
-
+  if (IS_CSS_ON(chtml10->entryp)) {
+    s_chtml10_push_and_get_now_style(pdoc, node, attr_style);
+  }
+  W_L("<form");
+  if (attr_action) {
+    attr_action = chxj_encoding_parameter(r, attr_action);
+    attr_action = chxj_add_cookie_parameter(r, attr_action, chtml10->cookie);
+    W_L(" action=\"");
+    W_V(attr_action);
+    W_L("\"");
+  }
+  if (attr_method) {
+    W_L(" method=\"");
+    W_V(attr_method);
+    W_L("\"");
+  }
   W_L(">");
 
   return chtml10->out;
@@ -2116,6 +2132,9 @@ s_chtml10_end_form_tag(void *pdoc, Node *UNUSED(child))
   r       = doc->r;
 
   W_L("</form>");
+  if (IS_CSS_ON(chtml10->entryp)) {
+    chxj_css_pop_prop_list(chtml10->css_prop_stack);
+  }
 
   return chtml10->out;
 }
