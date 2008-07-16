@@ -606,7 +606,6 @@ void test_jhtml_input_tag_with_css_006();
 void test_jhtml_input_tag_with_css_007();
 void test_jhtml_input_tag_with_css_008();
 
-
 void test_jhtml_center_tag_with_css_001();
 void test_jhtml_center_tag_with_css_002();
 void test_jhtml_center_tag_with_css_003();
