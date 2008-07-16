@@ -1599,96 +1599,143 @@ s_chtml30_start_input_tag(void *pdoc, Node *node)
   chtml30_t   *chtml30;
   Doc         *doc;
   request_rec *r;
-  char        *max_length  = NULL;
-  char        *type        = NULL;
-  char        *name        = NULL;
-  char        *value       = NULL;
-  char        *istyle      = NULL;
-  char        *size        = NULL;
-  char        *checked     = NULL;
-  char        *accesskey   = NULL;
+  Attr        *attr;
+  char        *attr_accesskey  = NULL;
+  char        *attr_max_length = NULL;
+  char        *attr_type       = NULL;
+  char        *attr_name       = NULL;
+  char        *attr_value      = NULL;
+  char        *attr_istyle     = NULL;
+  char        *attr_size       = NULL;
+  char        *attr_checked    = NULL;
+  char        *attr_style      = NULL;
 
-  chtml30   = GET_CHTML30(pdoc);
-  doc       = chtml30->doc;
-  r         = doc->r;
-  W_L("<input");
+  chtml30 = GET_CHTML30(pdoc);
+  doc     = chtml30->doc;
+  r       = doc->r;
+
   /*--------------------------------------------------------------------------*/
   /* Get Attributes                                                           */
   /*--------------------------------------------------------------------------*/
-  type       = qs_get_type_attr(doc, node, doc->buf.pool);
-  name       = qs_get_name_attr(doc, node, doc->buf.pool);
-  value      = qs_get_value_attr(doc,node,doc->buf.pool);
-  istyle     = qs_get_istyle_attr(doc,node,doc->buf.pool);
-  max_length = qs_get_maxlength_attr(doc,node,doc->buf.pool);
-  checked    = qs_get_checked_attr(doc,node,doc->buf.pool);
-  accesskey  = qs_get_accesskey_attr(doc, node, doc->buf.pool);
-  size       = qs_get_size_attr(doc, node, doc->buf.pool);
-
-  if (type) {
-    type = qs_trim_string(doc->buf.pool, type);
-    if (type && (STRCASEEQ('t','T',"text",    type) ||
-                 STRCASEEQ('p','P',"password",type) ||
-                 STRCASEEQ('c','C',"checkbox",type) ||
-                 STRCASEEQ('r','R',"radio",   type) ||
-                 STRCASEEQ('h','H',"hidden",  type) ||
-                 STRCASEEQ('s','S',"submit",  type) ||
-                 STRCASEEQ('r','R',"reset",   type))) {
-      W_L(" type=\"");
-      W_V(type);
-      W_L("\"");
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *name  = qs_get_attr_name(doc,attr);
+    char *value = qs_get_attr_value(doc,attr);
+    if (STRCASEEQ('t','T',"type",name) && value && *value) {
+      char *tmp_type = qs_trim_string(doc->buf.pool, value);
+      if (tmp_type && (STRCASEEQ('t','T',"text",    tmp_type) ||
+                       STRCASEEQ('p','P',"password",tmp_type) ||
+                       STRCASEEQ('c','C',"checkbox",tmp_type) ||
+                       STRCASEEQ('r','R',"radio",   tmp_type) ||
+                       STRCASEEQ('h','H',"hidden",  tmp_type) ||
+                       STRCASEEQ('s','S',"submit",  tmp_type) ||
+                       STRCASEEQ('r','R',"reset",   tmp_type))) {
+        attr_type = tmp_type;
+      }
+    }
+    else if (STRCASEEQ('n','N',"name",name) && value && *value) {
+      attr_name = value;
+    }
+    else if (STRCASEEQ('v','V',"value",name) && value && *value) {
+      attr_value = value;
+    }
+    else if (STRCASEEQ('i','I',"istyle",name) && value && *value) {
+      attr_istyle = value;
+    }
+    else if (STRCASEEQ('m','M',"maxlength",name) && value && *value) {
+      attr_max_length = value;
+    }
+    else if (STRCASEEQ('c','C',"checked", name)) {
+      attr_checked = value;
+    }
+    else if (STRCASEEQ('a','A',"accesskey", name) && value && *value) {
+      attr_accesskey = value;
+    }
+    else if (STRCASEEQ('s','S',"size", name) && value && *value) {
+      attr_size = value;
+    }
+    else if (STRCASEEQ('s','S',"style", name) && value && *value) {
+      attr_style = value;
     }
   }
-  if (size && *size) {
+
+  if (IS_CSS_ON(chtml30->entryp)) {
+    css_prop_list_t *style = s_chtml30_nopush_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *wap_input_format = chxj_css_get_property_value(doc, style, "-wap-input-format");
+      css_property_t *cur;
+      for (cur = wap_input_format->next; cur != wap_input_format; cur = cur->next) {
+        if (strcasestr(cur->value, "<ja:n>")) {
+          attr_istyle = "4";
+        }
+        else if (strcasestr(cur->value, "<ja:en>")) {
+          attr_istyle = "3";
+        }
+        else if (strcasestr(cur->value, "<ja:hk>")) {
+          attr_istyle = "2";
+        }
+        else if (strcasestr(cur->value, "<ja:h>")) {
+          attr_istyle = "1";
+        }
+      }
+    }
+  }
+
+  W_L("<input");
+  if (attr_type) {
+    W_L(" type=\"");
+    W_V(attr_type);
+    W_L("\"");
+  }
+  if (attr_size) {
     W_L(" size=\"");
-    W_V(size);
+    W_V(attr_size);
     W_L("\"");
   }
-  if (name && *name) {
+  if (attr_name) {
     W_L(" name=\"");
-    W_V(name);
+    W_V(attr_name);
     W_L("\"");
   }
-  if (value && *value) {
+  if (attr_value) {
     W_L(" value=\"");
-    W_V(chxj_add_slash_to_doublequote(doc->pool, value));
+    W_V(chxj_add_slash_to_doublequote(doc->pool, attr_value));
     W_L("\"");
   }
-  if (accesskey && *accesskey) {
+  if (attr_accesskey) {
     W_L(" accesskey=\"");
-    W_V(accesskey);
+    W_V(attr_accesskey);
     W_L("\"");
   }
-  if (istyle) {
-    /*------------------------------------------------------------------------*/
-    /* CHTML 2.0                                                              */
-    /*------------------------------------------------------------------------*/
-    if (*istyle == '1' || *istyle == '2' || *istyle == '3' || *istyle == '4') {
+  if (attr_istyle) {
+    if (*attr_istyle == '1' || *attr_istyle == '2' || *attr_istyle == '3' || *attr_istyle == '4') {
       W_L(" istyle=\"");
-      W_V(istyle);
+      W_V(attr_istyle);
       W_L("\"");
     }
   }
-
   /*--------------------------------------------------------------------------*/
   /* The figure is default for the password.                                  */
   /*--------------------------------------------------------------------------*/
-  if (max_length && *max_length) {
-    if (chxj_chk_numeric(max_length) != 0) {
-      max_length = apr_psprintf(r->pool, "0");
+  if (attr_max_length) {
+    if (chxj_chk_numeric(attr_max_length) != 0) {
+      attr_max_length = apr_psprintf(doc->buf.pool, "0");
     }
-    if (istyle != NULL && *istyle == '1') {
-      char *vv = apr_psprintf(doc->buf.pool, " maxlength=\"%d\"", chxj_atoi(max_length) * 2);
+    if (attr_istyle && *attr_istyle == '1') {
+      char *vv = apr_psprintf(doc->buf.pool, " maxlength=\"%d\"", chxj_atoi(attr_max_length) * 2);
       W_V(vv);
     }
-    else  {
-      char *vv = apr_psprintf(doc->buf.pool, " maxlength=\"%d\"", chxj_atoi(max_length));
+    else {
+      char *vv = apr_psprintf(doc->buf.pool, " maxlength=\"%d\"", chxj_atoi(attr_max_length));
       W_V(vv);
     }
   }
-  if (checked) {
+  if (attr_checked) {
     W_L(" checked");
   }
   W_L(">");
+
   return chtml30->out;
 }
 
@@ -1702,9 +1749,15 @@ s_chtml30_start_input_tag(void *pdoc, Node *node)
  * @return The conversion result is returned.
  */
 static char *
-s_chtml30_end_input_tag(void *pdoc, Node *UNUSED(child)) 
+s_chtml30_end_input_tag(void *pdoc, Node *node)
 {
-  chtml30_t *chtml30 = GET_CHTML30(pdoc);
+  chtml30_t   *chtml30;
+  Doc         *doc;
+  request_rec *r;
+
+  chtml30 = GET_CHTML20(pdoc);
+  doc     = chtml30->doc;
+  r       = doc->r;
 
   return chtml30->out;
 }
