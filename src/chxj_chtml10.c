@@ -2280,17 +2280,32 @@ s_chtml10_end_input_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_chtml10_start_center_tag(void *pdoc, Node *UNUSED(node)) 
+s_chtml10_start_center_tag(void *pdoc, Node *node)
 {
   chtml10_t    *chtml10;
   Doc          *doc;
   request_rec  *r;
+  Attr         *attr;
+  char         *attr_style = NULL;
 
   chtml10 = GET_CHTML10(pdoc);
   doc     = chtml10->doc;
   r       = doc->r;
 
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *name  = qs_get_attr_name(doc,attr);
+    char *value = qs_get_attr_value(doc,attr);
+    if (STRCASEEQ('s','S',"style",name) && value && *value) {
+      attr_style = value;
+    }
+  }
+
   W_L("<center>");
+  if (IS_CSS_ON(chtml10->entryp)) {
+    s_chtml10_push_and_get_now_style(pdoc, node, attr_style);
+  }
 
   return chtml10->out;
 }
@@ -2316,6 +2331,9 @@ s_chtml10_end_center_tag(void *pdoc, Node *UNUSED(child))
   r       = doc->r;
 
   W_L("</center>");
+  if (IS_CSS_ON(chtml10->entryp)) {
+    chxj_css_pop_prop_list(chtml10->css_prop_stack);
+  }
 
   return chtml10->out;
 }
