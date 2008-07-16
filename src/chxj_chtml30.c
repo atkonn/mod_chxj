@@ -1778,6 +1778,7 @@ s_chtml30_start_center_tag(void *pdoc, Node *node)
   Doc         *doc;
   Attr        *attr;
   char        *attr_style = NULL;
+  char        *attr_color = NULL;
 
   chtml30 = GET_CHTML30(pdoc);
   doc     = chtml30->doc;
@@ -1792,10 +1793,30 @@ s_chtml30_start_center_tag(void *pdoc, Node *node)
     }
   }
 
-  W_L("<center>");
   if (IS_CSS_ON(chtml30->entryp)) {
-    s_chtml30_push_and_get_now_style(pdoc, node, attr_style);
+    css_prop_list_t *style = s_chtml30_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *color_prop      = chxj_css_get_property_value(doc, style, "color");
+      css_property_t *cur;
+      for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          attr_color = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+    }
   }
+
+  W_L("<center>");
+  chtml30_flags_t *flg = (chtml30_flags_t *)apr_palloc(doc->pool, sizeof(chtml30_flags_t));
+  memset(flg, 0, sizeof(*flg));
+  if (attr_color) {
+    attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
+    W_L("<font color=\"");
+    W_V(attr_color);
+    W_L("\">");
+    flg->with_font_flag = 1;
+  }
+  node->userData = flg;
 
   return chtml30->out;
 }
@@ -1810,7 +1831,7 @@ s_chtml30_start_center_tag(void *pdoc, Node *node)
  * @return The conversion result is returned.
  */
 static char *
-s_chtml30_end_center_tag(void *pdoc, Node *UNUSED(child)) 
+s_chtml30_end_center_tag(void *pdoc, Node *node)
 {
   chtml30_t     *chtml30;
   Doc           *doc;
@@ -1818,10 +1839,14 @@ s_chtml30_end_center_tag(void *pdoc, Node *UNUSED(child))
   chtml30 = GET_CHTML30(pdoc);
   doc     = chtml30->doc;
 
-  W_L("</center>");
   if (IS_CSS_ON(chtml30->entryp)) {
     chxj_css_pop_prop_list(chtml30->css_prop_stack);
   }
+  chtml30_flags_t *flg = (chtml30_flags_t *)node->userData;
+  if (flg && flg->with_font_flag) {
+    W_L("</font>");
+  }
+  W_L("</center>");
 
   return chtml30->out;
 }
