@@ -2591,6 +2591,163 @@ s_jxhtml_end_ul_tag(void *pdoc, Node *UNUSED(child))
 static char *
 s_jxhtml_start_hr_tag(void *pdoc, Node *node) 
 {
+  Attr        *attr;
+  jxhtml_t     *jxhtml;
+  Doc         *doc;
+  request_rec *r;
+  char        *attr_align   = NULL;
+  char        *attr_size    = NULL;
+  char        *attr_width   = NULL;
+  char        *attr_noshade = NULL;
+  char        *attr_style   = NULL;
+  char        *attr_color   = NULL;
+
+  jxhtml   = GET_JXHTML(pdoc);
+  doc     = jxhtml->doc;
+  r       = doc->r;
+
+  for (attr = qs_get_attr(doc,node);
+       attr; 
+       attr = qs_get_next_attr(doc,attr)) {
+    char *name  = qs_get_attr_name (doc,attr);
+    char *value = qs_get_attr_value(doc,attr);
+    switch(*name) {
+    case 'a':
+    case 'A':
+      if (strcasecmp(name, "align") == 0) {
+        /*--------------------------------------------------------------------*/
+        /* CHTML 1.0                                                          */
+        /*--------------------------------------------------------------------*/
+        if (value && (STRCASEEQ('l','L',"left",value) || STRCASEEQ('r','R',"right",value) || STRCASEEQ('c','C',"center",value))) {
+          attr_align = value;
+        }
+      }
+      break;
+
+    case 's':
+    case 'S':
+      if (strcasecmp(name, "size") == 0) {
+        /*--------------------------------------------------------------------*/
+        /* CHTML 1.0                                                          */
+        /*--------------------------------------------------------------------*/
+        if (value && *value) {
+          attr_size = value;
+        }
+      }
+      else if (strcasecmp(name, "style") == 0) {
+        if (value && *value) {
+          attr_style = value;
+        }
+      }
+      break;
+
+    case 'w':
+    case 'W':
+      if (strcasecmp(name, "width") == 0) {
+        /*--------------------------------------------------------------------*/
+        /* CHTML 1.0                                                          */
+        /*--------------------------------------------------------------------*/
+        if (value && *value) {
+          attr_width = value;
+        }
+      }
+      break;
+
+    case 'n':
+    case 'N':
+      if (strcasecmp(name, "noshade") == 0) {
+        /*--------------------------------------------------------------------*/
+        /* CHTML 1.0                                                          */
+        /*--------------------------------------------------------------------*/
+        attr_noshade = apr_pstrdup(doc->pool, "noshade");
+      }
+      break;
+
+    case 'c':
+    case 'C':
+      if (strcasecmp(name, "color") == 0 && value && *value) {
+        /*--------------------------------------------------------------------*/
+        /* CHTML 4.0                                                          */
+        /*--------------------------------------------------------------------*/
+        attr_color = value;
+      }
+      break;
+
+    default:
+      break;
+    }
+  }
+  if (IS_CSS_ON(jxhtml->entryp)) {
+    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *border_style_prop = chxj_css_get_property_value(doc, style, "border-style");
+      css_property_t *height_prop       = chxj_css_get_property_value(doc, style, "height");
+      css_property_t *width_prop        = chxj_css_get_property_value(doc, style, "width");
+      css_property_t *cur;
+      for (cur = border_style_prop->next; cur != border_style_prop; cur = cur->next) {
+        if (STRCASEEQ('s','S',"solid",cur->value)) {
+          attr_noshade = "noshade";
+        }
+      }
+      for (cur = height_prop->next; cur != height_prop; cur = cur->next) {
+        char *tmp = apr_pstrdup(doc->pool, cur->value);
+        char *tmpp = strstr(tmp, "px");
+        if (tmpp) { 
+          attr_size = apr_pstrdup(doc->pool, tmp);
+        }
+      }
+      for (cur = width_prop->next; cur != width_prop; cur = cur->next) {
+        char *tmp = apr_pstrdup(doc->pool, cur->value);
+        char *tmpp = strstr(tmp, "px");
+        if (tmpp) {
+          attr_width = apr_pstrdup(doc->pool, tmp);
+        }
+        else {
+          tmpp = strstr(tmp, "%");
+          if (tmpp) {
+            attr_width = apr_pstrdup(doc->pool, tmp);
+          }
+        }
+      }
+    }
+  }
+  W_L("<hr");
+  if (attr_align) {
+    W_L(" align=\"");
+    W_V(attr_align);
+    W_L("\"");
+  }
+  if (attr_size || attr_width || attr_noshade) {
+    W_L(" style=\"");
+    if (attr_size) {
+      W_L("height:");
+      W_V(attr_size);
+      if (!strstr(attr_size, "px")) {
+        W_L("px");
+      }
+      W_L(";");
+    }
+    if (attr_width) {
+      W_L("width:");
+      W_V(attr_width);
+      if (!strstr(attr_width, "px") && !strstr(attr_width, "%")) {
+        W_L("px");
+      }
+      W_L(";");
+    }
+    if (attr_noshade) {
+      W_L("border-style:solid;");
+    }
+    W_L("\"");
+  }
+  if (attr_color) {
+    W_L(" color=\"");
+    W_V(attr_color);
+    W_L("\"");
+  }
+  W_L(" />");
+  return jxhtml->out;
+#if 0
   jxhtml_t *jxhtml = GET_JXHTML(pdoc);
   Doc     *doc   = jxhtml->doc;
   Attr    *attr;
@@ -2643,6 +2800,7 @@ s_jxhtml_start_hr_tag(void *pdoc, Node *node)
     }
   }
   W_L(" />");
+#endif
   return jxhtml->out;
 }
 
