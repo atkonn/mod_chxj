@@ -2014,60 +2014,6 @@ s_chtml40_start_hr_tag(void *pdoc, Node *node)
     W_L(" noshade");
   }
   W_L(">");
-#if 0
-  for (attr = qs_get_attr(doc,node);
-       attr; 
-       attr = qs_get_next_attr(doc,attr)) {
-    char *name = qs_get_attr_name(doc,attr);
-    char *value = qs_get_attr_value(doc,attr);
-    if (STRCASEEQ('a','A',"align", name)) {
-      /*----------------------------------------------------------------------*/
-      /* CHTML 1.0                                                            */
-      /*----------------------------------------------------------------------*/
-      if (value && (STRCASEEQ('l','L',"left",value) || STRCASEEQ('r','R',"right",value) || STRCASEEQ('c','C',"center",value))) {
-        W_L(" align=\"");
-        W_V(value);
-        W_L("\"");
-      }
-    }
-    else if (STRCASEEQ('s','S',"size", name)) {
-      /*----------------------------------------------------------------------*/
-      /* CHTML 1.0                                                            */
-      /*----------------------------------------------------------------------*/
-      if (value && *value) {
-        W_L(" size=\"");
-        W_V(value);
-        W_L("\"");
-      }
-    }
-    else if (STRCASEEQ('w','W',"width", name)) {
-      /*----------------------------------------------------------------------*/
-      /* CHTML 1.0                                                            */
-      /*----------------------------------------------------------------------*/
-      if (value && *value) {
-        W_L(" width=\"");
-        W_V(value);
-        W_L("\"");
-      }
-    }
-    else if (STRCASEEQ('n','N',"noshade", name)) {
-      /*----------------------------------------------------------------------*/
-      /* CHTML 1.0                                                            */
-      /*----------------------------------------------------------------------*/
-      W_L(" noshade");
-    }
-    else if (STRCASEEQ('c','C',"color", name) && value && *value) {
-      /*----------------------------------------------------------------------*/
-      /* CHTML 4.0                                                            */
-      /*----------------------------------------------------------------------*/
-      W_L(" color=\"");
-      W_V(value);
-      W_L("\"");
-    }
-  }
-  W_L("<hr");
-  W_L(">");
-#endif
   return chtml40->out;
 }
 
