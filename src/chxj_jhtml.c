@@ -2383,63 +2383,8 @@ s_jhtml_end_ul_tag(void *pdoc, Node *UNUSED(child))
 static char *
 s_jhtml_start_hr_tag(void *pdoc, Node *node) 
 {
-#if 0
-  jhtml_t *jhtml = GET_JHTML(pdoc);
-  Doc     *doc   = jhtml->doc;
-  Attr    *attr;
-
-  W_L("<hr");
-  for (attr = qs_get_attr(doc,node);
-       attr; 
-       attr = qs_get_next_attr(doc,attr)) {
-    char *name = qs_get_attr_name(doc,attr);
-    char *value = qs_get_attr_value(doc,attr);
-    if (STRCASEEQ('a','A',"align",name)) {
-      /*----------------------------------------------------------------------*/
-      /* CHTML 1.0                                                            */
-      /*----------------------------------------------------------------------*/
-      if (value && (STRCASEEQ('l','L',"left",value) || STRCASEEQ('r','R',"right",value) || STRCASEEQ('c','C',"center",value))) {
-        W_L(" align=\"");
-        W_V(value);
-        W_L("\"");
-      }
-    }
-    else if (STRCASEEQ('s','S',"size",name) && value && *value) {
-      /*----------------------------------------------------------------------*/
-      /* CHTML 1.0                                                            */
-      /*----------------------------------------------------------------------*/
-      W_L(" size=\"");
-      W_V(value);
-      W_L("\"");
-    }
-    else if (STRCASEEQ('w','W',"width",name) && value && *value) {
-      /*----------------------------------------------------------------------*/
-      /* CHTML 1.0                                                            */
-      /*----------------------------------------------------------------------*/
-      W_L(" width=\"");
-      W_V(value);
-      W_L("\"");
-    }
-    else if (STRCASEEQ('n','N',"noshade",name)) {
-      /*----------------------------------------------------------------------*/
-      /* CHTML 1.0                                                            */
-      /*----------------------------------------------------------------------*/
-      W_L(" noshade");
-    }
-    else if (STRCASEEQ('c','C',"color",name) && value && *value) {
-      /*----------------------------------------------------------------------*/
-      /* CHTML 4.0                                                            */
-      /*----------------------------------------------------------------------*/
-      W_L(" color=\"");
-      W_V(value);
-      W_L("\"");
-    }
-  }
-  W_L(">");
-  return jhtml->out;
-#endif
   Attr        *attr;
-  jhtml_t   *jhtml;
+  jhtml_t     *jhtml;
   Doc         *doc;
   request_rec *r;
   char        *attr_align   = NULL;
@@ -2449,7 +2394,7 @@ s_jhtml_start_hr_tag(void *pdoc, Node *node)
   char        *attr_style   = NULL;
   char        *attr_color   = NULL;
 
-  jhtml = GET_CHTML50(pdoc);
+  jhtml   = GET_JHTML(pdoc);
   doc     = jhtml->doc;
   r       = doc->r;
 
