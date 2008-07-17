@@ -2508,6 +2508,9 @@ s_chtml10_end_hr_tag(void *pdoc, Node *UNUSED(child))
 {
   chtml10_t *chtml10 = GET_CHTML10(pdoc);
 
+  if (IS_CSS_ON(chtml10->entryp)) {
+    chxj_css_pop_prop_list(chtml10->css_prop_stack);
+  }
 
   return chtml10->out;
 }

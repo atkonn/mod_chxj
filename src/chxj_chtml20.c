@@ -2252,17 +2252,20 @@ s_chtml20_start_hr_tag(void *pdoc, Node *node)
   Doc         *doc;
   request_rec *r;
   Attr        *attr;
+  char        *attr_align   = NULL;
+  char        *attr_size    = NULL;
+  char        *attr_width   = NULL;
+  char        *attr_noshade = NULL;
+  char        *attr_style   = NULL;
 
   chtml20 = GET_CHTML20(pdoc);
   doc     = chtml20->doc;
   r       = doc->r;
 
-
-  W_L("<hr");
   for (attr = qs_get_attr(doc,node);
        attr; 
        attr = qs_get_next_attr(doc,attr)) {
-    char *name  = qs_get_attr_name(doc,attr);
+    char *name  = qs_get_attr_name (doc,attr);
     char *value = qs_get_attr_value(doc,attr);
     switch(*name) {
     case 'a':
@@ -2272,9 +2275,7 @@ s_chtml20_start_hr_tag(void *pdoc, Node *node)
         /* CHTML 1.0                                                          */
         /*--------------------------------------------------------------------*/
         if (value && (STRCASEEQ('l','L',"left",value) || STRCASEEQ('r','R',"right",value) || STRCASEEQ('c','C',"center",value))) {
-          W_L(" align=\"");
-          W_V(value);
-          W_L("\"");
+          attr_align = value;
         }
       }
       break;
@@ -2285,10 +2286,13 @@ s_chtml20_start_hr_tag(void *pdoc, Node *node)
         /*--------------------------------------------------------------------*/
         /* CHTML 1.0                                                          */
         /*--------------------------------------------------------------------*/
-        if (value && value[0] != '\0') {
-          W_L(" size=\"");
-          W_V(value);
-          W_L("\"");
+        if (value && *value) {
+          attr_size = value;
+        }
+      }
+      else if (strcasecmp(name, "style") == 0) {
+        if (value && *value) {
+          attr_style = value;
         }
       }
       break;
@@ -2299,10 +2303,8 @@ s_chtml20_start_hr_tag(void *pdoc, Node *node)
         /*--------------------------------------------------------------------*/
         /* CHTML 1.0                                                          */
         /*--------------------------------------------------------------------*/
-        if (value && value[0] != '\0') {
-          W_L(" width=\"");
-          W_V(value);
-          W_L("\"");
+        if (value && *value) {
+          attr_width = value;
         }
       }
       break;
@@ -2313,7 +2315,7 @@ s_chtml20_start_hr_tag(void *pdoc, Node *node)
         /*--------------------------------------------------------------------*/
         /* CHTML 1.0                                                          */
         /*--------------------------------------------------------------------*/
-        W_L(" noshade");
+        attr_noshade = apr_pstrdup(doc->pool, "noshade");
       }
       break;
 
@@ -2330,6 +2332,61 @@ s_chtml20_start_hr_tag(void *pdoc, Node *node)
     default:
       break;
     }
+  }
+  if (IS_CSS_ON(chtml20->entryp)) {
+    css_prop_list_t *style = s_chtml20_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *border_style_prop = chxj_css_get_property_value(doc, style, "border-style");
+      css_property_t *height_prop       = chxj_css_get_property_value(doc, style, "height");
+      css_property_t *width_prop        = chxj_css_get_property_value(doc, style, "width");
+      css_property_t *cur;
+      for (cur = border_style_prop->next; cur != border_style_prop; cur = cur->next) {
+        if (STRCASEEQ('s','S',"solid",cur->value)) {
+          attr_noshade = "noshade";
+        }
+      }
+      for (cur = height_prop->next; cur != height_prop; cur = cur->next) {
+        char *tmp = apr_pstrdup(doc->pool, cur->value);
+        char *tmpp = strstr(tmp, "px");
+        if (tmpp) { 
+          *tmpp = 0;
+          attr_size = apr_pstrdup(doc->pool, tmp);
+        }
+      }
+      for (cur = width_prop->next; cur != width_prop; cur = cur->next) {
+        char *tmp = apr_pstrdup(doc->pool, cur->value);
+        char *tmpp = strstr(tmp, "px");
+        if (tmpp) {
+          *tmpp = 0;
+          attr_width = apr_pstrdup(doc->pool, tmp);
+        }
+        else {
+          tmpp = strstr(tmp, "%");
+          if (tmpp) {
+            attr_width = apr_pstrdup(doc->pool, tmp);
+          }
+        }
+      }
+    }
+  }
+  W_L("<hr");
+  if (attr_align) {
+    W_L(" align=\"");
+    W_V(attr_align);
+    W_L("\"");
+  }
+  if (attr_size) {
+    W_L(" size=\"");
+    W_V(attr_size);
+    W_L("\"");
+  }
+  if (attr_width) {
+    W_L(" width=\"");
+    W_V(attr_width);
+    W_L("\"");
+  }
+  if (attr_noshade) {
+    W_L(" noshade");
   }
   W_L(">");
   return chtml20->out;
@@ -2348,6 +2405,9 @@ static char *
 s_chtml20_end_hr_tag(void *pdoc, Node *UNUSED(child)) 
 {
   chtml20_t *chtml20 = GET_CHTML20(pdoc);
+  if (IS_CSS_ON(chtml20->entryp)) {
+    chxj_css_pop_prop_list(chtml20->css_prop_stack);
+  }
   return chtml20->out;
 }
 
