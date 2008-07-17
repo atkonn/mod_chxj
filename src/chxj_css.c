@@ -1214,23 +1214,6 @@ chxj_css_rgb_func_to_value(apr_pool_t *pool, const char *rgb_func_string)
   return s;
 }
 
-#if 0
-css_stylesheet_t *
-chxj_css_parse_from_style_tag(apr_pool_t *pool, css_stylesheet_t *old_stylesheet, const char *style_value)
-{
-}
-
-
-css_stylesheet_t *
-chxj_css_parse_from_style_attribute(apr_pool_t *pool, css_stylesheet_t *old_stylesheet, const char *style_attribute_value)
-{
-
-
-/*===========================================================================*/
-/* push/pop current_stylesheet_stack                                         */
-/*===========================================================================*/
-#endif
-
 /*
  * vim:ts=2 et
  */

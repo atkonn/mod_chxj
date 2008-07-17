@@ -102,6 +102,7 @@ extern css_prop_list_t *chxj_css_get_last_prop_list(css_prop_list_stack_t *stack
 extern css_property_t *chxj_css_get_property_value(Doc *doc, css_prop_list_t *base, const char *name);
 
 extern char *chxj_css_rgb_func_to_value(apr_pool_t *pool, const char *rgb_func_string);
+
 #endif
 /*
  * vim:ts=2 et
