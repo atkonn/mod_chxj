@@ -1949,7 +1949,7 @@ s_chtml30_start_hr_tag(void *pdoc, Node *node)
     }
   }
   if (IS_CSS_ON(chtml30->entryp)) {
-    css_prop_list_t *style = s_chtml30_push_and_get_now_style(pdoc, node, attr_style);
+    css_prop_list_t *style = s_chtml30_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *border_style_prop = chxj_css_get_property_value(doc, style, "border-style");
       css_property_t *height_prop       = chxj_css_get_property_value(doc, style, "height");
@@ -2020,9 +2020,6 @@ static char *
 s_chtml30_end_hr_tag(void *pdoc, Node *UNUSED(child)) 
 {
   chtml30_t *chtml30 = GET_CHTML30(pdoc);
-  if (IS_CSS_ON(chtml30->entryp)) {
-    chxj_css_pop_prop_list(chtml30->css_prop_stack);
-  }
   return chtml30->out;
 }
 
