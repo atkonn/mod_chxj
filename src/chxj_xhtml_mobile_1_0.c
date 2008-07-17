@@ -2170,66 +2170,6 @@ s_xhtml_1_0_start_hr_tag(void *pdoc, Node *node)
   W_L(" />");
 
   return xhtml->out;
-#if 0
-  xhtml_t *xhtml = GET_XHTML(pdoc);
-  Doc     *doc   = xhtml->doc;
-  Attr    *attr;
-
-  W_L("<hr");
- 
-  for (attr = qs_get_attr(doc,node);
-       attr; 
-       attr = qs_get_next_attr(doc,attr)) {
-    char *name = qs_get_attr_name(doc,attr);
-    char *value = qs_get_attr_value(doc,attr);
-    if (STRCASEEQ('a','A',"align", name)) {
-      /*----------------------------------------------------------------------*/
-      /* CHTML 1.0                                                            */
-      /*----------------------------------------------------------------------*/
-      if (value && (STRCASEEQ('l','L',"left",value) || STRCASEEQ('r','R',"right",value) || STRCASEEQ('c','C',"center",value))) {
-        W_L(" align=\"");
-        W_V(value);
-        W_L("\"");
-      }
-    }
-    else if (STRCASEEQ('s','S',"size", name)) {
-      /*----------------------------------------------------------------------*/
-      /* CHTML 1.0                                                            */
-      /*----------------------------------------------------------------------*/
-      if (value && *value) {
-        W_L(" size=\"");
-        W_V(value);
-        W_L("\"");
-      }
-    }
-    else if (STRCASEEQ('w','W',"width", name)) {
-      /*----------------------------------------------------------------------*/
-      /* CHTML 1.0                                                            */
-      /*----------------------------------------------------------------------*/
-      if (value && *value) {
-        W_L(" width=\"");
-        W_V(value);
-        W_L("\"");
-      }
-    }
-    else if (STRCASEEQ('n','N',"noshade", name)) {
-      /*----------------------------------------------------------------------*/
-      /* CHTML 1.0                                                            */
-      /*----------------------------------------------------------------------*/
-      /* ignore */
-    }
-    else if (STRCASEEQ('c','C',"color", name) && value && *value) {
-      /*----------------------------------------------------------------------*/
-      /* CHTML 4.0                                                            */
-      /*----------------------------------------------------------------------*/
-      W_L(" color=\"");
-      W_V(value);
-      W_L("\"");
-    }
-  }
-  W_L(" />");
-#endif
-  return xhtml->out;
 }
 
 
