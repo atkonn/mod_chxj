@@ -3198,12 +3198,19 @@ s_xhtml_1_0_start_img_tag(void *pdoc, Node *node)
   Doc           *doc   = xhtml->doc;
   request_rec   *r     = doc->r;
   Attr          *attr;
+  char          *attr_src    = NULL;
+  char          *attr_alt    = NULL;
+  char          *attr_height = NULL;
+  char          *attr_width  = NULL;
+  char          *attr_align  = NULL;
+  char          *attr_style  = NULL;
+  char          *attr_hspace = NULL;
+  char          *attr_vspace = NULL;
 
 #ifndef IMG_NOT_CONVERT_FILENAME
   device_table  *spec = xhtml->spec;
 #endif
 
-  W_L("<img");
   /*--------------------------------------------------------------------------*/
   /* Get Attributes                                                           */
   /*--------------------------------------------------------------------------*/
@@ -3224,19 +3231,13 @@ s_xhtml_1_0_start_img_tag(void *pdoc, Node *node)
                              CHXJ_COOKIE_NOUPDATE_PARAM);
       }
 #ifdef IMG_NOT_CONVERT_FILENAME
-
-      W_L(" src=\"");
-      W_V(value);
-      W_L("\"");
+      attr_src = value;
 
 #else
 
-      W_L(" src=\"");
       {
-        char *vv = chxj_img_conv(r,spec,value);
-        W_V(vv);
+        attr_src = chxj_img_conv(r,spec,value);
       }
-      W_L("\"");
 
 #endif
     }
@@ -3248,42 +3249,90 @@ s_xhtml_1_0_start_img_tag(void *pdoc, Node *node)
             STRCASEEQ('b','B',"bottom",value) ||
             STRCASEEQ('l','L',"left",  value) ||
             STRCASEEQ('r','R',"right", value)) {
-          W_L(" align=\"");
-          W_V(value);
-          W_L("\"");
+          attr_align = value;
         }
         else if (STRCASEEQ('c','C',"center",  value)) {
-          W_L(" align=\"");
-          W_L("middle");
-          W_L("\"");
+          attr_align = apr_pstrdup(doc->pool, "middle");
         }
       }
     }
     else if (STRCASEEQ('a','A',"alt",name) && value && *value) {
-      W_L(" alt=\"");
-      W_V(value);
-      W_L("\"");
+      attr_alt = value;
     }
     else if (STRCASEEQ('w','W',"width",name) && value && *value) {
-      W_L(" width=\"");
-      W_V(value);
-      W_L("\"");
+      attr_width = value;
     }
     else if (STRCASEEQ('h','H',"height",name) && value && *value) {
-      W_L(" height=\"");
-      W_V(value);
-      W_L("\"");
+      attr_height = value;
     }
     else if (STRCASEEQ('h','H',"hspace",name) && value && *value) {
-      W_L(" hspace=\"");
-      W_V(value);
-      W_L("\"");
+      attr_hspace = value;
     }
     else if (STRCASEEQ('v','V',"vspace",name) && value && *value) {
-      W_L(" vspace=\"");
-      W_V(value);
-      W_L("\"");
+      attr_vspace = value;
     }
+    else if (STRCASEEQ('s','S',"style",name) && value && *value) {
+      attr_style = value;
+    }
+  }
+
+  if (IS_CSS_ON(xhtml->entryp)) {
+    css_prop_list_t *style = s_xhtml_1_0_nopush_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *height_prop = chxj_css_get_property_value(doc, style, "height");
+      css_property_t *width_prop  = chxj_css_get_property_value(doc, style, "width");
+      css_property_t *valign_prop = chxj_css_get_property_value(doc, style, "vertical-align");
+      css_property_t *cur;
+      for (cur = height_prop->next; cur != height_prop; cur = cur->next) {
+        attr_height = apr_pstrdup(doc->pool, cur->value);
+      }
+      for (cur = width_prop->next; cur != width_prop; cur = cur->next) {
+        attr_width = apr_pstrdup(doc->pool, cur->value);
+      }
+      for (cur = valign_prop->next; cur != valign_prop; cur = cur->next) {
+        attr_align = apr_pstrdup(doc->pool, cur->value);
+      }
+    }
+  }
+
+  W_L("<img");
+  if (attr_src) {
+    W_L(" src=\"");
+    W_V(attr_src);
+    W_L("\"");
+  }
+  if (attr_align) {
+    W_L(" align=\"");
+    W_V(attr_align);
+    W_L("\"");
+  }
+  if (attr_width) {
+    W_L(" width=\"");
+    W_V(attr_width);
+    W_L("\"");
+  }
+  if (attr_height) {
+    W_L(" height=\"");
+    W_V(attr_height);
+    W_L("\"");
+  }
+  if (attr_hspace) {
+    W_L(" hspace=\"");
+    W_V(attr_hspace);
+    W_L("\"");
+  }
+  if (attr_vspace) {
+    W_L(" vspace=\"");
+    W_V(attr_vspace);
+    W_L("\"");
+  }
+  if (attr_alt) {
+    W_L(" alt=\"");
+    W_V(attr_alt);
+    W_L("\"");
+  }
+  else {
+    W_L(" alt=\"\"");
   }
   W_L(" />");
   return xhtml->out;

@@ -689,6 +689,17 @@ void test_xhtml_hr_tag_with_css_005();
 void test_xhtml_hr_tag_with_css_006();
 void test_xhtml_hr_tag_with_css_007();
 void test_xhtml_hr_tag_with_css_008();
+
+void test_xhtml_img_tag_with_css_001();
+void test_xhtml_img_tag_with_css_002();
+void test_xhtml_img_tag_with_css_003();
+void test_xhtml_img_tag_with_css_004();
+void test_xhtml_img_tag_with_css_005();
+void test_xhtml_img_tag_with_css_006();
+void test_xhtml_img_tag_with_css_007();
+void test_xhtml_img_tag_with_css_008();
+void test_xhtml_img_tag_with_css_009();
+void test_xhtml_img_tag_with_css_010();
 /* pend */
 
 int
@@ -1414,6 +1425,17 @@ main()
   CU_add_test(xhtml_suite, "test hr with css 006",                               test_xhtml_hr_tag_with_css_006);
   CU_add_test(xhtml_suite, "test hr with css 007",                               test_xhtml_hr_tag_with_css_007);
   CU_add_test(xhtml_suite, "test hr with css 008",                               test_xhtml_hr_tag_with_css_008);
+
+  CU_add_test(xhtml_suite, "test img with css 001",                              test_xhtml_img_tag_with_css_001);
+  CU_add_test(xhtml_suite, "test img with css 002",                              test_xhtml_img_tag_with_css_002);
+  CU_add_test(xhtml_suite, "test img with css 003",                              test_xhtml_img_tag_with_css_003);
+  CU_add_test(xhtml_suite, "test img with css 004",                              test_xhtml_img_tag_with_css_004);
+  CU_add_test(xhtml_suite, "test img with css 005",                              test_xhtml_img_tag_with_css_005);
+  CU_add_test(xhtml_suite, "test img with css 006",                              test_xhtml_img_tag_with_css_006);
+  CU_add_test(xhtml_suite, "test img with css 007",                              test_xhtml_img_tag_with_css_007);
+  CU_add_test(xhtml_suite, "test img with css 008",                              test_xhtml_img_tag_with_css_008);
+  CU_add_test(xhtml_suite, "test img with css 009",                              test_xhtml_img_tag_with_css_009);
+  CU_add_test(xhtml_suite, "test img with css 010",                              test_xhtml_img_tag_with_css_010);
   /* aend */
 
   CU_basic_run_tests();
@@ -6164,7 +6186,7 @@ void test_xhtml_html_tag_001()
 void test_xhtml_img_tag_001() 
 {
 #define  TEST_STRING "<img>"
-#define  RESULT_STRING "<img />"
+#define  RESULT_STRING "<img alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -6193,7 +6215,7 @@ void test_xhtml_img_tag_001()
 void test_xhtml_img_tag_002() 
 {
 #define  TEST_STRING "<img src>"
-#define  RESULT_STRING "<img src=\"?_chxj_cc=test_cookie_id&_chxj_nc=true\" />"
+#define  RESULT_STRING "<img src=\"?_chxj_cc=test_cookie_id&_chxj_nc=true\" alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -6222,7 +6244,7 @@ void test_xhtml_img_tag_002()
 void test_xhtml_img_tag_003() 
 {
 #define  TEST_STRING "<img src=\"\">"
-#define  RESULT_STRING "<img src=\"?_chxj_cc=test_cookie_id&_chxj_nc=true\" />"
+#define  RESULT_STRING "<img src=\"?_chxj_cc=test_cookie_id&_chxj_nc=true\" alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -6251,7 +6273,7 @@ void test_xhtml_img_tag_003()
 void test_xhtml_img_tag_004() 
 {
 #define  TEST_STRING "<img src=\"aaa\">"
-#define  RESULT_STRING "<img src=\"aaa?_chxj_cc=test_cookie_id&_chxj_nc=true\" />"
+#define  RESULT_STRING "<img src=\"aaa?_chxj_cc=test_cookie_id&_chxj_nc=true\" alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -6280,7 +6302,7 @@ void test_xhtml_img_tag_004()
 void test_xhtml_img_tag_005() 
 {
 #define  TEST_STRING "<img src=\"亀さん\">"
-#define  RESULT_STRING "<img src=\"亀さん?_chxj_cc=test_cookie_id&_chxj_nc=true\" />"
+#define  RESULT_STRING "<img src=\"亀さん?_chxj_cc=test_cookie_id&_chxj_nc=true\" alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -6309,7 +6331,7 @@ void test_xhtml_img_tag_005()
 void test_xhtml_img_tag_006() 
 {
 #define  TEST_STRING "<img src=\"ﾊﾝｶｸ\">"
-#define  RESULT_STRING "<img src=\"ﾊﾝｶｸ?_chxj_cc=test_cookie_id&_chxj_nc=true\" />"
+#define  RESULT_STRING "<img src=\"ﾊﾝｶｸ?_chxj_cc=test_cookie_id&_chxj_nc=true\" alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -6337,7 +6359,7 @@ void test_xhtml_img_tag_006()
 void test_xhtml_img_tag_007() 
 {
 #define  TEST_STRING "<img align>"
-#define  RESULT_STRING "<img />"
+#define  RESULT_STRING "<img alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -6366,7 +6388,7 @@ void test_xhtml_img_tag_007()
 void test_xhtml_img_tag_008() 
 {
 #define  TEST_STRING "<img align=\"\">"
-#define  RESULT_STRING "<img />"
+#define  RESULT_STRING "<img alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -6395,7 +6417,7 @@ void test_xhtml_img_tag_008()
 void test_xhtml_img_tag_009() 
 {
 #define  TEST_STRING "<img align=\"top\">"
-#define  RESULT_STRING "<img align=\"top\" />"
+#define  RESULT_STRING "<img align=\"top\" alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -6424,7 +6446,7 @@ void test_xhtml_img_tag_009()
 void test_xhtml_img_tag_010() 
 {
 #define  TEST_STRING "<img align=\"middle\">"
-#define  RESULT_STRING "<img align=\"middle\" />"
+#define  RESULT_STRING "<img align=\"middle\" alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -6453,7 +6475,7 @@ void test_xhtml_img_tag_010()
 void test_xhtml_img_tag_011() 
 {
 #define  TEST_STRING "<img align=\"bottom\">"
-#define  RESULT_STRING "<img align=\"bottom\" />"
+#define  RESULT_STRING "<img align=\"bottom\" alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -6482,7 +6504,7 @@ void test_xhtml_img_tag_011()
 void test_xhtml_img_tag_012() 
 {
 #define  TEST_STRING "<img align=\"left\">"
-#define  RESULT_STRING "<img align=\"left\" />"
+#define  RESULT_STRING "<img align=\"left\" alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -6511,7 +6533,7 @@ void test_xhtml_img_tag_012()
 void test_xhtml_img_tag_013() 
 {
 #define  TEST_STRING "<img align=\"right\">"
-#define  RESULT_STRING "<img align=\"right\" />"
+#define  RESULT_STRING "<img align=\"right\" alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -6540,7 +6562,7 @@ void test_xhtml_img_tag_013()
 void test_xhtml_img_tag_013_1() 
 {
 #define  TEST_STRING "<img align=\"center\">"
-#define  RESULT_STRING "<img align=\"middle\" />"
+#define  RESULT_STRING "<img align=\"middle\" alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -6569,7 +6591,7 @@ void test_xhtml_img_tag_013_1()
 void test_xhtml_img_tag_014() 
 {
 #define  TEST_STRING "<img align=\"unkown\">"
-#define  RESULT_STRING "<img />"
+#define  RESULT_STRING "<img alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -6598,7 +6620,7 @@ void test_xhtml_img_tag_014()
 void test_xhtml_img_tag_015() 
 {
 #define  TEST_STRING "<img width>"
-#define  RESULT_STRING "<img />"
+#define  RESULT_STRING "<img alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -6627,7 +6649,7 @@ void test_xhtml_img_tag_015()
 void test_xhtml_img_tag_016() 
 {
 #define  TEST_STRING "<img width=\"\">"
-#define  RESULT_STRING "<img />"
+#define  RESULT_STRING "<img alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -6656,7 +6678,7 @@ void test_xhtml_img_tag_016()
 void test_xhtml_img_tag_017() 
 {
 #define  TEST_STRING "<img width=\"abc\">"
-#define  RESULT_STRING "<img width=\"abc\" />"
+#define  RESULT_STRING "<img width=\"abc\" alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -6685,7 +6707,7 @@ void test_xhtml_img_tag_017()
 void test_xhtml_img_tag_018() 
 {
 #define  TEST_STRING "<img width=\"10\">"
-#define  RESULT_STRING "<img width=\"10\" />"
+#define  RESULT_STRING "<img width=\"10\" alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -6714,7 +6736,7 @@ void test_xhtml_img_tag_018()
 void test_xhtml_img_tag_019() 
 {
 #define  TEST_STRING "<img width=\"10%\">"
-#define  RESULT_STRING "<img width=\"10%\" />"
+#define  RESULT_STRING "<img width=\"10%\" alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -6743,7 +6765,7 @@ void test_xhtml_img_tag_019()
 void test_xhtml_img_tag_020() 
 {
 #define  TEST_STRING "<img height>"
-#define  RESULT_STRING "<img />"
+#define  RESULT_STRING "<img alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -6772,7 +6794,7 @@ void test_xhtml_img_tag_020()
 void test_xhtml_img_tag_021() 
 {
 #define  TEST_STRING "<img height=\"\">"
-#define  RESULT_STRING "<img />"
+#define  RESULT_STRING "<img alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -6801,7 +6823,7 @@ void test_xhtml_img_tag_021()
 void test_xhtml_img_tag_022() 
 {
 #define  TEST_STRING "<img height=\"abc\">"
-#define  RESULT_STRING "<img height=\"abc\" />"
+#define  RESULT_STRING "<img height=\"abc\" alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -6830,7 +6852,7 @@ void test_xhtml_img_tag_022()
 void test_xhtml_img_tag_023() 
 {
 #define  TEST_STRING "<img height=\"10\">"
-#define  RESULT_STRING "<img height=\"10\" />"
+#define  RESULT_STRING "<img height=\"10\" alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -6859,7 +6881,7 @@ void test_xhtml_img_tag_023()
 void test_xhtml_img_tag_024() 
 {
 #define  TEST_STRING "<img height=\"10%\">"
-#define  RESULT_STRING "<img height=\"10%\" />"
+#define  RESULT_STRING "<img height=\"10%\" alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -6888,7 +6910,7 @@ void test_xhtml_img_tag_024()
 void test_xhtml_img_tag_025() 
 {
 #define  TEST_STRING "<img hspace>"
-#define  RESULT_STRING "<img />"
+#define  RESULT_STRING "<img alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -6917,7 +6939,7 @@ void test_xhtml_img_tag_025()
 void test_xhtml_img_tag_026() 
 {
 #define  TEST_STRING "<img hspace=\"\">"
-#define  RESULT_STRING "<img />"
+#define  RESULT_STRING "<img alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -6946,7 +6968,7 @@ void test_xhtml_img_tag_026()
 void test_xhtml_img_tag_027() 
 {
 #define  TEST_STRING "<img hspace=\"abc\">"
-#define  RESULT_STRING "<img hspace=\"abc\" />"
+#define  RESULT_STRING "<img hspace=\"abc\" alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -6975,7 +6997,7 @@ void test_xhtml_img_tag_027()
 void test_xhtml_img_tag_028() 
 {
 #define  TEST_STRING "<img hspace=\"10\">"
-#define  RESULT_STRING "<img hspace=\"10\" />"
+#define  RESULT_STRING "<img hspace=\"10\" alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -7004,7 +7026,7 @@ void test_xhtml_img_tag_028()
 void test_xhtml_img_tag_029() 
 {
 #define  TEST_STRING "<img vspace>"
-#define  RESULT_STRING "<img />"
+#define  RESULT_STRING "<img alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -7033,7 +7055,7 @@ void test_xhtml_img_tag_029()
 void test_xhtml_img_tag_030() 
 {
 #define  TEST_STRING "<img vspace=\"\">"
-#define  RESULT_STRING "<img />"
+#define  RESULT_STRING "<img alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -7062,7 +7084,7 @@ void test_xhtml_img_tag_030()
 void test_xhtml_img_tag_031() 
 {
 #define  TEST_STRING "<img vspace=\"abc\">"
-#define  RESULT_STRING "<img vspace=\"abc\" />"
+#define  RESULT_STRING "<img vspace=\"abc\" alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -7091,7 +7113,7 @@ void test_xhtml_img_tag_031()
 void test_xhtml_img_tag_032() 
 {
 #define  TEST_STRING "<img vspace=\"10\">"
-#define  RESULT_STRING "<img vspace=\"10\" />"
+#define  RESULT_STRING "<img vspace=\"10\" alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -7120,7 +7142,7 @@ void test_xhtml_img_tag_032()
 void test_xhtml_img_tag_033() 
 {
 #define  TEST_STRING "<img alt>"
-#define  RESULT_STRING "<img />"
+#define  RESULT_STRING "<img alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -7149,7 +7171,7 @@ void test_xhtml_img_tag_033()
 void test_xhtml_img_tag_034() 
 {
 #define  TEST_STRING "<img alt=\"\">"
-#define  RESULT_STRING "<img />"
+#define  RESULT_STRING "<img alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -20700,6 +20722,431 @@ void test_xhtml_hr_tag_with_css_008()
   ret = chxj_rencoding(&r, ret, &destlen);
   fprintf(stderr, "actual:[%s]\n", ret);
   fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+
+/*---------------------------------------------------------------------------*/
+/* img tag with CSS                                                          */
+/*---------------------------------------------------------------------------*/
+char *test_chxj_serf_get110(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "img     { height:80% }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_xhtml_img_tag_with_css_001()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><img>あいう</body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?>" \
+                       "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><img height=\"80%\" alt=\"\" />あいう</body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get110;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_xhtml_img_tag_with_css_002()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><img style=\"height:10%\">あいう</body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?>" \
+                       "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><img height=\"10%\" alt=\"\" />あいう</body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get110;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+char *test_chxj_serf_get111(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "img     { width:80% }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_xhtml_img_tag_with_css_003()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><img>あいう</body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?>" \
+                       "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><img width=\"80%\" alt=\"\" />あいう</body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get111;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_xhtml_img_tag_with_css_004()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><img style=\"width:10%\">あいう</body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?>" \
+                       "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><img width=\"10%\" alt=\"\" />あいう</body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get111;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+char *test_chxj_serf_get112(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "img     { vertical-align:top }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_xhtml_img_tag_with_css_005()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><img>あいう</body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?>" \
+                       "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><img align=\"top\" alt=\"\" />あいう</body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get112;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_xhtml_img_tag_with_css_006()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><img style=\"vertical-align:top\">あいう</body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?>" \
+                       "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><img align=\"top\" alt=\"\" />あいう</body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get112;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+char *test_chxj_serf_get113(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "img     { vertical-align:middle }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_xhtml_img_tag_with_css_007()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><img>あいう</body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?>" \
+                       "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><img align=\"middle\" alt=\"\" />あいう</body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get113;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_xhtml_img_tag_with_css_008()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><img style=\"vertical-align:middle\">あいう</body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?>" \
+                       "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><img align=\"middle\" alt=\"\" />あいう</body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get113;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+char *test_chxj_serf_get114(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "img     { vertical-align:bottom }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_xhtml_img_tag_with_css_009()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><img>あいう</body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?>" \
+                       "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><img align=\"bottom\" alt=\"\" />あいう</body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get114;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_xhtml_img_tag_with_css_010()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><img style=\"vertical-align:bottom\">あいう</body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?>" \
+                       "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><img align=\"bottom\" alt=\"\" />あいう</body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get114;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
