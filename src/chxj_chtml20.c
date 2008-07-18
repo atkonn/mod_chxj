@@ -2561,7 +2561,7 @@ s_chtml20_start_img_tag(void *pdoc, Node *node)
   }
 
   if (IS_CSS_ON(chtml20->entryp)) {
-    css_prop_list_t *style = s_chtml20_push_and_get_now_style(pdoc, node, attr_style);
+    css_prop_list_t *style = s_chtml20_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *height_prop = chxj_css_get_property_value(doc, style, "height");
       css_property_t *width_prop  = chxj_css_get_property_value(doc, style, "width");

@@ -2664,7 +2664,7 @@ s_chtml10_start_img_tag(void *pdoc, Node *node)
   }
 
   if (IS_CSS_ON(chtml10->entryp)) {
-    css_prop_list_t *style = s_chtml10_push_and_get_now_style(pdoc, node, attr_style);
+    css_prop_list_t *style = s_chtml10_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *height_prop = chxj_css_get_property_value(doc, style, "height");
       css_property_t *width_prop  = chxj_css_get_property_value(doc, style, "width");
@@ -2735,9 +2735,6 @@ static char *
 s_chtml10_end_img_tag(void *pdoc, Node *UNUSED(child)) 
 {
   chtml10_t *chtml10 = GET_CHTML10(pdoc);
-  if (IS_CSS_ON(chtml10->entryp)) {
-    chxj_css_pop_prop_list(chtml10->css_prop_stack);
-  }
   return chtml10->out;
 }
 
