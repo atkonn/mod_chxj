@@ -2523,10 +2523,18 @@ s_chtml10_end_hr_tag(void *pdoc, Node *UNUSED(child))
 static char *
 s_chtml10_start_img_tag(void *pdoc, Node *node) 
 {
-  chtml10_t    *chtml10;
-  Doc          *doc;
-  request_rec  *r;
-  Attr         *attr;
+  chtml10_t   *chtml10;
+  Doc         *doc;
+  request_rec *r;
+  Attr        *attr;
+  char        *attr_src    = NULL;
+  char        *attr_align  = NULL;
+  char        *attr_style  = NULL;
+  char        *attr_alt    = NULL;
+  char        *attr_width  = NULL;
+  char        *attr_height = NULL;
+  char        *attr_hspace = NULL;
+  char        *attr_vspace = NULL;
 #ifndef IMG_NOT_CONVERT_FILENAME
   device_table *spec;
 #endif
@@ -2538,7 +2546,6 @@ s_chtml10_start_img_tag(void *pdoc, Node *node)
   doc     = chtml10->doc;
   r       = doc->r;
 
-  W_L("<img");
   /*--------------------------------------------------------------------------*/
   /* Get Attributes                                                           */
   /*--------------------------------------------------------------------------*/
@@ -2564,9 +2571,7 @@ s_chtml10_start_img_tag(void *pdoc, Node *node)
                                (strchr(value, '?')) ? '&' : '?',
                                CHXJ_COOKIE_NOUPDATE_PARAM);
         }
-        W_L(" src=\"");
-        W_V(value);
-        W_L("\"");
+        attr_src = value;
 #else
         value = chxj_img_conv(r, spec, value);
         value = chxj_encoding_parameter(r, value);
@@ -2578,10 +2583,11 @@ s_chtml10_start_img_tag(void *pdoc, Node *node)
                                (strchr(value, '?')) ? '&' : '?',
                                CHXJ_COOKIE_NOUPDATE_PARAM);
         }
-        W_L(" src=\"");
-        W_V(value);
-        W_L("\"");
+        attr_src = value;
 #endif
+      }
+      else if (strcasecmp(name,"style") == 0 && value && *value) {
+        attr_style = value;
       }
       break;
 
@@ -2600,79 +2606,55 @@ s_chtml10_start_img_tag(void *pdoc, Node *node)
               STRCASEEQ('b','B',"bottom",value) ||
               STRCASEEQ('l','L',"left",  value) ||
               STRCASEEQ('r','R',"right", value)) {
-            W_L(" align=\"");
-            W_V(value);
-            W_L("\"");
+            attr_align = value;
           }
           else if (STRCASEEQ('c','C',"center",  value)) {
-            W_L(" align=\"");
-            W_L("middle");
-            W_L("\"");
+            attr_align = apr_pstrdup(doc->pool, "middle");
           }
         }
       }
-      else if (strcasecmp(name, "alt"   ) == 0) {
+      else if (strcasecmp(name, "alt"   ) == 0 && value && *value) {
         /*--------------------------------------------------------------------*/
         /* CHTML 1.0                                                          */
         /*--------------------------------------------------------------------*/
-        if (value && value[0] != '\0') {
-          W_L(" alt=\"");
-          W_V(value);
-          W_L("\"");
-        }
+        attr_alt = value;
       }
       break;
 
     case 'w':
     case 'W':
-      if (strcasecmp(name, "width" ) == 0) {
+      if (strcasecmp(name, "width" ) == 0 && value && *value) {
         /*--------------------------------------------------------------------*/
         /* CHTML 1.0                                                          */
         /*--------------------------------------------------------------------*/
-        if (value && value[0] != '\0') {
-          W_L(" width=\"");
-          W_V(value);
-          W_L("\"");
-        }
+        attr_width = value;
       }
       break;
 
     case 'h':
     case 'H':
-      if (strcasecmp(name, "height") == 0) {
+      if (strcasecmp(name, "height") == 0 && value && *value) {
         /*--------------------------------------------------------------------*/
         /* CHTML 1.0                                                          */
         /*--------------------------------------------------------------------*/
-        if (value && value[0] != '\0') {
-          W_L(" height=\"");
-          W_V(value);
-          W_L("\"");
-        }
+        attr_height = value;
       }
       else
-      if (strcasecmp(name, "hspace") == 0) {
+      if (strcasecmp(name, "hspace") == 0 && value && *value) {
         /*--------------------------------------------------------------------*/
         /* CHTML 1.0                                                          */
         /*--------------------------------------------------------------------*/
-        if (value && value[0] != '\0') {
-          W_L(" hspace=\"");
-          W_V(value);
-          W_L("\"");
-        }
+        attr_hspace = value;
       }
       break;
 
     case 'v':
     case 'V':
-      if (strcasecmp(name, "vspace") == 0) {
+      if (strcasecmp(name, "vspace") == 0 && value && *value) {
         /*--------------------------------------------------------------------*/
         /* CHTML 1.0                                                          */
         /*--------------------------------------------------------------------*/
-        if (value && value[0] != '\0') {
-          W_L(" vspace=\"");
-          W_V(value);
-          W_L("\"");
-        }
+        attr_vspace = value;
       }
       break;
 
@@ -2681,6 +2663,61 @@ s_chtml10_start_img_tag(void *pdoc, Node *node)
     }
   }
 
+  if (IS_CSS_ON(chtml10->entryp)) {
+    css_prop_list_t *style = s_chtml10_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *height_prop = chxj_css_get_property_value(doc, style, "height");
+      css_property_t *width_prop  = chxj_css_get_property_value(doc, style, "width");
+      css_property_t *valign_prop = chxj_css_get_property_value(doc, style, "vertical-align");
+      css_property_t *cur;
+      for (cur = height_prop->next; cur != height_prop; cur = cur->next) {
+        attr_height = apr_pstrdup(doc->pool, cur->value);
+      }
+      for (cur = width_prop->next; cur != width_prop; cur = cur->next) {
+        attr_width = apr_pstrdup(doc->pool, cur->value);
+      }
+      for (cur = valign_prop->next; cur != valign_prop; cur = cur->next) {
+        attr_align = apr_pstrdup(doc->pool, cur->value);
+      }
+    }
+  }
+
+  W_L("<img");
+  if (attr_src) {
+    W_L(" src=\"");
+    W_V(attr_src);
+    W_L("\"");
+  }
+  if (attr_align) {
+    W_L(" align=\"");
+    W_V(attr_align);
+    W_L("\"");
+  }
+  if (attr_alt) {
+    W_L(" alt=\"");
+    W_V(attr_alt);
+    W_L("\"");
+  }
+  if (attr_width) {
+    W_L(" width=\"");
+    W_V(attr_width);
+    W_L("\"");
+  }
+  if (attr_height) {
+    W_L(" height=\"");
+    W_V(attr_height);
+    W_L("\"");
+  }
+  if (attr_hspace) {
+    W_L(" hspace=\"");
+    W_V(attr_hspace);
+    W_L("\"");
+  }
+  if (attr_vspace) {
+    W_L(" vspace=\"");
+    W_V(attr_vspace);
+    W_L("\"");
+  }
   W_L(">");
   return chtml10->out;
 }
@@ -2698,7 +2735,9 @@ static char *
 s_chtml10_end_img_tag(void *pdoc, Node *UNUSED(child)) 
 {
   chtml10_t *chtml10 = GET_CHTML10(pdoc);
-
+  if (IS_CSS_ON(chtml10->entryp)) {
+    chxj_css_pop_prop_list(chtml10->css_prop_stack);
+  }
   return chtml10->out;
 }
 
