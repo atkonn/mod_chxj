@@ -2870,7 +2870,7 @@ s_chtml10_end_select_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_chtml10_start_option_tag(void *pdoc, Node *child)
+s_chtml10_start_option_tag(void *pdoc, Node *node)
 {
   chtml10_t   *chtml10;
   Doc         *doc;
@@ -2878,6 +2878,7 @@ s_chtml10_start_option_tag(void *pdoc, Node *child)
   Attr        *attr;
   char        *selected;
   char        *value;
+  char        *attr_style = NULL;
 
   chtml10   = GET_CHTML10(pdoc);
   doc       = chtml10->doc;
@@ -2888,7 +2889,7 @@ s_chtml10_start_option_tag(void *pdoc, Node *child)
 
   W_L("<option");
 
-  for (attr = qs_get_attr(doc,child);
+  for (attr = qs_get_attr(doc,node);
        attr;
        attr = qs_get_next_attr(doc,attr)) {
     char *nm  = qs_get_attr_name (doc,attr);
@@ -2901,6 +2902,12 @@ s_chtml10_start_option_tag(void *pdoc, Node *child)
         /* CHTML 1.0 version 2.0                                              */
         /*--------------------------------------------------------------------*/
         selected = apr_pstrdup(doc->buf.pool, val);
+      }
+      else if (strcasecmp(nm, "style") == 0 && val && *val) {
+        /*--------------------------------------------------------------------*/
+        /* CHTML 1.0 version 2.0                                              */
+        /*--------------------------------------------------------------------*/
+        attr_style = apr_pstrdup(doc->buf.pool, val);
       }
       break;
 
@@ -2930,6 +2937,9 @@ s_chtml10_start_option_tag(void *pdoc, Node *child)
   }
 
   W_L(">");
+  if (IS_CSS_ON(chtml10->entryp)) {
+    s_chtml10_push_and_get_now_style(pdoc, node, attr_style);
+  }
   return chtml10->out;
 }
 
@@ -2948,6 +2958,9 @@ s_chtml10_end_option_tag(void *pdoc, Node *UNUSED(child))
   chtml10_t *chtml10 = GET_CHTML10(pdoc);
 
   /* Don't close */
+  if (IS_CSS_ON(chtml10->entryp)) {
+    chxj_css_pop_prop_list(chtml10->css_prop_stack);
+  }
 
   return chtml10->out;
 }
