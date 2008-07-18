@@ -3460,17 +3460,18 @@ s_xhtml_1_0_end_select_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_xhtml_1_0_start_option_tag(void *pdoc, Node *child)
+s_xhtml_1_0_start_option_tag(void *pdoc, Node *node)
 {
   xhtml_t *xhtml = GET_XHTML(pdoc);
   Doc     *doc   = xhtml->doc;
   Attr    *attr;
+  char    *attr_style = NULL;
 
   char *selected   = NULL;
   char *value      = NULL;
 
   W_L("<option");
-  for (attr = qs_get_attr(doc,child);
+  for (attr = qs_get_attr(doc,node);
        attr;
        attr = qs_get_next_attr(doc,attr)) {
     char *nm  = qs_get_attr_name(doc,attr);
@@ -3478,6 +3479,10 @@ s_xhtml_1_0_start_option_tag(void *pdoc, Node *child)
     if (STRCASEEQ('s','S',"selected",nm)) {
       /* CHTML version 2.0 */
       selected = apr_pstrdup(doc->buf.pool, val);
+    }
+    else if (STRCASEEQ('s','S',"style",nm) && val && *val) {
+      /* CHTML version 2.0 */
+      attr_style = apr_pstrdup(doc->buf.pool, val);
     }
     else if (STRCASEEQ('v','V',"value",nm)) {
       /* CHTML version 2.0 */
@@ -3493,6 +3498,9 @@ s_xhtml_1_0_start_option_tag(void *pdoc, Node *child)
     W_L(" selected=\"selected\"");
   }
   W_L(">");
+  if (IS_CSS_ON(xhtml->entryp)) {
+    s_xhtml_1_0_push_and_get_now_style(pdoc, node, attr_style);
+  }
   return xhtml->out;
 }
 
@@ -3512,6 +3520,10 @@ s_xhtml_1_0_end_option_tag(void *pdoc, Node *UNUSED(child))
   Doc     *doc   = xhtml->doc;
 
   W_L("</option>");
+  if (IS_CSS_ON(xhtml->entryp)) {
+    chxj_css_pop_prop_list(xhtml->css_prop_stack);
+  }
+
   return xhtml->out;
 }
 
