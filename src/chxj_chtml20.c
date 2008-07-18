@@ -2677,7 +2677,7 @@ s_chtml20_start_select_tag(void *pdoc, Node *node)
         /*--------------------------------------------------------------------*/
         size = apr_pstrdup(doc->buf.pool, val);
       }
-      else if (strcasecmp(nm, "style") == 0) {
+      else if (strcasecmp(nm, "style") == 0 && val && *val) {
         /*--------------------------------------------------------------------*/
         /* CHTML 1.0 version 2.0                                              */
         /*--------------------------------------------------------------------*/
