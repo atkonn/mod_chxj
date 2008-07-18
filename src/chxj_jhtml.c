@@ -2864,7 +2864,7 @@ s_jhtml_end_select_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_jhtml_start_option_tag(void *pdoc, Node *child)
+s_jhtml_start_option_tag(void *pdoc, Node *node)
 {
   jhtml_t *jhtml = GET_JHTML(pdoc);
   Doc     *doc   = jhtml->doc;
@@ -2872,9 +2872,10 @@ s_jhtml_start_option_tag(void *pdoc, Node *child)
 
   char *selected   = NULL;
   char *value      = NULL;
+  char *attr_style = NULL;
 
   W_L("<option");
-  for (attr = qs_get_attr(doc,child);
+  for (attr = qs_get_attr(doc,node);
        attr;
        attr = qs_get_next_attr(doc,attr)) {
     char *nm  = qs_get_attr_name(doc,attr);
@@ -2884,6 +2885,12 @@ s_jhtml_start_option_tag(void *pdoc, Node *child)
       /* CHTML 1.0 version 2.0                                                */
       /*----------------------------------------------------------------------*/
       selected = apr_pstrdup(doc->buf.pool, val);
+    }
+    else if (STRCASEEQ('s','S',"style",nm) && val && *val) {
+      /*----------------------------------------------------------------------*/
+      /* CHTML 1.0 version 2.0                                                */
+      /*----------------------------------------------------------------------*/
+      attr_style = apr_pstrdup(doc->buf.pool, val);
     }
     else if (STRCASEEQ('v','V',"value",nm)) {
       /*----------------------------------------------------------------------*/
@@ -2901,6 +2908,11 @@ s_jhtml_start_option_tag(void *pdoc, Node *child)
     W_L(" selected");
   }
   W_L(">");
+
+  if (IS_CSS_ON(jhtml->entryp)) {
+    s_jhtml_push_and_get_now_style(pdoc, node, attr_style);
+  }
+
   return jhtml->out;
 }
 
@@ -2918,6 +2930,9 @@ s_jhtml_end_option_tag(void *pdoc, Node *UNUSED(child))
 {
   jhtml_t *jhtml = GET_JHTML(pdoc);
   /* Don't close */
+  if (IS_CSS_ON(jhtml->entryp)) {
+    chxj_css_pop_prop_list(jhtml->css_prop_stack);
+  }
   return jhtml->out;
 }
 
