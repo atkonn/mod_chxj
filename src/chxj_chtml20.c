@@ -2764,12 +2764,13 @@ s_chtml20_end_select_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_chtml20_start_option_tag(void *pdoc, Node *child)
+s_chtml20_start_option_tag(void *pdoc, Node *node)
 {
   chtml20_t   *chtml20;
   Doc         *doc;
   request_rec *r;
   Attr        *attr;
+  char        *attr_style = NULL;
 
   chtml20 = GET_CHTML20(pdoc);
   doc     = chtml20->doc;
@@ -2779,7 +2780,7 @@ s_chtml20_start_option_tag(void *pdoc, Node *child)
   char *value      = NULL;
 
   W_L("<option");
-  for (attr = qs_get_attr(doc,child);
+  for (attr = qs_get_attr(doc,node);
        attr;
        attr = qs_get_next_attr(doc,attr)) {
     char *nm  = qs_get_attr_name(doc,attr);
@@ -2792,6 +2793,12 @@ s_chtml20_start_option_tag(void *pdoc, Node *child)
         /* CHTML 1.0 version 2.0                                              */
         /*--------------------------------------------------------------------*/
         selected = apr_pstrdup(doc->buf.pool, val);
+      }
+      else if (strcasecmp(nm, "style") == 0 && val && *val) {
+        /*--------------------------------------------------------------------*/
+        /* CHTML 1.0 version 2.0                                              */
+        /*--------------------------------------------------------------------*/
+        attr_style = apr_pstrdup(doc->buf.pool, val);
       }
       break;
 
@@ -2820,6 +2827,9 @@ s_chtml20_start_option_tag(void *pdoc, Node *child)
     W_L(" selected");
   }
   W_L(">");
+  if (IS_CSS_ON(chtml20->entryp)) {
+    s_chtml20_push_and_get_now_style(pdoc, node, attr_style);
+  }
   return chtml20->out;
 }
 
@@ -2838,6 +2848,9 @@ s_chtml20_end_option_tag(void *pdoc, Node *UNUSED(child))
   chtml20_t   *chtml20 = GET_CHTML20(pdoc);
 
   /* Don't close */
+  if (IS_CSS_ON(chtml20->entryp)) {
+    chxj_css_pop_prop_list(chtml20->css_prop_stack);
+  }
 
   return chtml20->out;
 }
