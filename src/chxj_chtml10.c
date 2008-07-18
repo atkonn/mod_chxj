@@ -2975,22 +2975,20 @@ s_chtml10_end_option_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_chtml10_start_div_tag(void *pdoc, Node *child)
+s_chtml10_start_div_tag(void *pdoc, Node *node)
 {
   chtml10_t   *chtml10;
   Doc         *doc;
   request_rec *r;
   Attr        *attr;
-  char        *align;
+  char        *attr_align = NULL;
+  char        *attr_style = NULL;
 
   chtml10 = GET_CHTML10(pdoc);
   doc     = chtml10->doc;
   r       = doc->r;
 
-  align   = NULL;
-
-  W_L("<div");
-  for (attr = qs_get_attr(doc,child);
+  for (attr = qs_get_attr(doc,node);
        attr;
        attr = qs_get_next_attr(doc,attr)) {
     char *nm  = qs_get_attr_name(doc,attr);
@@ -3000,18 +2998,40 @@ s_chtml10_start_div_tag(void *pdoc, Node *child)
       /* CHTML 1.0 (W3C version 3.2)                                          */
       /*----------------------------------------------------------------------*/
       if (val && (STRCASEEQ('l','L',"left",val) || STRCASEEQ('r','R',"right",val) || STRCASEEQ('c','C',"center",val))) {
-        align = apr_pstrdup(doc->buf.pool, val);
+        attr_align = apr_pstrdup(doc->buf.pool, val);
+      }
+    }
+    else if (STRCASEEQ('s','S',"style",nm) && val && *val) {
+      attr_style = apr_pstrdup(doc->pool, val);
+    }
+  }
+  if (IS_CSS_ON(chtml10->entryp)) {
+    css_prop_list_t *style = s_chtml10_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *text_align = chxj_css_get_property_value(doc, style, "text-align");
+      css_property_t *cur;
+      for (cur = text_align->next; cur != text_align; cur = cur->next) {
+        if (STRCASEEQ('l','L',"left",cur->value)) {
+          attr_align = apr_pstrdup(doc->pool, "left");
+        }
+        else if (STRCASEEQ('c','C',"center",cur->value)) {
+          attr_align = apr_pstrdup(doc->pool, "center");
+        }
+        else if (STRCASEEQ('r','R',"right",cur->value)) {
+          attr_align = apr_pstrdup(doc->pool, "right");
+        }
       }
     }
   }
 
-  if (align) {
+  W_L("<div");
+  if (attr_align) {
     W_L(" align=\"");
-    W_V(align);
+    W_V(attr_align);
     W_L("\"");
   }
-
   W_L(">");
+
   return chtml10->out;
 }
 
@@ -3036,6 +3056,11 @@ s_chtml10_end_div_tag(void *pdoc, Node *UNUSED(child))
   r       = doc->r;
 
   W_L("</div>");
+
+  if (IS_CSS_ON(chtml10->entryp)) {
+    chxj_css_pop_prop_list(chtml10->css_prop_stack);
+  }
+
   return chtml10->out;
 }
 
