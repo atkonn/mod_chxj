@@ -2376,7 +2376,7 @@ s_chtml50_end_img_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_chtml50_start_select_tag(void *pdoc, Node *child)
+s_chtml50_start_select_tag(void *pdoc, Node *node)
 {
   chtml50_t   *chtml50  = GET_CHTML50(pdoc);
   Doc         *doc      = chtml50->doc;
@@ -2384,9 +2384,10 @@ s_chtml50_start_select_tag(void *pdoc, Node *child)
   char        *name     = NULL;
   char        *multiple = NULL;
   Attr        *attr;
+  char        *attr_style = NULL;
 
   W_L("<select");
-  for (attr = qs_get_attr(doc,child);
+  for (attr = qs_get_attr(doc, node);
        attr;
        attr = qs_get_next_attr(doc,attr)) {
     char *nm  = qs_get_attr_name(doc,attr);
@@ -2396,6 +2397,12 @@ s_chtml50_start_select_tag(void *pdoc, Node *child)
       /* CHTML 1.0 version 2.0                                                */
       /*----------------------------------------------------------------------*/
       size = apr_pstrdup(doc->buf.pool, val);
+    }
+    else if (STRCASEEQ('s','S',"style", nm) && val && *val) {
+      /*----------------------------------------------------------------------*/
+      /* CHTML 1.0 version 2.0                                                */
+      /*----------------------------------------------------------------------*/
+      attr_style = apr_pstrdup(doc->buf.pool, val);
     }
     else if (STRCASEEQ('n','N',"name", nm)) {
       /*----------------------------------------------------------------------*/
@@ -2424,6 +2431,9 @@ s_chtml50_start_select_tag(void *pdoc, Node *child)
     W_L(" multiple");
   }
   W_L(">");
+  if (IS_CSS_ON(chtml50->entryp)) {
+    s_chtml50_push_and_get_now_style(pdoc, node, attr_style);
+  }
 
   return chtml50->out;
 }
@@ -2444,6 +2454,9 @@ s_chtml50_end_select_tag(void *pdoc, Node *UNUSED(child))
   Doc          *doc   = chtml50->doc;
 
   W_L("</select>");
+  if (IS_CSS_ON(chtml50->entryp)) {
+    chxj_css_pop_prop_list(chtml50->css_prop_stack);
+  }
 
   return chtml50->out;
 }
