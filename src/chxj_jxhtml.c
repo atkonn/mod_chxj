@@ -2778,16 +2778,20 @@ s_jxhtml_end_hr_tag(void *pdoc, Node *UNUSED(child))
 static char *
 s_jxhtml_start_img_tag(void *pdoc, Node *node) 
 {
-  jxhtml_t       *jxhtml = GET_JXHTML(pdoc);
-  Doc           *doc   = jxhtml->doc;
-  request_rec   *r     = doc->r;
-  Attr          *attr;
+  jxhtml_t    *jxhtml = GET_JXHTML(pdoc);
+  Doc         *doc   = jxhtml->doc;
+  request_rec *r     = doc->r;
+  Attr        *attr;
+  char        *attr_src    = NULL;
+  char        *attr_height = NULL;
+  char        *attr_width  = NULL;
+  char        *attr_align  = NULL;
+  char        *attr_alt    = NULL;
+  char        *attr_style  = NULL;
 #ifndef IMG_NOT_CONVERT_FILENAME
   device_table  *spec = jxhtml->spec;
 #endif
-  int           has_alt = 0;
 
-  W_L("<img");
   /*--------------------------------------------------------------------------*/
   /* Get Attributes                                                           */
   /*--------------------------------------------------------------------------*/
@@ -2807,9 +2811,7 @@ s_jxhtml_start_img_tag(void *pdoc, Node *node)
                              "%s",
                              value);
       }
-      W_L(" src=\"");
-      W_V(value);
-      W_L("\"");
+      attr_src = value;
 #else
       value = chxj_img_conv(r, spec, value);
       value = chxj_encoding_parameter(r, value);
@@ -2818,9 +2820,7 @@ s_jxhtml_start_img_tag(void *pdoc, Node *node)
                              "%s",
                              value);
       }
-      W_L(" src=\"");
-      W_V(value);
-      W_L("\"");
+      attr_src = value;
 #endif
     }
     else if (STRCASEEQ('a','A',"align",name)) {
@@ -2833,14 +2833,10 @@ s_jxhtml_start_img_tag(void *pdoc, Node *node)
             STRCASEEQ('b','B',"bottom",value) ||
             STRCASEEQ('l','L',"left",  value) ||
             STRCASEEQ('r','R',"right", value)) {
-          W_L(" align=\"");
-          W_V(value);
-          W_L("\"");
+          attr_align = value;
         }
         else if (STRCASEEQ('c','C',"center",value)) {
-          W_L(" align=\"");
-          W_L("middle"); 
-          W_L("\"");
+          attr_align = apr_pstrdup(doc->pool, "middle");
         }
       }
     }
@@ -2848,17 +2844,13 @@ s_jxhtml_start_img_tag(void *pdoc, Node *node)
       /*----------------------------------------------------------------------*/
       /* CHTML 1.0                                                            */
       /*----------------------------------------------------------------------*/
-      W_L(" width=\"");
-      W_V(value);
-      W_L("\"");
+      attr_width = value;
     }
     else if (STRCASEEQ('h','H',"height",name) && value && *value) {
       /*----------------------------------------------------------------------*/
       /* CHTML 1.0                                                            */
       /*----------------------------------------------------------------------*/
-      W_L(" height=\"");
-      W_V(value);
-      W_L("\"");
+      attr_height = value;
     }
     else if (STRCASEEQ('h','H',"hspace",name)) {
       /*----------------------------------------------------------------------*/
@@ -2876,13 +2868,62 @@ s_jxhtml_start_img_tag(void *pdoc, Node *node)
       /*----------------------------------------------------------------------*/
       /* CHTML 1.0                                                            */
       /*----------------------------------------------------------------------*/
-      W_L(" alt=\"");
-      W_V(value);
-      W_L("\"");
-      has_alt = 1;
+      attr_alt = value;
+    }
+    else if (STRCASEEQ('s','S',"style",name) && value && *value) {
+      /*----------------------------------------------------------------------*/
+      /* CHTML 1.0                                                            */
+      /*----------------------------------------------------------------------*/
+      attr_style = value;
     }
   }
-  if (! has_alt) {
+
+  if (IS_CSS_ON(jxhtml->entryp)) {
+    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *height_prop = chxj_css_get_property_value(doc, style, "height");
+      css_property_t *width_prop  = chxj_css_get_property_value(doc, style, "width");
+      css_property_t *valign_prop = chxj_css_get_property_value(doc, style, "vertical-align");
+      css_property_t *cur;
+      for (cur = height_prop->next; cur != height_prop; cur = cur->next) {
+        attr_height = apr_pstrdup(doc->pool, cur->value);
+      }
+      for (cur = width_prop->next; cur != width_prop; cur = cur->next) {
+        attr_width = apr_pstrdup(doc->pool, cur->value);
+      }
+      for (cur = valign_prop->next; cur != valign_prop; cur = cur->next) {
+        attr_align = apr_pstrdup(doc->pool, cur->value);
+      }
+    }
+  }
+
+  W_L("<img");
+  if (attr_src) {
+    W_L(" src=\"");
+    W_V(attr_src);
+    W_L("\"");
+  }
+  if (attr_align) {
+    W_L(" align=\"");
+    W_V(attr_align); 
+    W_L("\"");
+  }
+  if (attr_width) {
+    W_L(" width=\"");
+    W_V(attr_width);
+    W_L("\"");
+  }
+  if (attr_height) {
+    W_L(" height=\"");
+    W_V(attr_height);
+    W_L("\"");
+  }
+  if (attr_alt) {
+    W_L(" alt=\"");
+    W_V(attr_alt);
+    W_L("\"");
+  } 
+  else {
     W_L(" alt=\"\"");
   }
   W_L(" />");
