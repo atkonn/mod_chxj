@@ -2471,7 +2471,7 @@ s_chtml50_end_select_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_chtml50_start_option_tag(void *pdoc, Node *child)
+s_chtml50_start_option_tag(void *pdoc, Node *node)
 {
   Attr        *attr;
   chtml50_t   *chtml50;
@@ -2479,6 +2479,7 @@ s_chtml50_start_option_tag(void *pdoc, Node *child)
   request_rec *r;
   char        *selected;
   char        *value;
+  char        *attr_style = NULL;
 
   chtml50    = GET_CHTML50(pdoc);
   doc        = chtml50->doc;
@@ -2487,7 +2488,7 @@ s_chtml50_start_option_tag(void *pdoc, Node *child)
   value      = NULL;
 
   W_L("<option");
-  for (attr = qs_get_attr(doc,child);
+  for (attr = qs_get_attr(doc,node);
        attr;
        attr = qs_get_next_attr(doc,attr)) {
     char *nm  = qs_get_attr_name(doc,attr);
@@ -2497,6 +2498,12 @@ s_chtml50_start_option_tag(void *pdoc, Node *child)
       /* CHTML 1.0 version 2.0                                                */
       /*----------------------------------------------------------------------*/
       selected = apr_pstrdup(doc->buf.pool, val);
+    }
+    else if (STRCASEEQ('s','S',"style", nm) && val && *val) {
+      /*----------------------------------------------------------------------*/
+      /* CHTML 1.0 version 2.0                                                */
+      /*----------------------------------------------------------------------*/
+      attr_style = apr_pstrdup(doc->buf.pool, val);
     }
     else if (STRCASEEQ('v','V',"value", nm)) {
       /*----------------------------------------------------------------------*/
@@ -2514,6 +2521,11 @@ s_chtml50_start_option_tag(void *pdoc, Node *child)
     W_L(" selected");
   }
   W_L(">");
+
+  if (IS_CSS_ON(chtml50->entryp)) {
+    s_chtml50_push_and_get_now_style(pdoc, node, attr_style);
+  }
+
   return chtml50->out;
 }
 
@@ -2532,6 +2544,9 @@ s_chtml50_end_option_tag(void *pdoc, Node *UNUSED(child))
   chtml50_t *chtml50 = GET_CHTML50(pdoc);
 
   /* Don't close */
+  if (IS_CSS_ON(chtml50->entryp)) {
+    chxj_css_pop_prop_list(chtml50->css_prop_stack);
+  }
 
   return chtml50->out;
 }
