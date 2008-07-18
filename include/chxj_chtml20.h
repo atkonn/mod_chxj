@@ -50,6 +50,7 @@ struct _chtml20_flags_t {
   int with_font_flag;
   int with_blink_flag;
   int with_div_flag;
+  int with_marquee_flag;
 };
 
 /*----------------------------------------------------------------------------*/
