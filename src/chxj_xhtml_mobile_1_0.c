@@ -3365,7 +3365,7 @@ s_xhtml_1_0_end_img_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_xhtml_1_0_start_select_tag(void *pdoc, Node *child)
+s_xhtml_1_0_start_select_tag(void *pdoc, Node *node)
 {
   xhtml_t *xhtml    = GET_XHTML(pdoc);
   Doc     *doc      = xhtml->doc;
@@ -3373,10 +3373,10 @@ s_xhtml_1_0_start_select_tag(void *pdoc, Node *child)
   char    *name     = NULL;
   char    *multiple = NULL;
   Attr    *attr;
-
+  char    *attr_style = NULL;
 
   W_L("<select");
-  for (attr = qs_get_attr(doc,child);
+  for (attr = qs_get_attr(doc,node);
        attr;
        attr = qs_get_next_attr(doc,attr)) {
     char *nm  = qs_get_attr_name(doc,attr);
@@ -3386,6 +3386,12 @@ s_xhtml_1_0_start_select_tag(void *pdoc, Node *child)
       /* CHTML 1.0 version 2.0                                                */
       /*----------------------------------------------------------------------*/
       size = apr_pstrdup(doc->buf.pool, val);
+    }
+    else if (STRCASEEQ('s','S',"style",nm) && val && *val) {
+      /*----------------------------------------------------------------------*/
+      /* CHTML 1.0 version 2.0                                                */
+      /*----------------------------------------------------------------------*/
+      attr_style = apr_pstrdup(doc->buf.pool, val);
     }
     else if (STRCASEEQ('n','N',"name",nm)) {
       /*----------------------------------------------------------------------*/
@@ -3415,6 +3421,10 @@ s_xhtml_1_0_start_select_tag(void *pdoc, Node *child)
     W_L(" multiple=\"true\"");
   }
   W_L(">");
+  if (IS_CSS_ON(xhtml->entryp)) {
+    s_xhtml_1_0_push_and_get_now_style(pdoc, node, attr_style);
+  }
+
   return xhtml->out;
 }
 
@@ -3434,6 +3444,9 @@ s_xhtml_1_0_end_select_tag(void *pdoc, Node *UNUSED(child))
   Doc     *doc   = xhtml->doc;
 
   W_L("</select>");
+  if (IS_CSS_ON(xhtml->entryp)) {
+    chxj_css_pop_prop_list(xhtml->css_prop_stack);
+  }
   return xhtml->out;
 }
 
