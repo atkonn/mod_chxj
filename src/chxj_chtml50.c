@@ -2561,40 +2561,172 @@ s_chtml50_end_option_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_chtml50_start_div_tag(void *pdoc, Node *child)
+s_chtml50_start_div_tag(void *pdoc, Node *node)
 {
-  Attr          *attr;
-  chtml50_t     *chtml50;
-  Doc           *doc;
-  request_rec   *r;
-  char          *align;
+  chtml50_t   *chtml50;
+  Doc         *doc;
+  request_rec *r;
+  Attr        *attr;
+  char        *attr_style             = NULL;
+  char        *attr_align             = NULL;
+  char        *attr_display           = NULL;
+  char        *attr_decoration        = NULL;
+  char        *attr_wap_marquee_style = NULL;
+  char        *attr_wap_marquee_dir   = NULL;
+  char        *attr_wap_marquee_loop  = NULL;
+  char        *attr_color             = NULL;
+  char        *attr_font_size         = NULL;
 
   chtml50 = GET_CHTML50(pdoc);
   doc     = chtml50->doc;
   r       = doc->r;
-  align   = NULL;
 
-  W_L("<div");
-  for (attr = qs_get_attr(doc,child);
+  for (attr = qs_get_attr(doc,node);
        attr;
        attr = qs_get_next_attr(doc,attr)) {
     char *nm  = qs_get_attr_name(doc,attr);
     char *val = qs_get_attr_value(doc,attr);
-    if (STRCASEEQ('a','A',"align", nm)) {
+    if (STRCASEEQ('a','A', "align", nm)) {
       /*----------------------------------------------------------------------*/
       /* CHTML 1.0 (W3C version 3.2)                                          */
       /*----------------------------------------------------------------------*/
       if (val && (STRCASEEQ('l','L',"left",val) || STRCASEEQ('r','R',"right",val) || STRCASEEQ('c','C',"center",val))) {
-        align = apr_pstrdup(doc->buf.pool, val);
+        attr_align = apr_pstrdup(doc->buf.pool, val);
       }
     }
+    else if (STRCASEEQ('s','S',"style",nm) && val && *val) {
+      attr_style = apr_pstrdup(doc->buf.pool, val);
+    }
   }
-  if (align) {
+
+  if (IS_CSS_ON(chtml50->entryp)) {
+    css_prop_list_t *style = s_chtml50_nopush_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *display_prop           = chxj_css_get_property_value(doc, style, "display");
+      css_property_t *text_decoration_prop   = chxj_css_get_property_value(doc, style, "text-decoration");
+      css_property_t *color_prop             = chxj_css_get_property_value(doc, style, "color");
+      css_property_t *text_align_prop        = chxj_css_get_property_value(doc, style, "text-align");
+      css_property_t *font_size_prop         = chxj_css_get_property_value(doc, style, "font-size");
+
+      css_property_t *cur;
+      for (cur = display_prop->next; cur != display_prop; cur = cur->next) {
+        if (strcasecmp("-wap-marquee", cur->value) == 0) {
+          attr_display = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+      for (cur = text_decoration_prop->next; cur != text_decoration_prop; cur = cur->next) {
+        if (STRCASEEQ('b','B',"blink", cur->value)) {
+          attr_decoration = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+      for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
+        attr_color = apr_pstrdup(doc->pool, cur->value);
+      }
+      for (cur = text_align_prop->next; cur != text_align_prop; cur = cur->next) {
+        attr_align = apr_pstrdup(doc->pool, cur->value);
+      }
+      for (cur = font_size_prop->next; cur != font_size_prop; cur = cur->next) {
+        attr_font_size = apr_pstrdup(doc->pool, cur->value);
+        if (STRCASEEQ('x','X',"xx-small",attr_font_size)) {
+          attr_font_size = apr_pstrdup(doc->pool, "1");
+        }
+        else if (STRCASEEQ('x','X',"x-small",attr_font_size)) {
+          attr_font_size = apr_pstrdup(doc->pool, "2");
+        }
+        else if (STRCASEEQ('s','S',"small",attr_font_size)) {
+          attr_font_size = apr_pstrdup(doc->pool, "3");
+        }
+        else if (STRCASEEQ('m','M',"medium",attr_font_size)) {
+          attr_font_size = apr_pstrdup(doc->pool, "4");
+        }
+        else if (STRCASEEQ('l','L',"large",attr_font_size)) {
+          attr_font_size = apr_pstrdup(doc->pool, "5");
+        }
+        else if (STRCASEEQ('x','X',"x-large",attr_font_size)) {
+          attr_font_size = apr_pstrdup(doc->pool, "6");
+        }
+        else if (STRCASEEQ('x','X',"xx-large",attr_font_size)) {
+          attr_font_size = apr_pstrdup(doc->pool, "7");
+        }
+      }
+      if (attr_display) {
+        css_property_t *wap_marquee_style_prop = chxj_css_get_property_value(doc, style, "-wap-marquee-style");
+        css_property_t *wap_marquee_dir_prop   = chxj_css_get_property_value(doc, style, "-wap-marquee-dir");
+        css_property_t *wap_marquee_loop_prop  = chxj_css_get_property_value(doc, style, "-wap-marquee-loop");
+        for (cur = wap_marquee_style_prop->next; cur != wap_marquee_style_prop; cur = cur->next) {
+          if (STRCASEEQ('s','S',"scroll", cur->value) || STRCASEEQ('s','S',"slide",cur->value) || STRCASEEQ('a','A',"alternate",cur->value)) {
+            attr_wap_marquee_style = apr_pstrdup(doc->pool, cur->value);
+          }
+        }
+        for (cur = wap_marquee_dir_prop->next; cur != wap_marquee_dir_prop; cur = cur->next) {
+          if (STRCASEEQ('l','L',"ltr",cur->value)) {
+            attr_wap_marquee_dir = apr_pstrdup(doc->pool, "right");
+          }
+          else if (STRCASEEQ('r','R',"rtl",cur->value)) {
+            attr_wap_marquee_dir = apr_pstrdup(doc->pool, "left");
+          }
+        }
+        for (cur = wap_marquee_loop_prop->next; cur != wap_marquee_loop_prop; cur = cur->next) {
+          if (STRCASEEQ('i','I',"infinite",cur->value)) {
+            attr_wap_marquee_loop = apr_pstrdup(doc->pool, "16");
+          }
+          else {
+            attr_wap_marquee_loop = apr_pstrdup(doc->pool, cur->value);
+          }
+        }
+      }
+    }
+  }  
+  chtml50_flags_t *flg = (chtml50_flags_t *)apr_palloc(doc->pool, sizeof(chtml50_flags_t));
+  memset(flg, 0, sizeof(*flg));
+  if (attr_align) {
+    W_L("<div");
     W_L(" align=\"");
-    W_V(align);
+    W_V(attr_align);
     W_L("\"");
+    W_L(">");
+    flg->with_div_flag = 1;
   }
-  W_L(">");
+  if (attr_color || attr_font_size) {
+    W_L("<font");
+    if (attr_color) {
+      W_L(" color=\"");
+      W_V(attr_color);
+      W_L("\"");
+    }
+    if (attr_font_size) {
+      W_L(" size=\"");
+      W_V(attr_font_size);
+      W_L("\"");
+    }
+    W_L(">");
+    flg->with_font_flag = 1;
+  }
+  if (attr_decoration) {
+    W_L("<blink>");
+    flg->with_blink_flag = 1;
+  }
+  if (attr_display) {
+    W_L("<marquee");
+    if (attr_wap_marquee_style) {
+      W_L(" behavior=\"");
+      W_V(attr_wap_marquee_style);
+      W_L("\"");
+    }
+    if (attr_wap_marquee_dir) {
+      W_L(" direction=\"");
+      W_V(attr_wap_marquee_dir);
+      W_L("\"");
+    }
+    if (attr_wap_marquee_loop) {
+      W_L(" loop=\"");
+      W_V(attr_wap_marquee_loop);
+      W_L("\"");
+    }
+    W_L(">");
+    flg->with_marquee_flag = 1;
+  }
+  node->userData = flg;
 
   return chtml50->out;
 }
@@ -2609,12 +2741,28 @@ s_chtml50_start_div_tag(void *pdoc, Node *child)
  * @return The conversion result is returned.
  */
 static char *
-s_chtml50_end_div_tag(void *pdoc, Node *UNUSED(node))
+s_chtml50_end_div_tag(void *pdoc, Node *node)
 {
   chtml50_t    *chtml50 = GET_CHTML50(pdoc);
   Doc          *doc     = chtml50->doc;
 
-  W_L("</div>");
+  chtml50_flags_t *flg = node->userData;
+  if (flg && flg->with_marquee_flag) {
+    W_L("</marquee>");
+  }
+  if (flg && flg->with_blink_flag) {
+    W_L("</blink>");
+  }
+  if (flg && flg->with_font_flag) {
+    W_L("</font>");
+  }
+  if (flg && flg->with_div_flag) {
+    W_L("</div>");
+  }
+  if (IS_CSS_ON(chtml50->entryp)) {
+    chxj_css_pop_prop_list(chtml50->css_prop_stack);
+  }
+  node->userData = NULL;
 
   return chtml50->out;
 }
