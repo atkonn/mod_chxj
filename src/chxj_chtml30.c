@@ -2443,40 +2443,138 @@ s_chtml30_end_option_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_chtml30_start_div_tag(void *pdoc, Node *child)
+s_chtml30_start_div_tag(void *pdoc, Node *node)
 {
-  Attr          *attr;
-  chtml30_t     *chtml30;
-  Doc           *doc;
-  request_rec   *r;
-  char          *align;
+  chtml30_t   *chtml30;
+  Doc         *doc;
+  request_rec *r;
+  Attr        *attr;
+  char        *attr_style             = NULL;
+  char        *attr_align             = NULL;
+  char        *attr_display           = NULL;
+  char        *attr_decoration        = NULL;
+  char        *attr_wap_marquee_style = NULL;
+  char        *attr_wap_marquee_dir   = NULL;
+  char        *attr_wap_marquee_loop  = NULL;
+  char        *attr_color             = NULL;
 
   chtml30 = GET_CHTML30(pdoc);
   doc     = chtml30->doc;
   r       = doc->r;
-  align   = NULL;
 
-  W_L("<div");
-  for (attr = qs_get_attr(doc,child);
+  for (attr = qs_get_attr(doc,node);
        attr;
        attr = qs_get_next_attr(doc,attr)) {
     char *nm  = qs_get_attr_name(doc,attr);
     char *val = qs_get_attr_value(doc,attr);
-    if (STRCASEEQ('a','A',"align", nm)) {
+    if (STRCASEEQ('a','A', "align", nm)) {
       /*----------------------------------------------------------------------*/
       /* CHTML 1.0 (W3C version 3.2)                                          */
       /*----------------------------------------------------------------------*/
       if (val && (STRCASEEQ('l','L',"left",val) || STRCASEEQ('r','R',"right",val) || STRCASEEQ('c','C',"center",val))) {
-        align = apr_pstrdup(doc->buf.pool, val);
+        attr_align = apr_pstrdup(doc->buf.pool, val);
       }
     }
+    else if (STRCASEEQ('s','S',"style",nm) && val && *val) {
+      attr_style = apr_pstrdup(doc->buf.pool, val);
+    }
   }
-  if (align) {
+
+  if (IS_CSS_ON(chtml30->entryp)) {
+    css_prop_list_t *style = s_chtml30_nopush_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *display_prop           = chxj_css_get_property_value(doc, style, "display");
+      css_property_t *text_decoration_prop   = chxj_css_get_property_value(doc, style, "text-decoration");
+      css_property_t *color_prop             = chxj_css_get_property_value(doc, style, "color");
+      css_property_t *text_align_prop        = chxj_css_get_property_value(doc, style, "text-align");
+
+      css_property_t *cur;
+      for (cur = display_prop->next; cur != display_prop; cur = cur->next) {
+        if (strcasecmp("-wap-marquee", cur->value) == 0) {
+          attr_display = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+      for (cur = text_decoration_prop->next; cur != text_decoration_prop; cur = cur->next) {
+        if (STRCASEEQ('b','B',"blink", cur->value)) {
+          attr_decoration = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+      for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
+        attr_color = apr_pstrdup(doc->pool, cur->value);
+      }
+      for (cur = text_align_prop->next; cur != text_align_prop; cur = cur->next) {
+        attr_align = apr_pstrdup(doc->pool, cur->value);
+      }
+      if (attr_display) {
+        css_property_t *wap_marquee_style_prop = chxj_css_get_property_value(doc, style, "-wap-marquee-style");
+        css_property_t *wap_marquee_dir_prop   = chxj_css_get_property_value(doc, style, "-wap-marquee-dir");
+        css_property_t *wap_marquee_loop_prop  = chxj_css_get_property_value(doc, style, "-wap-marquee-loop");
+        for (cur = wap_marquee_style_prop->next; cur != wap_marquee_style_prop; cur = cur->next) {
+          if (STRCASEEQ('s','S',"scroll", cur->value) || STRCASEEQ('s','S',"slide",cur->value) || STRCASEEQ('a','A',"alternate",cur->value)) {
+            attr_wap_marquee_style = apr_pstrdup(doc->pool, cur->value);
+          }
+        }
+        for (cur = wap_marquee_dir_prop->next; cur != wap_marquee_dir_prop; cur = cur->next) {
+          if (STRCASEEQ('l','L',"ltr",cur->value)) {
+            attr_wap_marquee_dir = apr_pstrdup(doc->pool, "right");
+          }
+          else if (STRCASEEQ('r','R',"rtl",cur->value)) {
+            attr_wap_marquee_dir = apr_pstrdup(doc->pool, "left");
+          }
+        }
+        for (cur = wap_marquee_loop_prop->next; cur != wap_marquee_loop_prop; cur = cur->next) {
+          if (STRCASEEQ('i','I',"infinite",cur->value)) {
+            attr_wap_marquee_loop = apr_pstrdup(doc->pool, "16");
+          }
+          else {
+            attr_wap_marquee_loop = apr_pstrdup(doc->pool, cur->value);
+          }
+        }
+      }
+    }
+  }  
+  chtml30_flags_t *flg = (chtml30_flags_t *)apr_palloc(doc->pool, sizeof(chtml30_flags_t));
+  memset(flg, 0, sizeof(*flg));
+  if (attr_align) {
+    W_L("<div");
     W_L(" align=\"");
-    W_V(align);
+    W_V(attr_align);
     W_L("\"");
+    W_L(">");
+    flg->with_div_flag = 1;
   }
-  W_L(">");
+  if (attr_color) {
+    W_L("<font color=\"");
+    W_V(attr_color);
+    W_L("\">");
+    flg->with_font_flag = 1;
+  }
+  if (attr_decoration) {
+    W_L("<blink>");
+    flg->with_blink_flag = 1;
+  }
+  if (attr_display) {
+    W_L("<marquee");
+    if (attr_wap_marquee_style) {
+      W_L(" behavior=\"");
+      W_V(attr_wap_marquee_style);
+      W_L("\"");
+    }
+    if (attr_wap_marquee_dir) {
+      W_L(" direction=\"");
+      W_V(attr_wap_marquee_dir);
+      W_L("\"");
+    }
+    if (attr_wap_marquee_loop) {
+      W_L(" loop=\"");
+      W_V(attr_wap_marquee_loop);
+      W_L("\"");
+    }
+    W_L(">");
+    flg->with_marquee_flag = 1;
+  }
+  node->userData = flg;
+
   return chtml30->out;
 }
 
@@ -2490,12 +2588,28 @@ s_chtml30_start_div_tag(void *pdoc, Node *child)
  * @return The conversion result is returned.
  */
 static char *
-s_chtml30_end_div_tag(void *pdoc, Node *UNUSED(node))
+s_chtml30_end_div_tag(void *pdoc, Node *node)
 {
   chtml30_t    *chtml30 = GET_CHTML30(pdoc);
   Doc          *doc     = chtml30->doc;
 
-  W_L("</div>");
+  chtml30_flags_t *flg = node->userData;
+  if (flg && flg->with_marquee_flag) {
+    W_L("</marquee>");
+  }
+  if (flg && flg->with_blink_flag) {
+    W_L("</blink>");
+  }
+  if (flg && flg->with_font_flag) {
+    W_L("</font>");
+  }
+  if (flg && flg->with_div_flag) {
+    W_L("</div>");
+  }
+  if (IS_CSS_ON(chtml30->entryp)) {
+    chxj_css_pop_prop_list(chtml30->css_prop_stack);
+  }
+  node->userData = NULL;
 
   return chtml30->out;
 }
