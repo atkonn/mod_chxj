@@ -3136,20 +3136,27 @@ s_jxhtml_end_option_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_div_tag(void *pdoc, Node *child)
+s_jxhtml_start_div_tag(void *pdoc, Node *node)
 {
-  jxhtml_t     *jxhtml;
-  Doc          *doc;
-  request_rec  *r;
-  Attr         *attr;
-  char         *align = NULL;
+  jxhtml_t    *jxhtml;
+  Doc         *doc;
+  request_rec *r;
+  Attr        *attr;
+  char        *attr_style             = NULL;
+  char        *attr_align             = NULL;
+  char        *attr_display           = NULL;
+  char        *attr_decoration        = NULL;
+  char        *attr_wap_marquee_style = NULL;
+  char        *attr_wap_marquee_dir   = NULL;
+  char        *attr_wap_marquee_loop  = NULL;
+  char        *attr_color             = NULL;
+  char        *attr_font_size         = NULL;
 
   jxhtml = GET_JXHTML(pdoc);
   doc   = jxhtml->doc;
   r     = doc->r;
 
-  W_L("<div");
-  for (attr = qs_get_attr(doc,child);
+  for (attr = qs_get_attr(doc,node);
        attr;
        attr = qs_get_next_attr(doc,attr)) {
     char *nm  = qs_get_attr_name(doc,attr);
@@ -3159,13 +3166,117 @@ s_jxhtml_start_div_tag(void *pdoc, Node *child)
       /* CHTML 1.0 (W3C version 3.2)                                          */
       /*----------------------------------------------------------------------*/
       if (val && (STRCASEEQ('l','L',"left",val) || STRCASEEQ('r','R',"right",val) || STRCASEEQ('c','C',"center",val))) {
-        align = apr_pstrdup(doc->buf.pool, val);
+        attr_align = apr_pstrdup(doc->buf.pool, val);
       }
     }
+    else if (STRCASEEQ('s','S',"style",nm) && val && *val) {
+      attr_style = apr_pstrdup(doc->buf.pool, val);
+    }
   }
-  if (align) {
-    W_L(" align=\"");
-    W_V(align);
+
+  if (IS_CSS_ON(jxhtml->entryp)) {
+    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *display_prop           = chxj_css_get_property_value(doc, style, "display");
+      css_property_t *text_decoration_prop   = chxj_css_get_property_value(doc, style, "text-decoration");
+      css_property_t *color_prop             = chxj_css_get_property_value(doc, style, "color");
+      css_property_t *text_align_prop        = chxj_css_get_property_value(doc, style, "text-align");
+      css_property_t *font_size_prop         = chxj_css_get_property_value(doc, style, "font-size");
+
+      css_property_t *cur;
+      for (cur = display_prop->next; cur != display_prop; cur = cur->next) {
+        if (strcasecmp("-wap-marquee", cur->value) == 0) {
+          attr_display = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+      for (cur = text_decoration_prop->next; cur != text_decoration_prop; cur = cur->next) {
+        if (STRCASEEQ('b','B',"blink", cur->value)) {
+          attr_decoration = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+      for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
+        attr_color = apr_pstrdup(doc->pool, cur->value);
+      }
+      for (cur = text_align_prop->next; cur != text_align_prop; cur = cur->next) {
+        attr_align = apr_pstrdup(doc->pool, cur->value);
+      }
+      for (cur = font_size_prop->next; cur != font_size_prop; cur = cur->next) {
+        if (   STRCASEEQ('x','X',"xx-small",cur->value)
+            || STRCASEEQ('x','X',"x-small",cur->value)
+            || STRCASEEQ('s','S',"small",cur->value)
+            || STRCASEEQ('m','M',"medium",cur->value)
+            || STRCASEEQ('l','L',"large",cur->value)
+            || STRCASEEQ('x','X',"x-large",cur->value)
+            || STRCASEEQ('x','X',"xx-large",cur->value)) {
+          attr_font_size = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+      if (attr_display) {
+        css_property_t *wap_marquee_style_prop = chxj_css_get_property_value(doc, style, "-wap-marquee-style");
+        css_property_t *wap_marquee_dir_prop   = chxj_css_get_property_value(doc, style, "-wap-marquee-dir");
+        css_property_t *wap_marquee_loop_prop  = chxj_css_get_property_value(doc, style, "-wap-marquee-loop");
+        for (cur = wap_marquee_style_prop->next; cur != wap_marquee_style_prop; cur = cur->next) {
+          if (STRCASEEQ('s','S',"scroll", cur->value) || STRCASEEQ('s','S',"slide",cur->value) || STRCASEEQ('a','A',"alternate",cur->value)) {
+            attr_wap_marquee_style = apr_pstrdup(doc->pool, cur->value);
+          }
+        }
+        for (cur = wap_marquee_dir_prop->next; cur != wap_marquee_dir_prop; cur = cur->next) {
+          if (STRCASEEQ('l','L',"ltr",cur->value)) {
+            attr_wap_marquee_dir = apr_pstrdup(doc->pool, cur->value);
+          }
+          else if (STRCASEEQ('r','R',"rtl",cur->value)) {
+            attr_wap_marquee_dir = apr_pstrdup(doc->pool, cur->value);
+          }
+        }
+        for (cur = wap_marquee_loop_prop->next; cur != wap_marquee_loop_prop; cur = cur->next) {
+          attr_wap_marquee_loop = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+    }
+  }  
+  W_L("<div");
+  if (attr_align || attr_display || attr_decoration || attr_wap_marquee_style || attr_wap_marquee_dir || attr_wap_marquee_loop || attr_color || attr_font_size) {
+    W_L(" style=\"");
+    if (attr_align) {
+      W_L("text-align:");
+      W_V(attr_align);
+      W_L(";");
+    }
+    if (attr_display) {
+      W_L("display:");
+      W_V(attr_display);
+      W_L(";");
+    }
+    if (attr_decoration) {
+      W_L("text-decoration:");
+      W_V(attr_decoration);
+      W_L(";");
+    }
+    if (attr_wap_marquee_style) {
+      W_L("-wap-marquee-style:");
+      W_V(attr_wap_marquee_style);
+      W_L(";");
+    }
+    if (attr_wap_marquee_dir) {
+      W_L("-wap-marquee-dir:");
+      W_V(attr_wap_marquee_dir);
+      W_L(";");
+    }
+    if (attr_wap_marquee_loop) {
+      W_L("-wap-marquee-loop:");
+      W_V(attr_wap_marquee_loop);
+      W_L(";");
+    }
+    if (attr_color) {
+      W_L("color:");
+      W_V(attr_color);
+      W_L(";");
+    }
+    if (attr_font_size) {
+      W_L("font-size:");
+      W_V(attr_font_size);
+      W_L(";");
+    }
     W_L("\"");
   }
   W_L(">");
