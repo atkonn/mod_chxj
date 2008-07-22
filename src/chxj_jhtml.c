@@ -3557,11 +3557,68 @@ s_jhtml_end_dl_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_jhtml_start_dt_tag(void *pdoc, Node *UNUSED(child))
+s_jhtml_start_dt_tag(void *pdoc, Node *node)
 {
   jhtml_t *jhtml = GET_JHTML(pdoc);
-  Doc     *doc   = jhtml->doc;
+  Doc       *doc     = jhtml->doc;
+  Attr      *attr;
+  char      *attr_style = NULL;
+  char      *attr_font_size = NULL;
+
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *nm  = qs_get_attr_name(doc,attr);
+    char *val = qs_get_attr_value(doc,attr);
+    if (val && STRCASEEQ('s','S',"style", nm)) {
+      attr_style = val;
+    }
+  }
+  if (IS_CSS_ON(jhtml->entryp)) {
+    css_prop_list_t *style = s_jhtml_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *font_size_prop    = chxj_css_get_property_value(doc, style, "font-size");
+      css_property_t *cur;
+      for (cur = font_size_prop->next; cur != font_size_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          if (STRCASEEQ('x','X',"xx-small",cur->value)) {
+            attr_font_size = apr_pstrdup(doc->pool, "1");
+          }
+          else if (STRCASEEQ('x','X',"x-small",cur->value)) {
+            attr_font_size = apr_pstrdup(doc->pool, "2");
+          }
+          else if (STRCASEEQ('s','S',"small",cur->value)) {
+            attr_font_size = apr_pstrdup(doc->pool, "3");
+          }
+          else if (STRCASEEQ('m','M',"medium",cur->value)) {
+            attr_font_size = apr_pstrdup(doc->pool, "4");
+          }
+          else if (STRCASEEQ('l','L',"large",cur->value)) {
+            attr_font_size = apr_pstrdup(doc->pool, "5");
+          }
+          else if (STRCASEEQ('x','X',"x-large",cur->value)) {
+            attr_font_size = apr_pstrdup(doc->pool, "6");
+          }
+          else if (STRCASEEQ('x','X',"xx-large",cur->value)) {
+            attr_font_size = apr_pstrdup(doc->pool, "7");
+          }
+        }
+      }
+    }
+  }
   W_L("<dt>");
+  if (attr_font_size) {
+    W_L("<font size=\"");
+    W_V(attr_font_size);
+    W_L("\">");
+    jhtml_flags_t *flg = (jhtml_flags_t *)apr_palloc(doc->pool, sizeof(*flg));
+    memset(flg, 0, sizeof(*flg));
+    flg->with_font_flag = 1;
+    node->userData = flg;
+  }
+  else {
+    node->userData = NULL;
+  }
   return jhtml->out;
 }
 
@@ -3575,9 +3632,17 @@ s_jhtml_start_dt_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_jhtml_end_dt_tag(void *pdoc, Node *UNUSED(child))
+s_jhtml_end_dt_tag(void *pdoc, Node *node)
 {
   jhtml_t *jhtml = GET_JHTML(pdoc);
+  Doc       *doc     = jhtml->doc;
+  jhtml_flags_t *flg = (jhtml_flags_t *)node->userData;
+  if (flg && flg->with_font_flag) {
+    W_L("</font>");
+  }
+  if (IS_CSS_ON(jhtml->entryp)) {
+    chxj_css_pop_prop_list(jhtml->css_prop_stack);
+  }
   return jhtml->out;
 }
 
