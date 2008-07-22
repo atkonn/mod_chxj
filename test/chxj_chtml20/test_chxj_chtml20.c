@@ -1631,7 +1631,7 @@ void test_chtml20_a_tag_href_attribute_003()
 void test_chtml20_a_tag_href_attribute_004() 
 {
 #define  TEST_STRING "<html><head></head><body><a href=\"a.html#abc\">abc</a></body></html>"
-#define  RESULT_STRING "<html><head></head><body><a href=\"a.html#abc?_chxj_cc=test_cookie_id\">abc</a></body></html>"
+#define  RESULT_STRING "<html><head></head><body><a href=\"a.html?_chxj_cc=test_cookie_id#abc\">abc</a></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -1659,7 +1659,7 @@ void test_chtml20_a_tag_href_attribute_004()
 void test_chtml20_a_tag_href_attribute_005() 
 {
 #define  TEST_STRING "<html><head></head><body><a href=\"a.html#\">abc</a></body></html>"
-#define  RESULT_STRING "<html><head></head><body><a href=\"a.html#?_chxj_cc=test_cookie_id\">abc</a></body></html>"
+#define  RESULT_STRING "<html><head></head><body><a href=\"a.html?_chxj_cc=test_cookie_id#\">abc</a></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
