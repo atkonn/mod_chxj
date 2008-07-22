@@ -3925,11 +3925,26 @@ s_chtml30_end_dl_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_chtml30_start_dt_tag(void *pdoc, Node *UNUSED(child))
+s_chtml30_start_dt_tag(void *pdoc, Node *node)
 {
   chtml30_t *chtml30 = GET_CHTML30(pdoc);
   Doc       *doc     = chtml30->doc;
+  Attr      *attr;
+  char      *attr_style = NULL;
+
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *nm  = qs_get_attr_name(doc,attr);
+    char *val = qs_get_attr_value(doc,attr);
+    if (val && STRCASEEQ('s','S',"style", nm)) {
+      attr_style = val;
+    }
+  }
   W_L("<dt>");
+  if (IS_CSS_ON(chtml30->entryp)) {
+    s_chtml30_push_and_get_now_style(pdoc, node, attr_style);
+  }
   return chtml30->out;
 }
 
@@ -3946,7 +3961,9 @@ static char *
 s_chtml30_end_dt_tag(void *pdoc, Node *UNUSED(child))
 {
   chtml30_t *chtml30 = GET_CHTML30(pdoc);
-
+  if (IS_CSS_ON(chtml30->entryp)) {
+    chxj_css_pop_prop_list(chtml30->css_prop_stack);
+  }
   return chtml30->out;
 }
 
