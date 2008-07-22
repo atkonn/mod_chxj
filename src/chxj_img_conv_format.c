@@ -397,6 +397,7 @@ s_img_conv_format_from_file(
   if (rv != APR_SUCCESS)
     return HTTP_NOT_FOUND;
 
+  apr_table_setn(r->headers_in, "CHXJ_IMG_CONV", "done");
   try_count = CACHE_RETRY_COUNT;
   do {
     rv = apr_stat(&cache_st, tmpfile, APR_FINFO_MIN, r->pool);
@@ -428,7 +429,6 @@ s_img_conv_format_from_file(
     WRN(r, "cache retry failure....");
     WRN(r, "cache file was deleted...");
   }
-  apr_table_setn(r->headers_in, "CHXJ_IMG_CONV", "done");
 
   DBG(r,"end chxj_img_conv_format");
 
@@ -605,18 +605,16 @@ s_create_cache_file(request_rec          *r,
           return HTTP_NOT_FOUND;
         }
       }
-      else
-      if (spec->available_png) {
+      else if (spec->available_gif) {
+        if (s_convert_to_gif(magick_wand, r, spec)) {
+          return HTTP_NOT_FOUND;
+        }  
+      }
+      else if (spec->available_png) {
         if (s_convert_to_png(magick_wand, r, spec)) {
           return HTTP_NOT_FOUND;
         }  
   
-      }
-      else
-      if (spec->available_gif) {
-        if (s_convert_to_gif(magick_wand, r, spec)) {
-          return HTTP_NOT_FOUND;
-        }  
       }
       else
       if (spec->available_bmp2 || spec->available_bmp4) { 
@@ -826,6 +824,7 @@ s_convert_to_jpeg(MagickWand *magick_wand, request_rec *r, device_table *spec)
     return -1;
   
   r->content_type = apr_psprintf(r->pool, "image/jpeg");
+  ap_set_content_type(r, "image/jpeg");
   DBG(r,"convert to jpg");
   return 0;
 }
@@ -853,6 +852,7 @@ s_convert_to_png(MagickWand *magick_wand, request_rec *r, device_table *spec)
     return -1;
   
   r->content_type = apr_psprintf(r->pool, "image/png");
+  ap_set_content_type(r, "image/png");
   DBG(r, "convert to png");
   return 0;
 }
@@ -880,6 +880,7 @@ s_convert_to_gif(MagickWand *magick_wand, request_rec *r, device_table *spec)
     return -1;
   
   r->content_type = apr_psprintf(r->pool, "image/gif");
+  ap_set_content_type(r, "image/gif");
   
   DBG(r,"convert to gif");
   return 0;
@@ -908,6 +909,7 @@ s_convert_to_bmp(MagickWand *magick_wand, request_rec *r, device_table *spec)
     return -1;
   
   r->content_type = apr_psprintf(r->pool, "image/bmp");
+  ap_set_content_type(r, "image/bmp");
   
   DBG(r, "convert to bmp(unsupported)");
   return 0;
@@ -1420,47 +1422,59 @@ s_img_down_sizing(MagickWand *magick_wand, request_rec *r, device_table *spec)
   char               *writedata;
   apr_size_t         prev_size = 0;
   int                revers_flag = 0;
-
+  char               *fmt;
+  int                fmt_type = 0;
+  
   writedata = (char *)MagickGetImageBlob(magick_wand, &writebyte);
   prev_size = writebyte;
 
-  do {
-    if (MagickSetImageCompressionQuality(magick_wand, quality) == MagickFalse) {
-      EXIT_MAGICK_ERROR();
-      return NULL;
-    }
-
-    writedata = (char*)MagickGetImageBlob(magick_wand, &writebyte);
-    if (writebyte >= prev_size || revers_flag) {
-      DBG(r, "quality=[%ld] size=[%d]", (long)quality, (int)writebyte);
-      revers_flag = 1;
-      quality += 10;
-      if (quality > 100) {
-        if (MagickSetImageCompression(magick_wand,NoCompression) == MagickFalse) {
-          EXIT_MAGICK_ERROR();
-          return NULL;
-        }
-        break;
-      }
-      prev_size = writebyte;
-      continue;
-    }
-
-    DBG(r, "quality=[%ld] size=[%d]", (long)quality, (int)writebyte);
-
-    if (spec->cache == 0)
-      break;
-
-    if (writebyte <= (unsigned int)spec->cache)
-      break;
-
-    quality -= 10;
-
-    if (quality == 0 || quality > 100)
-      break;
-
+  
+  fmt = MagickGetImageFormat(magick_wand);
+  if (fmt) {
+    if (STRCASEEQ('j','J',"jpg",fmt)) fmt_type = 1;
+    if (STRCASEEQ('p','P',"png",fmt)) fmt_type = 2;
+    if (STRCASEEQ('g','G',"gif",fmt)) fmt_type = 3;
+    if (STRCASEEQ('b','B',"bmp",fmt)) fmt_type = 4;
   }
-  while (1);
+  if (fmt_type == 1) {
+    do {
+      if (MagickSetImageCompressionQuality(magick_wand, quality) == MagickFalse) {
+        EXIT_MAGICK_ERROR();
+        return NULL;
+      }
+  
+      writedata = (char*)MagickGetImageBlob(magick_wand, &writebyte);
+      if (writebyte >= prev_size || revers_flag) {
+        DBG(r, "quality=[%ld] size=[%d]", (long)quality, (int)writebyte);
+        revers_flag = 1;
+        quality += 10;
+        if (quality > 100) {
+          if (MagickSetImageCompression(magick_wand,NoCompression) == MagickFalse) {
+            EXIT_MAGICK_ERROR();
+            return NULL;
+          }
+          break;
+        }
+        prev_size = writebyte;
+        continue;
+      }
+  
+      DBG(r, "quality=[%ld] size=[%d]", (long)quality, (int)writebyte);
+  
+      if (spec->cache == 0)
+        break;
+  
+      if (writebyte <= (unsigned int)spec->cache)
+        break;
+  
+      quality -= 10;
+  
+      if (quality == 0 || quality > 100)
+        break;
+  
+    }
+    while (1);
+  }
 
 
   if (spec->cache > 0 
@@ -1485,6 +1499,7 @@ s_img_down_sizing(MagickWand *magick_wand, request_rec *r, device_table *spec)
 
       if (now_color <= 2) break;
 
+
       if (now_color >= 8) {
         status = MagickQuantizeImage(magick_wand,
                              now_color,
@@ -1506,12 +1521,12 @@ s_img_down_sizing(MagickWand *magick_wand, request_rec *r, device_table *spec)
         EXIT_MAGICK_ERROR();
         return NULL;
       }
-
-      if (MagickSetImageDepth(magick_wand, depth) == MagickFalse) {
-        EXIT_MAGICK_ERROR();
-        return NULL;
+      if (fmt_type != 2) {
+        if (MagickSetImageDepth(magick_wand, depth) == MagickFalse) {
+          EXIT_MAGICK_ERROR();
+          return NULL;
+        }
       }
-
       writedata = (char*)MagickGetImageBlob(magick_wand, &writebyte);
 
       DBG(r,"now_color=[%ld] size=[%d]", (long)now_color, (int)writebyte);
@@ -1527,7 +1542,7 @@ s_img_down_sizing(MagickWand *magick_wand, request_rec *r, device_table *spec)
 
 
 static apr_status_t 
-s_send_cache_file(device_table *spec, query_string_param_t *query_string, request_rec *r, const char *tmpfile)
+s_send_cache_file(device_table *UNUSED(spec), query_string_param_t *query_string, request_rec *r, const char *tmpfile)
 {
   apr_status_t rv;
   apr_finfo_t  st;
@@ -1544,35 +1559,51 @@ s_send_cache_file(device_table *spec, query_string_param_t *query_string, reques
   DBG(r, "offset:[%ld]", query_string->offset);
   DBG(r, "count:[%ld]",  query_string->count);
 
-  if (spec->available_jpeg) {
-    r->content_type = apr_psprintf(r->pool, "image/jpeg");
-  }
-  else
-  if (spec->available_png) {
-    r->content_type = apr_psprintf(r->pool, "image/png");
-  }
-  else
-  if (spec->available_gif) {
-    r->content_type = apr_psprintf(r->pool, "image/gif");
-  }
-  else
-  if (spec->available_bmp2 || spec->available_bmp4) {
-    r->content_type = apr_psprintf(r->pool, "image/bmp");
-  }
-
   if (query_string->mode != IMG_CONV_MODE_EZGET && query_string->name == NULL) {
     contentLength = apr_psprintf(r->pool, "%d", (int)st.size);
     apr_table_setn(r->headers_out, "Content-Length", (const char*)contentLength);
   
     DBG(r,"Content-Length:[%d]", (int)st.size);
-
+    MagickWand *magick_wand = NewMagickWand();
+    if (MagickReadImage(magick_wand,tmpfile) == MagickFalse) {
+      EXIT_MAGICK_ERROR();
+      return HTTP_NOT_FOUND;
+    }
+    if (MagickStripImage(magick_wand) == MagickFalse) {
+      ERR(r, "mod_chxj: strip image failure.");
+      EXIT_MAGICK_ERROR();
+      return HTTP_NOT_FOUND;
+    }
+    char *nowFormat = MagickGetImageFormat(magick_wand);
+    DestroyMagickWand(magick_wand);
+    if (nowFormat) {
+      if (STRCASEEQ('j','J',"jpeg",nowFormat) || STRCASEEQ('j','J',"jpg",nowFormat)) {
+        DBG(r, "detect cache file => jpg.");
+        ap_set_content_type(r, "image/jpeg");
+      }
+      else if (STRCASEEQ('p','P',"png", nowFormat)) {
+        DBG(r, "detect cache file => png.");
+        ap_set_content_type(r, "image/png");
+      }
+      else if (STRCASEEQ('g','G',"gif", nowFormat)) {
+        DBG(r, "detect cache file => gif.");
+        ap_set_content_type(r, "image/gif");
+      }
+      else if (STRCASEEQ('b','B',"bmp", nowFormat)) {
+        DBG(r, "detect cache file => bmp.");
+        ap_set_content_type(r, "image/bmp");
+      }
+      else {
+        ERR(r, "detect unknown file");
+        return HTTP_NOT_FOUND;
+      }
+    }
     rv = apr_file_open(&fout, tmpfile, 
       APR_READ | APR_BINARY, APR_OS_DEFAULT, r->pool);
     if (rv != APR_SUCCESS) {
       DBG(r, "cache file open failed[%s]", tmpfile);
       return HTTP_NOT_FOUND;
     }
-
     ap_send_fd(fout, r, 0, st.size, &sendbyte);
     apr_file_close(fout);
     ap_rflush(r);
@@ -1671,7 +1702,7 @@ s_send_original_file(request_rec *r, const char *originalfile)
 
 
 static apr_status_t 
-s_header_only_cache_file(device_table *spec, query_string_param_t *query_string, request_rec *r, const char *tmpfile)
+s_header_only_cache_file(device_table *UNUSED(spec), query_string_param_t *query_string, request_rec *r, const char *tmpfile)
 {
   apr_status_t rv;
   apr_finfo_t  st;
@@ -1686,25 +1717,44 @@ s_header_only_cache_file(device_table *spec, query_string_param_t *query_string,
   DBG(r, "offset:[%ld]", query_string->offset);
   DBG(r, "count:[%ld]",  query_string->count);
 
-  if (spec->available_jpeg) {
-    r->content_type = apr_psprintf(r->pool, "image/jpeg");
-  }
-  else
-  if (spec->available_png) {
-    r->content_type = apr_psprintf(r->pool, "image/png");
-  }
-  else
-  if (spec->available_gif) {
-    r->content_type = apr_psprintf(r->pool, "image/gif");
-  }
-  else
-  if (spec->available_bmp2 || spec->available_bmp4) {
-    r->content_type = apr_psprintf(r->pool, "image/bmp");
-  }
-
   if (query_string->mode != IMG_CONV_MODE_EZGET && query_string->name == NULL) {
     contentLength = apr_psprintf(r->pool, "%d", (int)st.size);
     apr_table_setn(r->headers_out, "Content-Length", (const char*)contentLength);
+
+    MagickWand *magick_wand = NewMagickWand();
+    if (MagickReadImage(magick_wand,tmpfile) == MagickFalse) {
+      EXIT_MAGICK_ERROR();
+      return HTTP_NOT_FOUND;
+    }
+    if (MagickStripImage(magick_wand) == MagickFalse) {
+      ERR(r, "mod_chxj: strip image failure.");
+      EXIT_MAGICK_ERROR();
+      return HTTP_NOT_FOUND;
+    }
+    char *nowFormat = MagickGetImageFormat(magick_wand);
+    DestroyMagickWand(magick_wand);
+    if (nowFormat) {
+      if (STRCASEEQ('j','J',"jpeg",nowFormat) || STRCASEEQ('j','J',"jpg",nowFormat)) {
+        DBG(r, "detect cache file => jpg.");
+        ap_set_content_type(r, "image/jpeg");
+      }
+      else if (STRCASEEQ('p','P',"png", nowFormat)) {
+        DBG(r, "detect cache file => png.");
+        ap_set_content_type(r, "image/png");
+      }
+      else if (STRCASEEQ('g','G',"gif", nowFormat)) {
+        DBG(r, "detect cache file => gif.");
+        ap_set_content_type(r, "image/gif");
+      }
+      else if (STRCASEEQ('b','B',"bmp", nowFormat)) {
+        DBG(r, "detect cache file => bmp.");
+        ap_set_content_type(r, "image/bmp");
+      }
+      else {
+        ERR(r, "detect unknown file");
+        return HTTP_NOT_FOUND;
+      }
+    }
   
     DBG(r,"Content-Length:[%d]", (int)st.size);
   }
