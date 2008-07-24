@@ -1550,6 +1550,7 @@ s_chtml20_start_form_tag(void *pdoc, Node *node)
   char        *attr_style  = NULL;
   char        *attr_color  = NULL;
   char        *attr_align  = NULL;
+  char        *new_hidden_tag = NULL;
 
   chtml20 = GET_CHTML20(pdoc);
   doc     = chtml20->doc;
@@ -1631,6 +1632,12 @@ s_chtml20_start_form_tag(void *pdoc, Node *node)
   if (attr_action) {
     attr_action = chxj_encoding_parameter(r, attr_action);
     attr_action = chxj_add_cookie_parameter(r, attr_action, chtml20->cookie);
+    char *q;
+    q = strchr(attr_action, '?');
+    if (q) {
+      new_hidden_tag = chxj_form_action_to_hidden_tag(doc->pool, attr_action, 0);
+      *q = 0;
+    }
     W_L(" action=\"");
     W_V(attr_action);
     W_L("\"");
@@ -1641,6 +1648,9 @@ s_chtml20_start_form_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   W_L(">");
+  if (new_hidden_tag) {
+    W_V(new_hidden_tag);
+  }
 
   chtml20_flags_t *flg = (chtml20_flags_t *)apr_palloc(doc->pool, sizeof(chtml20_flags_t));
   memset(flg, 0, sizeof(*flg));

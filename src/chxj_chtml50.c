@@ -1514,6 +1514,7 @@ s_chtml50_start_form_tag(void *pdoc, Node *node)
   char        *attr_color  = NULL;
   char        *attr_align  = NULL;
   char        *attr_utn    = NULL;
+  char        *new_hidden_tag = NULL;
 
   chtml50 = GET_CHTML50(pdoc);
   doc     = chtml50->doc;
@@ -1595,6 +1596,12 @@ s_chtml50_start_form_tag(void *pdoc, Node *node)
   if (attr_action) {
     attr_action = chxj_encoding_parameter(r, attr_action);
     attr_action = chxj_add_cookie_parameter(r, attr_action, chtml50->cookie);
+    char *q;
+    q = strchr(attr_action, '?');
+    if (q) {
+      new_hidden_tag = chxj_form_action_to_hidden_tag(doc->pool, attr_action, 0);
+      *q = 0;
+    }
     W_L(" action=\"");
     W_V(attr_action);
     W_L("\"");
@@ -1625,6 +1632,9 @@ s_chtml50_start_form_tag(void *pdoc, Node *node)
     flg->with_div_flag = 1;
   }
   node->userData = flg;
+  if (new_hidden_tag) {
+    W_V(new_hidden_tag);
+  }
 
   return chtml50->out;
 }
