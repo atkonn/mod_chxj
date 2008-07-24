@@ -3455,7 +3455,7 @@ void test_jhtml_div_tag_007()
 void test_jhtml_form_tag_001() 
 {
 #define  TEST_STRING "<html><head></head><body><form></form></body></html>"
-#define  RESULT_STRING "<html><head></head><body><form><input type='hidden' name='_chxj_cc' value='test_cookie_id'></form></body></html>"
+#define  RESULT_STRING "<html><head></head><body><form></form></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -3485,7 +3485,7 @@ void test_jhtml_form_tag_001()
 void test_jhtml_form_tag_002() 
 {
 #define  TEST_STRING "<html><head></head><body><form method></form></body></html>"
-#define  RESULT_STRING "<html><head></head><body><form method=\"\"><input type='hidden' name='_chxj_cc' value='test_cookie_id'></form></body></html>"
+#define  RESULT_STRING "<html><head></head><body><form method=\"\"></form></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -3515,7 +3515,7 @@ void test_jhtml_form_tag_002()
 void test_jhtml_form_tag_003() 
 {
 #define  TEST_STRING "<html><head></head><body><form method=\"post\"></form></body></html>"
-#define  RESULT_STRING "<html><head></head><body><form method=\"post\"><input type='hidden' name='_chxj_cc' value='test_cookie_id'></form></body></html>"
+#define  RESULT_STRING "<html><head></head><body><form method=\"post\"></form></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -3545,7 +3545,7 @@ void test_jhtml_form_tag_003()
 void test_jhtml_form_tag_004() 
 {
 #define  TEST_STRING "<html><head></head><body><form method=\"get\"></form></body></html>"
-#define  RESULT_STRING "<html><head></head><body><form method=\"get\"><input type='hidden' name='_chxj_cc' value='test_cookie_id'></form></body></html>"
+#define  RESULT_STRING "<html><head></head><body><form method=\"get\"></form></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -3575,7 +3575,7 @@ void test_jhtml_form_tag_004()
 void test_jhtml_form_tag_005() 
 {
 #define  TEST_STRING "<html><head></head><body><form method=\"abc\"></form></body></html>"
-#define  RESULT_STRING "<html><head></head><body><form method=\"abc\"><input type='hidden' name='_chxj_cc' value='test_cookie_id'></form></body></html>"
+#define  RESULT_STRING "<html><head></head><body><form method=\"abc\"></form></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -3603,7 +3603,7 @@ void test_jhtml_form_tag_005()
 void test_jhtml_form_tag_006() 
 {
 #define  TEST_STRING "<html><head></head><body><form action></form></body></html>"
-#define  RESULT_STRING "<html><head></head><body><form action=\"\"><input type='hidden' name='_chxj_cc' value='test_cookie_id'></form></body></html>"
+#define  RESULT_STRING "<html><head></head><body><form action=\"\"><input type=\"hidden\" name=\"_chxj_cc\" value=\"test_cookie_id\"></form></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -3693,7 +3693,7 @@ void test_jhtml_form_tag_008()
 void test_jhtml_form_tag_009() 
 {
 #define  TEST_STRING "<html><head></head><body><form method=\"post\" action=\"hogehoge\"></form></body></html>"
-#define  RESULT_STRING "<html><head></head><body><form action=\"hogehoge\" method=\"post\"><input type='hidden' name='_chxj_cc' value='test_cookie_id'></form></body></html>"
+#define  RESULT_STRING "<html><head></head><body><form action=\"hogehoge\" method=\"post\"><input type=\"hidden\" name=\"_chxj_cc\" value=\"test_cookie_id\"></form></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -17281,7 +17281,7 @@ void test_jhtml_form_tag_with_css_001()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><form>あいう</form></html>"
-#define  RESULT_STRING "<html><head></head><form><font color=\"#ff0000\"><input type='hidden' name='_chxj_cc' value='test_cookie_id'>あいう</font></form></html>"
+#define  RESULT_STRING "<html><head></head><form><font color=\"#ff0000\">あいう</font></form></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -17316,7 +17316,7 @@ void test_jhtml_form_tag_with_css_002()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><form style=\"color:#ff0000\">あいう</form></html>"
-#define  RESULT_STRING "<html><head></head><form><font color=\"#ff0000\"><input type='hidden' name='_chxj_cc' value='test_cookie_id'>あいう</font></form></html>"
+#define  RESULT_STRING "<html><head></head><form><font color=\"#ff0000\">あいう</font></form></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -17363,7 +17363,7 @@ void test_jhtml_form_tag_with_css_003()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><form>あいう</form></html>"
-#define  RESULT_STRING "<html><head></head><form><div align=\"left\"><input type='hidden' name='_chxj_cc' value='test_cookie_id'>あいう</div></form></html>"
+#define  RESULT_STRING "<html><head></head><form><div align=\"left\">あいう</div></form></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -17398,7 +17398,7 @@ void test_jhtml_form_tag_with_css_004()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><form style=\"text-align:left\">あいう</form></html>"
-#define  RESULT_STRING "<html><head></head><form><div align=\"left\"><input type='hidden' name='_chxj_cc' value='test_cookie_id'>あいう</div></form></html>"
+#define  RESULT_STRING "<html><head></head><form><div align=\"left\">あいう</div></form></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -17445,7 +17445,7 @@ void test_jhtml_form_tag_with_css_005()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><form>あいう</form></html>"
-#define  RESULT_STRING "<html><head></head><form><div align=\"center\"><input type='hidden' name='_chxj_cc' value='test_cookie_id'>あいう</div></form></html>"
+#define  RESULT_STRING "<html><head></head><form><div align=\"center\">あいう</div></form></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -17480,7 +17480,7 @@ void test_jhtml_form_tag_with_css_006()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><form style=\"text-align:center\">あいう</form></html>"
-#define  RESULT_STRING "<html><head></head><form><div align=\"center\"><input type='hidden' name='_chxj_cc' value='test_cookie_id'>あいう</div></form></html>"
+#define  RESULT_STRING "<html><head></head><form><div align=\"center\">あいう</div></form></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -17527,7 +17527,7 @@ void test_jhtml_form_tag_with_css_007()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><form>あいう</form></html>"
-#define  RESULT_STRING "<html><head></head><form><div align=\"right\"><input type='hidden' name='_chxj_cc' value='test_cookie_id'>あいう</div></form></html>"
+#define  RESULT_STRING "<html><head></head><form><div align=\"right\">あいう</div></form></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -17562,7 +17562,7 @@ void test_jhtml_form_tag_with_css_008()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><form style=\"text-align:right\">あいう</form></html>"
-#define  RESULT_STRING "<html><head></head><form><div align=\"right\"><input type='hidden' name='_chxj_cc' value='test_cookie_id'>あいう</div></form></html>"
+#define  RESULT_STRING "<html><head></head><form><div align=\"right\">あいう</div></form></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -17614,7 +17614,7 @@ void test_jhtml_input_tag_with_css_001()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><form><input type=\"text\"></form></html>"
-#define  RESULT_STRING "<html><head></head><form><input type='hidden' name='_chxj_cc' value='test_cookie_id'><input type=\"text\" mode=\"hiragana\"></form></html>"
+#define  RESULT_STRING "<html><head></head><form><input type=\"text\" mode=\"hiragana\"></form></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -17649,7 +17649,7 @@ void test_jhtml_input_tag_with_css_002()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><form><input type=\"text\" style=\"-wap-input-format: &quot;*&lt;ja:h&gt;&quot;\"></form></html>"
-#define  RESULT_STRING "<html><head></head><form><input type='hidden' name='_chxj_cc' value='test_cookie_id'><input type=\"text\" mode=\"hiragana\"></form></html>"
+#define  RESULT_STRING "<html><head></head><form><input type=\"text\" mode=\"hiragana\"></form></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -17695,7 +17695,7 @@ void test_jhtml_input_tag_with_css_003()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><form><input type=\"text\"></form></html>"
-#define  RESULT_STRING "<html><head></head><form><input type='hidden' name='_chxj_cc' value='test_cookie_id'><input type=\"text\" mode=\"hankakukana\"></form></html>"
+#define  RESULT_STRING "<html><head></head><form><input type=\"text\" mode=\"hankakukana\"></form></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -17730,7 +17730,7 @@ void test_jhtml_input_tag_with_css_004()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><form><input type=\"text\" style=\"-wap-input-format: &quot;*&lt;ja:hk&gt;&quot;\"></form></html>"
-#define  RESULT_STRING "<html><head></head><form><input type='hidden' name='_chxj_cc' value='test_cookie_id'><input type=\"text\" mode=\"hankakukana\"></form></html>"
+#define  RESULT_STRING "<html><head></head><form><input type=\"text\" mode=\"hankakukana\"></form></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -17776,7 +17776,7 @@ void test_jhtml_input_tag_with_css_005()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><form><input type=\"text\"></form></html>"
-#define  RESULT_STRING "<html><head></head><form><input type='hidden' name='_chxj_cc' value='test_cookie_id'><input type=\"text\" mode=\"alphabet\"></form></html>"
+#define  RESULT_STRING "<html><head></head><form><input type=\"text\" mode=\"alphabet\"></form></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -17811,7 +17811,7 @@ void test_jhtml_input_tag_with_css_006()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><form><input type=\"text\" style=\"-wap-input-format: &quot;*&lt;ja:en&gt;&quot;\"></form></html>"
-#define  RESULT_STRING "<html><head></head><form><input type='hidden' name='_chxj_cc' value='test_cookie_id'><input type=\"text\" mode=\"alphabet\"></form></html>"
+#define  RESULT_STRING "<html><head></head><form><input type=\"text\" mode=\"alphabet\"></form></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -17857,7 +17857,7 @@ void test_jhtml_input_tag_with_css_007()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><form><input type=\"text\"></form></html>"
-#define  RESULT_STRING "<html><head></head><form><input type='hidden' name='_chxj_cc' value='test_cookie_id'><input type=\"text\" mode=\"numeric\"></form></html>"
+#define  RESULT_STRING "<html><head></head><form><input type=\"text\" mode=\"numeric\"></form></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -17892,7 +17892,7 @@ void test_jhtml_input_tag_with_css_008()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><form><input type=\"text\" style=\"-wap-input-format: &quot;*&lt;ja:n&gt;&quot;;\"></form></html>"
-#define  RESULT_STRING "<html><head></head><form><input type='hidden' name='_chxj_cc' value='test_cookie_id'><input type=\"text\" mode=\"numeric\"></form></html>"
+#define  RESULT_STRING "<html><head></head><form><input type=\"text\" mode=\"numeric\"></form></html>"
   char  *ret;
   char  *tmp;
   device_table spec;

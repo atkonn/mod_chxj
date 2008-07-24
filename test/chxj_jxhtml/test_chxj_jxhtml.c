@@ -3817,7 +3817,7 @@ void test_jxhtml_form_tag_005()
 void test_jxhtml_form_tag_006() 
 {
 #define  TEST_STRING   "<form action></form>"
-#define  RESULT_STRING "<form action=\"?_chxj_cc=test_cookie_id\"></form>"
+#define  RESULT_STRING "<form action=\"\"><input type=\"hidden\" name=\"_chxj_cc\" value=\"test_cookie_id\"></form>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -3907,7 +3907,7 @@ void test_jxhtml_form_tag_008()
 void test_jxhtml_form_tag_009() 
 {
 #define  TEST_STRING   "<form method=\"post\" action=\"hogehoge\"></form>"
-#define  RESULT_STRING "<form action=\"hogehoge?_chxj_cc=test_cookie_id\" method=\"post\"></form>"
+#define  RESULT_STRING "<form action=\"hogehoge\" method=\"post\"><input type=\"hidden\" name=\"_chxj_cc\" value=\"test_cookie_id\"></form>"
   char  *ret;
   char  *tmp;
   device_table spec;

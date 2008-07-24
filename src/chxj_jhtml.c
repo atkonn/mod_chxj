@@ -1480,8 +1480,6 @@ s_jhtml_start_form_tag(void *pdoc, Node *node)
   Doc         *doc;
   request_rec *r;
   Attr        *attr;
-  int         dcflag = 0;
-  char        *dc = NULL;
   char        *attr_action = NULL;
   char        *attr_method = NULL;
   char        *attr_style  = NULL;
