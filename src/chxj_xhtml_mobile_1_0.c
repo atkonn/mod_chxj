@@ -4089,11 +4089,64 @@ s_xhtml_1_0_end_dl_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_xhtml_1_0_start_dt_tag(void *pdoc, Node *UNUSED(child))
+s_xhtml_1_0_start_dt_tag(void *pdoc, Node *node)
 {
-  xhtml_t *xhtml = GET_XHTML(pdoc);
-  Doc     *doc   = xhtml->doc;
-  W_L("<dt>");
+  xhtml_t   *xhtml = GET_XHTML(pdoc);
+  Doc       *doc     = xhtml->doc;
+  Attr      *attr;
+  char      *attr_style = NULL;
+  char      *attr_font_size = NULL;
+
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *nm  = qs_get_attr_name(doc,attr);
+    char *val = qs_get_attr_value(doc,attr);
+    if (val && STRCASEEQ('s','S',"style", nm)) {
+      attr_style = val;
+    }
+  }
+  if (IS_CSS_ON(xhtml->entryp)) {
+    css_prop_list_t *style = s_xhtml_1_0_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *font_size_prop    = chxj_css_get_property_value(doc, style, "font-size");
+      css_property_t *cur;
+      for (cur = font_size_prop->next; cur != font_size_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          if (STRCASEEQ('x','X',"xx-small",cur->value)) {
+            attr_font_size = apr_pstrdup(doc->pool, "xx-small");
+          }
+          else if (STRCASEEQ('x','X',"x-small",cur->value)) {
+            attr_font_size = apr_pstrdup(doc->pool, "x-small");
+          }
+          else if (STRCASEEQ('s','S',"small",cur->value)) {
+            attr_font_size = apr_pstrdup(doc->pool, "small");
+          }
+          else if (STRCASEEQ('m','M',"medium",cur->value)) {
+            attr_font_size = apr_pstrdup(doc->pool, "medium");
+          }
+          else if (STRCASEEQ('l','L',"large",cur->value)) {
+            attr_font_size = apr_pstrdup(doc->pool, "large");
+          }
+          else if (STRCASEEQ('x','X',"x-large",cur->value)) {
+            attr_font_size = apr_pstrdup(doc->pool, "x-large");
+          }
+          else if (STRCASEEQ('x','X',"xx-large",cur->value)) {
+            attr_font_size = apr_pstrdup(doc->pool, "xx-large");
+          }
+        }
+      }
+    }
+  }
+  W_L("<dt");
+  if (attr_font_size) {
+    W_L(" style=\"");
+    W_L("font-size:");
+    W_V(attr_font_size);
+    W_L(";");
+    W_L("\"");
+  }
+  W_L(">");
   return xhtml->out;
 }
 
@@ -4112,6 +4165,9 @@ s_xhtml_1_0_end_dt_tag(void *pdoc, Node *UNUSED(child))
   xhtml_t *xhtml = GET_XHTML(pdoc);
   Doc     *doc   = xhtml->doc;
   W_L("</dt>");
+  if (IS_CSS_ON(xhtml->entryp)) {
+    chxj_css_pop_prop_list(xhtml->css_prop_stack);
+  }
   return xhtml->out;
 }
 
