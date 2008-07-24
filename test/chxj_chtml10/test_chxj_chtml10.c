@@ -2747,7 +2747,7 @@ void test_chtml10_form_tag_005()
 void test_chtml10_form_tag_006() 
 {
 #define  TEST_STRING "<html><head></head><body><form action></form></body></html>"
-#define  RESULT_STRING "<html><head></head><body><form action=\"?_chxj_cc=test_cookie_id\"></form></body></html>"
+#define  RESULT_STRING "<html><head></head><body><form action=\"\"><input type=\"hidden\" name=\"_chxj_cc\" value=\"test_cookie_id\"></form></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -2831,7 +2831,7 @@ void test_chtml10_form_tag_008()
 void test_chtml10_form_tag_009() 
 {
 #define  TEST_STRING "<html><head></head><body><form method=\"post\" action=\"hogehoge\"></form></body></html>"
-#define  RESULT_STRING "<html><head></head><body><form action=\"hogehoge?_chxj_cc=test_cookie_id\" method=\"post\"></form></body></html>"
+#define  RESULT_STRING "<html><head></head><body><form action=\"hogehoge\" method=\"post\"><input type=\"hidden\" name=\"_chxj_cc\" value=\"test_cookie_id\"></form></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
