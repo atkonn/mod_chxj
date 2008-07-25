@@ -669,6 +669,9 @@ void test_chtml30_dir_tag_with_css_002();
 
 void test_chtml30_dl_tag_with_css_001();
 void test_chtml30_dl_tag_with_css_002();
+
+void test_chtml30_dd_tag_with_css_001();
+void test_chtml30_dd_tag_with_css_002();
 /* pend */
 
 int
@@ -1299,6 +1302,9 @@ main()
 
   CU_add_test(chtml30_suite, "test dl with css 001",                       test_chtml30_dl_tag_with_css_001);
   CU_add_test(chtml30_suite, "test dl with css 002",                       test_chtml30_dl_tag_with_css_002);
+
+  CU_add_test(chtml30_suite, "test dd with css 001",                       test_chtml30_dd_tag_with_css_001);
+  CU_add_test(chtml30_suite, "test dd with css 002",                       test_chtml30_dd_tag_with_css_002);
   /* aend */
 
   CU_basic_run_tests();
@@ -19222,6 +19228,96 @@ void test_chtml30_dl_tag_with_css_002()
   apr_size_t destlen;
   APR_INIT;
   chxj_serf_get = test_chxj_serf_get200;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_chtml30(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+
+
+
+
+
+
+
+/*===========================================================================*/
+/* dd tag with CSS                                                          */
+/*===========================================================================*/
+char *test_chxj_serf_get220(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "dd { color: #ff0000 }\n";
+
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_chtml30_dd_tag_with_css_001()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><dd>あいう</dd></body></html>"
+#define  RESULT_STRING "<html><head></head><body><dd><font color=\"#ff0000\">あいう</font></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get220;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_chtml30(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_chtml30_dd_tag_with_css_002()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><dd style=\"color:#ff0000\">あいう</dd></body></html>"
+#define  RESULT_STRING "<html><head></head><body><dd><font color=\"#ff0000\">あいう</font></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get220;
   call_check = 0;
 
   COOKIE_INIT(cookie);
