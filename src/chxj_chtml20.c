@@ -1872,7 +1872,7 @@ s_chtml20_start_input_tag(void *pdoc, Node *node)
  * @return The conversion result is returned.
  */
 static char *
-s_chtml20_end_input_tag(void *pdoc, Node *node)
+s_chtml20_end_input_tag(void *pdoc, Node *UNUSED(node))
 {
   chtml20_t   *chtml20;
   Doc         *doc;
@@ -4229,7 +4229,6 @@ s_chtml20_start_dl_tag(void *pdoc, Node *node)
     flg->with_font_flag = 1;
   }
   node->userData = (void *)flg;
-  return chtml20->out;
   return chtml20->out;
 }
 
