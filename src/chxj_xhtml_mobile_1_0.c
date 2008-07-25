@@ -3975,7 +3975,7 @@ s_xhtml_1_0_start_blockquote_tag(void *pdoc, Node *node)
   char     *attr_color = NULL;
   char     *attr_size  = NULL;
 
-  xhtml  = GET_JXHTML(pdoc);
+  xhtml  = GET_XHTML(pdoc);
   doc     = xhtml->doc;
   for (attr = qs_get_attr(doc,node);
        attr;
