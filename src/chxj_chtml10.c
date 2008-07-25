@@ -92,7 +92,7 @@ static char *s_chtml10_start_option_tag   (void *pdoc, Node *node);
 static char *s_chtml10_end_option_tag     (void *pdoc, Node *node);
 static char *s_chtml10_start_div_tag      (void *pdoc, Node *node);
 static char *s_chtml10_end_div_tag        (void *pdoc, Node *node);
-static char *s_chtml10_start_blockquote_tag(void *pdoc, Node *node);
+static char *s_chtml10_start_blockquote_tag (void *pdoc, Node *node);
 static char *s_chtml10_end_blockquote_tag (void *pdoc, Node *node);
 static char *s_chtml10_start_dir_tag      (void *pdoc, Node *node);
 static char *s_chtml10_end_dir_tag        (void *pdoc, Node *node);
