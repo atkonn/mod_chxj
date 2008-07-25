@@ -689,6 +689,23 @@ void test_jhtml_dt_tag_with_css_011();
 void test_jhtml_dt_tag_with_css_012();
 void test_jhtml_dt_tag_with_css_013();
 void test_jhtml_dt_tag_with_css_014();
+
+void test_jhtml_blockquote_tag_with_css_001();
+void test_jhtml_blockquote_tag_with_css_002();
+void test_jhtml_blockquote_tag_with_css_003();
+void test_jhtml_blockquote_tag_with_css_004();
+void test_jhtml_blockquote_tag_with_css_005();
+void test_jhtml_blockquote_tag_with_css_006();
+void test_jhtml_blockquote_tag_with_css_007();
+void test_jhtml_blockquote_tag_with_css_008();
+void test_jhtml_blockquote_tag_with_css_009();
+void test_jhtml_blockquote_tag_with_css_010();
+void test_jhtml_blockquote_tag_with_css_011();
+void test_jhtml_blockquote_tag_with_css_012();
+void test_jhtml_blockquote_tag_with_css_013();
+void test_jhtml_blockquote_tag_with_css_014();
+void test_jhtml_blockquote_tag_with_css_015();
+void test_jhtml_blockquote_tag_with_css_016();
 /* pend */
 
 int
@@ -1455,6 +1472,23 @@ main()
   CU_add_test(jhtml_suite, "test dt with css 012",                              test_jhtml_dt_tag_with_css_012);
   CU_add_test(jhtml_suite, "test dt with css 013",                              test_jhtml_dt_tag_with_css_013);
   CU_add_test(jhtml_suite, "test dt with css 014",                              test_jhtml_dt_tag_with_css_014);
+
+  CU_add_test(jhtml_suite, "test blockquote with css 001",                       test_jhtml_blockquote_tag_with_css_001);
+  CU_add_test(jhtml_suite, "test blockquote with css 002",                       test_jhtml_blockquote_tag_with_css_002);
+  CU_add_test(jhtml_suite, "test blockquote with css 003",                       test_jhtml_blockquote_tag_with_css_003);
+  CU_add_test(jhtml_suite, "test blockquote with css 004",                       test_jhtml_blockquote_tag_with_css_004);
+  CU_add_test(jhtml_suite, "test blockquote with css 005",                       test_jhtml_blockquote_tag_with_css_005);
+  CU_add_test(jhtml_suite, "test blockquote with css 006",                       test_jhtml_blockquote_tag_with_css_006);
+  CU_add_test(jhtml_suite, "test blockquote with css 007",                       test_jhtml_blockquote_tag_with_css_007);
+  CU_add_test(jhtml_suite, "test blockquote with css 008",                       test_jhtml_blockquote_tag_with_css_008);
+  CU_add_test(jhtml_suite, "test blockquote with css 009",                       test_jhtml_blockquote_tag_with_css_009);
+  CU_add_test(jhtml_suite, "test blockquote with css 010",                       test_jhtml_blockquote_tag_with_css_010);
+  CU_add_test(jhtml_suite, "test blockquote with css 011",                       test_jhtml_blockquote_tag_with_css_011);
+  CU_add_test(jhtml_suite, "test blockquote with css 012",                       test_jhtml_blockquote_tag_with_css_012);
+  CU_add_test(jhtml_suite, "test blockquote with css 013",                       test_jhtml_blockquote_tag_with_css_013);
+  CU_add_test(jhtml_suite, "test blockquote with css 014",                       test_jhtml_blockquote_tag_with_css_014);
+  CU_add_test(jhtml_suite, "test blockquote with css 015",                       test_jhtml_blockquote_tag_with_css_015);
+  CU_add_test(jhtml_suite, "test blockquote with css 016",                       test_jhtml_blockquote_tag_with_css_016);
   /* aend */
 
   CU_basic_run_tests();
@@ -21016,6 +21050,648 @@ void test_jhtml_dt_tag_with_css_014()
   apr_size_t destlen;
   APR_INIT;
   chxj_serf_get = test_chxj_serf_get156;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+
+
+
+
+/*===========================================================================*/
+/* blockquote tag with CSS                                                   */
+/*===========================================================================*/
+char *test_chxj_serf_get160(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "blockquote { color: #ff0000 }\n";
+
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_jhtml_blockquote_tag_with_css_001()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><blockquote>あいう</blockquote></body></html>"
+#define  RESULT_STRING "<html><head></head><body><blockquote><font color=\"#ff0000\">あいう</font></blockquote></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get160;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_jhtml_blockquote_tag_with_css_002()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><blockquote style=\"color:#ff0000\">あいう</blockquote></body></html>"
+#define  RESULT_STRING "<html><head></head><body><blockquote><font color=\"#ff0000\">あいう</font></blockquote></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get160;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+
+char *test_chxj_serf_get161(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "blockquote { font-size: xx-small }\n";
+
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_jhtml_blockquote_tag_with_css_003()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><blockquote>あいう</blockquote></body></html>"
+#define  RESULT_STRING "<html><head></head><body><blockquote><font size=\"1\">あいう</font></blockquote></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get161;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_jhtml_blockquote_tag_with_css_004()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><blockquote style=\"font-size:xx-small\">あいう</blockquote></body></html>"
+#define  RESULT_STRING "<html><head></head><body><blockquote><font size=\"1\">あいう</font></blockquote></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get161;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+char *test_chxj_serf_get162(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "blockquote { font-size: x-small }\n";
+
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_jhtml_blockquote_tag_with_css_005()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><blockquote>あいう</blockquote></body></html>"
+#define  RESULT_STRING "<html><head></head><body><blockquote><font size=\"2\">あいう</font></blockquote></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get162;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_jhtml_blockquote_tag_with_css_006()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><blockquote style=\"font-size:x-small\">あいう</blockquote></body></html>"
+#define  RESULT_STRING "<html><head></head><body><blockquote><font size=\"2\">あいう</font></blockquote></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get162;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+char *test_chxj_serf_get163(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "blockquote { font-size: small }\n";
+
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_jhtml_blockquote_tag_with_css_007()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><blockquote>あいう</blockquote></body></html>"
+#define  RESULT_STRING "<html><head></head><body><blockquote><font size=\"3\">あいう</font></blockquote></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get163;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_jhtml_blockquote_tag_with_css_008()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><blockquote style=\"font-size:small\">あいう</blockquote></body></html>"
+#define  RESULT_STRING "<html><head></head><body><blockquote><font size=\"3\">あいう</font></blockquote></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get163;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+char *test_chxj_serf_get164(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "blockquote { font-size: medium }\n";
+
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_jhtml_blockquote_tag_with_css_009()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><blockquote>あいう</blockquote></body></html>"
+#define  RESULT_STRING "<html><head></head><body><blockquote><font size=\"4\">あいう</font></blockquote></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get164;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_jhtml_blockquote_tag_with_css_010()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><blockquote style=\"font-size:medium\">あいう</blockquote></body></html>"
+#define  RESULT_STRING "<html><head></head><body><blockquote><font size=\"4\">あいう</font></blockquote></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get164;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+char *test_chxj_serf_get165(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "blockquote { font-size: large }\n";
+
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_jhtml_blockquote_tag_with_css_011()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><blockquote>あいう</blockquote></body></html>"
+#define  RESULT_STRING "<html><head></head><body><blockquote><font size=\"5\">あいう</font></blockquote></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get165;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_jhtml_blockquote_tag_with_css_012()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><blockquote style=\"font-size:large\">あいう</blockquote></body></html>"
+#define  RESULT_STRING "<html><head></head><body><blockquote><font size=\"5\">あいう</font></blockquote></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get165;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+char *test_chxj_serf_get166(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "blockquote { font-size: x-large }\n";
+
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_jhtml_blockquote_tag_with_css_013()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><blockquote>あいう</blockquote></body></html>"
+#define  RESULT_STRING "<html><head></head><body><blockquote><font size=\"6\">あいう</font></blockquote></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get166;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_jhtml_blockquote_tag_with_css_014()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><blockquote style=\"font-size:x-large\">あいう</blockquote></body></html>"
+#define  RESULT_STRING "<html><head></head><body><blockquote><font size=\"6\">あいう</font></blockquote></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get166;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+char *test_chxj_serf_get167(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "blockquote { font-size: xx-large }\n";
+
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_jhtml_blockquote_tag_with_css_015()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><blockquote>あいう</blockquote></body></html>"
+#define  RESULT_STRING "<html><head></head><body><blockquote><font size=\"7\">あいう</font></blockquote></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get167;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_jhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_jhtml_blockquote_tag_with_css_016()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><blockquote style=\"font-size:xx-large\">あいう</blockquote></body></html>"
+#define  RESULT_STRING "<html><head></head><body><blockquote><font size=\"7\">あいう</font></blockquote></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get167;
   call_check = 0;
 
   COOKIE_INIT(cookie);

@@ -85,7 +85,7 @@ static char *s_jhtml_start_b_tag        (void *pdoc, Node *node);
 static char *s_jhtml_end_b_tag          (void *pdoc, Node *node);
 static char *s_jhtml_chxjif_tag         (void *pdoc, Node *node); 
 static char *s_jhtml_text_tag           (void *pdoc, Node *node);
-static char *s_jhtml_start_blockquote_tag(void *pdoc, Node *node);
+static char *s_jhtml_start_blockquote_tag (void *pdoc, Node *node);
 static char *s_jhtml_end_blockquote_tag  (void *pdoc, Node *node);
 static char *s_jhtml_start_dir_tag      (void *pdoc, Node *node);
 static char *s_jhtml_end_dir_tag        (void *pdoc, Node *node);
@@ -3442,11 +3442,84 @@ s_jhtml_text_tag(void* pdoc, Node* child)
  * @return The conversion result is returned.
  */
 static char *
-s_jhtml_start_blockquote_tag(void *pdoc, Node *UNUSED(child))
+s_jhtml_start_blockquote_tag(void *pdoc, Node *node)
 {
-  jhtml_t *jhtml = GET_JHTML(pdoc);
-  Doc     *doc   = jhtml->doc;
+  jhtml_t *jhtml;
+  Doc     *doc;
+  Attr    *attr;
+  char    *attr_style = NULL;
+  char    *attr_color = NULL;
+  char    *attr_size  = NULL;
+
+  jhtml   = GET_JHTML(pdoc);
+  doc     = jhtml->doc;
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *nm  = qs_get_attr_name(doc,attr);
+    char *val = qs_get_attr_value(doc,attr);
+    if (val && STRCASEEQ('s','S',"style", nm)) {
+      attr_style = val;
+    }
+  }
+  if (IS_CSS_ON(jhtml->entryp)) {
+    css_prop_list_t *style = s_jhtml_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *color_prop = chxj_css_get_property_value(doc, style, "color");
+      css_property_t *font_size_prop = chxj_css_get_property_value(doc, style, "font-size");
+      css_property_t *cur;
+      for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          attr_color = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+      for (cur = font_size_prop->next; cur != font_size_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          if (STRCASEEQ('x','X',"xx-small",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, "1");
+          }
+          else if (STRCASEEQ('x','X',"x-small",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, "2");
+          }
+          else if (STRCASEEQ('s','S',"small",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, "3");
+          }
+          else if (STRCASEEQ('m','M',"medium",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, "4");
+          }
+          else if (STRCASEEQ('l','L',"large",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, "5");
+          }
+          else if (STRCASEEQ('x','X',"x-large",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, "6");
+          }
+          else if (STRCASEEQ('x','X',"xx-large",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, "7");
+          }
+        }
+      }
+    }
+  }
   W_L("<blockquote>");
+  jhtml_flags_t *flg = (jhtml_flags_t *)apr_palloc(doc->pool, sizeof(jhtml_flags_t));
+  memset(flg, 0, sizeof(*flg));
+  if (attr_color || attr_size) {
+    W_L("<font");
+    if (attr_color) {
+      attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
+      W_L(" color=\"");
+      W_V(attr_color);
+      W_L("\"");
+    }
+    if (attr_size) {
+      W_L(" size=\"");
+      W_V(attr_size);
+      W_L("\"");
+    }
+    W_L(">");
+    flg->with_font_flag = 1;
+  }
+  node->userData = (void *)flg;
   return jhtml->out;
 }
 
@@ -3460,11 +3533,18 @@ s_jhtml_start_blockquote_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_jhtml_end_blockquote_tag(void *pdoc, Node *UNUSED(child))
+s_jhtml_end_blockquote_tag(void *pdoc, Node *node)
 {
   jhtml_t *jhtml = GET_JHTML(pdoc);
-  Doc     *doc   = jhtml->doc;
+  Doc     *doc     = jhtml->doc;
+  jhtml_flags_t *flg = (jhtml_flags_t *)node->userData;
+  if (flg && flg->with_font_flag) {
+    W_L("</font>");
+  }
   W_L("</blockquote>");
+  if (IS_CSS_ON(jhtml->entryp)) {
+    chxj_css_pop_prop_list(jhtml->css_prop_stack);
+  }
   return jhtml->out;
 }
 
