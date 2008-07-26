@@ -4574,12 +4574,9 @@ s_chtml20_end_plaintext_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_chtml20_start_blink_tag(void *pdoc, Node *UNUSED(child))
+s_chtml20_start_blink_tag(void *pdoc, Node *node)
 {
-  chtml20_t *chtml20 = GET_CHTML20(pdoc);
-  Doc       *doc = chtml20->doc;
-  W_L("<blink>");
-  return chtml20->out;
+  CHTML20_START_OF_TAG_WITH_CSS_FONT_COLOR("<blink>");
 }
 
 
@@ -4592,12 +4589,9 @@ s_chtml20_start_blink_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_chtml20_end_blink_tag(void *pdoc, Node *UNUSED(child))
+s_chtml20_end_blink_tag(void *pdoc, Node *node)
 {
-  chtml20_t *chtml20 = GET_CHTML20(pdoc);
-  Doc       *doc = chtml20->doc;
-  W_L("</blink>");
-  return chtml20->out;
+  CHTML20_END_OF_CLOSE_TAG_WITH_FONT_TAG("</blink>");
 }
 
 
