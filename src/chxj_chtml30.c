@@ -4212,12 +4212,9 @@ s_chtml30_end_marquee_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_chtml30_start_blink_tag(void *pdoc, Node *UNUSED(child))
+s_chtml30_start_blink_tag(void *pdoc, Node *node)
 {
-  chtml30_t *chtml30 = GET_CHTML30(pdoc);
-  Doc       *doc = chtml30->doc;
-  W_L("<blink>");
-  return chtml30->out;
+  CHTML30_START_OF_TAG_WITH_CSS_FONT_COLOR("<blink>");
 }
 
 
@@ -4230,12 +4227,9 @@ s_chtml30_start_blink_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_chtml30_end_blink_tag(void *pdoc, Node *UNUSED(child))
+s_chtml30_end_blink_tag(void *pdoc, Node *node)
 {
-  chtml30_t *chtml30 = GET_CHTML30(pdoc);
-  Doc       *doc = chtml30->doc;
-  W_L("</blink>");
-  return chtml30->out;
+  CHTML30_END_OF_CLOSE_TAG_WITH_FONT_TAG("</blink>");
 }
 
 
