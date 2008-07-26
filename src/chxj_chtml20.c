@@ -4609,7 +4609,11 @@ s_chtml20_start_marquee_tag(void *pdoc, Node *node)
   chtml20_t *chtml20 = GET_CHTML20(pdoc);
   Doc       *doc = chtml20->doc;
   Attr      *attr;
-  W_L("<marquee");
+  char      *attr_direction = NULL;
+  char      *attr_behavior  = NULL;
+  char      *attr_loop      = NULL;
+  char      *attr_style     = NULL;
+  char      *attr_color     = NULL;
   /*--------------------------------------------------------------------------*/
   /* Get Attributes                                                           */
   /*--------------------------------------------------------------------------*/
@@ -4620,27 +4624,63 @@ s_chtml20_start_marquee_tag(void *pdoc, Node *node)
     char *value  = qs_get_attr_value(doc,attr);
     if (STRCASEEQ('d','D',"direction", name)) {
       if (value && (STRCASEEQ('l','L',"left",value) || STRCASEEQ('r','R',"right",value))) {
-        W_L(" direction=\"");
-        W_V(value);
-        W_L("\"");
+        attr_direction = value;
       }
     }
     else if (STRCASEEQ('b','B',"behavior",name)) {
       if (value && (STRCASEEQ('s','S',"scroll",value) || STRCASEEQ('s','S',"slide",value) || STRCASEEQ('a','A',"alternate",value))) {
-        W_L(" behavior=\""); 
-        W_V(value);
-        W_L("\"");
+        attr_behavior = value;
       }
     }
     else if (STRCASEEQ('l','L',"loop",name)) {
       if (value && *value) {
-        W_L(" loop=\"");
-        W_V(value);
-        W_L("\"");
+        attr_loop = value;
+      }
+    }
+    else if (STRCASEEQ('s','S',"style",name) && value && *value) {
+      attr_style = value;
+    }
+  }
+  if (IS_CSS_ON(chtml20->entryp)) {
+    css_prop_list_t *style = s_chtml20_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *color_prop = chxj_css_get_property_value(doc, style, "color");
+      css_property_t *cur;
+      for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          attr_color = apr_pstrdup(doc->pool, cur->value);
+        }
       }
     }
   }
+  W_L("<marquee");
+  if (attr_direction) {
+    W_L(" direction=\"");
+    W_V(attr_direction);
+    W_L("\"");
+  }
+  if (attr_behavior) {
+    W_L(" behavior=\"");
+    W_V(attr_behavior);
+    W_L("\"");
+  }
+  if (attr_loop) {
+    W_L(" loop=\"");
+    W_V(attr_loop);
+    W_L("\"");
+  }
   W_L(">");
+
+  chtml20_flags_t *flg = (chtml20_flags_t *)apr_palloc(doc->pool, sizeof(chtml20_flags_t));
+  memset(flg, 0, sizeof(*flg));
+  if (attr_color) {
+    attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
+    W_L("<font color=\"");
+    W_V(attr_color);
+    W_L("\">");
+    flg->with_font_flag = 1;
+  }
+  node->userData = (void *)flg;
   return chtml20->out;
 }
 
@@ -4654,11 +4694,18 @@ s_chtml20_start_marquee_tag(void *pdoc, Node *node)
  * @return The conversion result is returned.
  */
 static char *
-s_chtml20_end_marquee_tag(void *pdoc, Node *UNUSED(child))
+s_chtml20_end_marquee_tag(void *pdoc, Node *node)
 {
   chtml20_t *chtml20 = GET_CHTML20(pdoc);
-  Doc       *doc = chtml20->doc;
+  Doc       *doc     = chtml20->doc;
+  chtml20_flags_t *flg = (chtml20_flags_t *)node->userData;
+  if (flg && flg->with_font_flag) {
+    W_L("</font>");
+  }
   W_L("</marquee>");
+  if (IS_CSS_ON(chtml20->entryp)) {
+    chxj_css_pop_prop_list(chtml20->css_prop_stack);
+  }
   return chtml20->out;
 }
 
