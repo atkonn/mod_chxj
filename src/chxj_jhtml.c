@@ -4937,8 +4937,9 @@ s_jhtml_start_marquee_tag(void *pdoc, Node *node)
   if (IS_CSS_ON(jhtml->entryp)) {
     css_prop_list_t *style = s_jhtml_push_and_get_now_style(pdoc, node, attr_style);
     if (style) {
-      css_property_t *color_prop = chxj_css_get_property_value(doc, style, "color");
-      css_property_t *size_prop = chxj_css_get_property_value(doc, style, "font-size");
+      css_property_t *color_prop     = chxj_css_get_property_value(doc, style, "color");
+      css_property_t *size_prop      = chxj_css_get_property_value(doc, style, "font-size");
+      css_property_t *direction_prop = chxj_css_get_property_value(doc, style, "-wap-marquee-dir");
       css_property_t *cur;
       for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
         if (cur->value && *cur->value) {
@@ -4967,6 +4968,16 @@ s_jhtml_start_marquee_tag(void *pdoc, Node *node)
           }
           else if (STRCASEEQ('x','X',"xx-large",cur->value)) {
             attr_size = apr_pstrdup(doc->pool, "7");
+          }
+        }
+      }
+      for (cur = direction_prop->next; cur != direction_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          if (STRCASEEQ('l','L',"ltr",cur->value)) {
+            attr_direction = "right";
+          }
+          else if (STRCASEEQ('r','R',"rtl",cur->value)) {
+            attr_direction = "left";
           }
         }
       }
