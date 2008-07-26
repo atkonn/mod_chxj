@@ -4674,11 +4674,81 @@ s_chtml50_end_marquee_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_chtml50_start_blink_tag(void *pdoc, Node *UNUSED(child))
+s_chtml50_start_blink_tag(void *pdoc, Node *node)
 {
   chtml50_t *chtml50 = GET_CHTML50(pdoc);
-  Doc       *doc = chtml50->doc;
+  Doc       *doc     = chtml50->doc;
+  Attr      *attr;
+  char      *attr_style = NULL;
+  char      *attr_color = NULL;
+  char      *attr_size  = NULL;
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *name   = qs_get_attr_name(doc,attr);
+    char *value  = qs_get_attr_value(doc,attr);
+    if (STRCASEEQ('s','S',"style", name) && value && *value) {
+      attr_style = value;
+    }
+  }
+  if (IS_CSS_ON(chtml50->entryp)) {
+    css_prop_list_t *style = s_chtml50_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *color_prop           = chxj_css_get_property_value(doc, style, "color");
+      css_property_t *size_prop            = chxj_css_get_property_value(doc, style, "font-size");
+      css_property_t *cur;
+      for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          attr_color = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+      for (cur = size_prop->next; cur != size_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          if (STRCASEEQ('x','X',"xx-small",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, "1");
+          }
+          else if (STRCASEEQ('x','X',"x-small",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, "2");
+          }
+          else if (STRCASEEQ('s','S',"small",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, "3");
+          }
+          else if (STRCASEEQ('m','M',"medium",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, "4");
+          }
+          else if (STRCASEEQ('l','L',"large",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, "5");
+          }
+          else if (STRCASEEQ('x','X',"x-large",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, "6");
+          }
+          else if (STRCASEEQ('x','X',"xx-large",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, "7");
+          }
+        }
+      }
+    }
+  }
   W_L("<blink>");
+  chtml50_flags_t *flg = (chtml50_flags_t *)apr_palloc(doc->pool, sizeof(chtml50_flags_t));
+  memset(flg, 0, sizeof(*flg));
+  if (attr_color || attr_size) {
+    W_L("<font");
+    if (attr_color) {
+      attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
+      W_L(" color=\"");
+      W_V(attr_color);
+      W_L("\"");
+    }
+    if (attr_size) {
+      W_L(" size=\"");
+      W_V(attr_size);
+      W_L("\"");
+    }
+    W_L(">");
+    flg->with_font_flag = 1;
+  }
+  node->userData = (void *)flg;
   return chtml50->out;
 }
 
@@ -4692,11 +4762,19 @@ s_chtml50_start_blink_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_chtml50_end_blink_tag(void *pdoc, Node *UNUSED(child))
+s_chtml50_end_blink_tag(void *pdoc, Node *node)
 {
   chtml50_t *chtml50 = GET_CHTML50(pdoc);
-  Doc       *doc = chtml50->doc;
+  Doc       *doc     = chtml50->doc;
+
+  chtml50_flags_t *flg = (chtml50_flags_t *)node->userData;
+  if (flg && flg->with_font_flag) {
+    W_L("</font>");
+  }
   W_L("</blink>");
+  if (IS_CSS_ON(chtml50->entryp)) {
+    chxj_css_pop_prop_list(chtml50->css_prop_stack);
+  }
   return chtml50->out;
 }
 
