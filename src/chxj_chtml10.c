@@ -129,7 +129,7 @@ static char *s_chtml10_start_dd_tag       (void *pdoc, Node *node);
 static char *s_chtml10_end_dd_tag         (void *pdoc, Node *node);
 static char *s_chtml10_start_menu_tag     (void *pdoc, Node *node);
 static char *s_chtml10_end_menu_tag       (void *pdoc, Node *node);
-static char *s_chtml10_start_plaintext_tag(void *pdoc, Node *node);
+static char *s_chtml10_start_plaintext_tag (void *pdoc, Node *node);
 static char *s_chtml10_start_plaintext_tag_inner(void  *pdoc, Node *node);
 static char *s_chtml10_end_plaintext_tag  (void *pdoc, Node *node);
 static char *s_chtml10_link_tag           (void *pdoc, Node *node);
