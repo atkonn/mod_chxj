@@ -135,6 +135,8 @@ static char *s_chtml10_end_plaintext_tag  (void *pdoc, Node *node);
 static char *s_chtml10_link_tag           (void *pdoc, Node *node);
 static char *s_chtml10_style_tag          (void *pdoc, Node *node);
 static char *s_chtml10_newline_mark       (void *pdoc, Node *node);
+static char *s_chtml10_start_span_tag     (void *pdoc, Node *node);
+static char *s_chtml10_end_span_tag       (void *pdoc, Node *node);
 
 static void  s_init_chtml10(chtml10_t *chtml, Doc *doc, request_rec *r, device_table *spec);
 
@@ -334,8 +336,8 @@ tag_handler chtml10_handler[] = {
   },
   /* tagSPAN */
   {
-    NULL,
-    NULL,
+    s_chtml10_start_span_tag,
+    s_chtml10_end_span_tag,
   },
   /* tagTEXT */
   {
@@ -3996,6 +3998,112 @@ s_chtml10_nopush_and_get_now_style(void *pdoc, Node *node, const char *style_att
     }
   }
   return last_css;
+}
+
+
+
+/**
+ * It is a handler who processes the SPAN tag.
+ *
+ * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The SPAN tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_chtml10_start_span_tag(void *pdoc, Node *node)
+{
+  chtml10_t *chtml10;
+  Doc *doc;
+  Attr *attr;
+  char *attr_style = NULL;
+  char *attr_color = NULL;
+  char *attr_align = NULL;
+
+  chtml10 = GET_CHTML10(pdoc);
+  doc     = chtml10->doc;
+
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *nm  = qs_get_attr_name(doc,attr);
+    char *val = qs_get_attr_value(doc,attr);
+    if (val && STRCASEEQ('s','S',"style", nm)) {
+      attr_style = val;
+    }
+  }
+  if (IS_CSS_ON(chtml10->entryp)) {
+    css_prop_list_t *style = s_chtml10_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *color_prop = chxj_css_get_property_value(doc, style, "color");
+      css_property_t *text_align_prop = chxj_css_get_property_value(doc, style, "text-align");
+      css_property_t *cur;
+      for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
+        attr_color = apr_pstrdup(doc->pool, cur->value);
+      }
+      for (cur = text_align_prop->next; cur != text_align_prop; cur = cur->next) {
+        if (STRCASEEQ('l','L',"left", cur->value)) {
+          attr_align = apr_pstrdup(doc->pool, "left");
+        }
+        else if (STRCASEEQ('c','C',"center",cur->value)) {
+          attr_align = apr_pstrdup(doc->pool, "center");
+        }
+        else if (STRCASEEQ('r','R',"right",cur->value)) {
+          attr_align = apr_pstrdup(doc->pool, "right");
+        }
+      }
+    }
+  }
+  if (attr_color || attr_align) {
+    chtml10_flags_t *flg = apr_palloc(doc->pool, sizeof(*flg));
+    memset(flg, 0, sizeof(*flg));
+    if (attr_color) {
+      attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
+      W_L("<font color=\"");
+      W_V(attr_color);
+      W_L("\">");
+      flg->with_font_flag = 1;
+    }
+    if (attr_align) {
+      W_L("<div align=\"");
+      W_V(attr_align);
+      W_L("\">");
+      flg->with_div_flag = 1;
+    }
+    node->userData = flg;
+  }
+  else {
+    node->userData = NULL;
+  }
+  return chtml10->out;
+}
+
+
+/**
+ * It is a handler who processes the SPAN tag.
+ *
+ * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The SPAN tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_chtml10_end_span_tag(void *pdoc, Node *node)
+{
+  chtml10_t *chtml10 = GET_CHTML10(pdoc);
+  Doc *doc = chtml10->doc;
+
+  chtml10_flags_t *flg = (chtml10_flags_t *)node->userData;
+  if (flg && flg->with_div_flag) {
+    W_L("</div>");
+  }
+  if (flg && flg->with_font_flag) {
+    W_L("</font>");
+  }
+  if (IS_CSS_ON(chtml10->entryp)) {
+    chxj_css_pop_prop_list(chtml10->css_prop_stack);
+  }
+  return chtml10->out;
 }
 /*
  * vim:ts=2 et
