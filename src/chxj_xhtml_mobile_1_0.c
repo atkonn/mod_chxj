@@ -4521,13 +4521,13 @@ s_xhtml_1_0_end_dd_tag(void *pdoc, Node *UNUSED(child))
 static char *
 s_xhtml_1_0_start_menu_tag(void *pdoc, Node *node)
 {
-  xhtml_t *xhtml = GET_XHTML(pdoc);
-  Doc     *doc   = xhtml->doc;
-  Attr    *attr;
-  W_L("<menu");
-  /*--------------------------------------------------------------------------*/
-  /* Get Attributes                                                           */
-  /*--------------------------------------------------------------------------*/
+  xhtml_t *xhtml      = GET_XHTML(pdoc);
+  Doc       *doc        = xhtml->doc;
+  Attr      *attr;
+  char      *attr_style = NULL;
+  char      *attr_color = NULL;
+  char      *attr_type  = NULL;
+  char      *attr_size  = NULL;
   for (attr = qs_get_attr(doc,node);
        attr;
        attr = qs_get_next_attr(doc,attr)) {
@@ -4535,11 +4535,77 @@ s_xhtml_1_0_start_menu_tag(void *pdoc, Node *node)
     char *value  = qs_get_attr_value(doc,attr);
     if (STRCASEEQ('t','T',"type",name)) {
       if (value && (STRCASEEQ('d','D',"disc",value) || STRCASEEQ('c','C',"circle",value) || STRCASEEQ('s','S',"square",value))) {
-        W_L(" type=\"");
-        W_V(value);
-        W_L("\"");
+        attr_type = value;
       }
     }
+    else if (STRCASEEQ('s','S',"style", name) && value && *value) {
+      attr_style = value;
+    }
+  }
+  if (IS_CSS_ON(xhtml->entryp)) {
+    css_prop_list_t *style = s_xhtml_1_0_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *color_prop           = chxj_css_get_property_value(doc, style, "color");
+      css_property_t *size_prop            = chxj_css_get_property_value(doc, style, "font-size");
+      css_property_t *list_style_type_prop = chxj_css_get_property_value(doc, style, "list-style-type");
+      css_property_t *cur;
+      for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          attr_color = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+      for (cur = list_style_type_prop->next; cur != list_style_type_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          attr_type = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+      for (cur = size_prop->next; cur != size_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          if (STRCASEEQ('x','X',"xx-small",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, cur->value);
+          }
+          else if (STRCASEEQ('x','X',"x-small",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, cur->value);
+          }
+          else if (STRCASEEQ('s','S',"small",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, cur->value);
+          }
+          else if (STRCASEEQ('m','M',"medium",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, cur->value);
+          }
+          else if (STRCASEEQ('l','L',"large",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, cur->value);
+          }
+          else if (STRCASEEQ('x','X',"x-large",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, cur->value);
+          }
+          else if (STRCASEEQ('x','X',"xx-large",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, cur->value);
+          }
+        }
+      }
+    }
+  }
+  W_L("<menu");
+  if (attr_type || attr_color || attr_size) {
+    W_L(" style=\"");
+    if (attr_type) {
+      W_L("list-style-type:");
+      W_V(attr_type);
+      W_L(";");
+    }
+    if (attr_color) {
+      attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
+      W_L("color:");
+      W_V(attr_color);
+      W_L(";");
+    }
+    if (attr_size) {
+      W_L("font-size:");
+      W_V(attr_size);
+      W_L(";");
+    }
+    W_L("\"");
   }
   W_L(">");
   return xhtml->out;
@@ -4558,8 +4624,11 @@ static char *
 s_xhtml_1_0_end_menu_tag(void *pdoc, Node *UNUSED(child))
 {
   xhtml_t *xhtml = GET_XHTML(pdoc);
-  Doc *doc = xhtml->doc;
+  Doc     *doc = xhtml->doc;
   W_L("</menu>");
+  if (IS_CSS_ON(xhtml->entryp)) {
+    chxj_css_pop_prop_list(xhtml->css_prop_stack);
+  }
   return xhtml->out;
 }
 
