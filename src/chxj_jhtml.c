@@ -114,7 +114,7 @@ static char *s_jhtml_start_plaintext_tag_inner (void *pdoc, Node *node);
 static char *s_jhtml_end_plaintext_tag         (void *pdoc, Node *node);
 static char *s_jhtml_start_blink_tag  (void *pdoc, Node *node);
 static char *s_jhtml_end_blink_tag    (void *pdoc, Node *node);
-static char *s_jhtml_start_marquee_tag(void *pdoc, Node *node);
+static char *s_jhtml_start_marquee_tag (void *pdoc, Node *node);
 static char *s_jhtml_end_marquee_tag  (void *pdoc, Node *node);
 static char *s_jhtml_newline_mark       (void *pdoc, Node *node);
 static char *s_jhtml_link_tag           (void *pdoc, Node *node);
@@ -4905,9 +4905,12 @@ static char *
 s_jhtml_start_marquee_tag(void *pdoc, Node *node)
 {
   jhtml_t *jhtml = GET_JHTML(pdoc);
-  Doc *doc = jhtml->doc;
-  Attr *attr;
-  W_L("<marquee");
+  Doc     *doc = jhtml->doc;
+  Attr    *attr;
+  char    *attr_direction = NULL;
+  char    *attr_style     = NULL;
+  char    *attr_color     = NULL;
+  char    *attr_size      = NULL;
   /*--------------------------------------------------------------------------*/
   /* Get Attributes                                                           */
   /*--------------------------------------------------------------------------*/
@@ -4918,9 +4921,7 @@ s_jhtml_start_marquee_tag(void *pdoc, Node *node)
     char *value  = qs_get_attr_value(doc,attr);
     if (STRCASEEQ('d','D',"direction", name)) {
       if (value && (STRCASEEQ('l','L',"left",value) || STRCASEEQ('r','R',"right",value))) {
-        W_L(" direction=\"");
-        W_V(value);
-        W_L("\"");
+        attr_direction = value;
       }
     }
     else if (STRCASEEQ('b','B',"behavior",name)) {
@@ -4929,8 +4930,75 @@ s_jhtml_start_marquee_tag(void *pdoc, Node *node)
     else if (STRCASEEQ('l','L',"loop",name)) {
       /* ignore */
     }
+    else if (STRCASEEQ('s','S',"style",name) && value && *value) {
+      attr_style = value;
+    }
+  }
+  if (IS_CSS_ON(jhtml->entryp)) {
+    css_prop_list_t *style = s_jhtml_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *color_prop = chxj_css_get_property_value(doc, style, "color");
+      css_property_t *size_prop = chxj_css_get_property_value(doc, style, "font-size");
+      css_property_t *cur;
+      for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          attr_color = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+      for (cur = size_prop->next; cur != size_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          if (STRCASEEQ('x','X',"xx-small",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, "1");
+          }
+          else if (STRCASEEQ('x','X',"x-small",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, "2");
+          }
+          else if (STRCASEEQ('s','S',"small",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, "3");
+          }
+          else if (STRCASEEQ('m','M',"medium",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, "4");
+          }
+          else if (STRCASEEQ('l','L',"large",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, "5");
+          }
+          else if (STRCASEEQ('x','X',"x-large",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, "6");
+          }
+          else if (STRCASEEQ('x','X',"xx-large",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, "7");
+          }
+        }
+      }
+    }
+  }
+  W_L("<marquee");
+  if (attr_direction) {
+    W_L(" direction=\"");
+    W_V(attr_direction);
+    W_L("\"");
   }
   W_L(">");
+
+  jhtml_flags_t *flg = (jhtml_flags_t *)apr_palloc(doc->pool, sizeof(jhtml_flags_t));
+  memset(flg, 0, sizeof(*flg));
+  if (attr_color || attr_size) {
+    W_L("<font");
+    if (attr_color) {
+      attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
+      W_L(" color=\"");
+      W_V(attr_color);
+      W_L("\"");
+    }
+    if (attr_size) {
+      W_L(" size=\"");
+      W_V(attr_size);
+      W_L("\"");
+    }
+    W_L(">");
+    flg->with_font_flag = 1;
+  }
+  node->userData = (void *)flg;
   return jhtml->out;
 }
 
@@ -4944,11 +5012,19 @@ s_jhtml_start_marquee_tag(void *pdoc, Node *node)
  * @return The conversion result is returned.
  */
 static char *
-s_jhtml_end_marquee_tag(void *pdoc, Node *UNUSED(child))
+s_jhtml_end_marquee_tag(void *pdoc, Node *node)
 {
   jhtml_t *jhtml = GET_JHTML(pdoc);
-  Doc *doc = jhtml->doc;
+  Doc     *doc   = jhtml->doc;
+
+  jhtml_flags_t *flg = (jhtml_flags_t *)node->userData;
+  if (flg && flg->with_font_flag) {
+    W_L("</font>");
+  }
   W_L("</marquee>");
+  if (IS_CSS_ON(jhtml->entryp)) {
+    chxj_css_pop_prop_list(jhtml->css_prop_stack);
+  }
   return jhtml->out;
 }
 
