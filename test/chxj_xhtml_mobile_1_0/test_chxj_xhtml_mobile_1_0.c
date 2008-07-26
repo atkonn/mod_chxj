@@ -873,6 +873,23 @@ void test_xhtml_blink_tag_with_css_019();
 void test_xhtml_blink_tag_with_css_020();
 void test_xhtml_blink_tag_with_css_021();
 void test_xhtml_blink_tag_with_css_022();
+
+void test_xhtml_marquee_tag_with_css_001();
+void test_xhtml_marquee_tag_with_css_002();
+void test_xhtml_marquee_tag_with_css_009();
+void test_xhtml_marquee_tag_with_css_010();
+void test_xhtml_marquee_tag_with_css_011();
+void test_xhtml_marquee_tag_with_css_012();
+void test_xhtml_marquee_tag_with_css_013();
+void test_xhtml_marquee_tag_with_css_014();
+void test_xhtml_marquee_tag_with_css_015();
+void test_xhtml_marquee_tag_with_css_016();
+void test_xhtml_marquee_tag_with_css_017();
+void test_xhtml_marquee_tag_with_css_018();
+void test_xhtml_marquee_tag_with_css_019();
+void test_xhtml_marquee_tag_with_css_020();
+void test_xhtml_marquee_tag_with_css_021();
+void test_xhtml_marquee_tag_with_css_022();
 /* pend */
 
 int
@@ -1781,6 +1798,23 @@ main()
   CU_add_test(xhtml_suite, "test blink with css 020",                       test_xhtml_blink_tag_with_css_020);
   CU_add_test(xhtml_suite, "test blink with css 021",                       test_xhtml_blink_tag_with_css_021);
   CU_add_test(xhtml_suite, "test blink with css 022",                       test_xhtml_blink_tag_with_css_022);
+
+  CU_add_test(xhtml_suite, "test marquee with css 001",                       test_xhtml_marquee_tag_with_css_001);
+  CU_add_test(xhtml_suite, "test marquee with css 002",                       test_xhtml_marquee_tag_with_css_002);
+  CU_add_test(xhtml_suite, "test marquee with css 009",                       test_xhtml_marquee_tag_with_css_009);
+  CU_add_test(xhtml_suite, "test marquee with css 010",                       test_xhtml_marquee_tag_with_css_010);
+  CU_add_test(xhtml_suite, "test marquee with css 011",                       test_xhtml_marquee_tag_with_css_011);
+  CU_add_test(xhtml_suite, "test marquee with css 012",                       test_xhtml_marquee_tag_with_css_012);
+  CU_add_test(xhtml_suite, "test marquee with css 013",                       test_xhtml_marquee_tag_with_css_013);
+  CU_add_test(xhtml_suite, "test marquee with css 014",                       test_xhtml_marquee_tag_with_css_014);
+  CU_add_test(xhtml_suite, "test marquee with css 015",                       test_xhtml_marquee_tag_with_css_015);
+  CU_add_test(xhtml_suite, "test marquee with css 016",                       test_xhtml_marquee_tag_with_css_016);
+  CU_add_test(xhtml_suite, "test marquee with css 017",                       test_xhtml_marquee_tag_with_css_017);
+  CU_add_test(xhtml_suite, "test marquee with css 018",                       test_xhtml_marquee_tag_with_css_018);
+  CU_add_test(xhtml_suite, "test marquee with css 019",                       test_xhtml_marquee_tag_with_css_019);
+  CU_add_test(xhtml_suite, "test marquee with css 020",                       test_xhtml_marquee_tag_with_css_020);
+  CU_add_test(xhtml_suite, "test marquee with css 021",                       test_xhtml_marquee_tag_with_css_021);
+  CU_add_test(xhtml_suite, "test marquee with css 022",                       test_xhtml_marquee_tag_with_css_022);
   /* aend */
 
   CU_basic_run_tests();
@@ -13010,7 +13044,7 @@ void test_xhtml_marquee_tag_006()
 void test_xhtml_marquee_tag_007() 
 {
 #define  TEST_STRING "<marquee direction=\"left\">ﾊﾝｶｸ</marquee>"
-#define  RESULT_STRING "<marquee direction=\"left\">ﾊﾝｶｸ</marquee>"
+#define  RESULT_STRING "<marquee style=\"-wap-marquee-dir:rtl;\">ﾊﾝｶｸ</marquee>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -13039,7 +13073,7 @@ void test_xhtml_marquee_tag_007()
 void test_xhtml_marquee_tag_008() 
 {
 #define  TEST_STRING "<marquee direction=\"right\">ﾊﾝｶｸ</marquee>"
-#define  RESULT_STRING "<marquee direction=\"right\">ﾊﾝｶｸ</marquee>"
+#define  RESULT_STRING "<marquee style=\"-wap-marquee-dir:ltr;\">ﾊﾝｶｸ</marquee>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -13155,7 +13189,7 @@ void test_xhtml_marquee_tag_011()
 void test_xhtml_marquee_tag_012() 
 {
 #define  TEST_STRING "<marquee behavior=\"scroll\">ﾊﾝｶｸ</marquee>"
-#define  RESULT_STRING "<marquee behavior=\"scroll\">ﾊﾝｶｸ</marquee>"
+#define  RESULT_STRING "<marquee style=\"-wap-marquee-style:scroll;\">ﾊﾝｶｸ</marquee>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -13184,7 +13218,7 @@ void test_xhtml_marquee_tag_012()
 void test_xhtml_marquee_tag_013() 
 {
 #define  TEST_STRING "<marquee behavior=\"slide\">ﾊﾝｶｸ</marquee>"
-#define  RESULT_STRING "<marquee behavior=\"slide\">ﾊﾝｶｸ</marquee>"
+#define  RESULT_STRING "<marquee style=\"-wap-marquee-style:slide;\">ﾊﾝｶｸ</marquee>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -13213,7 +13247,7 @@ void test_xhtml_marquee_tag_013()
 void test_xhtml_marquee_tag_014() 
 {
 #define  TEST_STRING "<marquee behavior=\"alternate\">ﾊﾝｶｸ</marquee>"
-#define  RESULT_STRING "<marquee behavior=\"alternate\">ﾊﾝｶｸ</marquee>"
+#define  RESULT_STRING "<marquee style=\"-wap-marquee-style:alternate;\">ﾊﾝｶｸ</marquee>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -13329,7 +13363,7 @@ void test_xhtml_marquee_tag_017()
 void test_xhtml_marquee_tag_018() 
 {
 #define  TEST_STRING "<marquee loop=\"1\">ﾊﾝｶｸ</marquee>"
-#define  RESULT_STRING "<marquee loop=\"1\">ﾊﾝｶｸ</marquee>"
+#define  RESULT_STRING "<marquee style=\"-wap-marquee-loop:1;\">ﾊﾝｶｸ</marquee>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -13358,7 +13392,7 @@ void test_xhtml_marquee_tag_018()
 void test_xhtml_marquee_tag_019() 
 {
 #define  TEST_STRING "<marquee bgcolor=\"#ff0000\">ﾊﾝｶｸ</marquee>"
-#define  RESULT_STRING "<marquee bgcolor=\"#ff0000\">ﾊﾝｶｸ</marquee>"
+#define  RESULT_STRING "<marquee style=\"background-color:#ff0000;\">ﾊﾝｶｸ</marquee>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -28639,6 +28673,703 @@ void test_xhtml_blink_tag_with_css_022()
   apr_size_t destlen;
   APR_INIT;
   chxj_serf_get = test_chxj_serf_get_blink230;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+
+
+
+
+
+
+
+
+/*===========================================================================*/
+/* marquee tag with CSS                                                          */
+/*===========================================================================*/
+char *test_chxj_serf_get_marquee220(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "marquee { color: #ff0000 }\n";
+
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_xhtml_marquee_tag_with_css_001()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><marquee>あいう</marquee></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?>" \
+                       "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><marquee style=\"color:#ff0000;\">あいう</marquee></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get_marquee220;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_xhtml_marquee_tag_with_css_002()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><marquee style=\"color:#ff0000\">あいう</marquee></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?>" \
+                       "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><marquee style=\"color:#ff0000;\">あいう</marquee></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get_marquee220;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+
+char *test_chxj_serf_get_marquee224(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "marquee { font-size:xx-small }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_xhtml_marquee_tag_with_css_009()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><marquee>あいう</marquee></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?>" \
+                       "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><marquee style=\"font-size:xx-small;\">あいう</marquee></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get_marquee224;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_xhtml_marquee_tag_with_css_010()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><marquee style=\"font-size:xx-small\">あいう</marquee></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?>" \
+                       "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><marquee style=\"font-size:xx-small;\">あいう</marquee></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get_marquee224;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+
+
+char *test_chxj_serf_get_marquee225(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "marquee { font-size:x-small }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_xhtml_marquee_tag_with_css_011()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><marquee>あいう</marquee></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?>" \
+                       "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><marquee style=\"font-size:x-small;\">あいう</marquee></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get_marquee225;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_xhtml_marquee_tag_with_css_012()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><marquee style=\"font-size:x-small\">あいう</marquee></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?>" \
+                       "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><marquee style=\"font-size:x-small;\">あいう</marquee></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get_marquee225;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+
+
+char *test_chxj_serf_get_marquee226(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "marquee { font-size:small }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_xhtml_marquee_tag_with_css_013()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><marquee>あいう</marquee></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?>" \
+                       "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><marquee style=\"font-size:small;\">あいう</marquee></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get_marquee226;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_xhtml_marquee_tag_with_css_014()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><marquee style=\"font-size:small\">あいう</marquee></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?>" \
+                       "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><marquee style=\"font-size:small;\">あいう</marquee></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get_marquee226;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+char *test_chxj_serf_get_marquee227(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "marquee { font-size:medium }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_xhtml_marquee_tag_with_css_015()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><marquee>あいう</marquee></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?>" \
+                       "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><marquee style=\"font-size:medium;\">あいう</marquee></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get_marquee227;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_xhtml_marquee_tag_with_css_016()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><marquee style=\"font-size:medium\">あいう</marquee></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?>" \
+                       "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><marquee style=\"font-size:medium;\">あいう</marquee></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get_marquee227;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+char *test_chxj_serf_get_marquee228(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "marquee { font-size:large }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_xhtml_marquee_tag_with_css_017()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><marquee>あいう</marquee></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?>" \
+                       "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><marquee style=\"font-size:large;\">あいう</marquee></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get_marquee228;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_xhtml_marquee_tag_with_css_018()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><marquee style=\"font-size:large\">あいう</marquee></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?>" \
+                       "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><marquee style=\"font-size:large;\">あいう</marquee></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get_marquee228;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+
+char *test_chxj_serf_get_marquee229(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "marquee { font-size:x-large }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_xhtml_marquee_tag_with_css_019()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><marquee>あいう</marquee></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?>" \
+                       "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><marquee style=\"font-size:x-large;\">あいう</marquee></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get_marquee229;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_xhtml_marquee_tag_with_css_020()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><marquee style=\"font-size:x-large\">あいう</marquee></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?>" \
+                       "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><marquee style=\"font-size:x-large;\">あいう</marquee></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get_marquee229;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+
+char *test_chxj_serf_get_marquee230(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "marquee { font-size:xx-large }\n";
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_xhtml_marquee_tag_with_css_021()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><marquee>あいう</marquee></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?>" \
+                       "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><marquee style=\"font-size:xx-large;\">あいう</marquee></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get_marquee230;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_xhtml_mobile_1_0(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_xhtml_marquee_tag_with_css_022()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><marquee style=\"font-size:xx-large\">あいう</marquee></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?>" \
+                       "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><marquee style=\"font-size:xx-large;\">あいう</marquee></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get_marquee230;
   call_check = 0;
 
   COOKIE_INIT(cookie);

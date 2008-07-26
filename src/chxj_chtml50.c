@@ -4646,9 +4646,12 @@ s_chtml50_start_marquee_tag(void *pdoc, Node *node)
   if (IS_CSS_ON(chtml50->entryp)) {
     css_prop_list_t *style = s_chtml50_push_and_get_now_style(pdoc, node, attr_style);
     if (style) {
-      css_property_t *color_prop = chxj_css_get_property_value(doc, style, "color");
-      css_property_t *size_prop  = chxj_css_get_property_value(doc, style, "font-size");
-      css_property_t *bgcolor_prop  = chxj_css_get_property_value(doc, style, "background-color");
+      css_property_t *color_prop     = chxj_css_get_property_value(doc, style, "color");
+      css_property_t *size_prop      = chxj_css_get_property_value(doc, style, "font-size");
+      css_property_t *bgcolor_prop   = chxj_css_get_property_value(doc, style, "background-color");
+      css_property_t *direction_prop = chxj_css_get_property_value(doc, style, "-wap-marquee-dir");
+      css_property_t *style_prop     = chxj_css_get_property_value(doc, style, "-wap-marquee-style");
+      css_property_t *loop_prop      = chxj_css_get_property_value(doc, style, "-wap-marquee-loop");
       css_property_t *cur;
       for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
         if (cur->value && *cur->value) {
@@ -4658,6 +4661,29 @@ s_chtml50_start_marquee_tag(void *pdoc, Node *node)
       for (cur = bgcolor_prop->next; cur != bgcolor_prop; cur = cur->next) {
         if (cur->value && *cur->value) {
           attr_bgcolor = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+      for (cur = style_prop->next; cur != style_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          attr_behavior = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+      for (cur = loop_prop->next; cur != loop_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          attr_loop = apr_pstrdup(doc->pool, cur->value);
+          if (STRCASEEQ('i','I',"infinite",attr_loop)) {
+            attr_loop = "16";
+          }
+        }
+      }
+      for (cur = direction_prop->next; cur != direction_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          if (STRCASEEQ('l','L',"ltr",cur->value)) {
+            attr_direction = "right";
+          }
+          else if (STRCASEEQ('r','R',"rtl",cur->value)) {
+            attr_direction = "left";
+          }
         }
       }
       for (cur = size_prop->next; cur != size_prop; cur = cur->next) {
