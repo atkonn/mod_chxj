@@ -4490,7 +4490,7 @@ s_xhtml_1_0_start_dd_tag(void *pdoc, Node *node)
 
 
 /**
- * It is a handder who processes the DD tag.
+ * It is a handler who processes the DD tag.
  *
  * @param pdoc  [i/o] The pointer to the XHTML structure at the output
  *                     destination is specified.
@@ -4686,7 +4686,7 @@ s_xhtml_1_0_end_plaintext_tag(void *pdoc, Node *UNUSED(child))
 
 
 /**
- * It is a hanblinker who processes the BLINK tag.
+ * It is a handler who processes the BLINK tag.
  *
  * @param pdoc  [i/o] The pointer to the XHTML structure at the output
  *                     destination is specified.
@@ -4694,17 +4694,85 @@ s_xhtml_1_0_end_plaintext_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_xhtml_1_0_start_blink_tag(void *pdoc, Node *UNUSED(child))
+s_xhtml_1_0_start_blink_tag(void *pdoc, Node *node)
 {
-  xhtml_t *xhtml = GET_XHTML(pdoc);
-  Doc     *doc = xhtml->doc;
-  W_L("<blink>");
+  xhtml_t *xhtml      = GET_XHTML(pdoc);
+  Doc     *doc        = xhtml->doc;
+  Attr    *attr;
+  char    *attr_style = NULL;
+  char    *attr_color = NULL;
+  char    *attr_size  = NULL;
+
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *name   = qs_get_attr_name(doc,attr);
+    char *value  = qs_get_attr_value(doc,attr);
+    if (STRCASEEQ('s','S',"style", name) && value && *value) {
+      attr_style = value;
+    }
+  }
+  if (IS_CSS_ON(xhtml->entryp)) {
+    css_prop_list_t *style = s_xhtml_1_0_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *color_prop           = chxj_css_get_property_value(doc, style, "color");
+      css_property_t *size_prop            = chxj_css_get_property_value(doc, style, "font-size");
+      css_property_t *cur;
+      for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          attr_color = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+      for (cur = size_prop->next; cur != size_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          if (STRCASEEQ('x','X',"xx-small",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, cur->value);
+          }
+          else if (STRCASEEQ('x','X',"x-small",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, cur->value);
+          }
+          else if (STRCASEEQ('s','S',"small",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, cur->value);
+          }
+          else if (STRCASEEQ('m','M',"medium",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, cur->value);
+          }
+          else if (STRCASEEQ('l','L',"large",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, cur->value);
+          }
+          else if (STRCASEEQ('x','X',"x-large",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, cur->value);
+          }
+          else if (STRCASEEQ('x','X',"xx-large",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, cur->value);
+          }
+        }
+      }
+    }
+  }
+  W_L("<blink");
+  if (attr_color || attr_size) {
+    W_L(" style=\"");
+    if (attr_color) {
+      attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
+      W_L("color:");
+      W_V(attr_color);
+      W_L(";");
+    }
+    if (attr_size) {
+      W_L("font-size:");
+      W_V(attr_size);
+      W_L(";");
+    }
+    W_L("\"");
+  }
+  W_L(">");
   return xhtml->out;
 }
 
 
 /**
- * It is a hanblinker who processes the BLINK tag.
+ * It is a handler who processes the BLINK tag.
  *
  * @param pdoc  [i/o] The pointer to the XHTML structure at the output
  *                     destination is specified.
@@ -4712,11 +4780,14 @@ s_xhtml_1_0_start_blink_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_xhtml_1_0_end_blink_tag(void *pdoc, Node *UNUSED(child))
+s_xhtml_1_0_end_blink_tag(void *pdoc, Node *node)
 {
   xhtml_t *xhtml = GET_XHTML(pdoc);
-  Doc     *doc = xhtml->doc;
+  Doc     *doc   = xhtml->doc;
   W_L("</blink>");
+  if (IS_CSS_ON(xhtml->entryp)) {
+    chxj_css_pop_prop_list(xhtml->css_prop_stack);
+  }
   return xhtml->out;
 }
 
