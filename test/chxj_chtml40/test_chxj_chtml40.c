@@ -738,6 +738,10 @@ void test_chtml40_span_tag_with_css_023();
 void test_chtml40_span_tag_with_css_024();
 void test_chtml40_span_tag_with_css_025();
 void test_chtml40_span_tag_with_css_026();
+
+void test_chtml40_style_tag_001();
+void test_chtml40_style_tag_002();
+void test_chtml40_style_tag_003();
 /* pend */
 
 int
@@ -1438,6 +1442,10 @@ main()
   CU_add_test(chtml40_suite, "test span with css 024",                              test_chtml40_span_tag_with_css_024);
   CU_add_test(chtml40_suite, "test span with css 025",                              test_chtml40_span_tag_with_css_025);
   CU_add_test(chtml40_suite, "test span with css 026",                              test_chtml40_span_tag_with_css_026);
+
+  CU_add_test(chtml40_suite, "test style #001",                              test_chtml40_style_tag_001);
+  CU_add_test(chtml40_suite, "test style #002",                              test_chtml40_style_tag_002);
+  CU_add_test(chtml40_suite, "test style #003",                              test_chtml40_style_tag_003);
   /* aend */
 
   CU_basic_run_tests();
@@ -22040,6 +22048,118 @@ void test_chtml40_span_tag_with_css_026()
   apr_size_t destlen;
   APR_INIT;
   chxj_serf_get = test_chxj_serf_get_span013;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_chtml40(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+
+
+
+
+
+
+/*===========================================================================*/
+/* style tag                                                                 */
+/*===========================================================================*/
+void test_chtml40_style_tag_001()
+{
+#define  TEST_STRING "<html><head>" \
+                     "<style type=\"text/css\">span { color: #ff0000; }</style>" \
+                     "</head><body><span>あいう</span></body></html>"
+#define  RESULT_STRING "<html><head></head><body><font color=\"#ff0000\">あいう</font></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get_span004;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_chtml40(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_chtml40_style_tag_002()
+{
+#define  TEST_STRING "<html><head>" \
+                     "<style type=\"text/css\"></style>" \
+                     "</head><body><span>あいう</span></body></html>"
+#define  RESULT_STRING "<html><head></head><body>あいう</body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get_span004;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_chtml40(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_chtml40_style_tag_003()
+{
+#define  TEST_STRING "<html><head>" \
+                     "<style></style>" \
+                     "</head><body><span>あいう</span></body></html>"
+#define  RESULT_STRING "<html><head></head><body>あいう</body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get_span004;
   call_check = 0;
 
   COOKIE_INIT(cookie);

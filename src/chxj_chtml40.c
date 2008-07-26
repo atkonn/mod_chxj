@@ -137,6 +137,7 @@ static char *s_chtml40_newline_mark       (void *pdoc, Node *node);
 static char *s_chtml40_link_tag           (void *pdoc, Node *node);
 static char *s_chtml40_start_span_tag     (void *pdoc, Node *node);
 static char *s_chtml40_end_span_tag       (void *pdoc, Node *node);
+static char *s_chtml40_style_tag     (void *pdoc, Node *node);
 
 static void  s_init_chtml40(chtml40_t *chtml, Doc *doc, request_rec *r, device_table *spec);
 
@@ -328,7 +329,7 @@ tag_handler chtml40_handler[] = {
   },
   /* tagSTYLE */
   {
-    NULL,
+    s_chtml40_style_tag,
     NULL,
   },
   /* tagSPAN */
@@ -4945,6 +4946,55 @@ s_chtml40_end_span_tag(void *pdoc, Node *node)
   }
   if (IS_CSS_ON(chtml40->entryp)) {
     chxj_css_pop_prop_list(chtml40->css_prop_stack);
+  }
+  return chtml40->out;
+}
+
+
+/**
+ * It is a handler who processes the STYLE tag.
+ *
+ * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The STYLE tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_chtml40_style_tag(void *pdoc, Node *node)
+{
+  chtml40_t     *chtml40;
+  Doc           *doc;
+  Attr          *attr;
+  char          *type = NULL;
+
+  chtml40 = GET_CHTML40(pdoc);
+  doc     = chtml40->doc;
+
+  if (! IS_CSS_ON(chtml40->entryp)) {
+    return chtml40->out;
+  }
+
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *name  = qs_get_attr_name(doc,attr);
+    char *value = qs_get_attr_value(doc,attr);
+    if (STRCASEEQ('t','T',"type", name)) {
+      if (value && *value && STRCASEEQ('t','T',"text/css",value)) {
+        type = value;
+      }
+    }
+  }
+
+  Node *child = qs_get_child_node(doc, node);
+  if (type && child) {
+    char *name  = qs_get_node_name(doc, child);
+    if (STRCASEEQ('t','T',"text", name)) {
+      char *value = qs_get_node_value(doc, child);
+      DBG(doc->r, "start load CSS. buf:[%s]", value);
+      chtml40->style = chxj_css_parse_style_value(doc, chtml40->style, value);
+      DBG(doc->r, "end load CSS. value:[%s]", value);
+    }
   }
   return chtml40->out;
 }
