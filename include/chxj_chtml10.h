@@ -43,6 +43,15 @@ struct ctml10_t {
   css_prop_list_stack_t *css_prop_stack;
 };
 
+typedef struct _chtml10_flags_t chtml10_flags_t;
+
+struct _chtml10_flags_t {
+  int with_font_flag;
+  int with_blink_flag;
+  int with_div_flag;
+  int with_marquee_flag;
+};
+
 /*----------------------------------------------------------------------------*/
 /* Prototype                                                                  */
 /*----------------------------------------------------------------------------*/
