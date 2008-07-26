@@ -34,6 +34,31 @@
 #undef W_NLCODE
 #define W_NLCODE()     do { char *nlcode = TO_NLCODE(chtml10->conf); W_V(nlcode); } while (0)
 
+#define CHTML10_PUSH_ONLY(tagname)                              \
+  do {                                                          \
+    chtml10_t *chtml10;                                         \
+    Doc *doc;                                                   \
+    Attr *attr;                                                 \
+    char *attr_style = NULL;                                    \
+    chtml10 = GET_CHTML10(pdoc);                                \
+    doc     = chtml10->doc;                                     \
+    for (attr = qs_get_attr(doc,node);                          \
+       attr;                                                    \
+       attr = qs_get_next_attr(doc,attr)) {                     \
+      char *nm  = qs_get_attr_name(doc,attr);                   \
+      char *val = qs_get_attr_value(doc,attr);                  \
+      if (val && STRCASEEQ('s','S',"style", nm)) {              \
+        attr_style = val;                                       \
+      }                                                         \
+    }                                                           \
+    W_L(tagname);                                               \
+    if (IS_CSS_ON(chtml10->entryp)) {                           \
+      s_chtml10_push_and_get_now_style(pdoc, node, attr_style); \
+    }                                                           \
+    return chtml10->out;                                        \
+  }                                                             \
+  while (0)
+
 static char *s_chtml10_start_html_tag     (void *pdoc, Node *node);
 static char *s_chtml10_end_html_tag       (void *pdoc, Node *node);
 static char *s_chtml10_start_meta_tag     (void *pdoc, Node *node);
@@ -3687,28 +3712,7 @@ s_chtml10_end_dt_tag(void *pdoc, Node *UNUSED(child))
 static char *
 s_chtml10_start_dd_tag(void *pdoc, Node *node)
 {
-  chtml10_t *chtml10;
-  Doc *doc;
-  Attr *attr;
-  char *attr_style = NULL;
-
-  chtml10 = GET_CHTML10(pdoc);
-  doc     = chtml10->doc;
-
-  for (attr = qs_get_attr(doc,node);
-       attr;
-       attr = qs_get_next_attr(doc,attr)) {
-    char *nm  = qs_get_attr_name(doc,attr);
-    char *val = qs_get_attr_value(doc,attr);
-    if (val && STRCASEEQ('s','S',"style", nm)) {
-      attr_style = val;
-    }
-  }
-  W_L("<dd>");
-  if (IS_CSS_ON(chtml10->entryp)) {
-    s_chtml10_push_and_get_now_style(pdoc, node, attr_style);
-  }
-  return chtml10->out;
+  CHTML10_PUSH_ONLY("<dd>");
 }
 
 
@@ -3740,14 +3744,9 @@ s_chtml10_end_dd_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_chtml10_start_menu_tag(void *pdoc, Node *UNUSED(child))
+s_chtml10_start_menu_tag(void *pdoc, Node *node)
 {
-  chtml10_t *chtml10;
-  Doc *doc;
-  chtml10 = GET_CHTML10(pdoc);
-  doc     = chtml10->doc;
-  W_L("<menu>");
-  return chtml10->out;
+  CHTML10_PUSH_ONLY("<menu>");
 }
 
 
@@ -3765,6 +3764,9 @@ s_chtml10_end_menu_tag(void *pdoc, Node *UNUSED(child))
   chtml10_t *chtml10 = GET_CHTML10(pdoc);
   Doc *doc = chtml10->doc;
   W_L("</menu>");
+  if (IS_CSS_ON(chtml10->entryp)) {
+    chxj_css_pop_prop_list(chtml10->css_prop_stack);
+  }
   return chtml10->out;
 }
 
