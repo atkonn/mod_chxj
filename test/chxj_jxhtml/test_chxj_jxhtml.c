@@ -20,6 +20,7 @@
 #include "chxj_chtml30.c"
 #include "chxj_chtml40.c"
 #include "chxj_chtml50.c"
+#include "chxj_ixhtml10.c"
 #include "chxj_jxhtml.c"
 #include "chxj_jhtml.c"
 #include "chxj_hdml.c"
