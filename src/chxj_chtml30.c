@@ -190,6 +190,7 @@ static char *s_chtml30_end_menu_tag       (void *pdoc, Node *node);
 static char *s_chtml30_start_plaintext_tag       (void *pdoc, Node *node);
 static char *s_chtml30_start_plaintext_tag_inner (void *pdoc, Node *node);
 static char *s_chtml30_end_plaintext_tag         (void *pdoc, Node *node);
+static char *s_chtml30_style_tag       (void *pdoc, Node *node);
 static char *s_chtml30_newline_mark       (void *pdoc, Node *node);
 static char *s_chtml30_link_tag           (void *pdoc, Node *node);
 static char *s_chtml30_start_span_tag     (void *pdoc, Node *node);
@@ -385,7 +386,7 @@ tag_handler chtml30_handler[] = {
   },
   /* tagSTYLE */
   {
-    NULL,
+    s_chtml30_style_tag,
     NULL,
   },
   /* tagSPAN */
@@ -4702,6 +4703,54 @@ s_chtml30_end_span_tag(void *pdoc, Node *node)
 }
 
 
+
+/**
+ * It is a handler who processes the STYLE tag.
+ *
+ * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The STYLE tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_chtml30_style_tag(void *pdoc, Node *node)
+{
+  chtml30_t     *chtml30;
+  Doc           *doc;
+  Attr          *attr;
+  char          *type = NULL;
+
+  chtml30 = GET_CHTML30(pdoc);
+  doc     = chtml30->doc;
+
+  if (! IS_CSS_ON(chtml30->entryp)) {
+    return chtml30->out;
+  }
+
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *name  = qs_get_attr_name(doc,attr);
+    char *value = qs_get_attr_value(doc,attr);
+    if (STRCASEEQ('t','T',"type", name)) {
+      if (value && *value && STRCASEEQ('t','T',"text/css",value)) {
+        type = value;
+      }
+    }
+  }
+
+  Node *child = qs_get_child_node(doc, node);
+  if (type && child) {
+    char *name  = qs_get_node_name(doc, child);
+    if (STRCASEEQ('t','T',"text", name)) {
+      char *value = qs_get_node_value(doc, child);
+      DBG(doc->r, "start load CSS. buf:[%s]", value);
+      chtml30->style = chxj_css_parse_style_value(doc, chtml30->style, value);
+      DBG(doc->r, "end load CSS. value:[%s]", value);
+    }
+  }
+  return chtml30->out;
+}
 /*
  * vim:ts=2 et
  */
