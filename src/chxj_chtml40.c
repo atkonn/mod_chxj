@@ -32,6 +32,26 @@
 #undef W_NLCODE
 #define W_NLCODE()     do { char *nlcode = TO_NLCODE(chtml40->conf); W_V(nlcode); } while (0)
 
+#define CHTML40_GET_CSS_COLOR_AND_LIST_STYLE_TYPE() \
+  if (IS_CSS_ON(chtml40->entryp)) { \
+    css_prop_list_t *style = s_chtml40_push_and_get_now_style(pdoc, node, attr_style); \
+    if (style) { \
+      css_property_t *color_prop           = chxj_css_get_property_value(doc, style, "color"); \
+      css_property_t *list_style_type_prop = chxj_css_get_property_value(doc, style, "list-style-type"); \
+      css_property_t *cur; \
+      for (cur = color_prop->next; cur != color_prop; cur = cur->next) { \
+        if (cur->value && *cur->value) { \
+          attr_color = apr_pstrdup(doc->pool, cur->value); \
+        } \
+      } \
+      for (cur = list_style_type_prop->next; cur != list_style_type_prop; cur = cur->next) { \
+        if (cur->value && *cur->value) { \
+          attr_type = apr_pstrdup(doc->pool, cur->value); \
+        } \
+      } \
+    } \
+  }
+
 static char *s_chtml40_start_html_tag     (void *pdoc, Node *node);
 static char *s_chtml40_end_html_tag       (void *pdoc, Node *node);
 static char *s_chtml40_start_meta_tag     (void *pdoc, Node *node);
@@ -3977,24 +3997,7 @@ s_chtml40_start_dir_tag(void *pdoc, Node *node)
       attr_style = value;
     }
   }
-  if (IS_CSS_ON(chtml40->entryp)) {
-    css_prop_list_t *style = s_chtml40_push_and_get_now_style(pdoc, node, attr_style);
-    if (style) {
-      css_property_t *color_prop           = chxj_css_get_property_value(doc, style, "color");
-      css_property_t *list_style_type_prop = chxj_css_get_property_value(doc, style, "list-style-type");
-      css_property_t *cur;
-      for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
-        if (cur->value && *cur->value) {
-          attr_color = apr_pstrdup(doc->pool, cur->value);
-        }
-      }
-      for (cur = list_style_type_prop->next; cur != list_style_type_prop; cur = cur->next) {
-        if (cur->value && *cur->value) {
-          attr_type = apr_pstrdup(doc->pool, cur->value);
-        }
-      }
-    }
-  }
+  CHTML40_GET_CSS_COLOR_AND_LIST_STYLE_TYPE();
   W_L("<dir");
   if (attr_type) {
     W_L(" type=\"");
@@ -4397,7 +4400,9 @@ s_chtml40_start_menu_tag(void *pdoc, Node *node)
   chtml40_t *chtml40 = GET_CHTML40(pdoc);
   Doc       *doc     = chtml40->doc;
   Attr      *attr;
-  W_L("<menu");
+  char      *attr_style = NULL;
+  char      *attr_type  = NULL;
+  char      *attr_color = NULL;
   /*--------------------------------------------------------------------------*/
   /* Get Attributes                                                           */
   /*--------------------------------------------------------------------------*/
@@ -4408,13 +4413,32 @@ s_chtml40_start_menu_tag(void *pdoc, Node *node)
     char *value  = qs_get_attr_value(doc,attr);
     if (STRCASEEQ('t','T',"type",name)) {
       if (value && (STRCASEEQ('d','D',"disc",value) || STRCASEEQ('c','C',"circle",value) || STRCASEEQ('s','S',"square",value))) {
-        W_L(" type=\"");
-        W_V(value);
-        W_L("\"");
+        attr_type = value;
       }
     }
+    else if (STRCASEEQ('s','S',"style", name) && value && *value) {
+      attr_style = value;
+    }
+  }
+  CHTML40_GET_CSS_COLOR_AND_LIST_STYLE_TYPE();
+  W_L("<menu");
+  if (attr_type) {
+    W_L(" type=\"");
+    W_V(attr_type);
+    W_L("\"");
   }
   W_L(">");
+  chtml40_flags_t *flg = (chtml40_flags_t *)apr_palloc(doc->pool, sizeof(chtml40_flags_t));
+  memset(flg, 0, sizeof(*flg));
+  if (attr_color) {
+    attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
+    W_L("<font color=\"");
+    W_V(attr_color);
+    W_L("\">");
+    flg->with_font_flag = 1;
+  }
+  node->userData = (void *)flg;
+
   return chtml40->out;
 }
 
@@ -4428,12 +4452,18 @@ s_chtml40_start_menu_tag(void *pdoc, Node *node)
  * @return The conversion result is returned.
  */
 static char *
-s_chtml40_end_menu_tag(void *pdoc, Node *UNUSED(child))
+s_chtml40_end_menu_tag(void *pdoc, Node *node)
 {
   chtml40_t *chtml40 = GET_CHTML40(pdoc);
-  Doc       *doc = chtml40->doc;
+  Doc       *doc     = chtml40->doc;
+  chtml40_flags_t *flg = (chtml40_flags_t *)node->userData;
+  if (flg && flg->with_font_flag) {
+    W_L("</font>");
+  }
   W_L("</menu>");
-  return chtml40->out;
+  if (IS_CSS_ON(chtml40->entryp)) {
+    chxj_css_pop_prop_list(chtml40->css_prop_stack);
+  }
 }
 
 
