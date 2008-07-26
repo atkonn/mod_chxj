@@ -696,6 +696,15 @@ void test_chtml40_dl_tag_with_css_002();
 
 void test_chtml40_dd_tag_with_css_001();
 void test_chtml40_dd_tag_with_css_002();
+
+void test_chtml40_menu_tag_with_css_001();
+void test_chtml40_menu_tag_with_css_002();
+void test_chtml40_menu_tag_with_css_003();
+void test_chtml40_menu_tag_with_css_004();
+void test_chtml40_menu_tag_with_css_005();
+void test_chtml40_menu_tag_with_css_006();
+void test_chtml40_menu_tag_with_css_007();
+void test_chtml40_menu_tag_with_css_008();
 /* pend */
 
 int
@@ -1354,6 +1363,15 @@ main()
 
   CU_add_test(chtml40_suite, "test dd with css 001",                       test_chtml40_dd_tag_with_css_001);
   CU_add_test(chtml40_suite, "test dd with css 002",                       test_chtml40_dd_tag_with_css_002);
+
+  CU_add_test(chtml40_suite, "test menu with css 001",                       test_chtml40_menu_tag_with_css_001);
+  CU_add_test(chtml40_suite, "test menu with css 002",                       test_chtml40_menu_tag_with_css_002);
+  CU_add_test(chtml40_suite, "test menu with css 003",                       test_chtml40_menu_tag_with_css_003);
+  CU_add_test(chtml40_suite, "test menu with css 004",                       test_chtml40_menu_tag_with_css_004);
+  CU_add_test(chtml40_suite, "test menu with css 005",                       test_chtml40_menu_tag_with_css_005);
+  CU_add_test(chtml40_suite, "test menu with css 006",                       test_chtml40_menu_tag_with_css_006);
+  CU_add_test(chtml40_suite, "test menu with css 007",                       test_chtml40_menu_tag_with_css_007);
+  CU_add_test(chtml40_suite, "test menu with css 008",                       test_chtml40_menu_tag_with_css_008);
   /* aend */
 
   CU_basic_run_tests();
@@ -20412,6 +20430,346 @@ void test_chtml40_dd_tag_with_css_002()
   apr_size_t destlen;
   APR_INIT;
   chxj_serf_get = test_chxj_serf_get220;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_chtml40(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+
+
+
+
+
+/*===========================================================================*/
+/* menu tag with CSS                                                         */
+/*===========================================================================*/
+char *test_chxj_serf_get_menu001(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "menu { color: #ff0000 }\n";
+
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_chtml40_menu_tag_with_css_001()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><menu>あいう</menu></body></html>"
+#define  RESULT_STRING "<html><head></head><body><menu><font color=\"#ff0000\">あいう</font></menu></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get_menu001;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_chtml40(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_chtml40_menu_tag_with_css_002()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><menu style=\"color:#ff0000\">あいう</menu></body></html>"
+#define  RESULT_STRING "<html><head></head><body><menu><font color=\"#ff0000\">あいう</font></menu></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get_menu001;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_chtml40(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+char *test_chxj_serf_get_menu002(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "menu { list-style-type:disc }\n";
+/*
+list-style-type      =>  disc | circle | square => type="disc|circle|square"に変換
+*/
+
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_chtml40_menu_tag_with_css_003()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><menu>あいう</menu></body></html>"
+#define  RESULT_STRING "<html><head></head><body><menu type=\"disc\">あいう</menu></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get_menu002;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_chtml40(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_chtml40_menu_tag_with_css_004()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><menu style=\"list-style-type:disc\">あいう</menu></body></html>"
+#define  RESULT_STRING "<html><head></head><body><menu type=\"disc\">あいう</menu></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get_menu002;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_chtml40(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+
+char *test_chxj_serf_get_menu003(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "menu { list-style-type:circle }\n";
+/*
+list-style-type      =>  circle | circle | square => type="circle|circle|square"に変換
+*/
+
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_chtml40_menu_tag_with_css_005()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><menu>あいう</menu></body></html>"
+#define  RESULT_STRING "<html><head></head><body><menu type=\"circle\">あいう</menu></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get_menu003;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_chtml40(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_chtml40_menu_tag_with_css_006()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><menu style=\"list-style-type:circle\">あいう</menu></body></html>"
+#define  RESULT_STRING "<html><head></head><body><menu type=\"circle\">あいう</menu></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get_menu003;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_chtml40(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+
+
+char *test_chxj_serf_get_menu004(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "menu { list-style-type:square }\n";
+/*
+list-style-type      =>  square | square | square => type="square|square|square"に変換
+*/
+
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_chtml40_menu_tag_with_css_007()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><menu>あいう</menu></body></html>"
+#define  RESULT_STRING "<html><head></head><body><menu type=\"square\">あいう</menu></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get_menu004;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_chtml40(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_chtml40_menu_tag_with_css_008()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><menu style=\"list-style-type:square\">あいう</menu></body></html>"
+#define  RESULT_STRING "<html><head></head><body><menu type=\"square\">あいう</menu></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get_menu004;
   call_check = 0;
 
   COOKIE_INIT(cookie);
