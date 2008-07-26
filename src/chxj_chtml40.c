@@ -135,6 +135,8 @@ static char *s_chtml40_start_plaintext_tag_inner (void *pdoc, Node *node);
 static char *s_chtml40_end_plaintext_tag         (void *pdoc, Node *node);
 static char *s_chtml40_newline_mark       (void *pdoc, Node *node);
 static char *s_chtml40_link_tag           (void *pdoc, Node *node);
+static char *s_chtml40_start_span_tag     (void *pdoc, Node *node);
+static char *s_chtml40_end_span_tag       (void *pdoc, Node *node);
 
 static void  s_init_chtml40(chtml40_t *chtml, Doc *doc, request_rec *r, device_table *spec);
 
@@ -331,8 +333,8 @@ tag_handler chtml40_handler[] = {
   },
   /* tagSPAN */
   {
-    NULL,
-    NULL,
+    s_chtml40_start_span_tag,
+    s_chtml40_end_span_tag,
   },
   /* tagTEXT */
   {
@@ -4760,6 +4762,191 @@ s_chtml40_nopush_and_get_now_style(void *pdoc, Node *node, const char *style_att
     }
   }
   return last_css;
+}
+
+
+
+/**
+ * It is a handler who processes the SPAN tag.
+ *
+ * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The SPAN tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_chtml40_start_span_tag(void *pdoc, Node *node)
+{
+  chtml40_t *chtml40;
+  Doc *doc;
+  Attr *attr;
+  char *attr_style = NULL;
+  char *attr_color = NULL;
+  char *attr_align = NULL;
+  char *attr_blink = NULL;
+  char *attr_marquee = NULL;
+  char *attr_marquee_dir = NULL;
+  char *attr_marquee_style = NULL;
+  char *attr_marquee_loop = NULL;
+
+  chtml40 = GET_CHTML40(pdoc);
+  doc     = chtml40->doc;
+
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *nm  = qs_get_attr_name(doc,attr);
+    char *val = qs_get_attr_value(doc,attr);
+    if (val && STRCASEEQ('s','S',"style", nm)) {
+      attr_style = val;
+    }
+  }
+  if (IS_CSS_ON(chtml40->entryp)) {
+    css_prop_list_t *style = s_chtml40_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *color_prop = chxj_css_get_property_value(doc, style, "color");
+      css_property_t *text_align_prop = chxj_css_get_property_value(doc, style, "text-align");
+      css_property_t *decoration_prop = chxj_css_get_property_value(doc, style, "text-decoration");
+      css_property_t *display_prop = chxj_css_get_property_value(doc, style, "display");
+      css_property_t *marquee_dir_prop = chxj_css_get_property_value(doc, style, "-wap-marquee-dir");
+      css_property_t *marquee_style_prop = chxj_css_get_property_value(doc, style, "-wap-marquee-style");
+      css_property_t *marquee_loop_prop = chxj_css_get_property_value(doc, style, "-wap-marquee-loop");
+      css_property_t *cur;
+      for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
+        attr_color = apr_pstrdup(doc->pool, cur->value);
+      }
+      for (cur = decoration_prop->next; cur != decoration_prop; cur = cur->next) {
+        if (cur->value && STRCASEEQ('b','B',"blink",cur->value)) {
+          attr_blink = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+      for (cur = display_prop->next; cur != display_prop; cur = cur->next) {
+        if (cur->value && strcasecmp("-wap-marquee",cur->value) == 0) {
+          attr_marquee = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+      for (cur = marquee_dir_prop->next; cur != marquee_dir_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          if (STRCASEEQ('l','L',"ltr",cur->value)) {
+            attr_marquee_dir = "right";
+          }
+          else if (STRCASEEQ('r','R',"rtl",cur->value)) {
+            attr_marquee_dir = "left";
+          }
+        }
+      }
+      for (cur = marquee_style_prop->next; cur != marquee_style_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          if ( STRCASEEQ('s','S',"scroll",cur->value)
+            || STRCASEEQ('s','S',"slide",cur->value)
+            || STRCASEEQ('a','A',"alternate",cur->value)) {
+            attr_marquee_style = apr_pstrdup(doc->pool, cur->value);
+          }
+        }
+      }
+      for (cur = marquee_loop_prop->next; cur != marquee_loop_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          if (STRCASEEQ('i','I',"infinite",cur->value)) {
+            attr_marquee_loop = "16";
+          }
+          else {
+            attr_marquee_loop = apr_pstrdup(doc->pool, cur->value);
+          }
+        }
+      }
+      for (cur = text_align_prop->next; cur != text_align_prop; cur = cur->next) {
+        if (STRCASEEQ('l','L',"left", cur->value)) {
+          attr_align = apr_pstrdup(doc->pool, "left");
+        }
+        else if (STRCASEEQ('c','C',"center",cur->value)) {
+          attr_align = apr_pstrdup(doc->pool, "center");
+        }
+        else if (STRCASEEQ('r','R',"right",cur->value)) {
+          attr_align = apr_pstrdup(doc->pool, "right");
+        }
+      }
+    }
+  }
+  if (attr_color || attr_align || attr_blink || attr_marquee) {
+    chtml40_flags_t *flg = apr_palloc(doc->pool, sizeof(*flg));
+    memset(flg, 0, sizeof(*flg));
+    if (attr_blink) {
+      W_L("<blink>");
+      flg->with_blink_flag = 1;
+    }
+    if (attr_marquee) {
+      W_L("<marquee");
+      if (attr_marquee_dir) {
+        W_L(" direction=\"");
+        W_V(attr_marquee_dir);
+        W_L("\"");
+      }
+      if (attr_marquee_style) {
+        W_L(" behavior=\"");
+        W_V(attr_marquee_style);
+        W_L("\"");
+      }
+      if (attr_marquee_loop) {
+        W_L(" loop=\"");
+        W_V(attr_marquee_loop);
+        W_L("\"");
+      }
+      W_L(">");
+      flg->with_marquee_flag = 1;
+    }
+    if (attr_color) {
+      attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
+      W_L("<font color=\"");
+      W_V(attr_color);
+      W_L("\">");
+      flg->with_font_flag = 1;
+    }
+    if (attr_align) {
+      W_L("<div align=\"");
+      W_V(attr_align);
+      W_L("\">");
+      flg->with_div_flag = 1;
+    }
+    node->userData = flg;
+  }
+  else {
+    node->userData = NULL;
+  }
+  return chtml40->out;
+}
+
+
+/**
+ * It is a handler who processes the SPAN tag.
+ *
+ * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The SPAN tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_chtml40_end_span_tag(void *pdoc, Node *node)
+{
+  chtml40_t *chtml40 = GET_CHTML40(pdoc);
+  Doc *doc = chtml40->doc;
+
+  chtml40_flags_t *flg = (chtml40_flags_t *)node->userData;
+  if (flg && flg->with_div_flag) {
+    W_L("</div>");
+  }
+  if (flg && flg->with_font_flag) {
+    W_L("</font>");
+  }
+  if (flg && flg->with_marquee_flag) {
+    W_L("</marquee>");
+  }
+  if (flg && flg->with_blink_flag) {
+    W_L("</blink>");
+  }
+  if (IS_CSS_ON(chtml40->entryp)) {
+    chxj_css_pop_prop_list(chtml40->css_prop_stack);
+  }
+  return chtml40->out;
 }
 /*
  * vim:ts=2 et
