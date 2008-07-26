@@ -120,6 +120,7 @@ static char *s_jxhtml_newline_mark       (void *pdoc, Node *node);
 static char *s_jxhtml_link_tag           (void *pdoc, Node *node);
 static char *s_jxhtml_start_span_tag     (void *pdoc, Node *node);
 static char *s_jxhtml_end_span_tag       (void *pdoc, Node *node);
+static char *s_jxhtml_style_tag       (void *pdoc, Node *node);
 
 static void  s_init_jxhtml(jxhtml_t *jxhtml, Doc *doc, request_rec *r, device_table *spec);
 
@@ -315,7 +316,7 @@ tag_handler jxhtml_handler[] = {
   },
   /* tagSTYLE */
   {
-    NULL,
+    s_jxhtml_style_tag,
     NULL,
   },
   /* tagSPAN */
@@ -5479,6 +5480,55 @@ s_jxhtml_end_span_tag(void *pdoc, Node *UNUSED(node))
   W_L("</span>");
   if (IS_CSS_ON(jxhtml->entryp)) {
     chxj_css_pop_prop_list(jxhtml->css_prop_stack);
+  }
+  return jxhtml->out;
+}
+
+
+/**
+ * It is a handler who processes the STYLE tag.
+ *
+ * @param pdoc  [i/o] The pointer to the SoftBank XHTML structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The STYLE tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_jxhtml_style_tag(void *pdoc, Node *node)
+{
+  jxhtml_t     *jxhtml;
+  Doc           *doc;
+  Attr          *attr;
+  char          *type = NULL;
+
+  jxhtml = GET_JXHTML(pdoc);
+  doc     = jxhtml->doc;
+
+  if (! IS_CSS_ON(jxhtml->entryp)) {
+    return jxhtml->out;
+  }
+
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *name  = qs_get_attr_name(doc,attr);
+    char *value = qs_get_attr_value(doc,attr);
+    if (STRCASEEQ('t','T',"type", name)) {
+      if (value && *value && STRCASEEQ('t','T',"text/css",value)) {
+        type = value;
+      }
+    }
+  }
+
+  Node *child = qs_get_child_node(doc, node);
+  if (type && child) {
+    char *name  = qs_get_node_name(doc, child);
+    if (STRCASEEQ('t','T',"text", name)) {
+      char *value = qs_get_node_value(doc, child);
+      DBG(doc->r, "start load CSS. buf:[%s]", value);
+      jxhtml->style = chxj_css_parse_style_value(doc, jxhtml->style, value);
+      DBG(doc->r, "end load CSS. value:[%s]", value);
+    }
   }
   return jxhtml->out;
 }
