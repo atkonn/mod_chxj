@@ -188,6 +188,7 @@ static char *s_chtml20_end_blink_tag     (void *pdoc, Node *node);
 static char *s_chtml20_start_marquee_tag   (void *pdoc, Node *node);
 static char *s_chtml20_end_marquee_tag     (void *pdoc, Node *node);
 static char *s_chtml20_newline_mark       (void *pdoc, Node *node);
+static char *s_chtml20_style_tag          (void *pdoc, Node *node);
 static char *s_chtml20_link_tag           (void *pdoc, Node *node);
 static char *s_chtml20_start_span_tag    (void *pdoc, Node *node);
 static char *s_chtml20_end_span_tag      (void *pdoc, Node *node);
@@ -386,7 +387,7 @@ tag_handler chtml20_handler[] = {
   },
   /* tagSTYLE */
   {
-    NULL,
+    s_chtml20_style_tag,
     NULL,
   },
   /* tagSPAN */
@@ -5045,6 +5046,55 @@ s_chtml20_end_span_tag(void *pdoc, Node *node)
   }
   if (IS_CSS_ON(chtml20->entryp)) {
     chxj_css_pop_prop_list(chtml20->css_prop_stack);
+  }
+  return chtml20->out;
+}
+
+
+/**
+ * It is a handler who processes the STYLE tag.
+ *
+ * @param pdoc  [i/o] The pointer to the CHTML structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The STYLE tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_chtml20_style_tag(void *pdoc, Node *node)
+{
+  chtml20_t     *chtml20;
+  Doc           *doc;
+  Attr          *attr;
+  char          *type = NULL;
+
+  chtml20 = GET_CHTML20(pdoc);
+  doc     = chtml20->doc;
+
+  if (! IS_CSS_ON(chtml20->entryp)) {
+    return chtml20->out;
+  }
+
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *name  = qs_get_attr_name(doc,attr);
+    char *value = qs_get_attr_value(doc,attr);
+    if (STRCASEEQ('t','T',"type", name)) {
+      if (value && *value && STRCASEEQ('t','T',"text/css",value)) {
+        type = value;
+      }
+    }
+  }
+
+  Node *child = qs_get_child_node(doc, node);
+  if (type && child) {
+    char *name  = qs_get_node_name(doc, child);
+    if (STRCASEEQ('t','T',"text", name)) {
+      char *value = qs_get_node_value(doc, child);
+      DBG(doc->r, "start load CSS. buf:[%s]", value);
+      chtml20->style = chxj_css_parse_style_value(doc, chtml20->style, value);
+      DBG(doc->r, "end load CSS. value:[%s]", value);
+    }
   }
   return chtml20->out;
 }
