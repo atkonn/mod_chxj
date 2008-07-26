@@ -4604,7 +4604,13 @@ s_chtml50_start_marquee_tag(void *pdoc, Node *node)
   chtml50_t *chtml50 = GET_CHTML50(pdoc);
   Doc       *doc = chtml50->doc;
   Attr      *attr;
-  W_L("<marquee");
+  char      *attr_direction = NULL;
+  char      *attr_behavior  = NULL;
+  char      *attr_loop      = NULL;
+  char      *attr_style     = NULL;
+  char      *attr_color     = NULL;
+  char      *attr_size      = NULL;
+  char      *attr_bgcolor   = NULL;
   /*--------------------------------------------------------------------------*/
   /* Get Attributes                                                           */
   /*--------------------------------------------------------------------------*/
@@ -4615,34 +4621,115 @@ s_chtml50_start_marquee_tag(void *pdoc, Node *node)
     char *value  = qs_get_attr_value(doc,attr);
     if (STRCASEEQ('d','D',"direction", name)) {
       if (value && (STRCASEEQ('l','L',"left",value) || STRCASEEQ('r','R',"right",value))) {
-        W_L(" direction=\"");
-        W_V(value);
-        W_L("\"");
+        attr_direction = value;
       }
     }
     else if (STRCASEEQ('b','B',"behavior",name)) {
       if (value && (STRCASEEQ('s','S',"scroll",value) || STRCASEEQ('s','S',"slide",value) || STRCASEEQ('a','A',"alternate",value))) {
-        W_L(" behavior=\""); 
-        W_V(value);
-        W_L("\"");
+        attr_behavior = value;
       }
     }
     else if (STRCASEEQ('l','L',"loop",name)) {
       if (value && *value) {
-        W_L(" loop=\"");
-        W_V(value);
-        W_L("\"");
+        attr_loop = value;
       }
     }
     else if (STRCASEEQ('b','B',"bgcolor",name)) {
       if (value && *value) {
-        W_L(" bgcolor=\"");
-        W_V(value);
-        W_L("\"");
+        attr_bgcolor = value;
+      }
+    }
+    else if (STRCASEEQ('s','S',"style",name) && value && *value) {
+      attr_style = value;
+    }
+  }
+  if (IS_CSS_ON(chtml50->entryp)) {
+    css_prop_list_t *style = s_chtml50_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *color_prop = chxj_css_get_property_value(doc, style, "color");
+      css_property_t *size_prop  = chxj_css_get_property_value(doc, style, "font-size");
+      css_property_t *bgcolor_prop  = chxj_css_get_property_value(doc, style, "background-color");
+      css_property_t *cur;
+      for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          attr_color = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+      for (cur = bgcolor_prop->next; cur != bgcolor_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          attr_bgcolor = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+      for (cur = size_prop->next; cur != size_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          if (STRCASEEQ('x','X',"xx-small",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, "1");
+          }
+          else if (STRCASEEQ('x','X',"x-small",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, "2");
+          }
+          else if (STRCASEEQ('s','S',"small",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, "3");
+          }
+          else if (STRCASEEQ('m','M',"medium",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, "4");
+          }
+          else if (STRCASEEQ('l','L',"large",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, "5");
+          }
+          else if (STRCASEEQ('x','X',"x-large",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, "6");
+          }
+          else if (STRCASEEQ('x','X',"xx-large",cur->value)) {
+            attr_size = apr_pstrdup(doc->pool, "7");
+          }
+        }
       }
     }
   }
+  W_L("<marquee");
+  if (attr_direction) {
+    W_L(" direction=\"");
+    W_V(attr_direction);
+    W_L("\"");
+  }
+  if (attr_behavior) {
+    W_L(" behavior=\"");
+    W_V(attr_behavior);
+    W_L("\"");
+  }
+  if (attr_loop) {
+    W_L(" loop=\"");
+    W_V(attr_loop);
+    W_L("\"");
+  }
+  if (attr_bgcolor) {
+    attr_bgcolor = chxj_css_rgb_func_to_value(doc->pool, attr_bgcolor);
+    W_L(" bgcolor=\"");
+    W_V(attr_bgcolor);
+    W_L("\"");
+  }
   W_L(">");
+
+  chtml50_flags_t *flg = (chtml50_flags_t *)apr_palloc(doc->pool, sizeof(chtml50_flags_t));
+  memset(flg, 0, sizeof(*flg));
+  if (attr_color || attr_size) {
+    W_L("<font");
+    if (attr_color) {
+      attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
+      W_L(" color=\"");
+      W_V(attr_color);
+      W_L("\"");
+    }
+    if (attr_size) {
+      W_L(" size=\"");
+      W_V(attr_size);
+      W_L("\"");
+    }
+    W_L(">");
+    flg->with_font_flag = 1;
+  }
+  node->userData = (void *)flg;
   return chtml50->out;
 }
 
@@ -4656,11 +4743,19 @@ s_chtml50_start_marquee_tag(void *pdoc, Node *node)
  * @return The conversion result is returned.
  */
 static char *
-s_chtml50_end_marquee_tag(void *pdoc, Node *UNUSED(child))
+s_chtml50_end_marquee_tag(void *pdoc, Node *node)
 {
   chtml50_t *chtml50 = GET_CHTML50(pdoc);
-  Doc       *doc = chtml50->doc;
+  Doc       *doc     = chtml50->doc;
+
+  chtml50_flags_t *flg = (chtml50_flags_t *)node->userData;
+  if (flg && flg->with_font_flag) {
+    W_L("</font>");
+  }
   W_L("</marquee>");
+  if (IS_CSS_ON(chtml50->entryp)) {
+    chxj_css_pop_prop_list(chtml50->css_prop_stack);
+  }
   return chtml50->out;
 }
 
