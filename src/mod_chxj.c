@@ -54,6 +54,7 @@
 #include "chxj_chtml30.h"
 #include "chxj_chtml40.h"
 #include "chxj_chtml50.h"
+#include "chxj_ixhtml10.h"
 #include "chxj_jhtml.h"
 #include "chxj_jxhtml.h"
 #include "chxj_img_conv_format.h"
@@ -106,12 +107,12 @@ converter_t convert_routine[] = {
   },
   {
     /* CHXJ_SPEC_Chtml_6_0        */
-    .converter = chxj_convert_chtml50,
+    .converter = chxj_convert_ixhtml10,
     .encoder  = chxj_encoding,
   },
   {
     /* CHXJ_SPEC_Chtml_7_0        */
-    .converter = chxj_convert_chtml50,
+    .converter = chxj_convert_ixhtml10,
     .encoder  = chxj_encoding,
   },
   {

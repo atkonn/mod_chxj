@@ -43,11 +43,11 @@ tag_handlers chxj_tag_handlers[] = {
   },
   {
     .type    = CHXJ_SPEC_Chtml_6_0,
-    .handler = chtml50_handler,
+    .handler = ixhtml10_handler,
   },
   {
     .type    = CHXJ_SPEC_Chtml_7_0,
-    .handler = chtml50_handler,
+    .handler = ixhtml10_handler,
   },
   {
     .type    = CHXJ_SPEC_XHtml_Mobile_1_0,

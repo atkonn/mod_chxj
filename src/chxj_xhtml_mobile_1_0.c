@@ -119,6 +119,7 @@ static char *s_xhtml_1_0_newline_mark       (void *pdoc, Node *node);
 static char *s_xhtml_1_0_link_tag           (void *pdoc, Node *node);
 static char *s_xhtml_1_0_start_span_tag      (void *pdoc, Node *node);
 static char *s_xhtml_1_0_end_span_tag        (void *pdoc, Node *node);
+static char *s_xhtml_1_0_style_tag        (void *pdoc, Node *node);
 
 static void  s_init_xhtml(xhtml_t *xhtml, Doc *doc, request_rec *r, device_table *spec);
 static int   s_xhtml_search_emoji(xhtml_t *xhtml, char *txt, char **rslt);
@@ -311,7 +312,7 @@ tag_handler xhtml_handler[] = {
   },
   /* tagSTYLE */
   {
-    NULL,
+    s_xhtml_1_0_style_tag,
     NULL,
   },
   /* tagSPAN */
@@ -5282,6 +5283,55 @@ s_xhtml_1_0_end_span_tag(void *pdoc, Node *UNUSED(node))
   W_L("</span>");
   if (IS_CSS_ON(xhtml->entryp)) {
     chxj_css_pop_prop_list(xhtml->css_prop_stack);
+  }
+  return xhtml->out;
+}
+
+
+/**
+ * It is a handler who processes the STYLE tag.
+ *
+ * @param pdoc  [i/o] The pointer to the XHTML structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The STYLE tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_xhtml_1_0_style_tag(void *pdoc, Node *node)
+{
+  xhtml_t     *xhtml;
+  Doc           *doc;
+  Attr          *attr;
+  char          *type = NULL;
+
+  xhtml = GET_XHTML(pdoc);
+  doc     = xhtml->doc;
+
+  if (! IS_CSS_ON(xhtml->entryp)) {
+    return xhtml->out;
+  }
+
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *name  = qs_get_attr_name(doc,attr);
+    char *value = qs_get_attr_value(doc,attr);
+    if (STRCASEEQ('t','T',"type", name)) {
+      if (value && *value && STRCASEEQ('t','T',"text/css",value)) {
+        type = value;
+      }
+    }
+  }
+
+  Node *child = qs_get_child_node(doc, node);
+  if (type && child) {
+    char *name  = qs_get_node_name(doc, child);
+    if (STRCASEEQ('t','T',"text", name)) {
+      char *value = qs_get_node_value(doc, child);
+      DBG(doc->r, "start load CSS. buf:[%s]", value);
+      xhtml->style = chxj_css_parse_style_value(doc, xhtml->style, value);
+      DBG(doc->r, "end load CSS. value:[%s]", value);
+    }
   }
   return xhtml->out;
 }
