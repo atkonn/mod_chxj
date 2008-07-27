@@ -46,6 +46,16 @@ void test_ixhtml10_001();
 void test_ixhtml10_002();
 void test_ixhtml10_comment_tag_001();
 
+void test_ixhtml10_meta_tag_001();
+void test_ixhtml10_meta_tag_002();
+void test_ixhtml10_meta_tag_003();
+void test_ixhtml10_meta_tag_004();
+void test_ixhtml10_meta_tag_005();
+void test_ixhtml10_meta_tag_006();
+void test_ixhtml10_meta_tag_007();
+void test_ixhtml10_meta_tag_008();
+void test_ixhtml10_meta_tag_009();
+
 #if 0
 void test_ixhtml10_a_tag_name_attribute_001();
 void test_ixhtml10_a_tag_name_attribute_002();
@@ -472,15 +482,6 @@ void test_ixhtml10_marquee_tag_019();
 void test_ixhtml10_marquee_tag_020();
 void test_ixhtml10_marquee_tag_021();
 
-void test_ixhtml10_meta_tag_001();
-void test_ixhtml10_meta_tag_002();
-void test_ixhtml10_meta_tag_003();
-void test_ixhtml10_meta_tag_004();
-void test_ixhtml10_meta_tag_005();
-void test_ixhtml10_meta_tag_006();
-void test_ixhtml10_meta_tag_007();
-void test_ixhtml10_meta_tag_008();
-void test_ixhtml10_meta_tag_009();
 
 void test_ixhtml10_font_tag_001();
 void test_ixhtml10_font_tag_002();
@@ -937,6 +938,18 @@ main()
   CU_add_test(ixhtml10_suite, "test void src1",                                    test_ixhtml10_001);
   CU_add_test(ixhtml10_suite, "test void src2",                                    test_ixhtml10_002);
   CU_add_test(ixhtml10_suite, "test comment tag1",                                 test_ixhtml10_comment_tag_001);
+  /*=========================================================================*/
+  /* <META>                                                                  */
+  /*=========================================================================*/
+  CU_add_test(ixhtml10_suite, "test <meta> 1." ,                                   test_ixhtml10_meta_tag_001);
+  CU_add_test(ixhtml10_suite, "test <meta> 2." ,                                   test_ixhtml10_meta_tag_002);
+  CU_add_test(ixhtml10_suite, "test <meta> 3." ,                                   test_ixhtml10_meta_tag_003);
+  CU_add_test(ixhtml10_suite, "test <meta> 4." ,                                   test_ixhtml10_meta_tag_004);
+  CU_add_test(ixhtml10_suite, "test <meta> 5." ,                                   test_ixhtml10_meta_tag_005);
+  CU_add_test(ixhtml10_suite, "test <meta> 6." ,                                   test_ixhtml10_meta_tag_006);
+  CU_add_test(ixhtml10_suite, "test <meta> 7." ,                                   test_ixhtml10_meta_tag_007);
+  CU_add_test(ixhtml10_suite, "test <meta> 8." ,                                   test_ixhtml10_meta_tag_008);
+  CU_add_test(ixhtml10_suite, "test <meta> 9." ,                                   test_ixhtml10_meta_tag_009);
 #if 0
   /*=========================================================================*/
   /* <A>                                                                     */
@@ -1435,18 +1448,6 @@ main()
   CU_add_test(ixhtml10_suite, "test <marquee> 19." ,                               test_ixhtml10_marquee_tag_019);
   CU_add_test(ixhtml10_suite, "test <marquee> 20." ,                               test_ixhtml10_marquee_tag_020);
   CU_add_test(ixhtml10_suite, "test <marquee> 21." ,                               test_ixhtml10_marquee_tag_021);
-  /*=========================================================================*/
-  /* <META>                                                                  */
-  /*=========================================================================*/
-  CU_add_test(ixhtml10_suite, "test <meta> 1." ,                                   test_ixhtml10_meta_tag_001);
-  CU_add_test(ixhtml10_suite, "test <meta> 2." ,                                   test_ixhtml10_meta_tag_002);
-  CU_add_test(ixhtml10_suite, "test <meta> 3." ,                                   test_ixhtml10_meta_tag_003);
-  CU_add_test(ixhtml10_suite, "test <meta> 4." ,                                   test_ixhtml10_meta_tag_004);
-  CU_add_test(ixhtml10_suite, "test <meta> 5." ,                                   test_ixhtml10_meta_tag_005);
-  CU_add_test(ixhtml10_suite, "test <meta> 6." ,                                   test_ixhtml10_meta_tag_006);
-  CU_add_test(ixhtml10_suite, "test <meta> 7." ,                                   test_ixhtml10_meta_tag_007);
-  CU_add_test(ixhtml10_suite, "test <meta> 8." ,                                   test_ixhtml10_meta_tag_008);
-  CU_add_test(ixhtml10_suite, "test <meta> 9." ,                                   test_ixhtml10_meta_tag_009);
   /*=========================================================================*/
   /* <font>                                                                  */
   /*=========================================================================*/
@@ -14033,7 +14034,7 @@ void test_ixhtml10_meta_tag_007()
 void test_ixhtml10_meta_tag_008()
 {
 #define  TEST_STRING "<meta http-equiv=\"Content-Type\" content=\"text/html\">"
-#define  RESULT_STRING "<meta http-equiv=\"Content-Type\" content=\"application/xhtml+xml; charset=Windows-31J\" />"
+#define  RESULT_STRING "<meta http-equiv=\"Content-Type\" content=\"application/xhtml+xml; charset=Shift_JIS\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -14061,7 +14062,7 @@ void test_ixhtml10_meta_tag_008()
 void test_ixhtml10_meta_tag_009()
 {
 #define  TEST_STRING "<meta http-equiv=\"Content-Type\" content=\"application/xhtml+xml\">"
-#define  RESULT_STRING "<meta http-equiv=\"Content-Type\" content=\"application/xhtml+xml; charset=Windows-31J\" />"
+#define  RESULT_STRING "<meta http-equiv=\"Content-Type\" content=\"application/xhtml+xml; charset=Shift_JIS\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
