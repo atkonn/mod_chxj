@@ -4309,15 +4309,14 @@ s_ixhtml10_start_h2_tag(void *pdoc, Node *node)
       }
     }
   }
-  W_L("<div");
-  W_L(" style=\"");
-  W_L("font-size:x-large;");
+  W_L("<h2");
   if (attr_align) {
+    W_L(" style=\"");
     W_L("text-align:");
     W_V(attr_align);
-    W_L(";");
+    W_L(";\"");
   }
-  W_L("\">");
+  W_L(">");
 
   return ixhtml10->out;
 }
@@ -4342,7 +4341,7 @@ s_ixhtml10_end_h2_tag(void *pdoc, Node *UNUSED(child))
   doc     = ixhtml10->doc;
   r       = doc->r;
 
-  W_L("</div>");
+  W_L("</h2>");
   if (IS_CSS_ON(ixhtml10->entryp)) {
     chxj_css_pop_prop_list(ixhtml10->css_prop_stack);
   }
