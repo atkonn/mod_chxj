@@ -220,6 +220,12 @@ void test_ixhtml10_head_tag_002();
 void test_ixhtml10_title_tag_001();
 void test_ixhtml10_title_tag_002();
 
+void test_ixhtml10_base_tag_001();
+void test_ixhtml10_base_tag_href_attribute_001();
+void test_ixhtml10_base_tag_href_attribute_002();
+void test_ixhtml10_base_tag_href_attribute_003();
+void test_ixhtml10_base_tag_href_attribute_004();
+
 #if 0
 void test_ixhtml10_a_tag_name_attribute_001();
 void test_ixhtml10_a_tag_name_attribute_002();
@@ -235,11 +241,6 @@ void test_ixhtml10_a_tag_accesskey_attribute_001();
 void test_ixhtml10_a_tag_accesskey_attribute_002();
 void test_ixhtml10_a_tag_accesskey_attribute_003();
 
-void test_ixhtml10_base_tag_001();
-void test_ixhtml10_base_tag_href_attribute_001();
-void test_ixhtml10_base_tag_href_attribute_002();
-void test_ixhtml10_base_tag_href_attribute_003();
-void test_ixhtml10_base_tag_href_attribute_004();
 
 void test_ixhtml10_blockquote_tag_001();
 void test_ixhtml10_blockquote_tag_002();
@@ -1169,6 +1170,14 @@ main()
   CU_add_test(ixhtml10_suite, "test <title> 1." ,                                  test_ixhtml10_title_tag_001);
   CU_add_test(ixhtml10_suite, "test <title> 2." ,                                  test_ixhtml10_title_tag_002);
 
+  /*=========================================================================*/
+  /* <BASE>                                                                  */
+  /*=========================================================================*/
+  CU_add_test(ixhtml10_suite, "test base tag no attribute.",                       test_ixhtml10_base_tag_001);
+  CU_add_test(ixhtml10_suite, "test base tag href attribute with no value.",       test_ixhtml10_base_tag_href_attribute_001);
+  CU_add_test(ixhtml10_suite, "test base tag href attribute with void value.",     test_ixhtml10_base_tag_href_attribute_002);
+  CU_add_test(ixhtml10_suite, "test base tag href attribute with normal value 1.", test_ixhtml10_base_tag_href_attribute_003);
+  CU_add_test(ixhtml10_suite, "test base tag href attribute with normal value 2.", test_ixhtml10_base_tag_href_attribute_004);
 #if 0
   /*=========================================================================*/
   /* <A>                                                                     */
@@ -1186,14 +1195,6 @@ main()
   CU_add_test(ixhtml10_suite, "test a tag accesskey attribute.",                   test_ixhtml10_a_tag_accesskey_attribute_001);
   CU_add_test(ixhtml10_suite, "test a tag accesskey attribute with void char.",    test_ixhtml10_a_tag_accesskey_attribute_002);
   CU_add_test(ixhtml10_suite, "test a tag accesskey attribute with no value",      test_ixhtml10_a_tag_accesskey_attribute_003);
-  /*=========================================================================*/
-  /* <BASE>                                                                  */
-  /*=========================================================================*/
-  CU_add_test(ixhtml10_suite, "test base tag no attribute.",                       test_ixhtml10_base_tag_001);
-  CU_add_test(ixhtml10_suite, "test base tag href attribute with no value.",       test_ixhtml10_base_tag_href_attribute_001);
-  CU_add_test(ixhtml10_suite, "test base tag href attribute with void value.",     test_ixhtml10_base_tag_href_attribute_002);
-  CU_add_test(ixhtml10_suite, "test base tag href attribute with normal value 1.", test_ixhtml10_base_tag_href_attribute_003);
-  CU_add_test(ixhtml10_suite, "test base tag href attribute with normal value 2.", test_ixhtml10_base_tag_href_attribute_004);
   /*=========================================================================*/
   /* <BLOCKQUOTE>                                                            */
   /*=========================================================================*/
@@ -7037,7 +7038,6 @@ void test_ixhtml10_title_tag_002()
 #undef RESULT_STRING
 }
 
-/*KONNO*/
 /*============================================================================*/
 /* <BASE>                                                                     */
 /*============================================================================*/
@@ -7183,6 +7183,8 @@ void test_ixhtml10_base_tag_href_attribute_004()
 #undef TEST_STRING
 #undef RESULT_STRING
 }
+
+/*KONNO*/
 /*============================================================================*/
 /* <BLOCKQUOTE>                                                               */
 /*============================================================================*/
