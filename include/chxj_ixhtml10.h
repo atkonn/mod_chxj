@@ -31,6 +31,9 @@ typedef struct ixhtml10_t ixhtml10_t;
 struct ixhtml10_t {
   Doc                 *doc;
   char                *out;
+  char                *prev_style_data;
+  char                *style_data;
+
   int                 out_len;
   int                 pre_flag;
   int                 textarea_flag;
