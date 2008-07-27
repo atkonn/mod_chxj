@@ -214,6 +214,9 @@ void test_ixhtml10_h6_tag_008();
 void test_ixhtml10_h6_tag_009();
 void test_ixhtml10_h6_tag_010();
 
+void test_ixhtml10_head_tag_001();
+void test_ixhtml10_head_tag_002();
+
 #if 0
 void test_ixhtml10_a_tag_name_attribute_001();
 void test_ixhtml10_a_tag_name_attribute_002();
@@ -300,8 +303,6 @@ void test_ixhtml10_form_tag_007();
 void test_ixhtml10_form_tag_008();
 void test_ixhtml10_form_tag_009();
 
-void test_ixhtml10_head_tag_001();
-void test_ixhtml10_head_tag_002();
 
 
 
@@ -1155,6 +1156,12 @@ main()
   CU_add_test(ixhtml10_suite, "test <h6> with align attribute(center).",           test_ixhtml10_h6_tag_009);
   CU_add_test(ixhtml10_suite, "test <h6> with align attribute(unkown).",           test_ixhtml10_h6_tag_010);
 
+  /*=========================================================================*/
+  /* <HEAD>                                                                  */
+  /*=========================================================================*/
+  CU_add_test(ixhtml10_suite, "test <head>.",                                      test_ixhtml10_head_tag_001);
+  CU_add_test(ixhtml10_suite, "test <head> with value.",                           test_ixhtml10_head_tag_002);
+
 #if 0
   /*=========================================================================*/
   /* <A>                                                                     */
@@ -1265,11 +1272,6 @@ main()
   CU_add_test(ixhtml10_suite, "test <form action> with null cookie.",              test_ixhtml10_form_tag_007);
   CU_add_test(ixhtml10_suite, "test <form action> with other site .",              test_ixhtml10_form_tag_008);
   CU_add_test(ixhtml10_suite, "test <form action method>.",                        test_ixhtml10_form_tag_009);
-  /*=========================================================================*/
-  /* <HEAD>                                                                  */
-  /*=========================================================================*/
-  CU_add_test(ixhtml10_suite, "test <head>.",                                      test_ixhtml10_head_tag_001);
-  CU_add_test(ixhtml10_suite, "test <head> with value.",                           test_ixhtml10_head_tag_002);
   /*=========================================================================*/
   /* <HR>                                                                    */
   /*=========================================================================*/
@@ -6905,6 +6907,70 @@ void test_ixhtml10_h6_tag_010()
 #undef RESULT_STRING
 }
 
+/*============================================================================*/
+/* <HEAD>                                                                     */
+/*============================================================================*/
+void test_ixhtml10_head_tag_001()
+{
+#define  TEST_STRING   "<head></head>"
+#define  RESULT_STRING "<head></head>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_head_tag_002()
+{
+#define  TEST_STRING "<head><title>あああ</title></head>"
+#define  RESULT_STRING "<head><title>あああ</title></head>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
 /*KONNO*/
 /*============================================================================*/
 /* <BASE>                                                                     */
@@ -8704,69 +8770,6 @@ void test_ixhtml10_form_tag_009()
 {
 #define  TEST_STRING   "<form method=\"post\" action=\"hogehoge\"></form>"
 #define  RESULT_STRING "<form action=\"hogehoge\" method=\"post\"><input type=\"hidden\" name=\"_chxj_cc\" value=\"test_cookie_id\"></form>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-/*============================================================================*/
-/* <HEAD>                                                                     */
-/*============================================================================*/
-void test_ixhtml10_head_tag_001()
-{
-#define  TEST_STRING   "<head></head>"
-#define  RESULT_STRING "<head></head>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_head_tag_002()
-{
-#define  TEST_STRING "<head><title>あああ</title></head>"
-#define  RESULT_STRING "<head><title>あああ</title></head>"
   char  *ret;
   char  *tmp;
   device_table spec;
