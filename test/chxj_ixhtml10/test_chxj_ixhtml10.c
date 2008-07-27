@@ -109,6 +109,55 @@ void test_ixhtml10_ul_tag_008();
 void test_ixhtml10_ul_tag_009();
 void test_ixhtml10_ul_tag_010();
 void test_ixhtml10_ul_tag_011();
+
+void test_ixhtml10_li_tag_001();
+void test_ixhtml10_li_tag_002();
+void test_ixhtml10_li_tag_003();
+void test_ixhtml10_li_tag_004();
+void test_ixhtml10_li_tag_005();
+void test_ixhtml10_li_tag_006();
+void test_ixhtml10_li_tag_007();
+void test_ixhtml10_li_tag_008();
+void test_ixhtml10_li_tag_009();
+void test_ixhtml10_li_tag_010();
+void test_ixhtml10_li_tag_011();
+void test_ixhtml10_li_tag_012();
+void test_ixhtml10_li_tag_013();
+void test_ixhtml10_li_tag_014();
+void test_ixhtml10_li_tag_015();
+void test_ixhtml10_li_tag_016();
+void test_ixhtml10_li_tag_017();
+void test_ixhtml10_li_tag_018();
+
+void test_ixhtml10_ol_tag_001();
+void test_ixhtml10_ol_tag_002();
+void test_ixhtml10_ol_tag_003();
+void test_ixhtml10_ol_tag_004();
+void test_ixhtml10_ol_tag_005();
+void test_ixhtml10_ol_tag_006();
+void test_ixhtml10_ol_tag_007();
+void test_ixhtml10_ol_tag_008();
+void test_ixhtml10_ol_tag_009();
+void test_ixhtml10_ol_tag_010();
+void test_ixhtml10_ol_tag_011();
+void test_ixhtml10_ol_tag_012();
+void test_ixhtml10_ol_tag_013();
+void test_ixhtml10_ol_tag_014();
+void test_ixhtml10_ol_tag_015();
+void test_ixhtml10_ol_tag_016();
+void test_ixhtml10_ol_tag_017();
+void test_ixhtml10_ol_tag_018();
+
+void test_ixhtml10_h1_tag_001();
+void test_ixhtml10_h1_tag_002();
+void test_ixhtml10_h1_tag_003();
+void test_ixhtml10_h1_tag_004();
+void test_ixhtml10_h1_tag_005();
+void test_ixhtml10_h1_tag_006();
+void test_ixhtml10_h1_tag_007();
+void test_ixhtml10_h1_tag_008();
+void test_ixhtml10_h1_tag_009();
+void test_ixhtml10_h1_tag_010();
 #if 0
 void test_ixhtml10_a_tag_name_attribute_001();
 void test_ixhtml10_a_tag_name_attribute_002();
@@ -198,16 +247,6 @@ void test_ixhtml10_form_tag_009();
 void test_ixhtml10_head_tag_001();
 void test_ixhtml10_head_tag_002();
 
-void test_ixhtml10_h1_tag_001();
-void test_ixhtml10_h1_tag_002();
-void test_ixhtml10_h1_tag_003();
-void test_ixhtml10_h1_tag_004();
-void test_ixhtml10_h1_tag_005();
-void test_ixhtml10_h1_tag_006();
-void test_ixhtml10_h1_tag_007();
-void test_ixhtml10_h1_tag_008();
-void test_ixhtml10_h1_tag_009();
-void test_ixhtml10_h1_tag_010();
 
 void test_ixhtml10_h2_tag_001();
 void test_ixhtml10_h2_tag_002();
@@ -374,24 +413,6 @@ void test_ixhtml10_input_tag_045();
 void test_ixhtml10_input_tag_046();
 void test_ixhtml10_input_tag_047();
 
-void test_ixhtml10_li_tag_001();
-void test_ixhtml10_li_tag_002();
-void test_ixhtml10_li_tag_003();
-void test_ixhtml10_li_tag_004();
-void test_ixhtml10_li_tag_005();
-void test_ixhtml10_li_tag_006();
-void test_ixhtml10_li_tag_007();
-void test_ixhtml10_li_tag_008();
-void test_ixhtml10_li_tag_009();
-void test_ixhtml10_li_tag_010();
-void test_ixhtml10_li_tag_011();
-void test_ixhtml10_li_tag_012();
-void test_ixhtml10_li_tag_013();
-void test_ixhtml10_li_tag_014();
-void test_ixhtml10_li_tag_015();
-void test_ixhtml10_li_tag_016();
-void test_ixhtml10_li_tag_017();
-void test_ixhtml10_li_tag_018();
 
 void test_ixhtml10_menu_tag_001();
 void test_ixhtml10_menu_tag_002();
@@ -404,24 +425,6 @@ void test_ixhtml10_menu_tag_008();
 void test_ixhtml10_menu_tag_009();
 void test_ixhtml10_menu_tag_010();
 
-void test_ixhtml10_ol_tag_001();
-void test_ixhtml10_ol_tag_002();
-void test_ixhtml10_ol_tag_003();
-void test_ixhtml10_ol_tag_004();
-void test_ixhtml10_ol_tag_005();
-void test_ixhtml10_ol_tag_006();
-void test_ixhtml10_ol_tag_007();
-void test_ixhtml10_ol_tag_008();
-void test_ixhtml10_ol_tag_009();
-void test_ixhtml10_ol_tag_010();
-void test_ixhtml10_ol_tag_011();
-void test_ixhtml10_ol_tag_012();
-void test_ixhtml10_ol_tag_013();
-void test_ixhtml10_ol_tag_014();
-void test_ixhtml10_ol_tag_015();
-void test_ixhtml10_ol_tag_016();
-void test_ixhtml10_ol_tag_017();
-void test_ixhtml10_ol_tag_018();
 
 void test_ixhtml10_option_tag_001();
 void test_ixhtml10_option_tag_002();
@@ -1019,6 +1022,64 @@ main()
   CU_add_test(ixhtml10_suite, "test <ul> 9." ,                                     test_ixhtml10_ul_tag_009);
   CU_add_test(ixhtml10_suite, "test <ul> 10." ,                                    test_ixhtml10_ul_tag_010);
   CU_add_test(ixhtml10_suite, "test <ul> 11." ,                                    test_ixhtml10_ul_tag_011);
+
+  /*=========================================================================*/
+  /* <LI>                                                                    */
+  /*=========================================================================*/
+  CU_add_test(ixhtml10_suite, "test <li>." ,                                       test_ixhtml10_li_tag_001);
+  CU_add_test(ixhtml10_suite, "test <li> with alphabetic value." ,                 test_ixhtml10_li_tag_002);
+  CU_add_test(ixhtml10_suite, "test <li> with japanese value." ,                   test_ixhtml10_li_tag_003);
+  CU_add_test(ixhtml10_suite, "test <li> with japanese-hankaku value." ,           test_ixhtml10_li_tag_004);
+  CU_add_test(ixhtml10_suite, "test <li> type attribute 1." ,                      test_ixhtml10_li_tag_005);
+  CU_add_test(ixhtml10_suite, "test <li> type attribute 2." ,                      test_ixhtml10_li_tag_006);
+  CU_add_test(ixhtml10_suite, "test <li> type attribute 3." ,                      test_ixhtml10_li_tag_007);
+  CU_add_test(ixhtml10_suite, "test <li> type attribute 4." ,                      test_ixhtml10_li_tag_008);
+  CU_add_test(ixhtml10_suite, "test <li> type attribute 5." ,                      test_ixhtml10_li_tag_009);
+  CU_add_test(ixhtml10_suite, "test <li> type attribute 6." ,                      test_ixhtml10_li_tag_010);
+  CU_add_test(ixhtml10_suite, "test <li> type attribute 7." ,                      test_ixhtml10_li_tag_011);
+  CU_add_test(ixhtml10_suite, "test <li> type attribute 8." ,                      test_ixhtml10_li_tag_012);
+  CU_add_test(ixhtml10_suite, "test <li> type attribute 9." ,                      test_ixhtml10_li_tag_013);
+  CU_add_test(ixhtml10_suite, "test <li> type attribute 10." ,                     test_ixhtml10_li_tag_014);
+  CU_add_test(ixhtml10_suite, "test <li> type attribute 11." ,                     test_ixhtml10_li_tag_015);
+  CU_add_test(ixhtml10_suite, "test <li> type attribute 12." ,                     test_ixhtml10_li_tag_016);
+  CU_add_test(ixhtml10_suite, "test <li> type attribute 13." ,                     test_ixhtml10_li_tag_017);
+  CU_add_test(ixhtml10_suite, "test <li> type attribute 14." ,                     test_ixhtml10_li_tag_018);
+
+  /*=========================================================================*/
+  /* <OL>                                                                    */
+  /*=========================================================================*/
+  CU_add_test(ixhtml10_suite, "test <ol>." ,                                       test_ixhtml10_ol_tag_001);
+  CU_add_test(ixhtml10_suite, "test <ol> 2." ,                                     test_ixhtml10_ol_tag_002);
+  CU_add_test(ixhtml10_suite, "test <ol> 3." ,                                     test_ixhtml10_ol_tag_003);
+  CU_add_test(ixhtml10_suite, "test <ol> 4." ,                                     test_ixhtml10_ol_tag_004);
+  CU_add_test(ixhtml10_suite, "test <ol> 5." ,                                     test_ixhtml10_ol_tag_005);
+  CU_add_test(ixhtml10_suite, "test <ol> 6." ,                                     test_ixhtml10_ol_tag_006);
+  CU_add_test(ixhtml10_suite, "test <ol> 7." ,                                     test_ixhtml10_ol_tag_007);
+  CU_add_test(ixhtml10_suite, "test <ol> 8." ,                                     test_ixhtml10_ol_tag_008);
+  CU_add_test(ixhtml10_suite, "test <ol> 9." ,                                     test_ixhtml10_ol_tag_009);
+  CU_add_test(ixhtml10_suite, "test <ol> 10." ,                                    test_ixhtml10_ol_tag_010);
+  CU_add_test(ixhtml10_suite, "test <ol> 11." ,                                    test_ixhtml10_ol_tag_011);
+  CU_add_test(ixhtml10_suite, "test <ol> 12." ,                                    test_ixhtml10_ol_tag_012);
+  CU_add_test(ixhtml10_suite, "test <ol> 13." ,                                    test_ixhtml10_ol_tag_013);
+  CU_add_test(ixhtml10_suite, "test <ol> 14." ,                                    test_ixhtml10_ol_tag_014);
+  CU_add_test(ixhtml10_suite, "test <ol> 15." ,                                    test_ixhtml10_ol_tag_015);
+  CU_add_test(ixhtml10_suite, "test <ol> 16." ,                                    test_ixhtml10_ol_tag_016);
+  CU_add_test(ixhtml10_suite, "test <ol> 17." ,                                    test_ixhtml10_ol_tag_017);
+  CU_add_test(ixhtml10_suite, "test <ol> 18." ,                                    test_ixhtml10_ol_tag_018);
+
+  /*=========================================================================*/
+  /* <H1>                                                                    */
+  /*=========================================================================*/
+  CU_add_test(ixhtml10_suite, "test <h1>.",                                        test_ixhtml10_h1_tag_001);
+  CU_add_test(ixhtml10_suite, "test <h1> with value.",                             test_ixhtml10_h1_tag_002);
+  CU_add_test(ixhtml10_suite, "test <h1> with value(japanese).",                   test_ixhtml10_h1_tag_003);
+  CU_add_test(ixhtml10_suite, "test <h1> with value(japanese-hankaku).",           test_ixhtml10_h1_tag_004);
+  CU_add_test(ixhtml10_suite, "test <h1> with align attribute(non).",              test_ixhtml10_h1_tag_005);
+  CU_add_test(ixhtml10_suite, "test <h1> with align attribute(void).",             test_ixhtml10_h1_tag_006);
+  CU_add_test(ixhtml10_suite, "test <h1> with align attribute(left).",             test_ixhtml10_h1_tag_007);
+  CU_add_test(ixhtml10_suite, "test <h1> with align attribute(right).",            test_ixhtml10_h1_tag_008);
+  CU_add_test(ixhtml10_suite, "test <h1> with align attribute(center).",           test_ixhtml10_h1_tag_009);
+  CU_add_test(ixhtml10_suite, "test <h1> with align attribute(unkown).",           test_ixhtml10_h1_tag_010);
 #if 0
   /*=========================================================================*/
   /* <A>                                                                     */
@@ -1134,19 +1195,6 @@ main()
   /*=========================================================================*/
   CU_add_test(ixhtml10_suite, "test <head>.",                                      test_ixhtml10_head_tag_001);
   CU_add_test(ixhtml10_suite, "test <head> with value.",                           test_ixhtml10_head_tag_002);
-  /*=========================================================================*/
-  /* <H1>                                                                    */
-  /*=========================================================================*/
-  CU_add_test(ixhtml10_suite, "test <h1>.",                                        test_ixhtml10_h1_tag_001);
-  CU_add_test(ixhtml10_suite, "test <h1> with value.",                             test_ixhtml10_h1_tag_002);
-  CU_add_test(ixhtml10_suite, "test <h1> with value(japanese).",                   test_ixhtml10_h1_tag_003);
-  CU_add_test(ixhtml10_suite, "test <h1> with value(japanese-hankaku).",           test_ixhtml10_h1_tag_004);
-  CU_add_test(ixhtml10_suite, "test <h1> with align attribute(non).",              test_ixhtml10_h1_tag_005);
-  CU_add_test(ixhtml10_suite, "test <h1> with align attribute(void).",             test_ixhtml10_h1_tag_006);
-  CU_add_test(ixhtml10_suite, "test <h1> with align attribute(left).",             test_ixhtml10_h1_tag_007);
-  CU_add_test(ixhtml10_suite, "test <h1> with align attribute(right).",            test_ixhtml10_h1_tag_008);
-  CU_add_test(ixhtml10_suite, "test <h1> with align attribute(center).",           test_ixhtml10_h1_tag_009);
-  CU_add_test(ixhtml10_suite, "test <h1> with align attribute(unkown).",           test_ixhtml10_h1_tag_010);
   /*=========================================================================*/
   /* <H2>                                                                    */
   /*=========================================================================*/
@@ -1331,27 +1379,6 @@ main()
   CU_add_test(ixhtml10_suite, "test <input istyle> 13." ,                          test_ixhtml10_input_tag_046);
   CU_add_test(ixhtml10_suite, "test <input istyle> 14." ,                          test_ixhtml10_input_tag_047);
   /*=========================================================================*/
-  /* <LI>                                                                    */
-  /*=========================================================================*/
-  CU_add_test(ixhtml10_suite, "test <li>." ,                                       test_ixhtml10_li_tag_001);
-  CU_add_test(ixhtml10_suite, "test <li> with alphabetic value." ,                 test_ixhtml10_li_tag_002);
-  CU_add_test(ixhtml10_suite, "test <li> with japanese value." ,                   test_ixhtml10_li_tag_003);
-  CU_add_test(ixhtml10_suite, "test <li> with japanese-hankaku value." ,           test_ixhtml10_li_tag_004);
-  CU_add_test(ixhtml10_suite, "test <li> type attribute 1." ,                      test_ixhtml10_li_tag_005);
-  CU_add_test(ixhtml10_suite, "test <li> type attribute 2." ,                      test_ixhtml10_li_tag_006);
-  CU_add_test(ixhtml10_suite, "test <li> type attribute 3." ,                      test_ixhtml10_li_tag_007);
-  CU_add_test(ixhtml10_suite, "test <li> type attribute 4." ,                      test_ixhtml10_li_tag_008);
-  CU_add_test(ixhtml10_suite, "test <li> type attribute 5." ,                      test_ixhtml10_li_tag_009);
-  CU_add_test(ixhtml10_suite, "test <li> type attribute 6." ,                      test_ixhtml10_li_tag_010);
-  CU_add_test(ixhtml10_suite, "test <li> type attribute 7." ,                      test_ixhtml10_li_tag_011);
-  CU_add_test(ixhtml10_suite, "test <li> type attribute 8." ,                      test_ixhtml10_li_tag_012);
-  CU_add_test(ixhtml10_suite, "test <li> type attribute 9." ,                      test_ixhtml10_li_tag_013);
-  CU_add_test(ixhtml10_suite, "test <li> type attribute 10." ,                     test_ixhtml10_li_tag_014);
-  CU_add_test(ixhtml10_suite, "test <li> type attribute 11." ,                     test_ixhtml10_li_tag_015);
-  CU_add_test(ixhtml10_suite, "test <li> type attribute 12." ,                     test_ixhtml10_li_tag_016);
-  CU_add_test(ixhtml10_suite, "test <li> type attribute 13." ,                     test_ixhtml10_li_tag_017);
-  CU_add_test(ixhtml10_suite, "test <li> type attribute 14." ,                     test_ixhtml10_li_tag_018);
-  /*=========================================================================*/
   /* <MENU>                                                                  */
   /*=========================================================================*/
   CU_add_test(ixhtml10_suite, "test <menu>." ,                                     test_ixhtml10_menu_tag_001);
@@ -1364,27 +1391,6 @@ main()
   CU_add_test(ixhtml10_suite, "test <menu> 8." ,                                   test_ixhtml10_menu_tag_008);
   CU_add_test(ixhtml10_suite, "test <menu> 9." ,                                   test_ixhtml10_menu_tag_009);
   CU_add_test(ixhtml10_suite, "test <menu> 10." ,                                  test_ixhtml10_menu_tag_010);
-  /*=========================================================================*/
-  /* <OL>                                                                    */
-  /*=========================================================================*/
-  CU_add_test(ixhtml10_suite, "test <ol>." ,                                       test_ixhtml10_ol_tag_001);
-  CU_add_test(ixhtml10_suite, "test <ol> 2." ,                                     test_ixhtml10_ol_tag_002);
-  CU_add_test(ixhtml10_suite, "test <ol> 3." ,                                     test_ixhtml10_ol_tag_003);
-  CU_add_test(ixhtml10_suite, "test <ol> 4." ,                                     test_ixhtml10_ol_tag_004);
-  CU_add_test(ixhtml10_suite, "test <ol> 5." ,                                     test_ixhtml10_ol_tag_005);
-  CU_add_test(ixhtml10_suite, "test <ol> 6." ,                                     test_ixhtml10_ol_tag_006);
-  CU_add_test(ixhtml10_suite, "test <ol> 7." ,                                     test_ixhtml10_ol_tag_007);
-  CU_add_test(ixhtml10_suite, "test <ol> 8." ,                                     test_ixhtml10_ol_tag_008);
-  CU_add_test(ixhtml10_suite, "test <ol> 9." ,                                     test_ixhtml10_ol_tag_009);
-  CU_add_test(ixhtml10_suite, "test <ol> 10." ,                                    test_ixhtml10_ol_tag_010);
-  CU_add_test(ixhtml10_suite, "test <ol> 11." ,                                    test_ixhtml10_ol_tag_011);
-  CU_add_test(ixhtml10_suite, "test <ol> 12." ,                                    test_ixhtml10_ol_tag_012);
-  CU_add_test(ixhtml10_suite, "test <ol> 13." ,                                    test_ixhtml10_ol_tag_013);
-  CU_add_test(ixhtml10_suite, "test <ol> 14." ,                                    test_ixhtml10_ol_tag_014);
-  CU_add_test(ixhtml10_suite, "test <ol> 15." ,                                    test_ixhtml10_ol_tag_015);
-  CU_add_test(ixhtml10_suite, "test <ol> 16." ,                                    test_ixhtml10_ol_tag_016);
-  CU_add_test(ixhtml10_suite, "test <ol> 17." ,                                    test_ixhtml10_ol_tag_017);
-  CU_add_test(ixhtml10_suite, "test <ol> 18." ,                                    test_ixhtml10_ol_tag_018);
   /*=========================================================================*/
   /* <OPTION>                                                                */
   /*=========================================================================*/
@@ -3592,7 +3598,7 @@ void test_ixhtml10_pre_tag_003()
 void test_ixhtml10_pre_tag_004()
 {
 #define  TEST_STRING "<pre><h1>あああ\n\n</pre>"
-#define  RESULT_STRING "<pre><div style=\"font-size:xx-large;\">あああ\n\n</div></pre>"
+#define  RESULT_STRING "<pre><h1>あああ\n\n</h1></pre>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -3622,7 +3628,7 @@ void test_ixhtml10_pre_tag_004()
 void test_ixhtml10_pre_tag_005()
 {
 #define  TEST_STRING "<pre><h1>ﾊﾝｶｸ</h1>\n\n</pre>"
-#define  RESULT_STRING "<pre><div style=\"font-size:xx-large;\">ﾊﾝｶｸ</div>\n\n</pre>"
+#define  RESULT_STRING "<pre><h1>ﾊﾝｶｸ</h1>\n\n</pre>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -3956,6 +3962,1395 @@ void test_ixhtml10_ul_tag_011()
 {
 #define  TEST_STRING "<ul type><li>abc</ul>"
 #define  RESULT_STRING "<ul><li>abc</li></ul>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+/*============================================================================*/
+/* <LI>                                                                       */
+/*============================================================================*/
+void test_ixhtml10_li_tag_001()
+{
+#define  TEST_STRING "<li></li>"
+#define  RESULT_STRING "<li></li>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_li_tag_002()
+{
+#define  TEST_STRING "<li>abc</li>"
+#define  RESULT_STRING "<li>abc</li>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_li_tag_003()
+{
+#define  TEST_STRING "<li>あいうえお</li>"
+#define  RESULT_STRING "<li>あいうえお</li>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_li_tag_004()
+{
+#define  TEST_STRING "<li>ﾊﾝｶｸ</li>"
+#define  RESULT_STRING "<li>ﾊﾝｶｸ</li>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_li_tag_005()
+{
+#define  TEST_STRING "<li type>ﾊﾝｶｸ</li>"
+#define  RESULT_STRING "<li>ﾊﾝｶｸ</li>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_li_tag_006()
+{
+#define  TEST_STRING "<li type=\"\">ﾊﾝｶｸ</li>"
+#define  RESULT_STRING "<li>ﾊﾝｶｸ</li>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_li_tag_007()
+{
+#define  TEST_STRING "<li type=\"\">ﾊﾝｶｸ</li>"
+#define  RESULT_STRING "<li>ﾊﾝｶｸ</li>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_li_tag_008()
+{
+#define  TEST_STRING "<li type=\"1\">ﾊﾝｶｸ</li>"
+#define  RESULT_STRING "<li style=\"list-style-type:decimal;\">ﾊﾝｶｸ</li>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_li_tag_009()
+{
+#define  TEST_STRING "<li type=\"a\">ﾊﾝｶｸ</li>"
+#define  RESULT_STRING "<li style=\"list-style-type:lower-alpha;\">ﾊﾝｶｸ</li>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_li_tag_010()
+{
+#define  TEST_STRING "<li type=\"A\">ﾊﾝｶｸ</li>"
+#define  RESULT_STRING "<li style=\"list-style-type:upper-alpha;\">ﾊﾝｶｸ</li>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_li_tag_011()
+{
+#define  TEST_STRING "<li value>ﾊﾝｶｸ</li>"
+#define  RESULT_STRING "<li>ﾊﾝｶｸ</li>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_li_tag_012()
+{
+#define  TEST_STRING "<li value=\"\">ﾊﾝｶｸ</li>"
+#define  RESULT_STRING "<li>ﾊﾝｶｸ</li>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_li_tag_013()
+{
+#define  TEST_STRING "<li value=\"1\">ﾊﾝｶｸ</li>"
+#define  RESULT_STRING "<li value=\"1\">ﾊﾝｶｸ</li>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_li_tag_014()
+{
+#define  TEST_STRING "<li type=\"disc\">ﾊﾝｶｸ</li>"
+#define  RESULT_STRING "<li style=\"list-style-type:disc;\">ﾊﾝｶｸ</li>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_li_tag_015()
+{
+#define  TEST_STRING "<li type=\"circle\">ﾊﾝｶｸ</li>"
+#define  RESULT_STRING "<li style=\"list-style-type:circle;\">ﾊﾝｶｸ</li>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_li_tag_016()
+{
+#define  TEST_STRING "<li type=\"square\">ﾊﾝｶｸ</li>"
+#define  RESULT_STRING "<li style=\"list-style-type:square;\">ﾊﾝｶｸ</li>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_li_tag_017()
+{
+#define  TEST_STRING "<li type=\"\">ﾊﾝｶｸ</li>"
+#define  RESULT_STRING "<li>ﾊﾝｶｸ</li>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_li_tag_018()
+{
+#define  TEST_STRING "<li type>ﾊﾝｶｸ</li>"
+#define  RESULT_STRING "<li>ﾊﾝｶｸ</li>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+/*============================================================================*/
+/* <OL>                                                                       */
+/*============================================================================*/
+void test_ixhtml10_ol_tag_001()
+{
+#define  TEST_STRING "<ol></ol>"
+#define  RESULT_STRING "<ol></ol>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_ol_tag_002()
+{
+#define  TEST_STRING "<ol><li></li></ol>"
+#define  RESULT_STRING "<ol><li></li></ol>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_ol_tag_003()
+{
+#define  TEST_STRING "<ol><li>abc</li></ol>"
+#define  RESULT_STRING "<ol><li>abc</li></ol>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_ol_tag_004()
+{
+#define  TEST_STRING "<ol><li>abc</li><li>def</li></ol>"
+#define  RESULT_STRING "<ol><li>abc</li><li>def</li></ol>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_ol_tag_005()
+{
+#define  TEST_STRING "<ol><li>あ</li></ol>"
+#define  RESULT_STRING "<ol><li>あ</li></ol>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_ol_tag_006()
+{
+#define  TEST_STRING "<ol><li>あ</li><li>い</li></ol>"
+#define  RESULT_STRING "<ol><li>あ</li><li>い</li></ol>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_ol_tag_007()
+{
+#define  TEST_STRING "<ol><li>ﾊﾝｶｸ</li></ol>"
+#define  RESULT_STRING "<ol><li>ﾊﾝｶｸ</li></ol>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_ol_tag_008()
+{
+#define  TEST_STRING "<ol><li>ﾊﾝｶｸ</li><li>ｶﾅﾀﾞﾖ</li></ol>"
+#define  RESULT_STRING "<ol><li>ﾊﾝｶｸ</li><li>ｶﾅﾀﾞﾖ</li></ol>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_ol_tag_009()
+{
+#define  TEST_STRING "<ol type></ol>"
+#define  RESULT_STRING "<ol></ol>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_ol_tag_010()
+{
+#define  TEST_STRING "<ol type=\"\"></ol>"
+#define  RESULT_STRING "<ol></ol>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_ol_tag_011()
+{
+#define  TEST_STRING "<ol type=\"1\"></ol>"
+#define  RESULT_STRING "<ol style=\"list-style-type:decimal;\"></ol>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_ol_tag_012()
+{
+#define  TEST_STRING "<ol type=\"a\"></ol>"
+#define  RESULT_STRING "<ol style=\"list-style-type:lower-alpha;\"></ol>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_ol_tag_013()
+{
+#define  TEST_STRING "<ol type=\"A\"></ol>"
+#define  RESULT_STRING "<ol style=\"list-style-type:upper-alpha;\"></ol>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_ol_tag_014()
+{
+#define  TEST_STRING "<ol type=\"b\"></ol>"
+#define  RESULT_STRING "<ol></ol>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_ol_tag_015()
+{
+#define  TEST_STRING "<ol start></ol>"
+#define  RESULT_STRING "<ol></ol>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_ol_tag_016()
+{
+#define  TEST_STRING "<ol start=\"\"></ol>"
+#define  RESULT_STRING "<ol></ol>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_ol_tag_017()
+{
+#define  TEST_STRING "<ol start=\"1\"></ol>"
+#define  RESULT_STRING "<ol start=\"1\"></ol>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_ol_tag_018()
+{
+#define  TEST_STRING "<ol start=\"a\"></ol>"
+#define  RESULT_STRING "<ol start=\"a\"></ol>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+/*============================================================================*/
+/* <H>                                                                        */
+/*============================================================================*/
+void test_ixhtml10_h1_tag_001()
+{
+#define  TEST_STRING "<h1></h1>"
+#define  RESULT_STRING "<h1></h1>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_h1_tag_002()
+{
+#define  TEST_STRING "<h1>abc</h1>"
+#define  RESULT_STRING "<h1>abc</h1>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_h1_tag_003()
+{
+#define  TEST_STRING   "<h1>亀さん</h1>"
+#define  RESULT_STRING "<h1>亀さん</h1>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_h1_tag_004()
+{
+#define  TEST_STRING   "<h1>ﾊﾝｶｸ</h1>"
+#define  RESULT_STRING "<h1>ﾊﾝｶｸ</h1>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_h1_tag_005()
+{
+#define  TEST_STRING "<h1 align></h1>"
+#define  RESULT_STRING "<h1></h1>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_h1_tag_006()
+{
+#define  TEST_STRING "<h1 align=\"\"></h1>"
+#define  RESULT_STRING "<h1></h1>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_h1_tag_007()
+{
+#define  TEST_STRING   "<h1 align=\"left\"></h1>"
+#define  RESULT_STRING "<h1 style=\"text-align:left;\"></h1>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_h1_tag_008()
+{
+#define  TEST_STRING "<h1 align=\"right\"></h1>"
+#define  RESULT_STRING "<h1 style=\"text-align:right;\"></h1>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_h1_tag_009()
+{
+#define  TEST_STRING "<h1 align=\"center\"></h1>"
+#define  RESULT_STRING "<h1 style=\"text-align:center;\"></h1>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_h1_tag_010()
+{
+#define  TEST_STRING   "<h1 align=\"unkown\"></h1>"
+#define  RESULT_STRING "<h1></h1>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -5844,309 +7239,6 @@ void test_ixhtml10_head_tag_002()
 {
 #define  TEST_STRING "<head><title>あああ</title></head>"
 #define  RESULT_STRING "<head><title>あああ</title></head>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-/*============================================================================*/
-/* <H>                                                                        */
-/*============================================================================*/
-void test_ixhtml10_h1_tag_001()
-{
-#define  TEST_STRING "<h1></h1>"
-#define  RESULT_STRING "<div style=\"font-size:xx-large;\"></div>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_h1_tag_002()
-{
-#define  TEST_STRING "<h1>abc</h1>"
-#define  RESULT_STRING "<div style=\"font-size:xx-large;\">abc</div>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_h1_tag_003()
-{
-#define  TEST_STRING   "<h1>亀さん</h1>"
-#define  RESULT_STRING "<div style=\"font-size:xx-large;\">亀さん</div>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_h1_tag_004()
-{
-#define  TEST_STRING   "<h1>ﾊﾝｶｸ</h1>"
-#define  RESULT_STRING "<div style=\"font-size:xx-large;\">ﾊﾝｶｸ</div>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_h1_tag_005()
-{
-#define  TEST_STRING "<h1 align></h1>"
-#define  RESULT_STRING "<div style=\"font-size:xx-large;\"></div>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_h1_tag_006()
-{
-#define  TEST_STRING "<h1 align=\"\"></h1>"
-#define  RESULT_STRING "<div style=\"font-size:xx-large;\"></div>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_h1_tag_007()
-{
-#define  TEST_STRING   "<h1 align=\"left\"></h1>"
-#define  RESULT_STRING "<div style=\"font-size:xx-large;text-align:left;\"></div>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_h1_tag_008()
-{
-#define  TEST_STRING "<h1 align=\"right\"></h1>"
-#define  RESULT_STRING "<div style=\"font-size:xx-large;text-align:right;\"></div>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_h1_tag_009()
-{
-#define  TEST_STRING "<h1 align=\"center\"></h1>"
-#define  RESULT_STRING "<div style=\"font-size:xx-large;text-align:center;\"></div>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_h1_tag_010()
-{
-#define  TEST_STRING   "<h1 align=\"unkown\"></h1>"
-#define  RESULT_STRING "<div style=\"font-size:xx-large;\"></div>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -10884,549 +11976,6 @@ void test_ixhtml10_input_tag_047()
 #undef RESULT_STRING
 }
 /*============================================================================*/
-/* <LI>                                                                       */
-/*============================================================================*/
-void test_ixhtml10_li_tag_001()
-{
-#define  TEST_STRING "<li></li>"
-#define  RESULT_STRING "<li></li>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_li_tag_002()
-{
-#define  TEST_STRING "<li>abc</li>"
-#define  RESULT_STRING "<li>abc</li>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_li_tag_003()
-{
-#define  TEST_STRING "<li>あいうえお</li>"
-#define  RESULT_STRING "<li>あいうえお</li>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_li_tag_004()
-{
-#define  TEST_STRING "<li>ﾊﾝｶｸ</li>"
-#define  RESULT_STRING "<li>ﾊﾝｶｸ</li>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_li_tag_005()
-{
-#define  TEST_STRING "<li type>ﾊﾝｶｸ</li>"
-#define  RESULT_STRING "<li>ﾊﾝｶｸ</li>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_li_tag_006()
-{
-#define  TEST_STRING "<li type=\"\">ﾊﾝｶｸ</li>"
-#define  RESULT_STRING "<li>ﾊﾝｶｸ</li>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_li_tag_007()
-{
-#define  TEST_STRING "<li type=\"\">ﾊﾝｶｸ</li>"
-#define  RESULT_STRING "<li>ﾊﾝｶｸ</li>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_li_tag_008()
-{
-#define  TEST_STRING "<li type=\"1\">ﾊﾝｶｸ</li>"
-#define  RESULT_STRING "<li style=\"list-style-type:decimal;\">ﾊﾝｶｸ</li>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_li_tag_009()
-{
-#define  TEST_STRING "<li type=\"a\">ﾊﾝｶｸ</li>"
-#define  RESULT_STRING "<li style=\"list-style-type:lower-alpha;\">ﾊﾝｶｸ</li>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_li_tag_010()
-{
-#define  TEST_STRING "<li type=\"A\">ﾊﾝｶｸ</li>"
-#define  RESULT_STRING "<li style=\"list-style-type:upper-alpha;\">ﾊﾝｶｸ</li>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_li_tag_011()
-{
-#define  TEST_STRING "<li value>ﾊﾝｶｸ</li>"
-#define  RESULT_STRING "<li>ﾊﾝｶｸ</li>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_li_tag_012()
-{
-#define  TEST_STRING "<li value=\"\">ﾊﾝｶｸ</li>"
-#define  RESULT_STRING "<li>ﾊﾝｶｸ</li>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_li_tag_013()
-{
-#define  TEST_STRING "<li value=\"1\">ﾊﾝｶｸ</li>"
-#define  RESULT_STRING "<li value=\"1\">ﾊﾝｶｸ</li>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_li_tag_014()
-{
-#define  TEST_STRING "<li type=\"disc\">ﾊﾝｶｸ</li>"
-#define  RESULT_STRING "<li style=\"list-style-type:disc;\">ﾊﾝｶｸ</li>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_li_tag_015()
-{
-#define  TEST_STRING "<li type=\"circle\">ﾊﾝｶｸ</li>"
-#define  RESULT_STRING "<li style=\"list-style-type:circle;\">ﾊﾝｶｸ</li>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_li_tag_016()
-{
-#define  TEST_STRING "<li type=\"square\">ﾊﾝｶｸ</li>"
-#define  RESULT_STRING "<li style=\"list-style-type:square;\">ﾊﾝｶｸ</li>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_li_tag_017()
-{
-#define  TEST_STRING "<li type=\"\">ﾊﾝｶｸ</li>"
-#define  RESULT_STRING "<li>ﾊﾝｶｸ</li>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_li_tag_018()
-{
-#define  TEST_STRING "<li type>ﾊﾝｶｸ</li>"
-#define  RESULT_STRING "<li>ﾊﾝｶｸ</li>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-/*============================================================================*/
 /* <MENU>                                                                     */
 /*============================================================================*/
 void test_ixhtml10_menu_tag_001()
@@ -11703,549 +12252,6 @@ void test_ixhtml10_menu_tag_010()
 {
 #define  TEST_STRING "<menu type><li>ﾊﾝｶｸ</li><li>ﾊﾝｶｸ</li></menu>"
 #define  RESULT_STRING "<menu><li>ﾊﾝｶｸ</li><li>ﾊﾝｶｸ</li></menu>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-/*============================================================================*/
-/* <OL>                                                                       */
-/*============================================================================*/
-void test_ixhtml10_ol_tag_001()
-{
-#define  TEST_STRING "<ol></ol>"
-#define  RESULT_STRING "<ol></ol>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_ol_tag_002()
-{
-#define  TEST_STRING "<ol><li></li></ol>"
-#define  RESULT_STRING "<ol><li></li></ol>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_ol_tag_003()
-{
-#define  TEST_STRING "<ol><li>abc</li></ol>"
-#define  RESULT_STRING "<ol><li>abc</li></ol>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_ol_tag_004()
-{
-#define  TEST_STRING "<ol><li>abc</li><li>def</li></ol>"
-#define  RESULT_STRING "<ol><li>abc</li><li>def</li></ol>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_ol_tag_005()
-{
-#define  TEST_STRING "<ol><li>あ</li></ol>"
-#define  RESULT_STRING "<ol><li>あ</li></ol>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_ol_tag_006()
-{
-#define  TEST_STRING "<ol><li>あ</li><li>い</li></ol>"
-#define  RESULT_STRING "<ol><li>あ</li><li>い</li></ol>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_ol_tag_007()
-{
-#define  TEST_STRING "<ol><li>ﾊﾝｶｸ</li></ol>"
-#define  RESULT_STRING "<ol><li>ﾊﾝｶｸ</li></ol>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_ol_tag_008()
-{
-#define  TEST_STRING "<ol><li>ﾊﾝｶｸ</li><li>ｶﾅﾀﾞﾖ</li></ol>"
-#define  RESULT_STRING "<ol><li>ﾊﾝｶｸ</li><li>ｶﾅﾀﾞﾖ</li></ol>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_ol_tag_009()
-{
-#define  TEST_STRING "<ol type></ol>"
-#define  RESULT_STRING "<ol></ol>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_ol_tag_010()
-{
-#define  TEST_STRING "<ol type=\"\"></ol>"
-#define  RESULT_STRING "<ol></ol>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_ol_tag_011()
-{
-#define  TEST_STRING "<ol type=\"1\"></ol>"
-#define  RESULT_STRING "<ol style=\"list-style-type:decimal;\"></ol>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_ol_tag_012()
-{
-#define  TEST_STRING "<ol type=\"a\"></ol>"
-#define  RESULT_STRING "<ol style=\"list-style-type:lower-alpha;\"></ol>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_ol_tag_013()
-{
-#define  TEST_STRING "<ol type=\"A\"></ol>"
-#define  RESULT_STRING "<ol style=\"list-style-type:upper-alpha;\"></ol>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_ol_tag_014()
-{
-#define  TEST_STRING "<ol type=\"b\"></ol>"
-#define  RESULT_STRING "<ol></ol>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_ol_tag_015()
-{
-#define  TEST_STRING "<ol start></ol>"
-#define  RESULT_STRING "<ol></ol>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_ol_tag_016()
-{
-#define  TEST_STRING "<ol start=\"\"></ol>"
-#define  RESULT_STRING "<ol></ol>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_ol_tag_017()
-{
-#define  TEST_STRING "<ol start=\"1\"></ol>"
-#define  RESULT_STRING "<ol start=\"1\"></ol>"
-  char  *ret;
-  char  *tmp;
-  device_table spec;
-  chxjconvrule_entry entry;
-  cookie_t cookie;
-  apr_size_t destlen;
-  APR_INIT;
-
-  COOKIE_INIT(cookie);
-
-  SPEC_INIT(spec);
-  destlen = sizeof(TEST_STRING)-1;
-
-  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
-  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
-  ret = chxj_rencoding(&r, ret, &destlen);
-  fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  CU_ASSERT(ret != NULL);
-  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
-  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
-
-  APR_TERM;
-#undef TEST_STRING
-#undef RESULT_STRING
-}
-void test_ixhtml10_ol_tag_018()
-{
-#define  TEST_STRING "<ol start=\"a\"></ol>"
-#define  RESULT_STRING "<ol start=\"a\"></ol>"
   char  *ret;
   char  *tmp;
   device_table spec;
