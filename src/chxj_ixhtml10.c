@@ -1451,7 +1451,37 @@ s_ixhtml10_start_font_tag(void *pdoc, Node *node)
       /*----------------------------------------------------------------------*/
       /* CHTML 5.0                                                            */
       /*----------------------------------------------------------------------*/
-      attr_size = apr_pstrdup(doc->buf.pool, value);
+      switch (*value) {
+      case '1':
+        attr_size = "xx-small";
+        break;
+      case '2':
+        attr_size = "x-small";
+        break;
+      case '3':
+        attr_size = "small";
+        break;
+      case '4':
+        attr_size = "medium";
+        break;
+      case '5':
+        attr_size = "large";
+        break;
+      case '6':
+        attr_size = "x-large";
+        break;
+      case '7':
+        attr_size = "xx-large";
+        break;
+      case '+':
+      case '-':
+        if (chxj_chk_numeric(&value[1]) == 0) {
+          attr_size = apr_pstrdup(doc->pool, value);
+        }
+        break;
+      default:
+        break;
+      }
     }
     else if (STRCASEEQ('s','S',"style",name) && value && *value) {
       attr_style = apr_pstrdup(doc->buf.pool, value);
@@ -1471,88 +1501,68 @@ s_ixhtml10_start_font_tag(void *pdoc, Node *node)
       for (cur = size_prop->next; cur != size_prop; cur = cur->next) {
         if (cur->value && *cur->value) {
           attr_size = apr_pstrdup(doc->pool, cur->value);
-          if (STRCASEEQ('x','X',"xx-small",attr_size)) {
-            attr_size = apr_pstrdup(doc->pool, "1");
-          }
-          else if (STRCASEEQ('x','X',"x-small",attr_size)) {
-            attr_size = apr_pstrdup(doc->pool, "2");
-          }
-          else if (STRCASEEQ('s','S',"small",attr_size)) {
-            attr_size = apr_pstrdup(doc->pool, "3");
-          }
-          else if (STRCASEEQ('m','M',"medium",attr_size)) {
-            attr_size = apr_pstrdup(doc->pool, "4");
-          }
-          else if (STRCASEEQ('l','L',"large",attr_size)) {
-            attr_size = apr_pstrdup(doc->pool, "5");
-          }
-          else if (STRCASEEQ('x','X',"x-large",attr_size)) {
-            attr_size = apr_pstrdup(doc->pool, "6");
-          }
-          else if (STRCASEEQ('x','X',"xx-large",attr_size)) {
-            attr_size = apr_pstrdup(doc->pool, "7");
+          if ( STRCASEEQ('x','X',"xx-small",attr_size)
+            || STRCASEEQ('x','X',"x-small", attr_size)
+            || STRCASEEQ('s','S',"small",   attr_size)
+            || STRCASEEQ('m','M',"medium",  attr_size)
+            || STRCASEEQ('l','L',"large",   attr_size)
+            || STRCASEEQ('x','X',"x-large", attr_size)
+            || STRCASEEQ('x','X',"xx-large",attr_size)) {
+            attr_size = apr_pstrdup(doc->pool, cur->value);
           }
         }
       }
     }
   }
-  ixhtml10_flags_t *flg = (ixhtml10_flags_t *)apr_palloc(doc->pool, sizeof(*flg));
-  memset(flg, 0, sizeof(*flg));
-  if (attr_color) {
-    attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
-    W_L("<font color=\"");
-    W_V(attr_color);
-    W_L("\">");
-    flg->font_color_flag = 1;
-  }
-  if (attr_size) {
-    flg->font_size_flag = 1;
-    switch(*attr_size) {
-    case '1': W_L("<span style=\"font-size: xx-small\">"); break;
-    case '2': W_L("<span style=\"font-size: x-small\">");  break;
-    case '3': W_L("<span style=\"font-size: small\">");    break;
-    case '4': W_L("<span style=\"font-size: medium\">");   break;
-    case '5': W_L("<span style=\"font-size: large\">");    break;
-    case '6': W_L("<span style=\"font-size: x-large\">");  break;
-    case '7': W_L("<span style=\"font-size: xx-large\">"); break;
-    case '-':
-      if (*(attr_size + 1) == '1') {
-        W_L("<span style=\"font-size: small\">");
-        break;
-      }
-      if (*(attr_size + 1) == '2') {
-        W_L("<span style=\"font-size: x-small\">");
-        break;
-      }
-      if (*(attr_size + 1) == '3') {
-        W_L("<span style=\"font-size: xx-small\">");
-        break;
-      }
-      flg->font_size_flag = 0;
-      break;
-
-    case '+':
-      if (*(attr_size + 1) == '1') {
-        W_L("<span style=\"font-size: large\">");
-        break;
-      }
-      if (*(attr_size + 1) == '2') {
-        W_L("<span style=\"font-size: x-large\">");
-        break;
-      }
-      if (*(attr_size + 1) == '3') {
-        W_L("<span style=\"font-size: xx-large\">");
-        break;
-      }
-      flg->font_size_flag = 0;
-      break;
-
-    default:
-      WRN(doc->r, "invlalid font size. [%s] != (1|2|3|4|5|6|7|+1|+2|+3|-1|-2|-3)", attr_size);
-      flg->font_size_flag = 0;
+  W_L("<span");
+  if (attr_color || attr_size) {
+    W_L(" style=\"");
+    if (attr_color) {
+      attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
+      W_L("color:");
+      W_V(attr_color);
+      W_L(";");
     }
+    if (attr_size) {
+      switch(*attr_size) {
+      case '-':
+        if (*(attr_size + 1) == '1') {
+          attr_size = "small";
+          break;
+        }
+        if (*(attr_size + 1) == '2') {
+          attr_size = "x-small";
+          break;
+        }
+        if (*(attr_size + 1) == '3') {
+          attr_size = "xx-small";
+          break;
+        }
+        break;
+      case '+':
+        if (*(attr_size + 1) == '1') {
+          attr_size = "large";
+          break;
+        }
+        if (*(attr_size + 1) == '2') {
+          attr_size = "x-large";
+          break;
+        }
+        if (*(attr_size + 1) == '3') {
+          attr_size = "xx-large";
+          break;
+        }
+        break;
+      default:
+        break;
+      }
+      W_L("font-size:");
+      W_V(attr_size);
+      W_L(";");
+    }
+    W_L("\"");
   }
-  node->userData = flg;
+  W_L(">");
   return ixhtml10->out;
 }
 
@@ -1566,7 +1576,7 @@ s_ixhtml10_start_font_tag(void *pdoc, Node *node)
  * @return The conversion result is returned.
  */
 static char *
-s_ixhtml10_end_font_tag(void *pdoc, Node *node)
+s_ixhtml10_end_font_tag(void *pdoc, Node *UNUSED(node))
 {
   ixhtml10_t      *ixhtml10;
   request_rec  *r;
@@ -1576,13 +1586,7 @@ s_ixhtml10_end_font_tag(void *pdoc, Node *node)
   doc   = ixhtml10->doc;
   r     = ixhtml10->doc->r;
 
-  ixhtml10_flags_t *flg = (ixhtml10_flags_t *)node->userData;
-  if (flg && flg->font_size_flag) {
-    W_L("</span>");
-  }
-  if (flg && flg->font_color_flag) {
-    W_L("</font>");
-  }
+  W_L("</span>");
   if (IS_CSS_ON(ixhtml10->entryp)) {
     chxj_css_pop_prop_list(ixhtml10->css_prop_stack);
   }
