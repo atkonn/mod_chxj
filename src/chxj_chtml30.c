@@ -1514,12 +1514,13 @@ s_chtml30_start_form_tag(void *pdoc, Node *node)
   Doc         *doc;
   request_rec *r;
   Attr        *attr;
-  char        *attr_action = NULL;
-  char        *attr_method = NULL;
   char        *attr_style  = NULL;
   char        *attr_color  = NULL;
   char        *attr_align  = NULL;
-  char          *new_hidden_tag = NULL;
+  char        *new_hidden_tag = NULL;
+  char        *attr_method = NULL;
+  char        *attr_action = NULL;
+  char        *attr_utn    = NULL;
 
   chtml30 = GET_CHTML30(pdoc);
   doc     = chtml30->doc;
@@ -1560,7 +1561,7 @@ s_chtml30_start_form_tag(void *pdoc, Node *node)
         /*--------------------------------------------------------------------*/
         /* CHTML 3.0                                                          */
         /*--------------------------------------------------------------------*/
-        /* ignore */
+        attr_utn = "";
       }
       break;
 
@@ -1597,6 +1598,9 @@ s_chtml30_start_form_tag(void *pdoc, Node *node)
       }
     }
   }
+
+  int post_flag = (attr_method && strcasecmp(attr_method, "post") == 0) ? 1 : 0;
+
   W_L("<form");
   if (attr_action) {
     attr_action = chxj_encoding_parameter(r, attr_action);
@@ -1604,8 +1608,10 @@ s_chtml30_start_form_tag(void *pdoc, Node *node)
     char *q;
     q = strchr(attr_action, '?');
     if (q) {
-      new_hidden_tag = chxj_form_action_to_hidden_tag(doc->pool, attr_action, 0);
-      *q = 0;
+      new_hidden_tag = chxj_form_action_to_hidden_tag(r, doc->pool, attr_action, 0, post_flag);
+      if (new_hidden_tag) {
+        *q = 0;
+      }
     }
     W_L(" action=\"");
     W_V(attr_action);
@@ -1615,6 +1621,9 @@ s_chtml30_start_form_tag(void *pdoc, Node *node)
     W_L(" method=\"");
     W_V(attr_method);
     W_L("\"");
+  }
+  if (attr_utn) {
+    W_L(" utn");
   }
   W_L(">");
 
