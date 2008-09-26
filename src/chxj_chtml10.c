@@ -2083,7 +2083,8 @@ s_chtml10_start_form_tag(void *pdoc, Node *node)
         /*--------------------------------------------------------------------*/
         /* CHTML 1.0                                                          */
         /*--------------------------------------------------------------------*/
-        attr_action = value;
+        attr_action = chxj_encoding_parameter(r, value);
+        attr_action = chxj_add_cookie_parameter(r, attr_action, chtml10->cookie);
       }
       break;
 
@@ -2121,6 +2122,8 @@ s_chtml10_start_form_tag(void *pdoc, Node *node)
   if (IS_CSS_ON(chtml10->entryp)) {
     s_chtml10_push_and_get_now_style(pdoc, node, attr_style);
   }
+  int post_flag = (attr_method && strcasecmp(attr_method, "post") == 0) ? 1 : 0;
+
   W_L("<form");
   if (attr_action) {
     attr_action = chxj_encoding_parameter(r, attr_action);
@@ -2128,8 +2131,10 @@ s_chtml10_start_form_tag(void *pdoc, Node *node)
     char *q;
     q = strchr(attr_action, '?');
     if (q) {
-      new_hidden_tag = chxj_form_action_to_hidden_tag(doc->pool, attr_action, 0);
-      *q = 0;
+      new_hidden_tag = chxj_form_action_to_hidden_tag(r, doc->pool, attr_action, 0, post_flag);
+      if (new_hidden_tag) {
+        *q = 0;
+      }
     }
     W_L(" action=\"");
     W_V(attr_action);

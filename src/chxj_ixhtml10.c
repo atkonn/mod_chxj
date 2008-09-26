@@ -1694,6 +1694,9 @@ s_ixhtml10_start_form_tag(void *pdoc, Node *node)
       }
     }
   }
+
+  int post_flag = (attr_method && strcasecmp(attr_method, "post") == 0) ? 1 : 0;
+
   W_L("<form");
   if (attr_action) {
     attr_action = chxj_encoding_parameter(r, attr_action);
@@ -1701,7 +1704,7 @@ s_ixhtml10_start_form_tag(void *pdoc, Node *node)
     char *q;
     q = strchr(attr_action, '?');
     if (q) {
-      new_hidden_tag = chxj_form_action_to_hidden_tag(doc->pool, attr_action, 0);
+      new_hidden_tag = chxj_form_action_to_hidden_tag(r, doc->pool, attr_action, 1, post_flag);
       *q = 0;
     }
     W_L(" action=\"");
