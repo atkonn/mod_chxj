@@ -290,6 +290,54 @@ void test_ixhtml10_font_tag_019();
 void test_ixhtml10_font_tag_020();
 void test_ixhtml10_font_tag_021();
 void test_ixhtml10_font_tag_022();
+
+void test_ixhtml10_input_tag_001();
+void test_ixhtml10_input_tag_002();
+void test_ixhtml10_input_tag_003();
+void test_ixhtml10_input_tag_004();
+void test_ixhtml10_input_tag_005();
+void test_ixhtml10_input_tag_006();
+void test_ixhtml10_input_tag_007();
+void test_ixhtml10_input_tag_008();
+void test_ixhtml10_input_tag_009();
+void test_ixhtml10_input_tag_010();
+void test_ixhtml10_input_tag_011();
+void test_ixhtml10_input_tag_012();
+void test_ixhtml10_input_tag_013();
+void test_ixhtml10_input_tag_014();
+void test_ixhtml10_input_tag_015();
+void test_ixhtml10_input_tag_016();
+void test_ixhtml10_input_tag_017();
+void test_ixhtml10_input_tag_018();
+void test_ixhtml10_input_tag_019();
+void test_ixhtml10_input_tag_020();
+void test_ixhtml10_input_tag_021();
+void test_ixhtml10_input_tag_022();
+void test_ixhtml10_input_tag_023();
+void test_ixhtml10_input_tag_024();
+void test_ixhtml10_input_tag_025();
+void test_ixhtml10_input_tag_026();
+void test_ixhtml10_input_tag_027();
+void test_ixhtml10_input_tag_028();
+void test_ixhtml10_input_tag_029();
+void test_ixhtml10_input_tag_030();
+void test_ixhtml10_input_tag_031();
+void test_ixhtml10_input_tag_032();
+void test_ixhtml10_input_tag_033();
+void test_ixhtml10_input_tag_034();
+void test_ixhtml10_input_tag_035();
+void test_ixhtml10_input_tag_036();
+void test_ixhtml10_input_tag_037();
+void test_ixhtml10_input_tag_038();
+void test_ixhtml10_input_tag_039();
+void test_ixhtml10_input_tag_040();
+void test_ixhtml10_input_tag_041();
+void test_ixhtml10_input_tag_042();
+void test_ixhtml10_input_tag_043();
+void test_ixhtml10_input_tag_044();
+void test_ixhtml10_input_tag_045();
+void test_ixhtml10_input_tag_046();
+void test_ixhtml10_input_tag_047();
 #if 0
 
 
@@ -403,53 +451,6 @@ void test_ixhtml10_img_tag_035();
 void test_ixhtml10_img_tag_036();
 void test_ixhtml10_img_tag_037();
 
-void test_ixhtml10_input_tag_001();
-void test_ixhtml10_input_tag_002();
-void test_ixhtml10_input_tag_003();
-void test_ixhtml10_input_tag_004();
-void test_ixhtml10_input_tag_005();
-void test_ixhtml10_input_tag_006();
-void test_ixhtml10_input_tag_007();
-void test_ixhtml10_input_tag_008();
-void test_ixhtml10_input_tag_009();
-void test_ixhtml10_input_tag_010();
-void test_ixhtml10_input_tag_011();
-void test_ixhtml10_input_tag_012();
-void test_ixhtml10_input_tag_013();
-void test_ixhtml10_input_tag_014();
-void test_ixhtml10_input_tag_015();
-void test_ixhtml10_input_tag_016();
-void test_ixhtml10_input_tag_017();
-void test_ixhtml10_input_tag_018();
-void test_ixhtml10_input_tag_019();
-void test_ixhtml10_input_tag_020();
-void test_ixhtml10_input_tag_021();
-void test_ixhtml10_input_tag_022();
-void test_ixhtml10_input_tag_023();
-void test_ixhtml10_input_tag_024();
-void test_ixhtml10_input_tag_025();
-void test_ixhtml10_input_tag_026();
-void test_ixhtml10_input_tag_027();
-void test_ixhtml10_input_tag_028();
-void test_ixhtml10_input_tag_029();
-void test_ixhtml10_input_tag_030();
-void test_ixhtml10_input_tag_031();
-void test_ixhtml10_input_tag_032();
-void test_ixhtml10_input_tag_033();
-void test_ixhtml10_input_tag_034();
-void test_ixhtml10_input_tag_035();
-void test_ixhtml10_input_tag_036();
-void test_ixhtml10_input_tag_037();
-void test_ixhtml10_input_tag_038();
-void test_ixhtml10_input_tag_039();
-void test_ixhtml10_input_tag_040();
-void test_ixhtml10_input_tag_041();
-void test_ixhtml10_input_tag_042();
-void test_ixhtml10_input_tag_043();
-void test_ixhtml10_input_tag_044();
-void test_ixhtml10_input_tag_045();
-void test_ixhtml10_input_tag_046();
-void test_ixhtml10_input_tag_047();
 
 
 void test_ixhtml10_menu_tag_001();
@@ -1262,6 +1263,57 @@ main()
   CU_add_test(ixhtml10_suite, "test <font> 20." ,                                  test_ixhtml10_font_tag_020);
   CU_add_test(ixhtml10_suite, "test <font> 21." ,                                  test_ixhtml10_font_tag_021);
   CU_add_test(ixhtml10_suite, "test <font> 22." ,                                  test_ixhtml10_font_tag_022);
+
+  /*=========================================================================*/
+  /* <INPUT>                                                                 */
+  /*=========================================================================*/
+  CU_add_test(ixhtml10_suite, "test <input>." ,                                    test_ixhtml10_input_tag_001);
+  CU_add_test(ixhtml10_suite, "test <input type>." ,                               test_ixhtml10_input_tag_002);
+  CU_add_test(ixhtml10_suite, "test <input type> with void value." ,               test_ixhtml10_input_tag_003);
+  CU_add_test(ixhtml10_suite, "test <input type> with value(text)." ,              test_ixhtml10_input_tag_004);
+  CU_add_test(ixhtml10_suite, "test <input type> with value(password)." ,          test_ixhtml10_input_tag_005);
+  CU_add_test(ixhtml10_suite, "test <input type> with value(checkbox)." ,          test_ixhtml10_input_tag_006);
+  CU_add_test(ixhtml10_suite, "test <input type> with value(radio)." ,             test_ixhtml10_input_tag_007);
+  CU_add_test(ixhtml10_suite, "test <input type> with value(hidden)." ,            test_ixhtml10_input_tag_008);
+  CU_add_test(ixhtml10_suite, "test <input type> with value(submit)." ,            test_ixhtml10_input_tag_009);
+  CU_add_test(ixhtml10_suite, "test <input type> with value(reset)." ,             test_ixhtml10_input_tag_010);
+  CU_add_test(ixhtml10_suite, "test <input type> with value(unknown)." ,           test_ixhtml10_input_tag_011);
+  CU_add_test(ixhtml10_suite, "test <input name>." ,                               test_ixhtml10_input_tag_012);
+  CU_add_test(ixhtml10_suite, "test <input name> with void value." ,               test_ixhtml10_input_tag_013);
+  CU_add_test(ixhtml10_suite, "test <input name> with alphabetic value." ,         test_ixhtml10_input_tag_014);
+  CU_add_test(ixhtml10_suite, "test <input name> with japanese value." ,           test_ixhtml10_input_tag_015);
+  CU_add_test(ixhtml10_suite, "test <input name> with japanese-hankaku value." ,   test_ixhtml10_input_tag_016);
+  CU_add_test(ixhtml10_suite, "test <input value>." ,                              test_ixhtml10_input_tag_017);
+  CU_add_test(ixhtml10_suite, "test <input value> with void value." ,              test_ixhtml10_input_tag_018);
+  CU_add_test(ixhtml10_suite, "test <input value> with alphabetic value." ,        test_ixhtml10_input_tag_019);
+  CU_add_test(ixhtml10_suite, "test <input value> with japanese value." ,          test_ixhtml10_input_tag_020);
+  CU_add_test(ixhtml10_suite, "test <input value> with japanese-hankaku value." ,  test_ixhtml10_input_tag_021);
+  CU_add_test(ixhtml10_suite, "test <input size>." ,                               test_ixhtml10_input_tag_022);
+  CU_add_test(ixhtml10_suite, "test <input size> with void value." ,               test_ixhtml10_input_tag_023);
+  CU_add_test(ixhtml10_suite, "test <input size> with alphabetic value." ,         test_ixhtml10_input_tag_024);
+  CU_add_test(ixhtml10_suite, "test <input size> with numeric value." ,            test_ixhtml10_input_tag_025);
+  CU_add_test(ixhtml10_suite, "test <input maxlength>." ,                          test_ixhtml10_input_tag_026);
+  CU_add_test(ixhtml10_suite, "test <input maxlength> with void value." ,          test_ixhtml10_input_tag_027);
+  CU_add_test(ixhtml10_suite, "test <input maxlength> with alphabetic value." ,    test_ixhtml10_input_tag_028);
+  CU_add_test(ixhtml10_suite, "test <input maxlength> with numeric value." ,       test_ixhtml10_input_tag_029);
+  CU_add_test(ixhtml10_suite, "test <input checked>." ,                            test_ixhtml10_input_tag_030);
+  CU_add_test(ixhtml10_suite, "test <input accesskey>." ,                          test_ixhtml10_input_tag_031);
+  CU_add_test(ixhtml10_suite, "test <input accesskey> with void value." ,          test_ixhtml10_input_tag_032);
+  CU_add_test(ixhtml10_suite, "test <input accesskey> with value." ,               test_ixhtml10_input_tag_033);
+  CU_add_test(ixhtml10_suite, "test <input istyle> 1." ,                           test_ixhtml10_input_tag_034);
+  CU_add_test(ixhtml10_suite, "test <input istyle> 2." ,                           test_ixhtml10_input_tag_035);
+  CU_add_test(ixhtml10_suite, "test <input istyle> 3." ,                           test_ixhtml10_input_tag_036);
+  CU_add_test(ixhtml10_suite, "test <input istyle> 4." ,                           test_ixhtml10_input_tag_037);
+  CU_add_test(ixhtml10_suite, "test <input istyle> 5." ,                           test_ixhtml10_input_tag_038);
+  CU_add_test(ixhtml10_suite, "test <input istyle> 6." ,                           test_ixhtml10_input_tag_039);
+  CU_add_test(ixhtml10_suite, "test <input istyle> 7." ,                           test_ixhtml10_input_tag_040);
+  CU_add_test(ixhtml10_suite, "test <input istyle> 8." ,                           test_ixhtml10_input_tag_041);
+  CU_add_test(ixhtml10_suite, "test <input istyle> 9." ,                           test_ixhtml10_input_tag_042);
+  CU_add_test(ixhtml10_suite, "test <input istyle> 10." ,                          test_ixhtml10_input_tag_043);
+  CU_add_test(ixhtml10_suite, "test <input istyle> 11." ,                          test_ixhtml10_input_tag_044);
+  CU_add_test(ixhtml10_suite, "test <input istyle> 12." ,                          test_ixhtml10_input_tag_045);
+  CU_add_test(ixhtml10_suite, "test <input istyle> 13." ,                          test_ixhtml10_input_tag_046);
+  CU_add_test(ixhtml10_suite, "test <input istyle> 14." ,                          test_ixhtml10_input_tag_047);
 #if 0
   /*=========================================================================*/
   /* <BLOCKQUOTE>                                                            */
@@ -1388,56 +1440,6 @@ main()
   CU_add_test(ixhtml10_suite, "test <img alt> with alphabetic value." ,            test_ixhtml10_img_tag_035);
   CU_add_test(ixhtml10_suite, "test <img alt> with japanese value." ,              test_ixhtml10_img_tag_036);
   CU_add_test(ixhtml10_suite, "test <img alt> with japanese-hankaku value." ,      test_ixhtml10_img_tag_037);
-  /*=========================================================================*/
-  /* <INPUT>                                                                 */
-  /*=========================================================================*/
-  CU_add_test(ixhtml10_suite, "test <input>." ,                                    test_ixhtml10_input_tag_001);
-  CU_add_test(ixhtml10_suite, "test <input type>." ,                               test_ixhtml10_input_tag_002);
-  CU_add_test(ixhtml10_suite, "test <input type> with void value." ,               test_ixhtml10_input_tag_003);
-  CU_add_test(ixhtml10_suite, "test <input type> with value(text)." ,              test_ixhtml10_input_tag_004);
-  CU_add_test(ixhtml10_suite, "test <input type> with value(password)." ,          test_ixhtml10_input_tag_005);
-  CU_add_test(ixhtml10_suite, "test <input type> with value(checkbox)." ,          test_ixhtml10_input_tag_006);
-  CU_add_test(ixhtml10_suite, "test <input type> with value(radio)." ,             test_ixhtml10_input_tag_007);
-  CU_add_test(ixhtml10_suite, "test <input type> with value(hidden)." ,            test_ixhtml10_input_tag_008);
-  CU_add_test(ixhtml10_suite, "test <input type> with value(submit)." ,            test_ixhtml10_input_tag_009);
-  CU_add_test(ixhtml10_suite, "test <input type> with value(reset)." ,             test_ixhtml10_input_tag_010);
-  CU_add_test(ixhtml10_suite, "test <input type> with value(unknown)." ,           test_ixhtml10_input_tag_011);
-  CU_add_test(ixhtml10_suite, "test <input name>." ,                               test_ixhtml10_input_tag_012);
-  CU_add_test(ixhtml10_suite, "test <input name> with void value." ,               test_ixhtml10_input_tag_013);
-  CU_add_test(ixhtml10_suite, "test <input name> with alphabetic value." ,         test_ixhtml10_input_tag_014);
-  CU_add_test(ixhtml10_suite, "test <input name> with japanese value." ,           test_ixhtml10_input_tag_015);
-  CU_add_test(ixhtml10_suite, "test <input name> with japanese-hankaku value." ,   test_ixhtml10_input_tag_016);
-  CU_add_test(ixhtml10_suite, "test <input value>." ,                              test_ixhtml10_input_tag_017);
-  CU_add_test(ixhtml10_suite, "test <input value> with void value." ,              test_ixhtml10_input_tag_018);
-  CU_add_test(ixhtml10_suite, "test <input value> with alphabetic value." ,        test_ixhtml10_input_tag_019);
-  CU_add_test(ixhtml10_suite, "test <input value> with japanese value." ,          test_ixhtml10_input_tag_020);
-  CU_add_test(ixhtml10_suite, "test <input value> with japanese-hankaku value." ,  test_ixhtml10_input_tag_021);
-  CU_add_test(ixhtml10_suite, "test <input size>." ,                               test_ixhtml10_input_tag_022);
-  CU_add_test(ixhtml10_suite, "test <input size> with void value." ,               test_ixhtml10_input_tag_023);
-  CU_add_test(ixhtml10_suite, "test <input size> with alphabetic value." ,         test_ixhtml10_input_tag_024);
-  CU_add_test(ixhtml10_suite, "test <input size> with numeric value." ,            test_ixhtml10_input_tag_025);
-  CU_add_test(ixhtml10_suite, "test <input maxlength>." ,                          test_ixhtml10_input_tag_026);
-  CU_add_test(ixhtml10_suite, "test <input maxlength> with void value." ,          test_ixhtml10_input_tag_027);
-  CU_add_test(ixhtml10_suite, "test <input maxlength> with alphabetic value." ,    test_ixhtml10_input_tag_028);
-  CU_add_test(ixhtml10_suite, "test <input maxlength> with numeric value." ,       test_ixhtml10_input_tag_029);
-  CU_add_test(ixhtml10_suite, "test <input checked>." ,                            test_ixhtml10_input_tag_030);
-  CU_add_test(ixhtml10_suite, "test <input accesskey>." ,                          test_ixhtml10_input_tag_031);
-  CU_add_test(ixhtml10_suite, "test <input accesskey> with void value." ,          test_ixhtml10_input_tag_032);
-  CU_add_test(ixhtml10_suite, "test <input accesskey> with value." ,               test_ixhtml10_input_tag_033);
-  CU_add_test(ixhtml10_suite, "test <input istyle> 1." ,                           test_ixhtml10_input_tag_034);
-  CU_add_test(ixhtml10_suite, "test <input istyle> 2." ,                           test_ixhtml10_input_tag_035);
-  CU_add_test(ixhtml10_suite, "test <input istyle> 3." ,                           test_ixhtml10_input_tag_036);
-  CU_add_test(ixhtml10_suite, "test <input istyle> 4." ,                           test_ixhtml10_input_tag_037);
-  CU_add_test(ixhtml10_suite, "test <input istyle> 5." ,                           test_ixhtml10_input_tag_038);
-  CU_add_test(ixhtml10_suite, "test <input istyle> 6." ,                           test_ixhtml10_input_tag_039);
-  CU_add_test(ixhtml10_suite, "test <input istyle> 7." ,                           test_ixhtml10_input_tag_040);
-  CU_add_test(ixhtml10_suite, "test <input istyle> 8." ,                           test_ixhtml10_input_tag_041);
-  CU_add_test(ixhtml10_suite, "test <input istyle> 9." ,                           test_ixhtml10_input_tag_042);
-  CU_add_test(ixhtml10_suite, "test <input istyle> 10." ,                          test_ixhtml10_input_tag_043);
-  CU_add_test(ixhtml10_suite, "test <input istyle> 11." ,                          test_ixhtml10_input_tag_044);
-  CU_add_test(ixhtml10_suite, "test <input istyle> 12." ,                          test_ixhtml10_input_tag_045);
-  CU_add_test(ixhtml10_suite, "test <input istyle> 13." ,                          test_ixhtml10_input_tag_046);
-  CU_add_test(ixhtml10_suite, "test <input istyle> 14." ,                          test_ixhtml10_input_tag_047);
   /*=========================================================================*/
   /* <MENU>                                                                  */
   /*=========================================================================*/
