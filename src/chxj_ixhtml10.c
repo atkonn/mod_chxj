@@ -2107,22 +2107,21 @@ s_ixhtml10_start_center_tag(void *pdoc, Node *node)
     }
   }
 
-  W_L("<center");
-  if (attr_size || attr_color) {
-    W_L(" style=\"");
-    if (attr_size) {
-      W_L("font-size:");
-      W_V(attr_size);
-      W_L(";");
-    }
-    if (attr_color) {
-      attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
-      W_L("color:");
-      W_V(attr_color);
-      W_L(";");
-    }
-    W_L("\"");
+  W_L("<div");
+  W_L(" style=\"");
+  W_L("text-align:center;");
+  if (attr_size) {
+    W_L("font-size:");
+    W_V(attr_size);
+    W_L(";");
   }
+  if (attr_color) {
+    attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
+    W_L("color:");
+    W_V(attr_color);
+    W_L(";");
+  }
+  W_L("\"");
   W_L(">");
 
   return ixhtml10->out;
@@ -2148,7 +2147,7 @@ s_ixhtml10_end_center_tag(void *pdoc, Node *node)
   doc    = ixhtml10->doc;
   r      = doc->r;
 
-  W_L("</center>");
+  W_L("</div>");
   if (IS_CSS_ON(ixhtml10->entryp)) {
     chxj_css_pop_prop_list(ixhtml10->css_prop_stack);
   }
