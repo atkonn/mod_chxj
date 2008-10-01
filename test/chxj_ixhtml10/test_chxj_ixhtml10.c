@@ -338,6 +338,8 @@ void test_ixhtml10_input_tag_044();
 void test_ixhtml10_input_tag_045();
 void test_ixhtml10_input_tag_046();
 void test_ixhtml10_input_tag_047();
+
+void test_ixhtml10_center_tag_001();
 #if 0
 
 
@@ -348,7 +350,6 @@ void test_ixhtml10_blockquote_tag_004();
 
 
 
-void test_ixhtml10_center_tag_001();
 
 void test_ixhtml10_dir_tag_001();
 void test_ixhtml10_dir_tag_002();
@@ -1314,6 +1315,12 @@ main()
   CU_add_test(ixhtml10_suite, "test <input istyle> 12." ,                          test_ixhtml10_input_tag_045);
   CU_add_test(ixhtml10_suite, "test <input istyle> 13." ,                          test_ixhtml10_input_tag_046);
   CU_add_test(ixhtml10_suite, "test <input istyle> 14." ,                          test_ixhtml10_input_tag_047);
+
+  /*=========================================================================*/
+  /* <CENTER>                                                                */
+  /*=========================================================================*/
+  CU_add_test(ixhtml10_suite, "test <center>.",                                    test_ixhtml10_center_tag_001);
+
 #if 0
   /*=========================================================================*/
   /* <BLOCKQUOTE>                                                            */
@@ -1322,10 +1329,6 @@ main()
   CU_add_test(ixhtml10_suite, "test <blockquote> with value.",                     test_ixhtml10_blockquote_tag_002);
   CU_add_test(ixhtml10_suite, "test <blockquote> with japanese value.",            test_ixhtml10_blockquote_tag_003);
   CU_add_test(ixhtml10_suite, "test <blockquote> with hankaku kana value.",        test_ixhtml10_blockquote_tag_004);
-  /*=========================================================================*/
-  /* <CENTER>                                                                */
-  /*=========================================================================*/
-  CU_add_test(ixhtml10_suite, "test <center>.",                                    test_ixhtml10_center_tag_001);
   /*=========================================================================*/
   /* <DIR>                                                                   */
   /*=========================================================================*/
@@ -7740,7 +7743,7 @@ void test_ixhtml10_blockquote_tag_004()
 void test_ixhtml10_center_tag_001()
 {
 #define  TEST_STRING "<center>あいうえお</center>"
-#define  RESULT_STRING "<center>あいうえお</center>"
+#define  RESULT_STRING "<div style=\"text-align:center;\">あいうえお</div>"
   char  *ret;
   char  *tmp;
   device_table spec;
