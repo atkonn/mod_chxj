@@ -340,6 +340,27 @@ void test_ixhtml10_input_tag_046();
 void test_ixhtml10_input_tag_047();
 
 void test_ixhtml10_center_tag_001();
+
+void test_ixhtml10_hr_tag_001();
+void test_ixhtml10_hr_tag_002();
+void test_ixhtml10_hr_tag_003();
+void test_ixhtml10_hr_tag_004();
+void test_ixhtml10_hr_tag_005();
+void test_ixhtml10_hr_tag_006();
+void test_ixhtml10_hr_tag_007();
+void test_ixhtml10_hr_tag_008();
+void test_ixhtml10_hr_tag_009();
+void test_ixhtml10_hr_tag_010();
+void test_ixhtml10_hr_tag_011();
+void test_ixhtml10_hr_tag_012();
+void test_ixhtml10_hr_tag_013();
+void test_ixhtml10_hr_tag_014();
+void test_ixhtml10_hr_tag_015();
+void test_ixhtml10_hr_tag_016();
+void test_ixhtml10_hr_tag_017();
+void test_ixhtml10_hr_tag_018();
+void test_ixhtml10_hr_tag_018_1();
+void test_ixhtml10_hr_tag_018_2();
 #if 0
 
 
@@ -390,26 +411,6 @@ void test_ixhtml10_form_tag_009();
 
 
 
-void test_ixhtml10_hr_tag_001();
-void test_ixhtml10_hr_tag_002();
-void test_ixhtml10_hr_tag_003();
-void test_ixhtml10_hr_tag_004();
-void test_ixhtml10_hr_tag_005();
-void test_ixhtml10_hr_tag_006();
-void test_ixhtml10_hr_tag_007();
-void test_ixhtml10_hr_tag_008();
-void test_ixhtml10_hr_tag_009();
-void test_ixhtml10_hr_tag_010();
-void test_ixhtml10_hr_tag_011();
-void test_ixhtml10_hr_tag_012();
-void test_ixhtml10_hr_tag_013();
-void test_ixhtml10_hr_tag_014();
-void test_ixhtml10_hr_tag_015();
-void test_ixhtml10_hr_tag_016();
-void test_ixhtml10_hr_tag_017();
-void test_ixhtml10_hr_tag_018();
-void test_ixhtml10_hr_tag_018_1();
-void test_ixhtml10_hr_tag_018_2();
 
 void test_ixhtml10_html_tag_001();
 
@@ -1321,6 +1322,30 @@ main()
   /*=========================================================================*/
   CU_add_test(ixhtml10_suite, "test <center>.",                                    test_ixhtml10_center_tag_001);
 
+  /*=========================================================================*/
+  /* <HR>                                                                    */
+  /*=========================================================================*/
+  CU_add_test(ixhtml10_suite, "test <hr>.",                                        test_ixhtml10_hr_tag_001);
+  CU_add_test(ixhtml10_suite, "test <hr />.",                                      test_ixhtml10_hr_tag_002);
+  CU_add_test(ixhtml10_suite, "test <hr align> with no value.",                    test_ixhtml10_hr_tag_003);
+  CU_add_test(ixhtml10_suite, "test <hr align> with void value.",                  test_ixhtml10_hr_tag_004);
+  CU_add_test(ixhtml10_suite, "test <hr align> with value(left).",                 test_ixhtml10_hr_tag_005);
+  CU_add_test(ixhtml10_suite, "test <hr align> with value(right).",                test_ixhtml10_hr_tag_006);
+  CU_add_test(ixhtml10_suite, "test <hr align> with value(center).",               test_ixhtml10_hr_tag_007);
+  CU_add_test(ixhtml10_suite, "test <hr align> with value(unknown).",              test_ixhtml10_hr_tag_008);
+  CU_add_test(ixhtml10_suite, "test <hr size> with no value.",                     test_ixhtml10_hr_tag_009);
+  CU_add_test(ixhtml10_suite, "test <hr size> with void value.",                   test_ixhtml10_hr_tag_010);
+  CU_add_test(ixhtml10_suite, "test <hr size> with non numeric value.",            test_ixhtml10_hr_tag_011);
+  CU_add_test(ixhtml10_suite, "test <hr size> with numeric value.",                test_ixhtml10_hr_tag_012);
+  CU_add_test(ixhtml10_suite, "test <hr width> with no value.",                    test_ixhtml10_hr_tag_013);
+  CU_add_test(ixhtml10_suite, "test <hr width> with void value.",                  test_ixhtml10_hr_tag_014);
+  CU_add_test(ixhtml10_suite, "test <hr width> with non numeric value.",           test_ixhtml10_hr_tag_015);
+  CU_add_test(ixhtml10_suite, "test <hr width> with numeric value.",               test_ixhtml10_hr_tag_016);
+  CU_add_test(ixhtml10_suite, "test <hr noshade>.",                                test_ixhtml10_hr_tag_017);
+  CU_add_test(ixhtml10_suite, "test <hr color> 1.",                                test_ixhtml10_hr_tag_018);
+  CU_add_test(ixhtml10_suite, "test <hr color> 2.",                                test_ixhtml10_hr_tag_018_1);
+  CU_add_test(ixhtml10_suite, "test <hr color> 3.",                                test_ixhtml10_hr_tag_018_2);
+
 #if 0
   /*=========================================================================*/
   /* <BLOCKQUOTE>                                                            */
@@ -1375,29 +1400,6 @@ main()
   CU_add_test(ixhtml10_suite, "test <form action> with null cookie.",              test_ixhtml10_form_tag_007);
   CU_add_test(ixhtml10_suite, "test <form action> with other site .",              test_ixhtml10_form_tag_008);
   CU_add_test(ixhtml10_suite, "test <form action method>.",                        test_ixhtml10_form_tag_009);
-  /*=========================================================================*/
-  /* <HR>                                                                    */
-  /*=========================================================================*/
-  CU_add_test(ixhtml10_suite, "test <hr>.",                                        test_ixhtml10_hr_tag_001);
-  CU_add_test(ixhtml10_suite, "test <hr />.",                                      test_ixhtml10_hr_tag_002);
-  CU_add_test(ixhtml10_suite, "test <hr align> with no value.",                    test_ixhtml10_hr_tag_003);
-  CU_add_test(ixhtml10_suite, "test <hr align> with void value.",                  test_ixhtml10_hr_tag_004);
-  CU_add_test(ixhtml10_suite, "test <hr align> with value(left).",                 test_ixhtml10_hr_tag_005);
-  CU_add_test(ixhtml10_suite, "test <hr align> with value(right).",                test_ixhtml10_hr_tag_006);
-  CU_add_test(ixhtml10_suite, "test <hr align> with value(center).",               test_ixhtml10_hr_tag_007);
-  CU_add_test(ixhtml10_suite, "test <hr align> with value(unknown).",              test_ixhtml10_hr_tag_008);
-  CU_add_test(ixhtml10_suite, "test <hr size> with no value.",                     test_ixhtml10_hr_tag_009);
-  CU_add_test(ixhtml10_suite, "test <hr size> with void value.",                   test_ixhtml10_hr_tag_010);
-  CU_add_test(ixhtml10_suite, "test <hr size> with non numeric value.",            test_ixhtml10_hr_tag_011);
-  CU_add_test(ixhtml10_suite, "test <hr size> with numeric value.",                test_ixhtml10_hr_tag_012);
-  CU_add_test(ixhtml10_suite, "test <hr width> with no value.",                    test_ixhtml10_hr_tag_013);
-  CU_add_test(ixhtml10_suite, "test <hr width> with void value.",                  test_ixhtml10_hr_tag_014);
-  CU_add_test(ixhtml10_suite, "test <hr width> with non numeric value.",           test_ixhtml10_hr_tag_015);
-  CU_add_test(ixhtml10_suite, "test <hr width> with numeric value.",               test_ixhtml10_hr_tag_016);
-  CU_add_test(ixhtml10_suite, "test <hr noshade>.",                                test_ixhtml10_hr_tag_017);
-  CU_add_test(ixhtml10_suite, "test <hr color> 1.",                                test_ixhtml10_hr_tag_018);
-  CU_add_test(ixhtml10_suite, "test <hr color> 2.",                                test_ixhtml10_hr_tag_018_1);
-  CU_add_test(ixhtml10_suite, "test <hr color> 3.",                                test_ixhtml10_hr_tag_018_2);
   /*=========================================================================*/
   /* <HTML>                                                                  */
   /*=========================================================================*/
@@ -8752,7 +8754,7 @@ void test_ixhtml10_hr_tag_004()
 void test_ixhtml10_hr_tag_005()
 {
 #define  TEST_STRING   "<hr align=\"left\">"
-#define  RESULT_STRING "<hr align=\"left\" />"
+#define  RESULT_STRING "<hr style=\"float:left;\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -8782,7 +8784,7 @@ void test_ixhtml10_hr_tag_005()
 void test_ixhtml10_hr_tag_006()
 {
 #define  TEST_STRING   "<hr align=\"right\">"
-#define  RESULT_STRING "<hr align=\"right\" />"
+#define  RESULT_STRING "<hr style=\"float:right;\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -8812,7 +8814,7 @@ void test_ixhtml10_hr_tag_006()
 void test_ixhtml10_hr_tag_007()
 {
 #define  TEST_STRING   "<hr align=\"center\">"
-#define  RESULT_STRING "<hr align=\"center\" />"
+#define  RESULT_STRING "<hr style=\"float:none;\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -9142,7 +9144,7 @@ void test_ixhtml10_hr_tag_017()
 void test_ixhtml10_hr_tag_018()
 {
 #define  TEST_STRING   "<hr width=\"10\" color=\"#ff0000\">"
-#define  RESULT_STRING "<hr style=\"width:10px;\" color=\"#ff0000\" />"
+#define  RESULT_STRING "<hr style=\"width:10px;background-color:#ff0000;\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
