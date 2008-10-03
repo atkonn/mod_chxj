@@ -9144,7 +9144,7 @@ void test_ixhtml10_hr_tag_017()
 void test_ixhtml10_hr_tag_018()
 {
 #define  TEST_STRING   "<hr width=\"10\" color=\"#ff0000\">"
-#define  RESULT_STRING "<hr style=\"width:10px;background-color:#ff0000;\" />"
+#define  RESULT_STRING "<hr style=\"width:10px;border-color:#ff0000;background-color:#ff0000;\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
