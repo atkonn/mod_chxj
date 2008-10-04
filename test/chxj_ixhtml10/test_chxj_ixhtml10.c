@@ -361,6 +361,46 @@ void test_ixhtml10_hr_tag_017();
 void test_ixhtml10_hr_tag_018();
 void test_ixhtml10_hr_tag_018_1();
 void test_ixhtml10_hr_tag_018_2();
+
+void test_ixhtml10_img_tag_001();
+void test_ixhtml10_img_tag_002();
+void test_ixhtml10_img_tag_003();
+void test_ixhtml10_img_tag_004();
+void test_ixhtml10_img_tag_005();
+void test_ixhtml10_img_tag_006();
+void test_ixhtml10_img_tag_007();
+void test_ixhtml10_img_tag_008();
+void test_ixhtml10_img_tag_009();
+void test_ixhtml10_img_tag_010();
+void test_ixhtml10_img_tag_011();
+void test_ixhtml10_img_tag_012();
+void test_ixhtml10_img_tag_013();
+void test_ixhtml10_img_tag_013_1();
+void test_ixhtml10_img_tag_014();
+void test_ixhtml10_img_tag_015();
+void test_ixhtml10_img_tag_016();
+void test_ixhtml10_img_tag_017();
+void test_ixhtml10_img_tag_018();
+void test_ixhtml10_img_tag_019();
+void test_ixhtml10_img_tag_020();
+void test_ixhtml10_img_tag_021();
+void test_ixhtml10_img_tag_022();
+void test_ixhtml10_img_tag_023();
+void test_ixhtml10_img_tag_024();
+void test_ixhtml10_img_tag_025();
+void test_ixhtml10_img_tag_026();
+void test_ixhtml10_img_tag_027();
+void test_ixhtml10_img_tag_028();
+void test_ixhtml10_img_tag_029();
+void test_ixhtml10_img_tag_030();
+void test_ixhtml10_img_tag_031();
+void test_ixhtml10_img_tag_032();
+void test_ixhtml10_img_tag_033();
+void test_ixhtml10_img_tag_034();
+void test_ixhtml10_img_tag_035();
+void test_ixhtml10_img_tag_036();
+void test_ixhtml10_img_tag_037();
+
 #if 0
 
 
@@ -414,44 +454,6 @@ void test_ixhtml10_form_tag_009();
 
 void test_ixhtml10_html_tag_001();
 
-void test_ixhtml10_img_tag_001();
-void test_ixhtml10_img_tag_002();
-void test_ixhtml10_img_tag_003();
-void test_ixhtml10_img_tag_004();
-void test_ixhtml10_img_tag_005();
-void test_ixhtml10_img_tag_006();
-void test_ixhtml10_img_tag_007();
-void test_ixhtml10_img_tag_008();
-void test_ixhtml10_img_tag_009();
-void test_ixhtml10_img_tag_010();
-void test_ixhtml10_img_tag_011();
-void test_ixhtml10_img_tag_012();
-void test_ixhtml10_img_tag_013();
-void test_ixhtml10_img_tag_013_1();
-void test_ixhtml10_img_tag_014();
-void test_ixhtml10_img_tag_015();
-void test_ixhtml10_img_tag_016();
-void test_ixhtml10_img_tag_017();
-void test_ixhtml10_img_tag_018();
-void test_ixhtml10_img_tag_019();
-void test_ixhtml10_img_tag_020();
-void test_ixhtml10_img_tag_021();
-void test_ixhtml10_img_tag_022();
-void test_ixhtml10_img_tag_023();
-void test_ixhtml10_img_tag_024();
-void test_ixhtml10_img_tag_025();
-void test_ixhtml10_img_tag_026();
-void test_ixhtml10_img_tag_027();
-void test_ixhtml10_img_tag_028();
-void test_ixhtml10_img_tag_029();
-void test_ixhtml10_img_tag_030();
-void test_ixhtml10_img_tag_031();
-void test_ixhtml10_img_tag_032();
-void test_ixhtml10_img_tag_033();
-void test_ixhtml10_img_tag_034();
-void test_ixhtml10_img_tag_035();
-void test_ixhtml10_img_tag_036();
-void test_ixhtml10_img_tag_037();
 
 
 
@@ -1346,6 +1348,48 @@ main()
   CU_add_test(ixhtml10_suite, "test <hr color> 2.",                                test_ixhtml10_hr_tag_018_1);
   CU_add_test(ixhtml10_suite, "test <hr color> 3.",                                test_ixhtml10_hr_tag_018_2);
 
+  /*=========================================================================*/
+  /* <IMG>                                                                   */
+  /*=========================================================================*/
+  CU_add_test(ixhtml10_suite, "test <img>." ,                                      test_ixhtml10_img_tag_001);
+  CU_add_test(ixhtml10_suite, "test <img src> with no value." ,                    test_ixhtml10_img_tag_002);
+  CU_add_test(ixhtml10_suite, "test <img src> with void value." ,                  test_ixhtml10_img_tag_003);
+  CU_add_test(ixhtml10_suite, "test <img src> with alphabetic value." ,            test_ixhtml10_img_tag_004);
+  CU_add_test(ixhtml10_suite, "test <img src> with japanese value." ,              test_ixhtml10_img_tag_005);
+  CU_add_test(ixhtml10_suite, "test <img src> with japanese-hankaku value." ,      test_ixhtml10_img_tag_006);
+  CU_add_test(ixhtml10_suite, "test <img align> with no value." ,                  test_ixhtml10_img_tag_007);
+  CU_add_test(ixhtml10_suite, "test <img align> with void value." ,                test_ixhtml10_img_tag_008);
+  CU_add_test(ixhtml10_suite, "test <img align> with value(top)." ,                test_ixhtml10_img_tag_009);
+  CU_add_test(ixhtml10_suite, "test <img align> with value(middle)." ,             test_ixhtml10_img_tag_020);
+  CU_add_test(ixhtml10_suite, "test <img align> with value(bottom)." ,             test_ixhtml10_img_tag_011);
+  CU_add_test(ixhtml10_suite, "test <img align> with value(left)." ,               test_ixhtml10_img_tag_012);
+  CU_add_test(ixhtml10_suite, "test <img align> with value(right)." ,              test_ixhtml10_img_tag_013);
+  CU_add_test(ixhtml10_suite, "test <img align> with value(center)." ,             test_ixhtml10_img_tag_013_1);
+  CU_add_test(ixhtml10_suite, "test <img align> with value(unkown)." ,             test_ixhtml10_img_tag_014);
+  CU_add_test(ixhtml10_suite, "test <img width> with no value." ,                  test_ixhtml10_img_tag_015);
+  CU_add_test(ixhtml10_suite, "test <img width> with void value." ,                test_ixhtml10_img_tag_016);
+  CU_add_test(ixhtml10_suite, "test <img width> with alphabetic value." ,          test_ixhtml10_img_tag_017);
+  CU_add_test(ixhtml10_suite, "test <img width> with numeric value." ,             test_ixhtml10_img_tag_018);
+  CU_add_test(ixhtml10_suite, "test <img width> with percentage value." ,          test_ixhtml10_img_tag_019);
+  CU_add_test(ixhtml10_suite, "test <img height> with no value." ,                 test_ixhtml10_img_tag_020);
+  CU_add_test(ixhtml10_suite, "test <img height> with void value." ,               test_ixhtml10_img_tag_021);
+  CU_add_test(ixhtml10_suite, "test <img height> with alphabetic value." ,         test_ixhtml10_img_tag_022);
+  CU_add_test(ixhtml10_suite, "test <img height> with numeric value." ,            test_ixhtml10_img_tag_023);
+  CU_add_test(ixhtml10_suite, "test <img height> with percentage value." ,         test_ixhtml10_img_tag_024);
+  CU_add_test(ixhtml10_suite, "test <img hspace> with no value." ,                 test_ixhtml10_img_tag_025);
+  CU_add_test(ixhtml10_suite, "test <img hspace> with void value." ,               test_ixhtml10_img_tag_026);
+  CU_add_test(ixhtml10_suite, "test <img hspace> with alphabetic value." ,         test_ixhtml10_img_tag_027);
+  CU_add_test(ixhtml10_suite, "test <img hspace> with numeric value." ,            test_ixhtml10_img_tag_028);
+  CU_add_test(ixhtml10_suite, "test <img vspace> with no value." ,                 test_ixhtml10_img_tag_029);
+  CU_add_test(ixhtml10_suite, "test <img vspace> with void value." ,               test_ixhtml10_img_tag_030);
+  CU_add_test(ixhtml10_suite, "test <img vspace> with alphabetic value." ,         test_ixhtml10_img_tag_031);
+  CU_add_test(ixhtml10_suite, "test <img vspace> with numeric value." ,            test_ixhtml10_img_tag_032);
+  CU_add_test(ixhtml10_suite, "test <img alt>." ,                                  test_ixhtml10_img_tag_033);
+  CU_add_test(ixhtml10_suite, "test <img alt> with void value." ,                  test_ixhtml10_img_tag_034);
+  CU_add_test(ixhtml10_suite, "test <img alt> with alphabetic value." ,            test_ixhtml10_img_tag_035);
+  CU_add_test(ixhtml10_suite, "test <img alt> with japanese value." ,              test_ixhtml10_img_tag_036);
+  CU_add_test(ixhtml10_suite, "test <img alt> with japanese-hankaku value." ,      test_ixhtml10_img_tag_037);
+
 #if 0
   /*=========================================================================*/
   /* <BLOCKQUOTE>                                                            */
@@ -1404,47 +1448,6 @@ main()
   /* <HTML>                                                                  */
   /*=========================================================================*/
   CU_add_test(ixhtml10_suite, "test <html>.",                                      test_ixhtml10_html_tag_001);
-  /*=========================================================================*/
-  /* <IMG>                                                                   */
-  /*=========================================================================*/
-  CU_add_test(ixhtml10_suite, "test <img>." ,                                      test_ixhtml10_img_tag_001);
-  CU_add_test(ixhtml10_suite, "test <img src> with no value." ,                    test_ixhtml10_img_tag_002);
-  CU_add_test(ixhtml10_suite, "test <img src> with void value." ,                  test_ixhtml10_img_tag_003);
-  CU_add_test(ixhtml10_suite, "test <img src> with alphabetic value." ,            test_ixhtml10_img_tag_004);
-  CU_add_test(ixhtml10_suite, "test <img src> with japanese value." ,              test_ixhtml10_img_tag_005);
-  CU_add_test(ixhtml10_suite, "test <img src> with japanese-hankaku value." ,      test_ixhtml10_img_tag_006);
-  CU_add_test(ixhtml10_suite, "test <img align> with no value." ,                  test_ixhtml10_img_tag_007);
-  CU_add_test(ixhtml10_suite, "test <img align> with void value." ,                test_ixhtml10_img_tag_008);
-  CU_add_test(ixhtml10_suite, "test <img align> with value(top)." ,                test_ixhtml10_img_tag_009);
-  CU_add_test(ixhtml10_suite, "test <img align> with value(middle)." ,             test_ixhtml10_img_tag_020);
-  CU_add_test(ixhtml10_suite, "test <img align> with value(bottom)." ,             test_ixhtml10_img_tag_011);
-  CU_add_test(ixhtml10_suite, "test <img align> with value(left)." ,               test_ixhtml10_img_tag_012);
-  CU_add_test(ixhtml10_suite, "test <img align> with value(right)." ,              test_ixhtml10_img_tag_013);
-  CU_add_test(ixhtml10_suite, "test <img align> with value(center)." ,             test_ixhtml10_img_tag_013_1);
-  CU_add_test(ixhtml10_suite, "test <img align> with value(unkown)." ,             test_ixhtml10_img_tag_014);
-  CU_add_test(ixhtml10_suite, "test <img width> with no value." ,                  test_ixhtml10_img_tag_015);
-  CU_add_test(ixhtml10_suite, "test <img width> with void value." ,                test_ixhtml10_img_tag_016);
-  CU_add_test(ixhtml10_suite, "test <img width> with alphabetic value." ,          test_ixhtml10_img_tag_017);
-  CU_add_test(ixhtml10_suite, "test <img width> with numeric value." ,             test_ixhtml10_img_tag_018);
-  CU_add_test(ixhtml10_suite, "test <img width> with percentage value." ,          test_ixhtml10_img_tag_019);
-  CU_add_test(ixhtml10_suite, "test <img height> with no value." ,                 test_ixhtml10_img_tag_020);
-  CU_add_test(ixhtml10_suite, "test <img height> with void value." ,               test_ixhtml10_img_tag_021);
-  CU_add_test(ixhtml10_suite, "test <img height> with alphabetic value." ,         test_ixhtml10_img_tag_022);
-  CU_add_test(ixhtml10_suite, "test <img height> with numeric value." ,            test_ixhtml10_img_tag_023);
-  CU_add_test(ixhtml10_suite, "test <img height> with percentage value." ,         test_ixhtml10_img_tag_024);
-  CU_add_test(ixhtml10_suite, "test <img hspace> with no value." ,                 test_ixhtml10_img_tag_025);
-  CU_add_test(ixhtml10_suite, "test <img hspace> with void value." ,               test_ixhtml10_img_tag_026);
-  CU_add_test(ixhtml10_suite, "test <img hspace> with alphabetic value." ,         test_ixhtml10_img_tag_027);
-  CU_add_test(ixhtml10_suite, "test <img hspace> with numeric value." ,            test_ixhtml10_img_tag_028);
-  CU_add_test(ixhtml10_suite, "test <img vspace> with no value." ,                 test_ixhtml10_img_tag_029);
-  CU_add_test(ixhtml10_suite, "test <img vspace> with void value." ,               test_ixhtml10_img_tag_030);
-  CU_add_test(ixhtml10_suite, "test <img vspace> with alphabetic value." ,         test_ixhtml10_img_tag_031);
-  CU_add_test(ixhtml10_suite, "test <img vspace> with numeric value." ,            test_ixhtml10_img_tag_032);
-  CU_add_test(ixhtml10_suite, "test <img alt>." ,                                  test_ixhtml10_img_tag_033);
-  CU_add_test(ixhtml10_suite, "test <img alt> with void value." ,                  test_ixhtml10_img_tag_034);
-  CU_add_test(ixhtml10_suite, "test <img alt> with alphabetic value." ,            test_ixhtml10_img_tag_035);
-  CU_add_test(ixhtml10_suite, "test <img alt> with japanese value." ,              test_ixhtml10_img_tag_036);
-  CU_add_test(ixhtml10_suite, "test <img alt> with japanese-hankaku value." ,      test_ixhtml10_img_tag_037);
   /*=========================================================================*/
   /* <MENU>                                                                  */
   /*=========================================================================*/
@@ -9510,7 +9513,7 @@ void test_ixhtml10_img_tag_008()
 void test_ixhtml10_img_tag_009()
 {
 #define  TEST_STRING "<img align=\"top\">"
-#define  RESULT_STRING "<img align=\"top\" alt=\"\" />"
+#define  RESULT_STRING "<img style=\"vertical-align:top;\" alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -9540,7 +9543,7 @@ void test_ixhtml10_img_tag_009()
 void test_ixhtml10_img_tag_010()
 {
 #define  TEST_STRING "<img align=\"middle\">"
-#define  RESULT_STRING "<img align=\"middle\" alt=\"\" />"
+#define  RESULT_STRING "<img style=\"vertical-align:middle;\" alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -9570,7 +9573,7 @@ void test_ixhtml10_img_tag_010()
 void test_ixhtml10_img_tag_011()
 {
 #define  TEST_STRING "<img align=\"bottom\">"
-#define  RESULT_STRING "<img align=\"bottom\" alt=\"\" />"
+#define  RESULT_STRING "<img style=\"vertical-align:bottom;\" alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -9600,7 +9603,7 @@ void test_ixhtml10_img_tag_011()
 void test_ixhtml10_img_tag_012()
 {
 #define  TEST_STRING "<img align=\"left\">"
-#define  RESULT_STRING "<img align=\"left\" alt=\"\" />"
+#define  RESULT_STRING "<img style=\"float:left;\" alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -9630,7 +9633,7 @@ void test_ixhtml10_img_tag_012()
 void test_ixhtml10_img_tag_013()
 {
 #define  TEST_STRING "<img align=\"right\">"
-#define  RESULT_STRING "<img align=\"right\" alt=\"\" />"
+#define  RESULT_STRING "<img style=\"float:right;\" alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -9660,7 +9663,7 @@ void test_ixhtml10_img_tag_013()
 void test_ixhtml10_img_tag_013_1()
 {
 #define  TEST_STRING "<img align=\"center\">"
-#define  RESULT_STRING "<img align=\"middle\" alt=\"\" />"
+#define  RESULT_STRING "<img style=\"vertical-align:middle;\" alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -10080,7 +10083,7 @@ void test_ixhtml10_img_tag_026()
 void test_ixhtml10_img_tag_027()
 {
 #define  TEST_STRING "<img hspace=\"abc\">"
-#define  RESULT_STRING "<img alt=\"\" />"
+#define  RESULT_STRING "<img style=\"margin-left:abc;margin-right:abc;\" alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -10110,7 +10113,7 @@ void test_ixhtml10_img_tag_027()
 void test_ixhtml10_img_tag_028()
 {
 #define  TEST_STRING "<img hspace=\"10\">"
-#define  RESULT_STRING "<img alt=\"\" />"
+#define  RESULT_STRING "<img style=\"margin-left:10;margin-right:10;\" alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -10200,7 +10203,7 @@ void test_ixhtml10_img_tag_030()
 void test_ixhtml10_img_tag_031()
 {
 #define  TEST_STRING "<img vspace=\"abc\">"
-#define  RESULT_STRING "<img alt=\"\" />"
+#define  RESULT_STRING "<img style=\"margin-top:abc;margin-bottom:abc;\" alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -10230,7 +10233,7 @@ void test_ixhtml10_img_tag_031()
 void test_ixhtml10_img_tag_032()
 {
 #define  TEST_STRING "<img vspace=\"10\">"
-#define  RESULT_STRING "<img alt=\"\" />"
+#define  RESULT_STRING "<img style=\"margin-top:10;margin-bottom:10;\" alt=\"\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
