@@ -401,6 +401,23 @@ void test_ixhtml10_img_tag_035();
 void test_ixhtml10_img_tag_036();
 void test_ixhtml10_img_tag_037();
 
+void test_ixhtml10_select_tag_001();
+void test_ixhtml10_select_tag_002();
+void test_ixhtml10_select_tag_003();
+void test_ixhtml10_select_tag_004();
+void test_ixhtml10_select_tag_005();
+void test_ixhtml10_select_tag_006();
+void test_ixhtml10_select_tag_007();
+void test_ixhtml10_select_tag_008();
+void test_ixhtml10_select_tag_009();
+void test_ixhtml10_select_tag_010();
+void test_ixhtml10_select_tag_011();
+void test_ixhtml10_select_tag_012();
+void test_ixhtml10_select_tag_013();
+void test_ixhtml10_select_tag_014();
+
+
+
 #if 0
 
 
@@ -482,22 +499,6 @@ void test_ixhtml10_plaintext_tag_001();
 void test_ixhtml10_plaintext_tag_002();
 void test_ixhtml10_plaintext_tag_003();
 void test_ixhtml10_plaintext_tag_004();
-
-
-void test_ixhtml10_select_tag_001();
-void test_ixhtml10_select_tag_002();
-void test_ixhtml10_select_tag_003();
-void test_ixhtml10_select_tag_004();
-void test_ixhtml10_select_tag_005();
-void test_ixhtml10_select_tag_006();
-void test_ixhtml10_select_tag_007();
-void test_ixhtml10_select_tag_008();
-void test_ixhtml10_select_tag_009();
-void test_ixhtml10_select_tag_010();
-void test_ixhtml10_select_tag_011();
-void test_ixhtml10_select_tag_012();
-void test_ixhtml10_select_tag_013();
-void test_ixhtml10_select_tag_014();
 
 
 
