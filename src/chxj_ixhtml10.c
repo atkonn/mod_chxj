@@ -3214,7 +3214,6 @@ s_ixhtml10_start_option_tag(void *pdoc, Node *node)
   char *value      = NULL;
   char *attr_style = NULL;
 
-  W_L("<option");
   for (attr = qs_get_attr(doc,node);
        attr;
        attr = qs_get_next_attr(doc,attr)) {
@@ -3239,13 +3238,14 @@ s_ixhtml10_start_option_tag(void *pdoc, Node *node)
       value = apr_pstrdup(doc->buf.pool, val);
     }
   }
+  W_L("<option");
   if (value && *value) {
     W_L(" value=\"");
     W_V(value);
     W_L("\"");
   }
   if (selected) {
-    W_L(" selected");
+    W_L(" selected=\"selected\"");
   }
   W_L(">");
 
