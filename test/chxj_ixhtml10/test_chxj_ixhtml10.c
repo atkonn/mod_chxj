@@ -31169,6 +31169,7 @@ void test_ixhtml10_chxjif_tag_001()
 void test_ixhtml10_chxjif_tag_002()
 {
 #define  TEST_STRING   "<chxj:if lang>" \
+                       "abc" \
                        "</chxj:if>"
 #define  RESULT_STRING "\n" \
                        ""
@@ -31205,6 +31206,7 @@ void test_ixhtml10_chxjif_tag_002()
 void test_ixhtml10_chxjif_tag_003()
 {
 #define  TEST_STRING   "<chxj:if lang=\"chtml\">" \
+                       "abc" \
                        "</chxj:if>"
 #define  RESULT_STRING "\n" \
                        ""
