@@ -1420,6 +1420,16 @@ main()
   CU_add_test(ixhtml10_suite, "test <option value> with japanese-kana value." ,    test_ixhtml10_option_tag_006);
   CU_add_test(ixhtml10_suite, "test <option selected>." ,                          test_ixhtml10_option_tag_007);
 
+  /*=========================================================================*/
+  /* <DIV>                                                                   */
+  /*=========================================================================*/
+  CU_add_test(ixhtml10_suite, "test <div>.",                                       test_ixhtml10_div_tag_001);
+  CU_add_test(ixhtml10_suite, "test <div> with align attribute(left).",            test_ixhtml10_div_tag_002);
+  CU_add_test(ixhtml10_suite, "test <div> with align attribute(right).",           test_ixhtml10_div_tag_003);
+  CU_add_test(ixhtml10_suite, "test <div> with align attribute(center).",          test_ixhtml10_div_tag_004);
+  CU_add_test(ixhtml10_suite, "test <div> with align attribute(void).",            test_ixhtml10_div_tag_005);
+  CU_add_test(ixhtml10_suite, "test <div> with align attribute(unknown).",         test_ixhtml10_div_tag_006);
+  CU_add_test(ixhtml10_suite, "test <div> with style attribute.",                  test_ixhtml10_div_tag_007);
 #if 0
   /*=========================================================================*/
   /* <BLOCKQUOTE>                                                            */
@@ -1452,16 +1462,6 @@ main()
   /*=========================================================================*/
   CU_add_test(ixhtml10_suite, "test <dd>.",                                        test_ixhtml10_dd_tag_001);
   CU_add_test(ixhtml10_suite, "test <dd> with void value.",                        test_ixhtml10_dd_tag_002);
-  /*=========================================================================*/
-  /* <DIV>                                                                   */
-  /*=========================================================================*/
-  CU_add_test(ixhtml10_suite, "test <div>.",                                       test_ixhtml10_div_tag_001);
-  CU_add_test(ixhtml10_suite, "test <div> with align attribute(left).",            test_ixhtml10_div_tag_002);
-  CU_add_test(ixhtml10_suite, "test <div> with align attribute(right).",           test_ixhtml10_div_tag_003);
-  CU_add_test(ixhtml10_suite, "test <div> with align attribute(center).",          test_ixhtml10_div_tag_004);
-  CU_add_test(ixhtml10_suite, "test <div> with align attribute(void).",            test_ixhtml10_div_tag_005);
-  CU_add_test(ixhtml10_suite, "test <div> with align attribute(unknown).",         test_ixhtml10_div_tag_006);
-  CU_add_test(ixhtml10_suite, "test <div> with style attribute.",                  test_ixhtml10_div_tag_007);
   /*=========================================================================*/
   /* <FORM>                                                                  */
   /*=========================================================================*/
