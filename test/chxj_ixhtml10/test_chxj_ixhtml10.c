@@ -439,6 +439,7 @@ void test_ixhtml10_chxjif_tag_004();
 void test_ixhtml10_chxjif_tag_005();
 void test_ixhtml10_chxjif_tag_006();
 void test_ixhtml10_chxjif_tag_007();
+void test_ixhtml10_chxjif_tag_008();
 #if 0
 
 
@@ -1447,6 +1448,7 @@ main()
   CU_add_test(ixhtml10_suite, "test <chxj:if> 5.",                                  test_ixhtml10_chxjif_tag_005);
   CU_add_test(ixhtml10_suite, "test <chxj:if> 6.",                                  test_ixhtml10_chxjif_tag_006);
   CU_add_test(ixhtml10_suite, "test <chxj:if> 7.",                                  test_ixhtml10_chxjif_tag_007);
+  CU_add_test(ixhtml10_suite, "test <chxj:if> 8.",                                  test_ixhtml10_chxjif_tag_008);
 #if 0
   /*=========================================================================*/
   /* <BLOCKQUOTE>                                                            */
@@ -31164,7 +31166,7 @@ void test_ixhtml10_chxjif_tag_001()
   ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
   fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", TEST_RESULT);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -31201,7 +31203,7 @@ void test_ixhtml10_chxjif_tag_002()
   ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
   fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", TEST_RESULT);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -31238,7 +31240,7 @@ void test_ixhtml10_chxjif_tag_003()
   ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
   fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", TEST_RESULT);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -31275,7 +31277,7 @@ void test_ixhtml10_chxjif_tag_004()
   ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
   fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", TEST_RESULT);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -31312,7 +31314,7 @@ void test_ixhtml10_chxjif_tag_005()
   ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
   fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", TEST_RESULT);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -31349,7 +31351,7 @@ void test_ixhtml10_chxjif_tag_006()
   ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
   fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", TEST_RESULT);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -31386,7 +31388,44 @@ void test_ixhtml10_chxjif_tag_007()
   ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
   fprintf(stderr, "actual:[%s]\n", ret);
-  fprintf(stderr, "expect:[%s]\n", TEST_RESULT);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_chxjif_tag_008()
+{
+#define  TEST_STRING   "<chxj:if lang=\"ixhtml\">" \
+                       "abc" \
+                       "</chxj:if>"
+#define  RESULT_STRING "abc" \
+                       ""
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get_span020;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
