@@ -12305,7 +12305,7 @@ void test_ixhtml10_option_tag_006()
 void test_ixhtml10_option_tag_007()
 {
 #define  TEST_STRING "<option selected></option>"
-#define  RESULT_STRING "<option selected></option>"
+#define  RESULT_STRING "<option selected=\"selected\"></option>"
   char  *ret;
   char  *tmp;
   device_table spec;
