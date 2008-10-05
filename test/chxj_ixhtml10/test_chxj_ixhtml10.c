@@ -1391,6 +1391,24 @@ main()
   CU_add_test(ixhtml10_suite, "test <img alt> with japanese value." ,              test_ixhtml10_img_tag_036);
   CU_add_test(ixhtml10_suite, "test <img alt> with japanese-hankaku value." ,      test_ixhtml10_img_tag_037);
 
+  /*=========================================================================*/
+  /* <SELECT>                                                                */
+  /*=========================================================================*/
+  CU_add_test(ixhtml10_suite, "test <select> 1." ,                                 test_ixhtml10_select_tag_001);
+  CU_add_test(ixhtml10_suite, "test <select> 2." ,                                 test_ixhtml10_select_tag_002);
+  CU_add_test(ixhtml10_suite, "test <select> 3." ,                                 test_ixhtml10_select_tag_003);
+  CU_add_test(ixhtml10_suite, "test <select> 4." ,                                 test_ixhtml10_select_tag_004);
+  CU_add_test(ixhtml10_suite, "test <select> 5." ,                                 test_ixhtml10_select_tag_005);
+  CU_add_test(ixhtml10_suite, "test <select> 6." ,                                 test_ixhtml10_select_tag_006);
+  CU_add_test(ixhtml10_suite, "test <select> 7." ,                                 test_ixhtml10_select_tag_007);
+  CU_add_test(ixhtml10_suite, "test <select> 8." ,                                 test_ixhtml10_select_tag_008);
+  CU_add_test(ixhtml10_suite, "test <select> 9." ,                                 test_ixhtml10_select_tag_009);
+  CU_add_test(ixhtml10_suite, "test <select> 10." ,                                test_ixhtml10_select_tag_010);
+  CU_add_test(ixhtml10_suite, "test <select> 11." ,                                test_ixhtml10_select_tag_011);
+  CU_add_test(ixhtml10_suite, "test <select> 12." ,                                test_ixhtml10_select_tag_012);
+  CU_add_test(ixhtml10_suite, "test <select> 13." ,                                test_ixhtml10_select_tag_013);
+  CU_add_test(ixhtml10_suite, "test <select> 14." ,                                test_ixhtml10_select_tag_014);
+
 #if 0
   /*=========================================================================*/
   /* <BLOCKQUOTE>                                                            */
@@ -1479,23 +1497,6 @@ main()
   CU_add_test(ixhtml10_suite, "test <plaintext> 2." ,                              test_ixhtml10_plaintext_tag_002);
   CU_add_test(ixhtml10_suite, "test <plaintext> 3. value is not closed." ,         test_ixhtml10_plaintext_tag_003);
   CU_add_test(ixhtml10_suite, "test <plaintext> 3. value is not closed and hankaku." , test_ixhtml10_plaintext_tag_004);
-  /*=========================================================================*/
-  /* <SELECT>                                                                */
-  /*=========================================================================*/
-  CU_add_test(ixhtml10_suite, "test <select> 1." ,                                 test_ixhtml10_select_tag_001);
-  CU_add_test(ixhtml10_suite, "test <select> 2." ,                                 test_ixhtml10_select_tag_002);
-  CU_add_test(ixhtml10_suite, "test <select> 3." ,                                 test_ixhtml10_select_tag_003);
-  CU_add_test(ixhtml10_suite, "test <select> 4." ,                                 test_ixhtml10_select_tag_004);
-  CU_add_test(ixhtml10_suite, "test <select> 5." ,                                 test_ixhtml10_select_tag_005);
-  CU_add_test(ixhtml10_suite, "test <select> 6." ,                                 test_ixhtml10_select_tag_006);
-  CU_add_test(ixhtml10_suite, "test <select> 7." ,                                 test_ixhtml10_select_tag_007);
-  CU_add_test(ixhtml10_suite, "test <select> 8." ,                                 test_ixhtml10_select_tag_008);
-  CU_add_test(ixhtml10_suite, "test <select> 9." ,                                 test_ixhtml10_select_tag_009);
-  CU_add_test(ixhtml10_suite, "test <select> 10." ,                                test_ixhtml10_select_tag_010);
-  CU_add_test(ixhtml10_suite, "test <select> 11." ,                                test_ixhtml10_select_tag_011);
-  CU_add_test(ixhtml10_suite, "test <select> 12." ,                                test_ixhtml10_select_tag_012);
-  CU_add_test(ixhtml10_suite, "test <select> 13." ,                                test_ixhtml10_select_tag_013);
-  CU_add_test(ixhtml10_suite, "test <select> 14." ,                                test_ixhtml10_select_tag_014);
   /*=========================================================================*/
   /* <BLINK>                                                                 */
   /*=========================================================================*/
