@@ -424,6 +424,13 @@ void test_ixhtml10_option_tag_005();
 void test_ixhtml10_option_tag_006();
 void test_ixhtml10_option_tag_007();
 
+void test_ixhtml10_div_tag_001();
+void test_ixhtml10_div_tag_002();
+void test_ixhtml10_div_tag_003();
+void test_ixhtml10_div_tag_004();
+void test_ixhtml10_div_tag_005();
+void test_ixhtml10_div_tag_006();
+void test_ixhtml10_div_tag_007();
 
 #if 0
 
@@ -452,13 +459,6 @@ void test_ixhtml10_dt_tag_002();
 void test_ixhtml10_dd_tag_001();
 void test_ixhtml10_dd_tag_002();
 
-void test_ixhtml10_div_tag_001();
-void test_ixhtml10_div_tag_002();
-void test_ixhtml10_div_tag_003();
-void test_ixhtml10_div_tag_004();
-void test_ixhtml10_div_tag_005();
-void test_ixhtml10_div_tag_006();
-void test_ixhtml10_div_tag_007();
 
 void test_ixhtml10_form_tag_001();
 void test_ixhtml10_form_tag_002();
