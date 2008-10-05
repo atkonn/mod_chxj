@@ -416,6 +416,13 @@ void test_ixhtml10_select_tag_012();
 void test_ixhtml10_select_tag_013();
 void test_ixhtml10_select_tag_014();
 
+void test_ixhtml10_option_tag_001();
+void test_ixhtml10_option_tag_002();
+void test_ixhtml10_option_tag_003();
+void test_ixhtml10_option_tag_004();
+void test_ixhtml10_option_tag_005();
+void test_ixhtml10_option_tag_006();
+void test_ixhtml10_option_tag_007();
 
 
 #if 0
@@ -486,13 +493,6 @@ void test_ixhtml10_menu_tag_009();
 void test_ixhtml10_menu_tag_010();
 
 
-void test_ixhtml10_option_tag_001();
-void test_ixhtml10_option_tag_002();
-void test_ixhtml10_option_tag_003();
-void test_ixhtml10_option_tag_004();
-void test_ixhtml10_option_tag_005();
-void test_ixhtml10_option_tag_006();
-void test_ixhtml10_option_tag_007();
 
 
 void test_ixhtml10_plaintext_tag_001();
@@ -1409,6 +1409,17 @@ main()
   CU_add_test(ixhtml10_suite, "test <select> 13." ,                                test_ixhtml10_select_tag_013);
   CU_add_test(ixhtml10_suite, "test <select> 14." ,                                test_ixhtml10_select_tag_014);
 
+  /*=========================================================================*/
+  /* <OPTION>                                                                */
+  /*=========================================================================*/
+  CU_add_test(ixhtml10_suite, "test <option>." ,                                   test_ixhtml10_option_tag_001);
+  CU_add_test(ixhtml10_suite, "test <option value> with no value." ,               test_ixhtml10_option_tag_002);
+  CU_add_test(ixhtml10_suite, "test <option value> with void value." ,             test_ixhtml10_option_tag_003);
+  CU_add_test(ixhtml10_suite, "test <option value> with alphabetic value." ,       test_ixhtml10_option_tag_004);
+  CU_add_test(ixhtml10_suite, "test <option value> with japanese value." ,         test_ixhtml10_option_tag_005);
+  CU_add_test(ixhtml10_suite, "test <option value> with japanese-kana value." ,    test_ixhtml10_option_tag_006);
+  CU_add_test(ixhtml10_suite, "test <option selected>." ,                          test_ixhtml10_option_tag_007);
+
 #if 0
   /*=========================================================================*/
   /* <BLOCKQUOTE>                                                            */
@@ -1480,16 +1491,6 @@ main()
   CU_add_test(ixhtml10_suite, "test <menu> 8." ,                                   test_ixhtml10_menu_tag_008);
   CU_add_test(ixhtml10_suite, "test <menu> 9." ,                                   test_ixhtml10_menu_tag_009);
   CU_add_test(ixhtml10_suite, "test <menu> 10." ,                                  test_ixhtml10_menu_tag_010);
-  /*=========================================================================*/
-  /* <OPTION>                                                                */
-  /*=========================================================================*/
-  CU_add_test(ixhtml10_suite, "test <option>." ,                                   test_ixhtml10_option_tag_001);
-  CU_add_test(ixhtml10_suite, "test <option value> with no value." ,               test_ixhtml10_option_tag_002);
-  CU_add_test(ixhtml10_suite, "test <option value> with void value." ,             test_ixhtml10_option_tag_003);
-  CU_add_test(ixhtml10_suite, "test <option value> with alphabetic value." ,       test_ixhtml10_option_tag_004);
-  CU_add_test(ixhtml10_suite, "test <option value> with japanese value." ,         test_ixhtml10_option_tag_005);
-  CU_add_test(ixhtml10_suite, "test <option value> with japanese-kana value." ,    test_ixhtml10_option_tag_006);
-  CU_add_test(ixhtml10_suite, "test <option selected>." ,                          test_ixhtml10_option_tag_007);
   /*=========================================================================*/
   /* <PLAINTEXT>                                                             */
   /*=========================================================================*/
