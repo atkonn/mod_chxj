@@ -504,7 +504,7 @@ chxj_chxjif_is_mine(device_table *spec, Doc *doc, Node *tag)
           break;
         }
       }
-      else if (STRCASEEQ('c','C',"cxhtml",value)) {
+      else if (STRCASEEQ('i','I',"ixhtml",value)) {
         switch (spec->html_spec_type) {
         case CHXJ_SPEC_Chtml_6_0:
         case CHXJ_SPEC_Chtml_7_0:
