@@ -3291,7 +3291,7 @@ s_ixhtml10_end_option_tag(void *pdoc, Node *UNUSED(child))
 static char *
 s_ixhtml10_start_div_tag(void *pdoc, Node *node)
 {
-  ixhtml10_t    *ixhtml10;
+  ixhtml10_t  *ixhtml10;
   Doc         *doc;
   request_rec *r;
   Attr        *attr;
