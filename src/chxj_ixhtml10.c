@@ -2887,6 +2887,8 @@ s_ixhtml10_start_img_tag(void *pdoc, Node *node)
   char        *attr_align  = NULL;
   char        *attr_alt    = NULL;
   char        *attr_style  = NULL;
+  char        *attr_hspace = NULL;
+  char        *attr_vspace = NULL;
 #ifndef IMG_NOT_CONVERT_FILENAME
   device_table  *spec = ixhtml10->spec;
 #endif
@@ -2951,17 +2953,17 @@ s_ixhtml10_start_img_tag(void *pdoc, Node *node)
       /*----------------------------------------------------------------------*/
       attr_height = value;
     }
-    else if (STRCASEEQ('h','H',"hspace",name)) {
+    else if (STRCASEEQ('h','H',"hspace",name) && value && *value) {
       /*----------------------------------------------------------------------*/
       /* CHTML 1.0                                                            */
       /*----------------------------------------------------------------------*/
-      /* ignore */
+      attr_hspace = value;
     }
-    else if (STRCASEEQ('v','V',"vspace",name)) {
+    else if (STRCASEEQ('v','V',"vspace",name) && value && *value) {
       /*----------------------------------------------------------------------*/
       /* CHTML 1.0                                                            */
       /*----------------------------------------------------------------------*/
-      /* ignore */
+      attr_vspace = value;
     }
     else if (STRCASEEQ('a','A',"alt",name) && value && *value) {
       /*----------------------------------------------------------------------*/
@@ -2983,6 +2985,10 @@ s_ixhtml10_start_img_tag(void *pdoc, Node *node)
       css_property_t *height_prop = chxj_css_get_property_value(doc, style, "height");
       css_property_t *width_prop  = chxj_css_get_property_value(doc, style, "width");
       css_property_t *valign_prop = chxj_css_get_property_value(doc, style, "vertical-align");
+      css_property_t *margin_left_prop   = chxj_css_get_property_value(doc, style, "margin-left");
+      css_property_t *margin_right_prop  = chxj_css_get_property_value(doc, style, "margin-right");
+      css_property_t *margin_top_prop    = chxj_css_get_property_value(doc, style, "margin-top");
+      css_property_t *margin_bottom_prop = chxj_css_get_property_value(doc, style, "margin-bottom");
       css_property_t *cur;
       for (cur = height_prop->next; cur != height_prop; cur = cur->next) {
         attr_height = apr_pstrdup(doc->pool, cur->value);
@@ -2993,6 +2999,22 @@ s_ixhtml10_start_img_tag(void *pdoc, Node *node)
       for (cur = valign_prop->next; cur != valign_prop; cur = cur->next) {
         attr_align = apr_pstrdup(doc->pool, cur->value);
       }
+      for (cur = margin_left_prop->next; cur != margin_left_prop; cur = cur->next) {
+        attr_hspace = apr_pstrdup(doc->pool, cur->value);
+      }
+      if (! attr_hspace) {
+        for (cur = margin_right_prop->next; cur != margin_right_prop; cur = cur->next) {
+          attr_hspace = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+      for (cur = margin_top_prop->next; cur != margin_top_prop; cur = cur->next) {
+        attr_vspace = apr_pstrdup(doc->pool, cur->value);
+      }
+      if (! attr_vspace) {
+        for (cur = margin_bottom_prop->next; cur != margin_bottom_prop; cur = cur->next) {
+          attr_vspace = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
     }
   }
 
@@ -3002,9 +3024,41 @@ s_ixhtml10_start_img_tag(void *pdoc, Node *node)
     W_V(attr_src);
     W_L("\"");
   }
-  if (attr_align) {
-    W_L(" align=\"");
-    W_V(attr_align);
+  if (attr_align || attr_hspace || attr_vspace) {
+    W_L(" style=\"");
+    if (attr_align) {
+      if (STRCASEEQ('t','T',"top", attr_align)) {
+        W_L("vertical-align:top;");
+      }
+      else if (STRCASEEQ('m','M',"middle", attr_align) || STRCASEEQ('c','C',"center",attr_align)) {
+        W_L("vertical-align:middle;");
+      }
+      else if (STRCASEEQ('b','B',"bottom", attr_align)) {
+        W_L("vertical-align:bottom;");
+      }
+      else if (STRCASEEQ('l','L',"left", attr_align)) {
+        W_L("float:left;");
+      }
+      else if (STRCASEEQ('r','R',"right", attr_align)) {
+        W_L("float:right;");
+      }
+    }
+    if (attr_hspace) {
+      W_L("margin-left:");
+      W_V(attr_hspace);
+      W_L(";");
+      W_L("margin-right:");
+      W_V(attr_hspace);
+      W_L(";");
+    }
+    if (attr_vspace) {
+      W_L("margin-top:");
+      W_V(attr_vspace);
+      W_L(";");
+      W_L("margin-bottom:");
+      W_V(attr_vspace);
+      W_L(";");
+    }
     W_L("\"");
   }
   if (attr_width) {
