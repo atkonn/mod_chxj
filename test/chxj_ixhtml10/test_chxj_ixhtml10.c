@@ -1434,7 +1434,7 @@ main()
   /*=========================================================================*/
   /* <CHXJIF>                                                                */
   /*=========================================================================*/
-  CU_add_test(ixhtml10_suite, "test <chxjif>.",                                    test_ixhtml10_chxjif_tag_001);
+  CU_add_test(ixhtml10_suite, "test <chxj:if>.",                                    test_ixhtml10_chxjif_tag_001);
 #if 0
   /*=========================================================================*/
   /* <BLOCKQUOTE>                                                            */
@@ -31128,8 +31128,8 @@ void test_ixhtml10_span_tag_with_css_040()
 
 void test_ixhtml10_chxjif_tag_001()
 {
-#define  TEST_STRING   "<chxjif>" \
-                       "</chxjif>"
+#define  TEST_STRING   "<chxj:if>" \
+                       "</chxj:if>"
 #define  RESULT_STRING "\n" \
                        ""
   char  *ret;
