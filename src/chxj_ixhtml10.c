@@ -3119,7 +3119,6 @@ s_ixhtml10_start_select_tag(void *pdoc, Node *node)
   char    *multiple = NULL;
   char    *attr_style = NULL;
 
-  W_L("<select");
   for (attr = qs_get_attr(doc,node);
        attr;
        attr = qs_get_next_attr(doc,attr)) {
@@ -3150,6 +3149,7 @@ s_ixhtml10_start_select_tag(void *pdoc, Node *node)
       multiple = apr_pstrdup(doc->buf.pool, val);
     }
   }
+  W_L("<select");
   if (size && *size) {
     W_L(" size=\"");
     W_V(size);
