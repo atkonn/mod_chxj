@@ -5683,6 +5683,47 @@ s_ixhtml10_create_style_data(apr_pool_t *pool, const char *style_data)
   return apr_pstrcat(pool, "<style type=\"text/css\"><![CDATA[",style_data, "]]></style>", NULL);
 }
 
+
+/**
+ * It is a handler who processes the NOBR tag.
+ *
+ * @param pdoc  [i/o] The pointer to the IXHTML10 structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The NOBR tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_ixhtml10_start_nobr_tag(void *pdoc, Node *node)
+{
+  ixhtml10_t *ixhtml10;
+  Doc *doc;
+
+  ixhtml10 = GET_IXHTML10(pdoc);
+  doc     = ixhtml10->doc;
+
+  W_L("<nobr>");
+  return ixhtml10->out;
+}
+
+
+/**
+ * It is a handler who processes the NOBR tag.
+ *
+ * @param pdoc  [i/o] The pointer to the IXHTML10 structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The NOBR tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_ixhtml10_end_nobr_tag(void *pdoc, Node *UNUSED(node))
+{
+  ixhtml10_t *ixhtml10 = GET_IXHTML10(pdoc);
+  Doc *doc = ixhtml10->doc;
+
+  W_L("</nobr>");
+  return ixhtml10->out;
+}
+
 /*
  * vim:ts=2 et
  */
