@@ -122,6 +122,8 @@ static char *s_ixhtml10_start_span_tag     (void *pdoc, Node *node);
 static char *s_ixhtml10_end_span_tag       (void *pdoc, Node *node);
 static char *s_ixhtml10_style_tag       (void *pdoc, Node *node);
 static char *s_ixhtml10_create_style_data(apr_pool_t *pool, const char *style_data);
+static char *s_ixhtml10_start_nobr_tag     (void *pdoc, Node *node);
+static char *s_ixhtml10_end_nobr_tag       (void *pdoc, Node *node);
 
 static void  s_init_ixhtml10(ixhtml10_t *ixhtml10, Doc *doc, request_rec *r, device_table *spec);
 
@@ -308,8 +310,8 @@ tag_handler ixhtml10_handler[] = {
   },
   /* tagNOBR */
   {
-    NULL,
-    NULL,
+    s_ixhtml10_start_nobr_tag,
+    s_ixhtml10_end_nobr_tag,
   },
   /* tagSMALL */
   {
