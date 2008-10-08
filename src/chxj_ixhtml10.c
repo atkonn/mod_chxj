@@ -5460,15 +5460,15 @@ s_ixhtml10_start_span_tag(void *pdoc, Node *node)
   ixhtml10_t *ixhtml10;
   Doc *doc;
   Attr *attr;
-  char *attr_style = NULL;
-  char *attr_color = NULL;
-  char *attr_size = NULL;
-  char *attr_align = NULL;
-  char *attr_blink = NULL;
-  char *attr_marquee = NULL;
-  char *attr_marquee_dir = NULL;
+  char *attr_style         = NULL;
+  char *attr_color         = NULL;
+  char *attr_size          = NULL;
+  char *attr_align         = NULL;
+  char *attr_blink         = NULL;
+  char *attr_marquee       = NULL;
+  char *attr_marquee_dir   = NULL;
   char *attr_marquee_style = NULL;
-  char *attr_marquee_loop = NULL;
+  char *attr_marquee_loop  = NULL;
 
   ixhtml10 = GET_IXHTML10(pdoc);
   doc     = ixhtml10->doc;
