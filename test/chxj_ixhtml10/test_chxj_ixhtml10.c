@@ -449,6 +449,48 @@ void test_ixhtml10_small_tag_002();
 
 void test_ixhtml10_span_tag_001();
 void test_ixhtml10_span_tag_002();
+
+void test_ixhtml10_span_tag_with_css_001();
+void test_ixhtml10_span_tag_with_css_002();
+void test_ixhtml10_span_tag_with_css_003();
+void test_ixhtml10_span_tag_with_css_004();
+void test_ixhtml10_span_tag_with_css_005();
+void test_ixhtml10_span_tag_with_css_006();
+void test_ixhtml10_span_tag_with_css_007();
+void test_ixhtml10_span_tag_with_css_008();
+void test_ixhtml10_span_tag_with_css_009();
+void test_ixhtml10_span_tag_with_css_010();
+void test_ixhtml10_span_tag_with_css_011();
+void test_ixhtml10_span_tag_with_css_012();
+void test_ixhtml10_span_tag_with_css_013();
+void test_ixhtml10_span_tag_with_css_014();
+void test_ixhtml10_span_tag_with_css_015();
+void test_ixhtml10_span_tag_with_css_016();
+void test_ixhtml10_span_tag_with_css_017();
+void test_ixhtml10_span_tag_with_css_018();
+void test_ixhtml10_span_tag_with_css_019();
+void test_ixhtml10_span_tag_with_css_020();
+void test_ixhtml10_span_tag_with_css_021();
+void test_ixhtml10_span_tag_with_css_022();
+void test_ixhtml10_span_tag_with_css_023();
+void test_ixhtml10_span_tag_with_css_024();
+void test_ixhtml10_span_tag_with_css_025();
+void test_ixhtml10_span_tag_with_css_026();
+void test_ixhtml10_span_tag_with_css_027();
+void test_ixhtml10_span_tag_with_css_028();
+void test_ixhtml10_span_tag_with_css_029();
+void test_ixhtml10_span_tag_with_css_030();
+void test_ixhtml10_span_tag_with_css_031();
+void test_ixhtml10_span_tag_with_css_032();
+void test_ixhtml10_span_tag_with_css_033();
+void test_ixhtml10_span_tag_with_css_034();
+void test_ixhtml10_span_tag_with_css_035();
+void test_ixhtml10_span_tag_with_css_036();
+void test_ixhtml10_span_tag_with_css_037();
+void test_ixhtml10_span_tag_with_css_038();
+void test_ixhtml10_span_tag_with_css_039();
+void test_ixhtml10_span_tag_with_css_040();
+
 #if 0
 
 
@@ -921,46 +963,6 @@ void test_ixhtml10_marquee_tag_with_css_020();
 void test_ixhtml10_marquee_tag_with_css_021();
 void test_ixhtml10_marquee_tag_with_css_022();
 
-void test_ixhtml10_span_tag_with_css_001();
-void test_ixhtml10_span_tag_with_css_002();
-void test_ixhtml10_span_tag_with_css_003();
-void test_ixhtml10_span_tag_with_css_004();
-void test_ixhtml10_span_tag_with_css_005();
-void test_ixhtml10_span_tag_with_css_006();
-void test_ixhtml10_span_tag_with_css_007();
-void test_ixhtml10_span_tag_with_css_008();
-void test_ixhtml10_span_tag_with_css_009();
-void test_ixhtml10_span_tag_with_css_010();
-void test_ixhtml10_span_tag_with_css_011();
-void test_ixhtml10_span_tag_with_css_012();
-void test_ixhtml10_span_tag_with_css_013();
-void test_ixhtml10_span_tag_with_css_014();
-void test_ixhtml10_span_tag_with_css_015();
-void test_ixhtml10_span_tag_with_css_016();
-void test_ixhtml10_span_tag_with_css_017();
-void test_ixhtml10_span_tag_with_css_018();
-void test_ixhtml10_span_tag_with_css_019();
-void test_ixhtml10_span_tag_with_css_020();
-void test_ixhtml10_span_tag_with_css_021();
-void test_ixhtml10_span_tag_with_css_022();
-void test_ixhtml10_span_tag_with_css_023();
-void test_ixhtml10_span_tag_with_css_024();
-void test_ixhtml10_span_tag_with_css_025();
-void test_ixhtml10_span_tag_with_css_026();
-void test_ixhtml10_span_tag_with_css_027();
-void test_ixhtml10_span_tag_with_css_028();
-void test_ixhtml10_span_tag_with_css_029();
-void test_ixhtml10_span_tag_with_css_030();
-void test_ixhtml10_span_tag_with_css_031();
-void test_ixhtml10_span_tag_with_css_032();
-void test_ixhtml10_span_tag_with_css_033();
-void test_ixhtml10_span_tag_with_css_034();
-void test_ixhtml10_span_tag_with_css_035();
-void test_ixhtml10_span_tag_with_css_036();
-void test_ixhtml10_span_tag_with_css_037();
-void test_ixhtml10_span_tag_with_css_038();
-void test_ixhtml10_span_tag_with_css_039();
-void test_ixhtml10_span_tag_with_css_040();
 
 #endif
 /* pend */
@@ -1476,6 +1478,46 @@ main()
   /*=========================================================================*/
   CU_add_test(ixhtml10_suite, "test <span> 1.",                                     test_ixhtml10_span_tag_001);
   CU_add_test(ixhtml10_suite, "test <span> 2.",                                     test_ixhtml10_span_tag_002);
+  CU_add_test(ixhtml10_suite, "test span with css 001",                              test_ixhtml10_span_tag_with_css_001);
+  CU_add_test(ixhtml10_suite, "test span with css 002",                              test_ixhtml10_span_tag_with_css_002);
+  CU_add_test(ixhtml10_suite, "test span with css 003",                              test_ixhtml10_span_tag_with_css_003);
+  CU_add_test(ixhtml10_suite, "test span with css 004",                              test_ixhtml10_span_tag_with_css_004);
+  CU_add_test(ixhtml10_suite, "test span with css 005",                              test_ixhtml10_span_tag_with_css_005);
+  CU_add_test(ixhtml10_suite, "test span with css 006",                              test_ixhtml10_span_tag_with_css_006);
+  CU_add_test(ixhtml10_suite, "test span with css 007",                              test_ixhtml10_span_tag_with_css_007);
+  CU_add_test(ixhtml10_suite, "test span with css 008",                              test_ixhtml10_span_tag_with_css_008);
+  CU_add_test(ixhtml10_suite, "test span with css 009",                              test_ixhtml10_span_tag_with_css_009);
+  CU_add_test(ixhtml10_suite, "test span with css 010",                              test_ixhtml10_span_tag_with_css_010);
+  CU_add_test(ixhtml10_suite, "test span with css 011",                              test_ixhtml10_span_tag_with_css_011);
+  CU_add_test(ixhtml10_suite, "test span with css 012",                              test_ixhtml10_span_tag_with_css_012);
+  CU_add_test(ixhtml10_suite, "test span with css 013",                              test_ixhtml10_span_tag_with_css_013);
+  CU_add_test(ixhtml10_suite, "test span with css 014",                              test_ixhtml10_span_tag_with_css_014);
+  CU_add_test(ixhtml10_suite, "test span with css 015",                              test_ixhtml10_span_tag_with_css_015);
+  CU_add_test(ixhtml10_suite, "test span with css 016",                              test_ixhtml10_span_tag_with_css_016);
+  CU_add_test(ixhtml10_suite, "test span with css 017",                              test_ixhtml10_span_tag_with_css_017);
+  CU_add_test(ixhtml10_suite, "test span with css 018",                              test_ixhtml10_span_tag_with_css_018);
+  CU_add_test(ixhtml10_suite, "test span with css 019",                              test_ixhtml10_span_tag_with_css_019);
+  CU_add_test(ixhtml10_suite, "test span with css 020",                              test_ixhtml10_span_tag_with_css_020);
+  CU_add_test(ixhtml10_suite, "test span with css 021",                              test_ixhtml10_span_tag_with_css_021);
+  CU_add_test(ixhtml10_suite, "test span with css 022",                              test_ixhtml10_span_tag_with_css_022);
+  CU_add_test(ixhtml10_suite, "test span with css 023",                              test_ixhtml10_span_tag_with_css_023);
+  CU_add_test(ixhtml10_suite, "test span with css 024",                              test_ixhtml10_span_tag_with_css_024);
+  CU_add_test(ixhtml10_suite, "test span with css 025",                              test_ixhtml10_span_tag_with_css_025);
+  CU_add_test(ixhtml10_suite, "test span with css 026",                              test_ixhtml10_span_tag_with_css_026);
+  CU_add_test(ixhtml10_suite, "test span with css 027",                              test_ixhtml10_span_tag_with_css_027);
+  CU_add_test(ixhtml10_suite, "test span with css 028",                              test_ixhtml10_span_tag_with_css_028);
+  CU_add_test(ixhtml10_suite, "test span with css 029",                              test_ixhtml10_span_tag_with_css_029);
+  CU_add_test(ixhtml10_suite, "test span with css 030",                              test_ixhtml10_span_tag_with_css_030);
+  CU_add_test(ixhtml10_suite, "test span with css 031",                              test_ixhtml10_span_tag_with_css_031);
+  CU_add_test(ixhtml10_suite, "test span with css 032",                              test_ixhtml10_span_tag_with_css_032);
+  CU_add_test(ixhtml10_suite, "test span with css 033",                              test_ixhtml10_span_tag_with_css_033);
+  CU_add_test(ixhtml10_suite, "test span with css 034",                              test_ixhtml10_span_tag_with_css_034);
+  CU_add_test(ixhtml10_suite, "test span with css 035",                              test_ixhtml10_span_tag_with_css_035);
+  CU_add_test(ixhtml10_suite, "test span with css 036",                              test_ixhtml10_span_tag_with_css_036);
+  CU_add_test(ixhtml10_suite, "test span with css 037",                              test_ixhtml10_span_tag_with_css_037);
+  CU_add_test(ixhtml10_suite, "test span with css 038",                              test_ixhtml10_span_tag_with_css_038);
+  CU_add_test(ixhtml10_suite, "test span with css 039",                              test_ixhtml10_span_tag_with_css_039);
+  CU_add_test(ixhtml10_suite, "test span with css 040",                              test_ixhtml10_span_tag_with_css_040);
 
 #if 0
   /*=========================================================================*/
@@ -1949,46 +1991,6 @@ main()
   CU_add_test(ixhtml10_suite, "test marquee with css 021",                       test_ixhtml10_marquee_tag_with_css_021);
   CU_add_test(ixhtml10_suite, "test marquee with css 022",                       test_ixhtml10_marquee_tag_with_css_022);
 
-  CU_add_test(ixhtml10_suite, "test span with css 001",                              test_ixhtml10_span_tag_with_css_001);
-  CU_add_test(ixhtml10_suite, "test span with css 002",                              test_ixhtml10_span_tag_with_css_002);
-  CU_add_test(ixhtml10_suite, "test span with css 003",                              test_ixhtml10_span_tag_with_css_003);
-  CU_add_test(ixhtml10_suite, "test span with css 004",                              test_ixhtml10_span_tag_with_css_004);
-  CU_add_test(ixhtml10_suite, "test span with css 005",                              test_ixhtml10_span_tag_with_css_005);
-  CU_add_test(ixhtml10_suite, "test span with css 006",                              test_ixhtml10_span_tag_with_css_006);
-  CU_add_test(ixhtml10_suite, "test span with css 007",                              test_ixhtml10_span_tag_with_css_007);
-  CU_add_test(ixhtml10_suite, "test span with css 008",                              test_ixhtml10_span_tag_with_css_008);
-  CU_add_test(ixhtml10_suite, "test span with css 009",                              test_ixhtml10_span_tag_with_css_009);
-  CU_add_test(ixhtml10_suite, "test span with css 010",                              test_ixhtml10_span_tag_with_css_010);
-  CU_add_test(ixhtml10_suite, "test span with css 011",                              test_ixhtml10_span_tag_with_css_011);
-  CU_add_test(ixhtml10_suite, "test span with css 012",                              test_ixhtml10_span_tag_with_css_012);
-  CU_add_test(ixhtml10_suite, "test span with css 013",                              test_ixhtml10_span_tag_with_css_013);
-  CU_add_test(ixhtml10_suite, "test span with css 014",                              test_ixhtml10_span_tag_with_css_014);
-  CU_add_test(ixhtml10_suite, "test span with css 015",                              test_ixhtml10_span_tag_with_css_015);
-  CU_add_test(ixhtml10_suite, "test span with css 016",                              test_ixhtml10_span_tag_with_css_016);
-  CU_add_test(ixhtml10_suite, "test span with css 017",                              test_ixhtml10_span_tag_with_css_017);
-  CU_add_test(ixhtml10_suite, "test span with css 018",                              test_ixhtml10_span_tag_with_css_018);
-  CU_add_test(ixhtml10_suite, "test span with css 019",                              test_ixhtml10_span_tag_with_css_019);
-  CU_add_test(ixhtml10_suite, "test span with css 020",                              test_ixhtml10_span_tag_with_css_020);
-  CU_add_test(ixhtml10_suite, "test span with css 021",                              test_ixhtml10_span_tag_with_css_021);
-  CU_add_test(ixhtml10_suite, "test span with css 022",                              test_ixhtml10_span_tag_with_css_022);
-  CU_add_test(ixhtml10_suite, "test span with css 023",                              test_ixhtml10_span_tag_with_css_023);
-  CU_add_test(ixhtml10_suite, "test span with css 024",                              test_ixhtml10_span_tag_with_css_024);
-  CU_add_test(ixhtml10_suite, "test span with css 025",                              test_ixhtml10_span_tag_with_css_025);
-  CU_add_test(ixhtml10_suite, "test span with css 026",                              test_ixhtml10_span_tag_with_css_026);
-  CU_add_test(ixhtml10_suite, "test span with css 027",                              test_ixhtml10_span_tag_with_css_027);
-  CU_add_test(ixhtml10_suite, "test span with css 028",                              test_ixhtml10_span_tag_with_css_028);
-  CU_add_test(ixhtml10_suite, "test span with css 029",                              test_ixhtml10_span_tag_with_css_029);
-  CU_add_test(ixhtml10_suite, "test span with css 030",                              test_ixhtml10_span_tag_with_css_030);
-  CU_add_test(ixhtml10_suite, "test span with css 031",                              test_ixhtml10_span_tag_with_css_031);
-  CU_add_test(ixhtml10_suite, "test span with css 032",                              test_ixhtml10_span_tag_with_css_032);
-  CU_add_test(ixhtml10_suite, "test span with css 033",                              test_ixhtml10_span_tag_with_css_033);
-  CU_add_test(ixhtml10_suite, "test span with css 034",                              test_ixhtml10_span_tag_with_css_034);
-  CU_add_test(ixhtml10_suite, "test span with css 035",                              test_ixhtml10_span_tag_with_css_035);
-  CU_add_test(ixhtml10_suite, "test span with css 036",                              test_ixhtml10_span_tag_with_css_036);
-  CU_add_test(ixhtml10_suite, "test span with css 037",                              test_ixhtml10_span_tag_with_css_037);
-  CU_add_test(ixhtml10_suite, "test span with css 038",                              test_ixhtml10_span_tag_with_css_038);
-  CU_add_test(ixhtml10_suite, "test span with css 039",                              test_ixhtml10_span_tag_with_css_039);
-  CU_add_test(ixhtml10_suite, "test span with css 040",                              test_ixhtml10_span_tag_with_css_040);
 
 #endif
   /* aend */
@@ -29494,8 +29496,8 @@ void test_ixhtml10_span_tag_with_css_001()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><body><span>あいう</span></body></html>"
-#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?>" \
-                       "<!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>" \
+                       "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">" \
                        "<html>" \
                        "<head></head><body><div><span style=\"text-align:right;\">あいう</span></div></body></html>"
   char  *ret;
@@ -31014,10 +31016,10 @@ void test_ixhtml10_span_tag_with_css_037()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><body><span>あいう</span></body></html>"
-#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?>" \
-                       "<!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
-                       "<html>" \
-                       "<head></head><body><div><span style=\"font-size:x-large;\">あいう</span></div></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>" \
+                       "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><span style=\"font-size:x-large;\">あいう</span></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -31050,10 +31052,10 @@ void test_ixhtml10_span_tag_with_css_038()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><body><span style=\"font-size:x-large;\">あいう</span></body></html>"
-#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?>" \
-                       "<!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
-                       "<html>" \
-                       "<head></head><body><div><span style=\"font-size:x-large;\">あいう</span></div></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>" \
+                       "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><span style=\"font-size:x-large;\">あいう</span></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -31098,10 +31100,10 @@ void test_ixhtml10_span_tag_with_css_039()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><body><span>あいう</span></body></html>"
-#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?>" \
-                       "<!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
-                       "<html>" \
-                       "<head></head><body><div><span style=\"font-size:xx-large;\">あいう</span></div></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>" \
+                       "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><span style=\"font-size:xx-large;\">あいう</span></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -31134,10 +31136,10 @@ void test_ixhtml10_span_tag_with_css_040()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><body><span style=\"font-size:xx-large;\">あいう</span></body></html>"
-#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?>" \
-                       "<!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
-                       "<html>" \
-                       "<head></head><body><div><span style=\"font-size:xx-large;\">あいう</span></div></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>" \
+                       "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><span style=\"font-size:xx-large;\">あいう</span></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -31157,6 +31159,8 @@ void test_ixhtml10_span_tag_with_css_040()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
