@@ -3677,7 +3677,6 @@ s_ixhtml10_start_b_tag(void* pdoc, Node* UNUSED(node))
   doc   = ixhtml10->doc;
   r     = doc->r;
 
-  W_L("<b>");
   return ixhtml10->out;
 }
 
@@ -3696,7 +3695,6 @@ s_ixhtml10_end_b_tag(void* pdoc, Node* UNUSED(child))
   ixhtml10_t*      ixhtml10 = GET_IXHTML10(pdoc);
   Doc*          doc   = ixhtml10->doc;
 
-  W_L("</b>");
   return ixhtml10->out;
 }
 
