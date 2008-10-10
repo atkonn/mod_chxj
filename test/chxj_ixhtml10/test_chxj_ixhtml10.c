@@ -493,6 +493,9 @@ void test_ixhtml10_span_tag_with_css_040();
 
 void test_ixhtml10_th_tag_001();
 void test_ixhtml10_th_tag_002();
+
+void test_ixhtml10_b_tag_001();
+void test_ixhtml10_b_tag_002();
 #if 0
 
 
@@ -1523,6 +1526,8 @@ main()
 
   CU_add_test(ixhtml10_suite, "test <th> 1",                test_ixhtml10_th_tag_001);
   CU_add_test(ixhtml10_suite, "test <th> 2",                test_ixhtml10_th_tag_002);
+
+  CU_add_test(ixhtml10_suite, "test <b> 1",                test_ixhtml10_b_tag_001);
 #if 0
   /*=========================================================================*/
   /* <BLOCKQUOTE>                                                            */
@@ -31720,6 +31725,41 @@ void test_ixhtml10_th_tag_002()
 {
 #define  TEST_STRING   "<th></th>"
 #define  RESULT_STRING "\n"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get_span020;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+void test_ixhtml10_b_tag_001()
+{
+#define  TEST_STRING   "<b>abc</b>"
+#define  RESULT_STRING "abc"
   char  *ret;
   char  *tmp;
   device_table spec;
