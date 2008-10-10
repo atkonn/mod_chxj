@@ -3692,8 +3692,10 @@ s_ixhtml10_start_b_tag(void* pdoc, Node* UNUSED(node))
 static char*
 s_ixhtml10_end_b_tag(void* pdoc, Node* UNUSED(child))
 {
-  ixhtml10_t*      ixhtml10 = GET_IXHTML10(pdoc);
-  Doc*          doc   = ixhtml10->doc;
+  ixhtml10_t       *ixhtml10 = GET_IXHTML10(pdoc);
+/*
+  Doc              *doc   = ixhtml10->doc;
+*/
 
   return ixhtml10->out;
 }
