@@ -31719,7 +31719,7 @@ void test_ixhtml10_th_tag_001()
 void test_ixhtml10_th_tag_002()
 {
 #define  TEST_STRING   "<th></th>"
-#define  RESULT_STRING ""
+#define  RESULT_STRING "\n"
   char  *ret;
   char  *tmp;
   device_table spec;
