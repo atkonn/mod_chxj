@@ -23784,9 +23784,10 @@ void test_ixhtml10_dt_tag_with_css_004()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><body><dl><dt style=\"font-size:x-small;\">あいう</dt></dl></body></html>"
-#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?>" \
-                       "<!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
-                       "<html><head></head><body><div><dl><dt style=\"font-size:x-small;\">あいう</dt></dl></div></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>" \
+                       "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><dl><dt style=\"font-size:x-small;\">あいう</dt></dl></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -23834,9 +23835,10 @@ void test_ixhtml10_dt_tag_with_css_005()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><body><dl><dt>あいう</dt></dl></body></html>"
-#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?>" \
-                       "<!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
-                       "<html><head></head><body><div><dl><dt style=\"font-size:small;\">あいう</dt></dl></div></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>" \
+                       "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><dl><dt style=\"font-size:small;\">あいう</dt></dl></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
