@@ -1536,6 +1536,26 @@ main()
 
   CU_add_test(ixhtml10_suite, "test <fieldset> 1",                test_ixhtml10_fieldset_tag_001);
   CU_add_test(ixhtml10_suite, "test <fieldset> 2",                test_ixhtml10_fieldset_tag_002);
+
+  /*=========================================================================*/
+  /* <DT>                                                                    */
+  /*=========================================================================*/
+  CU_add_test(ixhtml10_suite, "test <dt>.",                                        test_ixhtml10_dt_tag_001);
+  CU_add_test(ixhtml10_suite, "test <dt> with void value.",                        test_ixhtml10_dt_tag_002);
+  CU_add_test(ixhtml10_suite, "test dt with css 001",                              test_ixhtml10_dt_tag_with_css_001);
+  CU_add_test(ixhtml10_suite, "test dt with css 002",                              test_ixhtml10_dt_tag_with_css_002);
+  CU_add_test(ixhtml10_suite, "test dt with css 003",                              test_ixhtml10_dt_tag_with_css_003);
+  CU_add_test(ixhtml10_suite, "test dt with css 004",                              test_ixhtml10_dt_tag_with_css_004);
+  CU_add_test(ixhtml10_suite, "test dt with css 005",                              test_ixhtml10_dt_tag_with_css_005);
+  CU_add_test(ixhtml10_suite, "test dt with css 006",                              test_ixhtml10_dt_tag_with_css_006);
+  CU_add_test(ixhtml10_suite, "test dt with css 007",                              test_ixhtml10_dt_tag_with_css_007);
+  CU_add_test(ixhtml10_suite, "test dt with css 008",                              test_ixhtml10_dt_tag_with_css_008);
+  CU_add_test(ixhtml10_suite, "test dt with css 009",                              test_ixhtml10_dt_tag_with_css_009);
+  CU_add_test(ixhtml10_suite, "test dt with css 010",                              test_ixhtml10_dt_tag_with_css_010);
+  CU_add_test(ixhtml10_suite, "test dt with css 011",                              test_ixhtml10_dt_tag_with_css_011);
+  CU_add_test(ixhtml10_suite, "test dt with css 012",                              test_ixhtml10_dt_tag_with_css_012);
+  CU_add_test(ixhtml10_suite, "test dt with css 013",                              test_ixhtml10_dt_tag_with_css_013);
+  CU_add_test(ixhtml10_suite, "test dt with css 014",                              test_ixhtml10_dt_tag_with_css_014);
 #if 0
   /*=========================================================================*/
   /* <BLOCKQUOTE>                                                            */
@@ -1558,11 +1578,6 @@ main()
   /* <DL>                                                                    */
   /*=========================================================================*/
   CU_add_test(ixhtml10_suite, "test <dl>.",                                        test_ixhtml10_dl_tag_001);
-  /*=========================================================================*/
-  /* <DT>                                                                    */
-  /*=========================================================================*/
-  CU_add_test(ixhtml10_suite, "test <dt>.",                                        test_ixhtml10_dt_tag_001);
-  CU_add_test(ixhtml10_suite, "test <dt> with void value.",                        test_ixhtml10_dt_tag_002);
   /*=========================================================================*/
   /* <DD>                                                                    */
   /*=========================================================================*/
@@ -1868,20 +1883,6 @@ main()
   CU_add_test(ixhtml10_suite, "test div with css 041",                              test_ixhtml10_div_tag_with_css_041);
   CU_add_test(ixhtml10_suite, "test div with css 042",                              test_ixhtml10_div_tag_with_css_042);
 
-  CU_add_test(ixhtml10_suite, "test dt with css 001",                              test_ixhtml10_dt_tag_with_css_001);
-  CU_add_test(ixhtml10_suite, "test dt with css 002",                              test_ixhtml10_dt_tag_with_css_002);
-  CU_add_test(ixhtml10_suite, "test dt with css 003",                              test_ixhtml10_dt_tag_with_css_003);
-  CU_add_test(ixhtml10_suite, "test dt with css 004",                              test_ixhtml10_dt_tag_with_css_004);
-  CU_add_test(ixhtml10_suite, "test dt with css 005",                              test_ixhtml10_dt_tag_with_css_005);
-  CU_add_test(ixhtml10_suite, "test dt with css 006",                              test_ixhtml10_dt_tag_with_css_006);
-  CU_add_test(ixhtml10_suite, "test dt with css 007",                              test_ixhtml10_dt_tag_with_css_007);
-  CU_add_test(ixhtml10_suite, "test dt with css 008",                              test_ixhtml10_dt_tag_with_css_008);
-  CU_add_test(ixhtml10_suite, "test dt with css 009",                              test_ixhtml10_dt_tag_with_css_009);
-  CU_add_test(ixhtml10_suite, "test dt with css 010",                              test_ixhtml10_dt_tag_with_css_010);
-  CU_add_test(ixhtml10_suite, "test dt with css 011",                              test_ixhtml10_dt_tag_with_css_011);
-  CU_add_test(ixhtml10_suite, "test dt with css 012",                              test_ixhtml10_dt_tag_with_css_012);
-  CU_add_test(ixhtml10_suite, "test dt with css 013",                              test_ixhtml10_dt_tag_with_css_013);
-  CU_add_test(ixhtml10_suite, "test dt with css 014",                              test_ixhtml10_dt_tag_with_css_014);
 
   CU_add_test(ixhtml10_suite, "test blockquote with css 001",                       test_ixhtml10_blockquote_tag_with_css_001);
   CU_add_test(ixhtml10_suite, "test blockquote with css 002",                       test_ixhtml10_blockquote_tag_with_css_002);
