@@ -1534,6 +1534,7 @@ main()
   CU_add_test(ixhtml10_suite, "test <b> 2",                test_ixhtml10_b_tag_002);
 
   CU_add_test(ixhtml10_suite, "test <fieldset> 1",                test_ixhtml10_fieldset_tag_001);
+  CU_add_test(ixhtml10_suite, "test <fieldset> 1",                test_ixhtml10_fieldset_tag_001);
 #if 0
   /*=========================================================================*/
   /* <BLOCKQUOTE>                                                            */
