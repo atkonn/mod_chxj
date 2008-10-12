@@ -498,6 +498,7 @@ void test_ixhtml10_b_tag_001();
 void test_ixhtml10_b_tag_002();
 
 void test_ixhtml10_fieldset_tag_001();
+void test_ixhtml10_fieldset_tag_002();
 #if 0
 
 
