@@ -1564,6 +1564,7 @@ main()
   /* <LEGEND>                                                                */
   /*=========================================================================*/
   CU_add_test(ixhtml10_suite, "test <legend>.",                                        test_ixhtml10_legend_tag_001);
+  CU_add_test(ixhtml10_suite, "test <legend> 2.",                                      test_ixhtml10_legend_tag_002);
 #if 0
   /*=========================================================================*/
   /* <BLOCKQUOTE>                                                            */
