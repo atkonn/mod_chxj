@@ -1558,6 +1558,11 @@ main()
   CU_add_test(ixhtml10_suite, "test dt with css 012",                              test_ixhtml10_dt_tag_with_css_012);
   CU_add_test(ixhtml10_suite, "test dt with css 013",                              test_ixhtml10_dt_tag_with_css_013);
   CU_add_test(ixhtml10_suite, "test dt with css 014",                              test_ixhtml10_dt_tag_with_css_014);
+
+  /*=========================================================================*/
+  /* <LEGEND>                                                                */
+  /*=========================================================================*/
+  CU_add_test(ixhtml10_suite, "test <legend>.",                                        test_ixhtml10_legend_tag_001);
 #if 0
   /*=========================================================================*/
   /* <BLOCKQUOTE>                                                            */
@@ -31919,6 +31924,40 @@ void test_ixhtml10_fieldset_tag_002()
 #undef RESULT_STRING
 }
 
+void test_ixhtml10_legend_tag_001()
+{
+#define  TEST_STRING   "<legend></legend>"
+#define  RESULT_STRING "\n"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get_span020;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
 
 /*
  * vim:ts=2 et
