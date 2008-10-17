@@ -7876,7 +7876,7 @@ void test_ixhtml10_center_tag_001()
 void test_ixhtml10_dir_tag_001()
 {
 #define  TEST_STRING "<dir><li>あああ</li><li>いいい</li></dir>"
-#define  RESULT_STRING "<dir><li>あああ</li><li>いいい</li></dir>"
+#define  RESULT_STRING "<ul><li>あああ</li><li>いいい</li></ul>"
   char  *ret;
   char  *tmp;
   device_table spec;
