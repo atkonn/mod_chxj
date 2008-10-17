@@ -1659,6 +1659,20 @@ main()
   CU_add_test(ixhtml10_suite, "test dd with css 020",                       test_ixhtml10_dd_tag_with_css_020);
   CU_add_test(ixhtml10_suite, "test dd with css 021",                       test_ixhtml10_dd_tag_with_css_021);
   CU_add_test(ixhtml10_suite, "test dd with css 022",                       test_ixhtml10_dd_tag_with_css_022);
+
+  /*=========================================================================*/
+  /* <MENU>                                                                  */
+  /*=========================================================================*/
+  CU_add_test(ixhtml10_suite, "test <menu>." ,                                     test_ixhtml10_menu_tag_001);
+  CU_add_test(ixhtml10_suite, "test <menu> 2." ,                                   test_ixhtml10_menu_tag_002);
+  CU_add_test(ixhtml10_suite, "test <menu> 3." ,                                   test_ixhtml10_menu_tag_003);
+  CU_add_test(ixhtml10_suite, "test <menu> 4." ,                                   test_ixhtml10_menu_tag_004);
+  CU_add_test(ixhtml10_suite, "test <menu> 5." ,                                   test_ixhtml10_menu_tag_005);
+  CU_add_test(ixhtml10_suite, "test <menu> 6." ,                                   test_ixhtml10_menu_tag_006);
+  CU_add_test(ixhtml10_suite, "test <menu> 7." ,                                   test_ixhtml10_menu_tag_007);
+  CU_add_test(ixhtml10_suite, "test <menu> 8." ,                                   test_ixhtml10_menu_tag_008);
+  CU_add_test(ixhtml10_suite, "test <menu> 9." ,                                   test_ixhtml10_menu_tag_009);
+  CU_add_test(ixhtml10_suite, "test <menu> 10." ,                                  test_ixhtml10_menu_tag_010);
 #if 0
   /*=========================================================================*/
   /* <FORM>                                                                  */
@@ -1676,19 +1690,6 @@ main()
   /* <HTML>                                                                  */
   /*=========================================================================*/
   CU_add_test(ixhtml10_suite, "test <html>.",                                      test_ixhtml10_html_tag_001);
-  /*=========================================================================*/
-  /* <MENU>                                                                  */
-  /*=========================================================================*/
-  CU_add_test(ixhtml10_suite, "test <menu>." ,                                     test_ixhtml10_menu_tag_001);
-  CU_add_test(ixhtml10_suite, "test <menu> 2." ,                                   test_ixhtml10_menu_tag_002);
-  CU_add_test(ixhtml10_suite, "test <menu> 3." ,                                   test_ixhtml10_menu_tag_003);
-  CU_add_test(ixhtml10_suite, "test <menu> 4." ,                                   test_ixhtml10_menu_tag_004);
-  CU_add_test(ixhtml10_suite, "test <menu> 5." ,                                   test_ixhtml10_menu_tag_005);
-  CU_add_test(ixhtml10_suite, "test <menu> 6." ,                                   test_ixhtml10_menu_tag_006);
-  CU_add_test(ixhtml10_suite, "test <menu> 7." ,                                   test_ixhtml10_menu_tag_007);
-  CU_add_test(ixhtml10_suite, "test <menu> 8." ,                                   test_ixhtml10_menu_tag_008);
-  CU_add_test(ixhtml10_suite, "test <menu> 9." ,                                   test_ixhtml10_menu_tag_009);
-  CU_add_test(ixhtml10_suite, "test <menu> 10." ,                                  test_ixhtml10_menu_tag_010);
   /*=========================================================================*/
   /* <PLAINTEXT>                                                             */
   /*=========================================================================*/
