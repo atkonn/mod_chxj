@@ -26763,7 +26763,7 @@ void test_ixhtml10_dd_tag_with_css_009()
 #define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>" \
                        "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">" \
                        "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
-                       "<head></head><body><div><dd style=\"font-size:xx-small;\">あいう</dd></div></body></html>"
+                       "<head></head><body><dd style=\"font-size:xx-small;\">あいう</dd></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
