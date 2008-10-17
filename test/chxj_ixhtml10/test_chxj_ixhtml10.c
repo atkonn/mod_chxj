@@ -11907,7 +11907,7 @@ void test_ixhtml10_input_tag_047()
 void test_ixhtml10_menu_tag_001()
 {
 #define  TEST_STRING "<menu></menu>"
-#define  RESULT_STRING "<menu></menu>"
+#define  RESULT_STRING "<ul></ul>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -11937,7 +11937,7 @@ void test_ixhtml10_menu_tag_001()
 void test_ixhtml10_menu_tag_002()
 {
 #define  TEST_STRING "<menu><li></li><li></li></menu>"
-#define  RESULT_STRING "<menu><li></li><li></li></menu>"
+#define  RESULT_STRING "<ul><li></li><li></li></ul>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -11967,7 +11967,7 @@ void test_ixhtml10_menu_tag_002()
 void test_ixhtml10_menu_tag_003()
 {
 #define  TEST_STRING "<menu><li>abc</li><li>def</li></menu>"
-#define  RESULT_STRING "<menu><li>abc</li><li>def</li></menu>"
+#define  RESULT_STRING "<ul><li>abc</li><li>def</li></ul>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -11997,7 +11997,7 @@ void test_ixhtml10_menu_tag_003()
 void test_ixhtml10_menu_tag_004()
 {
 #define  TEST_STRING "<menu><li>あああ</li><li>いいい</li></menu>"
-#define  RESULT_STRING "<menu><li>あああ</li><li>いいい</li></menu>"
+#define  RESULT_STRING "<ul><li>あああ</li><li>いいい</li></ul>"
   char  *ret;
   char  *tmp;
   device_table spec;
