@@ -1603,7 +1603,7 @@ main()
   CU_add_test(ixhtml10_suite, "test blockquote with css 014",                       test_ixhtml10_blockquote_tag_with_css_014);
   CU_add_test(ixhtml10_suite, "test blockquote with css 015",                       test_ixhtml10_blockquote_tag_with_css_015);
   CU_add_test(ixhtml10_suite, "test blockquote with css 016",                       test_ixhtml10_blockquote_tag_with_css_016);
-#if 0
+
   /*=========================================================================*/
   /* <DIR>                                                                   */
   /*=========================================================================*/
@@ -1614,6 +1614,7 @@ main()
   CU_add_test(ixhtml10_suite, "test <dir type> 3",                                 test_ixhtml10_dir_tag_005);
   CU_add_test(ixhtml10_suite, "test <dir type> 4",                                 test_ixhtml10_dir_tag_006);
   CU_add_test(ixhtml10_suite, "test <dir type> 5",                                 test_ixhtml10_dir_tag_007);
+#if 0
   /*=========================================================================*/
   /* <DL>                                                                    */
   /*=========================================================================*/
