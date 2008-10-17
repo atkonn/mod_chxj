@@ -1673,6 +1673,23 @@ main()
   CU_add_test(ixhtml10_suite, "test <menu> 8." ,                                   test_ixhtml10_menu_tag_008);
   CU_add_test(ixhtml10_suite, "test <menu> 9." ,                                   test_ixhtml10_menu_tag_009);
   CU_add_test(ixhtml10_suite, "test <menu> 10." ,                                  test_ixhtml10_menu_tag_010);
+
+  CU_add_test(ixhtml10_suite, "test menu with css 001",                       test_ixhtml10_menu_tag_with_css_001);
+  CU_add_test(ixhtml10_suite, "test menu with css 002",                       test_ixhtml10_menu_tag_with_css_002);
+  CU_add_test(ixhtml10_suite, "test menu with css 009",                       test_ixhtml10_menu_tag_with_css_009);
+  CU_add_test(ixhtml10_suite, "test menu with css 010",                       test_ixhtml10_menu_tag_with_css_010);
+  CU_add_test(ixhtml10_suite, "test menu with css 011",                       test_ixhtml10_menu_tag_with_css_011);
+  CU_add_test(ixhtml10_suite, "test menu with css 012",                       test_ixhtml10_menu_tag_with_css_012);
+  CU_add_test(ixhtml10_suite, "test menu with css 013",                       test_ixhtml10_menu_tag_with_css_013);
+  CU_add_test(ixhtml10_suite, "test menu with css 014",                       test_ixhtml10_menu_tag_with_css_014);
+  CU_add_test(ixhtml10_suite, "test menu with css 015",                       test_ixhtml10_menu_tag_with_css_015);
+  CU_add_test(ixhtml10_suite, "test menu with css 016",                       test_ixhtml10_menu_tag_with_css_016);
+  CU_add_test(ixhtml10_suite, "test menu with css 017",                       test_ixhtml10_menu_tag_with_css_017);
+  CU_add_test(ixhtml10_suite, "test menu with css 018",                       test_ixhtml10_menu_tag_with_css_018);
+  CU_add_test(ixhtml10_suite, "test menu with css 019",                       test_ixhtml10_menu_tag_with_css_019);
+  CU_add_test(ixhtml10_suite, "test menu with css 020",                       test_ixhtml10_menu_tag_with_css_020);
+  CU_add_test(ixhtml10_suite, "test menu with css 021",                       test_ixhtml10_menu_tag_with_css_021);
+  CU_add_test(ixhtml10_suite, "test menu with css 022",                       test_ixhtml10_menu_tag_with_css_022);
 #if 0
   /*=========================================================================*/
   /* <FORM>                                                                  */
@@ -1966,22 +1983,6 @@ main()
 
 
 
-  CU_add_test(ixhtml10_suite, "test menu with css 001",                       test_ixhtml10_menu_tag_with_css_001);
-  CU_add_test(ixhtml10_suite, "test menu with css 002",                       test_ixhtml10_menu_tag_with_css_002);
-  CU_add_test(ixhtml10_suite, "test menu with css 009",                       test_ixhtml10_menu_tag_with_css_009);
-  CU_add_test(ixhtml10_suite, "test menu with css 010",                       test_ixhtml10_menu_tag_with_css_010);
-  CU_add_test(ixhtml10_suite, "test menu with css 011",                       test_ixhtml10_menu_tag_with_css_011);
-  CU_add_test(ixhtml10_suite, "test menu with css 012",                       test_ixhtml10_menu_tag_with_css_012);
-  CU_add_test(ixhtml10_suite, "test menu with css 013",                       test_ixhtml10_menu_tag_with_css_013);
-  CU_add_test(ixhtml10_suite, "test menu with css 014",                       test_ixhtml10_menu_tag_with_css_014);
-  CU_add_test(ixhtml10_suite, "test menu with css 015",                       test_ixhtml10_menu_tag_with_css_015);
-  CU_add_test(ixhtml10_suite, "test menu with css 016",                       test_ixhtml10_menu_tag_with_css_016);
-  CU_add_test(ixhtml10_suite, "test menu with css 017",                       test_ixhtml10_menu_tag_with_css_017);
-  CU_add_test(ixhtml10_suite, "test menu with css 018",                       test_ixhtml10_menu_tag_with_css_018);
-  CU_add_test(ixhtml10_suite, "test menu with css 019",                       test_ixhtml10_menu_tag_with_css_019);
-  CU_add_test(ixhtml10_suite, "test menu with css 020",                       test_ixhtml10_menu_tag_with_css_020);
-  CU_add_test(ixhtml10_suite, "test menu with css 021",                       test_ixhtml10_menu_tag_with_css_021);
-  CU_add_test(ixhtml10_suite, "test menu with css 022",                       test_ixhtml10_menu_tag_with_css_022);
 
   CU_add_test(ixhtml10_suite, "test blink with css 001",                       test_ixhtml10_blink_tag_with_css_001);
   CU_add_test(ixhtml10_suite, "test blink with css 002",                       test_ixhtml10_blink_tag_with_css_002);
