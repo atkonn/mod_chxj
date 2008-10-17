@@ -27744,10 +27744,10 @@ void test_ixhtml10_menu_tag_with_css_014()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><body><menu style=\"font-size:small\">あいう</menu></body></html>"
-#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?>" \
-                       "<!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
-                       "<html>" \
-                       "<head></head><body><div><menu style=\"font-size:small;\">あいう</menu></div></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>" \
+                       "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><ul style=\"font-size:small;\">あいう</ul></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
