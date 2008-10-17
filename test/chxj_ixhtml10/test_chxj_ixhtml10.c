@@ -544,12 +544,6 @@ void test_ixhtml10_blockquote_tag_with_css_013();
 void test_ixhtml10_blockquote_tag_with_css_014();
 void test_ixhtml10_blockquote_tag_with_css_015();
 void test_ixhtml10_blockquote_tag_with_css_016();
-#if 0
-
-
-
-
-
 
 void test_ixhtml10_dir_tag_001();
 void test_ixhtml10_dir_tag_002();
@@ -558,6 +552,13 @@ void test_ixhtml10_dir_tag_004();
 void test_ixhtml10_dir_tag_005();
 void test_ixhtml10_dir_tag_006();
 void test_ixhtml10_dir_tag_007();
+#if 0
+
+
+
+
+
+
 
 void test_ixhtml10_dl_tag_001();
 
