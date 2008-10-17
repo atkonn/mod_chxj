@@ -1643,6 +1643,23 @@ main()
   /* <DL>                                                                    */
   /*=========================================================================*/
   CU_add_test(ixhtml10_suite, "test <dl>.",                                        test_ixhtml10_dl_tag_001);
+
+  CU_add_test(ixhtml10_suite, "test dl with css 001",                       test_ixhtml10_dl_tag_with_css_001);
+  CU_add_test(ixhtml10_suite, "test dl with css 002",                       test_ixhtml10_dl_tag_with_css_002);
+  CU_add_test(ixhtml10_suite, "test dl with css 009",                       test_ixhtml10_dl_tag_with_css_009);
+  CU_add_test(ixhtml10_suite, "test dl with css 010",                       test_ixhtml10_dl_tag_with_css_010);
+  CU_add_test(ixhtml10_suite, "test dl with css 011",                       test_ixhtml10_dl_tag_with_css_011);
+  CU_add_test(ixhtml10_suite, "test dl with css 012",                       test_ixhtml10_dl_tag_with_css_012);
+  CU_add_test(ixhtml10_suite, "test dl with css 013",                       test_ixhtml10_dl_tag_with_css_013);
+  CU_add_test(ixhtml10_suite, "test dl with css 014",                       test_ixhtml10_dl_tag_with_css_014);
+  CU_add_test(ixhtml10_suite, "test dl with css 015",                       test_ixhtml10_dl_tag_with_css_015);
+  CU_add_test(ixhtml10_suite, "test dl with css 016",                       test_ixhtml10_dl_tag_with_css_016);
+  CU_add_test(ixhtml10_suite, "test dl with css 017",                       test_ixhtml10_dl_tag_with_css_017);
+  CU_add_test(ixhtml10_suite, "test dl with css 018",                       test_ixhtml10_dl_tag_with_css_018);
+  CU_add_test(ixhtml10_suite, "test dl with css 019",                       test_ixhtml10_dl_tag_with_css_019);
+  CU_add_test(ixhtml10_suite, "test dl with css 020",                       test_ixhtml10_dl_tag_with_css_020);
+  CU_add_test(ixhtml10_suite, "test dl with css 021",                       test_ixhtml10_dl_tag_with_css_021);
+  CU_add_test(ixhtml10_suite, "test dl with css 022",                       test_ixhtml10_dl_tag_with_css_022);
 #if 0
   /*=========================================================================*/
   /* <DD>                                                                    */
@@ -1952,22 +1969,6 @@ main()
 
 
 
-  CU_add_test(ixhtml10_suite, "test dl with css 001",                       test_ixhtml10_dl_tag_with_css_001);
-  CU_add_test(ixhtml10_suite, "test dl with css 002",                       test_ixhtml10_dl_tag_with_css_002);
-  CU_add_test(ixhtml10_suite, "test dl with css 009",                       test_ixhtml10_dl_tag_with_css_009);
-  CU_add_test(ixhtml10_suite, "test dl with css 010",                       test_ixhtml10_dl_tag_with_css_010);
-  CU_add_test(ixhtml10_suite, "test dl with css 011",                       test_ixhtml10_dl_tag_with_css_011);
-  CU_add_test(ixhtml10_suite, "test dl with css 012",                       test_ixhtml10_dl_tag_with_css_012);
-  CU_add_test(ixhtml10_suite, "test dl with css 013",                       test_ixhtml10_dl_tag_with_css_013);
-  CU_add_test(ixhtml10_suite, "test dl with css 014",                       test_ixhtml10_dl_tag_with_css_014);
-  CU_add_test(ixhtml10_suite, "test dl with css 015",                       test_ixhtml10_dl_tag_with_css_015);
-  CU_add_test(ixhtml10_suite, "test dl with css 016",                       test_ixhtml10_dl_tag_with_css_016);
-  CU_add_test(ixhtml10_suite, "test dl with css 017",                       test_ixhtml10_dl_tag_with_css_017);
-  CU_add_test(ixhtml10_suite, "test dl with css 018",                       test_ixhtml10_dl_tag_with_css_018);
-  CU_add_test(ixhtml10_suite, "test dl with css 019",                       test_ixhtml10_dl_tag_with_css_019);
-  CU_add_test(ixhtml10_suite, "test dl with css 020",                       test_ixhtml10_dl_tag_with_css_020);
-  CU_add_test(ixhtml10_suite, "test dl with css 021",                       test_ixhtml10_dl_tag_with_css_021);
-  CU_add_test(ixhtml10_suite, "test dl with css 022",                       test_ixhtml10_dl_tag_with_css_022);
 
   CU_add_test(ixhtml10_suite, "test dd with css 001",                       test_ixhtml10_dd_tag_with_css_001);
   CU_add_test(ixhtml10_suite, "test dd with css 002",                       test_ixhtml10_dd_tag_with_css_002);
