@@ -12057,7 +12057,7 @@ void test_ixhtml10_menu_tag_005()
 void test_ixhtml10_menu_tag_006()
 {
 #define  TEST_STRING "<menu type=\"disc\"><li>ﾊﾝｶｸ</li><li>ﾊﾝｶｸ</li></menu>"
-#define  RESULT_STRING "<menu style=\"list-style-type:disc;\"><li>ﾊﾝｶｸ</li><li>ﾊﾝｶｸ</li></menu>"
+#define  RESULT_STRING "<ul style=\"list-style-type:disc;\"><li>ﾊﾝｶｸ</li><li>ﾊﾝｶｸ</li></ul>"
   char  *ret;
   char  *tmp;
   device_table spec;
