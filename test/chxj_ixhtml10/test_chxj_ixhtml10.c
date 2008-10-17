@@ -1575,7 +1575,7 @@ main()
   /*=========================================================================*/
   CU_add_test(ixhtml10_suite, "test <label>.",                                        test_ixhtml10_label_tag_001);
   CU_add_test(ixhtml10_suite, "test <label> 2.",                                      test_ixhtml10_label_tag_002);
-#if 0
+
   /*=========================================================================*/
   /* <BLOCKQUOTE>                                                            */
   /*=========================================================================*/
@@ -1583,6 +1583,7 @@ main()
   CU_add_test(ixhtml10_suite, "test <blockquote> with value.",                     test_ixhtml10_blockquote_tag_002);
   CU_add_test(ixhtml10_suite, "test <blockquote> with japanese value.",            test_ixhtml10_blockquote_tag_003);
   CU_add_test(ixhtml10_suite, "test <blockquote> with hankaku kana value.",        test_ixhtml10_blockquote_tag_004);
+#if 0
   /*=========================================================================*/
   /* <DIR>                                                                   */
   /*=========================================================================*/
