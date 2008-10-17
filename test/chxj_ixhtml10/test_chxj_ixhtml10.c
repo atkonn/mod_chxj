@@ -7906,7 +7906,7 @@ void test_ixhtml10_dir_tag_001()
 void test_ixhtml10_dir_tag_002()
 {
 #define  TEST_STRING "<dir></dir>"
-#define  RESULT_STRING "<dir></dir>"
+#define  RESULT_STRING "<ul></ul>"
   char  *ret;
   char  *tmp;
   device_table spec;
