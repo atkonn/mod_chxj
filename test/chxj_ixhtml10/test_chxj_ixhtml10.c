@@ -594,6 +594,8 @@ void test_ixhtml10_dl_tag_with_css_019();
 void test_ixhtml10_dl_tag_with_css_020();
 void test_ixhtml10_dl_tag_with_css_021();
 void test_ixhtml10_dl_tag_with_css_022();
+
+void test_ixhtml10_dd_tag_001();
 #if 0
 
 
@@ -604,7 +606,6 @@ void test_ixhtml10_dl_tag_with_css_022();
 
 
 
-void test_ixhtml10_dd_tag_001();
 void test_ixhtml10_dd_tag_002();
 
 
