@@ -7936,7 +7936,7 @@ void test_ixhtml10_dir_tag_002()
 void test_ixhtml10_dir_tag_003()
 {
 #define  TEST_STRING "<dir type=\"disc\"></dir>"
-#define  RESULT_STRING "<dir style=\"list-style-type:disc;\"></dir>"
+#define  RESULT_STRING "<ul style=\"list-style-type:disc;\"></ul>"
   char  *ret;
   char  *tmp;
   device_table spec;
