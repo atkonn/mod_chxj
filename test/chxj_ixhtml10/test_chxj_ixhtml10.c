@@ -1573,6 +1573,7 @@ main()
   /* <LABEL>                                                                 */
   /*=========================================================================*/
   CU_add_test(ixhtml10_suite, "test <label>.",                                        test_ixhtml10_label_tag_001);
+  CU_add_test(ixhtml10_suite, "test <label> 2.",                                      test_ixhtml10_label_tag_002);
 #if 0
   /*=========================================================================*/
   /* <BLOCKQUOTE>                                                            */
