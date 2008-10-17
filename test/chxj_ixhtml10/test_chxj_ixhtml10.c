@@ -25830,10 +25830,10 @@ void test_ixhtml10_dir_tag_with_css_020()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><body><dir style=\"font-size:x-large\">あいう</dir></body></html>"
-#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?>" \
-                       "<!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
-                       "<html>" \
-                       "<head></head><body><div><dir style=\"font-size:x-large;\">あいう</dir></div></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>" \
+                       "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><ul style=\"font-size:x-large;\">あいう</ul></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
