@@ -519,6 +519,8 @@ void test_ixhtml10_dt_tag_with_css_014();
 
 void test_ixhtml10_legend_tag_001();
 void test_ixhtml10_legend_tag_002();
+
+void test_ixhtml10_label_tag_001();
 #if 0
 
 
