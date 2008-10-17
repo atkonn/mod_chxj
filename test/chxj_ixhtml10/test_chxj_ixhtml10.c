@@ -1638,11 +1638,12 @@ main()
   CU_add_test(ixhtml10_suite, "test dir with css 020",                       test_ixhtml10_dir_tag_with_css_020);
   CU_add_test(ixhtml10_suite, "test dir with css 021",                       test_ixhtml10_dir_tag_with_css_021);
   CU_add_test(ixhtml10_suite, "test dir with css 022",                       test_ixhtml10_dir_tag_with_css_022);
-#if 0
+
   /*=========================================================================*/
   /* <DL>                                                                    */
   /*=========================================================================*/
   CU_add_test(ixhtml10_suite, "test <dl>.",                                        test_ixhtml10_dl_tag_001);
+#if 0
   /*=========================================================================*/
   /* <DD>                                                                    */
   /*=========================================================================*/
