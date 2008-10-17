@@ -522,13 +522,14 @@ void test_ixhtml10_legend_tag_002();
 
 void test_ixhtml10_label_tag_001();
 void test_ixhtml10_label_tag_002();
-#if 0
-
 
 void test_ixhtml10_blockquote_tag_001();
 void test_ixhtml10_blockquote_tag_002();
 void test_ixhtml10_blockquote_tag_003();
 void test_ixhtml10_blockquote_tag_004();
+#if 0
+
+
 
 
 
