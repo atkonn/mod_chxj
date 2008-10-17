@@ -1583,6 +1583,23 @@ main()
   CU_add_test(ixhtml10_suite, "test <blockquote> with value.",                     test_ixhtml10_blockquote_tag_002);
   CU_add_test(ixhtml10_suite, "test <blockquote> with japanese value.",            test_ixhtml10_blockquote_tag_003);
   CU_add_test(ixhtml10_suite, "test <blockquote> with hankaku kana value.",        test_ixhtml10_blockquote_tag_004);
+
+  CU_add_test(ixhtml10_suite, "test blockquote with css 001",                       test_ixhtml10_blockquote_tag_with_css_001);
+  CU_add_test(ixhtml10_suite, "test blockquote with css 002",                       test_ixhtml10_blockquote_tag_with_css_002);
+  CU_add_test(ixhtml10_suite, "test blockquote with css 003",                       test_ixhtml10_blockquote_tag_with_css_003);
+  CU_add_test(ixhtml10_suite, "test blockquote with css 004",                       test_ixhtml10_blockquote_tag_with_css_004);
+  CU_add_test(ixhtml10_suite, "test blockquote with css 005",                       test_ixhtml10_blockquote_tag_with_css_005);
+  CU_add_test(ixhtml10_suite, "test blockquote with css 006",                       test_ixhtml10_blockquote_tag_with_css_006);
+  CU_add_test(ixhtml10_suite, "test blockquote with css 007",                       test_ixhtml10_blockquote_tag_with_css_007);
+  CU_add_test(ixhtml10_suite, "test blockquote with css 008",                       test_ixhtml10_blockquote_tag_with_css_008);
+  CU_add_test(ixhtml10_suite, "test blockquote with css 009",                       test_ixhtml10_blockquote_tag_with_css_009);
+  CU_add_test(ixhtml10_suite, "test blockquote with css 010",                       test_ixhtml10_blockquote_tag_with_css_010);
+  CU_add_test(ixhtml10_suite, "test blockquote with css 011",                       test_ixhtml10_blockquote_tag_with_css_011);
+  CU_add_test(ixhtml10_suite, "test blockquote with css 012",                       test_ixhtml10_blockquote_tag_with_css_012);
+  CU_add_test(ixhtml10_suite, "test blockquote with css 013",                       test_ixhtml10_blockquote_tag_with_css_013);
+  CU_add_test(ixhtml10_suite, "test blockquote with css 014",                       test_ixhtml10_blockquote_tag_with_css_014);
+  CU_add_test(ixhtml10_suite, "test blockquote with css 015",                       test_ixhtml10_blockquote_tag_with_css_015);
+  CU_add_test(ixhtml10_suite, "test blockquote with css 016",                       test_ixhtml10_blockquote_tag_with_css_016);
 #if 0
   /*=========================================================================*/
   /* <DIR>                                                                   */
@@ -1904,22 +1921,6 @@ main()
   CU_add_test(ixhtml10_suite, "test div with css 042",                              test_ixhtml10_div_tag_with_css_042);
 
 
-  CU_add_test(ixhtml10_suite, "test blockquote with css 001",                       test_ixhtml10_blockquote_tag_with_css_001);
-  CU_add_test(ixhtml10_suite, "test blockquote with css 002",                       test_ixhtml10_blockquote_tag_with_css_002);
-  CU_add_test(ixhtml10_suite, "test blockquote with css 003",                       test_ixhtml10_blockquote_tag_with_css_003);
-  CU_add_test(ixhtml10_suite, "test blockquote with css 004",                       test_ixhtml10_blockquote_tag_with_css_004);
-  CU_add_test(ixhtml10_suite, "test blockquote with css 005",                       test_ixhtml10_blockquote_tag_with_css_005);
-  CU_add_test(ixhtml10_suite, "test blockquote with css 006",                       test_ixhtml10_blockquote_tag_with_css_006);
-  CU_add_test(ixhtml10_suite, "test blockquote with css 007",                       test_ixhtml10_blockquote_tag_with_css_007);
-  CU_add_test(ixhtml10_suite, "test blockquote with css 008",                       test_ixhtml10_blockquote_tag_with_css_008);
-  CU_add_test(ixhtml10_suite, "test blockquote with css 009",                       test_ixhtml10_blockquote_tag_with_css_009);
-  CU_add_test(ixhtml10_suite, "test blockquote with css 010",                       test_ixhtml10_blockquote_tag_with_css_010);
-  CU_add_test(ixhtml10_suite, "test blockquote with css 011",                       test_ixhtml10_blockquote_tag_with_css_011);
-  CU_add_test(ixhtml10_suite, "test blockquote with css 012",                       test_ixhtml10_blockquote_tag_with_css_012);
-  CU_add_test(ixhtml10_suite, "test blockquote with css 013",                       test_ixhtml10_blockquote_tag_with_css_013);
-  CU_add_test(ixhtml10_suite, "test blockquote with css 014",                       test_ixhtml10_blockquote_tag_with_css_014);
-  CU_add_test(ixhtml10_suite, "test blockquote with css 015",                       test_ixhtml10_blockquote_tag_with_css_015);
-  CU_add_test(ixhtml10_suite, "test blockquote with css 016",                       test_ixhtml10_blockquote_tag_with_css_016);
 
   CU_add_test(ixhtml10_suite, "test dir with css 001",                       test_ixhtml10_dir_tag_with_css_001);
   CU_add_test(ixhtml10_suite, "test dir with css 002",                       test_ixhtml10_dir_tag_with_css_002);
