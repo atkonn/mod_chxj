@@ -527,6 +527,23 @@ void test_ixhtml10_blockquote_tag_001();
 void test_ixhtml10_blockquote_tag_002();
 void test_ixhtml10_blockquote_tag_003();
 void test_ixhtml10_blockquote_tag_004();
+
+void test_ixhtml10_blockquote_tag_with_css_001();
+void test_ixhtml10_blockquote_tag_with_css_002();
+void test_ixhtml10_blockquote_tag_with_css_003();
+void test_ixhtml10_blockquote_tag_with_css_004();
+void test_ixhtml10_blockquote_tag_with_css_005();
+void test_ixhtml10_blockquote_tag_with_css_006();
+void test_ixhtml10_blockquote_tag_with_css_007();
+void test_ixhtml10_blockquote_tag_with_css_008();
+void test_ixhtml10_blockquote_tag_with_css_009();
+void test_ixhtml10_blockquote_tag_with_css_010();
+void test_ixhtml10_blockquote_tag_with_css_011();
+void test_ixhtml10_blockquote_tag_with_css_012();
+void test_ixhtml10_blockquote_tag_with_css_013();
+void test_ixhtml10_blockquote_tag_with_css_014();
+void test_ixhtml10_blockquote_tag_with_css_015();
+void test_ixhtml10_blockquote_tag_with_css_016();
 #if 0
 
 
@@ -854,22 +871,6 @@ void test_ixhtml10_div_tag_with_css_041();
 void test_ixhtml10_div_tag_with_css_042();
 
 
-void test_ixhtml10_blockquote_tag_with_css_001();
-void test_ixhtml10_blockquote_tag_with_css_002();
-void test_ixhtml10_blockquote_tag_with_css_003();
-void test_ixhtml10_blockquote_tag_with_css_004();
-void test_ixhtml10_blockquote_tag_with_css_005();
-void test_ixhtml10_blockquote_tag_with_css_006();
-void test_ixhtml10_blockquote_tag_with_css_007();
-void test_ixhtml10_blockquote_tag_with_css_008();
-void test_ixhtml10_blockquote_tag_with_css_009();
-void test_ixhtml10_blockquote_tag_with_css_010();
-void test_ixhtml10_blockquote_tag_with_css_011();
-void test_ixhtml10_blockquote_tag_with_css_012();
-void test_ixhtml10_blockquote_tag_with_css_013();
-void test_ixhtml10_blockquote_tag_with_css_014();
-void test_ixhtml10_blockquote_tag_with_css_015();
-void test_ixhtml10_blockquote_tag_with_css_016();
 
 void test_ixhtml10_dir_tag_with_css_001();
 void test_ixhtml10_dir_tag_with_css_002();
