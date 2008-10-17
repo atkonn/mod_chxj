@@ -7966,7 +7966,7 @@ void test_ixhtml10_dir_tag_003()
 void test_ixhtml10_dir_tag_004()
 {
 #define  TEST_STRING "<dir type=\"circle\"></dir>"
-#define  RESULT_STRING "<dir style=\"list-style-type:circle;\"></dir>"
+#define  RESULT_STRING "<ul style=\"list-style-type:circle;\"></ul>"
   char  *ret;
   char  *tmp;
   device_table spec;
