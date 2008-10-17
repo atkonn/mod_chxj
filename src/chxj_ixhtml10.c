@@ -4965,7 +4965,7 @@ s_ixhtml10_start_menu_tag(void *pdoc, Node *node)
       }
     }
   }
-  W_L("<menu");
+  W_L("<ul");
   if (attr_type || attr_color || attr_size) {
     W_L(" style=\"");
     if (attr_type) {
@@ -5004,7 +5004,7 @@ s_ixhtml10_end_menu_tag(void *pdoc, Node *UNUSED(child))
 {
   ixhtml10_t *ixhtml10 = GET_IXHTML10(pdoc);
   Doc *doc = ixhtml10->doc;
-  W_L("</menu>");
+  W_L("</ul>");
   if (IS_CSS_ON(ixhtml10->entryp)) {
     chxj_css_pop_prop_list(ixhtml10->css_prop_stack);
   }
