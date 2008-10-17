@@ -1653,12 +1653,13 @@ main()
   CU_add_test(ixhtml10_suite, "test dl with css 020",                       test_ixhtml10_dl_tag_with_css_020);
   CU_add_test(ixhtml10_suite, "test dl with css 021",                       test_ixhtml10_dl_tag_with_css_021);
   CU_add_test(ixhtml10_suite, "test dl with css 022",                       test_ixhtml10_dl_tag_with_css_022);
-#if 0
+
   /*=========================================================================*/
   /* <DD>                                                                    */
   /*=========================================================================*/
   CU_add_test(ixhtml10_suite, "test <dd>.",                                        test_ixhtml10_dd_tag_001);
   CU_add_test(ixhtml10_suite, "test <dd> with void value.",                        test_ixhtml10_dd_tag_002);
+#if 0
   /*=========================================================================*/
   /* <FORM>                                                                  */
   /*=========================================================================*/
