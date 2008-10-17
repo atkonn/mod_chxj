@@ -7996,7 +7996,7 @@ void test_ixhtml10_dir_tag_004()
 void test_ixhtml10_dir_tag_005()
 {
 #define  TEST_STRING "<dir type=\"square\"></dir>"
-#define  RESULT_STRING "<dir style=\"list-style-type:square;\"></dir>"
+#define  RESULT_STRING "<ul style=\"list-style-type:square;\"></ul>"
   char  *ret;
   char  *tmp;
   device_table spec;
