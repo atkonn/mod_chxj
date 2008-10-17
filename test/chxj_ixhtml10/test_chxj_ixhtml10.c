@@ -521,6 +521,7 @@ void test_ixhtml10_legend_tag_001();
 void test_ixhtml10_legend_tag_002();
 
 void test_ixhtml10_label_tag_001();
+void test_ixhtml10_label_tag_002();
 #if 0
 
 
