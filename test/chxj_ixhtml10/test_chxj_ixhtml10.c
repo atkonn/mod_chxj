@@ -1699,6 +1699,14 @@ main()
   CU_add_test(ixhtml10_suite, "test <plaintext> 2." ,                              test_ixhtml10_plaintext_tag_002);
   CU_add_test(ixhtml10_suite, "test <plaintext> 3. value is not closed." ,         test_ixhtml10_plaintext_tag_003);
   CU_add_test(ixhtml10_suite, "test <plaintext> 3. value is not closed and hankaku." , test_ixhtml10_plaintext_tag_004);
+
+  /*=========================================================================*/
+  /* <BLINK>                                                                 */
+  /*=========================================================================*/
+  CU_add_test(ixhtml10_suite, "test <blink> 1." ,                                  test_ixhtml10_blink_tag_001);
+  CU_add_test(ixhtml10_suite, "test <blink> 2." ,                                  test_ixhtml10_blink_tag_002);
+  CU_add_test(ixhtml10_suite, "test <blink> 3." ,                                  test_ixhtml10_blink_tag_003);
+  CU_add_test(ixhtml10_suite, "test <blink> 4." ,                                  test_ixhtml10_blink_tag_004);
 #if 0
   /*=========================================================================*/
   /* <FORM>                                                                  */
@@ -1716,13 +1724,6 @@ main()
   /* <HTML>                                                                  */
   /*=========================================================================*/
   CU_add_test(ixhtml10_suite, "test <html>.",                                      test_ixhtml10_html_tag_001);
-  /*=========================================================================*/
-  /* <BLINK>                                                                 */
-  /*=========================================================================*/
-  CU_add_test(ixhtml10_suite, "test <blink> 1." ,                                  test_ixhtml10_blink_tag_001);
-  CU_add_test(ixhtml10_suite, "test <blink> 2." ,                                  test_ixhtml10_blink_tag_002);
-  CU_add_test(ixhtml10_suite, "test <blink> 3." ,                                  test_ixhtml10_blink_tag_003);
-  CU_add_test(ixhtml10_suite, "test <blink> 4." ,                                  test_ixhtml10_blink_tag_004);
   /*=========================================================================*/
   /* <MARQUEE>                                                               */
   /*=========================================================================*/
