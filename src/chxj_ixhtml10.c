@@ -5131,9 +5131,9 @@ s_ixhtml10_start_blink_tag(void *pdoc, Node *node)
       }
     }
   }
-  W_L("<blink");
+  W_L("<span");
+  W_L(" style=\"text-decoration:blink;");
   if (attr_color || attr_size) {
-    W_L(" style=\"");
     if (attr_color) {
       attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
       W_L("color:");
@@ -5145,8 +5145,8 @@ s_ixhtml10_start_blink_tag(void *pdoc, Node *node)
       W_V(attr_size);
       W_L(";");
     }
-    W_L("\"");
   }
+  W_L("\"");
   W_L(">");
   return ixhtml10->out;
 }
@@ -5165,7 +5165,7 @@ s_ixhtml10_end_blink_tag(void *pdoc, Node *UNUSED(child))
 {
   ixhtml10_t *ixhtml10 = GET_IXHTML10(pdoc);
   Doc      *doc = ixhtml10->doc;
-  W_L("</blink>");
+  W_L("</span>");
   if (IS_CSS_ON(ixhtml10->entryp)) {
     chxj_css_pop_prop_list(ixhtml10->css_prop_stack);
   }
