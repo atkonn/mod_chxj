@@ -13021,7 +13021,7 @@ void test_ixhtml10_blink_tag_002()
 void test_ixhtml10_blink_tag_003()
 {
 #define  TEST_STRING "<blink>あああ</blink>"
-#define  RESULT_STRING "<blink>あああ</blink>"
+#define  RESULT_STRING "<span style=\"text-decoration:blink;\">あああ</span>"
   char  *ret;
   char  *tmp;
   device_table spec;
