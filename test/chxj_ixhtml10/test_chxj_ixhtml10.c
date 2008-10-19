@@ -648,7 +648,6 @@ void test_ixhtml10_plaintext_tag_002();
 void test_ixhtml10_plaintext_tag_003();
 void test_ixhtml10_plaintext_tag_004();
 
-
 #if 0
 void test_ixhtml10_form_tag_001();
 void test_ixhtml10_form_tag_002();
@@ -1691,6 +1690,14 @@ main()
   CU_add_test(ixhtml10_suite, "test menu with css 020",                       test_ixhtml10_menu_tag_with_css_020);
   CU_add_test(ixhtml10_suite, "test menu with css 021",                       test_ixhtml10_menu_tag_with_css_021);
   CU_add_test(ixhtml10_suite, "test menu with css 022",                       test_ixhtml10_menu_tag_with_css_022);
+
+  /*=========================================================================*/
+  /* <PLAINTEXT>                                                             */
+  /*=========================================================================*/
+  CU_add_test(ixhtml10_suite, "test <plaintext> 1." ,                              test_ixhtml10_plaintext_tag_001);
+  CU_add_test(ixhtml10_suite, "test <plaintext> 2." ,                              test_ixhtml10_plaintext_tag_002);
+  CU_add_test(ixhtml10_suite, "test <plaintext> 3. value is not closed." ,         test_ixhtml10_plaintext_tag_003);
+  CU_add_test(ixhtml10_suite, "test <plaintext> 3. value is not closed and hankaku." , test_ixhtml10_plaintext_tag_004);
 #if 0
   /*=========================================================================*/
   /* <FORM>                                                                  */
@@ -1708,13 +1715,6 @@ main()
   /* <HTML>                                                                  */
   /*=========================================================================*/
   CU_add_test(ixhtml10_suite, "test <html>.",                                      test_ixhtml10_html_tag_001);
-  /*=========================================================================*/
-  /* <PLAINTEXT>                                                             */
-  /*=========================================================================*/
-  CU_add_test(ixhtml10_suite, "test <plaintext> 1." ,                              test_ixhtml10_plaintext_tag_001);
-  CU_add_test(ixhtml10_suite, "test <plaintext> 2." ,                              test_ixhtml10_plaintext_tag_002);
-  CU_add_test(ixhtml10_suite, "test <plaintext> 3. value is not closed." ,         test_ixhtml10_plaintext_tag_003);
-  CU_add_test(ixhtml10_suite, "test <plaintext> 3. value is not closed and hankaku." , test_ixhtml10_plaintext_tag_004);
   /*=========================================================================*/
   /* <BLINK>                                                                 */
   /*=========================================================================*/
