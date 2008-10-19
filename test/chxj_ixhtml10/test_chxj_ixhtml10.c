@@ -13051,7 +13051,7 @@ void test_ixhtml10_blink_tag_003()
 void test_ixhtml10_blink_tag_004()
 {
 #define  TEST_STRING "<blink>ﾊﾝｶｸ</blink>"
-#define  RESULT_STRING "<blink>ﾊﾝｶｸ</blink>"
+#define  RESULT_STRING "<span style=\"text-decoration:blink;\">ﾊﾝｶｸ</span>"
   char  *ret;
   char  *tmp;
   device_table spec;
