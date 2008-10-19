@@ -28192,7 +28192,7 @@ void test_ixhtml10_blink_tag_with_css_002()
 #define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>" \
                        "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">" \
                        "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
-                       "<head></head><body><span style=\"text-decoration:blink;color:#ff0000;\">あいう</blink></body></html>"
+                       "<head></head><body><span style=\"text-decoration:blink;color:#ff0000;\">あいう</span></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
