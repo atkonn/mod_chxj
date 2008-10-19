@@ -12991,7 +12991,7 @@ void test_ixhtml10_blink_tag_001()
 void test_ixhtml10_blink_tag_002()
 {
 #define  TEST_STRING "<blink>abc</blink>"
-#define  RESULT_STRING "<blink>abc</blink>"
+#define  RESULT_STRING "<span style=\"text-decoration:blink;\">abc</span>"
   char  *ret;
   char  *tmp;
   device_table spec;
