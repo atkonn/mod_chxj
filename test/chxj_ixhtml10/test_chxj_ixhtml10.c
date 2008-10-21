@@ -13291,7 +13291,7 @@ void test_ixhtml10_marquee_tag_007()
 void test_ixhtml10_marquee_tag_008()
 {
 #define  TEST_STRING "<marquee direction=\"right\">ﾊﾝｶｸ</marquee>"
-#define  RESULT_STRING "<marquee style=\"-wap-marquee-dir:ltr;\">ﾊﾝｶｸ</marquee>"
+#define  RESULT_STRING "<span style=\"display:-wap-marquee;-wap-marquee-dir:ltr;\">ﾊﾝｶｸ</span>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -13321,7 +13321,7 @@ void test_ixhtml10_marquee_tag_008()
 void test_ixhtml10_marquee_tag_009()
 {
 #define  TEST_STRING "<marquee direction=\"center\">ﾊﾝｶｸ</marquee>"
-#define  RESULT_STRING "<marquee>ﾊﾝｶｸ</marquee>"
+#define  RESULT_STRING "<span style=\"display:-wap-marquee;\">ﾊﾝｶｸ</span>"
   char  *ret;
   char  *tmp;
   device_table spec;
