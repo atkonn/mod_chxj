@@ -13591,7 +13591,7 @@ void test_ixhtml10_marquee_tag_017()
 void test_ixhtml10_marquee_tag_018()
 {
 #define  TEST_STRING "<marquee loop=\"1\">ﾊﾝｶｸ</marquee>"
-#define  RESULT_STRING "<span style==\"display:-wap-marquee;\">ﾊﾝｶｸ</span>"
+#define  RESULT_STRING "<span style=\"display:-wap-marquee;\">ﾊﾝｶｸ</span>"
   char  *ret;
   char  *tmp;
   device_table spec;

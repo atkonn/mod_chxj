@@ -5263,9 +5263,9 @@ s_ixhtml10_start_marquee_tag(void *pdoc, Node *node)
       }
     }
   }
-  W_L("<marquee");
+  W_L("<span");
+  W_L(" style=\"display:-wap-marquee;");
   if (attr_color || attr_size || attr_direction || attr_bgcolor) {
-    W_L(" style=\"");
     if (attr_direction) {
       W_L("-wap-marquee-dir:");
       W_V(attr_direction);
@@ -5288,8 +5288,8 @@ s_ixhtml10_start_marquee_tag(void *pdoc, Node *node)
       W_V(attr_size);
       W_L(";");
     }
-    W_L("\"");
   }
+  W_L("\"");
   W_L(">");
 
   return ixhtml10->out;
@@ -5309,7 +5309,7 @@ s_ixhtml10_end_marquee_tag(void *pdoc, Node *UNUSED(node))
 {
   ixhtml10_t *ixhtml10 = GET_IXHTML10(pdoc);
   Doc      *doc     = ixhtml10->doc;
-  W_L("</marquee>");
+  W_L("</span>");
   if (IS_CSS_ON(ixhtml10->entryp)) {
     chxj_css_pop_prop_list(ixhtml10->css_prop_stack);
   }
