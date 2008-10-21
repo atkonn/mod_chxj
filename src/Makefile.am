@@ -56,6 +56,7 @@ clean:
 	rm -fr .libs
 	rm -f *.o *.lo *.la
 	rm -f mod_chxj.so
+	rm -f serf/libserf-0.la
 	(cd serf; make clean)
 
 install: make_so
