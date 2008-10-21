@@ -1718,23 +1718,7 @@ main()
   CU_add_test(ixhtml10_suite, "test blink with css 020",                       test_ixhtml10_blink_tag_with_css_020);
   CU_add_test(ixhtml10_suite, "test blink with css 021",                       test_ixhtml10_blink_tag_with_css_021);
   CU_add_test(ixhtml10_suite, "test blink with css 022",                       test_ixhtml10_blink_tag_with_css_022);
-#if 0
-  /*=========================================================================*/
-  /* <FORM>                                                                  */
-  /*=========================================================================*/
-  CU_add_test(ixhtml10_suite, "test <form>.",                                      test_ixhtml10_form_tag_001);
-  CU_add_test(ixhtml10_suite, "test <form method>.",                               test_ixhtml10_form_tag_002);
-  CU_add_test(ixhtml10_suite, "test <form method=\"post\">.",                      test_ixhtml10_form_tag_003);
-  CU_add_test(ixhtml10_suite, "test <form method=\"get\">.",                       test_ixhtml10_form_tag_004);
-  CU_add_test(ixhtml10_suite, "test <form method=\"abc\">.",                       test_ixhtml10_form_tag_005);
-  CU_add_test(ixhtml10_suite, "test <form action>.",                               test_ixhtml10_form_tag_006);
-  CU_add_test(ixhtml10_suite, "test <form action> with null cookie.",              test_ixhtml10_form_tag_007);
-  CU_add_test(ixhtml10_suite, "test <form action> with other site .",              test_ixhtml10_form_tag_008);
-  CU_add_test(ixhtml10_suite, "test <form action method>.",                        test_ixhtml10_form_tag_009);
-  /*=========================================================================*/
-  /* <HTML>                                                                  */
-  /*=========================================================================*/
-  CU_add_test(ixhtml10_suite, "test <html>.",                                      test_ixhtml10_html_tag_001);
+
   /*=========================================================================*/
   /* <MARQUEE>                                                               */
   /*=========================================================================*/
@@ -1759,6 +1743,23 @@ main()
   CU_add_test(ixhtml10_suite, "test <marquee> 19." ,                               test_ixhtml10_marquee_tag_019);
   CU_add_test(ixhtml10_suite, "test <marquee> 20." ,                               test_ixhtml10_marquee_tag_020);
   CU_add_test(ixhtml10_suite, "test <marquee> 21." ,                               test_ixhtml10_marquee_tag_021);
+#if 0
+  /*=========================================================================*/
+  /* <FORM>                                                                  */
+  /*=========================================================================*/
+  CU_add_test(ixhtml10_suite, "test <form>.",                                      test_ixhtml10_form_tag_001);
+  CU_add_test(ixhtml10_suite, "test <form method>.",                               test_ixhtml10_form_tag_002);
+  CU_add_test(ixhtml10_suite, "test <form method=\"post\">.",                      test_ixhtml10_form_tag_003);
+  CU_add_test(ixhtml10_suite, "test <form method=\"get\">.",                       test_ixhtml10_form_tag_004);
+  CU_add_test(ixhtml10_suite, "test <form method=\"abc\">.",                       test_ixhtml10_form_tag_005);
+  CU_add_test(ixhtml10_suite, "test <form action>.",                               test_ixhtml10_form_tag_006);
+  CU_add_test(ixhtml10_suite, "test <form action> with null cookie.",              test_ixhtml10_form_tag_007);
+  CU_add_test(ixhtml10_suite, "test <form action> with other site .",              test_ixhtml10_form_tag_008);
+  CU_add_test(ixhtml10_suite, "test <form action method>.",                        test_ixhtml10_form_tag_009);
+  /*=========================================================================*/
+  /* <HTML>                                                                  */
+  /*=========================================================================*/
+  CU_add_test(ixhtml10_suite, "test <html>.",                                      test_ixhtml10_html_tag_001);
   /*=========================================================================*/
   /* <param>                                                                 */
   /*=========================================================================*/
