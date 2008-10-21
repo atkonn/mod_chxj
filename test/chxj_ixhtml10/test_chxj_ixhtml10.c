@@ -13261,7 +13261,7 @@ void test_ixhtml10_marquee_tag_006()
 void test_ixhtml10_marquee_tag_007()
 {
 #define  TEST_STRING "<marquee direction=\"left\">ﾊﾝｶｸ</marquee>"
-#define  RESULT_STRING "<marquee style=\"-wap-marquee-dir:rtl;\">ﾊﾝｶｸ</marquee>"
+#define  RESULT_STRING "<span style=\"display:-wap-marquee;-wap-marquee-dir:rtl;\">ﾊﾝｶｸ</span>"
   char  *ret;
   char  *tmp;
   device_table spec;
