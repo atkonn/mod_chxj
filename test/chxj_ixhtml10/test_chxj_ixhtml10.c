@@ -29020,10 +29020,10 @@ void test_ixhtml10_marquee_tag_with_css_011()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><body><marquee>あいう</marquee></body></html>"
-#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?>" \
-                       "<!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
-                       "<html>" \
-                       "<head></head><body><div><marquee style=\"font-size:x-small;\">あいう</marquee></div></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>" \
+                       "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><span style=\"display:-wap-marquee;font-size:x-small;\">あいう</span></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -29056,10 +29056,10 @@ void test_ixhtml10_marquee_tag_with_css_012()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><body><marquee style=\"font-size:x-small\">あいう</marquee></body></html>"
-#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?>" \
-                       "<!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
-                       "<html>" \
-                       "<head></head><body><div><marquee style=\"font-size:x-small;\">あいう</marquee></div></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>" \
+                       "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><span style=\"display:-wap-marquee;font-size:x-small;\">あいう</span></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -29107,10 +29107,10 @@ void test_ixhtml10_marquee_tag_with_css_013()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><body><marquee>あいう</marquee></body></html>"
-#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?>" \
-                       "<!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
-                       "<html>" \
-                       "<head></head><body><div><marquee style=\"font-size:small;\">あいう</marquee></div></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>" \
+                       "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><span style=\"display:-wap-marquee;font-size:small;\">あいう</span></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
