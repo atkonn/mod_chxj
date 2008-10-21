@@ -669,22 +669,6 @@ void test_ixhtml10_blink_tag_with_css_019();
 void test_ixhtml10_blink_tag_with_css_020();
 void test_ixhtml10_blink_tag_with_css_021();
 void test_ixhtml10_blink_tag_with_css_022();
-#if 0
-void test_ixhtml10_form_tag_001();
-void test_ixhtml10_form_tag_002();
-void test_ixhtml10_form_tag_003();
-void test_ixhtml10_form_tag_004();
-void test_ixhtml10_form_tag_005();
-void test_ixhtml10_form_tag_006();
-void test_ixhtml10_form_tag_007();
-void test_ixhtml10_form_tag_008();
-void test_ixhtml10_form_tag_009();
-
-void test_ixhtml10_html_tag_001();
-
-
-
-
 
 void test_ixhtml10_marquee_tag_001();
 void test_ixhtml10_marquee_tag_002();
@@ -707,8 +691,18 @@ void test_ixhtml10_marquee_tag_018();
 void test_ixhtml10_marquee_tag_019();
 void test_ixhtml10_marquee_tag_020();
 void test_ixhtml10_marquee_tag_021();
+#if 0
+void test_ixhtml10_form_tag_001();
+void test_ixhtml10_form_tag_002();
+void test_ixhtml10_form_tag_003();
+void test_ixhtml10_form_tag_004();
+void test_ixhtml10_form_tag_005();
+void test_ixhtml10_form_tag_006();
+void test_ixhtml10_form_tag_007();
+void test_ixhtml10_form_tag_008();
+void test_ixhtml10_form_tag_009();
 
-
+void test_ixhtml10_html_tag_001();
 
 void test_ixhtml10_param_tag_001();
 
