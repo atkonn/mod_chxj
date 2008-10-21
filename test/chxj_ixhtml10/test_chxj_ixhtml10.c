@@ -28850,7 +28850,7 @@ void test_ixhtml10_marquee_tag_with_css_001()
 #define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>" \
                        "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">" \
                        "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
-                       "<head></head><body><div><span style=\"display:-wap-marquee;color:#ff0000;\">あいう</span></div></body></html>"
+                       "<head></head><body><span style=\"display:-wap-marquee;color:#ff0000;\">あいう</span></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -28883,10 +28883,10 @@ void test_ixhtml10_marquee_tag_with_css_002()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><body><marquee style=\"color:#ff0000\">あいう</marquee></body></html>"
-#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?>" \
-                       "<!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
-                       "<html>" \
-                       "<head></head><body><div><marquee style=\"color:#ff0000;\">あいう</marquee></div></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>" \
+                       "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><span style=\"display:-wap-marquee;color:#ff0000;\">あいう</span></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
