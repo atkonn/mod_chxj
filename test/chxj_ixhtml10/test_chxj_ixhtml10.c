@@ -13111,7 +13111,7 @@ void test_ixhtml10_marquee_tag_001()
 void test_ixhtml10_marquee_tag_002()
 {
 #define  TEST_STRING "<marquee>abc</marquee>"
-#define  RESULT_STRING "<marquee>abc</marquee>"
+#define  RESULT_STRING "<span style=\"display:-wap-marquee;\">abc</span>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -13141,7 +13141,7 @@ void test_ixhtml10_marquee_tag_002()
 void test_ixhtml10_marquee_tag_003()
 {
 #define  TEST_STRING "<marquee>あああ</marquee>"
-#define  RESULT_STRING "<marquee>あああ</marquee>"
+#define  RESULT_STRING "<span style=\"display:-wap-marquee;\">あああ</span>"
   char  *ret;
   char  *tmp;
   device_table spec;
