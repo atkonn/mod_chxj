@@ -13621,7 +13621,7 @@ void test_ixhtml10_marquee_tag_018()
 void test_ixhtml10_marquee_tag_019()
 {
 #define  TEST_STRING "<marquee bgcolor=\"#ff0000\">ﾊﾝｶｸ</marquee>"
-#define  RESULT_STRING "<marquee style=\"background-color:#ff0000;\">ﾊﾝｶｸ</marquee>"
+#define  RESULT_STRING "<span style=\"display:-wap-marquee;background-color:#ff0000;\">ﾊﾝｶｸ</span>"
   char  *ret;
   char  *tmp;
   device_table spec;
