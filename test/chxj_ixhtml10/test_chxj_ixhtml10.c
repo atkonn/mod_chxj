@@ -13081,7 +13081,7 @@ void test_ixhtml10_blink_tag_004()
 void test_ixhtml10_marquee_tag_001()
 {
 #define  TEST_STRING "<marquee></marquee>"
-#define  RESULT_STRING "<marquee></marquee>"
+#define  RESULT_STRING "<span style=\"display:-wap-marquee;\"></span>"
   char  *ret;
   char  *tmp;
   device_table spec;
