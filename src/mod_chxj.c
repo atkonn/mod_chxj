@@ -1254,7 +1254,7 @@ chxj_input_handler(request_rec *r)
 #if 0
     url_path = apr_psprintf(pool, "%s://%s:%d%s", chxj_apache_run_http_scheme(r), ap_get_server_name(r), ap_get_server_port(r), r->uri);
 #else
-    url_path = apr_psprintf(pool, "%s://%s:%d%s", chxj_apache_run_http_scheme(r), "localhost", ap_get_server_port(r), r->uri);
+    url_path = apr_psprintf(pool, "%s://%s:%d%s", chxj_apache_run_http_scheme(r), "127.0.0.1", ap_get_server_port(r), r->uri);
 #endif
   }
   if (r->args) {
