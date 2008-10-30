@@ -3169,4 +3169,60 @@
       <string>$GD</string>
     </jphone>
   </set>
+
+  <!-- 拡張絵文字 -->
+  <set>
+    <no>177</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>b1</hex2>
+      <string>&#63921;</string>
+      <description>iアプリ</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>298</C>
+      <D>298</D>
+    </ezweb>
+    <jphone>
+      <string>$QX</string>
+    </jphone>
+  </set>
+  <set>
+    <no>178</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>b2</hex2>
+      <string>&#63922;</string>
+      <description>iアプリ（枠付き）</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>298</C>
+      <D>298</D>
+    </ezweb>
+    <jphone>
+      <string>$QX</string>
+    </jphone>
+  </set>
+  <set>
+    <no>179</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>b3</hex2>
+      <string>&#63923;</string>
+      <description>Tシャツ（ボーダー）</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>298</C><!-- 良いものが無いのでEzマーク -->
+      <D>298</D><!-- 良いものが無いのでEzマーク -->
+    </ezweb>
+    <jphone>
+      <string>$QX</string><!-- 良いものが無いのでJSKY1 -->
+    </jphone>
+  </set>
 </emoji>
