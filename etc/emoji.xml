@@ -3323,4 +3323,23 @@
       <string>$OE</string><!-- ‚·‚¸ -->
     </jphone>
   </set>
+  <!-- Šg9 -->
+  <set>
+    <no>185</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>b9</hex2>
+      <string>&#63929;</string>
+      <description>ƒhƒA</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>112</C><!-- ‰Æ -->
+      <D>112</D><!-- ‰Æ -->
+    </ezweb>
+    <jphone>
+      <string>$GV</string><!-- ‰Æ -->
+    </jphone>
+  </set>
 </emoji>
