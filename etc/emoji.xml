@@ -3171,6 +3171,7 @@
   </set>
 
   <!-- ägí£äGï∂éö -->
+  <!-- äg1 -->
   <set>
     <no>177</no>
     <imode>
@@ -3189,6 +3190,7 @@
       <string>$QX</string>
     </jphone>
   </set>
+  <!-- äg2 -->
   <set>
     <no>178</no>
     <imode>
@@ -3207,6 +3209,7 @@
       <string>$QX</string>
     </jphone>
   </set>
+  <!-- äg3 -->
   <set>
     <no>179</no>
     <imode>
@@ -3222,7 +3225,26 @@
       <D>298</D><!-- ó«Ç¢Ç‡ÇÃÇ™ñ≥Ç¢ÇÃÇ≈EzÉ}Å[ÉN -->
     </ezweb>
     <jphone>
-      <string>$QX</string><!-- ó«Ç¢Ç‡ÇÃÇ™ñ≥Ç¢ÇÃÇ≈JSKY1 -->
+      <string>$G&</string>
+    </jphone>
+  </set>
+  <!-- äg4 -->
+  <set>
+    <no>180</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>b4</hex2>
+      <string>&#63924;</string>
+      <description>Ç™Ç‹å˚ç‡ïz</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>290</C>
+      <D>290</D>
+    </ezweb>
+    <jphone>
+      <string>$OC</string><!-- ó«Ç¢Ç‡ÇÃÇ™ñ≥Ç¢ÇÃÇ≈ÉuÉâÉìÉhÉoÉbÉN -->
     </jphone>
   </set>
 </emoji>
