@@ -3266,4 +3266,23 @@
       <string>$O&lt;</string><!-- Œûg -->
     </jphone>
   </set>
+  <!-- Šg6 -->
+  <set>
+    <no>182</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>b6</hex2>
+      <string>&#63926;</string>
+      <description>ƒW[ƒ“ƒY</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>301</C><!-- —Ç‚¢‚à‚Ì‚ª‚È‚¢‚Ì‚Å•wl• -->
+      <D>301</D><!-- —Ç‚¢‚à‚Ì‚ª‚È‚¢‚Ì‚Å•wl• -->
+    </ezweb>
+    <jphone>
+      <string>$G&</string><!-- —Ç‚¢‚à‚Ì‚ª–³‚¢‚Ì‚Å—m• -->
+    </jphone>
+  </set>
 </emoji>
