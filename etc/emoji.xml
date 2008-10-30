@@ -3247,4 +3247,23 @@
       <string>$OC</string><!-- ó«Ç¢Ç‡ÇÃÇ™ñ≥Ç¢ÇÃÇ≈ÉuÉâÉìÉhÉoÉbÉN -->
     </jphone>
   </set>
+  <!-- äg5 -->
+  <set>
+    <no>181</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>b5</hex2>
+      <string>&#63925;</string>
+      <description>âªèœ</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>295</C><!-- å˚çg -->
+      <D>295</D><!-- å˚çg -->
+    </ezweb>
+    <jphone>
+      <string>$O&lt;</string><!-- å˚çg -->
+    </jphone>
+  </set>
 </emoji>
