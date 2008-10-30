@@ -3304,4 +3304,23 @@
       <string>$G3</string><!-- 良いものが無いのでスキー -->
     </jphone>
   </set>
+  <!-- 拡8 -->
+  <set>
+    <no>184</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>b8</hex2>
+      <string>&#63928;</string>
+      <description>チャペル</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>48</C><!-- ベル -->
+      <D>48</D><!-- ベル -->
+    </ezweb>
+    <jphone>
+      <string>$OE</string><!-- すず -->
+    </jphone>
+  </set>
 </emoji>
