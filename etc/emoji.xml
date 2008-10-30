@@ -3285,4 +3285,23 @@
       <string>$G&</string><!-- 良いものが無いので洋服 -->
     </jphone>
   </set>
+  <!-- 拡7 -->
+  <set>
+    <no>183</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>b7</hex2>
+      <string>&#63927;</string>
+      <description>スノボ</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>221</C><!-- スノーボード-->
+      <D>221</D><!-- スノーボード -->
+    </ezweb>
+    <jphone>
+      <string>$G3</string><!-- 良いものが無いのでスキー -->
+    </jphone>
+  </set>
 </emoji>
