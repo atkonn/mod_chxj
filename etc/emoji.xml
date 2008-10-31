@@ -3361,4 +3361,23 @@
       <string>$EO</string><!-- 賞金 -->
     </jphone>
   </set>
+  <!-- 拡11 -->
+  <set>
+    <no>187</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>bb</hex2>
+      <string>&#63931;</string>
+      <description>パソコン</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>288</C><!-- テレビ -->
+      <D>288</D><!-- テレビ -->
+    </ezweb>
+    <jphone>
+      <string>$G,</string><!-- パソコン -->
+    </jphone>
+  </set>
 </emoji>
