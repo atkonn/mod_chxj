@@ -3399,4 +3399,23 @@
       <string>$E#</string><!-- メール宛先 -->
     </jphone>
   </set>
+  <!-- 拡13 -->
+  <set>
+    <no>189</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>bd</hex2>
+      <string>&#63933;</string>
+      <description>レンチ</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>152</C><!-- レンチ -->
+      <D>152</D><!-- レンチ -->
+    </ezweb>
+    <jphone>
+      <string>$QX</string><!-- 良いものがないのでJsマーク -->
+    </jphone>
+  </set>
 </emoji>
