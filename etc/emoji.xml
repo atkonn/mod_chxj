@@ -3342,4 +3342,23 @@
       <string>$GV</string><!-- ‰Æ -->
     </jphone>
   </set>
+  <!-- Šg10 -->
+  <set>
+    <no>186</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>ba</hex2>
+      <string>&#63930;</string>
+      <description>ƒhƒ‹‘Ü</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>233</C><!-- Ü‹à -->
+      <D>233</D><!-- Ü‹à -->
+    </ezweb>
+    <jphone>
+      <string>$EO</string><!-- Ü‹à -->
+    </jphone>
+  </set>
 </emoji>
