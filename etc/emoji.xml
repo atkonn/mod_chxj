@@ -3437,4 +3437,23 @@
       <string>$O!</string><!-- 良いものがないのでメモ -->
     </jphone>
   </set>
+  <!-- 拡15 -->
+  <set>
+    <no>191</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>bf</hex2>
+      <string>&#63935;</string>
+      <description>王冠</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>267</C><!-- 良いものがないのでスパーク -->
+      <D>267</D><!-- 良いものがないのでスパーク -->
+    </ezweb>
+    <jphone>
+      <string>$E.</string><!-- 王冠 -->
+    </jphone>
+  </set>
 </emoji>
