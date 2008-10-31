@@ -3418,4 +3418,23 @@
       <string>$QX</string><!-- 良いものがないのでJsマーク -->
     </jphone>
   </set>
+  <!-- 拡14 -->
+  <set>
+    <no>190</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>be</hex2>
+      <string>&#63934;</string>
+      <description>鉛筆</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>149</C><!-- レンチ -->
+      <D>149</D><!-- レンチ -->
+    </ezweb>
+    <jphone>
+      <string>$O!</string><!-- 良いものがないのでメモ -->
+    </jphone>
+  </set>
 </emoji>
