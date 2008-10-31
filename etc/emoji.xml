@@ -3380,4 +3380,23 @@
       <string>$G,</string><!-- パソコン -->
     </jphone>
   </set>
+  <!-- 拡12 -->
+  <set>
+    <no>188</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>bc</hex2>
+      <string>&#63932;</string>
+      <description>ラブレター</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>108</C><!-- 封筒 -->
+      <D>108</D><!-- 封筒 -->
+    </ezweb>
+    <jphone>
+      <string>$E#</string><!-- メール宛先 -->
+    </jphone>
+  </set>
 </emoji>
