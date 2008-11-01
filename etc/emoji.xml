@@ -3551,4 +3551,23 @@
       <string>$GF</string><!-- 時計 -->
     </jphone>
   </set>
+  <!-- 拡21 -->
+  <set>
+    <no>197</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>C5</hex2>
+      <string>&#63941;</string>
+      <description>考えてる顔</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>260</C><!-- 良いものがないので、顔４（つかれたカオ） -->
+      <D>260</D><!-- 良いものがないので、顔４（つかれたカオ） -->
+    </ezweb>
+    <jphone>
+      <string>$E(</string><!-- 良いものがないので、タラー -->
+    </jphone>
+  </set>
 </emoji>
