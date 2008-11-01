@@ -3779,4 +3779,23 @@
       <string>$P6</string><!-- —Ç‚¢‚à‚Ì‚ª‚È‚¢‚Ì‚ÅA‚ß‚¿‚á‚ß‚¿‚á“{‚Á‚Ä‚¢‚é -->
     </jphone>
   </set>
+  <!-- Šg33 -->
+  <set>
+    <no>209</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>D1</hex2>
+      <string>&#63953;</string>
+      <description>”L2</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>251</C><!-- ”L -->
+      <D>251</D><!-- ”L -->
+    </ezweb>
+    <jphone>
+      <string>$Go</string><!-- ‚Ë‚± -->
+    </jphone>
+  </set>
 </emoji>
