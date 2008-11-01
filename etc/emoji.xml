@@ -3741,4 +3741,23 @@
       <string>$P8</string><!-- 投げキッス -->
     </jphone>
   </set>
+  <!-- 拡31 -->
+  <set>
+    <no>207</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>CF</hex2>
+      <string>&#63951;</string>
+      <description>うれしい顔</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>257</C><!-- 顔１（うれしいカオ）-->
+      <D>257</D><!-- 顔１（うれしいカオ）-->
+    </ezweb>
+    <jphone>
+      <string>$Gw</string><!-- 喜 -->
+    </jphone>
+  </set>
 </emoji>
