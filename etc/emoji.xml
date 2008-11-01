@@ -3608,4 +3608,42 @@
       <string>$E(</string><!-- 良いものがないので、タラー -->
     </jphone>
   </set>
+  <!-- 拡24 -->
+  <set>
+    <no>200</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>C8</hex2>
+      <string>&#63944;</string>
+      <description>冷や汗2</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>263</C><!-- 良いものがないので、雫（涙・汗） -->
+      <D>263</D><!-- 良いものがないので、雫（涙・汗） -->
+    </ezweb>
+    <jphone>
+      <string>$P/</string><!-- 冷汗 -->
+    </jphone>
+  </set>
+  <!-- 拡25 -->
+  <set>
+    <no>201</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>C9</hex2>
+      <string>&#63945;</string>
+      <description>ぷっくっくな顔</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>258</C><!-- 良いものがないので、顔２（おこったカオ） -->
+      <D>258</D><!-- 良いものがないので、顔２（おこったカオ） -->
+    </ezweb>
+    <jphone>
+      <string>$Gy</string><!-- 良いものがないので、怒 -->
+    </jphone>
+  </set>
 </emoji>
