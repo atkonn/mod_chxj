@@ -3494,4 +3494,23 @@
       <string>$GF</string><!-- —Ç‚¢‚à‚Ì‚ª‚È‚¢‚Ì‚ÅŽžŒv -->
     </jphone>
   </set>
+  <!-- Šg18 -->
+  <set>
+    <no>194</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>C2</hex2>
+      <string>&#63938;</string>
+      <description>Ž©“]ŽÔ</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>215</C><!-- Ž©“]ŽÔ -->
+      <D>215</D><!-- Ž©“]ŽÔ -->
+    </ezweb>
+    <jphone>
+      <string>$EV</string><!-- —Ç‚¢‚à‚Ì‚ª‚È‚¢‚Ì‚Å‹£—Ö -->
+    </jphone>
+  </set>
 </emoji>
