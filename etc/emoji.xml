@@ -3722,4 +3722,23 @@
       <string>$P)</string><!-- あっかんべえ -->
     </jphone>
   </set>
+  <!-- 拡30 -->
+  <set>
+    <no>206</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>CE</hex2>
+      <string>&#63950;</string>
+      <description>ウィンク</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>267</C><!-- 良いものがないので、スパーク２（キラリマーク）-->
+      <D>267</D><!-- 良いものがないので、スパーク２（キラリマーク）-->
+    </ezweb>
+    <jphone>
+      <string>$P8</string><!-- 投げキッス -->
+    </jphone>
+  </set>
 </emoji>
