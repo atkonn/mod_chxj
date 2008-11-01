@@ -3589,4 +3589,23 @@
       <string>$E(</string><!-- 良いものがないので、タラー -->
     </jphone>
   </set>
+  <!-- 拡23 -->
+  <set>
+    <no>199</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>C7</hex2>
+      <string>&#63943;</string>
+      <description>冷や汗</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>263</C><!-- 良いものがないので、雫（涙・汗） -->
+      <D>263</D><!-- 良いものがないので、雫（涙・汗） -->
+    </ezweb>
+    <jphone>
+      <string>$E(</string><!-- 良いものがないので、タラー -->
+    </jphone>
+  </set>
 </emoji>
