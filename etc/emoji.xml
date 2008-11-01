@@ -3532,4 +3532,23 @@
       <string>$Ge</string><!-- ƒR[ƒq[ -->
     </jphone>
   </set>
+  <!-- Šg20 -->
+  <set>
+    <no>196</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>C4</hex2>
+      <string>&#63940;</string>
+      <description>˜rŽžŒv</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>25</C><!-- ˜rŽžŒv -->
+      <D>25</D><!-- ˜rŽžŒv -->
+    </ezweb>
+    <jphone>
+      <string>$GF</string><!-- ŽžŒv -->
+    </jphone>
+  </set>
 </emoji>
