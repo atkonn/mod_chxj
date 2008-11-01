@@ -3456,4 +3456,42 @@
       <string>$E.</string><!-- 王冠 -->
     </jphone>
   </set>
+  <!-- 拡16 -->
+  <set>
+    <no>192</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>C0</hex2>
+      <string>&#63936;</string>
+      <description>指輪</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>267</C><!-- 良いものがないのでスパーク -->
+      <D>267</D><!-- 良いものがないのでスパーク -->
+    </ezweb>
+    <jphone>
+      <string>$GT</string><!-- 指輪 -->
+    </jphone>
+  </set>
+  <!-- 拡17 -->
+  <set>
+    <no>193</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>C1</hex2>
+      <string>&#63937;</string>
+      <description>砂時計</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>58</C><!-- 砂時計２ -->
+      <D>58</D><!-- 砂時計２ -->
+    </ezweb>
+    <jphone>
+      <string>$GF</string><!-- 良いものがないので時計 -->
+    </jphone>
+  </set>
 </emoji>
