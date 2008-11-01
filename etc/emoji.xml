@@ -3684,4 +3684,23 @@
       <string>$E&</string><!-- ラブラブ -->
     </jphone>
   </set>
+  <!-- 拡28 -->
+  <set>
+    <no>204</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>CC</hex2>
+      <string>&#63948;</string>
+      <description>指でOK</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>287</C><!-- 良いものがないので、おやゆびサイン -->
+      <D>287</D><!-- 良いものがないので、おやゆびサイン -->
+    </ezweb>
+    <jphone>
+      <string>$G.</string><!-- GOOD! -->
+    </jphone>
+  </set>
 </emoji>
