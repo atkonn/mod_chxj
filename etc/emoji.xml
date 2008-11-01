@@ -3513,4 +3513,23 @@
       <string>$EV</string><!-- 良いものがないので競輪 -->
     </jphone>
   </set>
+  <!-- 拡19 -->
+  <set>
+    <no>195</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>C3</hex2>
+      <string>&#63939;</string>
+      <description>湯のみ</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>93</C><!-- カップ -->
+      <D>93</D><!-- カップ -->
+    </ezweb>
+    <jphone>
+      <string>$Ge</string><!-- コーヒー -->
+    </jphone>
+  </set>
 </emoji>
