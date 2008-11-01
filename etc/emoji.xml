@@ -3798,4 +3798,23 @@
       <string>$Go</string><!-- ねこ -->
     </jphone>
   </set>
+  <!-- 拡34 -->
+  <set>
+    <no>210</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>D2</hex2>
+      <string>&#63954;</string>
+      <description>泣き顔</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>259</C><!-- 顔３（かなしいカオ） -->
+      <D>259</D><!-- 顔３（かなしいカオ） -->
+    </ezweb>
+    <jphone>
+      <string>$P1</string><!-- 泣き -->
+    </jphone>
+  </set>
 </emoji>
