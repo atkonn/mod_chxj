@@ -3696,11 +3696,30 @@
     <ezweb>
       <A>1</A>
       <B>1</B>
-      <C>287</C><!-- 良いものがないので、おやゆびサイン -->
-      <D>287</D><!-- 良いものがないので、おやゆびサイン -->
+      <C>287</C><!-- おやゆびサイン -->
+      <D>287</D><!-- おやゆびサイン -->
     </ezweb>
     <jphone>
       <string>$G.</string><!-- GOOD! -->
+    </jphone>
+  </set>
+  <!-- 拡29 -->
+  <set>
+    <no>205</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>CD</hex2>
+      <string>&#63949;</string>
+      <description>あっかんべー</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>264</C><!-- からかう（あっかんべえ） -->
+      <D>264</D><!-- からかう（あっかんべえ）-->
+    </ezweb>
+    <jphone>
+      <string>$P)</string><!-- あっかんべえ -->
     </jphone>
   </set>
 </emoji>
