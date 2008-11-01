@@ -3760,4 +3760,23 @@
       <string>$Gw</string><!-- 喜 -->
     </jphone>
   </set>
+  <!-- 拡32 -->
+  <set>
+    <no>208</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>D0</hex2>
+      <string>&#63952;</string>
+      <description>がまん顔</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>258</C><!-- 良いものがないので、顔２（おこったカオ）-->
+      <D>258</D><!-- 良いものがないので、顔２（おこったカオ）-->
+    </ezweb>
+    <jphone>
+      <string>$P6</string><!-- 良いものがないので、めちゃめちゃ怒っている -->
+    </jphone>
+  </set>
 </emoji>
