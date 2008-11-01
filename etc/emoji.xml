@@ -3665,4 +3665,23 @@
       <string>$P.</string><!-- 良いものがないので、しらけ顔 -->
     </jphone>
   </set>
+  <!-- 拡27 -->
+  <set>
+    <no>203</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>CB</hex2>
+      <string>&#63947;</string>
+      <description>目がハート</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>266</C><!-- 良いものがないので、ハート３（大きい＆小さい） -->
+      <D>266</D><!-- 良いものがないので、ハート３（大きい＆小さい） -->
+    </ezweb>
+    <jphone>
+      <string>$E&</string><!-- ラブラブ -->
+    </jphone>
+  </set>
 </emoji>
