@@ -3950,4 +3950,23 @@
       <string>$O5</string><!-- マル秘 -->
     </jphone>
   </set>
+  <!-- 拡42 -->
+  <set>
+    <no>218</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>DA</hex2>
+      <string>&#63962;</string>
+      <description>リサイクル</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>332</C><!-- 良いものがないので、地球 -->
+      <D>332</D><!-- 良いものがないので、地球 -->
+    </ezweb>
+    <jphone>
+      <string>$OK</string><!-- 良いものがないので、ハート緑 -->
+    </jphone>
+  </set>
 </emoji>
