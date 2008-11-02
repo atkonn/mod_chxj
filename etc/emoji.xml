@@ -3855,4 +3855,23 @@
       <string>$OS</string><!-- × -->
     </jphone>
   </set>
+  <!-- 拡37 -->
+  <set>
+    <no>213</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>D5</hex2>
+      <string>&#63957;</string>
+      <description>クリップ</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>143</C><!-- クリップ -->
+      <D>143</D><!-- クリップ -->
+    </ezweb>
+    <jphone>
+      <string>$O!</string><!-- 良いものがないので、メモ -->
+    </jphone>
+  </set>
 </emoji>
