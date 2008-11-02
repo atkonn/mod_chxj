@@ -3893,4 +3893,23 @@
       <string>$Fn</string><!-- 著作権 -->
     </jphone>
   </set>
+  <!-- 拡39 -->
+  <set>
+    <no>215</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>D7</hex2>
+      <string>&#63959;</string>
+      <description>トレードマーク</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>54</C><!-- トレードマーク -->
+      <D>54</D><!-- トレードマーク -->
+    </ezweb>
+    <jphone>
+      <string>$QW</string><!-- TM -->
+    </jphone>
+  </set>
 </emoji>
