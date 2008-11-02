@@ -3969,4 +3969,23 @@
       <string>$OK</string><!-- 良いものがないので、ハート緑 -->
     </jphone>
   </set>
+  <!-- 拡43 -->
+  <set>
+    <no>219</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>DB</hex2>
+      <string>&#63963;</string>
+      <description>レジスタードトレードマーク</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>82</C><!-- レジスタードマーク -->
+      <D>82</D><!-- レジスタードマーク -->
+    </ezweb>
+    <jphone>
+      <string>$Fo</string><!-- 商標登録 -->
+    </jphone>
+  </set>
 </emoji>
