@@ -3931,4 +3931,23 @@
       <string>$E5</string><!-- —¤ã -->
     </jphone>
   </set>
+  <!-- Šg41 -->
+  <set>
+    <no>217</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>D9</hex2>
+      <string>&#63961;</string>
+      <description>ƒ}ƒ‹”é</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>279</C><!-- ŠÛ”é -->
+      <D>279</D><!-- ŠÛ”é -->
+    </ezweb>
+    <jphone>
+      <string>$O5</string><!-- ƒ}ƒ‹”é -->
+    </jphone>
+  </set>
 </emoji>
