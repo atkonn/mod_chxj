@@ -3988,4 +3988,23 @@
       <string>$Fo</string><!-- è§ïWìoò^ -->
     </jphone>
   </set>
+  <!-- äg44 -->
+  <set>
+    <no>220</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>DC</hex2>
+      <string>&#63964;</string>
+      <description>äÎåØÅEåxçê</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>1</C><!-- ! -->
+      <D>1</D><!-- ! -->
+    </ezweb>
+    <jphone>
+      <string>$Fr</string><!-- Ç≤íçà” -->
+    </jphone>
+  </set>
 </emoji>
