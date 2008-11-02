@@ -3836,4 +3836,23 @@
       <string>$P1</string><!-- ‹ƒ‚« -->
     </jphone>
   </set>
+  <!-- Šg36 -->
+  <set>
+    <no>212</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>D4</hex2>
+      <string>&#63956;</string>
+      <description>NG</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>61</C><!-- ƒoƒc‚P -->
+      <D>61</D><!-- ƒoƒc‚P -->
+    </ezweb>
+    <jphone>
+      <string>$OS</string><!-- ~ -->
+    </jphone>
+  </set>
 </emoji>
