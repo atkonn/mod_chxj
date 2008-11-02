@@ -3912,4 +3912,23 @@
       <string>$QW</string><!-- TM -->
     </jphone>
   </set>
+  <!-- 拡40 -->
+  <set>
+    <no>216</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>D8</hex2>
+      <string>&#63960;</string>
+      <description>走る人</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>218</C><!-- マラソン -->
+      <D>218</D><!-- マラソン -->
+    </ezweb>
+    <jphone>
+      <string>$E5</string><!-- 陸上 -->
+    </jphone>
+  </set>
 </emoji>
