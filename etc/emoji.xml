@@ -3874,4 +3874,23 @@
       <string>$O!</string><!-- 良いものがないので、メモ -->
     </jphone>
   </set>
+  <!-- 拡38 -->
+  <set>
+    <no>214</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>D6</hex2>
+      <string>&#63958;</string>
+      <description>コピーライト</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>81</C><!-- コピーライトマーク -->
+      <D>81</D><!-- コピーライトマーク -->
+    </ezweb>
+    <jphone>
+      <string>$Fn</string><!-- 著作権 -->
+    </jphone>
+  </set>
 </emoji>
