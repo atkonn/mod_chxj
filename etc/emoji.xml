@@ -3817,4 +3817,23 @@
       <string>$P1</string><!-- 泣き -->
     </jphone>
   </set>
+  <!-- 拡35 -->
+  <set>
+    <no>211</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>D3</hex2>
+      <string>&#63955;</string>
+      <description>涙</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>263</C><!-- 雫（涙・汗） -->
+      <D>263</D><!-- 雫（涙・汗） -->
+    </ezweb>
+    <jphone>
+      <string>$P1</string><!-- 泣き -->
+    </jphone>
+  </set>
 </emoji>
