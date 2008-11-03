@@ -4083,4 +4083,23 @@
       <string>$FJ</string><!-- 満席 -->
     </jphone>
   </set>
+  <!-- 拡49 -->
+  <set>
+    <no>225</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>E1</hex2>
+      <string>&#63969;</string>
+      <description>矢印左右</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>298</C><!-- 良いものがないので、Ezマーク -->
+      <D>298</D><!-- 良いものがないので、Ezマーク -->
+    </ezweb>
+    <jphone>
+      <string>$QX</string><!-- 良いものがないので、Jsマーク -->
+    </jphone>
+  </set>
 </emoji>
