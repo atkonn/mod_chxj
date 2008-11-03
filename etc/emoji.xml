@@ -4273,4 +4273,23 @@
       <string>$Oe</string><!-- りんご -->
     </jphone>
   </set>
+  <!-- 拡59 -->
+  <set>
+    <no>235</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>EB</hex2>
+      <string>&#63979;</string>
+      <description>芽</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>53</C><!-- 良いものがないので、四つ葉 -->
+      <D>53</D><!-- 良いものがないので、四つ葉 -->
+    </ezweb>
+    <jphone>
+      <string>$E0</string><!-- 良いものがないので、よつば -->
+    </jphone>
+  </set>
 </emoji>
