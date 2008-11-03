@@ -4178,4 +4178,23 @@
       <string>$G[</string><!-- 山 -->
     </jphone>
   </set>
+  <!-- 拡54 -->
+  <set>
+    <no>230</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>E6</hex2>
+      <string>&#63974;</string>
+      <description>クローバー</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>53</C><!-- 四つ葉 -->
+      <D>53</D><!-- 四つ葉 -->
+    </ezweb>
+    <jphone>
+      <string>$E0</string><!-- よつば -->
+    </jphone>
+  </set>
 </emoji>
