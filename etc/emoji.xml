@@ -4349,4 +4349,23 @@
       <string>$Ob</string><!-- おにぎり -->
     </jphone>
   </set>
+  <!-- 拡63 -->
+  <set>
+    <no>239</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>EF</hex2>
+      <string>&#63983;</string>
+      <description>ショートケーキ</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>239</C><!-- ケーキ -->
+      <D>239</D><!-- ケーキ -->
+    </ezweb>
+    <jphone>
+      <string>$Gf</string><!-- ケーキ -->
+    </jphone>
+  </set>
 </emoji>
