@@ -4292,4 +4292,23 @@
       <string>$E0</string><!-- —Ç‚¢‚à‚Ì‚ª‚È‚¢‚Ì‚ÅA‚æ‚Â‚Î -->
     </jphone>
   </set>
+  <!-- Šg60 -->
+  <set>
+    <no>236</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>EC</hex2>
+      <string>&#63980;</string>
+      <description>‚à‚Ý‚¶</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>133</C><!-- ‚Í‚Á‚Ï -->
+      <D>133</D><!-- ‚Í‚Á‚Ï -->
+    </ezweb>
+    <jphone>
+      <string>$E8</string><!-- ‚à‚Ý‚¶ -->
+    </jphone>
+  </set>
 </emoji>
