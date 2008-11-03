@@ -4228,11 +4228,30 @@
     <ezweb>
       <A>1</A>
       <B>1</B>
-      <C>235</C><!-- 良いものがないので、花見(さくら） -->
-      <D>235</D><!-- 良いものがないので、花見(さくら） -->
+      <C>113</C><!-- 花 -->
+      <D>113</D><!-- 花 -->
     </ezweb>
     <jphone>
       <string>$O$</string><!-- チューリップ -->
+    </jphone>
+  </set>
+  <!-- 拡57 -->
+  <set>
+    <no>233</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>E9</hex2>
+      <string>&#63977;</string>
+      <description>バナナ</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>238</C><!-- 良いものがないので、スイカ -->
+      <D>238</D><!-- 良いものがないので、スイカ -->
+    </ezweb>
+    <jphone>
+      <string>$Oh</string><!-- 良いものがないので、スイカ -->
     </jphone>
   </set>
 </emoji>
