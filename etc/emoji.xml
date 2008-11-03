@@ -4159,4 +4159,23 @@
       <string>$P^</string><!-- îgÇ™ÉUÅ[Éì -->
     </jphone>
   </set>
+  <!-- äg53 -->
+  <set>
+    <no>229</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>E5</hex2>
+      <string>&#63973;</string>
+      <description>ïxéméR</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>33</C><!-- ó«Ç¢Ç‡ÇÃÇ™Ç»Ç¢ÇÃÇ≈ÅAè„éOäpÇP -->
+      <D>33</D><!-- ó«Ç¢Ç‡ÇÃÇ™Ç»Ç¢ÇÃÇ≈ÅAè„éOäpÇP -->
+    </ezweb>
+    <jphone>
+      <string>$G[</string><!-- éR -->
+    </jphone>
+  </set>
 </emoji>
