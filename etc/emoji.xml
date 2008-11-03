@@ -4045,4 +4045,23 @@
       <string>$FK</string><!-- 空席 -->
     </jphone>
   </set>
+  <!-- 拡47 -->
+  <set>
+    <no>223</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>DF</hex2>
+      <string>&#63967;</string>
+      <description>合格マーク</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>278</C><!-- 良いものがないので、花丸 -->
+      <D>278</D><!-- 良いものがないので、花丸 -->
+    </ezweb>
+    <jphone>
+      <string>$O-</string><!-- 良いものがないので、祝 -->
+    </jphone>
+  </set>
 </emoji>
