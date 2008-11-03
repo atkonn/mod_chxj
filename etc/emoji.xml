@@ -4216,4 +4216,23 @@
       <string>$Oe</string><!-- 良いものがないので、りんご -->
     </jphone>
   </set>
+  <!-- 拡56 -->
+  <set>
+    <no>232</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>E8</hex2>
+      <string>&#63976;</string>
+      <description>チューリップ</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>235</C><!-- 良いものがないので、花見(さくら） -->
+      <D>235</D><!-- 良いものがないので、花見(さくら） -->
+    </ezweb>
+    <jphone>
+      <string>$O$</string><!-- チューリップ -->
+    </jphone>
+  </set>
 </emoji>
