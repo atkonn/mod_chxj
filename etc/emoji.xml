@@ -4026,4 +4026,23 @@
       <string>$OS</string><!-- 良いものがないので、× -->
     </jphone>
   </set>
+  <!-- 拡46 -->
+  <set>
+    <no>222</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>DE</hex2>
+      <string>&#63966;</string>
+      <description>空室・空席・空車</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>298</C><!-- 良いものがないので、EZマーク -->
+      <D>298</D><!-- 良いものがないので、EZマーク -->
+    </ezweb>
+    <jphone>
+      <string>$FK</string><!-- 空席 -->
+    </jphone>
+  </set>
 </emoji>
