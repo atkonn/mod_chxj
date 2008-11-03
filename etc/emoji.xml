@@ -4330,4 +4330,23 @@
       <string>$GP</string><!-- ‚¨‰ÔŒ© -->
     </jphone>
   </set>
+  <!-- Šg62 -->
+  <set>
+    <no>238</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>EE</hex2>
+      <string>&#63982;</string>
+      <description>‚¨‚É‚¬‚è</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>244</C><!-- ‚¨‚É‚¬‚è -->
+      <D>244</D><!-- ‚¨‚É‚¬‚è -->
+    </ezweb>
+    <jphone>
+      <string>$Ob</string><!-- ‚¨‚É‚¬‚è -->
+    </jphone>
+  </set>
 </emoji>
