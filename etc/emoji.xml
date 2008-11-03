@@ -4007,4 +4007,23 @@
       <string>$Fr</string><!-- ‚²’ˆÓ -->
     </jphone>
   </set>
+  <!-- Šg45 -->
+  <set>
+    <no>221</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>DD</hex2>
+      <string>&#63965;</string>
+      <description>‹ÖŽ~</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>98</C><!-- —§‚¿“ü‚è‹ÖŽ~ -->
+      <D>98</D><!-- —§‚¿“ü‚è‹ÖŽ~ -->
+    </ezweb>
+    <jphone>
+      <string>$OS</string><!-- —Ç‚¢‚à‚Ì‚ª‚È‚¢‚Ì‚ÅA~ -->
+    </jphone>
+  </set>
 </emoji>
