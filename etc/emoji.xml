@@ -4121,4 +4121,23 @@
       <string>$QX</string><!-- 良いものがないので、Jsマーク -->
     </jphone>
   </set>
+  <!-- 拡51 -->
+  <set>
+    <no>227</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>E3</hex2>
+      <string>&#63971;</string>
+      <description>学校</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>156</C><!-- 良いものがないので、工場・建物 -->
+      <D>156</D><!-- 良いものがないので、工場・建物 -->
+    </ezweb>
+    <jphone>
+      <string>$Ew</string><!-- 学校 -->
+    </jphone>
+  </set>
 </emoji>
