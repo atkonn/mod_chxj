@@ -3468,8 +3468,8 @@
     <ezweb>
       <A>1</A>
       <B>1</B>
-      <C>267</C><!-- 良いものがないのでスパーク -->
-      <D>267</D><!-- 良いものがないのでスパーク -->
+      <C>72</C><!-- ジュエリー -->
+      <D>72</D><!-- ジュエリー -->
     </ezweb>
     <jphone>
       <string>$GT</string><!-- 指輪 -->
@@ -4252,6 +4252,25 @@
     </ezweb>
     <jphone>
       <string>$Oh</string><!-- 良いものがないので、スイカ -->
+    </jphone>
+  </set>
+  <!-- 拡58 -->
+  <set>
+    <no>234</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>EA</hex2>
+      <string>&#63978;</string>
+      <description>りんご</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>241</C><!-- 良いものがないので、さくらんぼ -->
+      <D>241</D><!-- 良いものがないので、さくらんぼ -->
+    </ezweb>
+    <jphone>
+      <string>$Oe</string><!-- りんご -->
     </jphone>
   </set>
 </emoji>
