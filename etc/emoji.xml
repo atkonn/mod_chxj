@@ -4311,4 +4311,23 @@
       <string>$E8</string><!-- Ç‡Ç›Ç∂ -->
     </jphone>
   </set>
+  <!-- äg61 -->
+  <set>
+    <no>237</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>ED</hex2>
+      <string>&#63981;</string>
+      <description>ç˜</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>235</C><!-- â‘å©(Ç≥Ç≠ÇÁÅj -->
+      <D>235</D><!-- â‘å©(Ç≥Ç≠ÇÁÅj -->
+    </ezweb>
+    <jphone>
+      <string>$GP</string><!-- Ç®â‘å© -->
+    </jphone>
+  </set>
 </emoji>
