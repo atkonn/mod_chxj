@@ -4140,4 +4140,23 @@
       <string>$Ew</string><!-- ŠwZ -->
     </jphone>
   </set>
+  <!-- Šg52 -->
+  <set>
+    <no>228</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>E4</hex2>
+      <string>&#63972;</string>
+      <description>”g</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>190</C><!-- —Ç‚¢‚à‚Ì‚ª‚È‚¢‚Ì‚ÅA‘ä•— -->
+      <D>190</D><!-- —Ç‚¢‚à‚Ì‚ª‚È‚¢‚Ì‚ÅA‘ä•— -->
+    </ezweb>
+    <jphone>
+      <string>$P^</string><!-- ”g‚ªƒU[ƒ“ -->
+    </jphone>
+  </set>
 </emoji>
