@@ -4463,4 +4463,23 @@
       <string>$QC</string><!-- ‚Ð‚æ‚± -->
     </jphone>
   </set>
+  <!-- Šg69 -->
+  <set>
+    <no>245</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>F5</hex2>
+      <string>&#63989;</string>
+      <description>ƒyƒ“ƒMƒ“</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>252</C><!-- ƒyƒ“ƒMƒ“ -->
+      <D>252</D><!-- ƒyƒ“ƒMƒ“ -->
+    </ezweb>
+    <jphone>
+      <string>$Gu</string><!-- ƒyƒ“ƒMƒ“ -->
+    </jphone>
+  </set>
 </emoji>
