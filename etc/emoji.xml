@@ -4387,4 +4387,23 @@
       <string>$O+</string><!-- 晩酌 -->
     </jphone>
   </set>
+  <!-- 拡65 -->
+  <set>
+    <no>241</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>F1</hex2>
+      <string>&#63985;</string>
+      <description>どんぶり</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>333</C><!-- 良いものがないので、ラーメン -->
+      <D>333</D><!-- 良いものがないので、ラーメン -->
+    </ezweb>
+    <jphone>
+      <string>$O`</string><!-- 良いものがないので、ラーメン -->
+    </jphone>
+  </set>
 </emoji>
