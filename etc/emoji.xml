@@ -4406,4 +4406,23 @@
       <string>$O`</string><!-- 良いものがないので、ラーメン -->
     </jphone>
   </set>
+  <!-- 拡66 -->
+  <set>
+    <no>242</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>F2</hex2>
+      <string>&#63986;</string>
+      <description>パン</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>245</C><!-- 良いものがないので、ハンバーガー（ファーストフード） -->
+      <D>245</D><!-- 良いものがないので、ハンバーガー（ファーストフード） -->
+    </ezweb>
+    <jphone>
+      <string>$OY</string><!-- パン -->
+    </jphone>
+  </set>
 </emoji>
