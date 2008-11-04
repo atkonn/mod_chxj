@@ -4558,4 +4558,42 @@
       <string>$G:</string><!-- うま -->
     </jphone>
   </set>
+  <!-- 拡74 -->
+  <set>
+    <no>250</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>FA</hex2>
+      <string>&#63994;</string>
+      <description>ブタ</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>254</C><!-- ぶた -->
+      <D>254</D><!-- ぶた -->
+    </ezweb>
+    <jphone>
+      <string>$E+</string><!-- ぶた -->
+    </jphone>
+  </set>
+  <!-- 拡75 -->
+  <set>
+    <no>251</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>FB</hex2>
+      <string>&#63995;</string>
+      <description>ワイングラス</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>12</C><!-- ワイングラス -->
+      <D>12</D><!-- ワイングラス -->
+    </ezweb>
+    <jphone>
+      <string>$Gd</string><!-- カクテル -->
+    </jphone>
+  </set>
 </emoji>
