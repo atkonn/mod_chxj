@@ -4501,4 +4501,23 @@
       <string>$G9</string><!-- 魚 -->
     </jphone>
   </set>
+  <!-- 拡71 -->
+  <set>
+    <no>247</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>F7</hex2>
+      <string>&#63991;</string>
+      <description>うまい！</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>257</C><!-- 良いものがないので、顔１（うれしいカオ） -->
+      <D>257</D><!-- 良いものがないので、顔１（うれしいカオ） -->
+    </ezweb>
+    <jphone>
+      <string>$Gw</string><!-- 良いものがないので、喜 -->
+    </jphone>
+  </set>
 </emoji>
