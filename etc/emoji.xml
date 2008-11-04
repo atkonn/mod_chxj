@@ -4520,4 +4520,23 @@
       <string>$Gw</string><!-- 良いものがないので、喜 -->
     </jphone>
   </set>
+  <!-- 拡72 -->
+  <set>
+    <no>248</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>F8</hex2>
+      <string>&#63992;</string>
+      <description>ウッシッシ</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>264</C><!-- 良いものがないので、からかう（あっかんべえ） -->
+      <D>814</D><!-- うっしっし -->
+    </ezweb>
+    <jphone>
+      <string>$E%</string><!-- 良いものがないので、アカンベー -->
+    </jphone>
+  </set>
 </emoji>
