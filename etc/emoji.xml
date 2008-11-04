@@ -4596,4 +4596,23 @@
       <string>$Gd</string><!-- カクテル -->
     </jphone>
   </set>
+  <!-- 拡76 -->
+  <set>
+    <no>252</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>FC</hex2>
+      <string>&#63996;</string>
+      <description>げっそり</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>327</C><!-- 良いものがないので、ふらふら -->
+      <D>350</D><!-- ショッキング -->
+    </ezweb>
+    <jphone>
+      <string>$P+</string><!-- 良いものがないので、げろげろ -->
+    </jphone>
+  </set>
 </emoji>
