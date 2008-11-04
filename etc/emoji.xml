@@ -4482,4 +4482,23 @@
       <string>$Gu</string><!-- ƒyƒ“ƒMƒ“ -->
     </jphone>
   </set>
+  <!-- Šg70 -->
+  <set>
+    <no>246</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>F6</hex2>
+      <string>&#63990;</string>
+      <description>‹›</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>242</C><!-- ‚Ó‚® -->
+      <D>715</D><!-- ”M‘Ñ‹› -->
+    </ezweb>
+    <jphone>
+      <string>$G9</string><!-- ‹› -->
+    </jphone>
+  </set>
 </emoji>
