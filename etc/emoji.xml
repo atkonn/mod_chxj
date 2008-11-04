@@ -4425,4 +4425,23 @@
       <string>$OY</string><!-- パン -->
     </jphone>
   </set>
+  <!-- 拡67 -->
+  <set>
+    <no>243</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>F3</hex2>
+      <string>&#63987;</string>
+      <description>かたつむり</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>298</C><!-- 良いものがないので、Ezマーク -->
+      <D>298</D><!-- 良いものがないので、Ezマーク -->
+    </ezweb>
+    <jphone>
+      <string>$QX</string><!-- 良いものがないので、Jsマーク -->
+    </jphone>
+  </set>
 </emoji>
