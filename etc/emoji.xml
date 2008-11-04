@@ -3279,7 +3279,7 @@
       <A>1</A>
       <B>1</B>
       <C>301</C><!-- 良いものがないので婦人服 -->
-      <D>301</D><!-- 良いものがないので婦人服 -->
+      <D>805</D><!-- ジーンズ -->
     </ezweb>
     <jphone>
       <string>$G&</string><!-- 良いものが無いので洋服 -->
@@ -4442,6 +4442,25 @@
     </ezweb>
     <jphone>
       <string>$QX</string><!-- 良いものがないので、Jsマーク -->
+    </jphone>
+  </set>
+  <!-- 拡68 -->
+  <set>
+    <no>244</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>F4</hex2>
+      <string>&#63988;</string>
+      <description>ひよこ</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>298</C><!-- 良いものがないので、Ezマーク -->
+      <D>804</D><!-- 正面向きのひよこ -->
+    </ezweb>
+    <jphone>
+      <string>$QC</string><!-- ひよこ -->
     </jphone>
   </set>
 </emoji>
