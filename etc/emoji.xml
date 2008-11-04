@@ -4539,4 +4539,23 @@
       <string>$E%</string><!-- 良いものがないので、アカンベー -->
     </jphone>
   </set>
+  <!-- 拡73 -->
+  <set>
+    <no>249</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>F9</hex2>
+      <string>&#63993;</string>
+      <description>ウマ</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>248</C><!-- うま -->
+      <D>248</D><!-- うま -->
+    </ezweb>
+    <jphone>
+      <string>$G:</string><!-- うま -->
+    </jphone>
+  </set>
 </emoji>
