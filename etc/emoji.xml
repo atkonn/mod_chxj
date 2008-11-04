@@ -4368,4 +4368,23 @@
       <string>$Gf</string><!-- ケーキ -->
     </jphone>
   </set>
+  <!-- 拡64 -->
+  <set>
+    <no>240</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>F0</hex2>
+      <string>&#63984;</string>
+      <description>とっくり（おちょこ付き）</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>225</C><!-- 良いものがないので、居酒屋（赤ちょうちん） -->
+      <D>225</D><!-- 良いものがないので、居酒屋（赤ちょうちん） -->
+    </ezweb>
+    <jphone>
+      <string>$O+</string><!-- 晩酌 -->
+    </jphone>
+  </set>
 </emoji>
