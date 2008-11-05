@@ -32,7 +32,7 @@
 #include <unistd.h>
 
 /* for memcache */
-#include <memcached.h>
+#include <libmemcached/memcached.h>
 
 #define MEMCACHE_MIN_CONNECTION (0)
 #define MEMCACHE_SMAX_CONNECTION (1)
