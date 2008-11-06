@@ -558,7 +558,7 @@ chxj_convert_input_header(request_rec *r,chxjconvrule_entry *entryp)
         cookie = chxj_load_cookie(r, value);
         DBG(r, "REQ[%X] call end   chxj_load_cookie()", (unsigned int)(apr_size_t)r);
         if (! no_update_flag && cookie) {
-          chxj_update_cookie(r, cookie);
+          cookie = chxj_update_cookie(r, cookie);
         }
         chxj_cookie_unlock(r, lock);
       }
@@ -745,7 +745,7 @@ chxj_input_convert(
         cookie = chxj_load_cookie(r, value);
         DBG(r, "REQ[%X] call end   chxj_load_cookie()", (unsigned int)(apr_size_t)r);
         if (! no_update_flag && cookie) {
-          chxj_update_cookie(r, cookie);
+          cookie = chxj_update_cookie(r, cookie);
         }
         chxj_cookie_unlock(r, lock);
       }
@@ -1251,11 +1251,7 @@ chxj_input_handler(request_rec *r)
     url_path = apr_psprintf(pool, "%s%s", dconf->forward_url_base, r->uri);
   }
   else {
-#if 0
-    url_path = apr_psprintf(pool, "%s://%s:%d%s", chxj_apache_run_http_scheme(r), ap_get_server_name(r), ap_get_server_port(r), r->uri);
-#else
     url_path = apr_psprintf(pool, "%s://%s:%d%s", chxj_apache_run_http_scheme(r), "127.0.0.1", ap_get_server_port(r), r->uri);
-#endif
   }
   if (r->args) {
     url_path = apr_pstrcat(pool, url_path, "?", r->args, NULL);

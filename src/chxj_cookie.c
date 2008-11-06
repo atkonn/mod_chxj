@@ -281,8 +281,14 @@ chxj_save_cookie(request_rec *r)
     cookie->cookie_id = apr_pstrdup(r->pool, old_cookie_id);
   }
   else {
-    DBG(r, "REQ[%X] NO LAZY COOKIE save",(unsigned int)(apr_size_t)r);
-    cookie->cookie_id = alloc_cookie_id(r);
+    if (old_cookie_id && apr_table_get(r->headers_in, "X-Chxj-Forward")) {
+      DBG(r, "REQ[%X] NO LAZY COOKIE(X-Chxj-Forward)  save",(unsigned int)(apr_size_t)r);
+      cookie->cookie_id = apr_pstrdup(r->pool, old_cookie_id);
+    }
+    else {
+      DBG(r, "REQ[%X] NO LAZY COOKIE save",(unsigned int)(apr_size_t)r);
+      cookie->cookie_id = alloc_cookie_id(r);
+    }
   }
 
   DBG(r, "REQ[%X] TYPE:[%d]", (unsigned int)(apr_size_t)r, dconf->cookie_store_type);
