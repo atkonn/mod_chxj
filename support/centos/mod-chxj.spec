@@ -5,7 +5,9 @@ Name:  mod_chxj
 Version:  %{version}
 Release:  1
 License:  Apache License Version 2.0
-Group:  System Environment/Base
+Group: System Environment/Daemons
+Vendor: Atsushi Konno
+URL: http://sourceforge.jp/projects/modchxj/
 Source:  http://sourceforge.jp/projects/modchxj/downloads/33637/mod-chxj_%{version}.src.tar.gz
 Source1: http://download.tangent.org/libmemcached-0.23.tar.gz
 Packager:  Atsushi Konno <konn@sourceforge.jp>
