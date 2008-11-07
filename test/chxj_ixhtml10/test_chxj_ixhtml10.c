@@ -724,6 +724,7 @@ void test_ixhtml10_nlmark_002();
 void test_ixhtml10_nlmark_003();
 void test_ixhtml10_nlmark_004();
 
+void test_ixhtml10_html_tag_001();
 #if 0
 void test_ixhtml10_form_tag_001();
 void test_ixhtml10_form_tag_002();
@@ -735,7 +736,6 @@ void test_ixhtml10_form_tag_007();
 void test_ixhtml10_form_tag_008();
 void test_ixhtml10_form_tag_009();
 
-void test_ixhtml10_html_tag_001();
 
 void test_ixhtml10_param_tag_001();
 
@@ -1790,6 +1790,11 @@ main()
   CU_add_test(ixhtml10_suite, "test nlmark 003." ,                                    test_ixhtml10_nlmark_003);
   CU_add_test(ixhtml10_suite, "test nlmark 004." ,                                    test_ixhtml10_nlmark_004);
 
+  /*=========================================================================*/
+  /* <HTML>                                                                  */
+  /*=========================================================================*/
+  CU_add_test(ixhtml10_suite, "test <html>.",                                      test_ixhtml10_html_tag_001);
+
 #if 0
   /*=========================================================================*/
   /* <FORM>                                                                  */
@@ -1803,10 +1808,6 @@ main()
   CU_add_test(ixhtml10_suite, "test <form action> with null cookie.",              test_ixhtml10_form_tag_007);
   CU_add_test(ixhtml10_suite, "test <form action> with other site .",              test_ixhtml10_form_tag_008);
   CU_add_test(ixhtml10_suite, "test <form action method>.",                        test_ixhtml10_form_tag_009);
-  /*=========================================================================*/
-  /* <HTML>                                                                  */
-  /*=========================================================================*/
-  CU_add_test(ixhtml10_suite, "test <html>.",                                      test_ixhtml10_html_tag_001);
   /*=========================================================================*/
   /* <param>                                                                 */
   /*=========================================================================*/
@@ -9340,7 +9341,10 @@ void test_ixhtml10_hr_tag_018_2()
 void test_ixhtml10_html_tag_001()
 {
 #define  TEST_STRING "<html><head></head><body></body></html>"
-#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\"><html><head></head><body><div></div></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>" \
+                       "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
