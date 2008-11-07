@@ -25,7 +25,7 @@ libmod_chxj_la_SOURCES = mod_chxj.c \
     chxj_str_util.c  \
     chxj_img_conv.c  \
     chxj_dump.c \
-	chxj_img_conv_format.c \
+    chxj_img_conv_format.c \
     chxj_qr_code.c \
     chxj_calc_ecc.c \
     chxj_apply_convrule.c \
@@ -45,13 +45,13 @@ libmod_chxj_la_SOURCES = mod_chxj.c \
 
 libmod_chxj_la_CFLAGS = -O2 -prefer-pic @QDEFS@ @DDEFS@ -I. -I../include -I@with_apache_header@  -I./serf -I./css/include
 AM_CFLAGS = @CFLAGS@ -O2 -prefer-pic @QDEFS@ @DDEFS@ -I. -I../include -I@with_apache_header@
-libmod_chxj_la_DEPENDENCIES = serf/libserf-0.la css/src/libscss.la
+libmod_chxj_la_LIBADD = serf/.libs/libserf-0.a
 lib_LTLIBRARIES = libmod_chxj.la
 
 make_so:
 	@if test ! -L mod_chxj.so ; then ln -s .libs/libmod_chxj.so mod_chxj.so ; fi
 
-serf/libserf-0.la:
+serf/.libs/libserf-0.a:
 	(cd serf; CFLAGS=-fPIC CXXFLAGS=-fPIC ./configure --enable-shared --with-apr=`dirname @APR_CONFIG@` --with-apr-util=`dirname @APU_CONFIG@`; make)
 
 css/src/libscss.la:
@@ -61,6 +61,7 @@ clean:
 	rm -fr .libs
 	rm -f *.o *.lo *.la
 	rm -f mod_chxj.so
+	rm -f serf/libserf-0.la
 	@(cd serf; make clean)
 	@(cd css; make clean)
 

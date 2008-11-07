@@ -1,6 +1,6 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
-AC_INIT([mod_chxj],[0.12.13])
+AC_INIT([mod_chxj],[0.12.18],[konn@users.sourceforge.jp])
 AC_PREREQ(2.59)
 AC_CONFIG_SRCDIR([src/mod_chxj.c])
 AC_CANONICAL_TARGET
@@ -248,7 +248,6 @@ LIBS="${LIBS} `${APR_CONFIG} --ldflags` `${APR_CONFIG} --libs` "
 LIBS="${LIBS} `${APU_CONFIG} --ldflags` `${APU_CONFIG} --libs` "
 LIBS="${LIBS} ${MYSQL_COOKIE_LIBS}"
 LIBS="${LIBS} ${MEMCACHE_COOKIE_LIBS} "
-LIBS="${LIBS} serf/.libs/libserf-0.a"
 LIBS="${LIBS} css/src/.libs/libscss.a"
 CFLAGS="${CFLAGS} `${WAND_CONFIG} --cppflags` `${WAND_CONFIG} --cflags`"
 CFLAGS="${CFLAGS} `${APR_CONFIG} --includes` `${APR_CONFIG} --cflags` `${APR_CONFIG} --cppflags`"
@@ -305,5 +304,5 @@ AC_SUBST(APR_CONFIG)
 AC_SUBST(APU_CONFIG)
 
 
-AC_CONFIG_FILES([Makefile src/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile support/centos/mod-chxj.spec])
 AC_OUTPUT

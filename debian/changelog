@@ -1,3 +1,41 @@
+libapache2-mod-chxj (0.12.18-1) unstable; urgency=low
+
+  * Fixed Bug.
+    - When the POST data of 64 bytes or less is sent, it is Segv.
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Fri,  7 Nov 2008 10:05:30 +0900
+
+libapache2-mod-chxj (0.12.17-1) unstable; urgency=low
+
+  * Fixed bug.
+    - Bug that session becomes invalid.
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Fri,  7 Nov 2008 02:09:16 +0900
+
+libapache2-mod-chxj (0.12.16-1) unstable; urgency=low
+
+  * Added sample data of emoji.
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Wed,  5 Nov 2008 09:50:15 +0900
+
+libapache2-mod-chxj (0.12.15-1) unstable; urgency=low
+
+  * Bug Fix.
+    - fails in the link of libserf.
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Thu, 30 Oct 2008 00:29:29 +0900
+
+libapache2-mod-chxj (0.12.14) unstable; urgency=low
+
+  * Bug Fix.
+    - When it is not possible to convert it from the host name in request URL
+      into IP, it becomes an error.
+      (Reported by bayside. Thanks!)
+    - The mistake is found in `configure' and the compilation of libserf
+      doesn't operate normally.
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Wed, 29 Oct 2008 17:40:25 +0900
+
 libapache2-mod-chxj (0.12.13-1) unstable; urgency=low
 
   * Bug Fix(merge from 0.11.15).
