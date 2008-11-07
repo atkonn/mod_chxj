@@ -1,3 +1,10 @@
+libapache2-mod-chxj (0.12.18-1) unstable; urgency=low
+
+  * Fixed Bug.
+    - When the POST data of 64 bytes or less is sent, it is Segv.
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Fri,  7 Nov 2008 10:05:30 +0900
+
 libapache2-mod-chxj (0.12.17-1) unstable; urgency=low
 
   * Fixed bug.

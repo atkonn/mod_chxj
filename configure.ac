@@ -1,6 +1,6 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
-AC_INIT([mod_chxj],[0.12.17])
+AC_INIT([mod_chxj],[0.12.18],[konn@users.sourceforge.jp])
 AC_PREREQ(2.59)
 AC_CONFIG_SRCDIR([src/mod_chxj.c])
 AC_CANONICAL_TARGET
@@ -309,5 +309,5 @@ AC_SUBST(LIBS)
 AC_SUBST(CFLAGS)
 
 
-AC_CONFIG_FILES([Makefile src/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile support/centos/mod-chxj.spec])
 AC_OUTPUT
