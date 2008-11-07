@@ -718,6 +718,12 @@ void test_ixhtml10_link_006();
 void test_ixhtml10_link_007();
 void test_ixhtml10_link_008();
 void test_ixhtml10_link_009();
+
+void test_ixhtml10_nlmark_001();
+void test_ixhtml10_nlmark_002();
+void test_ixhtml10_nlmark_003();
+void test_ixhtml10_nlmark_004();
+
 #if 0
 void test_ixhtml10_form_tag_001();
 void test_ixhtml10_form_tag_002();
@@ -1775,6 +1781,15 @@ main()
   CU_add_test(ixhtml10_suite, "test link 007." ,                                    test_ixhtml10_link_007);
   CU_add_test(ixhtml10_suite, "test link 008." ,                                    test_ixhtml10_link_008);
   CU_add_test(ixhtml10_suite, "test link 009." ,                                    test_ixhtml10_link_009);
+
+  /*=========================================================================*/
+  /* NLCODE                                                                  */
+  /*=========================================================================*/
+  CU_add_test(ixhtml10_suite, "test nlmark 001." ,                                    test_ixhtml10_nlmark_001);
+  CU_add_test(ixhtml10_suite, "test nlmark 002." ,                                    test_ixhtml10_nlmark_002);
+  CU_add_test(ixhtml10_suite, "test nlmark 003." ,                                    test_ixhtml10_nlmark_003);
+  CU_add_test(ixhtml10_suite, "test nlmark 004." ,                                    test_ixhtml10_nlmark_004);
+
 #if 0
   /*=========================================================================*/
   /* <FORM>                                                                  */
@@ -2074,11 +2089,12 @@ const char *test_run_http_scheme(request_rec *r)
   return s;
 }
 
+static int v_new_line_type = NLTYPE_NONE;
 void * test_get_module_config(const ap_conf_vector_t *cv, const module *m)
 {
   static mod_chxj_config cfg;
   memset(&cfg, 0, sizeof(mod_chxj_config));
-  cfg.new_line_type = NLTYPE_NONE;
+  cfg.new_line_type = v_new_line_type;
   return &cfg;
 }
 
@@ -32060,6 +32076,157 @@ void test_ixhtml10_label_tag_002()
   ret = chxj_rencoding(&r, ret, &destlen);
   fprintf(stderr, "actual:[%s]\n", ret);
   fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+void test_ixhtml10_nlmark_001()
+{
+#define  TEST_STRING   "<div>\n</div>"
+#define  RESULT_STRING "<div></div>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get_span020;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+void test_ixhtml10_nlmark_002()
+{
+#define  TEST_STRING   "<div>\n</div>"
+#define  RESULT_STRING "<div>\r\n</div>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get_span020;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  v_new_line_type = NLTYPE_CRLF;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  fprintf(stderr, "nltype:[%d]\n", v_new_line_type);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_nlmark_003()
+{
+#define  TEST_STRING   "<div>\n</div>"
+#define  RESULT_STRING "<div>\r</div>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get_span020;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  v_new_line_type = NLTYPE_CR;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  fprintf(stderr, "nltype:[%d]\n", v_new_line_type);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+void test_ixhtml10_nlmark_004()
+{
+#define  TEST_STRING   "<div>\n</div>"
+#define  RESULT_STRING "<div>\n</div>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get_span020;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  v_new_line_type = NLTYPE_LF;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+
+  v_new_line_type = NLTYPE_NONE;
+
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  fprintf(stderr, "nltype:[%d]\n", v_new_line_type);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
