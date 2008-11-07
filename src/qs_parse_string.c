@@ -201,7 +201,7 @@ qs_parse_string(Doc *doc, const char *src, int srclen)
         && (doc->now_parent_node == NULL || !STRCASEEQ('p','P',"pre",doc->now_parent_node->name))) {
       continue;
     }
-    if ((unsigned char)'<' == src[ii]) {
+    if ((unsigned char)'<' == src[ii] && strncasecmp("<![CDATA[",&src[ii], sizeof("<![CDATA[")-1) != 0) {
       int endpoint = s_cut_tag(&src[ii], srclen - ii);
       Node *node   = qs_parse_tag(doc, &src[ii], endpoint);
       if (! node) {
@@ -298,6 +298,29 @@ qs_parse_string(Doc *doc, const char *src, int srclen)
           continue;
         }
       }
+    }
+    else if (strncasecmp("<![CDATA[", &src[ii], sizeof("<![CDATA[") - 1) == 0) {
+      /* TEXT */
+      int endpoint = s_cut_tag(&src[ii], srclen - ii);
+      Node *node = qs_new_tag(doc);
+      if (! node) {
+        QX_LOGGER_DEBUG("runtime exception: qs_parse_string(): Out of memory");
+        return doc->root_node;
+      }
+      node->value = (char *)apr_palloc(doc->pool,endpoint+1);
+      node->name  = (char *)apr_palloc(doc->pool,4+1);
+      node->otext = (char *)apr_palloc(doc->pool,endpoint+1);
+      node->size  = endpoint;
+      node->line  = nl_cnt;
+      memset(node->value, 0, endpoint+1);
+      memset(node->otext, 0, endpoint+1);
+      memset(node->name,  0, 4+1       );
+      memcpy(node->value, &src[ii+sizeof("<![CDATA[")-1], endpoint - (sizeof("<![CDATA[")-1) - (sizeof("]]")-1));
+      memcpy(node->name,  "text",   4);
+      memcpy(node->otext,node->value, endpoint);
+
+      qs_add_child_node(doc,node);
+      ii += (endpoint - 1);
     }
     else {
       /* TEXT */
