@@ -45,7 +45,7 @@ libmod_chxj_la_SOURCES = mod_chxj.c \
 
 libmod_chxj_la_CFLAGS = -O2 -prefer-pic @QDEFS@ @DDEFS@ -I. -I../include -I@with_apache_header@  -I./serf -I./css/include
 AM_CFLAGS = @CFLAGS@ -O2 -prefer-pic @QDEFS@ @DDEFS@ -I. -I../include -I@with_apache_header@
-libmod_chxj_la_LIBADD = serf/.libs/libserf-0.a
+libmod_chxj_la_LIBADD = serf/.libs/libserf-0.a css/src/.libs/libscss.a
 lib_LTLIBRARIES = libmod_chxj.la
 
 make_so:
@@ -54,7 +54,7 @@ make_so:
 serf/.libs/libserf-0.a:
 	(cd serf; CFLAGS=-fPIC CXXFLAGS=-fPIC ./configure --enable-shared --with-apr=`dirname @APR_CONFIG@` --with-apr-util=`dirname @APU_CONFIG@`; make)
 
-css/src/libscss.la:
+css/src/.libs/libscss.a:
 	(cd css; ./configure --with-apr-config=@APR_CONFIG@ --with-apu-config=@APU_CONFIG@; make)
 
 clean:
