@@ -708,6 +708,16 @@ void test_ixhtml10_marquee_tag_with_css_019();
 void test_ixhtml10_marquee_tag_with_css_020();
 void test_ixhtml10_marquee_tag_with_css_021();
 void test_ixhtml10_marquee_tag_with_css_022();
+
+void test_ixhtml10_link_001();
+void test_ixhtml10_link_002();
+void test_ixhtml10_link_003();
+void test_ixhtml10_link_004();
+void test_ixhtml10_link_005();
+void test_ixhtml10_link_006();
+void test_ixhtml10_link_007();
+void test_ixhtml10_link_008();
+void test_ixhtml10_link_009();
 #if 0
 void test_ixhtml10_form_tag_001();
 void test_ixhtml10_form_tag_002();
@@ -724,15 +734,6 @@ void test_ixhtml10_html_tag_001();
 void test_ixhtml10_param_tag_001();
 
 /* CSS */
-void test_ixhtml10_link_001();
-void test_ixhtml10_link_002();
-void test_ixhtml10_link_003();
-void test_ixhtml10_link_004();
-void test_ixhtml10_link_005();
-void test_ixhtml10_link_006();
-void test_ixhtml10_link_007();
-void test_ixhtml10_link_008();
-void test_ixhtml10_link_009();
 
 void test_ixhtml10_html_tag_with_css_001();
 void test_ixhtml10_meta_tag_with_css_001();
@@ -1761,6 +1762,19 @@ main()
   CU_add_test(ixhtml10_suite, "test marquee with css 020",                       test_ixhtml10_marquee_tag_with_css_020);
   CU_add_test(ixhtml10_suite, "test marquee with css 021",                       test_ixhtml10_marquee_tag_with_css_021);
   CU_add_test(ixhtml10_suite, "test marquee with css 022",                       test_ixhtml10_marquee_tag_with_css_022);
+
+  /*=========================================================================*/
+  /* <LINK>                                                                  */
+  /*=========================================================================*/
+  CU_add_test(ixhtml10_suite, "test link 001." ,                                    test_ixhtml10_link_001);
+  CU_add_test(ixhtml10_suite, "test link 002." ,                                    test_ixhtml10_link_002);
+  CU_add_test(ixhtml10_suite, "test link 003." ,                                    test_ixhtml10_link_003);
+  CU_add_test(ixhtml10_suite, "test link 004." ,                                    test_ixhtml10_link_004);
+  CU_add_test(ixhtml10_suite, "test link 005." ,                                    test_ixhtml10_link_005);
+  CU_add_test(ixhtml10_suite, "test link 006." ,                                    test_ixhtml10_link_006);
+  CU_add_test(ixhtml10_suite, "test link 007." ,                                    test_ixhtml10_link_007);
+  CU_add_test(ixhtml10_suite, "test link 008." ,                                    test_ixhtml10_link_008);
+  CU_add_test(ixhtml10_suite, "test link 009." ,                                    test_ixhtml10_link_009);
 #if 0
   /*=========================================================================*/
   /* <FORM>                                                                  */
@@ -1783,15 +1797,6 @@ main()
   /*=========================================================================*/
   CU_add_test(ixhtml10_suite, "test <param> 1.",                                   test_ixhtml10_param_tag_001);
   /* CSS */
-  CU_add_test(ixhtml10_suite, "test link 001." ,                                    test_ixhtml10_link_001);
-  CU_add_test(ixhtml10_suite, "test link 002." ,                                    test_ixhtml10_link_002);
-  CU_add_test(ixhtml10_suite, "test link 003." ,                                    test_ixhtml10_link_003);
-  CU_add_test(ixhtml10_suite, "test link 004." ,                                    test_ixhtml10_link_004);
-  CU_add_test(ixhtml10_suite, "test link 005." ,                                    test_ixhtml10_link_005);
-  CU_add_test(ixhtml10_suite, "test link 006." ,                                    test_ixhtml10_link_006);
-  CU_add_test(ixhtml10_suite, "test link 007." ,                                    test_ixhtml10_link_007);
-  CU_add_test(ixhtml10_suite, "test link 008." ,                                    test_ixhtml10_link_008);
-  CU_add_test(ixhtml10_suite, "test link 009." ,                                    test_ixhtml10_link_009);
 
   CU_add_test(ixhtml10_suite, "test html with css 001",                             test_ixhtml10_html_tag_with_css_001);
   CU_add_test(ixhtml10_suite, "test meta with css 001",                             test_ixhtml10_meta_tag_with_css_001);
