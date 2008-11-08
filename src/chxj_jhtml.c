@@ -2948,7 +2948,7 @@ s_jhtml_end_option_tag(void *pdoc, Node *UNUSED(child))
 static char *
 s_jhtml_start_div_tag(void *pdoc, Node *node)
 {
-  jhtml_t   *jhtml;
+  jhtml_t     *jhtml;
   Doc         *doc;
   request_rec *r;
   Attr        *attr;
@@ -3110,6 +3110,10 @@ s_jhtml_start_div_tag(void *pdoc, Node *node)
     }
     W_L(">");
     flg->with_marquee_flag = 1;
+  }
+  if (!attr_align && !attr_color && !attr_decoration && !attr_display && !attr_font_size) {
+    W_L("<div>");
+    flg->with_div_flag = 1;
   }
   node->userData = flg;
 

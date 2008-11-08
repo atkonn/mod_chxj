@@ -3090,6 +3090,10 @@ s_chtml20_start_div_tag(void *pdoc, Node *node)
     W_L(">");
     flg->with_marquee_flag = 1;
   }
+  if (! attr_align && ! attr_color && ! attr_decoration && ! attr_display) {
+    W_L("<div>");
+    flg->with_div_flag = 1;
+  }
   node->userData = flg;
 
   return chtml20->out;

@@ -2744,6 +2744,10 @@ s_chtml50_start_div_tag(void *pdoc, Node *node)
     W_L(">");
     flg->with_marquee_flag = 1;
   }
+  if (!attr_align && !attr_color && !attr_decoration && !attr_display && !attr_font_size) {
+    W_L("<div>");
+    flg->with_div_flag = 1;
+  }
   node->userData = flg;
 
   return chtml50->out;
