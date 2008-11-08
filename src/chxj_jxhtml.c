@@ -126,7 +126,6 @@ static void  s_init_jxhtml(jxhtml_t *jxhtml, Doc *doc, request_rec *r, device_ta
 
 static int   s_jxhtml_search_emoji(jxhtml_t *jxhtml, char *txt, char **rslt);
 
-static char *s_jxhtml_istyle_to_mode(apr_pool_t *p, const char *s);
 static char *s_jxhtml_istyle_to_wap_input_format(apr_pool_t *p, const char *s);
 static css_prop_list_t *s_jxhtml_nopush_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value);
 static css_prop_list_t *s_jxhtml_push_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value);
@@ -2076,7 +2075,7 @@ s_jxhtml_start_center_tag(void *pdoc, Node *node)
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_center_tag(void *pdoc, Node *node)
+s_jxhtml_end_center_tag(void *pdoc, Node *UNUSED(node))
 {
   jxhtml_t    *jxhtml;
   Doc         *doc;
@@ -3328,23 +3327,6 @@ s_jxhtml_end_div_tag(void *pdoc, Node *UNUSED(child))
   return jxhtml->out;
 }
 
-
-static char *
-s_jxhtml_istyle_to_mode(apr_pool_t *p, const char *s)
-{
-  if (s) {
-    switch (s[0]) {
-    case '1': return apr_psprintf(p, "hiragana");
-    case '2': return apr_psprintf(p, "hankakukana");
-    case '3': return apr_psprintf(p, "alphabet");
-    case '4': return apr_psprintf(p, "numeric");
-    default: 
-      return apr_pstrdup(p, "");
-    }
-  }
-
-  return apr_pstrdup(p,"");
-}
 
 static char *
 s_jxhtml_istyle_to_wap_input_format(apr_pool_t *p, const char *s)
