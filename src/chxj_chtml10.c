@@ -2126,8 +2126,6 @@ s_chtml10_start_form_tag(void *pdoc, Node *node)
 
   W_L("<form");
   if (attr_action) {
-    attr_action = chxj_encoding_parameter(r, attr_action, 0);
-    attr_action = chxj_add_cookie_parameter(r, attr_action, chtml10->cookie);
     char *q;
     q = strchr(attr_action, '?');
     if (q) {
