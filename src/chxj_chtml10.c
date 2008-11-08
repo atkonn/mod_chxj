@@ -625,7 +625,7 @@ s_chtml10_search_emoji(chtml10_t *chtml10, char *txt, char **rslt)
  * @return The conversion result is returned.
  */
 static char *
-s_chtml10_start_html_tag(void *pdoc, Node *node) 
+s_chtml10_start_html_tag(void *pdoc, Node *UNUSED(node))
 {
   Doc             *doc;
   request_rec     *r;
