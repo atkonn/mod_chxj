@@ -17,6 +17,7 @@
 #include "chxj_css.h"
 #include "chxj_serf.h"
 #include "chxj_encoding.h"
+#include "chxj_str_util.h"
 #include "qs_parse_string.h"
 #include "apr_pools.h"
 #include "scss.h"
@@ -263,8 +264,8 @@ s_search_selector_regexp(Doc *doc, request_rec *r, apr_pool_t *pool, css_stylesh
             if (ret) {
               DBG(r, "continue do while");
               node = node->parent;
-              DBG(r, "new node:[%x]", node);
-              DBG(r, "new node->prev:[%x]", node->prev);
+              DBG(r, "new node:[%x]", (unsigned int)(apr_size_t)node);
+              DBG(r, "new node->prev:[%x]", (unsigned int)(apr_size_t)node->prev);
               loop = 1;
             }
           }
@@ -541,7 +542,7 @@ s_css_parser_from_uri_start_selector(SCSSParserPtr_t parser, SCSSNodePtr_t selec
 
 
 static void 
-s_css_parser_from_uri_end_selector(SCSSParserPtr_t parser, SCSSNodePtr_t selectors)
+s_css_parser_from_uri_end_selector(SCSSParserPtr_t parser, SCSSNodePtr_t UNUSED(selectors))
 {
   int ii;
   css_property_t *cur = NULL;
@@ -632,7 +633,7 @@ s_css_parser_copy_property(apr_pool_t *pool, css_property_t *from)
 
 
 static void
-s_css_parser_from_uri_property(SCSSParserPtr_t parser, const char *propertyName, const char *value, int impotant)
+s_css_parser_from_uri_property(SCSSParserPtr_t parser, const char *propertyName, const char *value, int UNUSED(impotant))
 {
   CB_INIT;
   ERROR_OCCORED;
@@ -653,7 +654,7 @@ s_css_parser_from_uri_property(SCSSParserPtr_t parser, const char *propertyName,
 
 
 static void
-s_css_parser_from_uri_import_style(SCSSParserPtr_t parser, const char *uri, const char **media, const char *defaultNamespaceURI)
+s_css_parser_from_uri_import_style(SCSSParserPtr_t parser, const char *uri, const char **media, const char *UNUSED(defaultNamespaceURI))
 {
   CB_INIT;
   ERROR_OCCORED;
