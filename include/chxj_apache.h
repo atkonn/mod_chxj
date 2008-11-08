@@ -114,6 +114,7 @@ extern char *test_ap_escape_html(apr_pool_t *p, const char *s);
 #    undef PACKAGE_STRING
 #    undef PACKAGE_TARNAME
 #    undef PACKAGE_VERSION
+#    undef PACKAGE_BUGREPORT
 #    include "config.h"
 #  endif
 #  define chxj_log_rerror ap_log_rerror
