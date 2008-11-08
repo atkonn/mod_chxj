@@ -3670,7 +3670,7 @@ void test_chtml50_dd_tag_002()
 void test_chtml50_div_tag_001() 
 {
 #define  TEST_STRING "<html><head></head><body><div></div></body></html>"
-#define  RESULT_STRING "<html><head></head><body></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -3782,7 +3782,7 @@ void test_chtml50_div_tag_004()
 void test_chtml50_div_tag_005() 
 {
 #define  TEST_STRING "<html><head></head><body><div align=\"\"></div></body></html>"
-#define  RESULT_STRING "<html><head></head><body></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -3810,7 +3810,7 @@ void test_chtml50_div_tag_005()
 void test_chtml50_div_tag_006() 
 {
 #define  TEST_STRING "<html><head></head><body><div align=\"abc\"></div></body></html>"
-#define  RESULT_STRING "<html><head></head><body></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -3838,7 +3838,7 @@ void test_chtml50_div_tag_006()
 void test_chtml50_div_tag_007() 
 {
 #define  TEST_STRING "<html><head></head><body><div style=\"aaa\"></div></body></html>"
-#define  RESULT_STRING "<html><head></head><body></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
