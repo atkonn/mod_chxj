@@ -1167,6 +1167,7 @@ s_ixhtml10_start_a_tag(void *pdoc, Node *node)
       /* CHTML1.0                                                             */
       /*----------------------------------------------------------------------*/
       value = chxj_encoding_parameter(r, value);
+      value = chxj_add_cookie_parameter(r, value, ixhtml10->cookie);
       W_L(" href=\"");
       W_V(value);
       W_L("\"");
