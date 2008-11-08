@@ -1783,7 +1783,7 @@ s_chtml10_start_a_tag(void *pdoc, Node *node)
         /*--------------------------------------------------------------------*/
         /* CHTML1.0                                                           */
         /*--------------------------------------------------------------------*/
-        value = chxj_encoding_parameter(r, value);
+        value = chxj_encoding_parameter(r, value, 0);
         value = chxj_add_cookie_parameter(r, value, chtml10->cookie);
         W_L(" href=\"");
         W_V(value);
@@ -2083,7 +2083,7 @@ s_chtml10_start_form_tag(void *pdoc, Node *node)
         /*--------------------------------------------------------------------*/
         /* CHTML 1.0                                                          */
         /*--------------------------------------------------------------------*/
-        attr_action = chxj_encoding_parameter(r, value);
+        attr_action = chxj_encoding_parameter(r, value, 0);
         attr_action = chxj_add_cookie_parameter(r, attr_action, chtml10->cookie);
       }
       break;
@@ -2126,7 +2126,7 @@ s_chtml10_start_form_tag(void *pdoc, Node *node)
 
   W_L("<form");
   if (attr_action) {
-    attr_action = chxj_encoding_parameter(r, attr_action);
+    attr_action = chxj_encoding_parameter(r, attr_action, 0);
     attr_action = chxj_add_cookie_parameter(r, attr_action, chtml10->cookie);
     char *q;
     q = strchr(attr_action, '?');
@@ -2604,7 +2604,7 @@ s_chtml10_start_img_tag(void *pdoc, Node *node)
         /* CHTML 1.0                                                          */
         /*--------------------------------------------------------------------*/
 #ifdef IMG_NOT_CONVERT_FILENAME
-        value = chxj_encoding_parameter(r, value);
+        value = chxj_encoding_parameter(r, value, 0);
         value = chxj_add_cookie_parameter(r, value, chtml10->cookie);
         if (value) {
           value = apr_psprintf(doc->buf.pool, 
@@ -2616,7 +2616,7 @@ s_chtml10_start_img_tag(void *pdoc, Node *node)
         attr_src = value;
 #else
         value = chxj_img_conv(r, spec, value);
-        value = chxj_encoding_parameter(r, value);
+        value = chxj_encoding_parameter(r, value, 0);
         value = chxj_add_cookie_parameter(r, value, chtml10->cookie);
         if (value) {
           value = apr_psprintf(doc->buf.pool,

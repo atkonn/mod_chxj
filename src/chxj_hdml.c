@@ -1018,7 +1018,7 @@ s_hdml_start_a_tag(void *pdoc, Node *node)
     }
     else if (STRCASEEQ('h','H',"href",name)) {
       if (STRNCASEEQ('m','M',"mailto:",value,sizeof("mailto:")-1)) {
-        value = chxj_encoding_parameter(hdml->doc->r, value);
+        value = chxj_encoding_parameter(hdml->doc->r, value, 0);
         s_output_to_hdml_out(hdml, " TASK=GO DEST=\""     );
         s_output_to_hdml_out(hdml, value                  );
         s_output_to_hdml_out(hdml, "\" "                  );
@@ -1264,7 +1264,7 @@ s_hdml_start_form_tag(void *pdoc, Node *node)
     char *name  = qs_get_attr_name(doc,attr);
     char *value = qs_get_attr_value(doc,attr);
     if (STRCASEEQ('a','A',"action",name)) {
-      value = chxj_encoding_parameter(hdml->doc->r, value);
+      value = chxj_encoding_parameter(hdml->doc->r, value, 0);
       act = apr_psprintf(r->pool, "%s", value);
       break;
     }
@@ -2256,7 +2256,7 @@ s_hdml_start_img_tag(void *pdoc, Node *node)
     char *name  = qs_get_attr_name(doc,attr);
     char *value = qs_get_attr_value(doc,attr);
     if (STRCASEEQ('s','S',"src",name) && value && *value) {
-      value = chxj_encoding_parameter(hdml->doc->r, value);
+      value = chxj_encoding_parameter(hdml->doc->r, value, 0);
       out = apr_pstrcat(doc->r->pool, out, " src=\"", NULL);
 #ifdef IMG_NOT_CONVERT_FILENAME
       out = apr_pstrcat(doc->r->pool, out, value, NULL);

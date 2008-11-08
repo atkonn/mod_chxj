@@ -211,7 +211,7 @@ chxj_rencoding(request_rec *r, const char *src, apr_size_t *len)
 
 
 char *
-chxj_encoding_parameter(request_rec *r, const char *value)
+chxj_encoding_parameter(request_rec *r, const char *value, int xmlflag)
 {
   char *src;
   char *src_sv;
@@ -225,13 +225,13 @@ chxj_encoding_parameter(request_rec *r, const char *value)
 
   int   use_amp_flag;
   
-  DBG(r, "start chxj_encoding_parameter()");
+  DBG(r, "REQ[%X] start chxj_encoding_parameter()", (unsigned int)(apr_size_t)r);
 
   src = apr_pstrdup(r->pool, value);
 
   spos = strchr(src, '?');
   if (!spos) {
-    DBG(r, "end   chxj_encoding_parameter()");
+    DBG(r, "REQ[%X] end   chxj_encoding_parameter()", (unsigned int)(apr_size_t)r);
     return src;
   }
   *spos++ = 0;
@@ -244,7 +244,7 @@ chxj_encoding_parameter(request_rec *r, const char *value)
     apr_size_t len;
     char *sep_pos;
 
-    use_amp_flag = 0;
+    use_amp_flag = (xmlflag) ? 1 : 0;
 
     pair = apr_strtok(spos, "&", &pstat);
     spos = NULL;
@@ -302,7 +302,7 @@ chxj_encoding_parameter(request_rec *r, const char *value)
       }
     }
   }
-  DBG(r, "end   chxj_encoding_parameter()");
+  DBG(r, "REQ[%X] end   chxj_encoding_parameter()", (unsigned int)(apr_size_t)r);
 
   return apr_pstrcat(r->pool, src_sv, "?", param, NULL);
 }

@@ -36,7 +36,8 @@ extern char *chxj_rencoding(
 
 extern char *chxj_encoding_parameter(
   request_rec *r, 
-  const char  *value);
+  const char  *value,
+  int xmlflag);
 
 
 char *chxj_iconv(request_rec *r, apr_pool_t *pool, const char *src, apr_size_t *len, const char *from, const char *to);

@@ -1108,7 +1108,7 @@ s_xhtml_1_0_start_a_tag(void *pdoc, Node *node)
       W_L("\"");
     }
     else if (STRCASEEQ('h','H',"href", name) && value && *value) {
-      value = chxj_encoding_parameter(r, value);
+      value = chxj_encoding_parameter(r, value, 1);
       value = chxj_add_cookie_parameter(r, value, xhtml->cookie);
       W_L(" href=\"");
       W_V(value);
@@ -3236,7 +3236,7 @@ s_xhtml_1_0_start_img_tag(void *pdoc, Node *node)
     char *value = qs_get_attr_value(doc,attr);
 
     if (STRCASEEQ('s','S',"src",name)) {
-      value = chxj_encoding_parameter(r, value);
+      value = chxj_encoding_parameter(r, value, 1);
       value = chxj_add_cookie_parameter(r, value, xhtml->cookie);
       if (value) {
         value = apr_psprintf(r->pool,
