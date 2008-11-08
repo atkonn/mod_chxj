@@ -1804,11 +1804,12 @@ main()
   CU_add_test(ixhtml10_suite, "test <form action> with other site .",              test_ixhtml10_form_tag_008);
   CU_add_test(ixhtml10_suite, "test <form action method>.",                        test_ixhtml10_form_tag_009);
 
-#if 0
   /*=========================================================================*/
   /* <param>                                                                 */
   /*=========================================================================*/
   CU_add_test(ixhtml10_suite, "test <param> 1.",                                   test_ixhtml10_param_tag_001);
+
+#if 0
   /* CSS */
 
   CU_add_test(ixhtml10_suite, "test html with css 001",                             test_ixhtml10_html_tag_with_css_001);
