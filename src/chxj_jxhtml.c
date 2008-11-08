@@ -736,7 +736,7 @@ s_jxhtml_start_meta_tag(void *pdoc, Node *node)
             sec = apr_pstrdup(r->pool, buf);
             sec[url-buf] = 0;
             url++;
-            url = chxj_encoding_parameter(r, url);
+            url = chxj_encoding_parameter(r, url, 1);
             W_L(" ");
             W_V(name);
             W_L("=\"");
@@ -1132,7 +1132,7 @@ s_jxhtml_start_a_tag(void *pdoc, Node *node)
       /*----------------------------------------------------------------------*/
       /* CHTML1.0                                                             */
       /*----------------------------------------------------------------------*/
-      value = chxj_encoding_parameter(r, value);
+      value = chxj_encoding_parameter(r, value, 1);
       W_L(" href=\"");
       W_V(value);
       W_L("\"");
@@ -1634,7 +1634,7 @@ s_jxhtml_start_form_tag(void *pdoc, Node *node)
 
   W_L("<form");
   if (attr_action) {
-    attr_action = chxj_encoding_parameter(r, attr_action);
+    attr_action = chxj_encoding_parameter(r, attr_action, 1);
     attr_action = chxj_add_cookie_parameter(r, attr_action, jxhtml->cookie);
     char *q;
     q = strchr(attr_action, '?');
@@ -2822,7 +2822,7 @@ s_jxhtml_start_img_tag(void *pdoc, Node *node)
       /* CHTML 1.0                                                            */
       /*----------------------------------------------------------------------*/
 #ifdef IMG_NOT_CONVERT_FILENAME
-      value = chxj_encoding_parameter(r, value);
+      value = chxj_encoding_parameter(r, value, 1);
       if (value) {
         value = apr_psprintf(r->pool,
                              "%s",
@@ -2831,7 +2831,7 @@ s_jxhtml_start_img_tag(void *pdoc, Node *node)
       attr_src = value;
 #else
       value = chxj_img_conv(r, spec, value);
-      value = chxj_encoding_parameter(r, value);
+      value = chxj_encoding_parameter(r, value, 1);
       if (value) {
         value = apr_psprintf(r->pool,
                              "%s",
