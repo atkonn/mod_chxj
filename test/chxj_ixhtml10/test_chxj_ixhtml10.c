@@ -725,7 +725,7 @@ void test_ixhtml10_nlmark_003();
 void test_ixhtml10_nlmark_004();
 
 void test_ixhtml10_html_tag_001();
-#if 0
+
 void test_ixhtml10_form_tag_001();
 void test_ixhtml10_form_tag_002();
 void test_ixhtml10_form_tag_003();
@@ -960,10 +960,6 @@ void test_ixhtml10_div_tag_with_css_040();
 void test_ixhtml10_div_tag_with_css_041();
 void test_ixhtml10_div_tag_with_css_042();
 
-
-
-
-#endif
 /* pend */
 
 int
@@ -1795,7 +1791,6 @@ main()
   /*=========================================================================*/
   CU_add_test(ixhtml10_suite, "test <html>.",                                      test_ixhtml10_html_tag_001);
 
-#if 0
   /*=========================================================================*/
   /* <FORM>                                                                  */
   /*=========================================================================*/
@@ -1808,6 +1803,8 @@ main()
   CU_add_test(ixhtml10_suite, "test <form action> with null cookie.",              test_ixhtml10_form_tag_007);
   CU_add_test(ixhtml10_suite, "test <form action> with other site .",              test_ixhtml10_form_tag_008);
   CU_add_test(ixhtml10_suite, "test <form action method>.",                        test_ixhtml10_form_tag_009);
+
+#if 0
   /*=========================================================================*/
   /* <param>                                                                 */
   /*=========================================================================*/
@@ -8615,7 +8612,7 @@ void test_ixhtml10_form_tag_005()
 void test_ixhtml10_form_tag_006()
 {
 #define  TEST_STRING   "<form action></form>"
-#define  RESULT_STRING "<form action=\"\"><input type=\"hidden\" name=\"_chxj_cc\" value=\"test_cookie_id\"></form>"
+#define  RESULT_STRING "<form action=\"\"><input type=\"hidden\" name=\"_chxj_cc\" value=\"test_cookie_id\" /></form>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -8705,7 +8702,7 @@ void test_ixhtml10_form_tag_008()
 void test_ixhtml10_form_tag_009()
 {
 #define  TEST_STRING   "<form method=\"post\" action=\"hogehoge\"></form>"
-#define  RESULT_STRING "<form action=\"hogehoge\" method=\"post\"><input type=\"hidden\" name=\"_chxj_cc\" value=\"test_cookie_id\"></form>"
+#define  RESULT_STRING "<form action=\"hogehoge\" method=\"post\"><input type=\"hidden\" name=\"_chxj_cc\" value=\"test_cookie_id\" /></form>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -13853,7 +13850,7 @@ void test_ixhtml10_a_tag_name_attribute_004()
 void test_ixhtml10_a_tag_href_attribute_001()
 {
 #define  TEST_STRING "<a href=\"\">abc</a>"
-#define  RESULT_STRING "<a href=\"\">abc</a>"
+#define  RESULT_STRING "<a href=\"?_chxj_cc=test_cookie_id\">abc</a>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -13913,7 +13910,7 @@ void test_ixhtml10_a_tag_href_attribute_002()
 void test_ixhtml10_a_tag_href_attribute_003()
 {
 #define  TEST_STRING "<a href=\"a.html\">abc</a>"
-#define  RESULT_STRING "<a href=\"a.html\">abc</a>"
+#define  RESULT_STRING "<a href=\"a.html?_chxj_cc=test_cookie_id\">abc</a>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -13943,7 +13940,7 @@ void test_ixhtml10_a_tag_href_attribute_003()
 void test_ixhtml10_a_tag_href_attribute_004()
 {
 #define  TEST_STRING "<a href=\"a.html#abc\">abc</a>"
-#define  RESULT_STRING "<a href=\"a.html#abc\">abc</a>"
+#define  RESULT_STRING "<a href=\"a.html?_chxj_cc=test_cookie_id#abc\">abc</a>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -13973,7 +13970,7 @@ void test_ixhtml10_a_tag_href_attribute_004()
 void test_ixhtml10_a_tag_href_attribute_005()
 {
 #define  TEST_STRING "<a href=\"a.html#\">abc</a>"
-#define  RESULT_STRING "<a href=\"a.html#\">abc</a>"
+#define  RESULT_STRING "<a href=\"a.html?_chxj_cc=test_cookie_id#\">abc</a>"
   char  *ret;
   char  *tmp;
   device_table spec;
