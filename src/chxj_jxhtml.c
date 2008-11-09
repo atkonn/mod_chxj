@@ -126,7 +126,6 @@ static void  s_init_jxhtml(jxhtml_t *jxhtml, Doc *doc, request_rec *r, device_ta
 
 static int   s_jxhtml_search_emoji(jxhtml_t *jxhtml, char *txt, char **rslt);
 
-static char *s_jxhtml_istyle_to_wap_input_format(apr_pool_t *p, const char *s);
 static css_prop_list_t *s_jxhtml_nopush_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value);
 static css_prop_list_t *s_jxhtml_push_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value);
 
@@ -1844,11 +1843,11 @@ s_jxhtml_start_input_tag(void *pdoc, Node *node)
       W_L(" style=\"-wap-input-format:&quot;*&lt;ja:n&gt;&quot;;\"");
     }
     else {
-      char *vv = s_jxhtml_istyle_to_wap_input_format(doc->buf.pool,attr_istyle);
+      char *vv = qs_conv_istyle_to_format(doc->buf.pool, attr_istyle);
       W_L(" style=\"");
-      W_L("-wap-input-format:");
+      W_L("-wap-input-format:'*");
       W_V(vv);
-      W_L(";");
+      W_L("';");
       W_L("\"");
     }
   }
@@ -1948,11 +1947,11 @@ s_jxhtml_start_input_tag(void *pdoc, Node *node)
       W_L(" style=\"-wap-input-format: &quot;*&lt;ja:n&gt;&quot;;\"");
     }
     else {
-      char *vv = s_jxhtml_istyle_to_wap_input_format(doc->buf.pool,istyle);
+      char *vv = qs_conv_istyle_to_format(doc->buf.pool, istyle);
       W_L(" style=\"");
-      W_L("-wap-input-format: ");
+      W_L("-wap-input-format:'*");
       W_V(vv);
-      W_L(";");
+      W_L("';");
       W_L("\"");
     }
   }
@@ -3329,24 +3328,6 @@ s_jxhtml_end_div_tag(void *pdoc, Node *UNUSED(child))
 
 
 static char *
-s_jxhtml_istyle_to_wap_input_format(apr_pool_t *p, const char *s)
-{
-  if (s) {
-    switch (s[0]) {
-    case '1': return apr_psprintf(p, "&quot;*&lt;ja:h&gt;&quot;");
-    case '2': return apr_psprintf(p, "&quot;*&lt;ja:hk&gt;&quot;");
-    case '3': return apr_psprintf(p, "&quot;*&lt;ja:en&gt;&quot;");
-    case '4': return apr_psprintf(p, "&quot;*&lt;ja:n&gt;&quot;");
-    default: 
-      return apr_pstrdup(p, "");
-    }
-  }
-
-  return apr_pstrdup(p,"");
-}
-
-
-static char *
 s_jxhtml_chxjif_tag(void *pdoc, Node *node)
 {
   jxhtml_t *jxhtml;
@@ -3463,11 +3444,11 @@ s_jxhtml_start_textarea_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   if (attr_istyle) {
-    char *vv = s_jxhtml_istyle_to_wap_input_format(doc->buf.pool,attr_istyle);
+    char *vv = qs_conv_istyle_to_format(doc->buf.pool, attr_istyle);
     W_L(" style=\"");
-    W_L("-wap-input-format:");
+    W_L("-wap-input-format:'*");
     W_V(vv);
-    W_L(";");
+    W_L("';");
     W_L("\"");
   }
   W_L(">");
