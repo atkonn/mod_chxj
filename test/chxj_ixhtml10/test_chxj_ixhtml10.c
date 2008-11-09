@@ -1809,11 +1809,12 @@ main()
   /*=========================================================================*/
   CU_add_test(ixhtml10_suite, "test <param> 1.",                                   test_ixhtml10_param_tag_001);
 
-#if 0
   /* CSS */
 
   CU_add_test(ixhtml10_suite, "test html with css 001",                             test_ixhtml10_html_tag_with_css_001);
   CU_add_test(ixhtml10_suite, "test meta with css 001",                             test_ixhtml10_meta_tag_with_css_001);
+
+#if 0
 
   CU_add_test(ixhtml10_suite, "test textarea with css 001",                         test_ixhtml10_textarea_tag_with_css_001);
   CU_add_test(ixhtml10_suite, "test textarea with css 002",                         test_ixhtml10_textarea_tag_with_css_002);
@@ -15395,7 +15396,10 @@ char *test_chxj_serf_get002(request_rec *r, apr_pool_t *ppool, const char *uri_p
 void test_ixhtml10_html_tag_with_css_001()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" /></head><body></body></html>"
-#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\"><html><head></head><body><div></div></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>" \
+                       "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -15415,6 +15419,8 @@ void test_ixhtml10_html_tag_with_css_001()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -15444,7 +15450,10 @@ void test_ixhtml10_meta_tag_with_css_001()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "<META http-equiv=\"Content-Type\" content=\"text/html; charset=SHIFT_JIS\"></head><body></body></html>"
-#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\"><html><head><meta http-equiv=\"Content-Type\" content=\"application/xhtml+xml; charset=Windows-31J\" /></head><body><div></div></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>" \
+                       "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head><meta http-equiv=\"Content-Type\" content=\"application/xhtml+xml; charset=Shift_JIS\" /></head><body></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -15464,6 +15473,8 @@ void test_ixhtml10_meta_tag_with_css_001()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
