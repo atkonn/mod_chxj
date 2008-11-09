@@ -1814,13 +1814,13 @@ main()
   CU_add_test(ixhtml10_suite, "test html with css 001",                             test_ixhtml10_html_tag_with_css_001);
   CU_add_test(ixhtml10_suite, "test meta with css 001",                             test_ixhtml10_meta_tag_with_css_001);
 
-#if 0
 
   CU_add_test(ixhtml10_suite, "test textarea with css 001",                         test_ixhtml10_textarea_tag_with_css_001);
   CU_add_test(ixhtml10_suite, "test textarea with css 002",                         test_ixhtml10_textarea_tag_with_css_002);
   CU_add_test(ixhtml10_suite, "test textarea with css 003",                         test_ixhtml10_textarea_tag_with_css_003);
   CU_add_test(ixhtml10_suite, "test textarea with css 004",                         test_ixhtml10_textarea_tag_with_css_004);
 
+#if 0
   CU_add_test(ixhtml10_suite, "test textarea with css 005",                         test_ixhtml10_textarea_tag_with_css_005);
   CU_add_test(ixhtml10_suite, "test textarea with css 006",                         test_ixhtml10_textarea_tag_with_css_006);
   CU_add_test(ixhtml10_suite, "test textarea with css 007",                         test_ixhtml10_textarea_tag_with_css_007);
@@ -15505,7 +15505,10 @@ void test_ixhtml10_textarea_tag_with_css_001()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><body><textarea></textarea></body></html>"
-#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\"><html><head></head><body><div><textarea style=\"-wap-input-format:&quot;*&lt;ja:h&gt;&quot;;\"></textarea></div></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>" \
+                       "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><textarea style=\"-wap-input-format:&quot;*&lt;ja:h&gt;&quot;;\"></textarea></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -15550,7 +15553,10 @@ void test_ixhtml10_textarea_tag_with_css_002()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><body><textarea></textarea></body></html>"
-#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\"><html><head></head><body><div><textarea style=\"-wap-input-format:&quot;*&lt;ja:hk&gt;&quot;;\"></textarea></div></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>" \
+                       "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><textarea style=\"-wap-input-format:&quot;*&lt;ja:hk&gt;&quot;;\"></textarea></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -15598,7 +15604,10 @@ void test_ixhtml10_textarea_tag_with_css_003()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><body><textarea></textarea></body></html>"
-#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\"><html><head></head><body><div><textarea style=\"-wap-input-format:&quot;*&lt;ja:en&gt;&quot;;\"></textarea></div></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>" \
+                       "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><textarea style=\"-wap-input-format:&quot;*&lt;ja:en&gt;&quot;;\"></textarea></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -15645,7 +15654,10 @@ void test_ixhtml10_textarea_tag_with_css_004()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><body><textarea></textarea></body></html>"
-#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\"><html><head></head><body><div><textarea style=\"-wap-input-format:&quot;*&lt;ja:n&gt;&quot;;\"></textarea></div></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>" \
+                       "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><textarea style=\"-wap-input-format:&quot;*&lt;ja:n&gt;&quot;;\"></textarea></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -15665,8 +15677,8 @@ void test_ixhtml10_textarea_tag_with_css_004()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
-fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  fprintf(stderr, "actual:[%s]\n", ret);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
