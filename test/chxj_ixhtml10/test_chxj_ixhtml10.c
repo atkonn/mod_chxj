@@ -1825,7 +1825,6 @@ main()
   CU_add_test(ixhtml10_suite, "test textarea with css 007",                         test_ixhtml10_textarea_tag_with_css_007);
   CU_add_test(ixhtml10_suite, "test textarea with css 008",                         test_ixhtml10_textarea_tag_with_css_008);
 
-#if 0
   CU_add_test(ixhtml10_suite, "test p with css 001",                                test_ixhtml10_p_tag_with_css_001);
   CU_add_test(ixhtml10_suite, "test p with css 002",                                test_ixhtml10_p_tag_with_css_002);
   CU_add_test(ixhtml10_suite, "test p with css 003",                                test_ixhtml10_p_tag_with_css_003);
@@ -1839,6 +1838,7 @@ main()
   CU_add_test(ixhtml10_suite, "test p with css 012",                                test_ixhtml10_p_tag_with_css_012);
   CU_add_test(ixhtml10_suite, "test p with css 013",                                test_ixhtml10_p_tag_with_css_013);
 
+#if 0
   CU_add_test(ixhtml10_suite, "test ul with css 001",                               test_ixhtml10_ul_tag_with_css_001);
   CU_add_test(ixhtml10_suite, "test ul with css 002",                               test_ixhtml10_ul_tag_with_css_002);
   CU_add_test(ixhtml10_suite, "test ul with css 003",                               test_ixhtml10_ul_tag_with_css_003);
@@ -16336,8 +16336,10 @@ void test_ixhtml10_p_tag_with_css_013()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><body><p style=\"text-decoration: blink\">あいう</p></body></html>"
-#define  RESULT_STRING  "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
-                        "<html><head></head><body><div><p style=\"text-decoration:blink;\">あいう</p></div></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>" \
+                       "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><div><p style=\"text-decoration:blink;\">あいう</p></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
