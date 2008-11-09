@@ -131,7 +131,6 @@ static void  s_init_ixhtml10(ixhtml10_t *ixhtml10, Doc *doc, request_rec *r, dev
 
 static int   s_ixhtml10_search_emoji(ixhtml10_t *ixhtml10, char *txt, char **rslt);
 
-static char *s_ixhtml10_istyle_to_mode(apr_pool_t *p, const char *s);
 static char *s_ixhtml10_istyle_to_wap_input_format(apr_pool_t *p, const char *s);
 static css_prop_list_t *s_ixhtml10_nopush_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value);
 static css_prop_list_t *s_ixhtml10_push_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value);
@@ -3470,23 +3469,6 @@ s_ixhtml10_end_div_tag(void *pdoc, Node *UNUSED(child))
 
 
 static char *
-s_ixhtml10_istyle_to_mode(apr_pool_t *p, const char *s)
-{
-  if (s) {
-    switch (s[0]) {
-    case '1': return apr_psprintf(p, "hiragana");
-    case '2': return apr_psprintf(p, "hankakukana");
-    case '3': return apr_psprintf(p, "alphabet");
-    case '4': return apr_psprintf(p, "numeric");
-    default:
-      return apr_pstrdup(p, "");
-    }
-  }
-
-  return apr_pstrdup(p,"");
-}
-
-static char *
 s_ixhtml10_istyle_to_wap_input_format(apr_pool_t *p, const char *s)
 {
   if (s) {
@@ -5696,7 +5678,7 @@ s_ixhtml10_create_style_data(apr_pool_t *pool, const char *style_data)
  * @return The conversion result is returned.
  */
 static char *
-s_ixhtml10_start_nobr_tag(void *pdoc, Node *node)
+s_ixhtml10_start_nobr_tag(void *pdoc, Node *UNUSED(node))
 {
   ixhtml10_t *ixhtml10;
   Doc *doc;
@@ -5738,7 +5720,7 @@ s_ixhtml10_end_nobr_tag(void *pdoc, Node *UNUSED(node))
  * @return The conversion result is returned.
  */
 static char *
-s_ixhtml10_start_small_tag(void *pdoc, Node *node)
+s_ixhtml10_start_small_tag(void *pdoc, Node *UNUSED(node))
 {
   ixhtml10_t *ixhtml10;
   Doc *doc;

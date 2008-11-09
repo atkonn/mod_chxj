@@ -1752,7 +1752,7 @@ s_xhtml_1_0_start_input_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   if (attr_istyle && *attr_istyle && (*attr_istyle == '1' || *attr_istyle == '2' || *attr_istyle == '3' || *attr_istyle == '4')) {
-    char *fmt = qs_conv_istyle_to_format(r,attr_istyle);
+    char *fmt = qs_conv_istyle_to_format(r->pool,attr_istyle);
     if (attr_max_length && *attr_max_length) {
       int ii;
       for (ii=0; (unsigned int)ii<strlen(attr_max_length); ii++) {
@@ -1851,7 +1851,7 @@ s_xhtml_1_0_start_input_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   if (istyle && *istyle && (*istyle == '1' || *istyle == '2' || *istyle == '3' || *istyle == '4')) {
-    char *fmt = qs_conv_istyle_to_format(r,istyle);
+    char *fmt = qs_conv_istyle_to_format(r->pool,istyle);
     if (max_length && *max_length) {
       int ii;
       for (ii=0; (unsigned int)ii<strlen(max_length); ii++) {
@@ -3818,7 +3818,7 @@ s_xhtml_1_0_start_textarea_tag(void *pdoc, Node *node)
     else if (STRCASEEQ('i','I',"istyle", name) && value && (*value == '1' || *value == '2' || *value == '3' || *value == '4')) {
       attr_istyle = value;
 #if 0
-      char *fmt = qs_conv_istyle_to_format(doc->r,value);
+      char *fmt = qs_conv_istyle_to_format(doc->r->pool,value);
       W_L(" FORMAT=\"*");
       W_V(fmt);
       W_L("\"");
@@ -3874,7 +3874,7 @@ s_xhtml_1_0_start_textarea_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   if (attr_istyle) {
-    char *fmt = qs_conv_istyle_to_format(doc->r, attr_istyle);
+    char *fmt = qs_conv_istyle_to_format(doc->r->pool, attr_istyle);
     W_L(" FORMAT=\"*");
     W_V(fmt);
     W_L("\"");
