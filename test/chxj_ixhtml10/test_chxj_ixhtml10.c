@@ -1848,7 +1848,6 @@ main()
   CU_add_test(ixhtml10_suite, "test ul with css 008",                               test_ixhtml10_ul_tag_with_css_008);
   CU_add_test(ixhtml10_suite, "test ul with css 009",                               test_ixhtml10_ul_tag_with_css_009);
 
-#if 0
   CU_add_test(ixhtml10_suite, "test li with css 001",                               test_ixhtml10_li_tag_with_css_001);
   CU_add_test(ixhtml10_suite, "test li with css 002",                               test_ixhtml10_li_tag_with_css_002);
   CU_add_test(ixhtml10_suite, "test li with css 003",                               test_ixhtml10_li_tag_with_css_003);
@@ -1862,6 +1861,7 @@ main()
   CU_add_test(ixhtml10_suite, "test li with css 011",                               test_ixhtml10_li_tag_with_css_011);
   CU_add_test(ixhtml10_suite, "test li with css 012",                               test_ixhtml10_li_tag_with_css_012);
 
+#if 0
   CU_add_test(ixhtml10_suite, "test ol with css 001",                               test_ixhtml10_ol_tag_with_css_001);
   CU_add_test(ixhtml10_suite, "test ol with css 002",                               test_ixhtml10_ol_tag_with_css_002);
   CU_add_test(ixhtml10_suite, "test ol with css 003",                               test_ixhtml10_ol_tag_with_css_003);
@@ -16780,8 +16780,10 @@ void test_ixhtml10_li_tag_with_css_001()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><body><ul><li>あいう</li><li>かきく</li></ul></body></html>"
-#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
-                       "<html><head></head><body><div><ul><li style=\"list-style-type:decimal;\">あいう</li><li style=\"list-style-type:decimal;\">かきく</li></ul></div></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>" \
+                       "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><ul><li style=\"list-style-type:decimal;\">あいう</li><li style=\"list-style-type:decimal;\">かきく</li></ul></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
