@@ -1888,7 +1888,6 @@ main()
   CU_add_test(ixhtml10_suite, "test h3 with css 004",                               test_ixhtml10_h3_tag_with_css_004);
   CU_add_test(ixhtml10_suite, "test h3 with css 005",                               test_ixhtml10_h3_tag_with_css_005);
   CU_add_test(ixhtml10_suite, "test h3 with css 006",                               test_ixhtml10_h3_tag_with_css_006);
-#if 0
 
   CU_add_test(ixhtml10_suite, "test h4 with css 001",                               test_ixhtml10_h4_tag_with_css_001);
   CU_add_test(ixhtml10_suite, "test h4 with css 002",                               test_ixhtml10_h4_tag_with_css_002);
@@ -1897,6 +1896,7 @@ main()
   CU_add_test(ixhtml10_suite, "test h4 with css 005",                               test_ixhtml10_h4_tag_with_css_005);
   CU_add_test(ixhtml10_suite, "test h4 with css 006",                               test_ixhtml10_h4_tag_with_css_006);
 
+#if 0
   CU_add_test(ixhtml10_suite, "test h5 with css 001",                               test_ixhtml10_h5_tag_with_css_001);
   CU_add_test(ixhtml10_suite, "test h5 with css 002",                               test_ixhtml10_h5_tag_with_css_002);
   CU_add_test(ixhtml10_suite, "test h5 with css 003",                               test_ixhtml10_h5_tag_with_css_003);
@@ -18388,7 +18388,9 @@ void test_ixhtml10_h4_tag_with_css_001()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><body><h4>あいう</h4></body></html>"
-#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>" \
+                       "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
                        "<html><head></head><body><div><div style=\"font-size:small;text-align:right;\">あいう</div></div></body></html>"
   char  *ret;
   char  *tmp;
