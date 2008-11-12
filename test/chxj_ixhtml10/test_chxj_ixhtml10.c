@@ -18587,6 +18587,8 @@ void test_ixhtml10_h4_tag_with_css_005()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  fprintf(stderr, "actual:[%s]\n", ret);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
