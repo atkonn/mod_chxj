@@ -18526,7 +18526,9 @@ void test_ixhtml10_h4_tag_with_css_004()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><body><h4 style=\"text-align: left\">あいう</h4></body></html>"
-#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>" \
+                       "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
                        "<html><head></head><body><div><div style=\"font-size:small;text-align:left;\">あいう</div></div></body></html>"
   char  *ret;
   char  *tmp;
