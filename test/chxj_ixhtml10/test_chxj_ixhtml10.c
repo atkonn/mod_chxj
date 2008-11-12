@@ -1915,7 +1915,6 @@ main()
   CU_add_test(ixhtml10_suite, "test body with css 003",                             test_ixhtml10_body_tag_with_css_003);
   CU_add_test(ixhtml10_suite, "test body with css 004",                             test_ixhtml10_body_tag_with_css_004);
 
-#if 0
   CU_add_test(ixhtml10_suite, "test font with css 001",                             test_ixhtml10_font_tag_with_css_001);
   CU_add_test(ixhtml10_suite, "test font with css 002",                             test_ixhtml10_font_tag_with_css_002);
   CU_add_test(ixhtml10_suite, "test font with css 003",                             test_ixhtml10_font_tag_with_css_003);
@@ -1933,6 +1932,7 @@ main()
   CU_add_test(ixhtml10_suite, "test font with css 015",                             test_ixhtml10_font_tag_with_css_015);
   CU_add_test(ixhtml10_suite, "test font with css 016",                             test_ixhtml10_font_tag_with_css_016);
 
+#if 0
   CU_add_test(ixhtml10_suite, "test form with css 001",                             test_ixhtml10_form_tag_with_css_001);
   CU_add_test(ixhtml10_suite, "test form with css 002",                             test_ixhtml10_form_tag_with_css_002);
   CU_add_test(ixhtml10_suite, "test form with css 003",                             test_ixhtml10_form_tag_with_css_003);
