@@ -18123,7 +18123,7 @@ void test_ixhtml10_h3_tag_with_css_001()
 #define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>" \
                        "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">" \
                        "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
-                       "<head></head><body><div style=\"font-size:large;text-align:right;\">あいう</div></body></html>"
+                       "<head></head><body><h3 style=\"font-size:large;text-align:right;\">あいう</h3></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
