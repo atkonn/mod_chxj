@@ -20127,7 +20127,7 @@ void test_ixhtml10_form_tag_with_css_002()
 #define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>" \
                        "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">" \
                        "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
-                       "<head></head><form><span style=\"color:#ff0000;\">あいう</font></form></html>"
+                       "<head></head><form><span style=\"color:#ff0000;\">あいう</span></form></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
