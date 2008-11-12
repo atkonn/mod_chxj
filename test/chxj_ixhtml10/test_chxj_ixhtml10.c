@@ -1896,7 +1896,6 @@ main()
   CU_add_test(ixhtml10_suite, "test h4 with css 005",                               test_ixhtml10_h4_tag_with_css_005);
   CU_add_test(ixhtml10_suite, "test h4 with css 006",                               test_ixhtml10_h4_tag_with_css_006);
 
-#if 0
   CU_add_test(ixhtml10_suite, "test h5 with css 001",                               test_ixhtml10_h5_tag_with_css_001);
   CU_add_test(ixhtml10_suite, "test h5 with css 002",                               test_ixhtml10_h5_tag_with_css_002);
   CU_add_test(ixhtml10_suite, "test h5 with css 003",                               test_ixhtml10_h5_tag_with_css_003);
@@ -1904,6 +1903,7 @@ main()
   CU_add_test(ixhtml10_suite, "test h5 with css 005",                               test_ixhtml10_h5_tag_with_css_005);
   CU_add_test(ixhtml10_suite, "test h5 with css 006",                               test_ixhtml10_h5_tag_with_css_006);
 
+#if 0
   CU_add_test(ixhtml10_suite, "test h6 with css 001",                               test_ixhtml10_h6_tag_with_css_001);
   CU_add_test(ixhtml10_suite, "test h6 with css 002",                               test_ixhtml10_h6_tag_with_css_002);
   CU_add_test(ixhtml10_suite, "test h6 with css 003",                               test_ixhtml10_h6_tag_with_css_003);
