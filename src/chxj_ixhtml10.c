@@ -1610,7 +1610,7 @@ s_ixhtml10_end_font_tag(void *pdoc, Node *UNUSED(node))
 static char *
 s_ixhtml10_start_form_tag(void *pdoc, Node *node)
 {
-  ixhtml10_t    *ixhtml10;
+  ixhtml10_t  *ixhtml10;
   Doc         *doc;
   request_rec *r;
   Attr        *attr;
@@ -1623,8 +1623,8 @@ s_ixhtml10_start_form_tag(void *pdoc, Node *node)
   char        *new_hidden_tag = NULL;
 
   ixhtml10 = GET_IXHTML10(pdoc);
-  doc   = ixhtml10->doc;
-  r     = doc->r;
+  doc      = ixhtml10->doc;
+  r        = doc->r;
 
   /*--------------------------------------------------------------------------*/
   /* Get Attributes                                                           */
@@ -1729,18 +1729,21 @@ s_ixhtml10_start_form_tag(void *pdoc, Node *node)
 
   ixhtml10_flags_t *flg = (ixhtml10_flags_t *)apr_palloc(doc->pool, sizeof(ixhtml10_flags_t));
   memset(flg, 0, sizeof(*flg));
-  if (attr_color) {
-    attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
-    W_L("<font color=\"");
-    W_V(attr_color);
-    W_L("\">");
-    flg->with_font_flag = 1;
-  }
-  if (attr_align) {
-    W_L("<div align=\"");
-    W_V(attr_align);
-    W_L("\">");
+  if (attr_color || attr_align) {
+    W_L("<div style=\"");
+    if (attr_color) {
+      attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
+      W_L("color:");
+      W_V(attr_color);
+      W_L(";");
+    }
+    if (attr_align) {
+      W_L("text-align:");
+      W_V(attr_align);
+      W_L(";");
+    }
     flg->with_div_flag = 1;
+    W_L("\">");
   }
   node->userData = flg;
   if (new_hidden_tag) {
@@ -1767,9 +1770,6 @@ s_ixhtml10_end_form_tag(void *pdoc, Node *node)
   ixhtml10_flags_t *flg = (ixhtml10_flags_t *)node->userData;
   if (flg && flg->with_div_flag) {
     W_L("</div>");
-  }
-  if (flg && flg->with_font_flag) {
-    W_L("</font>");
   }
   W_L("</form>");
   if (IS_CSS_ON(ixhtml10->entryp)) {
