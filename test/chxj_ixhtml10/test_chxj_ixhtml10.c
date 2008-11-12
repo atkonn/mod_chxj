@@ -1909,13 +1909,13 @@ main()
   CU_add_test(ixhtml10_suite, "test h6 with css 004",                               test_ixhtml10_h6_tag_with_css_004);
   CU_add_test(ixhtml10_suite, "test h6 with css 005",                               test_ixhtml10_h6_tag_with_css_005);
   CU_add_test(ixhtml10_suite, "test h6 with css 006",                               test_ixhtml10_h6_tag_with_css_006);
-#if 0
 
   CU_add_test(ixhtml10_suite, "test body with css 001",                             test_ixhtml10_body_tag_with_css_001);
   CU_add_test(ixhtml10_suite, "test body with css 002",                             test_ixhtml10_body_tag_with_css_002);
   CU_add_test(ixhtml10_suite, "test body with css 003",                             test_ixhtml10_body_tag_with_css_003);
   CU_add_test(ixhtml10_suite, "test body with css 004",                             test_ixhtml10_body_tag_with_css_004);
 
+#if 0
   CU_add_test(ixhtml10_suite, "test font with css 001",                             test_ixhtml10_font_tag_with_css_001);
   CU_add_test(ixhtml10_suite, "test font with css 002",                             test_ixhtml10_font_tag_with_css_002);
   CU_add_test(ixhtml10_suite, "test font with css 003",                             test_ixhtml10_font_tag_with_css_003);
