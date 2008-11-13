@@ -44,21 +44,25 @@ chxj_encoding(request_rec *r, const char *src, apr_size_t *len)
 
   if (dconf == NULL) {
     DBG(r,"none encoding.");
+    DBG(r,"REQ[%X] end   chxj_encoding()", (unsigned int)(apr_size_t)r);
     return (char*)src;
   }
   if ((int)*len < 0) {
     ERR(r, "runtime exception: chxj_encoding(): invalid string size.[%d]", (int)*len);
+    DBG(r,"REQ[%X] end   chxj_encoding()", (unsigned int)(apr_size_t)r);
     return (char *)apr_pstrdup(r->pool, "");
   }
 
   entryp = chxj_apply_convrule(r, dconf->convrules);
   if (entryp->encoding == NULL) {
-    DBG(r,"none encoding.");
+    DBG(r,"REQ[%X] none encoding.", (unsigned int)(apr_size_t)r);
+    DBG(r,"REQ[%X] end   chxj_encoding()", (unsigned int)(apr_size_t)r);
     return (char *)src;
   }
 
   if (STRCASEEQ('n','N',"none", entryp->encoding)) {
-    DBG(r,"none encoding.");
+    DBG(r,"REQ[%X] none encoding.", (unsigned int)(apr_size_t)r);
+    DBG(r,"REQ[%X] end   chxj_encoding()", (unsigned int)(apr_size_t)r);
     return (char*)src;
   }
 
@@ -75,10 +79,10 @@ chxj_encoding(request_rec *r, const char *src, apr_size_t *len)
   olen = ilen * 4 + 1;
   spos = obuf = apr_palloc(pool, olen);
   if (obuf == NULL) {
-    DBG(r,"end   chxj_encoding()");
+    DBG(r,"REQ[%X] end   chxj_encoding()", (unsigned int)(apr_size_t)r);
     return ibuf;
   }
-  DBG(r,"encode convert [%s] -> [%s]", entryp->encoding, "CP932");
+  DBG(r,"REQ[%X] encode convert [%s] -> [%s]", (unsigned int)(apr_size_t)r, entryp->encoding, "CP932");
 
   memset(obuf, 0, olen);
   cd = iconv_open("CP932", entryp->encoding);
@@ -89,7 +93,7 @@ chxj_encoding(request_rec *r, const char *src, apr_size_t *len)
     else {
       ERR(r, "iconv open failed. from:[%s] to:[%s] errno:[%d]", entryp->encoding, "CP932", errno);
     }
-    DBG(r,"end   chxj_encoding()");
+    DBG(r,"REQ[%X] end   chxj_encoding()", (unsigned int)(apr_size_t)r);
     return ibuf;
   }
   while (ilen > 0) {
@@ -110,7 +114,8 @@ chxj_encoding(request_rec *r, const char *src, apr_size_t *len)
   *len = strlen(spos);
   iconv_close(cd);
 
-  DBG(r,"end   chxj_encoding() len=[%d] obuf=[%.*s]", (int)*len, (int)*len, spos);
+  chxj_dump_string(r, APLOG_MARK, "RESULT Convert Encoding", spos, *len);
+  DBG(r,"REQ[%X] end   chxj_encoding()", (unsigned int)(apr_size_t)r);
   return spos;
 }
 

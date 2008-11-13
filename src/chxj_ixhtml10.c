@@ -631,6 +631,7 @@ s_ixhtml10_start_html_tag(void *pdoc, Node *UNUSED(node))
 
   DBG(r, "end s_ixhtml10_start_html_tag()");
 
+  ixhtml10->start_html_flag = 1;
   return ixhtml10->out;
 }
 
@@ -5308,7 +5309,9 @@ s_ixhtml10_newline_mark(void *pdoc, Node *UNUSED(node))
 {
   ixhtml10_t *ixhtml10 = GET_IXHTML10(pdoc);
   Doc *doc = ixhtml10->doc;
-  W_NLCODE();
+  if (ixhtml10->start_html_flag) {
+    W_NLCODE();
+  }
   return ixhtml10->out;
 }
 

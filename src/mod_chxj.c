@@ -958,7 +958,7 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
        b = APR_BUCKET_NEXT(b)) {
 
     if (apr_bucket_read(b, &data, &len, APR_BLOCK_READ) == APR_SUCCESS) {
-      DBG(r, "REQ[%X] read data[%.*s]",(unsigned int)(apr_size_t)r, (int)len, data);
+      chxj_dump_string(r, APLOG_MARK, "READ Data", data, len);
 
       /*--------------------------------------------------------------------*/
       /* append data                                                        */
