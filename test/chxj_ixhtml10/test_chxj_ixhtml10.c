@@ -22081,8 +22081,9 @@ void test_ixhtml10_img_tag_with_css_006()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><body><img style=\"vertical-align:top\">あいう</body></html>"
-#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?>" \
-                       "<!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>" \
+                       "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
                        "<html><head></head><body><div><img align=\"top\" alt=\"\" />あいう</div></body></html>"
   char  *ret;
   char  *tmp;
