@@ -22222,7 +22222,7 @@ void test_ixhtml10_img_tag_with_css_009()
 #define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>" \
                        "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">" \
                        "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
-                       "<head></head><body><img align=\"bottom\" alt=\"\" />あいう</div></body></html>"
+                       "<head></head><body><img align=\"bottom\" alt=\"\" />あいう</body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
