@@ -451,7 +451,7 @@ chxj_convert_xhtml_mobile_1_0(
   xhtml.entryp = entryp;
   xhtml.cookie = cookie;
 
-  chxj_set_content_type(r, "text/html; charset=Windows-31J");
+  chxj_set_content_type(r, "application/xhtml+xml; charset=Windows-31J");
 
   /*--------------------------------------------------------------------------*/
   /* The character string of the input is analyzed.                           */

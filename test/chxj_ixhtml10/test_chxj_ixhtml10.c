@@ -2029,18 +2029,6 @@ main()
   CU_add_test(ixhtml10_suite, "test div with css 040",                              test_ixhtml10_div_tag_with_css_040);
   CU_add_test(ixhtml10_suite, "test div with css 041",                              test_ixhtml10_div_tag_with_css_041);
   CU_add_test(ixhtml10_suite, "test div with css 042",                              test_ixhtml10_div_tag_with_css_042);
-#if 0
-
-
-
-
-
-
-
-
-
-
-#endif
   /* aend */
 
   CU_basic_run_tests();
