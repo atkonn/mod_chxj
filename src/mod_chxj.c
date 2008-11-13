@@ -313,7 +313,10 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
   mod_chxj_config     *dconf; 
   chxjconvrule_entry  *entryp;
 
-  DBG(r,"REQ[%X] start of chxj_convert() input:[%.*s]", (unsigned int)(apr_size_t)r, (int)*len, *src);
+  DBG(r,"REQ[%X] start of chxj_convert()", (unsigned int)(apr_size_t)r);
+
+  chxj_dump_string(r, APLOG_MARK, "INPUT Data", *src, *len);
+
   dst  = apr_pstrcat(r->pool, (char *)*src, NULL);
 
   dconf = chxj_get_module_config(r->per_dir_config, &chxj_module);
@@ -612,7 +615,6 @@ chxj_input_convert(
   cookie_t *cookie = NULL;
   char     *buff_pre;
   int      no_update_flag = 0;
-  apr_size_t ii;
   apr_size_t ilen = 0;
   apr_pool_t *pool;
 
@@ -631,19 +633,7 @@ chxj_input_convert(
 
   result   = qs_alloc_zero_byte_string(pool);
 
-  DBG(r, "REQ[%X] +-------------------------------------------------------------------+", (unsigned int)(apr_size_t)r);
-  DBG(r, "REQ[%X] | BEFORE input convert source                                       |", (unsigned int)(apr_size_t)r);
-  DBG(r, "REQ[%X] +-------------------------------------------------------------------+", (unsigned int)(apr_size_t)r);
-  for (ii=0; ii<ilen-64; ii+=64) {
-    DBG(r, "REQ[%X] | [%-*.*s] |", (unsigned int)(apr_size_t)r, 64, 64, &s[ii]);
-    if (ilen < 64) {
-      break;
-    }
-  }
-  if (ilen >= 64 && ((ilen-64) % 64 != 0)) {
-    DBG(r, "REQ[%X] | [%-*.*s] |", (unsigned int)(apr_size_t)r, 64, 64, &s[ii]);
-  }
-  DBG(r, "REQ[%X] +--------------------------------------------------------------------+", (unsigned int)(apr_size_t)r);
+  chxj_dump_string(r, APLOG_MARK, "BEFORE input convert source", s, ilen);
 
   for (;;) {
     char *pair_sv;
@@ -853,6 +843,26 @@ pass_data_to_filter(ap_filter_t *f, const char *data,
   return rv;
 }
 
+/**
+ * Dump string to debug log.
+ */
+void
+chxj_dump_string(request_rec *r, const char *filename, int line, const char *title, const char *str, apr_size_t len)
+{
+  apr_size_t ii;
+  chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] +-------------------------------------------------------------------+", (unsigned int)(apr_size_t)r);
+  chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] |                                                                   |", (unsigned int)(apr_size_t)r);
+  chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] | %-*.*s |", (unsigned int)(apr_size_t)r, 64, 64, title);
+  chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] |                                                                   |", (unsigned int)(apr_size_t)r);
+  chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] +-------------------------------------------------------------------+", (unsigned int)(apr_size_t)r);
+  for (ii=0; ii<len/64; ii++) {
+    chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] | [%-*.*s] |", (unsigned int)(apr_size_t)r, 64, 64, &str[ii * 64]);
+  }
+  if (len % 64) {
+    chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] | [%-*.*s] |", (unsigned int)(apr_size_t)r, 64, 64, &str[ii * 64]);
+  }
+  chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] +-------------------------------------------------------------------+", (unsigned int)(apr_size_t)r);
+}
 
 /**
  * It is the main loop of the output filter. 
