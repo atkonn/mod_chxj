@@ -3169,4 +3169,1450 @@
       <string>$GD</string>
     </jphone>
   </set>
+
+  <!-- 拡張絵文字 -->
+  <!-- 拡1 -->
+  <set>
+    <no>177</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>b1</hex2>
+      <string>&#63921;</string>
+      <description>iアプリ</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>298</C>
+      <D>298</D>
+    </ezweb>
+    <jphone>
+      <string>$QX</string>
+    </jphone>
+  </set>
+  <!-- 拡2 -->
+  <set>
+    <no>178</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>b2</hex2>
+      <string>&#63922;</string>
+      <description>iアプリ（枠付き）</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>298</C>
+      <D>298</D>
+    </ezweb>
+    <jphone>
+      <string>$QX</string>
+    </jphone>
+  </set>
+  <!-- 拡3 -->
+  <set>
+    <no>179</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>b3</hex2>
+      <string>&#63923;</string>
+      <description>Tシャツ（ボーダー）</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>301</C><!-- 婦人服 -->
+      <D>335</D><!-- 紳士服 -->
+    </ezweb>
+    <jphone>
+      <string>$G&</string>
+    </jphone>
+  </set>
+  <!-- 拡4 -->
+  <set>
+    <no>180</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>b4</hex2>
+      <string>&#63924;</string>
+      <description>がま口財布</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>290</C><!-- 財布 -->
+      <D>290</D><!-- 財布 -->
+    </ezweb>
+    <jphone>
+      <string>$OC</string><!-- 良いものが無いのでブランドバック -->
+    </jphone>
+  </set>
+  <!-- 拡5 -->
+  <set>
+    <no>181</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>b5</hex2>
+      <string>&#63925;</string>
+      <description>化粧</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>295</C><!-- 口紅 -->
+      <D>295</D><!-- 口紅 -->
+    </ezweb>
+    <jphone>
+      <string>$O&lt;</string><!-- 口紅 -->
+    </jphone>
+  </set>
+  <!-- 拡6 -->
+  <set>
+    <no>182</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>b6</hex2>
+      <string>&#63926;</string>
+      <description>ジーンズ</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>301</C><!-- 良いものがないので婦人服 -->
+      <D>805</D><!-- ジーンズ -->
+    </ezweb>
+    <jphone>
+      <string>$G&</string><!-- 良いものが無いので洋服 -->
+    </jphone>
+  </set>
+  <!-- 拡7 -->
+  <set>
+    <no>183</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>b7</hex2>
+      <string>&#63927;</string>
+      <description>スノボ</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>221</C><!-- スノーボード-->
+      <D>221</D><!-- スノーボード -->
+    </ezweb>
+    <jphone>
+      <string>$G3</string><!-- 良いものが無いのでスキー -->
+    </jphone>
+  </set>
+  <!-- 拡8 -->
+  <set>
+    <no>184</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>b8</hex2>
+      <string>&#63928;</string>
+      <description>チャペル</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>48</C><!-- ベル -->
+      <D>340</D><!-- チャペル -->
+    </ezweb>
+    <jphone>
+      <string>$OE</string><!-- すず -->
+    </jphone>
+  </set>
+  <!-- 拡9 -->
+  <set>
+    <no>185</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>b9</hex2>
+      <string>&#63929;</string>
+      <description>ドア</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>112</C><!-- 家 -->
+      <D>112</D><!-- 家 -->
+    </ezweb>
+    <jphone>
+      <string>$GV</string><!-- 家 -->
+    </jphone>
+  </set>
+  <!-- 拡10 -->
+  <set>
+    <no>186</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>ba</hex2>
+      <string>&#63930;</string>
+      <description>ドル袋</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>233</C><!-- 賞金 -->
+      <D>233</D><!-- 賞金 -->
+    </ezweb>
+    <jphone>
+      <string>$EO</string><!-- 賞金 -->
+    </jphone>
+  </set>
+  <!-- 拡11 -->
+  <set>
+    <no>187</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>bb</hex2>
+      <string>&#63931;</string>
+      <description>パソコン</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>288</C><!-- 良いものがないので、テレビ -->
+      <D>337</D><!-- パソコン -->
+    </ezweb>
+    <jphone>
+      <string>$G,</string><!-- パソコン -->
+    </jphone>
+  </set>
+  <!-- 拡12 -->
+  <set>
+    <no>188</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>bc</hex2>
+      <string>&#63932;</string>
+      <description>ラブレター</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>108</C><!-- 封筒 -->
+      <D>806</D><!-- ハートつきメール -->
+    </ezweb>
+    <jphone>
+      <string>$E#</string><!-- メール宛先 -->
+    </jphone>
+  </set>
+  <!-- 拡13 -->
+  <set>
+    <no>189</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>bd</hex2>
+      <string>&#63933;</string>
+      <description>レンチ</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>152</C><!-- レンチ -->
+      <D>152</D><!-- レンチ -->
+    </ezweb>
+    <jphone>
+      <string>$QX</string><!-- 良いものがないのでJsマーク -->
+    </jphone>
+  </set>
+  <!-- 拡14 -->
+  <set>
+    <no>190</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>be</hex2>
+      <string>&#63934;</string>
+      <description>鉛筆</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>149</C><!-- 鉛筆 -->
+      <D>149</D><!-- 鉛筆 -->
+    </ezweb>
+    <jphone>
+      <string>$O!</string><!-- 良いものがないのでメモ -->
+    </jphone>
+  </set>
+  <!-- 拡15 -->
+  <set>
+    <no>191</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>bf</hex2>
+      <string>&#63935;</string>
+      <description>王冠</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>267</C><!-- 良いものがないのでスパーク -->
+      <D>354</D><!-- 王冠 -->
+    </ezweb>
+    <jphone>
+      <string>$E.</string><!-- 王冠 -->
+    </jphone>
+  </set>
+  <!-- 拡16 -->
+  <set>
+    <no>192</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>C0</hex2>
+      <string>&#63936;</string>
+      <description>指輪</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>72</C><!-- ジュエリー -->
+      <D>72</D><!-- ジュエリー -->
+    </ezweb>
+    <jphone>
+      <string>$GT</string><!-- 指輪 -->
+    </jphone>
+  </set>
+  <!-- 拡17 -->
+  <set>
+    <no>193</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>C1</hex2>
+      <string>&#63937;</string>
+      <description>砂時計</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>58</C><!-- 砂時計２ -->
+      <D>58</D><!-- 砂時計２ -->
+    </ezweb>
+    <jphone>
+      <string>$GF</string><!-- 良いものがないので時計 -->
+    </jphone>
+  </set>
+  <!-- 拡18 -->
+  <set>
+    <no>194</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>C2</hex2>
+      <string>&#63938;</string>
+      <description>自転車</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>215</C><!-- 自転車 -->
+      <D>215</D><!-- 自転車 -->
+    </ezweb>
+    <jphone>
+      <string>$EV</string><!-- 良いものがないので競輪 -->
+    </jphone>
+  </set>
+  <!-- 拡19 -->
+  <set>
+    <no>195</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>C3</hex2>
+      <string>&#63939;</string>
+      <description>湯のみ</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>93</C><!-- カップ -->
+      <D>423</D><!-- 日本茶 -->
+    </ezweb>
+    <jphone>
+      <string>$Ge</string><!-- コーヒー -->
+    </jphone>
+  </set>
+  <!-- 拡20 -->
+  <set>
+    <no>196</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>C4</hex2>
+      <string>&#63940;</string>
+      <description>腕時計</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>25</C><!-- 腕時計 -->
+      <D>25</D><!-- 腕時計 -->
+    </ezweb>
+    <jphone>
+      <string>$GF</string><!-- 時計 -->
+    </jphone>
+  </set>
+  <!-- 拡21 -->
+  <set>
+    <no>197</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>C5</hex2>
+      <string>&#63941;</string>
+      <description>考えてる顔</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>260</C><!-- 良いものがないので、顔４（つかれたカオ） -->
+      <D>444</D><!-- わからん -->
+    </ezweb>
+    <jphone>
+      <string>$E(</string><!-- 良いものがないので、タラー -->
+    </jphone>
+  </set>
+  <!-- 拡22 -->
+  <set>
+    <no>198</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>C6</hex2>
+      <string>&#63942;</string>
+      <description>ほっとした顔</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>260</C><!-- 良いものがないので、顔４（つかれたカオ） -->
+      <D>260</D><!-- 良いものがないので、顔４（つかれたカオ） -->
+    </ezweb>
+    <jphone>
+      <string>$E(</string><!-- 良いものがないので、タラー -->
+    </jphone>
+  </set>
+  <!-- 拡23 -->
+  <set>
+    <no>199</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>C7</hex2>
+      <string>&#63943;</string>
+      <description>冷や汗</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>263</C><!-- 良いものがないので、雫（涙・汗） -->
+      <D>351</D><!-- 困り -->
+    </ezweb>
+    <jphone>
+      <string>$E(</string><!-- 良いものがないので、タラー -->
+    </jphone>
+  </set>
+  <!-- 拡24 -->
+  <set>
+    <no>200</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>C8</hex2>
+      <string>&#63944;</string>
+      <description>冷や汗2</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>263</C><!-- 良いものがないので、雫（涙・汗） -->
+      <D>452</D><!-- あせり -->
+    </ezweb>
+    <jphone>
+      <string>$P/</string><!-- 冷汗 -->
+    </jphone>
+  </set>
+  <!-- 拡25 -->
+  <set>
+    <no>201</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>C9</hex2>
+      <string>&#63945;</string>
+      <description>ぷっくっくな顔</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>258</C><!-- 良いものがないので、顔２（おこったカオ） -->
+      <D>779</D><!-- ぷー -->
+    </ezweb>
+    <jphone>
+      <string>$Gy</string><!-- 良いものがないので、怒 -->
+    </jphone>
+  </set>
+  <!-- 拡26 -->
+  <set>
+    <no>202</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>CA</hex2>
+      <string>&#63946;</string>
+      <description>ボケーっとした顔</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>297</C><!-- 良いものがないので、エステ -->
+      <D>450</D><!-- 良いものがないので、横目 -->
+    </ezweb>
+    <jphone>
+      <string>$P.</string><!-- 良いものがないので、しらけ顔 -->
+    </jphone>
+  </set>
+  <!-- 拡27 -->
+  <set>
+    <no>203</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>CB</hex2>
+      <string>&#63947;</string>
+      <description>目がハート</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>266</C><!-- 良いものがないので、ハート３（大きい＆小さい） -->
+      <D>349</D><!-- 目がハート -->
+    </ezweb>
+    <jphone>
+      <string>$E&</string><!-- ラブラブ -->
+    </jphone>
+  </set>
+  <!-- 拡28 -->
+  <set>
+    <no>204</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>CC</hex2>
+      <string>&#63948;</string>
+      <description>指でOK</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>287</C><!-- おやゆびサイン -->
+      <D>287</D><!-- おやゆびサイン -->
+    </ezweb>
+    <jphone>
+      <string>$G.</string><!-- GOOD! -->
+    </jphone>
+  </set>
+  <!-- 拡29 -->
+  <set>
+    <no>205</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>CD</hex2>
+      <string>&#63949;</string>
+      <description>あっかんべー</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>264</C><!-- からかう（あっかんべえ） -->
+      <D>264</D><!-- からかう（あっかんべえ）-->
+    </ezweb>
+    <jphone>
+      <string>$P)</string><!-- あっかんべえ -->
+    </jphone>
+  </set>
+  <!-- 拡30 -->
+  <set>
+    <no>206</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>CE</hex2>
+      <string>&#63950;</string>
+      <description>ウィンク</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>267</C><!-- 良いものがないので、スパーク２（キラリマーク） -->
+      <D>348</D><!-- ウィンク -->
+    </ezweb>
+    <jphone>
+      <string>$P8</string><!-- 投げキッス -->
+    </jphone>
+  </set>
+  <!-- 拡31 -->
+  <set>
+    <no>207</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>CF</hex2>
+      <string>&#63951;</string>
+      <description>うれしい顔</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>257</C><!-- 顔１（うれしいカオ）-->
+      <D>257</D><!-- 顔１（うれしいカオ）-->
+    </ezweb>
+    <jphone>
+      <string>$Gw</string><!-- 喜 -->
+    </jphone>
+  </set>
+  <!-- 拡32 -->
+  <set>
+    <no>208</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>D0</hex2>
+      <string>&#63952;</string>
+      <description>がまん顔</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>258</C><!-- 良いものがないので、顔２（おこったカオ）-->
+      <D>258</D><!-- 良いものがないので、顔２（おこったカオ）-->
+    </ezweb>
+    <jphone>
+      <string>$P6</string><!-- 良いものがないので、めちゃめちゃ怒っている -->
+    </jphone>
+  </set>
+  <!-- 拡33 -->
+  <set>
+    <no>209</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>D1</hex2>
+      <string>&#63953;</string>
+      <description>猫2</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>251</C><!-- 猫 -->
+      <D>251</D><!-- 猫 -->
+    </ezweb>
+    <jphone>
+      <string>$Go</string><!-- ねこ -->
+    </jphone>
+  </set>
+  <!-- 拡34 -->
+  <set>
+    <no>210</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>D2</hex2>
+      <string>&#63954;</string>
+      <description>泣き顔</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>259</C><!-- 顔３（かなしいカオ） -->
+      <D>259</D><!-- 顔３（かなしいカオ） -->
+    </ezweb>
+    <jphone>
+      <string>$P1</string><!-- 泣き -->
+    </jphone>
+  </set>
+  <!-- 拡35 -->
+  <set>
+    <no>211</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>D3</hex2>
+      <string>&#63955;</string>
+      <description>涙</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>263</C><!-- 雫（涙・汗） -->
+      <D>263</D><!-- 雫（涙・汗） -->
+    </ezweb>
+    <jphone>
+      <string>$P1</string><!-- 泣き -->
+    </jphone>
+  </set>
+  <!-- 拡36 -->
+  <set>
+    <no>212</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>D4</hex2>
+      <string>&#63956;</string>
+      <description>NG</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>61</C><!-- バツ１ -->
+      <D>464</D><!-- NG -->
+    </ezweb>
+    <jphone>
+      <string>$OS</string><!-- × -->
+    </jphone>
+  </set>
+  <!-- 拡37 -->
+  <set>
+    <no>213</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>D5</hex2>
+      <string>&#63957;</string>
+      <description>クリップ</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>143</C><!-- クリップ -->
+      <D>143</D><!-- クリップ -->
+    </ezweb>
+    <jphone>
+      <string>$O!</string><!-- 良いものがないので、メモ -->
+    </jphone>
+  </set>
+  <!-- 拡38 -->
+  <set>
+    <no>214</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>D6</hex2>
+      <string>&#63958;</string>
+      <description>コピーライト</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>81</C><!-- コピーライトマーク -->
+      <D>81</D><!-- コピーライトマーク -->
+    </ezweb>
+    <jphone>
+      <string>$Fn</string><!-- 著作権 -->
+    </jphone>
+  </set>
+  <!-- 拡39 -->
+  <set>
+    <no>215</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>D7</hex2>
+      <string>&#63959;</string>
+      <description>トレードマーク</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>54</C><!-- トレードマーク -->
+      <D>54</D><!-- トレードマーク -->
+    </ezweb>
+    <jphone>
+      <string>$QW</string><!-- TM -->
+    </jphone>
+  </set>
+  <!-- 拡40 -->
+  <set>
+    <no>216</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>D8</hex2>
+      <string>&#63960;</string>
+      <description>走る人</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>218</C><!-- マラソン -->
+      <D>218</D><!-- マラソン -->
+    </ezweb>
+    <jphone>
+      <string>$E5</string><!-- 陸上 -->
+    </jphone>
+  </set>
+  <!-- 拡41 -->
+  <set>
+    <no>217</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>D9</hex2>
+      <string>&#63961;</string>
+      <description>マル秘</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>279</C><!-- 丸秘 -->
+      <D>279</D><!-- 丸秘 -->
+    </ezweb>
+    <jphone>
+      <string>$O5</string><!-- マル秘 -->
+    </jphone>
+  </set>
+  <!-- 拡42 -->
+  <set>
+    <no>218</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>DA</hex2>
+      <string>&#63962;</string>
+      <description>リサイクル</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>332</C><!-- 良いものがないので、地球 -->
+      <D>807</D><!-- 循環矢印 -->
+    </ezweb>
+    <jphone>
+      <string>$OK</string><!-- 良いものがないので、ハート緑 -->
+    </jphone>
+  </set>
+  <!-- 拡43 -->
+  <set>
+    <no>219</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>DB</hex2>
+      <string>&#63963;</string>
+      <description>レジスタードトレードマーク</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>82</C><!-- レジスタードマーク -->
+      <D>82</D><!-- レジスタードマーク -->
+    </ezweb>
+    <jphone>
+      <string>$Fo</string><!-- 商標登録 -->
+    </jphone>
+  </set>
+  <!-- 拡44 -->
+  <set>
+    <no>220</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>DC</hex2>
+      <string>&#63964;</string>
+      <description>危険・警告</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>1</C><!-- ! -->
+      <D>1</D><!-- ! -->
+    </ezweb>
+    <jphone>
+      <string>$Fr</string><!-- ご注意 -->
+    </jphone>
+  </set>
+  <!-- 拡45 -->
+  <set>
+    <no>221</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>DD</hex2>
+      <string>&#63965;</string>
+      <description>禁止</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>98</C><!-- 立ち入り禁止 -->
+      <D>98</D><!-- 立ち入り禁止 -->
+    </ezweb>
+    <jphone>
+      <string>$OS</string><!-- 良いものがないので、× -->
+    </jphone>
+  </set>
+  <!-- 拡46 -->
+  <set>
+    <no>222</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>DE</hex2>
+      <string>&#63966;</string>
+      <description>空室・空席・空車</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>298</C><!-- 良いものがないので、EZマーク -->
+      <D>387</D><!-- 空マーク -->
+    </ezweb>
+    <jphone>
+      <string>$FK</string><!-- 空席 -->
+    </jphone>
+  </set>
+  <!-- 拡47 -->
+  <set>
+    <no>223</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>DF</hex2>
+      <string>&#63967;</string>
+      <description>合格マーク</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>278</C><!-- 良いものがないので、花丸 -->
+      <D>278</D><!-- 良いものがないので、花丸 -->
+    </ezweb>
+    <jphone>
+      <string>$O-</string><!-- 良いものがないので、祝 -->
+    </jphone>
+  </set>
+  <!-- 拡48 -->
+  <set>
+    <no>224</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>E0</hex2>
+      <string>&#63968;</string>
+      <description>満室・満席・満車</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>298</C><!-- 良いものがないので、Ezマーク -->
+      <D>386</D><!-- 満席 -->
+    </ezweb>
+    <jphone>
+      <string>$FJ</string><!-- 満席 -->
+    </jphone>
+  </set>
+  <!-- 拡49 -->
+  <set>
+    <no>225</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>E1</hex2>
+      <string>&#63969;</string>
+      <description>矢印左右</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>298</C><!-- 良いものがないので、Ezマーク -->
+      <D>808</D><!-- 左右両方向矢印 -->
+    </ezweb>
+    <jphone>
+      <string>$QX</string><!-- 良いものがないので、Jsマーク -->
+    </jphone>
+  </set>
+  <!-- 拡50 -->
+  <set>
+    <no>226</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>E2</hex2>
+      <string>&#63970;</string>
+      <description>矢印上下</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>298</C><!-- 良いものがないので、Ezマーク -->
+      <D>809</D><!-- 上下両方向矢印 -->
+    </ezweb>
+    <jphone>
+      <string>$QX</string><!-- 良いものがないので、Jsマーク -->
+    </jphone>
+  </set>
+  <!-- 拡51 -->
+  <set>
+    <no>227</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>E3</hex2>
+      <string>&#63971;</string>
+      <description>学校</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>156</C><!-- 良いものがないので、工場・建物 -->
+      <D>377</D><!-- 学校 -->
+    </ezweb>
+    <jphone>
+      <string>$Ew</string><!-- 学校 -->
+    </jphone>
+  </set>
+  <!-- 拡52 -->
+  <set>
+    <no>228</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>E4</hex2>
+      <string>&#63972;</string>
+      <description>波</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>190</C><!-- 良いものがないので、台風 -->
+      <D>810</D><!-- 波 -->
+    </ezweb>
+    <jphone>
+      <string>$P^</string><!-- 波がザーン -->
+    </jphone>
+  </set>
+  <!-- 拡53 -->
+  <set>
+    <no>229</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>E5</hex2>
+      <string>&#63973;</string>
+      <description>富士山</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>33</C><!-- 良いものがないので、上三角１ -->
+      <D>342</D><!-- 富士山 -->
+    </ezweb>
+    <jphone>
+      <string>$G[</string><!-- 山 -->
+    </jphone>
+  </set>
+  <!-- 拡54 -->
+  <set>
+    <no>230</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>E6</hex2>
+      <string>&#63974;</string>
+      <description>クローバー</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>53</C><!-- 四つ葉 -->
+      <D>53</D><!-- 四つ葉 -->
+    </ezweb>
+    <jphone>
+      <string>$E0</string><!-- よつば -->
+    </jphone>
+  </set>
+  <!-- 拡55 -->
+  <set>
+    <no>231</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>E7</hex2>
+      <string>&#63975;</string>
+      <description>さくらんぼ</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>241</C><!-- さくらんぼ -->
+      <D>241</D><!-- さくらんぼ -->
+    </ezweb>
+    <jphone>
+      <string>$Oe</string><!-- 良いものがないので、りんご -->
+    </jphone>
+  </set>
+  <!-- 拡56 -->
+  <set>
+    <no>232</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>E8</hex2>
+      <string>&#63976;</string>
+      <description>チューリップ</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>113</C><!-- 花 -->
+      <D>113</D><!-- 花 -->
+    </ezweb>
+    <jphone>
+      <string>$O$</string><!-- チューリップ -->
+    </jphone>
+  </set>
+  <!-- 拡57 -->
+  <set>
+    <no>233</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>E9</hex2>
+      <string>&#63977;</string>
+      <description>バナナ</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>238</C><!-- 良いものがないので、スイカ -->
+      <D>739</D><!-- バナナ -->
+    </ezweb>
+    <jphone>
+      <string>$Oh</string><!-- 良いものがないので、スイカ -->
+    </jphone>
+  </set>
+  <!-- 拡58 -->
+  <set>
+    <no>234</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>EA</hex2>
+      <string>&#63978;</string>
+      <description>りんご</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>241</C><!-- 良いものがないので、さくらんぼ -->
+      <D>434</D><!-- りんご -->
+    </ezweb>
+    <jphone>
+      <string>$Oe</string><!-- りんご -->
+    </jphone>
+  </set>
+  <!-- 拡59 -->
+  <set>
+    <no>235</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>EB</hex2>
+      <string>&#63979;</string>
+      <description>芽</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>53</C><!-- 良いものがないので、四つ葉 -->
+      <D>811</D><!-- 双葉 -->
+    </ezweb>
+    <jphone>
+      <string>$E0</string><!-- 良いものがないので、よつば -->
+    </jphone>
+  </set>
+  <!-- 拡60 -->
+  <set>
+    <no>236</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>EC</hex2>
+      <string>&#63980;</string>
+      <description>もみじ</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>133</C><!-- はっぱ -->
+      <D>133</D><!-- はっぱ -->
+    </ezweb>
+    <jphone>
+      <string>$E8</string><!-- もみじ -->
+    </jphone>
+  </set>
+  <!-- 拡61 -->
+  <set>
+    <no>237</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>ED</hex2>
+      <string>&#63981;</string>
+      <description>桜</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>235</C><!-- 花見(さくら） -->
+      <D>235</D><!-- 花見(さくら） -->
+    </ezweb>
+    <jphone>
+      <string>$GP</string><!-- お花見 -->
+    </jphone>
+  </set>
+  <!-- 拡62 -->
+  <set>
+    <no>238</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>EE</hex2>
+      <string>&#63982;</string>
+      <description>おにぎり</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>244</C><!-- おにぎり -->
+      <D>244</D><!-- おにぎり -->
+    </ezweb>
+    <jphone>
+      <string>$Ob</string><!-- おにぎり -->
+    </jphone>
+  </set>
+  <!-- 拡63 -->
+  <set>
+    <no>239</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>EF</hex2>
+      <string>&#63983;</string>
+      <description>ショートケーキ</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>239</C><!-- ケーキ -->
+      <D>239</D><!-- ケーキ -->
+    </ezweb>
+    <jphone>
+      <string>$Gf</string><!-- ケーキ -->
+    </jphone>
+  </set>
+  <!-- 拡64 -->
+  <set>
+    <no>240</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>F0</hex2>
+      <string>&#63984;</string>
+      <description>とっくり（おちょこ付き）</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>225</C><!-- 良いものがないので、居酒屋（赤ちょうちん） -->
+      <D>400</D><!-- お銚子＆杯 -->
+    </ezweb>
+    <jphone>
+      <string>$O+</string><!-- 晩酌 -->
+    </jphone>
+  </set>
+  <!-- 拡65 -->
+  <set>
+    <no>241</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>F1</hex2>
+      <string>&#63985;</string>
+      <description>どんぶり</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>333</C><!-- 良いものがないので、ラーメン -->
+      <D>333</D><!-- 良いものがないので、ラーメン -->
+    </ezweb>
+    <jphone>
+      <string>$O`</string><!-- 良いものがないので、ラーメン -->
+    </jphone>
+  </set>
+  <!-- 拡66 -->
+  <set>
+    <no>242</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>F2</hex2>
+      <string>&#63986;</string>
+      <description>パン</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>245</C><!-- 良いものがないので、ハンバーガー（ファーストフード） -->
+      <D>424</D><!-- 食パン -->
+    </ezweb>
+    <jphone>
+      <string>$OY</string><!-- パン -->
+    </jphone>
+  </set>
+  <!-- 拡67 -->
+  <set>
+    <no>243</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>F3</hex2>
+      <string>&#63987;</string>
+      <description>かたつむり</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>298</C><!-- 良いものがないので、Ezマーク -->
+      <D>812</D><!-- かたつむり -->
+    </ezweb>
+    <jphone>
+      <string>$QX</string><!-- 良いものがないので、Jsマーク -->
+    </jphone>
+  </set>
+  <!-- 拡68 -->
+  <set>
+    <no>244</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>F4</hex2>
+      <string>&#63988;</string>
+      <description>ひよこ</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>298</C><!-- 良いものがないので、Ezマーク -->
+      <D>804</D><!-- 正面向きのひよこ -->
+    </ezweb>
+    <jphone>
+      <string>$QC</string><!-- ひよこ -->
+    </jphone>
+  </set>
+  <!-- 拡69 -->
+  <set>
+    <no>245</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>F5</hex2>
+      <string>&#63989;</string>
+      <description>ペンギン</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>252</C><!-- ペンギン -->
+      <D>252</D><!-- ペンギン -->
+    </ezweb>
+    <jphone>
+      <string>$Gu</string><!-- ペンギン -->
+    </jphone>
+  </set>
+  <!-- 拡70 -->
+  <set>
+    <no>246</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>F6</hex2>
+      <string>&#63990;</string>
+      <description>魚</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>242</C><!-- ふぐ -->
+      <D>715</D><!-- 熱帯魚 -->
+    </ezweb>
+    <jphone>
+      <string>$G9</string><!-- 魚 -->
+    </jphone>
+  </set>
+  <!-- 拡71 -->
+  <set>
+    <no>247</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>F7</hex2>
+      <string>&#63991;</string>
+      <description>うまい！</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>257</C><!-- 良いものがないので、顔１（うれしいカオ） -->
+      <D>257</D><!-- 良いものがないので、顔１（うれしいカオ） -->
+    </ezweb>
+    <jphone>
+      <string>$Gw</string><!-- 良いものがないので、喜 -->
+    </jphone>
+  </set>
+  <!-- 拡72 -->
+  <set>
+    <no>248</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>F8</hex2>
+      <string>&#63992;</string>
+      <description>ウッシッシ</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>264</C><!-- 良いものがないので、からかう（あっかんべえ） -->
+      <D>814</D><!-- うっしっし -->
+    </ezweb>
+    <jphone>
+      <string>$E%</string><!-- 良いものがないので、アカンベー -->
+    </jphone>
+  </set>
+  <!-- 拡73 -->
+  <set>
+    <no>249</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>F9</hex2>
+      <string>&#63993;</string>
+      <description>ウマ</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>248</C><!-- うま -->
+      <D>248</D><!-- うま -->
+    </ezweb>
+    <jphone>
+      <string>$G:</string><!-- うま -->
+    </jphone>
+  </set>
+  <!-- 拡74 -->
+  <set>
+    <no>250</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>FA</hex2>
+      <string>&#63994;</string>
+      <description>ブタ</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>254</C><!-- ぶた -->
+      <D>254</D><!-- ぶた -->
+    </ezweb>
+    <jphone>
+      <string>$E+</string><!-- ぶた -->
+    </jphone>
+  </set>
+  <!-- 拡75 -->
+  <set>
+    <no>251</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>FB</hex2>
+      <string>&#63995;</string>
+      <description>ワイングラス</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>12</C><!-- ワイングラス -->
+      <D>12</D><!-- ワイングラス -->
+    </ezweb>
+    <jphone>
+      <string>$Gd</string><!-- カクテル -->
+    </jphone>
+  </set>
+  <!-- 拡76 -->
+  <set>
+    <no>252</no>
+    <imode>
+      <hex1>f9</hex1>
+      <hex2>FC</hex2>
+      <string>&#63996;</string>
+      <description>げっそり</description>
+    </imode>
+    <ezweb>
+      <A>1</A>
+      <B>1</B>
+      <C>327</C><!-- 良いものがないので、ふらふら -->
+      <D>350</D><!-- ショッキング -->
+    </ezweb>
+    <jphone>
+      <string>$P+</string><!-- 良いものがないので、げろげろ -->
+    </jphone>
+  </set>
 </emoji>

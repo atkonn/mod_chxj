@@ -43,11 +43,11 @@ tag_handlers chxj_tag_handlers[] = {
   },
   {
     .type    = CHXJ_SPEC_Chtml_6_0,
-    .handler = chtml50_handler,
+    .handler = ixhtml10_handler,
   },
   {
     .type    = CHXJ_SPEC_Chtml_7_0,
-    .handler = chtml50_handler,
+    .handler = ixhtml10_handler,
   },
   {
     .type    = CHXJ_SPEC_XHtml_Mobile_1_0,
@@ -354,6 +354,19 @@ chxj_node_convert(
 
         if (handlers[tagLABEL].end_tag_handler)
           handlers[tagLABEL].end_tag_handler(pdoc, child);
+      }
+      else
+      /*----------------------------------------------------------------------*/
+      /* <LINK>                                                               */
+      /*----------------------------------------------------------------------*/
+      if (strcasecmp(name, "link") == 0) {
+        if (handlers[tagLINK].start_tag_handler) 
+          handlers[tagLINK].start_tag_handler(pdoc, child);
+
+        chxj_node_convert(spec, r, pdoc, doc, child, indent+1);
+
+        if (handlers[tagLINK].end_tag_handler)
+          handlers[tagLINK].end_tag_handler(pdoc, child);
       }
       else {
         chxj_node_convert(spec, r, pdoc, doc, child, indent+1);

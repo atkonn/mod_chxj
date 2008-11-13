@@ -58,6 +58,10 @@
 #define STRNCASEEQ(a,b,c,d,e) \
   ((((a) == *(d))|| ((b) == *(d))) && strncasecmp((c),(d),(e)) == 0)
 
+#define CHXJ_QUERY_STRING_PARAM_PREFIX "_chxj_qs_"
+#define CHXJ_QUERY_STRING_PARAM_PREFIX_ENC "%5Fchxj%5Fqs%5F"
+
+
 #include "qs_ignore_sp.h"
 #include "qs_log.h"
 #include "qs_malloc.h"
@@ -273,6 +277,7 @@ typedef enum {
   tagPLAINTEXT,
   tagBLINK,
   tagMARQUEE,
+  tagLINK,
   tagNLMARK,      /* New Line Code */
 } tag_type;
 
@@ -346,6 +351,8 @@ struct mod_chxj_config {
 #if defined(USE_MEMCACHE_COOKIE)
   memcache_t            memcache;
 #endif
+  char                  *forward_url_base;  /* use input filter */
+  char                  *forward_server_ip; /* use input filter */
 
   chxj_new_line_type_t  new_line_type;
 };
@@ -363,11 +370,14 @@ struct mod_chxj_config {
 #define CONVRULE_ENGINE_ON_BIT        (0x00000001)
 #define CONVRULE_ENGINE_OFF_BIT       (0x00000002)
 #define CONVRULE_COOKIE_ON_BIT        (0x00000004)
+#define CONVRULE_CSS_ON_BIT           (0x00000008)
 
 #define CONVRULE_ENGINE_ON_CMD        "EngineOn"
 #define CONVRULE_ENGINE_OFF_CMD       "EngineOff"
 #define CONVRULE_COOKIE_ON_CMD        "CookieOn"
 #define CONVRULE_COOKIE_OFF_CMD       "CookieOff"
+#define CONVRULE_CSS_ON_CMD           "CssOn"
+#define CONVRULE_CSS_OFF_CMD          "CssOff"
 
 
 #define CONVRULE_FLAG_NOTMATCH        (0x00000001)
@@ -377,6 +387,8 @@ struct mod_chxj_config {
 #define CONVRULE_PC_FLAG_ON_BIT       (0x00000001)
 #define CONVRULE_PC_FLAG_OFF_BIT      (0x00000002)
 
+
+#define IS_CSS_ON(X)                  ((X)->action & CONVRULE_CSS_ON_BIT)
 
 typedef struct {
   apr_global_mutex_t* cookie_db_lock;
@@ -400,6 +412,7 @@ typedef struct {
 #define HTTP_USER_AGENT       "User-Agent"
 #define HTTP_HOST             "Host"
 #define CHXJ_HTTP_USER_AGENT  "CHXJ_HTTP_USER_AGENT"
+#define CHXJ_HEADER_ORIG_CLIENT_IP "X-Chxj-Orig-Client-Ip"
 
 module AP_MODULE_DECLARE_DATA chxj_module;
 
@@ -422,6 +435,7 @@ extern tag_handler  chtml20_handler[];
 extern tag_handler  chtml30_handler[];
 extern tag_handler  chtml40_handler[];
 extern tag_handler  chtml50_handler[];
+extern tag_handler  ixhtml10_handler[];
 extern tag_handler  xhtml_handler[];
 extern tag_handler  hdml_handler[];
 extern tag_handler  jhtml_handler[];
@@ -436,7 +450,10 @@ extern char* chxj_node_convert(
   int          indent
 );
 
+extern void chxj_dump_string(request_rec *r, const char *filename, int line, const char *title, const char *str, apr_size_t len);
+
 #define IMAGE_CACHE_LIMIT_FMT_LEN  (20)
+
 
 #if HAVE_MALLOC == 0
 extern void *rpl_malloc(size_t n);

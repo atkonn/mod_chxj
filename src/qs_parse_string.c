@@ -201,7 +201,7 @@ qs_parse_string(Doc *doc, const char *src, int srclen)
         && (doc->now_parent_node == NULL || !STRCASEEQ('p','P',"pre",doc->now_parent_node->name))) {
       continue;
     }
-    if ((unsigned char)'<' == src[ii]) {
+    if ((unsigned char)'<' == src[ii] && strncasecmp("<![CDATA[",&src[ii], sizeof("<![CDATA[")-1) != 0) {
       int endpoint = s_cut_tag(&src[ii], srclen - ii);
       Node *node   = qs_parse_tag(doc, &src[ii], endpoint);
       if (! node) {
@@ -298,6 +298,29 @@ qs_parse_string(Doc *doc, const char *src, int srclen)
           continue;
         }
       }
+    }
+    else if (strncasecmp("<![CDATA[", &src[ii], sizeof("<![CDATA[") - 1) == 0) {
+      /* TEXT */
+      int endpoint = s_cut_tag(&src[ii], srclen - ii);
+      Node *node = qs_new_tag(doc);
+      if (! node) {
+        QX_LOGGER_DEBUG("runtime exception: qs_parse_string(): Out of memory");
+        return doc->root_node;
+      }
+      node->value = (char *)apr_palloc(doc->pool,endpoint+1);
+      node->name  = (char *)apr_palloc(doc->pool,4+1);
+      node->otext = (char *)apr_palloc(doc->pool,endpoint+1);
+      node->size  = endpoint;
+      node->line  = nl_cnt;
+      memset(node->value, 0, endpoint+1);
+      memset(node->otext, 0, endpoint+1);
+      memset(node->name,  0, 4+1       );
+      memcpy(node->value, &src[ii+sizeof("<![CDATA[")-1], endpoint - (sizeof("<![CDATA[")-1) - (sizeof("]]")-1));
+      memcpy(node->name,  "text",   4);
+      memcpy(node->otext,node->value, endpoint);
+
+      qs_add_child_node(doc,node);
+      ii += (endpoint - 1);
     }
     else {
       /* TEXT */
@@ -410,7 +433,7 @@ qs_dump_node(Doc *doc, Node *node, int indent)
                       (char *)qs_get_node_value(doc,p));
     }
     else {
-      DBG(doc->r,"%*.*sNode:[%s]\n", indent,indent," ", qs_get_node_name(doc,p));
+      DBG(doc->r,"%*.*sNode:[%s] prev:[%x]\n", indent,indent," ", qs_get_node_name(doc,p), (unsigned int)(apr_size_t)p->prev);
     }
     for (attr = (Attr *)qs_get_attr(doc,p); attr; attr = (Attr *)qs_get_next_attr(doc,attr)) {
       DBG(doc->r,"%*.*s  ATTR:[%s]\n", indent,indent," ", (char *)qs_get_attr_name(doc,attr));
@@ -527,6 +550,7 @@ qs_init_root_node(Doc *doc)
     QX_LOGGER_FATAL("Out Of Memory");
   }
 
+  doc->root_node->prev   = NULL;
   doc->root_node->next   = NULL;
   doc->root_node->parent = NULL;
   doc->root_node->child  = NULL;
@@ -547,6 +571,7 @@ qs_init_root_node(Doc *doc)
 void
 qs_add_child_node(Doc *doc,Node *node) 
 {
+  node->prev       = NULL;
   node->next       = NULL;
   node->child      = NULL;
   node->child_tail = NULL;
@@ -559,6 +584,7 @@ qs_add_child_node(Doc *doc,Node *node)
 #ifdef DEBUG
     QX_LOGGER_DEBUG("search child free node");
 #endif
+    node->prev = doc->now_parent_node->child_tail;
     doc->now_parent_node->child_tail->next = node;
     doc->now_parent_node->child_tail       = node;
   }
@@ -599,14 +625,23 @@ qs_get_child_node(Doc *UNUSED(doc), Node *node) {
 
 
 Node *
-qs_get_next_node(Doc *UNUSED(doc), Node *node) {
+qs_get_next_node(Doc *UNUSED(doc), Node *node) 
+{
   return node->next;
+}
+
+
+Node *
+qs_get_prev_node(Doc *UNUSED(doc), Node *node) 
+{
+  return node->prev;
 }
 
 
 
 Attr *
-qs_get_attr(Doc *UNUSED(doc), Node *node) {
+qs_get_attr(Doc *UNUSED(doc), Node *node) 
+{
   return node->attr;
 }
 

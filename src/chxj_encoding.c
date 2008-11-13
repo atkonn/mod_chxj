@@ -35,6 +35,7 @@ chxj_encoding(request_rec *r, const char *src, apr_size_t *len)
   apr_size_t          olen;
   mod_chxj_config     *dconf;
   chxjconvrule_entry  *entryp;
+  apr_pool_t          *pool;
 
 
   DBG(r,"start chxj_encoding()");
@@ -43,25 +44,31 @@ chxj_encoding(request_rec *r, const char *src, apr_size_t *len)
 
   if (dconf == NULL) {
     DBG(r,"none encoding.");
+    DBG(r,"REQ[%X] end   chxj_encoding()", (unsigned int)(apr_size_t)r);
     return (char*)src;
   }
   if ((int)*len < 0) {
     ERR(r, "runtime exception: chxj_encoding(): invalid string size.[%d]", (int)*len);
+    DBG(r,"REQ[%X] end   chxj_encoding()", (unsigned int)(apr_size_t)r);
     return (char *)apr_pstrdup(r->pool, "");
   }
 
   entryp = chxj_apply_convrule(r, dconf->convrules);
   if (entryp->encoding == NULL) {
-    DBG(r,"none encoding.");
+    DBG(r,"REQ[%X] none encoding.", (unsigned int)(apr_size_t)r);
+    DBG(r,"REQ[%X] end   chxj_encoding()", (unsigned int)(apr_size_t)r);
     return (char *)src;
   }
 
   if (STRCASEEQ('n','N',"none", entryp->encoding)) {
-    DBG(r,"none encoding.");
+    DBG(r,"REQ[%X] none encoding.", (unsigned int)(apr_size_t)r);
+    DBG(r,"REQ[%X] end   chxj_encoding()", (unsigned int)(apr_size_t)r);
     return (char*)src;
   }
+
+  apr_pool_create(&pool, r->pool);
   ilen = *len;
-  ibuf = apr_palloc(r->pool, ilen+1);
+  ibuf = apr_palloc(pool, ilen+1);
   if (ibuf == NULL) {
     ERR(r, "runtime exception: chxj_encoding(): Out of memory.");
     return (char *)src;
@@ -70,12 +77,12 @@ chxj_encoding(request_rec *r, const char *src, apr_size_t *len)
   memcpy(ibuf, src, ilen);
 
   olen = ilen * 4 + 1;
-  spos = obuf = apr_palloc(r->pool, olen);
+  spos = obuf = apr_palloc(pool, olen);
   if (obuf == NULL) {
-    DBG(r,"end   chxj_encoding()");
+    DBG(r,"REQ[%X] end   chxj_encoding()", (unsigned int)(apr_size_t)r);
     return ibuf;
   }
-  DBG(r,"encode convert [%s] -> [%s]", entryp->encoding, "CP932");
+  DBG(r,"REQ[%X] encode convert [%s] -> [%s]", (unsigned int)(apr_size_t)r, entryp->encoding, "CP932");
 
   memset(obuf, 0, olen);
   cd = iconv_open("CP932", entryp->encoding);
@@ -86,7 +93,7 @@ chxj_encoding(request_rec *r, const char *src, apr_size_t *len)
     else {
       ERR(r, "iconv open failed. from:[%s] to:[%s] errno:[%d]", entryp->encoding, "CP932", errno);
     }
-    DBG(r,"end   chxj_encoding()");
+    DBG(r,"REQ[%X] end   chxj_encoding()", (unsigned int)(apr_size_t)r);
     return ibuf;
   }
   while (ilen > 0) {
@@ -107,7 +114,8 @@ chxj_encoding(request_rec *r, const char *src, apr_size_t *len)
   *len = strlen(spos);
   iconv_close(cd);
 
-  DBG(r,"end   chxj_encoding() len=[%d] obuf=[%.*s]", (int)*len, (int)*len, spos);
+  chxj_dump_string(r, APLOG_MARK, "RESULT Convert Encoding", spos, *len);
+  DBG(r,"REQ[%X] end   chxj_encoding()", (unsigned int)(apr_size_t)r);
   return spos;
 }
 
@@ -208,7 +216,7 @@ chxj_rencoding(request_rec *r, const char *src, apr_size_t *len)
 
 
 char *
-chxj_encoding_parameter(request_rec *r, const char *value)
+chxj_encoding_parameter(request_rec *r, const char *value, int xmlflag)
 {
   char *src;
   char *src_sv;
@@ -222,13 +230,13 @@ chxj_encoding_parameter(request_rec *r, const char *value)
 
   int   use_amp_flag;
   
-  DBG(r, "start chxj_encoding_parameter()");
+  DBG(r, "REQ[%X] start chxj_encoding_parameter()", (unsigned int)(apr_size_t)r);
 
   src = apr_pstrdup(r->pool, value);
 
   spos = strchr(src, '?');
   if (!spos) {
-    DBG(r, "end   chxj_encoding_parameter()");
+    DBG(r, "REQ[%X] end   chxj_encoding_parameter()", (unsigned int)(apr_size_t)r);
     return src;
   }
   *spos++ = 0;
@@ -241,7 +249,7 @@ chxj_encoding_parameter(request_rec *r, const char *value)
     apr_size_t len;
     char *sep_pos;
 
-    use_amp_flag = 0;
+    use_amp_flag = (xmlflag) ? 1 : 0;
 
     pair = apr_strtok(spos, "&", &pstat);
     spos = NULL;
@@ -299,9 +307,75 @@ chxj_encoding_parameter(request_rec *r, const char *value)
       }
     }
   }
-  DBG(r, "end   chxj_encoding_parameter()");
+  DBG(r, "REQ[%X] end   chxj_encoding_parameter()", (unsigned int)(apr_size_t)r);
 
   return apr_pstrcat(r->pool, src_sv, "?", param, NULL);
+}
+
+
+char *
+chxj_iconv(request_rec *r, apr_pool_t *pool, const char *src, apr_size_t *len, const char *from, const char *to)
+{
+  char                *obuf;
+  char                *ibuf;
+  char                *spos;
+  
+  iconv_t             cd;
+  size_t              result;
+  apr_size_t          ilen;
+  apr_size_t          olen;
+
+
+  if ((int)*len < 0) {
+    ERR(r, "runtime exception: chxj_iconv(): invalid string size.[%d]", (int)*len);
+    return (char *)apr_pstrdup(pool, "");
+  }
+
+  ilen = *len;
+  ibuf = apr_palloc(pool, ilen+1);
+  if (ibuf == NULL) {
+    ERR(r, "runtime exception: chxj_iconv(): Out of memory.");
+    return (char *)src;
+  }
+  memset(ibuf, 0, ilen+1);
+  memcpy(ibuf, src, ilen);
+
+  olen = ilen * 4 + 1;
+  spos = obuf = apr_palloc(pool, olen);
+  if (obuf == NULL) {
+    ERR(r, "%s:%d runtime exception: chxj_iconv(): Out of memory", APLOG_MARK);
+    return ibuf;
+  }
+  memset(obuf, 0, olen);
+  cd = iconv_open(to, from);
+  if (cd == (iconv_t)-1) {
+    if (EINVAL == errno) {
+      ERR(r, "The conversion from %s to %s is not supported by the implementation.", from, to);
+    }
+    else {
+      ERR(r, "iconv open failed. from:[%s] to:[%s] errno:[%d]", from, to, errno);
+    }
+    return ibuf;
+  }
+  while (ilen > 0) {
+    result = iconv(cd, &ibuf, &ilen, &obuf, &olen);
+    if (result == (size_t)(-1)) {
+      if (E2BIG == errno) {
+        ERR(r, "There is not sufficient room at *outbuf.");
+      }
+      else if (EILSEQ == errno) {
+        ERR(r, "An invalid multibyte sequence has been encountered in the input. input:[%s]", ibuf);
+      }
+      else if (EINVAL == errno) {
+        ERR(r, "An incomplete multibyte sequence has been encountered in the input. input:[%s]", ibuf);
+      }
+      break;
+    }
+  }
+  *len = strlen(spos);
+  iconv_close(cd);
+
+  return spos;
 }
 /*
  * vim:ts=2 et

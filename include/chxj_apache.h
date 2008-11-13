@@ -26,6 +26,7 @@
 #  include "apr.h"
 #  include "apr_pools.h"
 #  include "apr_tables.h"
+#  include "apr_uri.h"
 #  define APLOG_EMERG 0   /* system is unusable */
 #  define APLOG_ALERT 1   /* action must be taken immediately */
 #  define APLOG_CRIT  2   /* critical conditions */
@@ -45,6 +46,7 @@
 #  endif
 #  define AP_MODULE_DECLARE_DATA
 #  define APLOG_MARK   __FILE__,__LINE__
+#  undef ap_regex_t
 typedef struct module_struct module;
 struct module_struct {
     int version;
@@ -68,11 +70,24 @@ typedef struct test_request_rec {
   ap_conf_vector_t *per_dir_config;
   apr_table_t *headers_in;
   apr_table_t *headers_out;
+  apr_table_t *err_headers_out;
   char *uri;
   char *args;
   char *hostname;
   char *unparsed_uri;
+  apr_uri_t parsed_uri;
 } request_rec;
+#include "pcre.h"
+typedef struct {
+    void *re_pcre;
+    apr_size_t re_nsub;
+    apr_size_t re_erroffset;
+} ap_regex_t;
+#undef ap_regmatch_t
+typedef struct {
+    int rm_so;
+    int rm_eo;
+} ap_regmatch_t;
 
 
 extern void test_log_error(const char *file, int line, int level, apr_status_t status, const request_rec *r, const char *fmt, ...);
@@ -99,6 +114,7 @@ extern char *test_ap_escape_html(apr_pool_t *p, const char *s);
 #    undef PACKAGE_STRING
 #    undef PACKAGE_TARNAME
 #    undef PACKAGE_VERSION
+#    undef PACKAGE_BUGREPORT
 #    include "config.h"
 #  endif
 #  define chxj_log_rerror ap_log_rerror
@@ -114,6 +130,11 @@ extern char * chxj_os_escape_path(apr_pool_t *p, const char *path, int partial);
 extern void chxj_set_content_type(request_rec *r, const char *ct);
 extern void * chxj_get_module_config(const ap_conf_vector_t *cv, const module *m);
 extern char *chxj_ap_escape_html(apr_pool_t *p, const char *s);
+extern ap_regex_t *chxj_ap_pregcomp(apr_pool_t *p, const char *pattern, int cflags);
+extern void chxj_ap_pregfree(apr_pool_t *p, ap_regex_t *reg);
+extern int chxj_ap_regexec(const ap_regex_t *preg, const char *string, apr_size_t nmatch, ap_regmatch_t *pmatch, int eflags);
+extern int chxj_ap_regcomp(ap_regex_t *preg, const char *pattern, int cflags);
+extern char *chxj_ap_pregsub(apr_pool_t *p, const char *input, const char *source, size_t nmatch, ap_regmatch_t pmatch[]);
 
 
 #endif

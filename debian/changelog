@@ -1,3 +1,138 @@
+libapache2-mod-chxj (0.12.18-1) unstable; urgency=low
+
+  * Fixed Bug.
+    - When the POST data of 64 bytes or less is sent, it is Segv.
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Fri,  7 Nov 2008 10:05:30 +0900
+
+libapache2-mod-chxj (0.12.17-1) unstable; urgency=low
+
+  * Fixed bug.
+    - Bug that session becomes invalid.
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Fri,  7 Nov 2008 02:09:16 +0900
+
+libapache2-mod-chxj (0.12.16-1) unstable; urgency=low
+
+  * Added sample data of emoji.
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Wed,  5 Nov 2008 09:50:15 +0900
+
+libapache2-mod-chxj (0.12.15-1) unstable; urgency=low
+
+  * Bug Fix.
+    - fails in the link of libserf.
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Thu, 30 Oct 2008 00:29:29 +0900
+
+libapache2-mod-chxj (0.12.14) unstable; urgency=low
+
+  * Bug Fix.
+    - When it is not possible to convert it from the host name in request URL
+      into IP, it becomes an error.
+      (Reported by bayside. Thanks!)
+    - The mistake is found in `configure' and the compilation of libserf
+      doesn't operate normally.
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Wed, 29 Oct 2008 17:40:25 +0900
+
+libapache2-mod-chxj (0.12.13-1) unstable; urgency=low
+
+  * Bug Fix(merge from 0.11.15).
+    - The screen might become pure-white. [13508]
+    - Upgraded from 0.1.2 to 0.2.0. [13508]
+    - The POST form to another site is illegal. [#13544]
+      (Reported by anyone. Thanks!)
+    - libserf link failure because of x86_64 environment[13507]
+      (Reported by anyone. Thanks!)
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Sat, 27 Sep 2008 00:06:08 +0900
+
+libapache2-mod-chxj (0.12.12-1) unstable; urgency=low
+
+  * Fixed Bug.
+    - cookie cannot be acquired in model of old SoftBank.
+   (Reported by tiruda1600 _at_ users.sourceforge.jp. thanks!)
+  * Fixed Bug & Added Features.
+    - Query in the action attribute of the form tag cannot be acquired.
+   (Reported by tiruda1600 _at_ users.sourceforge.jp. thanks!)
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Thu, 24 Jul 2008 16:02:02 +0900
+
+libapache2-mod-chxj (0.12.11-1) unstable; urgency=low
+
+  * Changed features.
+    - After it had converted it by a former image,
+      the priority of the image type was selected.
+      (Requested by someone. thanks!)
+  * Fixed Bug.
+    - Dynamic image converter is not available.
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Tue, 22 Jul 2008 12:52:13 +0900
+
+libapache2-mod-chxj (0.12.10-1) unstable; urgency=low
+
+  * Added Features.
+    - For anchor's name for cookie simulator.
+    (Requested by tiruda1600 _at_ users.sourceforge.jp. thanks!)
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Mon, 21 Jul 2008 15:11:53 +0900
+
+libapache2-mod-chxj (0.12.9-1) unstable; urgency=low
+
+  * Changed Specification.
+    - When the size after it reduces becomes 0, it compels it to 1.
+      (Reported by someone. thanks!)
+  * Emergency measure
+    - MagickQuantizeImage function doesn't return.
+      (Reported by someone. thanks!)
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Sun, 20 Jul 2008 23:28:36 +0900
+
+libapache2-mod-chxj (0.12.8-1) unstable; urgency=low
+
+  * Added function.
+    - The au terminal is handled as NO Cookie model. (For http -> https or https -> http exchange.) 
+      (Requested by someone. thanks!)
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Sun, 13 Jul 2008 15:20:39 +0900
+
+libapache2-mod-chxj (0.12.7-1) unstable; urgency=low
+
+  * Fixed bug.
+    - It doesn't become a conversion target when setting as JXHTML.
+     (Reported by someone. thanks!)
+
+  * Added name attribute of form tag. 
+    (Requested by tiruda1600 _at_ users.sourceforge.jp. thanks!)
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Sat, 12 Jul 2008 02:11:04 +0900
+
+libapache2-mod-chxj (0.12.6-1) unstable; urgency=low
+
+  * Fixed bug.
+    - cannot be redirected since 0.12.4
+      (Reported by tiruda1600 _at_ users.sourceforge.jp. thanks!)
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Thu,  3 Jul 2008 22:06:28 +0900
+
+libapache2-mod-chxj (0.12.5-1) unstable; urgency=low
+
+  * Fixed bug.
+    - The bug that was not able to be displayed correctly when a double quart
+      was included in value.
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Fri, 27 Jun 2008 16:37:26 +0900
+
+libapache2-mod-chxj (0.12.4-1) unstable; urgency=low
+
+  * Fixed Bug.
+    - Because Input_filter of Apache is a fuck-shit, it abolishes it.
+      Proxy is made at one's own expense by using libserf instead.
+      (Reported by tiruda1600 _at_ users.sourceforge.jp. thanks!)
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Thu, 26 Jun 2008 10:32:44 +0900
+
 libapache2-mod-chxj (0.12.3-1) unstable; urgency=low
 
   * Fixed bug.

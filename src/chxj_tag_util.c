@@ -15,6 +15,8 @@
  * limitations under the License.
  */
 #include "chxj_tag_util.h"
+#include "chxj_url_encode.h"
+#include "chxj_str_util.h"
 
 
 /**
@@ -157,10 +159,14 @@ qs_alloc_zero_byte_string(apr_pool_t *pool)
 char *
 qs_trim_string(apr_pool_t *p, char *s)
 {
-  char *ss = apr_pstrdup(p, s);
-  int len = strlen(s);
+  char *ss;
+  int len;
   int ii;
 
+  if (! s) return apr_pstrdup(p, "");
+
+  ss = apr_pstrdup(p, s);
+  len = strlen(s);
   ii = 0;
   for (ii = 0;is_white_space(*ss) && ii < len; ss++, ii++);
 
@@ -498,7 +504,7 @@ chxj_chxjif_is_mine(device_table *spec, Doc *doc, Node *tag)
           break;
         }
       }
-      else if (STRCASEEQ('c','C',"cxhtml",value)) {
+      else if (STRCASEEQ('i','I',"ixhtml",value)) {
         switch (spec->html_spec_type) {
         case CHXJ_SPEC_Chtml_6_0:
         case CHXJ_SPEC_Chtml_7_0:
@@ -581,6 +587,52 @@ qs_get_parse_attr(Doc *doc, Node *tag, apr_pool_t *pool)
   return NULL;
 }
 
+
+char *
+chxj_form_action_to_hidden_tag(request_rec *r, apr_pool_t *pool, const char *str, int xmlFlag, int post)
+{
+  char *s = apr_pstrdup(pool, str);
+  if (!s) return NULL;
+  if (chxj_starts_with(s, "http://") || chxj_starts_with(s, "https://")) {
+    apr_uri_t url;
+    apr_uri_parse(pool, s, &url);
+    if (url.hostname && strcasecmp(url.hostname, r->hostname) != 0) {
+      return NULL;
+    }
+  }
+  s = strchr(s, '?');
+  if (!s) return NULL;
+  s++;
+  char *result = NULL;
+
+  char *pstat;
+  char *pstat2;
+  for (;;) {
+    char *pair = apr_strtok(s, "&", &pstat);
+    if (! pair) break;
+    s = NULL;
+    char *key = apr_strtok(pair, "=",  &pstat2);
+    char *val = "";
+    if (key) {
+      val = apr_strtok(NULL, "=", &pstat2);
+      if (!val) val = "";
+    }
+    char *tmp = NULL;
+    if (! post || strcasecmp(key, "_chxj_cc") == 0 || strcasecmp(key, "_chxj_nc") == 0) {
+      tmp = apr_psprintf(pool, "<input type=\"hidden\" name=\"%s\" value=\"%s\"%s>", key, chxj_url_decode(pool, val), (xmlFlag == 1) ? " /" : "");
+    }
+    else {
+      tmp = apr_psprintf(pool, "<input type=\"hidden\" name=\"_chxj_qs_%s\" value=\"%s\"%s>", key, chxj_url_decode(pool, val), (xmlFlag == 1) ? " /" : "");
+    }
+    if (result) {
+      result = apr_pstrcat(pool, result, tmp, NULL);
+    }
+    else {
+      result = tmp;
+    }
+  }
+  return result;
+}
 /*
  * vim:ts=2 et
  */

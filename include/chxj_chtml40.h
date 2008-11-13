@@ -21,6 +21,7 @@
 
 #include "mod_chxj.h"
 #include "chxj_cookie.h"
+#include "chxj_css.h"
 
 /*----------------------------------------------------------------------------*/
 /* Structure for CHTML4.0                                                     */
@@ -28,17 +29,28 @@
 typedef struct chtml40_t chtml40_t;
 
 struct chtml40_t {
-    Doc                 *doc;
-    char                *out;
-    int                 out_len;
-    int                 pre_flag;
-    int                 textarea_flag;
-    int                 font_flag;
+  Doc                 *doc;
+  char                *out;
+  int                 out_len;
+  int                 pre_flag;
+  int                 textarea_flag;
+  int                 font_flag;
 
-    device_table        *spec;
-    mod_chxj_config     *conf;
-    chxjconvrule_entry  *entryp;
-    cookie_t            *cookie;
+  device_table        *spec;
+  mod_chxj_config     *conf;
+  chxjconvrule_entry  *entryp;
+  cookie_t            *cookie;
+  css_stylesheet_t    *style;
+  css_prop_list_stack_t *css_prop_stack;
+};
+
+typedef struct _chtml40_flags_t chtml40_flags_t;
+
+struct _chtml40_flags_t {
+  int with_font_flag;
+  int with_blink_flag;
+  int with_div_flag;
+  int with_marquee_flag;
 };
 
 /*----------------------------------------------------------------------------*/

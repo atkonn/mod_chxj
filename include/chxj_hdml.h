@@ -119,8 +119,6 @@ extern char *qs_out_apr_pstrcat(
   char         *s, 
   int          *len);
 
-extern char *qs_conv_istyle_to_format(
-  request_rec  *r, 
-  char         *is);
+extern char *qs_conv_istyle_to_format(apr_pool_t *p, char *is);
 
 #endif

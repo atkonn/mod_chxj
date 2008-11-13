@@ -1018,7 +1018,7 @@ s_hdml_start_a_tag(void *pdoc, Node *node)
     }
     else if (STRCASEEQ('h','H',"href",name)) {
       if (STRNCASEEQ('m','M',"mailto:",value,sizeof("mailto:")-1)) {
-        value = chxj_encoding_parameter(hdml->doc->r, value);
+        value = chxj_encoding_parameter(hdml->doc->r, value, 0);
         s_output_to_hdml_out(hdml, " TASK=GO DEST=\""     );
         s_output_to_hdml_out(hdml, value                  );
         s_output_to_hdml_out(hdml, "\" "                  );
@@ -1264,7 +1264,7 @@ s_hdml_start_form_tag(void *pdoc, Node *node)
     char *name  = qs_get_attr_name(doc,attr);
     char *value = qs_get_attr_value(doc,attr);
     if (STRCASEEQ('a','A',"action",name)) {
-      value = chxj_encoding_parameter(hdml->doc->r, value);
+      value = chxj_encoding_parameter(hdml->doc->r, value, 0);
       act = apr_psprintf(r->pool, "%s", value);
       break;
     }
@@ -1493,7 +1493,7 @@ s_hdml_do_input_text_tag(hdml_t *hdml, Node *tag)
   is   = qs_get_istyle_attr     (doc, tag, r->pool);
   val  = qs_get_value_attr      (doc, tag, r->pool);
 
-  fmt  = qs_conv_istyle_to_format(r, is);
+  fmt  = qs_conv_istyle_to_format(r->pool, is);
   DBG(r,"qs_conv_istyle_to_format end");
         
   if (fmt) {
@@ -2020,7 +2020,7 @@ s_hdml_do_input_checkbox_tag(hdml_t *hdml, Node *tag)
  * @return The ISTYLE attribute converted into the HDML form is returned. 
  */
 char *
-qs_conv_istyle_to_format(request_rec *r, char *is)
+qs_conv_istyle_to_format(apr_pool_t *p, char *is)
 {
   char *fmt;
 
@@ -2029,19 +2029,19 @@ qs_conv_istyle_to_format(request_rec *r, char *is)
   
   switch(*is) {
   case '1':
-    fmt = apr_psprintf(r->pool, "M");
+    fmt = apr_psprintf(p, "M");
     break;
   case '2':
-    fmt = apr_psprintf(r->pool, "M");
+    fmt = apr_psprintf(p, "M");
     break;
   case '3':
-    fmt = apr_psprintf(r->pool, "m");
+    fmt = apr_psprintf(p, "m");
     break;
   case '4':
-    fmt = apr_psprintf(r->pool, "N");
+    fmt = apr_psprintf(p, "N");
     break;
   default:
-    return NULL;
+    return apr_pstrdup(p, "M");
   }
 
   return fmt;
@@ -2256,7 +2256,7 @@ s_hdml_start_img_tag(void *pdoc, Node *node)
     char *name  = qs_get_attr_name(doc,attr);
     char *value = qs_get_attr_value(doc,attr);
     if (STRCASEEQ('s','S',"src",name) && value && *value) {
-      value = chxj_encoding_parameter(hdml->doc->r, value);
+      value = chxj_encoding_parameter(hdml->doc->r, value, 0);
       out = apr_pstrcat(doc->r->pool, out, " src=\"", NULL);
 #ifdef IMG_NOT_CONVERT_FILENAME
       out = apr_pstrcat(doc->r->pool, out, value, NULL);
@@ -3364,7 +3364,7 @@ s_hdml_start_textarea_tag(void *pdoc, Node *node)
   is   = qs_get_istyle_attr     (doc, node, r->pool);
   val  = s_hdml_inner_textarea_tag_get_value(hdml, node);
 
-  fmt  = qs_conv_istyle_to_format(r, is);
+  fmt  = qs_conv_istyle_to_format(r->pool, is);
   if (fmt) {
     if (mlen) {
       for (ii=0; ii<strlen(mlen); ii++) {
