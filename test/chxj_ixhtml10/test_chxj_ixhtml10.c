@@ -21687,7 +21687,7 @@ void test_ixhtml10_hr_tag_with_css_005()
 #define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>" \
                        "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">" \
                        "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
-                       "<head></head><body><hr style=\"width:10px;\" />あいう</div></body></html>"
+                       "<head></head><body><hr style=\"width:10px;\" />あいう</body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
