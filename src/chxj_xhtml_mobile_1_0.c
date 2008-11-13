@@ -710,6 +710,7 @@ s_xhtml_1_0_start_html_tag(void *pdoc, Node *node)
     }
   }
   W_L(">");
+  xhtml->start_html_flag = 1;
   return xhtml->out;
 }
 
@@ -4990,7 +4991,9 @@ s_xhtml_1_0_newline_mark(void *pdoc, Node *UNUSED(node))
 {
   xhtml_t *xhtml = GET_XHTML(pdoc);
   Doc *doc = xhtml->doc;
-  W_NLCODE();
+  if (xhtml->start_html_flag) {
+    W_NLCODE();
+  }
   return xhtml->out;
 }
 
