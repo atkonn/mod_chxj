@@ -40,6 +40,8 @@ struct xhtml_t {
   cookie_t            *cookie;
   css_stylesheet_t    *style;
   css_prop_list_stack_t *css_prop_stack;
+
+  int                 start_html_flag;
 };
 
 typedef struct _xhtml_flags_t xhtml_flags_t;
