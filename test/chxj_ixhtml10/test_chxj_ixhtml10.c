@@ -32615,8 +32615,12 @@ void test_ixhtml10_nlmark_001()
 
 void test_ixhtml10_nlmark_002()
 {
-#define  TEST_STRING   "<div>\n</div>"
-#define  RESULT_STRING "<div>\r\n</div>"
+#define  TEST_STRING   "<html><div>\n</div></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>\r\n" \
+                       "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">\r\n" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<div>\r\n</div>" \
+                       "</html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -32652,8 +32656,12 @@ void test_ixhtml10_nlmark_002()
 }
 void test_ixhtml10_nlmark_003()
 {
-#define  TEST_STRING   "<div>\n</div>"
-#define  RESULT_STRING "<div>\r</div>"
+#define  TEST_STRING   "<html><div>\n</div></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>\r" \
+                       "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">\r" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<div>\r</div>" \
+                       "</html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -32690,8 +32698,12 @@ void test_ixhtml10_nlmark_003()
 
 void test_ixhtml10_nlmark_004()
 {
-#define  TEST_STRING   "<div>\n</div>"
-#define  RESULT_STRING "<div>\n</div>"
+#define  TEST_STRING   "<html><div>\n</div></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>\n" \
+                       "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">\n" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<div>\n</div>" \
+                       "</html>"
   char  *ret;
   char  *tmp;
   device_table spec;

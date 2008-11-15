@@ -1204,10 +1204,10 @@ chxj_css_rgb_func_to_value(apr_pool_t *pool, const char *rgb_func_string)
     }
     if (blue && (pstat = strchr(blue, '%'))) {
       *pstat = 0;
+      blue_per_flag = 1;
     }
     else {
       blue = "0";
-      blue_per_flag = 1;
     }
     double d_red   = (double)chxj_atoi(red);
     double d_green = (double)chxj_atoi(green);
