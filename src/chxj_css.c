@@ -1244,6 +1244,126 @@ chxj_css_rgb_func_to_value(apr_pool_t *pool, const char *rgb_func_string)
       return apr_psprintf(pool, "#%02x%02x%02x", ired * 0x0f + ired, igreen * 0x0f + igreen, iblue * 0x0f + iblue);
     }
   }
+  else {
+    switch(*s) {
+    case 'a':
+    case 'A':
+      if (STRCASEEQ('q','Q', &s[1], "qua")) {
+        /* aqua */
+        return apr_pstrdup(pool, "#00ffff");
+      }
+      break;
+    case 'b':
+    case 'B':
+      if (s[1] == 'l' || s[1] == 'L') {
+        if (s[2] == 'a' || s[2] == 'A') {
+          if (STRCASEEQ('c','C',&s[3], "ck")) {
+            /* black */
+            return apr_pstrdup(pool, "#000000");
+          }
+        }
+        else if (s[2] == 'u' || s[2] == 'U') {
+          if (s[3] == 'e' || s[3] == 'E') {
+            /* blue */
+            return apr_pstrdup(pool, "#0000ff");
+          }
+        }
+      }
+      break;
+    case 'f':
+    case 'F':
+      if (STRCASEEQ('u','U',&s[1], "uchsia")) {
+        /* fuchsia */
+        return apr_pstrdup(pool, "#ff00ff");
+      }
+      break;
+    case 'g':
+    case 'G':
+      if (s[1] == 'r'||s[1] == 'R') {
+        if (STRCASEEQ('a','A', &s[2], "ay")) {
+          /* gray */
+          return apr_pstrdup(pool, "#808080");
+        }
+        else if (STRCASEEQ('e','E',&s[2], "een")) {
+          /* green */
+          return apr_pstrdup(pool, "#008000");
+        }
+      }
+      break;
+    case 'l':
+    case 'L':
+      if (STRCASEEQ('i','I', &s[1], "ime")) {
+        /* lime */
+        return apr_pstrdup(pool, "#00ff00");
+      }
+      break;
+    case 'm':
+    case 'M':
+      if (STRCASEEQ('a','A', &s[1], "aroon")) {
+        /* maroon */
+        return apr_pstrdup(pool, "#800000");
+      }
+      break;
+    case 'n':
+    case 'N':
+      if (STRCASEEQ('a','A', &s[1], "avy")) {
+        /* navy */
+        return apr_pstrdup(pool, "#000080");
+      }
+      break;
+    case 'o':
+    case 'O':
+      if (STRCASEEQ('l','L', &s[1], "live")) {
+        /* olive */
+        return apr_pstrdup(pool, "#808000");
+      }
+      break;
+    case 'p':
+    case 'P':
+      if (STRCASEEQ('u','U', &s[1], "urple")) {
+        /* purple */
+        return apr_pstrdup(pool, "#800080");
+      }
+      break;
+    case 'r':
+    case 'R':
+      if (STRCASEEQ('e','E', &s[1], "ed")) {
+        /* red */
+        return apr_pstrdup(pool, "#ff0000");
+      }
+      break;
+    case 's':
+    case 'S':
+      if (STRCASEEQ('i','I', &s[1], "ilver")) {
+        /* silver */
+        return apr_pstrdup(pool, "#c0c0c0");
+      }
+      break;
+    case 't':
+    case 'T':
+      if (STRCASEEQ('e','E', &s[1], "eal")) {
+        /* teal */
+        return apr_pstrdup(pool, "#008080");
+      }
+      break;
+    case 'w':
+    case 'W':
+      if (STRCASEEQ('h','H', &s[1], "hite")) {
+        /* white */
+        return apr_pstrdup(pool, "#ffffff");
+      }
+      break;
+    case 'y':
+    case 'Y':
+      if (STRCASEEQ('y','Y', &s[1], "ellow")) {
+        /* yellow */
+        return apr_pstrdup(pool, "#ffff00");
+      }
+      break;
+    default:
+      break;
+    }
+  }
   return s;
 }
 
