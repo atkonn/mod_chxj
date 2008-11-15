@@ -3566,6 +3566,7 @@ s_xhtml_1_0_start_div_tag(void *pdoc, Node *node)
   char        *attr_wap_marquee_dir   = NULL;
   char        *attr_wap_marquee_loop  = NULL;
   char        *attr_color             = NULL;
+  char        *attr_bgcolor           = NULL;
   char        *attr_font_size         = NULL;
 
   for (attr = qs_get_attr(doc,node);
@@ -3594,6 +3595,8 @@ s_xhtml_1_0_start_div_tag(void *pdoc, Node *node)
       css_property_t *color_prop             = chxj_css_get_property_value(doc, style, "color");
       css_property_t *text_align_prop        = chxj_css_get_property_value(doc, style, "text-align");
       css_property_t *font_size_prop         = chxj_css_get_property_value(doc, style, "font-size");
+      css_property_t *background_color_prop  = chxj_css_get_property_value(doc, style, "background-color");
+      css_property_t *background_prop        = chxj_css_get_property_value(doc, style, "background");
 
       css_property_t *cur;
       for (cur = display_prop->next; cur != display_prop; cur = cur->next) {
@@ -3604,6 +3607,17 @@ s_xhtml_1_0_start_div_tag(void *pdoc, Node *node)
       for (cur = text_decoration_prop->next; cur != text_decoration_prop; cur = cur->next) {
         if (STRCASEEQ('b','B',"blink", cur->value)) {
           attr_decoration = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+      for (cur = background_color_prop->next; cur != background_color_prop; cur = cur->next) {
+        attr_bgcolor = apr_pstrdup(doc->pool, cur->value);
+        attr_bgcolor = chxj_css_rgb_func_to_value(doc->pool, attr_bgcolor);
+      }
+      for (cur = background_prop->next; cur != background_prop; cur = cur->next) {
+        char *ss = strchr(cur->value, '#');
+        if (ss) {
+          attr_bgcolor = apr_pstrdup(doc->pool, cur->value);
+          attr_bgcolor = chxj_css_rgb_func_to_value(doc->pool, attr_bgcolor);
         }
       }
       for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
@@ -3647,7 +3661,15 @@ s_xhtml_1_0_start_div_tag(void *pdoc, Node *node)
     }
   }  
   W_L("<div");
-  if (attr_align || attr_display || attr_decoration || attr_wap_marquee_style || attr_wap_marquee_dir || attr_wap_marquee_loop || attr_color || attr_font_size) {
+  if (attr_align
+      || attr_display
+      || attr_decoration
+      || attr_wap_marquee_style
+      || attr_wap_marquee_dir
+      || attr_wap_marquee_loop
+      || attr_color
+      || attr_bgcolor
+      || attr_font_size) {
     W_L(" style=\"");
     if (attr_align) {
       W_L("text-align:");
@@ -3682,6 +3704,11 @@ s_xhtml_1_0_start_div_tag(void *pdoc, Node *node)
     if (attr_color) {
       W_L("color:");
       W_V(attr_color);
+      W_L(";");
+    }
+    if (attr_bgcolor) {
+      W_L("background-color:");
+      W_V(attr_bgcolor);
       W_L(";");
     }
     if (attr_font_size) {
