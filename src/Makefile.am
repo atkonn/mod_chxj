@@ -40,6 +40,7 @@ libmod_chxj_la_SOURCES = mod_chxj.c \
     chxj_buffered_write.c \
     chxj_apache.c \
     chxj_serf.c \
+    chxj_dump_string.c \
     chxj_css.c
 
 

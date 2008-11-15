@@ -64,6 +64,7 @@
 #include "chxj_cookie.h"
 #include "chxj_url_encode.h"
 #include "chxj_str_util.h"
+#include "chxj_dump_string.h"
 #if defined(USE_MYSQL_COOKIE)
 #  include "chxj_mysql.h"
 #endif
@@ -841,27 +842,6 @@ pass_data_to_filter(ap_filter_t *f, const char *data,
   DBG(r, "REQ[%X] end pass_data_to_filter()", (unsigned int)(apr_size_t)r);
 
   return rv;
-}
-
-/**
- * Dump string to debug log.
- */
-void
-chxj_dump_string(request_rec *r, const char *filename, int line, const char *title, const char *str, apr_size_t len)
-{
-  apr_size_t ii;
-  chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] +-------------------------------------------------------------------+", (unsigned int)(apr_size_t)r);
-  chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] |                                                                   |", (unsigned int)(apr_size_t)r);
-  chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] | %-*.*s |", (unsigned int)(apr_size_t)r, 64, 64, title);
-  chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] |                                                                   |", (unsigned int)(apr_size_t)r);
-  chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] +-------------------------------------------------------------------+", (unsigned int)(apr_size_t)r);
-  for (ii=0; ii<len/64; ii++) {
-    chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] | [%-*.*s] |", (unsigned int)(apr_size_t)r, 64, 64, &str[ii * 64]);
-  }
-  if (len % 64) {
-    chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] | [%-*.*s] |", (unsigned int)(apr_size_t)r, 64, 64, &str[ii * 64]);
-  }
-  chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] +-------------------------------------------------------------------+", (unsigned int)(apr_size_t)r);
 }
 
 /**

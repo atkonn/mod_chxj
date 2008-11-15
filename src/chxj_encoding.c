@@ -18,6 +18,7 @@
 #include "chxj_encoding.h"
 #include "chxj_apply_convrule.h"
 #include "chxj_url_encode.h"
+#include "chxj_dump_string.h"
 #include <errno.h>
 #include <iconv.h>
 

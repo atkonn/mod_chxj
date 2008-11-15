@@ -34,6 +34,7 @@
 #include "chxj_apache.c"
 #include "chxj_dbm.c"
 #include "chxj_str_util.c"
+#include "chxj_dump_string.c"
 #include <iconv.h>
 #include "chxj_serf.h"
 #include "chxj_css.h"
