@@ -4125,7 +4125,7 @@ void test_xhtml_form_tag_006()
 #define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Windows-31J\"?>" \
                        "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">" \
                        "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
-                       "<form action=\"\"></form></html>"
+                       "<form action=\"\"><input type=\"hidden\" name=\"_chxj_cc\" value=\"test_cookie_id\" /></form></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -4212,7 +4212,7 @@ void test_xhtml_form_tag_008()
 void test_xhtml_form_tag_009() 
 {
 #define  TEST_STRING "<form method=\"post\" action=\"hogehoge\"></form>"
-#define  RESULT_STRING "<form action=\"hogehoge\" method=\"post\"></form>"
+#define  RESULT_STRING "<form action=\"hogehoge\" method=\"post\"><input type=\"hidden\" name=\"_chxj_cc\" value=\"test_cookie_id\" /></form>"
   char  *ret;
   char  *tmp;
   device_table spec;
