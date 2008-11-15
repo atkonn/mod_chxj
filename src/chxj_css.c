@@ -1227,6 +1227,23 @@ chxj_css_rgb_func_to_value(apr_pool_t *pool, const char *rgb_func_string)
     char *ret = apr_psprintf(pool, "#%02x%02x%02x", (int)d_red, (int)d_green, (int)d_blue);
     return ret;
   }
+  else if (s[0] == '#') {
+    if (strlen(&s[1]) == 3) {
+      char red[2];
+      char green[2];
+      char blue[2];
+      red[0]   = s[1];
+      green[0] = s[2];
+      blue[0]  = s[3];
+      red[1]   = 0;
+      green[1] = 0;
+      blue[1]  = 0;
+      int ired   = chxj_atoi(red);
+      int igreen = chxj_atoi(green);
+      int iblue  = chxj_atoi(blue);
+      return apr_psprintf(pool, "#%02x%02x%02x", ired * 0x0f + ired, igreen * 0x0f + igreen, iblue * 0x0f + iblue);
+    }
+  }
   return s;
 }
 
