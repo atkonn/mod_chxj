@@ -1185,14 +1185,19 @@ chxj_css_rgb_func_to_value(apr_pool_t *pool, const char *rgb_func_string)
     char *red   = qs_trim_string(pool, apr_strtok(s, ",", &pstat));
     char *green = qs_trim_string(pool, apr_strtok(NULL, ",", &pstat));
     char *blue  = qs_trim_string(pool, apr_strtok(NULL, ",", &pstat));
+    int red_per_flag   = 0;
+    int green_per_flag = 0;
+    int blue_per_flag  = 0;
     if (red && (pstat = strchr(red, '%'))) {
       *pstat = 0;
+      red_per_flag = 1;
     }
     else {
       red = "0";
     }
     if (green && (pstat = strchr(green, '%'))) {
       *pstat = 0;
+      green_per_flag = 1;
     }
     else {
       green = "0";
@@ -1202,13 +1207,23 @@ chxj_css_rgb_func_to_value(apr_pool_t *pool, const char *rgb_func_string)
     }
     else {
       blue = "0";
+      blue_per_flag = 1;
     }
-    double d_red = ((double)chxj_atoi(red) / 100.0);
-    double d_green = ((double)chxj_atoi(green) / 100.0);
-    double d_blue = ((double)chxj_atoi(blue) / 100.0);
-    d_red   *= 255;
-    d_green *= 255;
-    d_blue  *= 255;
+    double d_red   = (double)chxj_atoi(red);
+    double d_green = (double)chxj_atoi(green);
+    double d_blue  = (double)chxj_atoi(blue);
+    if (red_per_flag) {
+      d_red   /= 100.0;
+      d_red   *= 255;
+    }
+    if (green_per_flag) {
+      d_green /= 100.0;
+      d_green *= 255;
+    }
+    if (blue_per_flag) {
+      d_blue  /= 100.0;
+      d_blue  *= 255;
+    }
     char *ret = apr_psprintf(pool, "#%02x%02x%02x", (int)d_red, (int)d_green, (int)d_blue);
     return ret;
   }
