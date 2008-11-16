@@ -450,8 +450,6 @@ extern char* chxj_node_convert(
   int          indent
 );
 
-extern void chxj_dump_string(request_rec *r, const char *filename, int line, const char *title, const char *str, apr_size_t len);
-
 #define IMAGE_CACHE_LIMIT_FMT_LEN  (20)
 
 

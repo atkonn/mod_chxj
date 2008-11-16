@@ -14,20 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef __CHXJ_STR_UTIL_H__
-#define __CHXJ_STR_UTIL_H__
+#ifndef __CHXJ_DUMP_STRING__
+#define __CHXJ_DUMP_STRING__
 
-#include <string.h>
-#include <apr_pools.h>
+extern void chxj_dump_string(request_rec *r, const char *filename, int line, const char *title, const char *str, apr_size_t len);
 
-extern int chxj_chk_numeric(const char *s);
-extern int chxj_atoi(const char *s);
-extern int chxj_axtoi(const char *s);
-extern int chxj_strcasenrcmp(apr_pool_t *p, const char *s1, const char *s2, int n);
-extern int chxj_starts_with(const char *str, const char *word);
-extern int chxj_strcount(const char *s, const char *str);
-extern char *chxj_add_slash_to_doublequote(apr_pool_t *pool, const char *str);
 #endif
-/*
- * vim:ts=2 et
- */

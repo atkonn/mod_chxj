@@ -631,6 +631,8 @@ s_jxhtml_start_html_tag(void *pdoc, Node *UNUSED(node))
   /*--------------------------------------------------------------------------*/
   W_L("<html>");
 
+  jxhtml->start_html_flag = 1;
+
   DBG(r, "end s_jxhtml_start_html_tag()");
 
   return jxhtml->out;
@@ -1723,7 +1725,7 @@ s_jxhtml_end_form_tag(void *pdoc, Node *node)
 static char *
 s_jxhtml_start_input_tag(void *pdoc, Node *node) 
 {
-  jxhtml_t     *jxhtml;
+  jxhtml_t    *jxhtml;
   Doc         *doc;
   request_rec *r;
   Attr        *attr;
@@ -1737,7 +1739,7 @@ s_jxhtml_start_input_tag(void *pdoc, Node *node)
   char        *attr_checked    = NULL;
   char        *attr_style      = NULL;
 
-  jxhtml = GET_JXHTML(pdoc);
+  jxhtml  = GET_JXHTML(pdoc);
   doc     = jxhtml->doc;
   r       = doc->r;
 
@@ -1840,19 +1842,25 @@ s_jxhtml_start_input_tag(void *pdoc, Node *node)
     /* CHTML 2.0                                                              */
     /*------------------------------------------------------------------------*/
     if (attr_type && STRCASEEQ('p','P',"password", attr_type) && ! jxhtml->entryp->pc_flag ) {
-      W_L(" style=\"-wap-input-format:&quot;*&lt;ja:n&gt;&quot;;\"");
+      char *vv = qs_conv_istyle_to_format(doc->buf.pool, "4");
+      W_L(" style=\"-wap-input-format:&quot;*");
+      W_V(vv);
+      W_L("&quot;;\"");
     }
     else {
       char *vv = qs_conv_istyle_to_format(doc->buf.pool, attr_istyle);
       W_L(" style=\"");
-      W_L("-wap-input-format:'*");
+      W_L("-wap-input-format:&quot;*");
       W_V(vv);
-      W_L("';");
+      W_L("&quot;;");
       W_L("\"");
     }
   }
   else if (attr_type && STRCASEEQ('p','P',"password",attr_type)) {
-    W_L(" style=\"-wap-input-format:&quot;*&lt;ja:n&gt;&quot;;\"");
+    char *vv = qs_conv_istyle_to_format(doc->buf.pool, "4");
+    W_L(" style=\"-wap-input-format:&quot;*");
+    W_V(vv);
+    W_L("&quot;;\"");
   }
   /*--------------------------------------------------------------------------*/
   /* The figure is default for the password.                                  */
@@ -3166,6 +3174,7 @@ s_jxhtml_start_div_tag(void *pdoc, Node *node)
   char        *attr_wap_marquee_dir   = NULL;
   char        *attr_wap_marquee_loop  = NULL;
   char        *attr_color             = NULL;
+  char        *attr_bgcolor           = NULL;
   char        *attr_font_size         = NULL;
 
   jxhtml = GET_JXHTML(pdoc);
@@ -3198,6 +3207,8 @@ s_jxhtml_start_div_tag(void *pdoc, Node *node)
       css_property_t *color_prop             = chxj_css_get_property_value(doc, style, "color");
       css_property_t *text_align_prop        = chxj_css_get_property_value(doc, style, "text-align");
       css_property_t *font_size_prop         = chxj_css_get_property_value(doc, style, "font-size");
+      css_property_t *background_color_prop  = chxj_css_get_property_value(doc, style, "background-color");
+      css_property_t *background_prop        = chxj_css_get_property_value(doc, style, "background");
 
       css_property_t *cur;
       for (cur = display_prop->next; cur != display_prop; cur = cur->next) {
@@ -3212,6 +3223,20 @@ s_jxhtml_start_div_tag(void *pdoc, Node *node)
       }
       for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
         attr_color = apr_pstrdup(doc->pool, cur->value);
+      }
+      for (cur = background_color_prop->next; cur != background_color_prop; cur = cur->next) {
+        attr_bgcolor = apr_pstrdup(doc->pool, cur->value);
+        attr_bgcolor = chxj_css_rgb_func_to_value(doc->pool, attr_bgcolor);
+      }
+      for (cur = background_prop->next; cur != background_prop; cur = cur->next) {
+        char *ss = strchr(cur->value, '#');
+        if (!ss || !*ss) {
+          ss = strstr(cur->value, "rgb");
+        }
+        if (ss && *ss) {
+          attr_bgcolor = apr_pstrdup(doc->pool, cur->value);
+          attr_bgcolor = chxj_css_rgb_func_to_value(doc->pool, attr_bgcolor);
+        }
       }
       for (cur = text_align_prop->next; cur != text_align_prop; cur = cur->next) {
         attr_align = apr_pstrdup(doc->pool, cur->value);
@@ -3251,7 +3276,15 @@ s_jxhtml_start_div_tag(void *pdoc, Node *node)
     }
   }  
   W_L("<div");
-  if (attr_align || attr_display || attr_decoration || attr_wap_marquee_style || attr_wap_marquee_dir || attr_wap_marquee_loop || attr_color || attr_font_size) {
+  if (attr_align
+      || attr_display
+      || attr_decoration
+      || attr_wap_marquee_style
+      || attr_wap_marquee_dir
+      || attr_wap_marquee_loop
+      || attr_color
+      || attr_bgcolor
+      || attr_font_size) {
     W_L(" style=\"");
     if (attr_align) {
       W_L("text-align:");
@@ -3286,6 +3319,11 @@ s_jxhtml_start_div_tag(void *pdoc, Node *node)
     if (attr_color) {
       W_L("color:");
       W_V(attr_color);
+      W_L(";");
+    }
+    if (attr_bgcolor) {
+      W_L("background-color:");
+      W_V(attr_bgcolor);
       W_L(";");
     }
     if (attr_font_size) {
@@ -3446,9 +3484,9 @@ s_jxhtml_start_textarea_tag(void *pdoc, Node *node)
   if (attr_istyle) {
     char *vv = qs_conv_istyle_to_format(doc->buf.pool, attr_istyle);
     W_L(" style=\"");
-    W_L("-wap-input-format:'*");
+    W_L("-wap-input-format:&quot;*");
     W_V(vv);
-    W_L("';");
+    W_L("&quot;;");
     W_L("\"");
   }
   W_L(">");
@@ -5150,8 +5188,10 @@ static char *
 s_jxhtml_newline_mark(void *pdoc, Node *UNUSED(node))
 {
   jxhtml_t *jxhtml = GET_JXHTML(pdoc);
-  Doc *doc = jxhtml->doc;
-  W_NLCODE();
+  if (jxhtml->start_html_flag) {
+    Doc *doc = jxhtml->doc;
+    W_NLCODE();
+  }
   return jxhtml->out;
 }
 
