@@ -9295,7 +9295,7 @@ void test_jxhtml_input_tag_045()
 void test_jxhtml_input_tag_046()
 {
 #define  TEST_STRING "<input istyle=\"4\" maxlength=\"10\">"
-#define  RESULT_STRING "<input style=\"-wap-input-format:&quot;*&lt;ja:n&gt;&quot;;\" maxlength=\"10\" />"
+#define  RESULT_STRING "<input style=\"-wap-input-format:&quot;*N&quot;;\" maxlength=\"10\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
