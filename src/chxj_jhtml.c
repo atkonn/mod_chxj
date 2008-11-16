@@ -3089,7 +3089,9 @@ s_jhtml_start_div_tag(void *pdoc, Node *node)
     W_L(">");
     flg->with_div_flag = 1;
   }
-  if (attr_color || attr_font_size) {
+  if ((attr_color
+      && ! ((STRCASEEQ('w','W',"white",attr_color) || STRCASEEQ('#','#',"#ffffff",attr_color)) && attr_bgcolor))
+      || attr_font_size) {
     W_L("<font");
     if (attr_color) {
       W_L(" color=\"");
