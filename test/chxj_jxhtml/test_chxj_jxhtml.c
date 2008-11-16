@@ -12520,7 +12520,7 @@ void test_jxhtml_textarea_tag_021()
 void test_jxhtml_textarea_tag_022() 
 {
 #define  TEST_STRING "<textarea istyle=\"1\"></textarea>"
-#define  RESULT_STRING "<textarea style=\"-wap-input-format:&quot;*&lt;ja:h&gt;&quot;;\"></textarea>"
+#define  RESULT_STRING "<textarea style=\"-wap-input-format:&quot;*M&quot;;\"></textarea>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -12550,7 +12550,7 @@ void test_jxhtml_textarea_tag_022()
 void test_jxhtml_textarea_tag_023() 
 {
 #define  TEST_STRING "<textarea istyle=\"2\"></textarea>"
-#define  RESULT_STRING "<textarea style=\"-wap-input-format:&quot;*&lt;ja:hk&gt;&quot;;\"></textarea>"
+#define  RESULT_STRING "<textarea style=\"-wap-input-format:&quot;*M&quot;;\"></textarea>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -12580,7 +12580,7 @@ void test_jxhtml_textarea_tag_023()
 void test_jxhtml_textarea_tag_024() 
 {
 #define  TEST_STRING "<textarea istyle=\"3\"></textarea>"
-#define  RESULT_STRING "<textarea style=\"-wap-input-format:&quot;*&lt;ja:en&gt;&quot;;\"></textarea>"
+#define  RESULT_STRING "<textarea style=\"-wap-input-format:&quot;*m&quot;;\"></textarea>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -12610,7 +12610,7 @@ void test_jxhtml_textarea_tag_024()
 void test_jxhtml_textarea_tag_025() 
 {
 #define  TEST_STRING "<textarea istyle=\"4\"></textarea>"
-#define  RESULT_STRING "<textarea style=\"-wap-input-format:&quot;*&lt;ja:n&gt;&quot;;\"></textarea>"
+#define  RESULT_STRING "<textarea style=\"-wap-input-format:&quot;*N&quot;;\"></textarea>"
   char  *ret;
   char  *tmp;
   device_table spec;
