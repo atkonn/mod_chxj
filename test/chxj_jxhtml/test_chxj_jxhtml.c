@@ -15345,7 +15345,9 @@ void test_jxhtml_textarea_tag_with_css_004()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><body><textarea></textarea></body></html>"
-#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\"><html><head></head><body><div><textarea style=\"-wap-input-format:&quot;*&lt;ja:n&gt;&quot;;\"></textarea></div></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?>" \
+                       "<!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
+                       "<html><head></head><body><div><textarea style=\"-wap-input-format:&quot;*N&quot;;\"></textarea></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -15365,8 +15367,8 @@ void test_jxhtml_textarea_tag_with_css_004()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_jxhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
-fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  fprintf(stderr, "actual:[%s]\n", ret);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -15385,7 +15387,9 @@ void test_jxhtml_textarea_tag_with_css_005()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><body><textarea style=\"-wap-input-format: &quot;*&lt;ja:h&gt;&quot;\"></textarea></body></html>"
-#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\"><html><head></head><body><div><textarea style=\"-wap-input-format:&quot;*&lt;ja:h&gt;&quot;;\"></textarea></div></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?>" \
+                       "<!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
+                       "<html><head></head><body><div><textarea style=\"-wap-input-format:&quot;*M&quot;;\"></textarea></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -15405,6 +15409,8 @@ void test_jxhtml_textarea_tag_with_css_005()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_jxhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -15418,7 +15424,9 @@ void test_jxhtml_textarea_tag_with_css_006()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><body><textarea style=\"-wap-input-format: &quot;*&lt;ja:hk&gt;&quot;\"></textarea></body></html>"
-#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\"><html><head></head><body><div><textarea style=\"-wap-input-format:&quot;*&lt;ja:hk&gt;&quot;;\"></textarea></div></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?>" \
+                       "<!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
+                       "<html><head></head><body><div><textarea style=\"-wap-input-format:&quot;*M&quot;;\"></textarea></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -15438,12 +15446,12 @@ void test_jxhtml_textarea_tag_with_css_006()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_jxhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  fprintf(stderr, "actual:[%s]\n", ret);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
   CU_ASSERT(call_check == 0);
-  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-  fprintf(stderr, "actual:[%s]\n", ret);
 
   APR_TERM;
 #undef TEST_STRING
