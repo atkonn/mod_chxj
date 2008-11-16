@@ -1723,7 +1723,7 @@ s_jxhtml_end_form_tag(void *pdoc, Node *node)
 static char *
 s_jxhtml_start_input_tag(void *pdoc, Node *node) 
 {
-  jxhtml_t     *jxhtml;
+  jxhtml_t    *jxhtml;
   Doc         *doc;
   request_rec *r;
   Attr        *attr;
@@ -1737,7 +1737,7 @@ s_jxhtml_start_input_tag(void *pdoc, Node *node)
   char        *attr_checked    = NULL;
   char        *attr_style      = NULL;
 
-  jxhtml = GET_JXHTML(pdoc);
+  jxhtml  = GET_JXHTML(pdoc);
   doc     = jxhtml->doc;
   r       = doc->r;
 
@@ -1840,19 +1840,25 @@ s_jxhtml_start_input_tag(void *pdoc, Node *node)
     /* CHTML 2.0                                                              */
     /*------------------------------------------------------------------------*/
     if (attr_type && STRCASEEQ('p','P',"password", attr_type) && ! jxhtml->entryp->pc_flag ) {
-      W_L(" style=\"-wap-input-format:&quot;*&lt;ja:n&gt;&quot;;\"");
+      char *vv = qs_conv_istyle_to_format(doc->buf.pool, "4");
+      W_L(" style=\"-wap-input-format:&quot;*");
+      W_V(vv);
+      W_L("&quot;;\"");
     }
     else {
       char *vv = qs_conv_istyle_to_format(doc->buf.pool, attr_istyle);
       W_L(" style=\"");
-      W_L("-wap-input-format:'*");
+      W_L("-wap-input-format:&quot;*");
       W_V(vv);
-      W_L("';");
+      W_L("&quot;;");
       W_L("\"");
     }
   }
   else if (attr_type && STRCASEEQ('p','P',"password",attr_type)) {
-    W_L(" style=\"-wap-input-format:&quot;*&lt;ja:n&gt;&quot;;\"");
+    char *vv = qs_conv_istyle_to_format(doc->buf.pool, "4");
+    W_L(" style=\"-wap-input-format:&quot;*");
+    W_V(vv);
+    W_L("&quot;;\"");
   }
   /*--------------------------------------------------------------------------*/
   /* The figure is default for the password.                                  */

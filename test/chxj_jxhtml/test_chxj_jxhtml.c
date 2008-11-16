@@ -39,6 +39,7 @@
 #include "chxj_css.h"
 #include "chxj_serf.c"
 #include "chxj_css.c"
+#include "chxj_dump_string.c"
 
 
 
@@ -8064,7 +8065,7 @@ void test_jxhtml_input_tag_004()
 void test_jxhtml_input_tag_005() 
 {
 #define  TEST_STRING "<input type=\"password\">"
-#define  RESULT_STRING "<input type=\"password\" style=\"-wap-input-format:&quot;*&lt;ja:n&gt;&quot;;\" />"
+#define  RESULT_STRING "<input type=\"password\" style=\"-wap-input-format:&quot;*N&quot;;\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -9024,7 +9025,7 @@ void test_jxhtml_input_tag_036()
 void test_jxhtml_input_tag_037() 
 {
 #define  TEST_STRING "<input istyle=\"1\">"
-#define  RESULT_STRING "<input style=\"-wap-input-format:&quot;*&lt;ja:h&gt;&quot;;\" />"
+#define  RESULT_STRING "<input style=\"-wap-input-format:&quot;*M&quot;;\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
