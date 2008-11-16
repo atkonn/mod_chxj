@@ -15462,7 +15462,9 @@ void test_jxhtml_textarea_tag_with_css_007()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><body><textarea style=\"-wap-input-format: &quot;*&lt;ja:en&gt;&quot;;\"></textarea></body></html>"
-#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\"><html><head></head><body><div><textarea style=\"-wap-input-format:&quot;*&lt;ja:en&gt;&quot;;\"></textarea></div></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?>" \
+                       "<!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
+                       "<html><head></head><body><div><textarea style=\"-wap-input-format:&quot;*m&quot;;\"></textarea></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -15482,6 +15484,8 @@ void test_jxhtml_textarea_tag_with_css_007()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_jxhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -15496,7 +15500,9 @@ void test_jxhtml_textarea_tag_with_css_008()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><body><textarea style=\"-wap-input-format: &quot;*&lt;ja:n&gt;&quot;;\"></textarea></body></html>"
-#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?><!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\"><html><head></head><body><div><textarea style=\"-wap-input-format:&quot;*&lt;ja:n&gt;&quot;;\"></textarea></div></body></html>"
+#define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?>" \
+                       "<!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
+                       "<html><head></head><body><div><textarea style=\"-wap-input-format:&quot;*N&quot;;\"></textarea></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -15516,8 +15522,8 @@ void test_jxhtml_textarea_tag_with_css_008()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_jxhtml(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
-fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
-fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  fprintf(stderr, "actual:[%s]\n", ret);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -19853,7 +19859,7 @@ void test_jxhtml_input_tag_with_css_001()
                      "</head><form><input type=\"text\"></form></html>"
 #define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?>" \
                        "<!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
-                       "<html><head></head><form><input type=\"text\" style=\"-wap-input-format:&quot;*&lt;ja:h&gt;&quot;;\" /></form></html>"
+                       "<html><head></head><form><input type=\"text\" style=\"-wap-input-format:&quot;*M&quot;;\" /></form></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -19890,7 +19896,7 @@ void test_jxhtml_input_tag_with_css_002()
                      "</head><form><input type=\"text\" style=\"-wap-input-format: &quot;*&lt;ja:h&gt;&quot;\"></form></html>"
 #define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?>" \
                        "<!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
-                       "<html><head></head><form><input type=\"text\" style=\"-wap-input-format:&quot;*&lt;ja:h&gt;&quot;;\" /></form></html>"
+                       "<html><head></head><form><input type=\"text\" style=\"-wap-input-format:&quot;*M&quot;;\" /></form></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -19938,7 +19944,7 @@ void test_jxhtml_input_tag_with_css_003()
                      "</head><form><input type=\"text\"></form></html>"
 #define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?>" \
                        "<!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
-                       "<html><head></head><form><input type=\"text\" style=\"-wap-input-format:&quot;*&lt;ja:hk&gt;&quot;;\" /></form></html>"
+                       "<html><head></head><form><input type=\"text\" style=\"-wap-input-format:&quot;*M&quot;;\" /></form></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -19975,7 +19981,7 @@ void test_jxhtml_input_tag_with_css_004()
                      "</head><form><input type=\"text\" style=\"-wap-input-format: &quot;*&lt;ja:hk&gt;&quot;\"></form></html>"
 #define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?>" \
                        "<!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
-                       "<html><head></head><form><input type=\"text\" style=\"-wap-input-format:&quot;*&lt;ja:hk&gt;&quot;;\" /></form></html>"
+                       "<html><head></head><form><input type=\"text\" style=\"-wap-input-format:&quot;*M&quot;;\" /></form></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -20023,7 +20029,7 @@ void test_jxhtml_input_tag_with_css_005()
                      "</head><form><input type=\"text\"></form></html>"
 #define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?>" \
                        "<!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
-                       "<html><head></head><form><input type=\"text\" style=\"-wap-input-format:&quot;*&lt;ja:en&gt;&quot;;\" /></form></html>"
+                       "<html><head></head><form><input type=\"text\" style=\"-wap-input-format:&quot;*m&quot;;\" /></form></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -20060,7 +20066,7 @@ void test_jxhtml_input_tag_with_css_006()
                      "</head><form><input type=\"text\" style=\"-wap-input-format: &quot;*&lt;ja:en&gt;&quot;\"></form></html>"
 #define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?>" \
                        "<!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
-                       "<html><head></head><form><input type=\"text\" style=\"-wap-input-format:&quot;*&lt;ja:en&gt;&quot;;\" /></form></html>"
+                       "<html><head></head><form><input type=\"text\" style=\"-wap-input-format:&quot;*m&quot;;\" /></form></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -20108,7 +20114,7 @@ void test_jxhtml_input_tag_with_css_007()
                      "</head><form><input type=\"text\"></form></html>"
 #define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?>" \
                        "<!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
-                       "<html><head></head><form><input type=\"text\" style=\"-wap-input-format:&quot;*&lt;ja:n&gt;&quot;;\" /></form></html>"
+                       "<html><head></head><form><input type=\"text\" style=\"-wap-input-format:&quot;*N&quot;;\" /></form></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -20145,7 +20151,7 @@ void test_jxhtml_input_tag_with_css_008()
                      "</head><form><input type=\"text\" style=\"-wap-input-format: &quot;*&lt;ja:n&gt;&quot;;\"></form></html>"
 #define  RESULT_STRING "<?xml version='1.0' encoding='Shift_JIS' ?>" \
                        "<!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">" \
-                       "<html><head></head><form><input type=\"text\" style=\"-wap-input-format:&quot;*&lt;ja:n&gt;&quot;;\" /></form></html>"
+                       "<html><head></head><form><input type=\"text\" style=\"-wap-input-format:&quot;*N&quot;;\" /></form></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
