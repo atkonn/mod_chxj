@@ -631,6 +631,8 @@ s_jxhtml_start_html_tag(void *pdoc, Node *UNUSED(node))
   /*--------------------------------------------------------------------------*/
   W_L("<html>");
 
+  jxhtml->start_html_flag = 1;
+
   DBG(r, "end s_jxhtml_start_html_tag()");
 
   return jxhtml->out;
@@ -5183,8 +5185,10 @@ static char *
 s_jxhtml_newline_mark(void *pdoc, Node *UNUSED(node))
 {
   jxhtml_t *jxhtml = GET_JXHTML(pdoc);
-  Doc *doc = jxhtml->doc;
-  W_NLCODE();
+  if (jxhtml->start_html_flag) {
+    Doc *doc = jxhtml->doc;
+    W_NLCODE();
+  }
   return jxhtml->out;
 }
 
