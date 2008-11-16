@@ -3230,7 +3230,10 @@ s_jxhtml_start_div_tag(void *pdoc, Node *node)
       }
       for (cur = background_prop->next; cur != background_prop; cur = cur->next) {
         char *ss = strchr(cur->value, '#');
-        if (ss) {
+        if (!ss || !*ss) {
+          ss = strstr(cur->value, "rgb");
+        }
+        if (ss && *ss) {
           attr_bgcolor = apr_pstrdup(doc->pool, cur->value);
           attr_bgcolor = chxj_css_rgb_func_to_value(doc->pool, attr_bgcolor);
         }
