@@ -9085,7 +9085,7 @@ void test_jxhtml_input_tag_038()
 void test_jxhtml_input_tag_039() 
 {
 #define  TEST_STRING "<input istyle=\"3\">"
-#define  RESULT_STRING "<input style=\"-wap-input-format:&quot;*&lt;ja:en&gt;&quot;;\" />"
+#define  RESULT_STRING "<input style=\"-wap-input-format:&quot;*m&quot;;\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -9115,7 +9115,7 @@ void test_jxhtml_input_tag_039()
 void test_jxhtml_input_tag_040() 
 {
 #define  TEST_STRING "<input istyle=\"4\">"
-#define  RESULT_STRING "<input style=\"-wap-input-format:&quot;*&lt;ja:n&gt;&quot;;\" />"
+#define  RESULT_STRING "<input style=\"-wap-input-format:&quot;*N&quot;;\" />"
   char  *ret;
   char  *tmp;
   device_table spec;
