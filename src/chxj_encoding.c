@@ -39,7 +39,7 @@ chxj_encoding(request_rec *r, const char *src, apr_size_t *len)
   apr_pool_t          *pool;
 
 
-  DBG(r,"start chxj_encoding()");
+  DBG(r,"REQ[%X] start chxj_encoding()", (unsigned int)(apr_size_t)r);
 
   dconf = chxj_get_module_config(r->per_dir_config, &chxj_module);
 
@@ -72,6 +72,7 @@ chxj_encoding(request_rec *r, const char *src, apr_size_t *len)
   ibuf = apr_palloc(pool, ilen+1);
   if (ibuf == NULL) {
     ERR(r, "runtime exception: chxj_encoding(): Out of memory.");
+    DBG(r,"REQ[%X] end chxj_encoding()", (unsigned int)(apr_size_t)r);
     return (char *)src;
   }
   memset(ibuf, 0, ilen+1);
@@ -135,37 +136,38 @@ chxj_rencoding(request_rec *r, const char *src, apr_size_t *len)
   mod_chxj_config     *dconf;
   chxjconvrule_entry  *entryp;
 
-  DBG(r,"start chxj_rencoding()");
+  DBG(r,"REQ[%X] start chxj_rencoding()", (unsigned int)(apr_size_t)r);
 
   if ((int)*len < 0) {
     ERR(r, "runtime exception: chxj_rencoding(): invalid string size.[%d]", (int)*len);
+    DBG(r,"REQ[%X] end   chxj_rencoding()", (unsigned int)(apr_size_t)r);
     return (char *)apr_pstrdup(r->pool, "");
   }
 
   dconf = chxj_get_module_config(r->per_dir_config, &chxj_module);
   if (! dconf) {
-    DBG(r,"none encoding.");
-    DBG(r,"end   chxj_rencoding()");
+    DBG(r,"REQ[%X] none encoding.", (unsigned int)(apr_size_t)r);
+    DBG(r,"REQ[%X] end   chxj_rencoding()", (unsigned int)(apr_size_t)r);
     return (char*)src;
   }
 
   entryp = chxj_apply_convrule(r, dconf->convrules);
   if (! entryp->encoding) {
-    DBG(r,"none encoding.");
-    DBG(r,"end   chxj_rencoding()");
+    DBG(r,"REQ[%X] none encoding.", (unsigned int)(apr_size_t)r);
+    DBG(r,"REQ[%X] end   chxj_rencoding()", (unsigned int)(apr_size_t)r);
     return (char*)src;
   }
 
   if (STRCASEEQ('n','N',"none", entryp->encoding)) {
-    DBG(r,"none encoding.");
-    DBG(r,"end   chxj_rencoding()");
+    DBG(r,"REQ[%X] none encoding.", (unsigned int)(apr_size_t)r);
+    DBG(r,"REQ[%X] end   chxj_rencoding()", (unsigned int)(apr_size_t)r);
     return (char*)src;
   }
 
   ilen = *len;
   ibuf = apr_palloc(r->pool, ilen+1);
   if (! ibuf) {
-    DBG(r,"end   chxj_rencoding()");
+    DBG(r,"REQ[%X] end   chxj_rencoding()", (unsigned int)(apr_size_t)r);
     return (char*)src;
   }
 
@@ -175,7 +177,7 @@ chxj_rencoding(request_rec *r, const char *src, apr_size_t *len)
   olen = ilen * 4 + 1;
   spos = obuf = apr_palloc(r->pool, olen);
   if (! obuf) {
-    DBG(r,"end   chxj_rencoding()");
+    DBG(r,"REQ[%X] end   chxj_rencoding()", (unsigned int)(apr_size_t)r);
     return ibuf;
   }
   DBG(r,"encode convert [%s] -> [%s]", "CP932", entryp->encoding);
@@ -187,7 +189,7 @@ chxj_rencoding(request_rec *r, const char *src, apr_size_t *len)
     if (EINVAL == errno) {
       ERR(r, "The conversion from %s to %s is not supported by the implementation.", "CP932", entryp->encoding);
     }
-    DBG(r,"end   chxj_rencoding()");
+    DBG(r,"REQ[%X] end   chxj_rencoding()", (unsigned int)(apr_size_t)r);
     return ibuf;
   }
 
@@ -210,7 +212,8 @@ chxj_rencoding(request_rec *r, const char *src, apr_size_t *len)
   *len = strlen(spos);
   iconv_close(cd);
 
-  DBG(r,"end   chxj_rencoding() len=[%d] obuf=[%.*s]", (int)*len, (int)*len, spos);
+  chxj_dump_string(r, APLOG_MARK, "RESULT Convert REncoding", spos, *len);
+  DBG(r,"REQ[%X] end   chxj_rencoding()", (unsigned int)(apr_size_t)r);
 
   return spos;
 }
