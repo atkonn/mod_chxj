@@ -2617,6 +2617,7 @@ s_chtml30_start_div_tag(void *pdoc, Node *node)
       }
       for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
         attr_color = apr_pstrdup(doc->pool, cur->value);
+        attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
       }
       for (cur = text_align_prop->next; cur != text_align_prop; cur = cur->next) {
         attr_align = apr_pstrdup(doc->pool, cur->value);
