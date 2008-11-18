@@ -2556,6 +2556,7 @@ s_chtml30_start_div_tag(void *pdoc, Node *node)
   char        *attr_wap_marquee_dir   = NULL;
   char        *attr_wap_marquee_loop  = NULL;
   char        *attr_color             = NULL;
+  char        *attr_bgcolor           = NULL;
 
   chtml30 = GET_CHTML30(pdoc);
   doc     = chtml30->doc;
@@ -2586,6 +2587,8 @@ s_chtml30_start_div_tag(void *pdoc, Node *node)
       css_property_t *text_decoration_prop   = chxj_css_get_property_value(doc, style, "text-decoration");
       css_property_t *color_prop             = chxj_css_get_property_value(doc, style, "color");
       css_property_t *text_align_prop        = chxj_css_get_property_value(doc, style, "text-align");
+      css_property_t *background_color_prop  = chxj_css_get_property_value(doc, style, "background-color");
+      css_property_t *background_prop        = chxj_css_get_property_value(doc, style, "background");
 
       css_property_t *cur;
       for (cur = display_prop->next; cur != display_prop; cur = cur->next) {
@@ -2596,6 +2599,20 @@ s_chtml30_start_div_tag(void *pdoc, Node *node)
       for (cur = text_decoration_prop->next; cur != text_decoration_prop; cur = cur->next) {
         if (STRCASEEQ('b','B',"blink", cur->value)) {
           attr_decoration = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+      for (cur = background_color_prop->next; cur != background_color_prop; cur = cur->next) {
+        attr_bgcolor = apr_pstrdup(doc->pool, cur->value);
+        attr_bgcolor = chxj_css_rgb_func_to_value(doc->pool, attr_bgcolor);
+      }
+      for (cur = background_prop->next; cur != background_prop; cur = cur->next) {
+        char *ss = strchr(cur->value, '#');
+        if (!ss) {
+          ss = strstr(cur->value, "rgb");
+        }
+        if (ss) {
+          attr_bgcolor = apr_pstrdup(doc->pool, cur->value);
+          attr_bgcolor = chxj_css_rgb_func_to_value(doc->pool, attr_bgcolor);
         }
       }
       for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
@@ -2642,11 +2659,20 @@ s_chtml30_start_div_tag(void *pdoc, Node *node)
     W_L(">");
     flg->with_div_flag = 1;
   }
+  else {
+    W_L("<div>");
+    flg->with_div_flag = 1;
+  }
   if (attr_color) {
-    W_L("<font color=\"");
-    W_V(attr_color);
-    W_L("\">");
-    flg->with_font_flag = 1;
+    if (attr_bgcolor && (STRCASEEQ('w','W',"white",attr_color) || STRCASEEQ('#','#',"#ffffff",attr_color))) {
+      /* nothing */
+    }
+    else {
+      W_L("<font color=\"");
+      W_V(attr_color);
+      W_L("\">");
+      flg->with_font_flag = 1;
+    }
   }
   if (attr_decoration) {
     W_L("<blink>");
@@ -2671,10 +2697,6 @@ s_chtml30_start_div_tag(void *pdoc, Node *node)
     }
     W_L(">");
     flg->with_marquee_flag = 1;
-  }
-  if (! attr_align && ! attr_color && ! attr_decoration && ! attr_display) {
-    W_L("<div>");
-    flg->with_div_flag = 1;
   }
   node->userData = flg;
 
