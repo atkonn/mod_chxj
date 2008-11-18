@@ -39,6 +39,7 @@
 #include "chxj_css.h"
 #include "chxj_serf.c"
 #include "chxj_css.c"
+#include "chxj_dump_string.c"
 
 
 
