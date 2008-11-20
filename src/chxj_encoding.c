@@ -153,10 +153,70 @@ chxj_convert_illegal_charactor_sequence(request_rec *r, chxjconvrule_entry  *ent
       *ibuf += 1;
       DBG(r, "passed 1byte.");
     }
-    if (ibuf && *ibuf) {
-      *ilen = strlen(*ibuf);
-      DBG(r, "new len = [%d].", *ilen);
+  }
+  else if (STRCASEEQ('e','E', "EUCJP",               entryp->encoding)
+      ||   STRCASEEQ('c','C', "CSEUCPKDFMTJAPANESE", entryp->encoding)
+      ||   STRCASEEQ('e','E', "EUC-JISX0213",        entryp->encoding)
+      ||   STRCASEEQ('e','E', "EUC-JP-MS",           entryp->encoding)
+      ||   STRCASEEQ('e','E', "EUC-JP",              entryp->encoding)
+      ||   STRCASEEQ('e','E', "EUCJP-MS",            entryp->encoding)
+      ||   STRCASEEQ('e','E', "EUCJP-OPEN",          entryp->encoding)
+      ||   STRCASEEQ('e','E', "EUCJP-WIN",           entryp->encoding)
+      ||   STRCASEEQ('e','E', "EUCJP",               entryp->encoding)) {
+    if ((unsigned char)**ibuf == 0x8F) {
+      /* 3byte charactor */
+      **obuf = '?';
+      *obuf += 1;
+      *olen -= 1;
+      *ibuf +=3;
+      DBG(r, "passed 3byte.");
     }
+    else {
+      /* 2byte charactor */
+      **obuf = '?';
+      *obuf += 1;
+      *olen -= 1;
+      *ibuf += 2;
+      DBG(r, "passed 2byte.");
+    }
+  }
+  else if (STRCASEEQ('c', 'C', "CP932",     entryp->encoding)
+      ||   STRCASEEQ('c', 'C', "CSIBM932",  entryp->encoding)
+      ||   STRCASEEQ('i', 'I', "IBM-932",   entryp->encoding)
+      ||   STRCASEEQ('i', 'I', "IBM932",    entryp->encoding)
+      ||   STRCASEEQ('m', 'M', "MS932",     entryp->encoding)
+      ||   STRCASEEQ('m', 'M', "MS_KANJI",  entryp->encoding)
+      ||   STRCASEEQ('s', 'S', "SJIS-OPEN", entryp->encoding)
+      ||   STRCASEEQ('s', 'S', "SJIS-WIN",  entryp->encoding)
+      ||   STRCASEEQ('s', 'S', "SJIS",      entryp->encoding)) {
+    if ( ( ((0x81 <= (unsigned char)**ibuf) && (0x9f >= (unsigned char)**ibuf))
+        || ((0xe0 <= (unsigned char)**ibuf) && (0xfc >= (unsigned char)**ibuf)))
+       &&
+       (  ((0x40 <= (unsigned char)*((*ibuf)+1)) && (0x7e >= (unsigned char)*((*ibuf)+1)))
+        ||((0x80 <= (unsigned char)*((*ibuf)+1)) && (0xfc >= (unsigned char)*((*ibuf)+1))))) {
+      /* 2byte charactor */
+      **obuf = '?';
+      *obuf += 1;
+      *olen -= 1;
+      *ibuf += 2;
+      DBG(r, "passed 2byte.");
+    }
+    else {
+      /* 1byte charactor */
+      **obuf = '?';
+      *obuf += 1;
+      *olen -= 1;
+      *ibuf += 1;
+      DBG(r, "passed 1byte.");
+    }
+  }
+  else {
+    *ilen = 0;
+    return;
+  }
+  if (ibuf && *ibuf) {
+    *ilen = strlen(*ibuf);
+    DBG(r, "new len = [%d].", *ilen);
   }
 }
 
