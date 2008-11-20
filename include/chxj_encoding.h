@@ -38,5 +38,14 @@ extern char* chxj_encoding_parameter(
   request_rec*       r, 
   const char*        value);
 
+extern void
+chxj_convert_illegal_charactor_sequence(
+  request_rec         *r,
+  chxjconvrule_entry  *entryp,
+  char                **ibuf,
+  apr_size_t          *ilen,
+  char                **obuf,
+  apr_size_t          *olen);
+
 #endif
 
