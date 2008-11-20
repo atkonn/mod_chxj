@@ -90,7 +90,7 @@
 #define PACKAGE "mod_chxj"
 
 /* Define to the address where bug reports for this package should be sent. */
-#define PACKAGE_BUGREPORT ""
+#define PACKAGE_BUGREPORT "konn@users.sourceforge.jp"
 
 /* Define to the full name of this package. */
 #define PACKAGE_NAME "mod_chxj"

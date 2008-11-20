@@ -97,14 +97,16 @@ chxj_encoding(request_rec *r, const char *src, apr_size_t *len)
     if (result == (size_t)(-1)) {
       if (E2BIG == errno) {
         ERR(r, "There is not sufficient room at *outbuf.");
+        break;
       }
       else if (EILSEQ == errno) {
-        ERR(r, "An invalid multibyte sequence has been encountered in the input. input:[%s]", ibuf);
+        ERR(r, "%s:%d An invalid multibyte sequence has been encountered in the input. input:[%s]", __FILE__,__LINE__,ibuf);
+        chxj_convert_illegal_charactor_sequence(r, entryp, &ibuf, &ilen, &obuf, &olen);
       }
       else if (EINVAL == errno) {
         ERR(r, "An incomplete multibyte sequence has been encountered in the input. input:[%s]", ibuf);
+        break;
       }
-      break;
     }
   }
   *len = strlen(spos);
@@ -112,6 +114,50 @@ chxj_encoding(request_rec *r, const char *src, apr_size_t *len)
 
   DBG(r,"end   chxj_encoding() len=[%d] obuf=[%.*s]", (int)*len, (int)*len, spos);
   return spos;
+}
+
+
+void
+chxj_convert_illegal_charactor_sequence(request_rec *r, chxjconvrule_entry  *entryp, char **ibuf, apr_size_t *ilen, char **obuf, apr_size_t *olen)
+{
+  if (STRCASEEQ('u','U',"UTF-8", entryp->encoding) || STRCASEEQ('u','U',"UTF8", entryp->encoding)) {
+    if ((0xe0 & **ibuf) == 0xc0) {
+      /* 2byte charactor */
+      **obuf = '?';
+      *obuf += 1;
+      *olen -= 1;
+      *ibuf += 2;
+      DBG(r, "passed 2byte.");
+    }
+    else if ((0xf0 & **ibuf) == 0xe0) {
+      /* 3byte charactor */
+      **obuf = '?';
+      *obuf += 1;
+      *olen -= 1;
+      *ibuf +=3;
+      DBG(r, "passed 3byte.");
+    }
+    else if ((0xf8 & **ibuf) == 0xf0) {
+      /* 4byte charactor */
+      **obuf = '?';
+      *obuf += 1;
+      *olen -= 1;
+      *ibuf +=4;
+      DBG(r, "passed 4byte.");
+    }
+    else if ((0xc0 & **ibuf) == 0x80) {
+      /* 1byte charactor */
+      **obuf = '?';
+      *obuf += 1;
+      *olen -= 1;
+      *ibuf += 1;
+      DBG(r, "passed 1byte.");
+    }
+    if (ibuf && *ibuf) {
+      *ilen = strlen(*ibuf);
+      DBG(r, "new len = [%d].", *ilen);
+    }
+  }
 }
 
 
@@ -190,14 +236,16 @@ chxj_rencoding(request_rec *r, const char *src, apr_size_t *len)
     if (result == (size_t)(-1)) {
       if (E2BIG == errno) {
         ERR(r, "There is not sufficient room at *outbuf");
+        break;
       }
       else if (EILSEQ == errno) {
         ERR(r, "An invalid multibyte sequence has been encountered in the input. input:[%s]", ibuf);
+        chxj_convert_illegal_charactor_sequence(r, entryp, &ibuf, &ilen, &obuf, &olen);
       }
       else if (EINVAL == errno) {
         ERR(r, "An incomplete multibyte sequence has been encountered in the input. input:[%s]", ibuf);
+        break;
       }
-      break;
     }
   }
 
