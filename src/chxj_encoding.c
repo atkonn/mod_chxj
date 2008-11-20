@@ -153,6 +153,14 @@ chxj_convert_illegal_charactor_sequence(request_rec *r, chxjconvrule_entry  *ent
       *ibuf += 1;
       DBG(r, "passed 1byte.");
     }
+    else {
+      /* unknown charactor */
+      **obuf = '?';
+      *obuf += 1;
+      *olen -= 1;
+      *ibuf += 1;
+      DBG(r, "passed 1byte.");
+    }
   }
   else if (STRCASEEQ('e','E', "EUCJP",               entryp->encoding)
       ||   STRCASEEQ('c','C', "CSEUCPKDFMTJAPANESE", entryp->encoding)
