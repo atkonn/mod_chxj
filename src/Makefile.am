@@ -38,6 +38,7 @@ libmod_chxj_la_SOURCES = mod_chxj.c \
     chxj_dbm.c \
     chxj_buffered_write.c \
     chxj_apache.c \
+    chxj_add_device_env.c \
     chxj_serf.c
 
 
