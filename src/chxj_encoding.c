@@ -219,8 +219,12 @@ chxj_convert_illegal_charactor_sequence(request_rec *r, chxjconvrule_entry  *ent
     }
   }
   else {
-    *ilen = 0;
-    return;
+    /* unknown 1byte charactor */
+    **obuf = '?';
+    *obuf += 1;
+    *olen -= 1;
+    *ibuf += 1;
+    DBG(r, "passed 1byte.");
   }
   if (ibuf && *ibuf) {
     *ilen = strlen(*ibuf);
