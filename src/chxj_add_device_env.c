@@ -21,21 +21,62 @@ void
 chxj_add_device_env(request_rec *r, device_table *spec)
 {
   DBG(r, "REQ[%X] start chxj_add_device_env()", (unsigned int)(apr_size_t)r);
-  /* "X-Chxj-Provider" => { 0 => 'unknown', 1 => 'docomo', 2 => 'au', 3 => 'SoftBank' */
-  /* "X-Chxj-DeviceId" => { docomo => 'D503i' and so on, au => 'CA31' and so on, SoftBank => '706P' and so on */
-  /* "X-Chxj-DeviceName" => { 'SoftBank 706P' and so on. } <device_name> */
-  /* "X-Chxj-HtmlSpecType" => { JXHTML, JHTML, CHTML1.0 CHTML2.0 CHTML3.0 CHTML4.0 CHTML5.0 IXHTML1.0 } */
-  /* "X-Chxj-Width"        => { <width> } */
-  /* "X-Chxj-Height"       => { <height> } */
-  /* "X-Chxj-Gif"          => { true/false } */
-  /* "X-Chxj-Jpeg"         => { true/false } */
-  /* "X-Chxj-Png"          => { true/false } */
-  /* "X-Chxj-Bmp2"         => { true/false } */
-  /* "X-Chxj-Bmp4"         => { true/false } */
-  /* "X-Chxj-Color"        => { <color> } */
-  /* "X-Chxj-WP-Width"     => { <wp_width> } */
-  /* "X-Chxj-WP-Height"    => { <wp_height> } */
-  /* "X-Chxj-Cache"        => { <cache> } */
+  switch(spec->html_spec_type) {
+  case CHXJ_SPEC_Chtml_1_0:
+  case CHXJ_SPEC_Chtml_2_0:
+  case CHXJ_SPEC_Chtml_3_0:
+  case CHXJ_SPEC_Chtml_4_0:
+  case CHXJ_SPEC_Chtml_5_0:
+  case CHXJ_SPEC_Chtml_6_0:
+  case CHXJ_SPEC_Chtml_7_0:
+    apr_table_setn(r->headers_in, HTTP_X_CHXJ_PROVIDER, "1");
+    apr_table_setn(r->headers_in, HTTP_X_CHXJ_PROVIDER_STRING, "docomo");
+    break;
+  case CHXJ_SPEC_XHtml_Mobile_1_0:
+  case CHXJ_SPEC_Hdml:
+    apr_table_setn(r->headers_in, HTTP_X_CHXJ_PROVIDER, "2");
+    apr_table_setn(r->headers_in, HTTP_X_CHXJ_PROVIDER_STRING, "au");
+    break;
+  case CHXJ_SPEC_Jhtml:
+  case CHXJ_SPEC_Jxhtml:
+    apr_table_setn(r->headers_in, HTTP_X_CHXJ_PROVIDER, "3");
+    apr_table_setn(r->headers_in, HTTP_X_CHXJ_PROVIDER_STRING, "SoftBank");
+    break;
+  default:
+    apr_table_setn(r->headers_in, HTTP_X_CHXJ_PROVIDER, "0");
+    apr_table_setn(r->headers_in, HTTP_X_CHXJ_PROVIDER_STRING, "unknown");
+    break;
+  }
+
+  apr_table_setn(r->headers_in, HTTP_X_CHXJ_DEVICEID, apr_pstrdup(r->pool, spec->device_id));
+  apr_table_setn(r->headers_in, HTTP_X_CHXJ_DEVICENAME, apr_pstrdup(r->pool, spec->device_name));
+
+  switch(spec->html_spec_type) {
+  case CHXJ_SPEC_Chtml_1_0:        apr_table_setn(r->headers_in, HTTP_X_CHXJ_HTMLSPECTYPE, "CHTML1.0"); break;
+  case CHXJ_SPEC_Chtml_2_0:        apr_table_setn(r->headers_in, HTTP_X_CHXJ_HTMLSPECTYPE, "CHTML2.0"); break;
+  case CHXJ_SPEC_Chtml_3_0:        apr_table_setn(r->headers_in, HTTP_X_CHXJ_HTMLSPECTYPE, "CHTML3.0"); break;
+  case CHXJ_SPEC_Chtml_4_0:        apr_table_setn(r->headers_in, HTTP_X_CHXJ_HTMLSPECTYPE, "CHTML4.0"); break;
+  case CHXJ_SPEC_Chtml_5_0:        apr_table_setn(r->headers_in, HTTP_X_CHXJ_HTMLSPECTYPE, "CHTML5.0"); break;
+  case CHXJ_SPEC_Chtml_6_0:        apr_table_setn(r->headers_in, HTTP_X_CHXJ_HTMLSPECTYPE, "CHXJL6.0"); break;
+  case CHXJ_SPEC_Chtml_7_0:        apr_table_setn(r->headers_in, HTTP_X_CHXJ_HTMLSPECTYPE, "CHTML7.0"); break;
+  case CHXJ_SPEC_XHtml_Mobile_1_0: apr_table_setn(r->headers_in, HTTP_X_CHXJ_HTMLSPECTYPE, "XHTML");    break;
+  case CHXJ_SPEC_Hdml:             apr_table_setn(r->headers_in, HTTP_X_CHXJ_HTMLSPECTYPE, "HDML");     break;
+  case CHXJ_SPEC_Jhtml:            apr_table_setn(r->headers_in, HTTP_X_CHXJ_HTMLSPECTYPE, "JHTML");    break;
+  case CHXJ_SPEC_Jxhtml:           apr_table_setn(r->headers_in, HTTP_X_CHXJ_HTMLSPECTYPE, "JXHTML");   break;
+  default:                         apr_table_setn(r->headers_in, HTTP_X_CHXJ_HTMLSPECTYPE, "UNKNOWN");  break;
+  }
+
+  apr_table_setn(r->headers_in, HTTP_X_CHXJ_WIDTH,    apr_psprintf(r->pool, "%d", spec->width));
+  apr_table_setn(r->headers_in, HTTP_X_CHXJ_HEIGHT,   apr_psprintf(r->pool, "%d", spec->heigh));
+  apr_table_setn(r->headers_in, HTTP_X_CHXJ_GIF,      (spec->available_gif  == 0) ? "false" : "true");
+  apr_table_setn(r->headers_in, HTTP_X_CHXJ_JPEG,     (spec->available_jpeg == 0) ? "false" : "true");
+  apr_table_setn(r->headers_in, HTTP_X_CHXJ_PNG,      (spec->available_png  == 0) ? "false" : "true");
+  apr_table_setn(r->headers_in, HTTP_X_CHXJ_BMP2,     (spec->available_bmp2 == 0) ? "false" : "true");
+  apr_table_setn(r->headers_in, HTTP_X_CHXJ_BMP4,     (spec->available_bmp4 == 0) ? "false" : "true");
+  apr_table_setn(r->headers_in, HTTP_X_CHXJ_COLOR,    apr_psprintf(r->pool, "%d", spec->color));
+  apr_table_setn(r->headers_in, HTTP_X_CHXJ_WP_WIDTH, apr_psprintf(r->pool, "%d", spec->wp_width));
+  apr_table_setn(r->headers_in, HTTP_X_CHXJ_WP_HEIGHT,apr_psprintf(r->pool, "%d", spec->wp_heigh));
+  apr_table_setn(r->headers_in, HTTP_X_CHXJ_CACHE,    apr_psprintf(r->pool, "%d", spec->cache));
 
   DBG(r, "REQ[%X] end chxj_add_device_env()", (unsigned int)(apr_size_t)r);
 }

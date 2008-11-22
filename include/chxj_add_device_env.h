@@ -21,7 +21,8 @@
 #include "chxj_specified_device.h"
 
 /* "X-Chxj-Provider" => { 0 => 'unknown', 1 => 'docomo', 2 => 'au', 3 => 'SoftBank' */
-#define HTTP_X_CHXJ_PROVIDER "X-Chxj-Provider"
+#define HTTP_X_CHXJ_PROVIDER        "X-Chxj-Provider"
+#define HTTP_X_CHXJ_PROVIDER_STRING "X-Chxj-Provider-String"
 
 /* "X-Chxj-DeviceId" => { docomo => 'D503i' and so on, au => 'CA31' and so on, SoftBank => '706P' and so on */
 #define HTTP_X_CHXJ_DEVICEID "X-Chxj-DeviceId"
