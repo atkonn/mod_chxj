@@ -2071,6 +2071,28 @@
       <dpi_heigh>96</dpi_heigh>
     </device>
 
+    <!-- W61PT 2008/3/21 -->
+    <device>
+      <device_id>PT33</device_id>
+      <device_name>W61PT</device_name>
+      <html_spec_type>XHTML_MOBILE_1_0</html_spec_type>
+      <width>240</width>
+      <heigh>283</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type>D</emoji_type>
+
+      <wp_width>240</wp_width>
+      <wp_heigh>320</wp_heigh>
+      <cache>131072</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+
     <!--=====================================================================-->
     <!-- A5000 series                                                        -->
     <!--=====================================================================-->
