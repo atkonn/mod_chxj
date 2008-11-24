@@ -10457,6 +10457,32 @@
       <dpi_width>96</dpi_width>
       <dpi_heigh>96</dpi_heigh>
     </device>
+    <!--
+      DoCoMo/2.0 F883iESS(c100;TB;W16H08)
+      DoCoMo/2.0 F883iESS(c100;TC;W20H08)
+      DoCoMo/2.0 F883iESS(c100;TC;W16H08)
+      DoCoMo/2.0 F883iESS(c100;TB;W20H08)
+    -->
+    <device>
+      <device_id>F883iESS</device_id>
+      <device_name>F883iESS</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IXHTML2.1 -->
+      <width>240</width>
+      <heigh>256</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+
+      <wp_width>240</wp_width>
+      <wp_heigh>320</wp_heigh>
+      <cache>102400</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
   </user_agent>
 
 
