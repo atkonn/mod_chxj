@@ -11033,6 +11033,39 @@
       <dpi_heigh>96</dpi_heigh>
     </device>
 
+    <!--
+      N706i
+      DoCoMo/2.0 N706i(c100;TB;W16H10)
+      DoCoMo/2.0 N706i(c100;TB;W20H13)
+      DoCoMo/2.0 N706i(c100;TB;W24H16)
+      DoCoMo/2.0 N706i(c100;TB;W30H20)
+      DoCoMo/2.0 N706i(c100;TC;W16H10)
+      DoCoMo/2.0 N706i(c100;TC;W20H13)
+      DoCoMo/2.0 N706i(c100;TC;W24H16)
+      DoCoMo/2.0 N706i(c100;TC;W30H20)
+      DoCoMo/2.0 N706i(c100;TD)
+      DoCoMo/2.0 N706i(c100;TJ)
+    -->
+    <device>
+      <device_id>N706i</device_id>
+      <device_name>DoCoMo N706i</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IXHTML2.2 -->
+      <width>240</width>
+      <heigh>320</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>427</wp_heigh>
+      <cache>102400</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+
 
   </user_agent>
 
