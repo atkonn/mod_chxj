@@ -11379,6 +11379,35 @@
       <dpi_heigh>96</dpi_heigh>
     </device>
 
+    <!--
+      NM706i
+      DoCoMo/2.0 NM706i(c100;TB;W15H13)
+      DoCoMo/2.0 NM706i(c100;TB;W38H18)
+      DoCoMo/2.0 NM706i(c100;TC;W15H13)
+      DoCoMo/2.0 NM706i(c100;TC;W38H18)
+      DoCoMo/2.0 NM706i(c100;TD)
+      DoCoMo/2.0 NM706i(c100;TJ)
+    -->
+    <device>
+      <device_id>NM706i</device_id>
+      <device_name>DoCoMo NM706i</device_name>
+      <html_spec_type>CHTML_4_0</html_spec_type><!-- IXHTML1.0 -->
+      <width>231</width>
+      <heigh>235</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>16777216</color>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>235</wp_heigh>
+      <cache>102400</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+
   </user_agent>
 
 
