@@ -1,3 +1,51 @@
+libapache2-mod-chxj (0.12.21-1) unstable; urgency=low
+
+  * Fixed Bug.
+    - The parameter for the cookie is not applied at the ``A LINK'' to
+      "mailto:" and "telto:".
+   (Reported by bayside _at_ users.sourceforge.jp. thanks!)
+  * Fixed Bug.
+    - When you make a mistake in the setting of the character-code.
+   (Reported by anyone. thanks!)
+  * Added Sample Device Data.
+    - SoftBank 824SH
+    - SoftBank 923SH
+    - au W63S
+    - au W63SA
+    - DoCoMo SO706i
+    - SoftBank 820N
+    - SoftBank 821N
+    - SoftBank 825SH
+    - DoCoMo N706i
+    - SoftBank 823P
+    - DoCoMo F706i
+    - DoCoMo SH906iTV
+    - au W63K
+    - au W64K
+    - DoCoMo N906iL
+    - DoCoMo N906i
+    - au W63T
+    - au W62K
+    - au W62T
+    - SoftBank DM002SH
+    - DoCoMo F906i
+    - DoCoMo N906imyu
+    - DoCoMo SH906i
+    - DoCoMo SO906i
+    - DoCoMo L852i
+    - DoCoMo P906i
+    - DoCoMo F883iS
+    - au W61S
+    - au W61SA
+    - DoCoMo F883iESS
+    - SoftBank 821SC
+    - SoftBank 920SH YK
+    - DoCoMo NM705i
+    - au W61PT
+   (Added by na_mako. thanks!)
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Wed, 26 Nov 2008 18:15:31 +0900
+
 libapache2-mod-chxj (0.12.20-1) unstable; urgency=low
 
   * Changed encoding specification.
