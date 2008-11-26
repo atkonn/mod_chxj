@@ -11316,6 +11316,39 @@
       <dpi_width>96</dpi_width>
       <dpi_heigh>96</dpi_heigh>
     </device>
+
+    <!--
+      L706ie
+      DoCoMo/2.0 L706ie(c100;TB;W16H09)
+      DoCoMo/2.0 L706ie(c100;TB;W20H11)
+      DoCoMo/2.0 L706ie(c100;TB;W24H14)
+      DoCoMo/2.0 L706ie(c100;TB;W21H11)
+      DoCoMo/2.0 L706ie(c100;TD)
+      DoCoMo/2.0 L706ie(c100;TJ)
+      DoCoMo/2.0 L706ie(c100;TC;W16H09)
+      DoCoMo/2.0 L706ie(c100;TC;W20H11)
+      DoCoMo/2.0 L706ie(c100;TC;W24H14)
+      DoCoMo/2.0 L706ie(c100;TC;W21H11)
+    -->
+    <device>
+      <device_id>L706ie</device_id>
+      <device_name>DoCoMo L706ie</device_name>
+      <html_spec_type>CHTML_6_0</html_spec_type><!-- IXHTML2.0 -->
+      <width>240</width>
+      <heigh>280</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>320</wp_heigh>
+      <cache>102400</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
   </user_agent>
 
 
