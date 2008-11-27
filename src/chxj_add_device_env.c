@@ -57,7 +57,7 @@ chxj_add_device_env(request_rec *r, device_table *spec)
   case CHXJ_SPEC_Chtml_3_0:        apr_table_setn(r->headers_in, HTTP_X_CHXJ_HTMLSPECTYPE, "CHTML3.0"); break;
   case CHXJ_SPEC_Chtml_4_0:        apr_table_setn(r->headers_in, HTTP_X_CHXJ_HTMLSPECTYPE, "CHTML4.0"); break;
   case CHXJ_SPEC_Chtml_5_0:        apr_table_setn(r->headers_in, HTTP_X_CHXJ_HTMLSPECTYPE, "CHTML5.0"); break;
-  case CHXJ_SPEC_Chtml_6_0:        apr_table_setn(r->headers_in, HTTP_X_CHXJ_HTMLSPECTYPE, "CHXJL6.0"); break;
+  case CHXJ_SPEC_Chtml_6_0:        apr_table_setn(r->headers_in, HTTP_X_CHXJ_HTMLSPECTYPE, "CHTML6.0"); break;
   case CHXJ_SPEC_Chtml_7_0:        apr_table_setn(r->headers_in, HTTP_X_CHXJ_HTMLSPECTYPE, "CHTML7.0"); break;
   case CHXJ_SPEC_XHtml_Mobile_1_0: apr_table_setn(r->headers_in, HTTP_X_CHXJ_HTMLSPECTYPE, "XHTML");    break;
   case CHXJ_SPEC_Hdml:             apr_table_setn(r->headers_in, HTTP_X_CHXJ_HTMLSPECTYPE, "HDML");     break;
