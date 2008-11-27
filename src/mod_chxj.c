@@ -69,6 +69,7 @@
 #  include "chxj_mysql.h"
 #endif
 #include "chxj_serf.h"
+#include "chxj_add_device_env.h"
 
 
 #define CHXJ_VERSION_PREFIX PACKAGE_NAME "/"
@@ -269,6 +270,8 @@ chxj_headers_fixup(request_rec *r)
       }
     }
   }
+
+  chxj_add_device_env(r, spec);
 
   DBG(r, "REQ[%X] end chxj_headers_fixup()", (unsigned int)(apr_size_t)r);
 

@@ -41,7 +41,8 @@ libmod_chxj_la_SOURCES = mod_chxj.c \
     chxj_apache.c \
     chxj_serf.c \
     chxj_dump_string.c \
-    chxj_css.c
+    chxj_css.c \
+    chxj_add_device_env.c
 
 
 libmod_chxj_la_CFLAGS = -O2 -prefer-pic @QDEFS@ @DDEFS@ -I. -I../include -I@with_apache_header@  -I./serf -I./css/include
