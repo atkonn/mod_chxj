@@ -61,7 +61,7 @@
 #define HTTP_X_CHXJ_WP_WIDTH "X-Chxj-WP-Width"
 
 /* "X-Chxj-WP-Height"    => { <wp_height> } */
-#define HTTP_X_CHXJ_WP_HEIGHT "X-Chxj-WP-Width"
+#define HTTP_X_CHXJ_WP_HEIGHT "X-Chxj-WP-Height"
 
 /* "X-Chxj-Cache"        => { <cache> } */
 #define HTTP_X_CHXJ_CACHE    "X-Chxj-Cache"
