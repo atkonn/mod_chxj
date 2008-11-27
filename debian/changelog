@@ -1,3 +1,40 @@
+libapache2-mod-chxj (0.12.22-1) unstable; urgency=low
+
+  * Fixed Bug.
+    - The X-Chxj-WP-Height header cannot be taken[#14143].
+    - The value of the X-Chxj-HtmlSpecTyp header is abnormal[#14145].
+  * Added Sample Device Data.
+    - au W65K
+    - au W62P
+    - au W64S
+    - SoftBank 830P
+    - SoftBank 830SHs
+    - SoftBank 830SH
+    - au W64T
+    - au W63Kカメラ無し
+    - au W63SH
+    - SoftBank 824T
+    - DoCoMo SH706iw
+    - au W62PT
+    - DoCoMo N706iII
+    - DoCoMo SH706ie
+    - SoftBank 823T
+    - DoCoMo N706ie
+    - DoCoMo P706ie
+    - DoCoMo NM706i
+    - SoftBank 921P
+    - DoCoMo F884iES
+    - DoCoMo L706ie
+    - au W64SA
+    - SoftBank 824P
+    - DoCoMo P706imyu
+    - au W62CA
+    - au W62H
+    - au W62SH
+    - DoCoMo SH706i
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Thu, 27 Nov 2008 22:47:30 +0900
+
 libapache2-mod-chxj (0.12.21-1) unstable; urgency=low
 
   * Fixed Bug.
