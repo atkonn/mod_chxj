@@ -20,10 +20,12 @@
 #include "qs_parse_string.h"
 #include <errno.h>
 
-static struct kana_table_t {
+typedef struct {
   apr_size_t byte;
   char *hankaku;
-} kana_table[] = {
+} kana_table_t;
+
+static kana_table_t kana_table1[] = {
   { /* 00 */ 1, "\xa7\x00",},
   { /* 01 */ 1, "\xb1\x00",},
   { /* 02 */ 1, "\xa8\x00",},
@@ -112,6 +114,26 @@ static struct kana_table_t {
   { /* 85 */ 2, "\x83\x95",},
   { /* 86 */ 2, "\x83\x96",},
 };
+static kana_table_t kana_table2[] = {
+  { /* 0x8141 、*/ 1, "\xa4",},
+  { /* 0x8142 。*/ 1, "\xa1",},
+  { /* 0x8143 ，*/ 1, ",",},
+  { /* 0x8144 ．*/ 1, ".",},
+  { /* 0x8145 ・*/ 1, "\xa5",},
+  { /* 0x8146 ：*/ 1, ":",},
+  { /* 0x8147 ；*/ 1, ";",},
+  { /* 0x8148 ？*/ 1, "?",},
+  { /* 0x8149 ！*/ 1, "!",},
+  { /* 0x814a ゛*/ 1, "\xde",},
+  { /* 0x814b ゜*/ 1, "\xdf",},
+};
+static kana_table_t kana_table3[] = {
+  { /* 0x8175 「*/ 1, "\xa2",},
+  { /* 0x8176 」*/ 1, "\xa3",},
+};
+static kana_table_t kana_table4[] = {
+  { /* 0x815b ゛*/ 1, "-",},
+};
 
 /**
  */
@@ -157,13 +179,60 @@ chxj_conv_z2h_kana(request_rec *r, const char *src, apr_size_t *len, chxjconvrul
     else if (is_sjis_kanji(src[ii])) {
       unsigned char firstbyte  = src[ii + 0];
       unsigned char secondbyte = src[ii + 1];
-      unsigned char p = secondbyte - 0x40;
       if (   firstbyte == 0x83
-          && (secondbyte >= 0x40 && secondbyte <= 0x96)
-          && kana_table[p].byte != 0) {
-        /* Detect Zenkakaku Kana */
-        strcpy(&obuf[olen], kana_table[p].hankaku);
-        olen += kana_table[p].byte;
+          && (secondbyte >= 0x40 && secondbyte <= 0x96)) {
+        unsigned char p = secondbyte - 0x40;
+        if (kana_table1[p].byte != 0) {
+          /* Detect Zenkakaku Kana */
+          strcpy(&obuf[olen], kana_table1[p].hankaku);
+          olen += kana_table1[p].byte;
+        }
+        else {
+          obuf[olen++] = src[ii + 0];
+          obuf[olen++] = src[ii + 1];
+        }
+      }
+      else
+      if (   firstbyte == 0x81
+          && (secondbyte >= 0x41 && secondbyte <= 0x4b)) {
+        unsigned char p = secondbyte - 0x41;
+        if (kana_table2[p].byte != 0) {
+          /* Detect Zenkakaku Kana */
+          strcpy(&obuf[olen], kana_table2[p].hankaku);
+          olen += kana_table2[p].byte;
+        }
+        else {
+          obuf[olen++] = src[ii + 0];
+          obuf[olen++] = src[ii + 1];
+        }
+      }
+      else
+      if (   firstbyte == 0x81
+          && (secondbyte >= 0x75 && secondbyte <= 0x76)) {
+        unsigned char p = secondbyte - 0x75;
+        if (kana_table3[p].byte != 0) {
+          /* Detect Zenkakaku Kana */
+          strcpy(&obuf[olen], kana_table3[p].hankaku);
+          olen += kana_table3[p].byte;
+        }
+        else {
+          obuf[olen++] = src[ii + 0];
+          obuf[olen++] = src[ii + 1];
+        }
+      }
+      else
+      if (   firstbyte == 0x81
+          && (secondbyte >= 0x5b && secondbyte <= 0x5b)) {
+        unsigned char p = secondbyte - 0x5b;
+        if (kana_table4[p].byte != 0) {
+          /* Detect Zenkakaku Kana */
+          strcpy(&obuf[olen], kana_table4[p].hankaku);
+          olen += kana_table4[p].byte;
+        }
+        else {
+          obuf[olen++] = src[ii + 0];
+          obuf[olen++] = src[ii + 1];
+        }
       }
       else {
         obuf[olen++] = src[ii + 0];
