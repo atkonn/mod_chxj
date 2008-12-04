@@ -1,3 +1,20 @@
+libapache2-mod-chxj (0.12.24-1) unstable; urgency=low
+
+  * Fixed bug.
+    - Convert 0x5c.
+  * Changed Feature.
+    - The conversion object of Z2h.
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Wed,  3 Dec 2008 20:13:55 +0900
+
+libapache2-mod-chxj (0.12.23-1) unstable; urgency=low
+
+  * Added new feature.
+    - convert Zenkakaku Kana into Hankaku Kana (with Z2hOn or Z2hOff).
+      (Requested by bayside. Thanks!)
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Mon,  1 Dec 2008 23:57:51 +0900
+
 libapache2-mod-chxj (0.12.22-1) unstable; urgency=low
 
   * Fixed Bug.

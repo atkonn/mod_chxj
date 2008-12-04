@@ -70,6 +70,7 @@
 #endif
 #include "chxj_serf.h"
 #include "chxj_add_device_env.h"
+#include "chxj_conv_kana.h"
 
 
 #define CHXJ_VERSION_PREFIX PACKAGE_NAME "/"
@@ -406,6 +407,9 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
                                                               entryp, 
                                                               cookie);
     }
+    if (dst && *len) {
+      dst = chxj_conv_z2h_kana(r, dst, len, entryp);
+    }
   }
   ap_set_content_length(r, *len);
 
@@ -417,6 +421,7 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
   if (cookie) {
     *cookiep = cookie;
   }
+
 
   DBG(r, "REQ[%X] end of chxj_convert()", (unsigned int)(apr_size_t)r);
 
@@ -2189,6 +2194,18 @@ cmd_convert_rule(cmd_parms *cmd, void *mconfig, const char *arg)
         newrule->action &= (0xffffffff ^ CONVRULE_CSS_ON_BIT);
       }
       break;
+
+    case 'Z':
+    case 'z':
+      if (strcasecmp(CONVRULE_Z2H_ON_CMD, action) == 0) {
+        newrule->action |= CONVRULE_Z2H_ON_BIT;
+      }
+      else
+      if (strcasecmp(CONVRULE_Z2H_OFF_CMD, action) == 0) {
+        newrule->action |= CONVRULE_Z2H_OFF_BIT;
+      }
+      break;
+
     default:
       break;
     }
