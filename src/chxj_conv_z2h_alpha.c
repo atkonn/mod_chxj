@@ -117,7 +117,7 @@ chxj_conv_z2h_alpha(request_rec *r, const char *src, apr_size_t *len, chxjconvru
   memset(obuf, 0, ilen + 1);
   for (ii=0; ii<ilen; ii++) {
     /* sjis only */
-    if (is_sjis_alpha(src[ii])) {
+    if (is_sjis_kana(src[ii])) {
       obuf[olen++] = src[ii];
     }
     else if (is_sjis_kanji(src[ii])) {

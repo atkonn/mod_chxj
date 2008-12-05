@@ -2204,6 +2204,14 @@ cmd_convert_rule(cmd_parms *cmd, void *mconfig, const char *arg)
       if (strcasecmp(CONVRULE_Z2H_OFF_CMD, action) == 0) {
         newrule->action |= CONVRULE_Z2H_OFF_BIT;
       }
+      else
+      if (strcasecmp(CONVRULE_Z2H_ALPHA_ON_CMD, action) == 0) {
+        newrule->action |= CONVRULE_Z2H_ALPHA_ON_BIT;
+      }
+      else
+      if (strcasecmp(CONVRULE_Z2H_ALPHA_OFF_CMD, action) == 0) {
+        newrule->action |= CONVRULE_Z2H_ALPHA_OFF_BIT;
+      }
       break;
 
     default:
