@@ -2212,6 +2212,22 @@ cmd_convert_rule(cmd_parms *cmd, void *mconfig, const char *arg)
       if (strcasecmp(CONVRULE_Z2H_ALPHA_OFF_CMD, action) == 0) {
         newrule->action |= CONVRULE_Z2H_ALPHA_OFF_BIT;
       }
+      else
+      if (strcasecmp(CONVRULE_Z2H_NUM_ON_CMD, action) == 0) {
+        newrule->action |= CONVRULE_Z2H_NUM_ON_BIT;
+      }
+      else
+      if (strcasecmp(CONVRULE_Z2H_NUM_OFF_CMD, action) == 0) {
+        newrule->action |= CONVRULE_Z2H_NUM_OFF_BIT;
+      }
+      else
+      if (strcasecmp(CONVRULE_Z2H_ALL_ON_CMD, action) == 0) {
+        newrule->action |= CONVRULE_Z2H_ON_BIT | CONVRULE_Z2H_ALPHA_ON_BIT | CONVRULE_Z2H_NUM_ON_BIT;
+      }
+      else
+      if (strcasecmp(CONVRULE_Z2H_NUM_OFF_CMD, action) == 0) {
+        newrule->action |= COFFVRULE_Z2H_OFF_BIT | COFFVRULE_Z2H_ALPHA_OFF_BIT | COFFVRULE_Z2H_NUM_OFF_BIT;
+      }
       break;
 
     default:

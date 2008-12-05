@@ -386,6 +386,8 @@ struct mod_chxj_config {
 #define CONVRULE_Z2H_ALPHA_OFF_CMD    "Z2hAlphaOff"
 #define CONVRULE_Z2H_NUM_ON_CMD       "Z2hNumOn"
 #define CONVRULE_Z2H_NUM_OFF_CMD      "Z2hNumOff"
+#define CONVRULE_Z2H_ALL_ON_CMD       "Z2hAllOn"
+#define CONVRULE_Z2H_ALL_OFF_CMD      "Z2hAllOff"
 
 
 #define CONVRULE_FLAG_NOTMATCH        (0x00000001)
