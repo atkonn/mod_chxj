@@ -16,7 +16,7 @@
 #include "qs_ignore_sp.c"
 #include "qs_parse_file.c"
 #include "chxj_buffered_write.c"
-#include "chxj_conv_kana.c"
+#include "chxj_conv_z2h_kana.c"
 #include "chxj_node_convert.c"
 #include "chxj_tag_util.c"
 #include "chxj_encoding.c"

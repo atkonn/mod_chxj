@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 #include "mod_chxj.h"
-#include "chxj_conv_kana.h"
+#include "chxj_conv_z2h_kana.h"
 #include "chxj_url_encode.h"
 #include "qs_parse_string.h"
 #include <errno.h>

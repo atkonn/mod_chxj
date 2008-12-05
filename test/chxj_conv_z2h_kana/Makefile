@@ -1,7 +1,7 @@
 .SUFFIXES:
 .SUFFIXES: .c.o
 
-TARGET= test_chxj_conv_kana
+TARGET= test_chxj_conv_z2h_kana
 
 TOP_DIR=../..
 
