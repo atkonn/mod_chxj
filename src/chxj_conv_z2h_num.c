@@ -38,7 +38,7 @@ chxj_conv_z2h_num(request_rec *r, const char *src, apr_size_t *len, chxjconvrule
     DBG(r,"REQ[%X] end chxj_conv_z2h_num()", (unsigned int)(apr_size_t)r);
     return (char *)src;
   }
-  if (! (entryp->action & CONVRULE_Z2H_NUMM_ON_BIT)) {
+  if (! (entryp->action & CONVRULE_Z2H_NUM_ON_BIT)) {
     DBG(r,"REQ[%X] Detect Z2hNumOff", (unsigned int)(apr_size_t)r);
     DBG(r,"REQ[%X] end chxj_conv_z2h_num()", (unsigned int)(apr_size_t)r);
     return (char *)src;
@@ -69,7 +69,7 @@ chxj_conv_z2h_num(request_rec *r, const char *src, apr_size_t *len, chxjconvrule
           && (secondbyte >= 0x4F && secondbyte <= 0x58)) {
         unsigned char p = secondbyte - 0x4F;
         /* Detect Zenkaku Number */
-        &obuf[olen] = '0' + p;
+        obuf[olen] = '0' + p;
         olen++;
       }
       else {
