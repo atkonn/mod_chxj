@@ -132,7 +132,7 @@ static kana_table_t kana_table3[] = {
   { /* 0x8176 」*/ 1, "\xa3",},
 };
 static kana_table_t kana_table4[] = {
-  { /* 0x815b ゛*/ 1, "-",},
+  { /* 0x815b ゛*/ 1, "\xb0",},
 };
 
 /**
