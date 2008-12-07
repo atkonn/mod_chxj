@@ -68,7 +68,7 @@
 #endif
 #include "chxj_serf.h"
 #include "chxj_add_device_env.h"
-#include "chxj_conv_kana.h"
+#include "chxj_conv_z2h.h"
 
 
 #define CHXJ_VERSION_PREFIX PACKAGE_NAME "/"
@@ -404,6 +404,8 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
     }
     if (dst && *len) {
       dst = chxj_conv_z2h_kana(r, dst, len, entryp);
+      dst = chxj_conv_z2h_alpha(r, dst, len, entryp);
+      dst = chxj_conv_z2h_num(r, dst, len, entryp);
     }
   }
   ap_set_content_length(r, *len);
@@ -2203,6 +2205,30 @@ cmd_convert_rule(cmd_parms *cmd, void *mconfig, const char *arg)
       else
       if (strcasecmp(CONVRULE_Z2H_OFF_CMD, action) == 0) {
         newrule->action |= CONVRULE_Z2H_OFF_BIT;
+      }
+      else
+      if (strcasecmp(CONVRULE_Z2H_ALPHA_ON_CMD, action) == 0) {
+        newrule->action |= CONVRULE_Z2H_ALPHA_ON_BIT;
+      }
+      else
+      if (strcasecmp(CONVRULE_Z2H_ALPHA_OFF_CMD, action) == 0) {
+        newrule->action |= CONVRULE_Z2H_ALPHA_OFF_BIT;
+      }
+      else
+      if (strcasecmp(CONVRULE_Z2H_NUM_ON_CMD, action) == 0) {
+        newrule->action |= CONVRULE_Z2H_NUM_ON_BIT;
+      }
+      else
+      if (strcasecmp(CONVRULE_Z2H_NUM_OFF_CMD, action) == 0) {
+        newrule->action |= CONVRULE_Z2H_NUM_OFF_BIT;
+      }
+      else
+      if (strcasecmp(CONVRULE_Z2H_ALL_ON_CMD, action) == 0) {
+        newrule->action |= CONVRULE_Z2H_ON_BIT | CONVRULE_Z2H_ALPHA_ON_BIT | CONVRULE_Z2H_NUM_ON_BIT;
+      }
+      else
+      if (strcasecmp(CONVRULE_Z2H_NUM_OFF_CMD, action) == 0) {
+        newrule->action |= CONVRULE_Z2H_OFF_BIT | CONVRULE_Z2H_ALPHA_OFF_BIT | CONVRULE_Z2H_NUM_OFF_BIT;
       }
       break;
 

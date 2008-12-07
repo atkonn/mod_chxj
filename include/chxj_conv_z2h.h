@@ -14,11 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef __CHXJ_CONV_KANA_H__
-#define __CHXJ_CONV_kANA_H__
+#ifndef __CHXJ_CONV_Z2H_H__
+#define __CHXJ_CONV_Z2H_H__
 
 #include "mod_chxj.h"
 
+typedef struct {
+  apr_size_t byte;
+  char *hankaku;
+} z2h_table_t;
+
 extern char *chxj_conv_z2h_kana(request_rec *r, const char *src, apr_size_t *len, chxjconvrule_entry *entryp);
+extern char *chxj_conv_z2h_alpha(request_rec *r, const char *src, apr_size_t *len, chxjconvrule_entry *entryp);
+extern char *chxj_conv_z2h_num(request_rec *r, const char *src, apr_size_t *len, chxjconvrule_entry *entryp);
 
 #endif

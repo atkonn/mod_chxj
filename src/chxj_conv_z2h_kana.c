@@ -15,17 +15,12 @@
  * limitations under the License.
  */
 #include "mod_chxj.h"
-#include "chxj_conv_kana.h"
+#include "chxj_conv_z2h.h"
 #include "chxj_url_encode.h"
 #include "qs_parse_string.h"
 #include <errno.h>
 
-typedef struct {
-  apr_size_t byte;
-  char *hankaku;
-} kana_table_t;
-
-static kana_table_t kana_table1[] = {
+static z2h_table_t kana_table1[] = {
   { /* 00 */ 1, "\xa7\x00",},
   { /* 01 */ 1, "\xb1\x00",},
   { /* 02 */ 1, "\xa8\x00",},
@@ -114,7 +109,7 @@ static kana_table_t kana_table1[] = {
   { /* 85 */ 2, "\x83\x95",},
   { /* 86 */ 2, "\x83\x96",},
 };
-static kana_table_t kana_table2[] = {
+static z2h_table_t kana_table2[] = {
   { /* 0x8141 、*/ 1, "\xa4",},
   { /* 0x8142 。*/ 1, "\xa1",},
   { /* 0x8143 ，*/ 1, ",",},
@@ -127,11 +122,11 @@ static kana_table_t kana_table2[] = {
   { /* 0x814a ゛*/ 1, "\xde",},
   { /* 0x814b ゜*/ 1, "\xdf",},
 };
-static kana_table_t kana_table3[] = {
+static z2h_table_t kana_table3[] = {
   { /* 0x8175 「*/ 1, "\xa2",},
   { /* 0x8176 」*/ 1, "\xa3",},
 };
-static kana_table_t kana_table4[] = {
+static z2h_table_t kana_table4[] = {
   { /* 0x815b ゛*/ 1, "\xb0",},
 };
 
