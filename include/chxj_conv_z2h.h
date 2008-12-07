@@ -26,5 +26,6 @@ typedef struct {
 
 extern char *chxj_conv_z2h_kana(request_rec *r, const char *src, apr_size_t *len, chxjconvrule_entry *entryp);
 extern char *chxj_conv_z2h_alpha(request_rec *r, const char *src, apr_size_t *len, chxjconvrule_entry *entryp);
+extern char *chxj_conv_z2h_num(request_rec *r, const char *src, apr_size_t *len, chxjconvrule_entry *entryp);
 
 #endif
