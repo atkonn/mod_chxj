@@ -40,9 +40,7 @@ libmod_chxj_la_SOURCES = mod_chxj.c \
     chxj_apache.c \
     chxj_add_device_env.c \
     chxj_serf.c \
-    chxj_conv_z2h_kana.c \
-    chxj_conv_z2h_alpha.c \
-    chxj_conv_z2h_num.c
+    chxj_conv_z2h.c
 
 
 libmod_chxj_la_CFLAGS = -O2 -prefer-pic @QDEFS@ @DDEFS@ -I. -I../include -I@with_apache_header@  -I./serf

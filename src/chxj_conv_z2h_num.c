@@ -64,7 +64,6 @@ chxj_conv_z2h_num(request_rec *r, const char *src, apr_size_t *len, chxjconvrule
     else if (is_sjis_kanji(src[ii])) {
       unsigned char firstbyte  = src[ii + 0];
       unsigned char secondbyte = src[ii + 1];
-      /* Upper case */
       if (   firstbyte == 0x82
           && (secondbyte >= 0x4F && secondbyte <= 0x58)) {
         unsigned char p = secondbyte - 0x4F;
