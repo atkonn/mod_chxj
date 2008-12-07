@@ -403,9 +403,7 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
                                                               cookie);
     }
     if (dst && *len) {
-      dst = chxj_conv_z2h_kana(r, dst, len, entryp);
-      dst = chxj_conv_z2h_alpha(r, dst, len, entryp);
-      dst = chxj_conv_z2h_num(r, dst, len, entryp);
+      dst = chxj_conv_z2h(r, dst, len, entryp);
     }
   }
   ap_set_content_length(r, *len);

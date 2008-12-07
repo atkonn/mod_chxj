@@ -130,27 +130,99 @@ static z2h_table_t kana_table4[] = {
   { /* 0x815b ゛*/ 1, "\xb0",},
 };
 
+static z2h_table_t alpha_table_uc[] = {
+  { 1, "A",},
+  { 1, "B",},
+  { 1, "C",},
+  { 1, "D",},
+  { 1, "E",},
+  { 1, "F",},
+  { 1, "G",},
+  { 1, "H",},
+  { 1, "I",},
+  { 1, "J",},
+  { 1, "K",},
+  { 1, "L",},
+  { 1, "M",},
+  { 1, "N",},
+  { 1, "O",},
+  { 1, "P",},
+  { 1, "Q",},
+  { 1, "R",},
+  { 1, "S",},
+  { 1, "T",},
+  { 1, "U",},
+  { 1, "V",},
+  { 1, "W",},
+  { 1, "X",},
+  { 1, "Y",},
+  { 1, "Z",},
+};
+static z2h_table_t alpha_table_lc[] = {
+  { 1, "a",},
+  { 1, "b",},
+  { 1, "c",},
+  { 1, "d",},
+  { 1, "e",},
+  { 1, "f",},
+  { 1, "g",},
+  { 1, "h",},
+  { 1, "i",},
+  { 1, "j",},
+  { 1, "k",},
+  { 1, "l",},
+  { 1, "m",},
+  { 1, "n",},
+  { 1, "o",},
+  { 1, "p",},
+  { 1, "q",},
+  { 1, "r",},
+  { 1, "s",},
+  { 1, "t",},
+  { 1, "u",},
+  { 1, "v",},
+  { 1, "w",},
+  { 1, "x",},
+  { 1, "y",},
+  { 1, "z",},
+};
 /**
  */
 char *
-chxj_conv_z2h_kana(request_rec *r, const char *src, apr_size_t *len, chxjconvrule_entry *entryp)
+chxj_conv_z2h(request_rec *r, const char *src, apr_size_t *len, chxjconvrule_entry *entryp)
 {
   apr_size_t          ii;
   apr_size_t          ilen;
   apr_pool_t          *pool;
   char                *obuf;
   apr_size_t          olen;
+  int                 z2h_kana_flag = 0;
+  int                 z2h_alpha_flag = 0;
+  int                 z2h_num_flag = 0;
 
-  DBG(r,"REQ[%X] start chxj_conv_z2h_kana()", (unsigned int)(apr_size_t)r);
+  DBG(r,"REQ[%X] start chxj_conv_z2h()", (unsigned int)(apr_size_t)r);
 
-  if (entryp->action & CONVRULE_Z2H_OFF_BIT) {
-    DBG(r,"REQ[%X] Detect Z2hOff", (unsigned int)(apr_size_t)r);
-    DBG(r,"REQ[%X] end chxj_conv_z2h_kana()", (unsigned int)(apr_size_t)r);
-    return (char *)src;
+  if (entryp->action & CONVRULE_Z2H_ON_BIT) {
+    z2h_kana_flag = 1;
   }
-  if (! (entryp->action & CONVRULE_Z2H_ON_BIT)) {
-    DBG(r,"REQ[%X] Detect Z2hOff", (unsigned int)(apr_size_t)r);
-    DBG(r,"REQ[%X] end chxj_conv_z2h_kana()", (unsigned int)(apr_size_t)r);
+  if (entryp->action & CONVRULE_Z2H_OFF_BIT) {
+    z2h_kana_flag = 0;
+  }
+  if (entryp->action & CONVRULE_Z2H_ALPHA_ON_BIT) {
+    z2h_alpha_flag = 1;
+  }
+  if (entryp->action & CONVRULE_Z2H_ALPHA_OFF_BIT) {
+    z2h_alpha_flag = 0;
+  }
+  if (entryp->action & CONVRULE_Z2H_NUM_ON_BIT) {
+    z2h_num_flag = 1;
+  }
+  if (entryp->action & CONVRULE_Z2H_NUM_OFF_BIT) {
+    z2h_num_flag = 0;
+  }
+  if (z2h_kana_flag == 0 && z2h_alpha_flag == 0 &&  z2h_num_flag == 0) {
+    DBG(r, "REQ[%X] No Z2h flag.", (unsigned int)(apr_size_t)r);
+    DBG(r,"REQ[%X] end chxj_conv_z2h()", (unsigned int)(apr_size_t)r);
     return (char *)src;
   }
 
@@ -162,6 +234,7 @@ chxj_conv_z2h_kana(request_rec *r, const char *src, apr_size_t *len, chxjconvrul
   obuf = apr_palloc(pool, ilen + 1);
   if (! obuf) {
     ERR(r,"%s:%d REQ[%X] memory allocation error", __FILE__,__LINE__,(unsigned int)(apr_size_t)r);
+    DBG(r,"REQ[%X] end chxj_conv_z2h()", (unsigned int)(apr_size_t)r);
     return (char*)src;
   }
 
@@ -174,7 +247,8 @@ chxj_conv_z2h_kana(request_rec *r, const char *src, apr_size_t *len, chxjconvrul
     else if (is_sjis_kanji(src[ii])) {
       unsigned char firstbyte  = src[ii + 0];
       unsigned char secondbyte = src[ii + 1];
-      if (   firstbyte == 0x83
+      if (   z2h_kana_flag
+          && firstbyte == 0x83
           && (secondbyte >= 0x40 && secondbyte <= 0x96)) {
         unsigned char p = secondbyte - 0x40;
         if (kana_table1[p].byte != 0) {
@@ -188,7 +262,8 @@ chxj_conv_z2h_kana(request_rec *r, const char *src, apr_size_t *len, chxjconvrul
         }
       }
       else
-      if (   firstbyte == 0x81
+      if (   z2h_kana_flag
+          && firstbyte == 0x81
           && (secondbyte >= 0x41 && secondbyte <= 0x4b)) {
         unsigned char p = secondbyte - 0x41;
         if (kana_table2[p].byte != 0) {
@@ -202,7 +277,8 @@ chxj_conv_z2h_kana(request_rec *r, const char *src, apr_size_t *len, chxjconvrul
         }
       }
       else
-      if (   firstbyte == 0x81
+      if (   z2h_kana_flag
+          && firstbyte == 0x81
           && (secondbyte >= 0x75 && secondbyte <= 0x76)) {
         unsigned char p = secondbyte - 0x75;
         if (kana_table3[p].byte != 0) {
@@ -216,7 +292,8 @@ chxj_conv_z2h_kana(request_rec *r, const char *src, apr_size_t *len, chxjconvrul
         }
       }
       else
-      if (   firstbyte == 0x81
+      if (   z2h_kana_flag
+          && firstbyte == 0x81
           && (secondbyte >= 0x5b && secondbyte <= 0x5b)) {
         unsigned char p = secondbyte - 0x5b;
         if (kana_table4[p].byte != 0) {
@@ -228,6 +305,46 @@ chxj_conv_z2h_kana(request_rec *r, const char *src, apr_size_t *len, chxjconvrul
           obuf[olen++] = src[ii + 0];
           obuf[olen++] = src[ii + 1];
         }
+      }
+      else
+      /* Upper case */
+      if (   z2h_alpha_flag
+          && firstbyte == 0x82
+          && (secondbyte >= 0x60 && secondbyte <= 0x79)) {
+        unsigned char p = secondbyte - 0x60;
+        if (alpha_table_uc[p].byte != 0) {
+          /* Detect Zenkaku Alphabet */
+          strcpy(&obuf[olen], alpha_table_uc[p].hankaku);
+          olen += alpha_table_uc[p].byte;
+        }
+        else {
+          obuf[olen++] = src[ii + 0];
+          obuf[olen++] = src[ii + 1];
+        }
+      }
+      else /* Lower case */
+      if (   z2h_alpha_flag
+          && firstbyte == 0x82
+          && (secondbyte >= 0x81 && secondbyte <= 0x9a)) {
+        unsigned char p = secondbyte - 0x81;
+        if (alpha_table_lc[p].byte != 0) {
+          /* Detect Zenkaku Alphabet */
+          strcpy(&obuf[olen], alpha_table_lc[p].hankaku);
+          olen += alpha_table_lc[p].byte;
+        }
+        else {
+          obuf[olen++] = src[ii + 0];
+          obuf[olen++] = src[ii + 1];
+        }
+      }
+      else
+      if (   z2h_num_flag
+          && firstbyte == 0x82
+          && (secondbyte >= 0x4F && secondbyte <= 0x58)) {
+        unsigned char p = secondbyte - 0x4F;
+        /* Detect Zenkaku Number */
+        obuf[olen] = '0' + p;
+        olen++;
       }
       else {
         obuf[olen++] = src[ii + 0];
