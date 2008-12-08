@@ -69,6 +69,7 @@
 #include "chxj_serf.h"
 #include "chxj_add_device_env.h"
 #include "chxj_conv_z2h.h"
+#include "chxj_header_inf.h"
 
 
 #define CHXJ_VERSION_PREFIX PACKAGE_NAME "/"
@@ -841,6 +842,8 @@ pass_data_to_filter(ap_filter_t *f, const char *data,
   apr_bucket          *b;
 
   DBG(r, "REQ[%X] start pass_data_to_filter()", (unsigned int)(apr_size_t)r);
+
+  chxj_header_inf_clear(r);
 
   bb = apr_brigade_create(r->pool, c->bucket_alloc);
   b  = apr_bucket_transient_create(data, len, c->bucket_alloc);

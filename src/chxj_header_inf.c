@@ -20,6 +20,11 @@
 #include "qs_parse_string.h"
 #include <errno.h>
 
+static const char * v_header_inf_table[] = {
+  HTTP_X_CHXJ_SET_CONTENT_TYPE,
+  NULL,
+};
+
 /**
  */
 char *
@@ -46,6 +51,15 @@ chxj_header_inf_set_content_type(request_rec *r, char *default_string)
   return default_string;
 }
 
+void
+chxj_header_inf_clear(request_rec *r)
+{
+  int ii=0;
+  for (;v_header_inf_table[ii] != NULL; ii++) {
+    apr_table_unset(r->headers_out, v_header_inf_table[ii]);
+    apr_table_unset(r->err_headers_out, v_header_inf_table[ii]);
+  }
+}
 /*
  * vim: ts=2 et
  */
