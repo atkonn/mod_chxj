@@ -228,7 +228,7 @@ chxj_convert_illegal_charactor_sequence(request_rec *r, chxjconvrule_entry  *ent
   }
   if (ibuf && *ibuf) {
     *ilen = strlen(*ibuf);
-    DBG(r, "new len = [%d].", *ilen);
+    DBG(r, "new len = [%" APR_SIZE_T_FMT "].", (apr_size_t)*ilen);
   }
 }
 
