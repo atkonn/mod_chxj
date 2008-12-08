@@ -22,6 +22,7 @@
 #include "chxj_img_conv.h"
 #include "chxj_qr_code.h"
 #include "chxj_encoding.h"
+#include "chxj_header_inf.h"
 
 #define GET_CHTML50(X) ((chtml50_t *)(X))
 #undef W_L
@@ -441,7 +442,7 @@ chxj_convert_chtml50(
   chtml50.entryp = entryp;
   chtml50.cookie = cookie;
 
-  chxj_set_content_type(r, "text/html; charset=Windows-31J");
+  chxj_set_content_type(r, chxj_header_inf_set_content_type(r, "text/html; charset=Windows-31J"));
 
   /*--------------------------------------------------------------------------*/
   /* The character string of the input is analyzed.                           */
@@ -670,7 +671,9 @@ s_chtml50_start_meta_tag(void *pdoc, Node *node)
         if (content_type_flag) {
           W_L(" ");
           W_V(name);
-          W_L("=\"text/html; charset=Windows-31J\"");
+          W_L("=\"");
+          W_V(chxj_header_inf_set_content_type(r, "text/html; charset=SHIFT_JIS"));
+          W_L("\"");
         }
         else
         if (refresh_flag) {

@@ -22,6 +22,7 @@
 #include "chxj_encoding.h"
 #include "chxj_url_encode.h"
 #include "chxj_str_util.h"
+#include "chxj_header_inf.h"
 
 
 #define GET_JHTML(X) ((jhtml_t *)(X))
@@ -447,7 +448,7 @@ chxj_convert_jhtml(
   jhtml.entryp = entryp;
   jhtml.cookie = cookie;
 
-  chxj_set_content_type(r, "text/html; charset=Windows-31J");
+  chxj_set_content_type(r, chxj_header_inf_set_content_type(r, "text/html; charset=Windows-31J"));
 
   /*--------------------------------------------------------------------------*/
   /* The character string of the input is analyzed.                           */
@@ -702,7 +703,7 @@ s_jhtml_start_meta_tag(void *pdoc, Node *node)
           W_L(" ");
           W_V(name);
           W_L("=\"");
-          W_L("text/html; charset=Windows-31J");
+          W_V(chxj_header_inf_set_content_type(r, "text/html; charset=SHIFT_JIS"));
           W_L("\"");
         }
         else
