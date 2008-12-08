@@ -527,7 +527,7 @@ s_create_cache_file(request_rec          *r,
   /*------------------*/
   img_count = MagickGetNumberImages(magick_wand);
   DBG(r, "REQ[%X] img_count is [%d]", (unsigned int)(apr_size_t)r, img_count);
-  if (img_count > 0) {
+  if (img_count > 1) {
     MagickSetImageIndex(magick_wand, 0);
     MagickWand *magick_wand2 = MagickGetImage(magick_wand);
     DestroyMagickWand(magick_wand);

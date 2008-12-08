@@ -21,7 +21,7 @@
 
 #define HTTP_X_CHXJ_SET_CONTENT_TYPE   "X-Chxj-Set-Content-Type"
 
-
 extern char *chxj_header_inf_set_content_type(request_rec *r, char *default_string);
+extern void chxj_header_inf_clear(request_rec *r);
 
 #endif
