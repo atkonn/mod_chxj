@@ -23,6 +23,7 @@
 #include "chxj_encoding.h"
 #include "chxj_buffered_write.h"
 #include "chxj_str_util.h"
+#include "chxj_header_inf.h"
 
 #define GET_CHTML10(X) ((chtml10_t *)(X))
 #undef W_L
@@ -476,7 +477,7 @@ chxj_convert_chtml10(
   chtml10.entryp    = entryp;
   chtml10.cookie    = cookie;
 
-  chxj_set_content_type(r, "text/html; charset=Windows-31J");
+  chxj_set_content_type(r, chxj_header_inf_set_content_type(r, "text/html; charset=Windows-31J"));
 
   /*--------------------------------------------------------------------------*/
   /* The character string of the input is analyzed.                           */
@@ -1784,7 +1785,9 @@ s_chtml10_start_a_tag(void *pdoc, Node *node)
         /* CHTML1.0                                                           */
         /*--------------------------------------------------------------------*/
         value = chxj_encoding_parameter(r, value, 0);
-        value = chxj_add_cookie_parameter(r, value, chtml10->cookie);
+        if (! chxj_starts_with(value, "mailto:") && ! chxj_starts_with(value, "telto:")) {
+          value = chxj_add_cookie_parameter(r, value, chtml10->cookie);
+        }
         W_L(" href=\"");
         W_V(value);
         W_L("\"");

@@ -64,10 +64,14 @@
 #include "chxj_cookie.h"
 #include "chxj_url_encode.h"
 #include "chxj_str_util.h"
+#include "chxj_dump_string.h"
 #if defined(USE_MYSQL_COOKIE)
 #  include "chxj_mysql.h"
 #endif
 #include "chxj_serf.h"
+#include "chxj_add_device_env.h"
+#include "chxj_conv_z2h.h"
+#include "chxj_header_inf.h"
 
 
 #define CHXJ_VERSION_PREFIX PACKAGE_NAME "/"
@@ -269,6 +273,8 @@ chxj_headers_fixup(request_rec *r)
     }
   }
 
+  chxj_add_device_env(r, spec);
+
   DBG(r, "REQ[%X] end chxj_headers_fixup()", (unsigned int)(apr_size_t)r);
 
   return DECLINED;
@@ -402,6 +408,9 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
                                                               entryp, 
                                                               cookie);
     }
+    if (dst && *len) {
+      dst = chxj_conv_z2h(r, dst, len, entryp);
+    }
   }
   ap_set_content_length(r, *len);
 
@@ -413,6 +422,7 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
   if (cookie) {
     *cookiep = cookie;
   }
+
 
   DBG(r, "REQ[%X] end of chxj_convert()", (unsigned int)(apr_size_t)r);
 
@@ -825,6 +835,8 @@ pass_data_to_filter(ap_filter_t *f, const char *data,
 
   DBG(r, "REQ[%X] start pass_data_to_filter()", (unsigned int)(apr_size_t)r);
 
+  chxj_header_inf_clear(r);
+
   bb = apr_brigade_create(r->pool, c->bucket_alloc);
   b  = apr_bucket_transient_create(data, len, c->bucket_alloc);
 
@@ -843,26 +855,6 @@ pass_data_to_filter(ap_filter_t *f, const char *data,
   return rv;
 }
 
-/**
- * Dump string to debug log.
- */
-void
-chxj_dump_string(request_rec *r, const char *filename, int line, const char *title, const char *str, apr_size_t len)
-{
-  apr_size_t ii;
-  chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] +-------------------------------------------------------------------+", (unsigned int)(apr_size_t)r);
-  chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] |                                                                   |", (unsigned int)(apr_size_t)r);
-  chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] | %-*.*s |", (unsigned int)(apr_size_t)r, 64, 64, title);
-  chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] |                                                                   |", (unsigned int)(apr_size_t)r);
-  chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] +-------------------------------------------------------------------+", (unsigned int)(apr_size_t)r);
-  for (ii=0; ii<len/64; ii++) {
-    chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] | [%-*.*s] |", (unsigned int)(apr_size_t)r, 64, 64, &str[ii * 64]);
-  }
-  if (len % 64) {
-    chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] | [%-*.*s] |", (unsigned int)(apr_size_t)r, 64, 64, &str[ii * 64]);
-  }
-  chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] +-------------------------------------------------------------------+", (unsigned int)(apr_size_t)r);
-}
 
 /**
  * It is the main loop of the output filter. 
@@ -2206,6 +2198,42 @@ cmd_convert_rule(cmd_parms *cmd, void *mconfig, const char *arg)
         newrule->action &= (0xffffffff ^ CONVRULE_CSS_ON_BIT);
       }
       break;
+
+    case 'Z':
+    case 'z':
+      if (strcasecmp(CONVRULE_Z2H_ON_CMD, action) == 0) {
+        newrule->action |= CONVRULE_Z2H_ON_BIT;
+      }
+      else
+      if (strcasecmp(CONVRULE_Z2H_OFF_CMD, action) == 0) {
+        newrule->action |= CONVRULE_Z2H_OFF_BIT;
+      }
+      else
+      if (strcasecmp(CONVRULE_Z2H_ALPHA_ON_CMD, action) == 0) {
+        newrule->action |= CONVRULE_Z2H_ALPHA_ON_BIT;
+      }
+      else
+      if (strcasecmp(CONVRULE_Z2H_ALPHA_OFF_CMD, action) == 0) {
+        newrule->action |= CONVRULE_Z2H_ALPHA_OFF_BIT;
+      }
+      else
+      if (strcasecmp(CONVRULE_Z2H_NUM_ON_CMD, action) == 0) {
+        newrule->action |= CONVRULE_Z2H_NUM_ON_BIT;
+      }
+      else
+      if (strcasecmp(CONVRULE_Z2H_NUM_OFF_CMD, action) == 0) {
+        newrule->action |= CONVRULE_Z2H_NUM_OFF_BIT;
+      }
+      else
+      if (strcasecmp(CONVRULE_Z2H_ALL_ON_CMD, action) == 0) {
+        newrule->action |= CONVRULE_Z2H_ON_BIT | CONVRULE_Z2H_ALPHA_ON_BIT | CONVRULE_Z2H_NUM_ON_BIT;
+      }
+      else
+      if (strcasecmp(CONVRULE_Z2H_NUM_OFF_CMD, action) == 0) {
+        newrule->action |= CONVRULE_Z2H_OFF_BIT | CONVRULE_Z2H_ALPHA_OFF_BIT | CONVRULE_Z2H_NUM_OFF_BIT;
+      }
+      break;
+
     default:
       break;
     }

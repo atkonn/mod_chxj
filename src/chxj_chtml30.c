@@ -22,6 +22,7 @@
 #include "chxj_img_conv.h"
 #include "chxj_qr_code.h"
 #include "chxj_encoding.h"
+#include "chxj_header_inf.h"
 
 #define GET_CHTML30(X) ((chtml30_t *)(X))
 #undef W_L
@@ -529,7 +530,7 @@ chxj_convert_chtml30(
   chtml30.entryp = entryp;
   chtml30.cookie = cookie;
 
-  chxj_set_content_type(r, "text/html; charset=Windows-31J");
+  chxj_set_content_type(r, chxj_header_inf_set_content_type(r, "text/html; charset=Windows-31J"));
 
   /*--------------------------------------------------------------------------*/
   /* The character string of the input is analyzed.                           */
@@ -763,7 +764,9 @@ s_chtml30_start_meta_tag(void *pdoc, Node *node)
         if (content_type_flag) {
           W_L(" ");
           W_V(name);
-          W_L("=\"text/html; charset=Windows-31J\"");
+          W_L("=\"");
+          W_V(chxj_header_inf_set_content_type(r, "text/html; charset=SHIFT_JIS"));
+          W_L("\"");
         }
         else
         if (refresh_flag) {
@@ -1180,7 +1183,9 @@ s_chtml30_start_a_tag(void *pdoc, Node *node)
       /* CHTML1.0                                                             */
       /*----------------------------------------------------------------------*/
       value = chxj_encoding_parameter(r, value, 0);
-      value = chxj_add_cookie_parameter(r, value, chtml30->cookie);
+      if (! chxj_starts_with(value, "mailto:") && ! chxj_starts_with(value, "telto:")) {
+        value = chxj_add_cookie_parameter(r, value, chtml30->cookie);
+      }
       W_L(" href=\"");
       W_V(value);
       W_L("\"");
@@ -2556,6 +2561,7 @@ s_chtml30_start_div_tag(void *pdoc, Node *node)
   char        *attr_wap_marquee_dir   = NULL;
   char        *attr_wap_marquee_loop  = NULL;
   char        *attr_color             = NULL;
+  char        *attr_bgcolor           = NULL;
 
   chtml30 = GET_CHTML30(pdoc);
   doc     = chtml30->doc;
@@ -2586,6 +2592,8 @@ s_chtml30_start_div_tag(void *pdoc, Node *node)
       css_property_t *text_decoration_prop   = chxj_css_get_property_value(doc, style, "text-decoration");
       css_property_t *color_prop             = chxj_css_get_property_value(doc, style, "color");
       css_property_t *text_align_prop        = chxj_css_get_property_value(doc, style, "text-align");
+      css_property_t *background_color_prop  = chxj_css_get_property_value(doc, style, "background-color");
+      css_property_t *background_prop        = chxj_css_get_property_value(doc, style, "background");
 
       css_property_t *cur;
       for (cur = display_prop->next; cur != display_prop; cur = cur->next) {
@@ -2598,8 +2606,23 @@ s_chtml30_start_div_tag(void *pdoc, Node *node)
           attr_decoration = apr_pstrdup(doc->pool, cur->value);
         }
       }
+      for (cur = background_color_prop->next; cur != background_color_prop; cur = cur->next) {
+        attr_bgcolor = apr_pstrdup(doc->pool, cur->value);
+        attr_bgcolor = chxj_css_rgb_func_to_value(doc->pool, attr_bgcolor);
+      }
+      for (cur = background_prop->next; cur != background_prop; cur = cur->next) {
+        char *ss = strchr(cur->value, '#');
+        if (!ss) {
+          ss = strstr(cur->value, "rgb");
+        }
+        if (ss) {
+          attr_bgcolor = apr_pstrdup(doc->pool, cur->value);
+          attr_bgcolor = chxj_css_rgb_func_to_value(doc->pool, attr_bgcolor);
+        }
+      }
       for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
         attr_color = apr_pstrdup(doc->pool, cur->value);
+        attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
       }
       for (cur = text_align_prop->next; cur != text_align_prop; cur = cur->next) {
         attr_align = apr_pstrdup(doc->pool, cur->value);
@@ -2642,11 +2665,20 @@ s_chtml30_start_div_tag(void *pdoc, Node *node)
     W_L(">");
     flg->with_div_flag = 1;
   }
+  else {
+    W_L("<div>");
+    flg->with_div_flag = 1;
+  }
   if (attr_color) {
-    W_L("<font color=\"");
-    W_V(attr_color);
-    W_L("\">");
-    flg->with_font_flag = 1;
+    if (attr_bgcolor && (STRCASEEQ('w','W',"white",attr_color) || STRCASEEQ('#','#',"#ffffff",attr_color))) {
+      /* nothing */
+    }
+    else {
+      W_L("<font color=\"");
+      W_V(attr_color);
+      W_L("\">");
+      flg->with_font_flag = 1;
+    }
   }
   if (attr_decoration) {
     W_L("<blink>");
@@ -2671,10 +2703,6 @@ s_chtml30_start_div_tag(void *pdoc, Node *node)
     }
     W_L(">");
     flg->with_marquee_flag = 1;
-  }
-  if (! attr_align && ! attr_color && ! attr_decoration && ! attr_display) {
-    W_L("<div>");
-    flg->with_div_flag = 1;
   }
   node->userData = flg;
 
@@ -3134,6 +3162,18 @@ s_chtml30_start_li_tag(void *pdoc, Node *node)
     W_V(attr_value);
     W_L("\"");
   }
+
+  W_L("<li");
+  if (attr_type) {
+    W_L(" type=\"");
+    W_V(attr_type);
+    W_L("\"");
+  }
+  if (attr_value) {
+    W_L(" value=\"");
+    W_V(attr_value);
+    W_L("\"");
+  }
   W_L(">");
   return chtml30->out;
 }
@@ -3579,6 +3619,12 @@ s_chtml30_start_h5_tag(void *pdoc, Node *node)
     W_V(attr_align);
     W_L("\"");
   }
+  W_L("<h5");
+  if (attr_align) {
+    W_L(" align=\"");
+    W_V(attr_align);
+    W_L("\"");
+  }
   W_L(">");
 
   return chtml30->out;
@@ -3748,6 +3794,33 @@ s_chtml30_start_textarea_tag(void *pdoc, Node *node)
     else if (STRCASEEQ('s','S',"style", name) && value && *value) {
       attr_style = value;
     }
+  }  
+
+  W_L("<textarea");
+  if (attr_accesskey) {
+    W_L(" accesskey=\"");
+    W_V(attr_accesskey);
+    W_L("\"");
+  }
+  if (attr_name) {
+    W_L(" name=\"");
+    W_V(attr_name);
+    W_L("\"");
+  }
+  if (attr_rows) {
+    W_L(" rows=\"");
+    W_V(attr_rows);
+    W_L("\"");
+  }
+  if (attr_cols) {
+    W_L(" cols=\"");
+    W_V(attr_cols);
+    W_L("\"");
+  }
+  if (attr_istyle) {
+    W_L(" istyle=\"");
+    W_V(attr_istyle);
+    W_L("\"");
   }
 
   if (IS_CSS_ON(chtml30->entryp)) {
@@ -4234,6 +4307,22 @@ s_chtml30_start_marquee_tag(void *pdoc, Node *node)
         }
       }
     }
+  }
+  W_L("<marquee");
+  if (attr_direction) {
+    W_L(" direction=\"");
+    W_V(attr_direction);
+    W_L("\"");
+  }
+  if (attr_behavior) {
+    W_L(" behavior=\"");
+    W_V(attr_behavior);
+    W_L("\"");
+  }
+  if (attr_loop) {
+    W_L(" loop=\"");
+    W_V(attr_loop);
+    W_L("\"");
   }
   W_L("<marquee");
   if (attr_direction) {

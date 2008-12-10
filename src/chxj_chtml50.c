@@ -22,6 +22,7 @@
 #include "chxj_img_conv.h"
 #include "chxj_qr_code.h"
 #include "chxj_encoding.h"
+#include "chxj_header_inf.h"
 
 #define GET_CHTML50(X) ((chtml50_t *)(X))
 #undef W_L
@@ -452,7 +453,7 @@ chxj_convert_chtml50(
   chtml50.entryp = entryp;
   chtml50.cookie = cookie;
 
-  chxj_set_content_type(r, "text/html; charset=Windows-31J");
+  chxj_set_content_type(r, chxj_header_inf_set_content_type(r, "text/html; charset=Windows-31J"));
 
   /*--------------------------------------------------------------------------*/
   /* The character string of the input is analyzed.                           */
@@ -686,7 +687,9 @@ s_chtml50_start_meta_tag(void *pdoc, Node *node)
         if (content_type_flag) {
           W_L(" ");
           W_V(name);
-          W_L("=\"text/html; charset=Windows-31J\"");
+          W_L("=\"");
+          W_V(chxj_header_inf_set_content_type(r, "text/html; charset=SHIFT_JIS"));
+          W_L("\"");
         }
         else
         if (refresh_flag) {
@@ -1034,6 +1037,38 @@ s_chtml50_start_body_tag(void *pdoc, Node *node)
     W_V(attr_vlink);
     W_L("\"");
   }
+
+  W_L("<body");
+  if (attr_bgcolor) {
+    attr_bgcolor = chxj_css_rgb_func_to_value(doc->pool, attr_bgcolor);
+    W_L(" bgcolor=\"");
+    W_V(attr_bgcolor);
+    W_L("\"");
+  }
+  if (attr_text) {
+    attr_text = chxj_css_rgb_func_to_value(doc->pool, attr_text);
+    W_L(" text=\"");
+    W_V(attr_text);
+    W_L("\"");
+  }
+  if (attr_link) {
+    attr_link = chxj_css_rgb_func_to_value(doc->pool, attr_link);
+    W_L(" link=\"");
+    W_V(attr_link);
+    W_L("\"");
+  }
+  if (attr_alink) {
+    attr_alink = chxj_css_rgb_func_to_value(doc->pool, attr_alink);
+    W_L(" alink=\"");
+    W_V(attr_alink);
+    W_L("\"");
+  }
+  if (attr_vlink) {
+    attr_vlink = chxj_css_rgb_func_to_value(doc->pool, attr_vlink);
+    W_L(" vlink=\"");
+    W_V(attr_vlink);
+    W_L("\"");
+  }
   W_L(">");
 
   return chtml50->out;
@@ -1109,7 +1144,9 @@ s_chtml50_start_a_tag(void *pdoc, Node *node)
       /* CHTML1.0                                                             */
       /*----------------------------------------------------------------------*/
       value = chxj_encoding_parameter(r, value, 0);
-      value = chxj_add_cookie_parameter(r, value, chtml50->cookie);
+      if (! chxj_starts_with(value, "mailto:") && ! chxj_starts_with(value, "telto:")) {
+        value = chxj_add_cookie_parameter(r, value, chtml50->cookie);
+      }
       W_L(" href=\"");
       W_V(value);
       W_L("\"");
@@ -2593,6 +2630,7 @@ s_chtml50_start_div_tag(void *pdoc, Node *node)
   char        *attr_wap_marquee_dir   = NULL;
   char        *attr_wap_marquee_loop  = NULL;
   char        *attr_color             = NULL;
+  char        *attr_bgcolor           = NULL;
   char        *attr_font_size         = NULL;
 
   chtml50 = GET_CHTML50(pdoc);
@@ -2625,6 +2663,8 @@ s_chtml50_start_div_tag(void *pdoc, Node *node)
       css_property_t *color_prop             = chxj_css_get_property_value(doc, style, "color");
       css_property_t *text_align_prop        = chxj_css_get_property_value(doc, style, "text-align");
       css_property_t *font_size_prop         = chxj_css_get_property_value(doc, style, "font-size");
+      css_property_t *background_color_prop  = chxj_css_get_property_value(doc, style, "background-color");
+      css_property_t *background_prop        = chxj_css_get_property_value(doc, style, "background");
 
       css_property_t *cur;
       for (cur = display_prop->next; cur != display_prop; cur = cur->next) {
@@ -2637,8 +2677,23 @@ s_chtml50_start_div_tag(void *pdoc, Node *node)
           attr_decoration = apr_pstrdup(doc->pool, cur->value);
         }
       }
+      for (cur = background_color_prop->next; cur != background_color_prop; cur = cur->next) {
+        attr_bgcolor = apr_pstrdup(doc->pool, cur->value);
+        attr_bgcolor = chxj_css_rgb_func_to_value(doc->pool, attr_bgcolor);
+      }
+      for (cur = background_prop->next; cur != background_prop; cur = cur->next) {
+        char *ss = strchr(cur->value, '#');
+        if (!ss) {
+          ss = strstr(cur->value, "rgb");
+        }
+        if (ss) {
+          attr_bgcolor = apr_pstrdup(doc->pool, cur->value);
+          attr_bgcolor = chxj_css_rgb_func_to_value(doc->pool, attr_bgcolor);
+        }
+      }
       for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
         attr_color = apr_pstrdup(doc->pool, cur->value);
+        attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
       }
       for (cur = text_align_prop->next; cur != text_align_prop; cur = cur->next) {
         attr_align = apr_pstrdup(doc->pool, cur->value);
@@ -2705,20 +2760,28 @@ s_chtml50_start_div_tag(void *pdoc, Node *node)
     W_L(">");
     flg->with_div_flag = 1;
   }
+  else {
+    W_L("<div>");
+    flg->with_div_flag = 1;
+  }
   if (attr_color || attr_font_size) {
-    W_L("<font");
-    if (attr_color) {
-      W_L(" color=\"");
-      W_V(attr_color);
-      W_L("\"");
+    if (! attr_display && attr_color && (STRCASEEQ('w','W',"white",attr_color) || STRCASEEQ('#','#',"#ffffff", attr_color))) {
     }
-    if (attr_font_size) {
-      W_L(" size=\"");
-      W_V(attr_font_size);
-      W_L("\"");
+    else {
+      W_L("<font");
+      if (attr_color) {
+        W_L(" color=\"");
+        W_V(attr_color);
+        W_L("\"");
+      }
+      if (attr_font_size) {
+        W_L(" size=\"");
+        W_V(attr_font_size);
+        W_L("\"");
+      }
+      W_L(">");
+      flg->with_font_flag = 1;
     }
-    W_L(">");
-    flg->with_font_flag = 1;
   }
   if (attr_decoration) {
     W_L("<blink>");
@@ -2741,12 +2804,13 @@ s_chtml50_start_div_tag(void *pdoc, Node *node)
       W_V(attr_wap_marquee_loop);
       W_L("\"");
     }
+    if (attr_bgcolor) {
+      W_L(" bgcolor=\"");
+      W_V(attr_bgcolor);
+      W_L("\"");
+    }
     W_L(">");
     flg->with_marquee_flag = 1;
-  }
-  if (!attr_align && !attr_color && !attr_decoration && !attr_display && !attr_font_size) {
-    W_L("<div>");
-    flg->with_div_flag = 1;
   }
   node->userData = flg;
 
@@ -3137,6 +3201,17 @@ s_chtml50_start_ol_tag(void *pdoc, Node *node)
     W_V(attr_start);
     W_L("\"");
   }
+  W_L("<ol");
+  if (attr_type) {
+    W_L(" type=\"");
+    W_V(attr_type);
+    W_L("\"");
+  }
+  if (attr_start) {
+    W_L(" start=\"");
+    W_V(attr_start);
+    W_L("\"");
+  }
   W_L(">");
 
   return chtml50->out;
@@ -3507,6 +3582,12 @@ s_chtml50_start_h3_tag(void *pdoc, Node *node)
     W_V(attr_align);
     W_L("\"");
   }
+  W_L("<h3");
+  if (attr_align) {
+    W_L(" align=\"");
+    W_V(attr_align);
+    W_L("\"");
+  }
   W_L(">");
 
   return chtml50->out;
@@ -3678,6 +3759,12 @@ s_chtml50_start_h5_tag(void *pdoc, Node *node)
         }
       }
     }
+  }
+  W_L("<h5");
+  if (attr_align) {
+    W_L(" align=\"");
+    W_V(attr_align);
+    W_L("\"");
   }
   W_L("<h5");
   if (attr_align) {
@@ -4987,6 +5074,12 @@ s_chtml50_start_menu_tag(void *pdoc, Node *node)
         }
       }
     }
+  }
+  W_L("<menu");
+  if (attr_type) {
+    W_L(" type=\"");
+    W_V(attr_type);
+    W_L("\"");
   }
   W_L("<menu");
   if (attr_type) {

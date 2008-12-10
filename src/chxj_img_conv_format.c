@@ -458,6 +458,7 @@ s_create_cache_file(request_rec          *r,
   apr_finfo_t cache_dir_st;
 
   MagickWand *magick_wand;
+  int        img_count;
 
   if (STRCASEEQ('c','C',"chxj-qrcode",r->handler)) {
     /*------------------------------------------------------------------------*/
@@ -520,6 +521,24 @@ s_create_cache_file(request_rec          *r,
     EXIT_MAGICK_ERROR();
     return HTTP_NOT_FOUND;
   }
+  if (MagickStripImage(magick_wand) == MagickFalse) {
+    ERR(r, "mod_chxj: strip image failure.");
+    EXIT_MAGICK_ERROR();
+    return HTTP_NOT_FOUND;
+  }
+
+  /*------------------*/
+  /* for AnimationGIF */
+  /*------------------*/
+  img_count = MagickGetNumberImages(magick_wand);
+  DBG(r, "REQ[%X] img_count is [%d]", (unsigned int)(apr_size_t)r, img_count);
+  if (img_count > 1) {
+    MagickSetImageIndex(magick_wand, 0);
+    MagickWand *magick_wand2 = MagickGetImage(magick_wand);
+    DestroyMagickWand(magick_wand);
+    magick_wand = magick_wand2;
+  }
+
   if (MagickStripImage(magick_wand) == MagickFalse) {
     ERR(r, "mod_chxj: strip image failure.");
     EXIT_MAGICK_ERROR();

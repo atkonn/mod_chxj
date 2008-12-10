@@ -18,6 +18,7 @@
 #include "chxj_encoding.h"
 #include "chxj_apply_convrule.h"
 #include "chxj_url_encode.h"
+#include "chxj_dump_string.h"
 #include <errno.h>
 #include <iconv.h>
 
@@ -38,7 +39,7 @@ chxj_encoding(request_rec *r, const char *src, apr_size_t *len)
   apr_pool_t          *pool;
 
 
-  DBG(r,"start chxj_encoding()");
+  DBG(r,"REQ[%X] start chxj_encoding()", (unsigned int)(apr_size_t)r);
 
   dconf = chxj_get_module_config(r->per_dir_config, &chxj_module);
 
@@ -71,6 +72,7 @@ chxj_encoding(request_rec *r, const char *src, apr_size_t *len)
   ibuf = apr_palloc(pool, ilen+1);
   if (ibuf == NULL) {
     ERR(r, "runtime exception: chxj_encoding(): Out of memory.");
+    DBG(r,"REQ[%X] end chxj_encoding()", (unsigned int)(apr_size_t)r);
     return (char *)src;
   }
   memset(ibuf, 0, ilen+1);
@@ -101,14 +103,16 @@ chxj_encoding(request_rec *r, const char *src, apr_size_t *len)
     if (result == (size_t)(-1)) {
       if (E2BIG == errno) {
         ERR(r, "There is not sufficient room at *outbuf.");
+        break;
       }
       else if (EILSEQ == errno) {
-        ERR(r, "An invalid multibyte sequence has been encountered in the input. input:[%s]", ibuf);
+        ERR(r, "%s:%d An invalid multibyte sequence has been encountered in the input. input:[%s]", __FILE__,__LINE__,ibuf);
+        chxj_convert_illegal_charactor_sequence(r, entryp, &ibuf, &ilen, &obuf, &olen);
       }
       else if (EINVAL == errno) {
         ERR(r, "An incomplete multibyte sequence has been encountered in the input. input:[%s]", ibuf);
+        break;
       }
-      break;
     }
   }
   *len = strlen(spos);
@@ -117,6 +121,122 @@ chxj_encoding(request_rec *r, const char *src, apr_size_t *len)
   chxj_dump_string(r, APLOG_MARK, "RESULT Convert Encoding", spos, *len);
   DBG(r,"REQ[%X] end   chxj_encoding()", (unsigned int)(apr_size_t)r);
   return spos;
+}
+
+
+void
+chxj_convert_illegal_charactor_sequence(request_rec *r, chxjconvrule_entry  *entryp, char **ibuf, apr_size_t *ilen, char **obuf, apr_size_t *olen)
+{
+  if (STRCASEEQ('u','U',"UTF-8", entryp->encoding) || STRCASEEQ('u','U',"UTF8", entryp->encoding)) {
+    if ((0xe0 & **ibuf) == 0xc0) {
+      /* 2byte charactor */
+      **obuf = '?';
+      *obuf += 1;
+      *olen -= 1;
+      *ibuf += 2;
+      DBG(r, "passed 2byte.");
+    }
+    else if ((0xf0 & **ibuf) == 0xe0) {
+      /* 3byte charactor */
+      **obuf = '?';
+      *obuf += 1;
+      *olen -= 1;
+      *ibuf +=3;
+      DBG(r, "passed 3byte.");
+    }
+    else if ((0xf8 & **ibuf) == 0xf0) {
+      /* 4byte charactor */
+      **obuf = '?';
+      *obuf += 1;
+      *olen -= 1;
+      *ibuf +=4;
+      DBG(r, "passed 4byte.");
+    }
+    else if ((0xc0 & **ibuf) == 0x80) {
+      /* 1byte charactor */
+      **obuf = '?';
+      *obuf += 1;
+      *olen -= 1;
+      *ibuf += 1;
+      DBG(r, "passed 1byte.");
+    }
+    else {
+      /* unknown charactor */
+      **obuf = '?';
+      *obuf += 1;
+      *olen -= 1;
+      *ibuf += 1;
+      DBG(r, "passed 1byte.");
+    }
+  }
+  else if (STRCASEEQ('e','E', "EUCJP",               entryp->encoding)
+      ||   STRCASEEQ('c','C', "CSEUCPKDFMTJAPANESE", entryp->encoding)
+      ||   STRCASEEQ('e','E', "EUC-JISX0213",        entryp->encoding)
+      ||   STRCASEEQ('e','E', "EUC-JP-MS",           entryp->encoding)
+      ||   STRCASEEQ('e','E', "EUC-JP",              entryp->encoding)
+      ||   STRCASEEQ('e','E', "EUCJP-MS",            entryp->encoding)
+      ||   STRCASEEQ('e','E', "EUCJP-OPEN",          entryp->encoding)
+      ||   STRCASEEQ('e','E', "EUCJP-WIN",           entryp->encoding)
+      ||   STRCASEEQ('e','E', "EUCJP",               entryp->encoding)) {
+    if ((unsigned char)**ibuf == 0x8F) {
+      /* 3byte charactor */
+      **obuf = '?';
+      *obuf += 1;
+      *olen -= 1;
+      *ibuf +=3;
+      DBG(r, "passed 3byte.");
+    }
+    else {
+      /* 2byte charactor */
+      **obuf = '?';
+      *obuf += 1;
+      *olen -= 1;
+      *ibuf += 2;
+      DBG(r, "passed 2byte.");
+    }
+  }
+  else if (STRCASEEQ('c', 'C', "CP932",     entryp->encoding)
+      ||   STRCASEEQ('c', 'C', "CSIBM932",  entryp->encoding)
+      ||   STRCASEEQ('i', 'I', "IBM-932",   entryp->encoding)
+      ||   STRCASEEQ('i', 'I', "IBM932",    entryp->encoding)
+      ||   STRCASEEQ('m', 'M', "MS932",     entryp->encoding)
+      ||   STRCASEEQ('m', 'M', "MS_KANJI",  entryp->encoding)
+      ||   STRCASEEQ('s', 'S', "SJIS-OPEN", entryp->encoding)
+      ||   STRCASEEQ('s', 'S', "SJIS-WIN",  entryp->encoding)
+      ||   STRCASEEQ('s', 'S', "SJIS",      entryp->encoding)) {
+    if ( ( ((0x81 <= (unsigned char)**ibuf) && (0x9f >= (unsigned char)**ibuf))
+        || ((0xe0 <= (unsigned char)**ibuf) && (0xfc >= (unsigned char)**ibuf)))
+       &&
+       (  ((0x40 <= (unsigned char)*((*ibuf)+1)) && (0x7e >= (unsigned char)*((*ibuf)+1)))
+        ||((0x80 <= (unsigned char)*((*ibuf)+1)) && (0xfc >= (unsigned char)*((*ibuf)+1))))) {
+      /* 2byte charactor */
+      **obuf = '?';
+      *obuf += 1;
+      *olen -= 1;
+      *ibuf += 2;
+      DBG(r, "passed 2byte.");
+    }
+    else {
+      /* 1byte charactor */
+      **obuf = '?';
+      *obuf += 1;
+      *olen -= 1;
+      *ibuf += 1;
+      DBG(r, "passed 1byte.");
+    }
+  }
+  else {
+    /* unknown 1byte charactor */
+    **obuf = '?';
+    *obuf += 1;
+    *olen -= 1;
+    *ibuf += 1;
+    DBG(r, "passed 1byte.");
+  }
+  if (ibuf && *ibuf) {
+    *ilen = strlen(*ibuf);
+    DBG(r, "new len = [%" APR_SIZE_T_FMT "].", (apr_size_t)*ilen);
+  }
 }
 
 
@@ -134,37 +254,38 @@ chxj_rencoding(request_rec *r, const char *src, apr_size_t *len)
   mod_chxj_config     *dconf;
   chxjconvrule_entry  *entryp;
 
-  DBG(r,"start chxj_rencoding()");
+  DBG(r,"REQ[%X] start chxj_rencoding()", (unsigned int)(apr_size_t)r);
 
   if ((int)*len < 0) {
     ERR(r, "runtime exception: chxj_rencoding(): invalid string size.[%d]", (int)*len);
+    DBG(r,"REQ[%X] end   chxj_rencoding()", (unsigned int)(apr_size_t)r);
     return (char *)apr_pstrdup(r->pool, "");
   }
 
   dconf = chxj_get_module_config(r->per_dir_config, &chxj_module);
   if (! dconf) {
-    DBG(r,"none encoding.");
-    DBG(r,"end   chxj_rencoding()");
+    DBG(r,"REQ[%X] none encoding.", (unsigned int)(apr_size_t)r);
+    DBG(r,"REQ[%X] end   chxj_rencoding()", (unsigned int)(apr_size_t)r);
     return (char*)src;
   }
 
   entryp = chxj_apply_convrule(r, dconf->convrules);
   if (! entryp->encoding) {
-    DBG(r,"none encoding.");
-    DBG(r,"end   chxj_rencoding()");
+    DBG(r,"REQ[%X] none encoding.", (unsigned int)(apr_size_t)r);
+    DBG(r,"REQ[%X] end   chxj_rencoding()", (unsigned int)(apr_size_t)r);
     return (char*)src;
   }
 
   if (STRCASEEQ('n','N',"none", entryp->encoding)) {
-    DBG(r,"none encoding.");
-    DBG(r,"end   chxj_rencoding()");
+    DBG(r,"REQ[%X] none encoding.", (unsigned int)(apr_size_t)r);
+    DBG(r,"REQ[%X] end   chxj_rencoding()", (unsigned int)(apr_size_t)r);
     return (char*)src;
   }
 
   ilen = *len;
   ibuf = apr_palloc(r->pool, ilen+1);
   if (! ibuf) {
-    DBG(r,"end   chxj_rencoding()");
+    DBG(r,"REQ[%X] end   chxj_rencoding()", (unsigned int)(apr_size_t)r);
     return (char*)src;
   }
 
@@ -174,7 +295,7 @@ chxj_rencoding(request_rec *r, const char *src, apr_size_t *len)
   olen = ilen * 4 + 1;
   spos = obuf = apr_palloc(r->pool, olen);
   if (! obuf) {
-    DBG(r,"end   chxj_rencoding()");
+    DBG(r,"REQ[%X] end   chxj_rencoding()", (unsigned int)(apr_size_t)r);
     return ibuf;
   }
   DBG(r,"encode convert [%s] -> [%s]", "CP932", entryp->encoding);
@@ -186,7 +307,7 @@ chxj_rencoding(request_rec *r, const char *src, apr_size_t *len)
     if (EINVAL == errno) {
       ERR(r, "The conversion from %s to %s is not supported by the implementation.", "CP932", entryp->encoding);
     }
-    DBG(r,"end   chxj_rencoding()");
+    DBG(r,"REQ[%X] end   chxj_rencoding()", (unsigned int)(apr_size_t)r);
     return ibuf;
   }
 
@@ -195,21 +316,24 @@ chxj_rencoding(request_rec *r, const char *src, apr_size_t *len)
     if (result == (size_t)(-1)) {
       if (E2BIG == errno) {
         ERR(r, "There is not sufficient room at *outbuf");
+        break;
       }
       else if (EILSEQ == errno) {
         ERR(r, "An invalid multibyte sequence has been encountered in the input. input:[%s]", ibuf);
+        chxj_convert_illegal_charactor_sequence(r, entryp, &ibuf, &ilen, &obuf, &olen);
       }
       else if (EINVAL == errno) {
         ERR(r, "An incomplete multibyte sequence has been encountered in the input. input:[%s]", ibuf);
+        break;
       }
-      break;
     }
   }
 
   *len = strlen(spos);
   iconv_close(cd);
 
-  DBG(r,"end   chxj_rencoding() len=[%d] obuf=[%.*s]", (int)*len, (int)*len, spos);
+  chxj_dump_string(r, APLOG_MARK, "RESULT Convert REncoding", spos, *len);
+  DBG(r,"REQ[%X] end   chxj_rencoding()", (unsigned int)(apr_size_t)r);
 
   return spos;
 }

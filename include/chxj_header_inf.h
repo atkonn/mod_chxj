@@ -14,20 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef __CHXJ_STR_UTIL_H__
-#define __CHXJ_STR_UTIL_H__
+#ifndef __CHXJ_HEADER_INF_H__
+#define __CHXJ_HEADER_INF_H__
 
-#include <string.h>
-#include <apr_pools.h>
+#include "mod_chxj.h"
 
-extern int chxj_chk_numeric(const char *s);
-extern int chxj_atoi(const char *s);
-extern int chxj_axtoi(const char *s);
-extern int chxj_strcasenrcmp(apr_pool_t *p, const char *s1, const char *s2, int n);
-extern int chxj_starts_with(const char *str, const char *word);
-extern int chxj_strcount(const char *s, const char *str);
-extern char *chxj_add_slash_to_doublequote(apr_pool_t *pool, const char *str);
+#define HTTP_X_CHXJ_SET_CONTENT_TYPE   "X-Chxj-Set-Content-Type"
+
+extern char *chxj_header_inf_set_content_type(request_rec *r, char *default_string);
+extern void chxj_header_inf_clear(request_rec *r);
+
 #endif
-/*
- * vim:ts=2 et
- */
