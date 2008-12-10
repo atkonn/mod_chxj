@@ -848,6 +848,42 @@ on_error:
 }
 
 
+char *
+chxj_add_cookie_no_update_parameter(request_rec *r, char *value)
+{
+  char *qs;
+  char *dst;
+  char *name = "";
+
+  DBG(r, "REQ[%X] start chxj_add_cookie_no_update_parameter()", (unsigned int)(apr_size_t)r);
+
+  if (! value || ! *value) {
+    DBG(r, "REQ[%X] end chxj_add_cookie_parameter()(void value)", (unsigned int)(apr_size_t)r);
+    return apr_pstrdup(r->pool, "");
+  }
+
+  dst = apr_pstrdup(r->pool, value);
+
+  if (chxj_cookie_check_host(r, value) != 0) {
+    DBG(r, "REQ[%X] end chxj_add_cookie_parameter()(check host)", (unsigned int)(apr_size_t)r);
+    goto on_error;
+  }
+
+  qs = strchr(dst, '#');
+  if (qs) {
+    name = apr_pstrdup(r->pool, qs);
+    *qs = 0;
+  }
+  dst = apr_psprintf(r->pool, "%s%c%s=true%s", dst, (strchr(dst,'?')) ? '&' : '?',CHXJ_COOKIE_NOUPDATE_PARAM, name);
+  DBG(r, "REQ[%X] end   chxj_add_cookie_no_update_parameter() dst=[%s]", (unsigned int)(apr_size_t)r, dst);
+  return dst;
+
+on_error:
+  DBG(r, "REQ[%X] end   chxj_add_cookie_no_update_parameter() (on_error)", (unsigned int)(apr_size_t)r);
+  return dst;
+}
+
+
 int
 chxj_cookie_check_host(request_rec *r, char *value) 
 {
