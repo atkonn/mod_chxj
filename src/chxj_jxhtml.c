@@ -2091,26 +2091,14 @@ s_jxhtml_start_img_tag(void *pdoc, Node *node)
       /*----------------------------------------------------------------------*/
 #ifdef IMG_NOT_CONVERT_FILENAME
       value = chxj_encoding_parameter(r, value);
-      if (value) {
-        value = apr_psprintf(r->pool,
-                             "%s%c%s=true",
-                             value,
-                             (strchr(value, '?')) ? '&' : '?',
-                             CHXJ_COOKIE_NOUPDATE_PARAM);
-      }
+      value = chxj_add_cookie_no_update_parameter(r, value);
       W_L(" src=\"");
       W_V(value);
       W_L("\"");
 #else
       value = chxj_img_conv(r, spec, value);
       value = chxj_encoding_parameter(r, value);
-      if (value) {
-        value = apr_psprintf(r->pool,
-                             "%s%c%s=true",
-                             value,
-                             (strchr(value, '?')) ? '&' : '?',
-                             CHXJ_COOKIE_NOUPDATE_PARAM);
-      }
+      value = chxj_add_cookie_no_update_parameter(r, value);
       W_L(" src=\"");
       W_V(value);
       W_L("\"");
