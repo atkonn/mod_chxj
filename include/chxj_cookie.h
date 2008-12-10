@@ -127,6 +127,8 @@ extern apr_time_t chxj_parse_cookie_expires(const char *s);
 extern cookie_lock_t *__chxj_cookie_lock(request_rec *r, const char *filename, int line);
 extern int __chxj_cookie_unlock(request_rec *r, cookie_lock_t *lock, const char *filename, int line);
 
+extern char *chxj_add_cookie_no_update_parameter(request_rec *r, char *value);
+
 #define chxj_cookie_lock(X) __chxj_cookie_lock((X),__FILE__,__LINE__)
 #define chxj_cookie_unlock(X,L) __chxj_cookie_unlock((X),(L),__FILE__,__LINE__)
 

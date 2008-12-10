@@ -3245,13 +3245,7 @@ s_xhtml_1_0_start_img_tag(void *pdoc, Node *node)
     if (STRCASEEQ('s','S',"src",name)) {
       value = chxj_encoding_parameter(r, value, 1);
       value = chxj_add_cookie_parameter(r, value, xhtml->cookie);
-      if (value) {
-        value = apr_psprintf(r->pool,
-                             "%s%c%s=true",
-                             value,
-                             (strchr(value, '?')) ? '&' : '?',
-                             CHXJ_COOKIE_NOUPDATE_PARAM);
-      }
+      value = chxj_add_cookie_no_update_parameter(r, value);
 #ifdef IMG_NOT_CONVERT_FILENAME
       attr_src = value;
 

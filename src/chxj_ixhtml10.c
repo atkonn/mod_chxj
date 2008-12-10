@@ -2914,20 +2914,14 @@ s_ixhtml10_start_img_tag(void *pdoc, Node *node)
       /*----------------------------------------------------------------------*/
 #ifdef IMG_NOT_CONVERT_FILENAME
       value = chxj_encoding_parameter(r, value, 1);
-      if (value) {
-        value = apr_psprintf(r->pool,
-                             "%s",
-                             value);
-      }
+      value = chxj_add_cookie_parameter(r, value, ixhtml10->cookie);
+      value = chxj_add_cookie_no_update_parameter(r, value);
       attr_src = value;
 #else
       value = chxj_img_conv(r, spec, value);
       value = chxj_encoding_parameter(r, value, 1);
-      if (value) {
-        value = apr_psprintf(r->pool,
-                             "%s",
-                             value);
-      }
+      value = chxj_add_cookie_parameter(r, value, ixhtml10->cookie);
+      value = chxj_add_cookie_no_update_parameter(r, value);
       attr_src = value;
 #endif
     }

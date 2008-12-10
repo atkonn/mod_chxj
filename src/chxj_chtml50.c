@@ -2244,28 +2244,16 @@ s_chtml50_start_img_tag(void *pdoc, Node *node)
         /* CHTML 1.0                                                          */
         /*--------------------------------------------------------------------*/
 #ifdef IMG_NOT_CONVERT_FILENAME
-        value = chxj_encoding_parameter(r, value, 0);
-        value = chxj_add_cookie_parameter(r, value, chtml50->cookie);
-        if (value) {
-          value = apr_psprintf(doc->buf.pool, 
-                               "%s%c%s=true", 
-                               value, 
-                               (strchr(value, '?')) ? '&' : '?',
-                               CHXJ_COOKIE_NOUPDATE_PARAM);
-        }
-        attr_src = value;
+      value = chxj_encoding_parameter(r, value, 0);
+      value = chxj_add_cookie_parameter(r, value, chtml50->cookie);
+      value = chxj_add_cookie_no_update_parameter(r, value);
+      attr_src = value;
 #else
-        value = chxj_img_conv(r, spec, value);
-        value = chxj_encoding_parameter(r, value, 0);
-        value = chxj_add_cookie_parameter(r, value, chtml50->cookie);
-        if (value) {
-          value = apr_psprintf(doc->buf.pool,
-                               "%s%c%s=true",
-                               value,
-                               (strchr(value, '?')) ? '&' : '?',
-                               CHXJ_COOKIE_NOUPDATE_PARAM);
-        }
-        attr_src = value;
+      value = chxj_img_conv(r,spec,value);
+      value = chxj_encoding_parameter(r, value, 0);
+      value = chxj_add_cookie_parameter(r, value, chtml50->cookie);
+      value = chxj_add_cookie_no_update_parameter(r, value);
+      attr_src = value;
 #endif
       }
       else if (strcasecmp(name,"style") == 0 && value && *value) {
