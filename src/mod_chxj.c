@@ -70,7 +70,8 @@
 #endif
 #include "chxj_serf.h"
 #include "chxj_add_device_env.h"
-#include "chxj_conv_kana.h"
+#include "chxj_conv_z2h.h"
+#include "chxj_header_inf.h"
 
 
 #define CHXJ_VERSION_PREFIX PACKAGE_NAME "/"
@@ -408,7 +409,7 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
                                                               cookie);
     }
     if (dst && *len) {
-      dst = chxj_conv_z2h_kana(r, dst, len, entryp);
+      dst = chxj_conv_z2h(r, dst, len, entryp);
     }
   }
   ap_set_content_length(r, *len);
@@ -833,6 +834,8 @@ pass_data_to_filter(ap_filter_t *f, const char *data,
   apr_bucket          *b;
 
   DBG(r, "REQ[%X] start pass_data_to_filter()", (unsigned int)(apr_size_t)r);
+
+  chxj_header_inf_clear(r);
 
   bb = apr_brigade_create(r->pool, c->bucket_alloc);
   b  = apr_bucket_transient_create(data, len, c->bucket_alloc);
@@ -2203,6 +2206,30 @@ cmd_convert_rule(cmd_parms *cmd, void *mconfig, const char *arg)
       else
       if (strcasecmp(CONVRULE_Z2H_OFF_CMD, action) == 0) {
         newrule->action |= CONVRULE_Z2H_OFF_BIT;
+      }
+      else
+      if (strcasecmp(CONVRULE_Z2H_ALPHA_ON_CMD, action) == 0) {
+        newrule->action |= CONVRULE_Z2H_ALPHA_ON_BIT;
+      }
+      else
+      if (strcasecmp(CONVRULE_Z2H_ALPHA_OFF_CMD, action) == 0) {
+        newrule->action |= CONVRULE_Z2H_ALPHA_OFF_BIT;
+      }
+      else
+      if (strcasecmp(CONVRULE_Z2H_NUM_ON_CMD, action) == 0) {
+        newrule->action |= CONVRULE_Z2H_NUM_ON_BIT;
+      }
+      else
+      if (strcasecmp(CONVRULE_Z2H_NUM_OFF_CMD, action) == 0) {
+        newrule->action |= CONVRULE_Z2H_NUM_OFF_BIT;
+      }
+      else
+      if (strcasecmp(CONVRULE_Z2H_ALL_ON_CMD, action) == 0) {
+        newrule->action |= CONVRULE_Z2H_ON_BIT | CONVRULE_Z2H_ALPHA_ON_BIT | CONVRULE_Z2H_NUM_ON_BIT;
+      }
+      else
+      if (strcasecmp(CONVRULE_Z2H_NUM_OFF_CMD, action) == 0) {
+        newrule->action |= CONVRULE_Z2H_OFF_BIT | CONVRULE_Z2H_ALPHA_OFF_BIT | CONVRULE_Z2H_NUM_OFF_BIT;
       }
       break;
 

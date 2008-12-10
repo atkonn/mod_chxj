@@ -23,6 +23,7 @@
 #include "chxj_qr_code.h"
 #include "chxj_buffered_write.h"
 #include "chxj_str_util.h"
+#include "chxj_header_inf.h"
 
 #define GET_XHTML(X) ((xhtml_t*)(X))
 #undef W_L
@@ -451,7 +452,7 @@ chxj_convert_xhtml_mobile_1_0(
   xhtml.entryp = entryp;
   xhtml.cookie = cookie;
 
-  chxj_set_content_type(r, "application/xhtml+xml; charset=Windows-31J");
+  chxj_set_content_type(r, chxj_header_inf_set_content_type(r, "text/html; charset=Windows-31J"));
 
   /*--------------------------------------------------------------------------*/
   /* The character string of the input is analyzed.                           */
@@ -748,6 +749,7 @@ s_xhtml_1_0_start_meta_tag(void *pdoc, Node *node)
   Attr          *attr;
   Doc           *doc   = xhtml->doc;
   int           content_type_flag = 0;
+  request_rec   *r = doc->r;
 
   W_L("<meta");
   /*--------------------------------------------------------------------------*/
@@ -780,7 +782,7 @@ s_xhtml_1_0_start_meta_tag(void *pdoc, Node *node)
         W_L(" ");
         W_V(name);
         W_L("=\"");
-        W_L("text/html; charset=Windows-31J");
+        W_V(chxj_header_inf_set_content_type(r, "text/html; charset=Windows-31J"));
         W_L("\"");
       }
       else {

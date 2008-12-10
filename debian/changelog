@@ -1,3 +1,27 @@
+libapache2-mod-chxj (0.12.26-1) unstable; urgency=low
+
+  * Fixed bug.
+    - The image becomes abnormal for animation GIF.
+      (Reported by bayside. Thanks!)
+  * Added Features.
+    - Content-Type can be compulsorily rewritten by specifying the
+      ``X-Chxj-Set-Content-Type'' header.
+      (Requested by katsu2000x. Thanks!)
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Mon,  8 Dec 2008 21:04:36 +0900
+
+libapache2-mod-chxj (0.12.25-1) unstable; urgency=low
+
+  * Fixed bug.
+    - Zenkaku Hifun -> 0xb0
+      (Requested by bayside. Thanks!)
+  * Added new features.
+    - Zenkaku Alphabet -> Hankaku Alphabet.(with Z2hAlphaOn or Z2hAlphaOff)
+    - Zenkaku Number -> Hankaku Number. (with Z2hNumOn or Z2hNumOff)
+    - Z2hAllOn (Z2hOn And Z2hAlphaOn And Z2hNumOn)
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Mon,  8 Dec 2008 01:14:45 +0900
+
 libapache2-mod-chxj (0.12.24-1) unstable; urgency=low
 
   * Fixed bug.
