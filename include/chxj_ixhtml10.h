@@ -52,6 +52,7 @@ struct ixhtml10_t {
   cookie_t            *cookie;
   css_stylesheet_t    *style;
   css_prop_list_stack_t *css_prop_stack;
+  int                 start_html_flag;
 };
 
 typedef struct _ixhtml10_flags_t ixhtml10_flags_t;

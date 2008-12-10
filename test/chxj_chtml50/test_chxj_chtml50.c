@@ -39,6 +39,7 @@
 #include "chxj_css.h"
 #include "chxj_serf.c"
 #include "chxj_css.c"
+#include "chxj_dump_string.c"
 
 
 
@@ -732,6 +733,10 @@ void test_chtml50_div_tag_with_css_039();
 void test_chtml50_div_tag_with_css_040();
 void test_chtml50_div_tag_with_css_041();
 void test_chtml50_div_tag_with_css_042();
+void test_chtml50_div_tag_with_css_043();
+void test_chtml50_div_tag_with_css_044();
+void test_chtml50_div_tag_with_css_045();
+void test_chtml50_div_tag_with_css_046();
 
 void test_chtml50_dt_tag_with_css_001();
 void test_chtml50_dt_tag_with_css_002();
@@ -1618,6 +1623,10 @@ main()
   CU_add_test(chtml50_suite, "test div with css 040",                              test_chtml50_div_tag_with_css_040);
   CU_add_test(chtml50_suite, "test div with css 041",                              test_chtml50_div_tag_with_css_041);
   CU_add_test(chtml50_suite, "test div with css 042",                              test_chtml50_div_tag_with_css_042);
+  CU_add_test(chtml50_suite, "test div with css 043",                              test_chtml50_div_tag_with_css_043);
+  CU_add_test(chtml50_suite, "test div with css 044",                              test_chtml50_div_tag_with_css_044);
+  CU_add_test(chtml50_suite, "test div with css 045",                              test_chtml50_div_tag_with_css_045);
+  CU_add_test(chtml50_suite, "test div with css 046",                              test_chtml50_div_tag_with_css_046);
 
   CU_add_test(chtml50_suite, "test dt with css 001",                              test_chtml50_dt_tag_with_css_001);
   CU_add_test(chtml50_suite, "test dt with css 002",                              test_chtml50_dt_tag_with_css_002);
@@ -20869,7 +20878,7 @@ void test_chtml50_div_tag_with_css_007()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><body><div>あいう</div></body></html>"
-#define  RESULT_STRING "<html><head></head><body><font color=\"#ff0000\">あいう</font></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><font color=\"#ff0000\">あいう</font></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -20889,6 +20898,8 @@ void test_chtml50_div_tag_with_css_007()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml50(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -20902,7 +20913,7 @@ void test_chtml50_div_tag_with_css_008()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><body><div style=\"color:#ff0000\">あいう</div></body></html>"
-#define  RESULT_STRING "<html><head></head><body><font color=\"#ff0000\">あいう</font></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><font color=\"#ff0000\">あいう</font></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -20922,6 +20933,8 @@ void test_chtml50_div_tag_with_css_008()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml50(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -20947,7 +20960,7 @@ void test_chtml50_div_tag_with_css_009()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><body><div>あいう</div></body></html>"
-#define  RESULT_STRING "<html><head></head><body><blink>あいう</blink></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><blink>あいう</blink></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -20967,6 +20980,8 @@ void test_chtml50_div_tag_with_css_009()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml50(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -20980,7 +20995,7 @@ void test_chtml50_div_tag_with_css_010()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><body><div style=\"text-decoration:blink\">あいう</div></body></html>"
-#define  RESULT_STRING "<html><head></head><body><blink>あいう</blink></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><blink>あいう</blink></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -21000,6 +21015,8 @@ void test_chtml50_div_tag_with_css_010()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml50(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -21025,7 +21042,7 @@ void test_chtml50_div_tag_with_css_011()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><body><div>あいう</div></body></html>"
-#define  RESULT_STRING "<html><head></head><body><marquee>あいう</marquee></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><marquee>あいう</marquee></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -21058,7 +21075,7 @@ void test_chtml50_div_tag_with_css_012()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><body><div style=\"display:-wap-marquee\">あいう</div></body></html>"
-#define  RESULT_STRING "<html><head></head><body><marquee>あいう</marquee></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><marquee>あいう</marquee></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -21078,6 +21095,8 @@ void test_chtml50_div_tag_with_css_012()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml50(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -21105,7 +21124,7 @@ void test_chtml50_div_tag_with_css_013()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><body><div>あいう</div></body></html>"
-#define  RESULT_STRING "<html><head></head><body><marquee behavior=\"scroll\">あいう</marquee></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><marquee behavior=\"scroll\">あいう</marquee></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -21138,7 +21157,7 @@ void test_chtml50_div_tag_with_css_014()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><body><div style=\"display:-wap-marquee;-wap-marquee-style:scroll;\">あいう</div></body></html>"
-#define  RESULT_STRING "<html><head></head><body><marquee behavior=\"scroll\">あいう</marquee></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><marquee behavior=\"scroll\">あいう</marquee></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -21158,6 +21177,8 @@ void test_chtml50_div_tag_with_css_014()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml50(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -21185,7 +21206,7 @@ void test_chtml50_div_tag_with_css_015()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><body><div>あいう</div></body></html>"
-#define  RESULT_STRING "<html><head></head><body><marquee behavior=\"slide\">あいう</marquee></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><marquee behavior=\"slide\">あいう</marquee></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -21205,6 +21226,8 @@ void test_chtml50_div_tag_with_css_015()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml50(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -21218,7 +21241,7 @@ void test_chtml50_div_tag_with_css_016()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><body><div style=\"display:-wap-marquee;-wap-marquee-style:slide;\">あいう</div></body></html>"
-#define  RESULT_STRING "<html><head></head><body><marquee behavior=\"slide\">あいう</marquee></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><marquee behavior=\"slide\">あいう</marquee></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -21238,6 +21261,8 @@ void test_chtml50_div_tag_with_css_016()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml50(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -21265,7 +21290,7 @@ void test_chtml50_div_tag_with_css_017()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><body><div>あいう</div></body></html>"
-#define  RESULT_STRING "<html><head></head><body><marquee behavior=\"alternate\">あいう</marquee></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><marquee behavior=\"alternate\">あいう</marquee></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -21285,6 +21310,8 @@ void test_chtml50_div_tag_with_css_017()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml50(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -21298,7 +21325,7 @@ void test_chtml50_div_tag_with_css_018()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><body><div style=\"display:-wap-marquee;-wap-marquee-style:alternate\">あいう</div></body></html>"
-#define  RESULT_STRING "<html><head></head><body><marquee behavior=\"alternate\">あいう</marquee></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><marquee behavior=\"alternate\">あいう</marquee></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -21318,6 +21345,8 @@ void test_chtml50_div_tag_with_css_018()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml50(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -21345,7 +21374,7 @@ void test_chtml50_div_tag_with_css_019()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><body><div>あいう</div></body></html>"
-#define  RESULT_STRING "<html><head></head><body><marquee behavior=\"alternate\" direction=\"right\">あいう</marquee></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><marquee behavior=\"alternate\" direction=\"right\">あいう</marquee></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -21365,6 +21394,8 @@ void test_chtml50_div_tag_with_css_019()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml50(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -21378,7 +21409,7 @@ void test_chtml50_div_tag_with_css_020()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><body><div style=\"display:-wap-marquee;-wap-marquee-style:alternate;-wap-marquee-dir:ltr\">あいう</div></body></html>"
-#define  RESULT_STRING "<html><head></head><body><marquee behavior=\"alternate\" direction=\"right\">あいう</marquee></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><marquee behavior=\"alternate\" direction=\"right\">あいう</marquee></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -21398,6 +21429,8 @@ void test_chtml50_div_tag_with_css_020()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml50(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -21425,7 +21458,7 @@ void test_chtml50_div_tag_with_css_021()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><body><div>あいう</div></body></html>"
-#define  RESULT_STRING "<html><head></head><body><marquee behavior=\"alternate\" direction=\"left\">あいう</marquee></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><marquee behavior=\"alternate\" direction=\"left\">あいう</marquee></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -21445,6 +21478,8 @@ void test_chtml50_div_tag_with_css_021()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml50(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -21458,7 +21493,7 @@ void test_chtml50_div_tag_with_css_022()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><body><div style=\"display:-wap-marquee;-wap-marquee-style:alternate;-wap-marquee-dir:rtl\">あいう</div></body></html>"
-#define  RESULT_STRING "<html><head></head><body><marquee behavior=\"alternate\" direction=\"left\">あいう</marquee></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><marquee behavior=\"alternate\" direction=\"left\">あいう</marquee></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -21478,6 +21513,8 @@ void test_chtml50_div_tag_with_css_022()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml50(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -21505,7 +21542,7 @@ void test_chtml50_div_tag_with_css_023()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><body><div>あいう</div></body></html>"
-#define  RESULT_STRING "<html><head></head><body><marquee behavior=\"alternate\" direction=\"left\" loop=\"1\">あいう</marquee></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><marquee behavior=\"alternate\" direction=\"left\" loop=\"1\">あいう</marquee></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -21525,6 +21562,8 @@ void test_chtml50_div_tag_with_css_023()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml50(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -21538,7 +21577,7 @@ void test_chtml50_div_tag_with_css_024()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><body><div style=\"display:-wap-marquee;-wap-marquee-style:alternate;-wap-marquee-dir:rtl;-wap-marquee-loop:1\">あいう</div></body></html>"
-#define  RESULT_STRING "<html><head></head><body><marquee behavior=\"alternate\" direction=\"left\" loop=\"1\">あいう</marquee></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><marquee behavior=\"alternate\" direction=\"left\" loop=\"1\">あいう</marquee></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -21558,6 +21597,8 @@ void test_chtml50_div_tag_with_css_024()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml50(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -21585,7 +21626,7 @@ void test_chtml50_div_tag_with_css_025()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><body><div>あいう</div></body></html>"
-#define  RESULT_STRING "<html><head></head><body><marquee behavior=\"alternate\" direction=\"left\" loop=\"16\">あいう</marquee></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><marquee behavior=\"alternate\" direction=\"left\" loop=\"16\">あいう</marquee></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -21605,6 +21646,8 @@ void test_chtml50_div_tag_with_css_025()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml50(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -21618,7 +21661,7 @@ void test_chtml50_div_tag_with_css_026()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><body><div style=\"display:-wap-marquee;-wap-marquee-style:alternate;-wap-marquee-dir:rtl;-wap-marquee-loop:16\">あいう</div></body></html>"
-#define  RESULT_STRING "<html><head></head><body><marquee behavior=\"alternate\" direction=\"left\" loop=\"16\">あいう</marquee></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><marquee behavior=\"alternate\" direction=\"left\" loop=\"16\">あいう</marquee></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -21665,7 +21708,7 @@ void test_chtml50_div_tag_with_css_027()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><body><div>あいう</div></body></html>"
-#define  RESULT_STRING "<html><head></head><body><marquee behavior=\"alternate\" direction=\"left\" loop=\"16\">あいう</marquee></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><marquee behavior=\"alternate\" direction=\"left\" loop=\"16\">あいう</marquee></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -21685,6 +21728,8 @@ void test_chtml50_div_tag_with_css_027()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml50(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -21698,7 +21743,7 @@ void test_chtml50_div_tag_with_css_028()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><body><div style=\"display:-wap-marquee;-wap-marquee-style:alternate;-wap-marquee-dir:rtl;-wap-marquee-loop:infinite;\">あいう</div></body></html>"
-#define  RESULT_STRING "<html><head></head><body><marquee behavior=\"alternate\" direction=\"left\" loop=\"16\">あいう</marquee></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><marquee behavior=\"alternate\" direction=\"left\" loop=\"16\">あいう</marquee></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -21718,6 +21763,8 @@ void test_chtml50_div_tag_with_css_028()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml50(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -21744,7 +21791,7 @@ void test_chtml50_div_tag_with_css_029()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><body><div>あいう</div></body></html>"
-#define  RESULT_STRING "<html><head></head><body><font size=\"1\">あいう</font></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><font size=\"1\">あいう</font></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -21764,6 +21811,8 @@ void test_chtml50_div_tag_with_css_029()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml50(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -21777,7 +21826,7 @@ void test_chtml50_div_tag_with_css_030()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><body><div style=\"font-size:xx-small;\">あいう</div></body></html>"
-#define  RESULT_STRING "<html><head></head><body><font size=\"1\">あいう</font></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><font size=\"1\">あいう</font></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -21797,6 +21846,8 @@ void test_chtml50_div_tag_with_css_030()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml50(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -21824,7 +21875,7 @@ void test_chtml50_div_tag_with_css_031()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><body><div>あいう</div></body></html>"
-#define  RESULT_STRING "<html><head></head><body><font size=\"2\">あいう</font></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><font size=\"2\">あいう</font></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -21844,6 +21895,8 @@ void test_chtml50_div_tag_with_css_031()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml50(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -21857,7 +21910,7 @@ void test_chtml50_div_tag_with_css_032()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><body><div style=\"font-size:x-small;\">あいう</div></body></html>"
-#define  RESULT_STRING "<html><head></head><body><font size=\"2\">あいう</font></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><font size=\"2\">あいう</font></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -21877,6 +21930,8 @@ void test_chtml50_div_tag_with_css_032()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml50(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -21904,7 +21959,7 @@ void test_chtml50_div_tag_with_css_033()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><body><div>あいう</div></body></html>"
-#define  RESULT_STRING "<html><head></head><body><font size=\"3\">あいう</font></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><font size=\"3\">あいう</font></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -21924,6 +21979,8 @@ void test_chtml50_div_tag_with_css_033()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml50(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -21937,7 +21994,7 @@ void test_chtml50_div_tag_with_css_034()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><body><div style=\"font-size:small;\">あいう</div></body></html>"
-#define  RESULT_STRING "<html><head></head><body><font size=\"3\">あいう</font></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><font size=\"3\">あいう</font></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -21957,6 +22014,8 @@ void test_chtml50_div_tag_with_css_034()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml50(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -21983,7 +22042,7 @@ void test_chtml50_div_tag_with_css_035()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><body><div>あいう</div></body></html>"
-#define  RESULT_STRING "<html><head></head><body><font size=\"4\">あいう</font></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><font size=\"4\">あいう</font></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -22003,6 +22062,8 @@ void test_chtml50_div_tag_with_css_035()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml50(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -22016,7 +22077,7 @@ void test_chtml50_div_tag_with_css_036()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><body><div style=\"font-size:medium;\">あいう</div></body></html>"
-#define  RESULT_STRING "<html><head></head><body><font size=\"4\">あいう</font></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><font size=\"4\">あいう</font></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -22036,6 +22097,8 @@ void test_chtml50_div_tag_with_css_036()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml50(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -22062,7 +22125,7 @@ void test_chtml50_div_tag_with_css_037()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><body><div>あいう</div></body></html>"
-#define  RESULT_STRING "<html><head></head><body><font size=\"5\">あいう</font></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><font size=\"5\">あいう</font></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -22082,6 +22145,8 @@ void test_chtml50_div_tag_with_css_037()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml50(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -22095,7 +22160,7 @@ void test_chtml50_div_tag_with_css_038()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><body><div style=\"font-size:large;\">あいう</div></body></html>"
-#define  RESULT_STRING "<html><head></head><body><font size=\"5\">あいう</font></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><font size=\"5\">あいう</font></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -22115,6 +22180,8 @@ void test_chtml50_div_tag_with_css_038()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml50(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -22141,7 +22208,7 @@ void test_chtml50_div_tag_with_css_039()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><body><div>あいう</div></body></html>"
-#define  RESULT_STRING "<html><head></head><body><font size=\"6\">あいう</font></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><font size=\"6\">あいう</font></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -22161,6 +22228,8 @@ void test_chtml50_div_tag_with_css_039()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml50(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -22174,7 +22243,7 @@ void test_chtml50_div_tag_with_css_040()
 {
 #define  TEST_STRING "<html><head>" \
                      "</head><body><div style=\"font-size:x-large;\">あいう</div></body></html>"
-#define  RESULT_STRING "<html><head></head><body><font size=\"6\">あいう</font></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><font size=\"6\">あいう</font></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -22194,6 +22263,8 @@ void test_chtml50_div_tag_with_css_040()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml50(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -22220,7 +22291,7 @@ void test_chtml50_div_tag_with_css_041()
 {
 #define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
                      "</head><body><div>あいう</div></body></html>"
-#define  RESULT_STRING "<html><head></head><body><font size=\"7\">あいう</font></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><font size=\"7\">あいう</font></div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -22229,6 +22300,92 @@ void test_chtml50_div_tag_with_css_041()
   apr_size_t destlen;
   APR_INIT;
   chxj_serf_get = test_chxj_serf_get140;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_chtml50(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_chtml50_div_tag_with_css_042()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><div style=\"font-size:xx-large;\">あいう</div></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><font size=\"7\">あいう</font></div></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get140;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_chtml50(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+
+
+char *test_chxj_serf_get141(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "div     { background:#000;color:#fff; }\n";
+
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_chtml50_div_tag_with_css_043()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><div>あいう</div></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div>あいう</div></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get141;
   call_check = 0;
 
   COOKIE_INIT(cookie);
@@ -22249,11 +22406,11 @@ void test_chtml50_div_tag_with_css_041()
 #undef TEST_STRING
 #undef RESULT_STRING
 }
-void test_chtml50_div_tag_with_css_042()
+void test_chtml50_div_tag_with_css_044()
 {
 #define  TEST_STRING "<html><head>" \
-                     "</head><body><div style=\"font-size:xx-large;\">あいう</div></body></html>"
-#define  RESULT_STRING "<html><head></head><body><font size=\"7\">あいう</font></body></html>"
+                     "</head><body><div style=\"background:#000;color:#fff;\">あいう</div></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div>あいう</div></body></html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -22261,7 +22418,7 @@ void test_chtml50_div_tag_with_css_042()
   cookie_t cookie;
   apr_size_t destlen;
   APR_INIT;
-  chxj_serf_get = test_chxj_serf_get140;
+  chxj_serf_get = test_chxj_serf_get141;
   call_check = 0;
 
   COOKIE_INIT(cookie);
@@ -22273,6 +22430,90 @@ void test_chtml50_div_tag_with_css_042()
   tmp = chxj_encoding(&r, TEST_STRING, &destlen);
   ret = chxj_convert_chtml50(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
   ret = chxj_rencoding(&r, ret, &destlen);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+
+char *test_chxj_serf_get142(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "div     { display:-wap-marquee;background:#000;color:#fff; }\n";
+
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_chtml50_div_tag_with_css_045()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><div>あいう</div></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><font color=\"#ffffff\"><marquee bgcolor=\"#000000\">あいう</marquee></font></div></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get142;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_chtml50(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_chtml50_div_tag_with_css_046()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><div style=\"display:-wap-marquee;background:#000;color:#fff;\">あいう</div></body></html>"
+#define  RESULT_STRING "<html><head></head><body><div><font color=\"#ffffff\"><marquee bgcolor=\"#000000\">あいう</marquee></font></div></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get142;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_chtml50(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);

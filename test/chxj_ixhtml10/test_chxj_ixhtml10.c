@@ -34,6 +34,7 @@
 #include "chxj_apache.c"
 #include "chxj_dbm.c"
 #include "chxj_str_util.c"
+#include "chxj_dump_string.c"
 #include <iconv.h>
 #include "chxj_serf.h"
 #include "chxj_css.h"
@@ -959,6 +960,8 @@ void test_ixhtml10_div_tag_with_css_039();
 void test_ixhtml10_div_tag_with_css_040();
 void test_ixhtml10_div_tag_with_css_041();
 void test_ixhtml10_div_tag_with_css_042();
+void test_ixhtml10_div_tag_with_css_043();
+void test_ixhtml10_div_tag_with_css_044();
 
 /* pend */
 
@@ -2029,6 +2032,8 @@ main()
   CU_add_test(ixhtml10_suite, "test div with css 040",                              test_ixhtml10_div_tag_with_css_040);
   CU_add_test(ixhtml10_suite, "test div with css 041",                              test_ixhtml10_div_tag_with_css_041);
   CU_add_test(ixhtml10_suite, "test div with css 042",                              test_ixhtml10_div_tag_with_css_042);
+  CU_add_test(ixhtml10_suite, "test div with css 043",                              test_ixhtml10_div_tag_with_css_043);
+  CU_add_test(ixhtml10_suite, "test div with css 044",                              test_ixhtml10_div_tag_with_css_044);
   /* aend */
 
   CU_basic_run_tests();
@@ -24146,6 +24151,98 @@ void test_ixhtml10_div_tag_with_css_042()
   ret = chxj_rencoding(&r, ret, &destlen);
   fprintf(stderr, "actual:[%s]\n", ret);
   fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+<<<<<<< HEAD:test/chxj_ixhtml10/test_chxj_ixhtml10.c
+=======
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 0);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+char *test_chxj_serf_get141(request_rec *r, apr_pool_t *ppool, const char *uri_path, int ss, apr_size_t *len)
+{
+  static char *css = "a:focus { display: none }\n"
+                     "a:link  { display: none }\n"
+                     "a       { display: none }\n"
+                     "hr      { display: none }\n"
+                     "a:visited { display:none }\n"
+                     "div     { background:#ffffff; }\n";
+
+  *len = strlen(css);
+  call_check = 1;
+  return css;
+}
+void test_ixhtml10_div_tag_with_css_043()
+{
+#define  TEST_STRING "<html><head><link rel=\"stylesheet\" href=\"http://localhost/a.css\"  type=\"text/css\" />" \
+                     "</head><body><div>あいう</div></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>" \
+                       "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><div style=\"background-color:#ffffff;\">あいう</div></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get141;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+  CU_ASSERT(ret != NULL);
+  CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
+  CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
+  CU_ASSERT(call_check == 1);
+
+  APR_TERM;
+#undef TEST_STRING
+#undef RESULT_STRING
+}
+void test_ixhtml10_div_tag_with_css_044()
+{
+#define  TEST_STRING "<html><head>" \
+                     "</head><body><div style=\"background:#ffffff;\">あいう</div></body></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>" \
+                       "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<head></head><body><div style=\"background-color:#ffffff;\">あいう</div></body></html>"
+  char  *ret;
+  char  *tmp;
+  device_table spec;
+  chxjconvrule_entry entry;
+  cookie_t cookie;
+  apr_size_t destlen;
+  APR_INIT;
+  chxj_serf_get = test_chxj_serf_get141;
+  call_check = 0;
+
+  COOKIE_INIT(cookie);
+
+  SPEC_INIT(spec);
+  destlen = sizeof(TEST_STRING)-1;
+  entry.action |= CONVRULE_CSS_ON_BIT;
+
+  tmp = chxj_encoding(&r, TEST_STRING, &destlen);
+  ret = chxj_convert_ixhtml10(&r, &spec, tmp, destlen, &destlen, &entry, &cookie);
+  ret = chxj_rencoding(&r, ret, &destlen);
+  fprintf(stderr, "actual:[%s]\n", ret);
+  fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+>>>>>>> master:test/chxj_ixhtml10/test_chxj_ixhtml10.c
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -32614,8 +32711,12 @@ void test_ixhtml10_nlmark_001()
 
 void test_ixhtml10_nlmark_002()
 {
-#define  TEST_STRING   "<div>\n</div>"
-#define  RESULT_STRING "<div>\r\n</div>"
+#define  TEST_STRING   "<html><div>\n</div></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>\r\n" \
+                       "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">\r\n" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<div>\r\n</div>" \
+                       "</html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -32651,8 +32752,12 @@ void test_ixhtml10_nlmark_002()
 }
 void test_ixhtml10_nlmark_003()
 {
-#define  TEST_STRING   "<div>\n</div>"
-#define  RESULT_STRING "<div>\r</div>"
+#define  TEST_STRING   "<html><div>\n</div></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>\r" \
+                       "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">\r" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<div>\r</div>" \
+                       "</html>"
   char  *ret;
   char  *tmp;
   device_table spec;
@@ -32689,8 +32794,12 @@ void test_ixhtml10_nlmark_003()
 
 void test_ixhtml10_nlmark_004()
 {
-#define  TEST_STRING   "<div>\n</div>"
-#define  RESULT_STRING "<div>\n</div>"
+#define  TEST_STRING   "<html><div>\n</div></html>"
+#define  RESULT_STRING "<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>\n" \
+                       "<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">\n" \
+                       "<html xmlns=\"http://www.w3.org/1999/xhtml\">" \
+                       "<div>\n</div>" \
+                       "</html>"
   char  *ret;
   char  *tmp;
   device_table spec;

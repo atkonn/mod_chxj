@@ -42,9 +42,8 @@ chxj_chk_numeric(const char *s)
 }
 
 
-
 int
-chxj_atoi(const char *s)
+_chxj_atoi(const char *s, int base)
 {
   int len;
   int ii;
@@ -59,7 +58,7 @@ chxj_atoi(const char *s)
   len = strlen(s);
 
   for (ii=0; ii < len && break_flag == 0; ii++) {
-    result *= 10;
+    result *= base;
     switch(s[ii]) {
     case '0': result += 0; break; 
     case '1': result += 1; break;
@@ -71,8 +70,14 @@ chxj_atoi(const char *s)
     case '7': result += 7; break;
     case '8': result += 8; break;
     case '9': result += 9; break;
+    case 'a': case 'A': result += 10; break;
+    case 'b': case 'B': result += 11; break;
+    case 'c': case 'C': result += 12; break;
+    case 'd': case 'D': result += 13; break;
+    case 'e': case 'E': result += 14; break;
+    case 'f': case 'F': result += 15; break;
     case '-': 
-      result /= 10;
+      result /= base;
       if (ii != 0) {
         break_flag = 1;
         break;
@@ -81,7 +86,7 @@ chxj_atoi(const char *s)
       break;
 
     case '+':
-      result /= 10;
+      result /= base;
       if (ii != 0) {
         break_flag = 1;
         break;
@@ -90,7 +95,7 @@ chxj_atoi(const char *s)
 
     default: 
       break_flag = 1;
-      result /= 10;
+      result /= base;
       break;
     }
   }
@@ -99,6 +104,17 @@ chxj_atoi(const char *s)
     result *= -1;
 
   return result;
+}
+
+int
+chxj_atoi(const char *s)
+{
+  return _chxj_atoi(s, 10);
+}
+int
+chxj_axtoi(const char *s)
+{
+  return _chxj_atoi(s, 16);
 }
 
 int

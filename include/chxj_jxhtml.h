@@ -42,6 +42,7 @@ struct jxhtml_t {
   int                 h6_align_flag;
   int                 font_flag;
   int                 font_size_flag;
+  int                 start_html_flag;
 
   device_table        *spec;
   mod_chxj_config     *conf;

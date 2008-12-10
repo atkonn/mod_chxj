@@ -23,6 +23,7 @@
 #include "chxj_encoding.h"
 #include "chxj_buffered_write.h"
 #include "chxj_css.h"
+#include "chxj_header_inf.h"
 
 
 #define GET_CHTML20(X) ((chtml20_t*)(X))
@@ -527,7 +528,7 @@ chxj_convert_chtml20(
   chtml20.entryp = entryp;
   chtml20.cookie = cookie;
 
-  chxj_set_content_type(r, "text/html; charset=Windows-31J");
+  chxj_set_content_type(r, chxj_header_inf_set_content_type(r, "text/html; charset=Windows-31J"));
 
   /*--------------------------------------------------------------------------*/
   /* The character string of the input is analyzed.                           */
@@ -769,7 +770,9 @@ s_chtml20_start_meta_tag(void *pdoc, Node *node)
         if (content_type_flag) {
           W_L(" ");
           W_V(name);
-          W_L("=\"text/html; charset=Windows-31J\"");
+          W_L("=\"");
+          W_V(chxj_header_inf_set_content_type(r, "text/html; charset=SHIFT_JIS"));
+          W_L("\"");
         }
         else if (refresh_flag) {
           char *buf = apr_pstrdup(r->pool, value);
@@ -1220,7 +1223,9 @@ s_chtml20_start_a_tag(void *pdoc, Node *node)
         /* CHTML1.0                                                           */
         /*--------------------------------------------------------------------*/
         value = chxj_encoding_parameter(r, value, 0);
-        value = chxj_add_cookie_parameter(r, value, chtml20->cookie);
+        if (! chxj_starts_with(value, "mailto:") && ! chxj_starts_with(value, "telto:")) {
+          value = chxj_add_cookie_parameter(r, value, chtml20->cookie);
+        }
         W_L(" href=\"");
         W_V(value);
         W_L("\"");
@@ -2974,6 +2979,7 @@ s_chtml20_start_div_tag(void *pdoc, Node *node)
   char        *attr_wap_marquee_dir   = NULL;
   char        *attr_wap_marquee_loop  = NULL;
   char        *attr_color             = NULL;
+  char        *attr_bgcolor           = NULL;
 
   chtml20 = GET_CHTML20(pdoc);
   doc     = chtml20->doc;
@@ -3004,6 +3010,8 @@ s_chtml20_start_div_tag(void *pdoc, Node *node)
       css_property_t *text_decoration_prop   = chxj_css_get_property_value(doc, style, "text-decoration");
       css_property_t *color_prop             = chxj_css_get_property_value(doc, style, "color");
       css_property_t *text_align_prop        = chxj_css_get_property_value(doc, style, "text-align");
+      css_property_t *background_color_prop  = chxj_css_get_property_value(doc, style, "background-color");
+      css_property_t *background_prop        = chxj_css_get_property_value(doc, style, "background");
 
       css_property_t *cur;
       for (cur = display_prop->next; cur != display_prop; cur = cur->next) {
@@ -3021,6 +3029,20 @@ s_chtml20_start_div_tag(void *pdoc, Node *node)
       }
       for (cur = text_align_prop->next; cur != text_align_prop; cur = cur->next) {
         attr_align = apr_pstrdup(doc->pool, cur->value);
+      }
+      for (cur = background_color_prop->next; cur != background_color_prop; cur = cur->next) {
+        attr_bgcolor = apr_pstrdup(doc->pool, cur->value);
+        attr_bgcolor = chxj_css_rgb_func_to_value(doc->pool, attr_bgcolor);
+      }
+      for (cur = background_prop->next; cur != background_prop; cur = cur->next) {
+        char *ss = strchr(cur->value, '#');
+        if (!ss) {
+          ss = strstr(cur->value, "rgb");
+        }
+        if (ss) {
+          attr_bgcolor = apr_pstrdup(doc->pool, cur->value);
+          attr_bgcolor = chxj_css_rgb_func_to_value(doc->pool, attr_bgcolor);
+        }
       }
       if (attr_display) {
         css_property_t *wap_marquee_style_prop = chxj_css_get_property_value(doc, style, "-wap-marquee-style");
@@ -3060,11 +3082,20 @@ s_chtml20_start_div_tag(void *pdoc, Node *node)
     W_L(">");
     flg->with_div_flag = 1;
   }
+  else {
+    W_L("<div>");
+    flg->with_div_flag = 1;
+  }
   if (attr_color) {
-    W_L("<font color=\"");
-    W_V(attr_color);
-    W_L("\">");
-    flg->with_font_flag = 1;
+    if (attr_bgcolor && (STRCASEEQ('w','W',"white",attr_color) || STRCASEEQ('#','#',"#ffffff",attr_color))) {
+      /* nothing */
+    }
+    else {
+      W_L("<font color=\"");
+      W_V(attr_color);
+      W_L("\">");
+      flg->with_font_flag = 1;
+    }
   }
   if (attr_decoration) {
     W_L("<blink>");
@@ -3089,10 +3120,6 @@ s_chtml20_start_div_tag(void *pdoc, Node *node)
     }
     W_L(">");
     flg->with_marquee_flag = 1;
-  }
-  if (! attr_align && ! attr_color && ! attr_decoration && ! attr_display) {
-    W_L("<div>");
-    flg->with_div_flag = 1;
   }
   node->userData = flg;
 

@@ -64,10 +64,14 @@
 #include "chxj_cookie.h"
 #include "chxj_url_encode.h"
 #include "chxj_str_util.h"
+#include "chxj_dump_string.h"
 #if defined(USE_MYSQL_COOKIE)
 #  include "chxj_mysql.h"
 #endif
 #include "chxj_serf.h"
+#include "chxj_add_device_env.h"
+#include "chxj_conv_z2h.h"
+#include "chxj_header_inf.h"
 
 
 #define CHXJ_VERSION_PREFIX PACKAGE_NAME "/"
@@ -269,6 +273,8 @@ chxj_headers_fixup(request_rec *r)
     }
   }
 
+  chxj_add_device_env(r, spec);
+
   DBG(r, "REQ[%X] end chxj_headers_fixup()", (unsigned int)(apr_size_t)r);
 
   return DECLINED;
@@ -313,7 +319,10 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
   mod_chxj_config     *dconf; 
   chxjconvrule_entry  *entryp;
 
-  DBG(r,"REQ[%X] start of chxj_convert() input:[%.*s]", (unsigned int)(apr_size_t)r, (int)*len, *src);
+  DBG(r,"REQ[%X] start of chxj_convert()", (unsigned int)(apr_size_t)r);
+
+  chxj_dump_string(r, APLOG_MARK, "INPUT Data", *src, *len);
+
   dst  = apr_pstrcat(r->pool, (char *)*src, NULL);
 
   dconf = chxj_get_module_config(r->per_dir_config, &chxj_module);
@@ -399,6 +408,9 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
                                                               entryp, 
                                                               cookie);
     }
+    if (dst && *len) {
+      dst = chxj_conv_z2h(r, dst, len, entryp);
+    }
   }
   ap_set_content_length(r, *len);
 
@@ -410,6 +422,7 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
   if (cookie) {
     *cookiep = cookie;
   }
+
 
   DBG(r, "REQ[%X] end of chxj_convert()", (unsigned int)(apr_size_t)r);
 
@@ -612,7 +625,6 @@ chxj_input_convert(
   cookie_t *cookie = NULL;
   char     *buff_pre;
   int      no_update_flag = 0;
-  apr_size_t ii;
   apr_size_t ilen = 0;
   apr_pool_t *pool;
 
@@ -631,19 +643,7 @@ chxj_input_convert(
 
   result   = qs_alloc_zero_byte_string(pool);
 
-  DBG(r, "REQ[%X] +-------------------------------------------------------------------+", (unsigned int)(apr_size_t)r);
-  DBG(r, "REQ[%X] | BEFORE input convert source                                       |", (unsigned int)(apr_size_t)r);
-  DBG(r, "REQ[%X] +-------------------------------------------------------------------+", (unsigned int)(apr_size_t)r);
-  for (ii=0; ii<ilen-64; ii+=64) {
-    DBG(r, "REQ[%X] | [%-*.*s] |", (unsigned int)(apr_size_t)r, 64, 64, &s[ii]);
-    if (ilen < 64) {
-      break;
-    }
-  }
-  if (ilen >= 64 && ((ilen-64) % 64 != 0)) {
-    DBG(r, "REQ[%X] | [%-*.*s] |", (unsigned int)(apr_size_t)r, 64, 64, &s[ii]);
-  }
-  DBG(r, "REQ[%X] +--------------------------------------------------------------------+", (unsigned int)(apr_size_t)r);
+  chxj_dump_string(r, APLOG_MARK, "BEFORE input convert source", s, ilen);
 
   for (;;) {
     char *pair_sv;
@@ -835,6 +835,8 @@ pass_data_to_filter(ap_filter_t *f, const char *data,
 
   DBG(r, "REQ[%X] start pass_data_to_filter()", (unsigned int)(apr_size_t)r);
 
+  chxj_header_inf_clear(r);
+
   bb = apr_brigade_create(r->pool, c->bucket_alloc);
   b  = apr_bucket_transient_create(data, len, c->bucket_alloc);
 
@@ -852,7 +854,6 @@ pass_data_to_filter(ap_filter_t *f, const char *data,
 
   return rv;
 }
-
 
 /**
  * It is the main loop of the output filter. 
@@ -948,7 +949,7 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
        b = APR_BUCKET_NEXT(b)) {
 
     if (apr_bucket_read(b, &data, &len, APR_BLOCK_READ) == APR_SUCCESS) {
-      DBG(r, "REQ[%X] read data[%.*s]",(unsigned int)(apr_size_t)r, (int)len, data);
+      chxj_dump_string(r, APLOG_MARK, "READ Data", data, len);
 
       /*--------------------------------------------------------------------*/
       /* append data                                                        */
@@ -2196,6 +2197,42 @@ cmd_convert_rule(cmd_parms *cmd, void *mconfig, const char *arg)
         newrule->action &= (0xffffffff ^ CONVRULE_CSS_ON_BIT);
       }
       break;
+
+    case 'Z':
+    case 'z':
+      if (strcasecmp(CONVRULE_Z2H_ON_CMD, action) == 0) {
+        newrule->action |= CONVRULE_Z2H_ON_BIT;
+      }
+      else
+      if (strcasecmp(CONVRULE_Z2H_OFF_CMD, action) == 0) {
+        newrule->action |= CONVRULE_Z2H_OFF_BIT;
+      }
+      else
+      if (strcasecmp(CONVRULE_Z2H_ALPHA_ON_CMD, action) == 0) {
+        newrule->action |= CONVRULE_Z2H_ALPHA_ON_BIT;
+      }
+      else
+      if (strcasecmp(CONVRULE_Z2H_ALPHA_OFF_CMD, action) == 0) {
+        newrule->action |= CONVRULE_Z2H_ALPHA_OFF_BIT;
+      }
+      else
+      if (strcasecmp(CONVRULE_Z2H_NUM_ON_CMD, action) == 0) {
+        newrule->action |= CONVRULE_Z2H_NUM_ON_BIT;
+      }
+      else
+      if (strcasecmp(CONVRULE_Z2H_NUM_OFF_CMD, action) == 0) {
+        newrule->action |= CONVRULE_Z2H_NUM_OFF_BIT;
+      }
+      else
+      if (strcasecmp(CONVRULE_Z2H_ALL_ON_CMD, action) == 0) {
+        newrule->action |= CONVRULE_Z2H_ON_BIT | CONVRULE_Z2H_ALPHA_ON_BIT | CONVRULE_Z2H_NUM_ON_BIT;
+      }
+      else
+      if (strcasecmp(CONVRULE_Z2H_NUM_OFF_CMD, action) == 0) {
+        newrule->action |= CONVRULE_Z2H_OFF_BIT | CONVRULE_Z2H_ALPHA_OFF_BIT | CONVRULE_Z2H_NUM_OFF_BIT;
+      }
+      break;
+
     default:
       break;
     }
