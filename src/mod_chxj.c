@@ -1820,6 +1820,13 @@ chxj_merge_per_dir_config(apr_pool_t *p, void *basev, void *addv)
   else {
     mrg->new_line_type = NLTYPE_NIL;
   }
+
+  if (add->forward_url_base) {
+    mrg->forward_url_base = add->forward_url_base;
+  }
+  else if (base->forward_url_base) {
+    mrg->forward_url_base = base->forward_url_base;
+  }
   return mrg;
 }
 
