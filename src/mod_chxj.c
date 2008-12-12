@@ -146,7 +146,8 @@ converter_t convert_routine[] = {
   },
 };
 
-static int chxj_convert_input_header(request_rec *r,chxjconvrule_entry *entryp);
+static int chxj_convert_input_header(request_rec *r,chxjconvrule_entry *entryp, device_table *spec);
+static void s_convert_guid_parameter_to_header(request_rec *r, const char *param, device_table *spec);
 static void s_add_cookie_id_if_has_location_header(request_rec *r, cookie_t *cookie);
 static void s_clear_cookie_header(request_rec *r, device_table *spec);
 
@@ -224,7 +225,7 @@ chxj_headers_fixup(request_rec *r)
                      HTTP_USER_AGENT, 
                      entryp->user_agent);
 
-    chxj_convert_input_header(r,entryp);
+    chxj_convert_input_header(r,entryp, spec);
 
     break;
   
@@ -431,12 +432,44 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
 
 
 /**
+ * convert GUID parameter.
+ *
+ */
+static void
+s_convert_guid_parameter_to_header(request_rec *r, const char *param, device_table *spec)
+{
+  if (strcasecmp(param, "guid") == 0) {
+    switch(spec->html_spec_type) {
+    case CHXJ_SPEC_XHtml_Mobile_1_0:
+      do {
+        char *x_up_subno = (char *)apr_table_get(r->headers_in, "x-up-subno");
+        if (x_up_subno) {
+          apr_table_setn(r->headers_in, "X-DCMGUID", x_up_subno);
+        }
+      } while(0);
+      break;
+    case CHXJ_SPEC_Jhtml:
+    case CHXJ_SPEC_Jxhtml:
+      do {
+        char *x_jphone_uid = (char *)apr_table_get(r->headers_in, "x-jphone-uid");
+        if (x_jphone_uid) {
+          apr_table_setn(r->headers_in, "X-DCMGUID", x_jphone_uid);
+        }
+      } while(0);
+      break;
+    default:
+      break;
+    }
+  }
+}
+
+/**
  * It converts it from HEADER.
  *
  * @param r   [i]
  */
 static int
-chxj_convert_input_header(request_rec *r,chxjconvrule_entry *entryp) 
+chxj_convert_input_header(request_rec *r,chxjconvrule_entry *entryp, device_table *spec) 
 {
 
   char       *buff;
@@ -537,7 +570,7 @@ chxj_convert_input_header(request_rec *r,chxjconvrule_entry *entryp)
         else {
           dname = "";
         }
-
+        s_convert_guid_parameter_to_header(r, dname, spec);
         result = apr_pstrcat(r->pool, result, dname, "=", dvalue, NULL);
       }
       else {
@@ -613,7 +646,8 @@ chxj_input_convert(
   request_rec         *r, 
   const char          **src, 
   apr_size_t          *len, 
-  chxjconvrule_entry  *entryp)
+  chxjconvrule_entry  *entryp,
+  device_table        *spec)
 {
   char     *pair;
   char     *name;
@@ -707,6 +741,7 @@ chxj_input_convert(
           dname = "";
         }
 
+
         result = apr_pstrcat(pool, result, dname, "=", dvalue, NULL);
       }
       else {
@@ -782,6 +817,7 @@ chxj_input_convert(
         else {
           r->args = apr_pstrcat(pool, &name[sizeof(CHXJ_QUERY_STRING_PARAM_PREFIX)-1], "=", dvalue, NULL);
         }
+        s_convert_guid_parameter_to_header(r, &name[sizeof(CHXJ_QUERY_STRING_PARAM_PREFIX)-1], spec);
       }
     }
     else
@@ -799,6 +835,7 @@ chxj_input_convert(
         else {
           r->args = apr_pstrcat(pool, &name[sizeof(CHXJ_QUERY_STRING_PARAM_PREFIX_ENC)-1], "=", dvalue, NULL);
         }
+        s_convert_guid_parameter_to_header(r, &name[sizeof(CHXJ_QUERY_STRING_PARAM_PREFIX_ENC)-1], spec);
       }
     }
     DBG(r, "REQ[%X] ************************ name:[%s]", (unsigned int)(apr_size_t)r, name);
@@ -1213,6 +1250,7 @@ chxj_input_handler(request_rec *r)
   char                *user_agent;
   apr_pool_t          *pool;
   apr_size_t          ii;
+  int                 response_code = 0;
   
   DBG(r, "start of chxj_input_handler()");
 
@@ -1249,7 +1287,7 @@ chxj_input_handler(request_rec *r)
    * now convert.
    */
   if (post_data_len > 0) {
-    post_data = chxj_input_convert(r, (const char**)&post_data, (apr_size_t*)&post_data_len, entryp);
+    post_data = chxj_input_convert(r, (const char**)&post_data, (apr_size_t*)&post_data_len, entryp, spec);
     DBG(r, "(in:exchange)POSTDATA:[%s]", post_data);
   }
 
@@ -1269,7 +1307,7 @@ chxj_input_handler(request_rec *r)
   apr_table_setn(r->headers_in, CHXJ_HEADER_ORIG_CLIENT_IP, r->connection->remote_ip);
   apr_table_unset(r->headers_in, "Content-Length");
   apr_table_setn(r->headers_in, "Content-Length", apr_psprintf(pool, "%" APR_SIZE_T_FMT, post_data_len));
-  response = chxj_serf_post(r, pool, url_path, post_data, post_data_len, 1, &res_len);
+  response = chxj_serf_post(r, pool, url_path, post_data, post_data_len, 1, &res_len, &response_code);
   DBG(r, "REQ[%X] -------------------------------------------------------", (unsigned int)(apr_size_t)r);
   DBG(r, "REQ[%X] response length:[%" APR_SIZE_T_FMT "]", (unsigned int)(apr_size_t)r, res_len);
   for (ii=0; ii<res_len/64; ii++) {
@@ -1305,7 +1343,7 @@ chxj_input_handler(request_rec *r)
   }
 
   DBG(r, "REQ[%X] end of chxj_input_handler()", (unsigned int)(apr_size_t)r);
-  return APR_SUCCESS;
+  return response_code;
 }
 
 static mod_chxj_global_config *
@@ -1810,6 +1848,13 @@ chxj_merge_per_dir_config(apr_pool_t *p, void *basev, void *addv)
   }
   else {
     mrg->new_line_type = NLTYPE_NIL;
+  }
+
+  if (add->forward_url_base) {
+    mrg->forward_url_base = add->forward_url_base;
+  }
+  else if (base->forward_url_base) {
+    mrg->forward_url_base = base->forward_url_base;
   }
   return mrg;
 }

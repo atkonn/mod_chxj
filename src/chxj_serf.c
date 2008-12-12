@@ -46,6 +46,7 @@ struct __handler_ctx_t {
 
   apr_status_t rv;
   const char *reason;
+  int response_code;
 
   char *response;
   apr_size_t response_len;
@@ -58,8 +59,8 @@ struct __handler_ctx_t {
 
 char *default_chxj_serf_get(request_rec *r, apr_pool_t *ppool, const char *url_path, int set_headers_flag, apr_size_t *response_len);
 char *(*chxj_serf_get)(request_rec *r, apr_pool_t *ppool, const char *url_path, int set_headers_flag, apr_size_t *response_len) = default_chxj_serf_get;
-char *default_chxj_serf_post(request_rec *r, apr_pool_t *ppool, const char *url_path, char *post_data, apr_size_t post_data_len, int set_headers_flag, apr_size_t *response_len);
-char *(*chxj_serf_post)(request_rec *r, apr_pool_t *ppool, const char *url_path, char *post_data, apr_size_t post_data_len, int set_headers_flag, apr_size_t *response_len) = default_chxj_serf_post;
+char *default_chxj_serf_post(request_rec *r, apr_pool_t *ppool, const char *url_path, char *post_data, apr_size_t post_data_len, int set_headers_flag, apr_size_t *response_len, int *response_code);
+char *(*chxj_serf_post)(request_rec *r, apr_pool_t *ppool, const char *url_path, char *post_data, apr_size_t post_data_len, int set_headers_flag, apr_size_t *response_len, int *response_code) = default_chxj_serf_post;
 
 
 void
@@ -129,6 +130,7 @@ s_handle_response(serf_request_t *UNUSED(request), serf_bucket_t *response, void
     return rv;
   }
   ctx->reason = sl.reason;
+  ctx->response_code = sl.code;
 
   while (1) {
     rv = serf_bucket_read(response, 2048, &data, &len);
@@ -375,7 +377,7 @@ default_chxj_serf_get(request_rec *r, apr_pool_t *ppool, const char *url_path, i
 
 
 char *
-default_chxj_serf_post(request_rec *r, apr_pool_t *ppool, const char *url_path, char *post_data, apr_size_t post_data_len, int set_headers_flag, apr_size_t *response_len)
+default_chxj_serf_post(request_rec *r, apr_pool_t *ppool, const char *url_path, char *post_data, apr_size_t post_data_len, int set_headers_flag, apr_size_t *response_len, int *response_code)
 {
   apr_pool_t *pool;
   apr_uri_t url;
@@ -465,6 +467,7 @@ default_chxj_serf_post(request_rec *r, apr_pool_t *ppool, const char *url_path, 
   }
 
   DBG(r, "end of serf request");
+  DBG(r, "response_code:[%d]", handler_ctx.response_code);
   DBG(r, "response:[%s][%" APR_SIZE_T_FMT "]", handler_ctx.response, handler_ctx.response_len);
   serf_connection_close(connection);
   ret = apr_pstrdup(ppool, handler_ctx.response);
@@ -477,6 +480,7 @@ default_chxj_serf_post(request_rec *r, apr_pool_t *ppool, const char *url_path, 
       chxj_set_content_type(r, apr_pstrdup(r->pool, contentType));
     }
   }
+  *response_code = handler_ctx.response_code;
   DBG(r, "REQ:[%X] end chxj_serf_post()", (unsigned int)(apr_size_t)r);
   return ret;
 }

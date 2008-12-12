@@ -1566,9 +1566,10 @@ s_jhtml_start_form_tag(void *pdoc, Node *node)
     attr_action = chxj_encoding_parameter(r, attr_action, 0);
     attr_action = chxj_add_cookie_parameter(r, attr_action, jhtml->cookie);
     char *q;
+    char *unused = NULL;
     q = strchr(attr_action, '?');
     if (q) {
-      new_hidden_tag = chxj_form_action_to_hidden_tag(r, doc->pool, attr_action, 0, post_flag);
+      new_hidden_tag = chxj_form_action_to_hidden_tag(r, doc->pool, attr_action, 0, post_flag, &unused, CHXJ_FALSE);
       if (new_hidden_tag) {
         *q = 0;
       }
