@@ -1259,6 +1259,7 @@ chxj_input_handler(request_rec *r)
   char                *user_agent;
   apr_pool_t          *pool;
   apr_size_t          ii;
+  int                 response_code = 0;
   
   DBG(r, "start of chxj_input_handler()");
 
@@ -1315,7 +1316,7 @@ chxj_input_handler(request_rec *r)
   apr_table_setn(r->headers_in, CHXJ_HEADER_ORIG_CLIENT_IP, r->connection->remote_ip);
   apr_table_unset(r->headers_in, "Content-Length");
   apr_table_setn(r->headers_in, "Content-Length", apr_psprintf(pool, "%" APR_SIZE_T_FMT, post_data_len));
-  response = chxj_serf_post(r, pool, url_path, post_data, post_data_len, 1, &res_len);
+  response = chxj_serf_post(r, pool, url_path, post_data, post_data_len, 1, &res_len, &response_code);
   DBG(r, "REQ[%X] -------------------------------------------------------", (unsigned int)(apr_size_t)r);
   DBG(r, "REQ[%X] response length:[%" APR_SIZE_T_FMT "]", (unsigned int)(apr_size_t)r, res_len);
   for (ii=0; ii<res_len/64; ii++) {
@@ -1351,7 +1352,7 @@ chxj_input_handler(request_rec *r)
   }
 
   DBG(r, "REQ[%X] end of chxj_input_handler()", (unsigned int)(apr_size_t)r);
-  return APR_SUCCESS;
+  return response_code;
 }
 
 static mod_chxj_global_config *

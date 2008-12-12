@@ -42,8 +42,8 @@
 extern char *default_chxj_serf_get(request_rec *r, apr_pool_t *ppool, const char *url_path, int set_headers_flag, apr_size_t *res_len);
 extern char *(*chxj_serf_get)(request_rec *r, apr_pool_t *ppool, const char *url_path, int set_headers_flag, apr_size_t *res_len);
 
-extern char *default_chxj_serf_post(request_rec *r, apr_pool_t *ppool, const char *url_path, char *post_data, apr_size_t post_data_len, int set_headers_flag, apr_size_t *res_len);
-extern char *(*chxj_serf_post)(request_rec *r, apr_pool_t *ppool, const char *url_path, char *post_data, apr_size_t post_data_len, int set_headers_flag, apr_size_t *res_len);
+extern char *default_chxj_serf_post(request_rec *r, apr_pool_t *ppool, const char *url_path, char *post_data, apr_size_t post_data_len, int set_headers_flag, apr_size_t *res_len, int *response_code);
+extern char *(*chxj_serf_post)(request_rec *r, apr_pool_t *ppool, const char *url_path, char *post_data, apr_size_t post_data_len, int set_headers_flag, apr_size_t *res_len, int *response_code);
 
 
 #endif
