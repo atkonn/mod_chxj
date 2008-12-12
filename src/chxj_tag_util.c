@@ -591,9 +591,10 @@ qs_get_parse_attr(Doc *doc, Node *tag, apr_pool_t *pool)
 
 
 char *
-chxj_form_action_to_hidden_tag(request_rec *r, apr_pool_t *pool, const char *str, int xmlFlag, int post)
+chxj_form_action_to_hidden_tag(request_rec *r, apr_pool_t *pool, const char *str, int xmlFlag, int post, char **new_query_string, int docomo)
 {
   char *s = apr_pstrdup(pool, str);
+  *new_query_string = NULL;
   if (!s) return NULL;
   if (chxj_starts_with(s, "http://") || chxj_starts_with(s, "https://")) {
     apr_uri_t url;
@@ -620,17 +621,22 @@ chxj_form_action_to_hidden_tag(request_rec *r, apr_pool_t *pool, const char *str
       if (!val) val = "";
     }
     char *tmp = NULL;
-    if (! post || strcasecmp(key, "_chxj_cc") == 0 || strcasecmp(key, "_chxj_nc") == 0) {
-      tmp = apr_psprintf(pool, "<input type=\"hidden\" name=\"%s\" value=\"%s\"%s>", key, chxj_url_decode(pool, val), (xmlFlag == 1) ? " /" : "");
+    if (strcasecmp(key, "guid") == 0 && docomo) {
+      *new_query_string = apr_psprintf(pool, "%s=%s", key, val);
     }
     else {
-      tmp = apr_psprintf(pool, "<input type=\"hidden\" name=\"_chxj_qs_%s\" value=\"%s\"%s>", key, chxj_url_decode(pool, val), (xmlFlag == 1) ? " /" : "");
-    }
-    if (result) {
-      result = apr_pstrcat(pool, result, tmp, NULL);
-    }
-    else {
-      result = tmp;
+      if (! post || strcasecmp(key, "_chxj_cc") == 0 || strcasecmp(key, "_chxj_nc") == 0) {
+        tmp = apr_psprintf(pool, "<input type=\"hidden\" name=\"%s\" value=\"%s\"%s>", key, chxj_url_decode(pool, val), (xmlFlag == 1) ? " /" : "");
+      }
+      else {
+        tmp = apr_psprintf(pool, "<input type=\"hidden\" name=\"_chxj_qs_%s\" value=\"%s\"%s>", key, chxj_url_decode(pool, val), (xmlFlag == 1) ? " /" : "");
+      }
+      if (result) {
+        result = apr_pstrcat(pool, result, tmp, NULL);
+      }
+      else {
+        result = tmp;
+      }
     }
   }
   return result;
