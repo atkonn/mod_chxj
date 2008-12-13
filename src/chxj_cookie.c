@@ -879,7 +879,7 @@ chxj_add_cookie_no_update_parameter(request_rec *r, char *value)
   return dst;
 
 on_error:
-  DBG(r, "REQ[%X] end   chxj_add_cookie_no_update_parameter() (on_error)", (unsigned int)(apr_size_t)r, dst);
+  DBG(r, "REQ[%X] end   chxj_add_cookie_no_update_parameter() (on_error)", (unsigned int)(apr_size_t)r);
   return dst;
 }
 

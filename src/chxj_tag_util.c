@@ -17,6 +17,7 @@
 #include "chxj_tag_util.h"
 #include "chxj_url_encode.h"
 #include "chxj_str_util.h"
+#include "chxj_jreserved_tag.h"
 
 
 /**
@@ -591,7 +592,7 @@ qs_get_parse_attr(Doc *doc, Node *tag, apr_pool_t *pool)
 
 
 char *
-chxj_form_action_to_hidden_tag(request_rec *r, apr_pool_t *pool, const char *str, int xmlFlag, int post, char **new_query_string, int docomo)
+chxj_form_action_to_hidden_tag(request_rec *r, apr_pool_t *pool, const char *str, int xmlFlag, int post, char **new_query_string, int docomo, int softbank)
 {
   char *s = apr_pstrdup(pool, str);
   *new_query_string = NULL;
@@ -626,7 +627,12 @@ chxj_form_action_to_hidden_tag(request_rec *r, apr_pool_t *pool, const char *str
     }
     else {
       if (! post || strcasecmp(key, "_chxj_cc") == 0 || strcasecmp(key, "_chxj_nc") == 0) {
-        tmp = apr_psprintf(pool, "<input type=\"hidden\" name=\"%s\" value=\"%s\"%s>", key, chxj_url_decode(pool, val), (xmlFlag == 1) ? " /" : "");
+        if (softbank) {
+          tmp = apr_psprintf(pool, "<input type=\"hidden\" name=\"%s\" value=\"%s\"%s>", chxj_jreserved_to_safe_tag(r, key), chxj_url_decode(pool, val), (xmlFlag == 1) ? " /" : "");
+        }
+        else {
+          tmp = apr_psprintf(pool, "<input type=\"hidden\" name=\"%s\" value=\"%s\"%s>", key, chxj_url_decode(pool, val), (xmlFlag == 1) ? " /" : "");
+        }
       }
       else {
         tmp = apr_psprintf(pool, "<input type=\"hidden\" name=\"_chxj_qs_%s\" value=\"%s\"%s>", key, chxj_url_decode(pool, val), (xmlFlag == 1) ? " /" : "");

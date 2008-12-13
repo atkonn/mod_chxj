@@ -70,6 +70,7 @@
 #include "chxj_add_device_env.h"
 #include "chxj_conv_z2h.h"
 #include "chxj_header_inf.h"
+#include "chxj_jreserved_tag.h"
 
 
 #define CHXJ_VERSION_PREFIX PACKAGE_NAME "/"

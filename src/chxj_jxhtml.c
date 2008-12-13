@@ -23,6 +23,7 @@
 #include "chxj_url_encode.h"
 #include "chxj_str_util.h"
 #include "chxj_header_inf.h"
+#include "chxj_jreserved_tag.h"
 
 
 #define GET_JXHTML(X) ((jxhtml_t *)(X))
@@ -1049,7 +1050,7 @@ s_jxhtml_start_a_tag(void *pdoc, Node *node)
       /* CHTML1.0                                                             */
       /*----------------------------------------------------------------------*/
       W_L(" name=\"");
-      W_V(value);
+      W_V(chxj_jreserved_to_safe_tag(r, value));
       W_L("\"");
     }
     else if (STRCASEEQ('h','H',"href",name)) {
@@ -1450,7 +1451,7 @@ s_jxhtml_start_form_tag(void *pdoc, Node *node)
     char *unused = NULL;
     q = strchr(attr_action, '?');
     if (q) {
-      new_hidden_tag = chxj_form_action_to_hidden_tag(r, doc->pool, attr_action, 1, post_flag, &unused, CHXJ_FALSE);
+      new_hidden_tag = chxj_form_action_to_hidden_tag(r, doc->pool, attr_action, 1, post_flag, &unused, CHXJ_FALSE, CHXJ_TRUE);
       if (new_hidden_tag) {
         *q = 0;
       }
@@ -1561,7 +1562,7 @@ s_jxhtml_start_input_tag(void *pdoc, Node *node)
   }
   if (name && *name) {
     W_L(" name=\"");
-    W_V(name);
+    W_V(chxj_jreserved_to_safe_tag(r, name));
     W_L("\"");
   }
   if (value && *value) {

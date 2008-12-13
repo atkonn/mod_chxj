@@ -1358,7 +1358,7 @@ s_xhtml_1_0_start_form_tag(void *pdoc, Node *node)
     char *unused = NULL;
     q = strchr(attr_action, '?');
     if (q) {
-      new_hidden_tag = chxj_form_action_to_hidden_tag(r, doc->pool, attr_action, 1, post_flag, &unused, CHXJ_FALSE);
+      new_hidden_tag = chxj_form_action_to_hidden_tag(r, doc->pool, attr_action, 1, post_flag, &unused, CHXJ_FALSE, CHXJ_FALSE);
       if (new_hidden_tag) {
         *q = 0;
       }
