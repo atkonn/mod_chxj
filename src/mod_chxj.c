@@ -973,7 +973,7 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
         }
       }
       if (apr_table_get(r->headers_out, "Location") || apr_table_get(r->err_headers_out, "Location")) {
-        if (r->status < HTTP_MULTIPLE_CHOICES || r->status > HTTP_TEMPORARY_REDIRECT) {
+        if (! ap_is_HTTP_REDIRECT(r->status)) {
           r->status = HTTP_MOVED_TEMPORARILY;
         }
       }
@@ -1149,7 +1149,7 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
           DBG(r, "REQ[%X] call pass_data_to_filter()", (unsigned int)(apr_size_t)r);
           s_add_cookie_id_if_has_location_header(r, cookie);
           if (apr_table_get(r->headers_out, "Location") || apr_table_get(r->err_headers_out, "Location")) {
-            if (r->status < HTTP_MULTIPLE_CHOICES || r->status > HTTP_TEMPORARY_REDIRECT) {
+            if (! ap_is_HTTP_REDIRECT(r->status)) {
               r->status = HTTP_MOVED_TEMPORARILY;
             }
           }
@@ -1201,6 +1201,7 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
         }
         if (apr_table_get(r->headers_out, "Location") || apr_table_get(r->err_headers_out, "Location")) {
           if (r->status < HTTP_MULTIPLE_CHOICES || r->status > HTTP_TEMPORARY_REDIRECT) {
+          if (! ap_is_HTTP_REDIRECT(r->status)) {
             r->status = HTTP_MOVED_TEMPORARILY;
           }
         }
@@ -1237,7 +1238,7 @@ s_add_cookie_id_if_has_location_header(request_rec *r, cookie_t *cookie)
     apr_table_unset(r->headers_out, "Location");
     apr_table_setn(r->headers_out, "Location", location_header);
     DBG(r, "REQ[%X] Location Header=[%s]", (unsigned int)(apr_size_t)r, location_header);
-    if (r->status < HTTP_MULTIPLE_CHOICES || r->status > HTTP_TEMPORARY_REDIRECT) {
+    if (!ap_is_HTTP_REDIRECT(r->status)) {
       r->status = HTTP_MOVED_TEMPORARILY;
     }
   }
