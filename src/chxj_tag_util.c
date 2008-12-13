@@ -621,7 +621,7 @@ chxj_form_action_to_hidden_tag(request_rec *r, apr_pool_t *pool, const char *str
       if (!val) val = "";
     }
     char *tmp = NULL;
-    if (strcasecmp(key, "guid") == 0 && docomo) {
+    if (post && strcasecmp(key, "guid") == 0 && docomo) {
       *new_query_string = apr_psprintf(pool, "%s=%s", key, val);
     }
     else {
