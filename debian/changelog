@@ -1,3 +1,16 @@
+libapache2-mod-chxj (0.12.27-1) unstable; urgency=low
+
+  * Fixed bug.
+    - Whenever POST is done, the response code becomes 200. 
+    - __chxj_nc parameter is applied to the link to an external site. 
+    - It doesn't correspond to Ip-based virtual host. 
+
+  * Added new features.
+    - added GUID converter.
+  
+
+ -- Atsush Konno  <konn@users.sourceforge.jp>  Sat, 13 Dec 2008 16:49:11 +0900
+
 libapache2-mod-chxj (0.12.26-1) unstable; urgency=low
 
   * Fixed bug.
