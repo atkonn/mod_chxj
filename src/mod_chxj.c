@@ -722,6 +722,8 @@ chxj_input_convert(
     name  = apr_strtok(pair, "=", &vstate);
     value = apr_strtok(NULL, "=", &vstate);
     if (! name) continue;
+    name  = chxj_safe_to_jreserved_tag(r, name);
+
     if (strncasecmp(name, "_chxj", 5) != 0 && strncasecmp(name, "%5Fchxj", sizeof("%5Fchxj")-1) != 0) {
       if (strlen(result) != 0) 
         result = apr_pstrcat(pool, result, "&", NULL);
