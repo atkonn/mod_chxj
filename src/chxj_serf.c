@@ -312,7 +312,8 @@ default_chxj_serf_get(request_rec *r, apr_pool_t *ppool, const char *url_path, i
   rv = apr_sockaddr_info_get(&address, url.hostname, APR_UNSPEC, url.port, 0, pool);
   if (rv != APR_SUCCESS) {
     char buf[256];
-    ERR(r, "apr_sockaddr_info_get() failed: rv:[%d|%s]", rv, apr_strerror(rv, buf, 256));
+    ERR(r, "REQ[%X] %s:%d apr_sockaddr_info_get() failed: rv:[%d|%s] - Please check DNS settings.", 
+           (unsigned int)(apr_size_t)r, __FILE__,__LINE__, rv, apr_strerror(rv, buf, 256));
     return NULL;
   }
   memset(&app_ctx, 0, sizeof(app_ctx_t));
