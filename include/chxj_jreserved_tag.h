@@ -21,4 +21,6 @@
 
 extern char *chxj_jreserved_to_safe_tag(request_rec *r, const char *src);
 extern char *chxj_safe_to_jreserved_tag(request_rec *r, const char *src);
+
+extern char *chxj_jreserved_tag_to_safe_for_query_string(request_rec *r, const char *query_string);
 #endif

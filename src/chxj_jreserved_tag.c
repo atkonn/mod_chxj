@@ -16,6 +16,7 @@
  */
 #include "mod_chxj.h"
 #include "chxj_jreserved_tag.h"
+#include "chxj_url_encode.h"
 
 typedef struct r_table {
   char lower;
@@ -147,4 +148,50 @@ chxj_safe_to_jreserved_tag(request_rec *r, const char *src)
     return apr_pstrdup(r->pool, &src[sizeof(CHXJ_SOFTBANK_RESERVED_TAG_PREFIX)-1]);
   }
   return (char *)src;
+}
+
+char *
+chxj_jreserved_tag_to_safe_for_query_string(request_rec *r, const char *query_string)
+{
+  apr_pool_t *pool;
+  apr_pool_create(&pool, r->pool);
+  char *s = apr_pstrdup(pool, query_string);
+  char *fname;
+
+  if (!s) return apr_pstrdup(pool, "");
+  char *result = s;
+  s = strchr(s, '?');
+  if (!s) return result;
+  *s = 0;
+  s++;
+  fname = apr_pstrdup(pool, result);
+  result = NULL;
+
+  char *pstat;
+  char *pstat2;
+  for (;;) {
+    char *pair = apr_strtok(s, "&", &pstat);
+    if (! pair) break;
+    s = NULL;
+    char *key = apr_strtok(pair, "=",  &pstat2);
+    char *val = "";
+    if (key) {
+      val = apr_strtok(NULL, "=", &pstat2);
+      if (!val) val = "";
+    }
+    char *tmp = NULL;
+    if (strcasecmp(key, "guid") == 0) {
+      tmp = apr_psprintf(pool, "%s=%s", key, val);
+    }
+    else {
+      tmp = apr_psprintf(pool, "%s=%s", chxj_jreserved_to_safe_tag(r, key), chxj_url_decode(pool, val));
+      if (result) {
+        result = apr_pstrcat(pool, result, "&" ,tmp, NULL);
+      }
+      else {
+        result = tmp;
+      }
+    }
+  }
+  return apr_pstrcat(pool, fname, "?" , result, NULL);
 }
