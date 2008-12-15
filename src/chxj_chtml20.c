@@ -1500,7 +1500,7 @@ s_chtml20_start_form_tag(void *pdoc, Node *node)
     q = strchr(attr_action, '?');
     if (q) {
       new_hidden_tag = chxj_form_action_to_hidden_tag(r, doc->pool, attr_action, 0, post_flag, &new_query_string, CHXJ_TRUE, CHXJ_FALSE);
-      if (new_hidden_tag) {
+      if (new_hidden_tag || new_query_string) {
         *q = 0;
       }
     }
