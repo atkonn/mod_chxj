@@ -1,3 +1,13 @@
+libapache2-mod-chxj (0.12.28-1) unstable; urgency=low
+
+  * Fixed bug.
+    - When the Cookie simulator is invalidated, GUID Parameter Converter does
+      abnormal operation. [#14284]
+  * Added new Features.
+    - Added J-Reserved Parameter Converter.(merge from old-trunk)
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Tue, 16 Dec 2008 09:52:26 +0900
+
 libapache2-mod-chxj (0.12.27-1) unstable; urgency=low
 
   * Fixed bug.
