@@ -1712,8 +1712,10 @@ s_ixhtml10_start_form_tag(void *pdoc, Node *node)
     char *new_query_string = NULL;
     q = strchr(attr_action, '?');
     if (q) {
-      new_hidden_tag = chxj_form_action_to_hidden_tag(r, doc->pool, attr_action, 1, post_flag, &new_query_string, CHXJ_TRUE);
-      *q = 0;
+      new_hidden_tag = chxj_form_action_to_hidden_tag(r, doc->pool, attr_action, 1, post_flag, &new_query_string, CHXJ_TRUE, CHXJ_FALSE);
+      if (new_hidden_tag || new_query_string) {
+        *q = 0;
+      }
     }
     W_L(" action=\"");
     W_V(attr_action);

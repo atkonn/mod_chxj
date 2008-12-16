@@ -1949,7 +1949,7 @@ chxj_trans_name(request_rec *r)
           "qrc",    /* QRCode出力用ファイルの拡張子 */
           "",
   };
-  char     *fname;
+  char     *fname = NULL;
   char     *idx;
   char     *filename_sv;
   int      do_ext_check = TRUE;

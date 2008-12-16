@@ -23,6 +23,7 @@
 #include "chxj_url_encode.h"
 #include "chxj_str_util.h"
 #include "chxj_header_inf.h"
+#include "chxj_jreserved_tag.h"
 
 
 #define GET_JHTML(X) ((jhtml_t *)(X))
@@ -1149,6 +1150,7 @@ s_jhtml_start_a_tag(void *pdoc, Node *node)
       value = chxj_encoding_parameter(r, value, 0);
       if (! chxj_starts_with(value, "mailto:") && ! chxj_starts_with(value, "telto:")) {
         value = chxj_add_cookie_parameter(r, value, jhtml->cookie);
+        value = chxj_jreserved_tag_to_safe_for_query_string(r, value);
       }
       W_L(" href=\"");
       W_V(value);
@@ -1569,7 +1571,7 @@ s_jhtml_start_form_tag(void *pdoc, Node *node)
     char *unused = NULL;
     q = strchr(attr_action, '?');
     if (q) {
-      new_hidden_tag = chxj_form_action_to_hidden_tag(r, doc->pool, attr_action, 0, post_flag, &unused, CHXJ_FALSE);
+      new_hidden_tag = chxj_form_action_to_hidden_tag(r, doc->pool, attr_action, 0, post_flag, &unused, CHXJ_FALSE, CHXJ_TRUE);
       if (new_hidden_tag) {
         *q = 0;
       }
@@ -1751,7 +1753,7 @@ s_jhtml_start_input_tag(void *pdoc, Node *node)
   }
   if (attr_name) {
     W_L(" name=\"");
-    W_V(attr_name);
+    W_V(chxj_jreserved_to_safe_tag(r, attr_name));
     W_L("\"");
   }
   if (attr_value) {
@@ -2633,12 +2635,14 @@ s_jhtml_start_img_tag(void *pdoc, Node *node)
         /*--------------------------------------------------------------------*/
 #ifdef IMG_NOT_CONVERT_FILENAME
       value = chxj_encoding_parameter(r, value, 0);
+      value = chxj_jreserved_tag_to_safe_for_query_string(r, value);
       value = chxj_add_cookie_parameter(r, value, jhtml->cookie);
       value = chxj_add_cookie_no_update_parameter(r, value);
       attr_src = value;
 #else
       value = chxj_img_conv(r, spec, value);
       value = chxj_encoding_parameter(r, value, 0);
+      value = chxj_jreserved_tag_to_safe_for_query_string(r, value);
       value = chxj_add_cookie_parameter(r, value, jhtml->cookie);
       value = chxj_add_cookie_no_update_parameter(r, value);
       attr_src = value;
