@@ -1502,7 +1502,7 @@ s_chtml10_start_a_tag(void *pdoc, Node *node)
         /* CHTML1.0                                                           */
         /*--------------------------------------------------------------------*/
         value = chxj_encoding_parameter(r, value);
-        if (! chxj_starts_with(value, "mailto:") && ! chxj_starts_with(value, "telto:")) {
+        if (! chxj_starts_with(value, "mailto:") && ! chxj_starts_with(value, "tel:")) {
           value = chxj_add_cookie_parameter(r, value, chtml10->cookie);
         }
         W_L(" href=\"");

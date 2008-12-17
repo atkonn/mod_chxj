@@ -1032,7 +1032,7 @@ s_xhtml_1_0_start_a_tag(void *pdoc, Node *node)
     }
     else if (STRCASEEQ('h','H',"href", name) && value && *value) {
       value = chxj_encoding_parameter(r, value);
-      if (! chxj_starts_with(value, "mailto:") && ! chxj_starts_with(value, "telto:")) {
+      if (! chxj_starts_with(value, "mailto:") && ! chxj_starts_with(value, "tel:")) {
         value = chxj_add_cookie_parameter(r, value, xhtml->cookie);
       }
       W_L(" href=\"");
