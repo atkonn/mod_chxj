@@ -1981,7 +1981,7 @@ s_chtml50_start_option_tag(void *pdoc, Node *child)
       value = apr_pstrdup(doc->buf.pool, val);
     }
   }
-  if (value && *value) {
+  if (value) {
     W_L(" value=\"");
     W_V(value);
     W_L("\"");

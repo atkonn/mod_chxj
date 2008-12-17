@@ -2354,7 +2354,7 @@ s_chtml20_start_option_tag(void *pdoc, Node *child)
     }
   }
 
-  if (value && *value) {
+  if (value) {
     W_L(" value=\"");
     W_V(value);
     W_L("\"");

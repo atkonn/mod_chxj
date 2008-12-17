@@ -2560,7 +2560,7 @@ s_chtml10_start_option_tag(void *pdoc, Node *child)
     }
   }
 
-  if (value && *value != 0) {
+  if (value) {
     W_L(" value=\"");
     W_V(value);
     W_L("\"");
