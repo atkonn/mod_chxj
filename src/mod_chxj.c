@@ -2252,6 +2252,13 @@ cmd_convert_rule(cmd_parms *cmd, void *mconfig, const char *arg)
       }
       break;
 
+    case 'Q':
+    case 'q':
+      if (strcasecmp(CONVRULE_QSCONV_OFF_CMD, action) == 0) {
+        newrule->action |= CONVRULE_QSCONV_OFF_BIT;
+      }
+      break;
+
     case 'Z':
     case 'z':
       if (strcasecmp(CONVRULE_Z2H_ON_CMD, action) == 0) {
