@@ -1451,16 +1451,20 @@ s_jxhtml_start_form_tag(void *pdoc, Node *node)
   W_L("<form");
   if (attr_action) {
     char *q;
-    char *unused = NULL;
+    char *old_qs = NULL;
     q = strchr(attr_action, '?');
     if (q) {
-      new_hidden_tag = chxj_form_action_to_hidden_tag(r, doc->pool, attr_action, 1, post_flag, &unused, CHXJ_FALSE, CHXJ_TRUE);
-      if (new_hidden_tag) {
+      new_hidden_tag = chxj_form_action_to_hidden_tag(r, doc->pool, attr_action, 1, post_flag, &old_qs, CHXJ_FALSE, CHXJ_TRUE, jxhtml->entryp);
+      if (new_hidden_tag || old_qs) {
         *q = 0;
       }
     }
     W_L(" action=\"");
     W_V(attr_action);
+    if (old_qs) {
+      W_L("?");
+      W_V(old_qs);
+    }
     W_L("\"");
   }
   if (attr_method) {

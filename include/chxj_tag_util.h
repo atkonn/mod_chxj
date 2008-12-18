@@ -46,7 +46,9 @@ extern char *chxj_form_action_to_hidden_tag(
   int post, 
   char **new_query_string, 
   int docomo,
-  int softbank);
+  int softbank,
+  chxjconvrule_entry *entryp
+  );
 
 #endif
 /*
