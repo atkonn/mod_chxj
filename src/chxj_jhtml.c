@@ -1148,9 +1148,9 @@ s_jhtml_start_a_tag(void *pdoc, Node *node)
       /* CHTML1.0                                                             */
       /*----------------------------------------------------------------------*/
       value = chxj_encoding_parameter(r, value, 0);
-      if (! chxj_starts_with(value, "mailto:") && ! chxj_starts_with(value, "telto:")) {
+      if (! chxj_starts_with(value, "mailto:") && ! chxj_starts_with(value, "tel:")) {
         value = chxj_add_cookie_parameter(r, value, jhtml->cookie);
-        value = chxj_jreserved_tag_to_safe_for_query_string(r, value);
+        value = chxj_jreserved_tag_to_safe_for_query_string(r, value, jhtml->entryp);
       }
       W_L(" href=\"");
       W_V(value);
@@ -1568,16 +1568,20 @@ s_jhtml_start_form_tag(void *pdoc, Node *node)
     attr_action = chxj_encoding_parameter(r, attr_action, 0);
     attr_action = chxj_add_cookie_parameter(r, attr_action, jhtml->cookie);
     char *q;
-    char *unused = NULL;
+    char *old_qs = NULL;
     q = strchr(attr_action, '?');
     if (q) {
-      new_hidden_tag = chxj_form_action_to_hidden_tag(r, doc->pool, attr_action, 0, post_flag, &unused, CHXJ_FALSE, CHXJ_TRUE);
-      if (new_hidden_tag) {
+      new_hidden_tag = chxj_form_action_to_hidden_tag(r, doc->pool, attr_action, 0, post_flag, &old_qs, CHXJ_FALSE, CHXJ_TRUE, jhtml->entryp);
+      if (new_hidden_tag || old_qs) {
         *q = 0;
       }
     }
     W_L(" action=\"");
     W_V(attr_action);
+    if (old_qs) {
+      W_L("?");
+      W_V(old_qs);
+    }
     W_L("\"");
   }
   if (attr_method) {
@@ -1753,7 +1757,7 @@ s_jhtml_start_input_tag(void *pdoc, Node *node)
   }
   if (attr_name) {
     W_L(" name=\"");
-    W_V(chxj_jreserved_to_safe_tag(r, attr_name));
+    W_V(chxj_jreserved_to_safe_tag(r, attr_name, jhtml->entryp));
     W_L("\"");
   }
   if (attr_value) {
@@ -2605,14 +2609,14 @@ s_jhtml_start_img_tag(void *pdoc, Node *node)
         /*--------------------------------------------------------------------*/
 #ifdef IMG_NOT_CONVERT_FILENAME
       value = chxj_encoding_parameter(r, value, 0);
-      value = chxj_jreserved_tag_to_safe_for_query_string(r, value);
+      value = chxj_jreserved_tag_to_safe_for_query_string(r, value, jhtml->entryp);
       value = chxj_add_cookie_parameter(r, value, jhtml->cookie);
       value = chxj_add_cookie_no_update_parameter(r, value);
       attr_src = value;
 #else
       value = chxj_img_conv(r, spec, value);
       value = chxj_encoding_parameter(r, value, 0);
-      value = chxj_jreserved_tag_to_safe_for_query_string(r, value);
+      value = chxj_jreserved_tag_to_safe_for_query_string(r, value, jhtml->entryp);
       value = chxj_add_cookie_parameter(r, value, jhtml->cookie);
       value = chxj_add_cookie_no_update_parameter(r, value);
       attr_src = value;
@@ -2895,7 +2899,7 @@ s_jhtml_start_option_tag(void *pdoc, Node *node)
       value = apr_pstrdup(doc->buf.pool, val);
     }
   }
-  if (value && *value) {
+  if (value) {
     W_L(" value=\"");
     W_V(value);
     W_L("\"");

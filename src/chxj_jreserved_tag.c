@@ -121,9 +121,12 @@ static r_table_t reserved_table[] = {
 
 
 char *
-chxj_jreserved_to_safe_tag(request_rec *r, const char *src)
+chxj_jreserved_to_safe_tag(request_rec *r, const char *src, chxjconvrule_entry *entryp)
 {
   int ii;
+  if (entryp->action & CONVRULE_JRCONV_OFF_BIT) {
+    return (char *)src;
+  }
   for (ii=0;ii<RESERVED_NELT;ii++) {
     if (STRCASEEQ(reserved_table[ii].lower,
                   reserved_table[ii].upper,
@@ -151,13 +154,16 @@ chxj_safe_to_jreserved_tag(request_rec *r, const char *src)
 }
 
 char *
-chxj_jreserved_tag_to_safe_for_query_string(request_rec *r, const char *query_string)
+chxj_jreserved_tag_to_safe_for_query_string(request_rec *r, const char *query_string, chxjconvrule_entry  *entryp)
 {
   apr_pool_t *pool;
   apr_pool_create(&pool, r->pool);
   char *s = apr_pstrdup(pool, query_string);
   char *fname;
 
+  if (entryp->action & CONVRULE_JRCONV_OFF_BIT) {
+    return s;
+  }
   if (!s) return apr_pstrdup(pool, "");
   char *result = s;
   s = strchr(s, '?');
@@ -184,7 +190,7 @@ chxj_jreserved_tag_to_safe_for_query_string(request_rec *r, const char *query_st
       tmp = apr_psprintf(pool, "%s=%s", key, val);
     }
     else {
-      tmp = apr_psprintf(pool, "%s=%s", chxj_jreserved_to_safe_tag(r, key), chxj_url_decode(pool, val));
+      tmp = apr_psprintf(pool, "%s=%s", chxj_jreserved_to_safe_tag(r, key, entryp), chxj_url_decode(pool, val));
       if (result) {
         result = apr_pstrcat(pool, result, "&" ,tmp, NULL);
       }
