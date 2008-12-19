@@ -370,13 +370,16 @@ struct mod_chxj_config {
 #define CONVRULE_ENGINE_ON_BIT        (0x00000001)
 #define CONVRULE_ENGINE_OFF_BIT       (0x00000002)
 #define CONVRULE_COOKIE_ON_BIT        (0x00000004)
-#define CONVRULE_CSS_ON_BIT           (0x00000008)
-#define CONVRULE_Z2H_ON_BIT           (0x00000010)
-#define CONVRULE_Z2H_OFF_BIT          (0x00000020)
-#define CONVRULE_Z2H_ALPHA_ON_BIT     (0x00000040)
-#define CONVRULE_Z2H_ALPHA_OFF_BIT    (0x00000080)
-#define CONVRULE_Z2H_NUM_ON_BIT       (0x00000100)
-#define CONVRULE_Z2H_NUM_OFF_BIT      (0x00000200)
+#define CONVRULE_CSS_ON_BIT           (0x10000000)
+#define CONVRULE_Z2H_ON_BIT           (0x00000008)
+#define CONVRULE_Z2H_OFF_BIT          (0x00000010)
+#define CONVRULE_Z2H_ALPHA_ON_BIT     (0x00000020)
+#define CONVRULE_Z2H_ALPHA_OFF_BIT    (0x00000040)
+#define CONVRULE_Z2H_NUM_ON_BIT       (0x00000080)
+#define CONVRULE_Z2H_NUM_OFF_BIT      (0x00000100)
+#define CONVRULE_QSCONV_OFF_BIT       (0x00000200)
+#define CONVRULE_JRCONV_OFF_BIT       (0x00000400)
+#define CONVRULE_NOCACHE_ON_BIT       (0x00000800)
 
 #define CONVRULE_ENGINE_ON_CMD        "EngineOn"
 #define CONVRULE_ENGINE_OFF_CMD       "EngineOff"
@@ -392,6 +395,11 @@ struct mod_chxj_config {
 #define CONVRULE_Z2H_NUM_OFF_CMD      "Z2hNumOff"
 #define CONVRULE_Z2H_ALL_ON_CMD       "Z2hAllOn"
 #define CONVRULE_Z2H_ALL_OFF_CMD      "Z2hAllOff"
+#define CONVRULE_Z2H_ALL_ON_CMD       "Z2hAllOn"
+#define CONVRULE_Z2H_ALL_OFF_CMD      "Z2hAllOff"
+#define CONVRULE_QSCONV_OFF_CMD       "QSConvOff"
+#define CONVRULE_JRCONV_OFF_CMD       "JRConvOff"
+#define CONVRULE_NOCACHE_ON_CMD       "NoCacheOn"
 
 
 #define CONVRULE_FLAG_NOTMATCH        (0x00000001)

@@ -151,6 +151,7 @@ static int chxj_convert_input_header(request_rec *r,chxjconvrule_entry *entryp, 
 static void s_convert_guid_parameter_to_header(request_rec *r, const char *param, device_table *spec);
 static void s_add_cookie_id_if_has_location_header(request_rec *r, cookie_t *cookie);
 static void s_clear_cookie_header(request_rec *r, device_table *spec);
+static void s_add_no_cache_headers(request_rec *r, chxjconvrule_entry  *entryp);
 
 /**
  * Only when User-Agent is specified, the User-Agent header is camouflaged. 
@@ -899,6 +900,27 @@ pass_data_to_filter(ap_filter_t *f, const char *data,
 
 
 /**
+ * Add No Cache Header
+ */
+static void
+s_add_no_cache_headers(request_rec *r, chxjconvrule_entry  *entryp)
+{
+  if (entryp->action & CONVRULE_NOCACHE_ON_BIT) {
+    apr_table_unset(r->headers_out,     "Pragma");
+    apr_table_unset(r->err_headers_out, "Pragma");
+    apr_table_unset(r->headers_out,     "Expires");
+    apr_table_unset(r->err_headers_out, "Expires");
+    apr_table_unset(r->headers_out,     "Cache-Control");
+    apr_table_unset(r->err_headers_out, "Cache-Control");
+
+    apr_table_setn(r->err_headers_out, "Pragma", "no-cache");
+    apr_table_setn(r->err_headers_out, "Expires", "Thu, 01 Jan 1970 00:00:00 GMT");
+    apr_table_setn(r->err_headers_out, "Cache-Control", "no-cache, no-store");
+  }
+}
+
+
+/**
  * It is the main loop of the output filter. 
  *
  * @param f   [i/o] It is a filter.
@@ -974,6 +996,7 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
           r->status = HTTP_MOVED_TEMPORARILY;
         }
       }
+      s_add_no_cache_headers(r, entryp);
       ap_pass_brigade(f->next, bb);
       DBG(f->r, "REQ[%X] end of chxj_output_filter()", (unsigned int)(apr_size_t)r);
       return APR_SUCCESS;
@@ -1151,6 +1174,7 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
             }
           }
           chxj_cookie_unlock(r,lock);
+          s_add_no_cache_headers(r, entryp);
           rv = pass_data_to_filter(f, 
                                    (const char *)ctx->buffer, 
                                    (apr_size_t)ctx->len);
@@ -1203,6 +1227,7 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
         }
         apr_table_setn(r->headers_out, "Content-Length", "0");
         DBG(r, "REQ[%X] call pass_data_to_filter()", (unsigned int)(apr_size_t)r);
+        s_add_no_cache_headers(r, entryp);
         rv = pass_data_to_filter(f, (const char *)"", (apr_size_t)0);
         DBG(f->r, "REQ[%X] end of chxj_output_filter()", (unsigned int)(apr_size_t)r);
         return rv;
@@ -2250,6 +2275,27 @@ cmd_convert_rule(cmd_parms *cmd, void *mconfig, const char *arg)
       }
       else if (strcasecmp(CONVRULE_CSS_OFF_CMD, action) == 0) {
         newrule->action &= (0xffffffff ^ CONVRULE_CSS_ON_BIT);
+      }
+      break;
+
+    case 'J':
+    case 'j':
+      if (strcasecmp(CONVRULE_JRCONV_OFF_CMD, action) == 0) {
+        newrule->action |= CONVRULE_JRCONV_OFF_BIT;
+      }
+      break;
+
+    case 'N':
+    case 'n':
+      if (strcasecmp(CONVRULE_NOCACHE_ON_CMD, action) == 0) {
+        newrule->action |= CONVRULE_NOCACHE_ON_BIT;
+      }
+      break;
+
+    case 'Q':
+    case 'q':
+      if (strcasecmp(CONVRULE_QSCONV_OFF_CMD, action) == 0) {
+        newrule->action |= CONVRULE_QSCONV_OFF_BIT;
       }
       break;
 

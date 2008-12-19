@@ -1785,7 +1785,7 @@ s_chtml10_start_a_tag(void *pdoc, Node *node)
         /* CHTML1.0                                                           */
         /*--------------------------------------------------------------------*/
         value = chxj_encoding_parameter(r, value, 0);
-        if (! chxj_starts_with(value, "mailto:") && ! chxj_starts_with(value, "telto:")) {
+        if (! chxj_starts_with(value, "mailto:") && ! chxj_starts_with(value, "tel:")) {
           value = chxj_add_cookie_parameter(r, value, chtml10->cookie);
         }
         W_L(" href=\"");
@@ -2133,7 +2133,7 @@ s_chtml10_start_form_tag(void *pdoc, Node *node)
     char *new_query_string = NULL;
     q = strchr(attr_action, '?');
     if (q) {
-      new_hidden_tag = chxj_form_action_to_hidden_tag(r, doc->pool, attr_action, 0, post_flag, &new_query_string, CHXJ_TRUE, CHXJ_FALSE);
+      new_hidden_tag = chxj_form_action_to_hidden_tag(r, doc->pool, attr_action, 0, post_flag, &new_query_string, CHXJ_TRUE, CHXJ_FALSE, chtml10->entryp);
       if (new_hidden_tag || new_query_string) {
         *q = 0;
       }
@@ -2962,7 +2962,7 @@ s_chtml10_start_option_tag(void *pdoc, Node *node)
     }
   }
 
-  if (value && *value != 0) {
+  if (value) {
     W_L(" value=\"");
     W_V(value);
     W_L("\"");

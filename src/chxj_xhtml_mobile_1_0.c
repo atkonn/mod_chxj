@@ -1112,7 +1112,7 @@ s_xhtml_1_0_start_a_tag(void *pdoc, Node *node)
     }
     else if (STRCASEEQ('h','H',"href", name) && value && *value) {
       value = chxj_encoding_parameter(r, value, 1);
-      if (! chxj_starts_with(value, "mailto:") && ! chxj_starts_with(value, "telto:")) {
+      if (! chxj_starts_with(value, "mailto:") && ! chxj_starts_with(value, "tel:")) {
         value = chxj_add_cookie_parameter(r, value, xhtml->cookie);
       }
       W_L(" href=\"");
@@ -1555,16 +1555,20 @@ s_xhtml_1_0_start_form_tag(void *pdoc, Node *node)
     attr_action = chxj_encoding_parameter(r, attr_action, 1);
     attr_action = chxj_add_cookie_parameter(r, attr_action, xhtml->cookie);
     char *q;
-    char *unused = NULL;
+    char *old_qs = NULL;
     q = strchr(attr_action, '?');
     if (q) {
-      new_hidden_tag = chxj_form_action_to_hidden_tag(r, doc->pool, attr_action, 1, post_flag, &unused, CHXJ_FALSE, CHXJ_FALSE);
-      if (new_hidden_tag) {
+      new_hidden_tag = chxj_form_action_to_hidden_tag(r, doc->pool, attr_action, 1, post_flag, &old_qs, CHXJ_FALSE, CHXJ_FALSE, xhtml->entryp);
+      if (new_hidden_tag || old_qs) {
         *q = 0;
       }
     }
     W_L(" action=\"");
     W_V(attr_action);
+    if (old_qs) {
+      W_L("?");
+      W_V(old_qs);
+    }
     W_L("\"");
   }
   if (attr_method) {
@@ -3506,7 +3510,7 @@ s_xhtml_1_0_start_option_tag(void *pdoc, Node *node)
       value = apr_pstrdup(doc->buf.pool, val);
     }
   }
-  if (value && *value) {
+  if (value) {
     W_L(" value=\"");
     W_V(value);
     W_L("\"");

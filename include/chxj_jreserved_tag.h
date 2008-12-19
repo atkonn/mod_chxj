@@ -19,8 +19,8 @@
 
 #define CHXJ_SOFTBANK_RESERVED_TAG_PREFIX "_chxj_sf_"
 
-extern char *chxj_jreserved_to_safe_tag(request_rec *r, const char *src);
+extern char *chxj_jreserved_to_safe_tag(request_rec *r, const char *src, chxjconvrule_entry *entryp);
 extern char *chxj_safe_to_jreserved_tag(request_rec *r, const char *src);
 
-extern char *chxj_jreserved_tag_to_safe_for_query_string(request_rec *r, const char *query_string);
+extern char *chxj_jreserved_tag_to_safe_for_query_string(request_rec *r, const char *query_string, chxjconvrule_entry *entryp);
 #endif
