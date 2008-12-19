@@ -1050,7 +1050,7 @@ s_jxhtml_start_a_tag(void *pdoc, Node *node)
       /* CHTML1.0                                                             */
       /*----------------------------------------------------------------------*/
       W_L(" name=\"");
-      W_V(chxj_jreserved_to_safe_tag(r, value));
+      W_V(chxj_jreserved_to_safe_tag(r, value, jxhtml->entryp));
       W_L("\"");
     }
     else if (STRCASEEQ('h','H',"href",name)) {
@@ -1059,7 +1059,7 @@ s_jxhtml_start_a_tag(void *pdoc, Node *node)
       /*----------------------------------------------------------------------*/
       value = chxj_encoding_parameter(r, value);
       if (! chxj_starts_with(value, "mailto:") && ! chxj_starts_with(value, "tel:")) {
-        value = chxj_jreserved_tag_to_safe_for_query_string(r, value);
+        value = chxj_jreserved_tag_to_safe_for_query_string(r, value, jxhtml->entryp);
       }
       W_L(" href=\"");
       W_V(value);
@@ -1569,7 +1569,7 @@ s_jxhtml_start_input_tag(void *pdoc, Node *node)
   }
   if (name && *name) {
     W_L(" name=\"");
-    W_V(chxj_jreserved_to_safe_tag(r, name));
+    W_V(chxj_jreserved_to_safe_tag(r, name, jxhtml->entryp));
     W_L("\"");
   }
   if (value && *value) {
@@ -2100,7 +2100,7 @@ s_jxhtml_start_img_tag(void *pdoc, Node *node)
       /*----------------------------------------------------------------------*/
 #ifdef IMG_NOT_CONVERT_FILENAME
       value = chxj_encoding_parameter(r, value);
-      value = chxj_jreserved_tag_to_safe_for_query_string(r, value);
+      value = chxj_jreserved_tag_to_safe_for_query_string(r, value, jxhtml->entryp);
       value = chxj_add_cookie_no_update_parameter(r, value);
       W_L(" src=\"");
       W_V(value);
@@ -2108,7 +2108,7 @@ s_jxhtml_start_img_tag(void *pdoc, Node *node)
 #else
       value = chxj_img_conv(r, spec, value);
       value = chxj_encoding_parameter(r, value);
-      value = chxj_jreserved_tag_to_safe_for_query_string(r, value);
+      value = chxj_jreserved_tag_to_safe_for_query_string(r, value, jxhtml->entryp);
       value = chxj_add_cookie_no_update_parameter(r, value);
       W_L(" src=\"");
       W_V(value);

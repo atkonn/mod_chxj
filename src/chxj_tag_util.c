@@ -635,10 +635,10 @@ chxj_form_action_to_hidden_tag(
     
     if (no_qsconv_flag) {
       if (*new_query_string) {
-        *new_query_string = apr_psprintf(pool, "%s&%s=%s", *new_query_string, chxj_jreserved_to_safe_tag(r, key), val);
+        *new_query_string = apr_psprintf(pool, "%s&%s=%s", *new_query_string, chxj_jreserved_to_safe_tag(r, key, entryp), val);
       }
       else {
-        *new_query_string = apr_psprintf(pool, "%s=%s", chxj_jreserved_to_safe_tag(r, key), val);
+        *new_query_string = apr_psprintf(pool, "%s=%s", chxj_jreserved_to_safe_tag(r, key, entryp), val);
       }
     }
     else {
@@ -648,7 +648,7 @@ chxj_form_action_to_hidden_tag(
       else {
         if (! post || strcasecmp(key, "_chxj_cc") == 0 || strcasecmp(key, "_chxj_nc") == 0) {
           if (softbank) {
-            tmp = apr_psprintf(pool, "<input type=\"hidden\" name=\"%s\" value=\"%s\"%s>", chxj_jreserved_to_safe_tag(r, key), chxj_url_decode(pool, val), (xmlFlag == 1) ? " /" : "");
+            tmp = apr_psprintf(pool, "<input type=\"hidden\" name=\"%s\" value=\"%s\"%s>", chxj_jreserved_to_safe_tag(r, key, entryp), chxj_url_decode(pool, val), (xmlFlag == 1) ? " /" : "");
           }
           else {
             tmp = apr_psprintf(pool, "<input type=\"hidden\" name=\"%s\" value=\"%s\"%s>", key, chxj_url_decode(pool, val), (xmlFlag == 1) ? " /" : "");
