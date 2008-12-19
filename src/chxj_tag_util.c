@@ -605,7 +605,7 @@ chxj_form_action_to_hidden_tag(
 {
   char *s = apr_pstrdup(pool, str);
   *new_query_string = NULL;
-  int no_qsconv_flag = (entryp->action & CONVRULE_QSCONV_OFF_BIT) == 0;
+  int no_qsconv_flag = (((unsigned int)entryp->action & CONVRULE_QSCONV_OFF_BIT) != 0);
   if (!s) return NULL;
   if (chxj_starts_with(s, "http://") || chxj_starts_with(s, "https://")) {
     apr_uri_t url;
