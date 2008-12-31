@@ -680,37 +680,20 @@ s_xhtml_1_0_start_html_tag(void *pdoc, Node *node)
   /*--------------------------------------------------------------------------*/
   /* Add XML Declare                                                          */
   /*--------------------------------------------------------------------------*/
-  W_L("<?xml version=\"1.0\" encoding=\"Windows-31J\"?>");
+  W_L("<?xml version=\"1.0\" encoding=\"Shift_JIS\"?>");
   W_NLCODE();
   /*--------------------------------------------------------------------------*/
   /* Add DocType                                                              */
   /*--------------------------------------------------------------------------*/
-  W_L("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\"");
+  W_L("<!DOCTYPE html PUBLIC \"-//OPENWAVE//DTD XHTML 1.0//EN\"");
   W_NLCODE();
-  W_L(" \"http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd\">");
+  W_L(" \"http://www.openwave.com/DTD/xhtml-basic.dtd\">");
   W_NLCODE();
   /*--------------------------------------------------------------------------*/
   /* start HTML tag                                                           */
   /*--------------------------------------------------------------------------*/
-  W_L("<html xmlns=\"http://www.w3.org/1999/xhtml\"");
-  /*--------------------------------------------------------------------------*/
-  /* Get Attributes                                                           */
-  /*--------------------------------------------------------------------------*/
-  for (attr = qs_get_attr(doc,node);
-       attr; 
-       attr = qs_get_next_attr(doc,attr)) {
-    char* name  = qs_get_attr_name(doc,attr);
-    char* value = qs_get_attr_value(doc,attr);
-    if (STRCASEEQ('l','L',"lang", name)) {
-      W_L(" xml:lang=\"");
-      W_V(value);
-      W_L("\"");
-    }
-    else if (STRCASEEQ('v','V',"version", name)) {
-      W_L(" version=\"-//OPENWAVE//DTD XHTML Mobile 1.0//EN\"");
-    }
-  }
-  W_L(">");
+  W_L("<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"ja\" xml:lang=\"ja\">");
+
   xhtml->start_html_flag = 1;
   return xhtml->out;
 }

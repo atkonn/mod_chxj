@@ -463,7 +463,7 @@ chxj_convert_ixhtml10(
   ixhtml10.entryp = entryp;
   ixhtml10.cookie = cookie;
 
-  chxj_set_content_type(r, "application/xhtml+xml; charset=Windows-31J");
+  chxj_set_content_type(r, chxj_header_inf_set_content_type(r, "application/xhtml+xml; charset=Shift_JIS"));
 
   /*--------------------------------------------------------------------------*/
   /* The character string of the input is analyzed.                           */
@@ -609,7 +609,7 @@ s_ixhtml10_search_emoji(ixhtml10_t *ixhtml10, char *txt, char **rslt)
 static char *
 s_ixhtml10_start_html_tag(void *pdoc, Node *UNUSED(node))
 {
-  ixhtml10_t       *ixhtml10;
+  ixhtml10_t    *ixhtml10;
   Doc           *doc;
   request_rec   *r;
 
@@ -617,7 +617,7 @@ s_ixhtml10_start_html_tag(void *pdoc, Node *UNUSED(node))
   ixhtml10  = GET_IXHTML10(pdoc);
   doc    = ixhtml10->doc;
   r      = doc->r;
-  DBG(r, "start s_ixhtml10_start_html_tag()");
+  DBG(r, "REQ[%X] start s_ixhtml10_start_html_tag()", (unsigned int)(apr_size_t)r);
 
   W_L("<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>");
   W_NLCODE();
@@ -627,9 +627,9 @@ s_ixhtml10_start_html_tag(void *pdoc, Node *UNUSED(node))
   /*--------------------------------------------------------------------------*/
   /* start HTML tag                                                           */
   /*--------------------------------------------------------------------------*/
-  W_L("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
+  W_L("<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"ja\" xml:lang=\"ja\">");
 
-  DBG(r, "end s_ixhtml10_start_html_tag()");
+  DBG(r, "REQ[%X] end s_ixhtml10_start_html_tag()", (unsigned int)(apr_size_t)r);
 
   ixhtml10->start_html_flag = 1;
   return ixhtml10->out;
@@ -718,7 +718,7 @@ s_ixhtml10_start_meta_tag(void *pdoc, Node *node)
           W_L(" ");
           W_V(name);
           W_L("=\"");
-          W_L("application/xhtml+xml; charset=Shift_JIS");
+          W_V(chxj_header_inf_set_content_type(r, "application/xhtml+xml; charset=Shift_JIS"));
           W_L("\"");
         }
         else

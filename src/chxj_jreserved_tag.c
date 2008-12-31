@@ -154,7 +154,7 @@ chxj_safe_to_jreserved_tag(request_rec *r, const char *src)
 }
 
 char *
-chxj_jreserved_tag_to_safe_for_query_string(request_rec *r, const char *query_string, chxjconvrule_entry  *entryp)
+chxj_jreserved_tag_to_safe_for_query_string(request_rec *r, const char *query_string, chxjconvrule_entry  *entryp, int xmlflag)
 {
   apr_pool_t *pool;
   apr_pool_create(&pool, r->pool);
@@ -176,7 +176,13 @@ chxj_jreserved_tag_to_safe_for_query_string(request_rec *r, const char *query_st
   char *pstat;
   char *pstat2;
   for (;;) {
-    char *pair = apr_strtok(s, "&", &pstat);
+    char *pair = NULL;
+    if (xmlflag) {
+      pair = apr_strtok(s, "&amp;", &pstat);
+    }
+    else {
+      pair = apr_strtok(s, "&", &pstat);
+    }
     if (! pair) break;
     s = NULL;
     char *key = apr_strtok(pair, "=",  &pstat2);
@@ -192,7 +198,12 @@ chxj_jreserved_tag_to_safe_for_query_string(request_rec *r, const char *query_st
     else {
       tmp = apr_psprintf(pool, "%s=%s", chxj_jreserved_to_safe_tag(r, key, entryp), chxj_url_decode(pool, val));
       if (result) {
-        result = apr_pstrcat(pool, result, "&" ,tmp, NULL);
+        if (xmlflag) {
+          result = apr_pstrcat(pool, result, "&amp;" ,tmp, NULL);
+        }
+        else {
+          result = apr_pstrcat(pool, result, "&" ,tmp, NULL);
+        }
       }
       else {
         result = tmp;

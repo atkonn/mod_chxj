@@ -1150,7 +1150,7 @@ s_jhtml_start_a_tag(void *pdoc, Node *node)
       value = chxj_encoding_parameter(r, value, 0);
       if (! chxj_starts_with(value, "mailto:") && ! chxj_starts_with(value, "tel:")) {
         value = chxj_add_cookie_parameter(r, value, jhtml->cookie);
-        value = chxj_jreserved_tag_to_safe_for_query_string(r, value, jhtml->entryp);
+        value = chxj_jreserved_tag_to_safe_for_query_string(r, value, jhtml->entryp, 0);
       }
       W_L(" href=\"");
       W_V(value);
@@ -2609,14 +2609,14 @@ s_jhtml_start_img_tag(void *pdoc, Node *node)
         /*--------------------------------------------------------------------*/
 #ifdef IMG_NOT_CONVERT_FILENAME
       value = chxj_encoding_parameter(r, value, 0);
-      value = chxj_jreserved_tag_to_safe_for_query_string(r, value, jhtml->entryp);
+      value = chxj_jreserved_tag_to_safe_for_query_string(r, value, jhtml->entryp, 0);
       value = chxj_add_cookie_parameter(r, value, jhtml->cookie);
       value = chxj_add_cookie_no_update_parameter(r, value);
       attr_src = value;
 #else
       value = chxj_img_conv(r, spec, value);
       value = chxj_encoding_parameter(r, value, 0);
-      value = chxj_jreserved_tag_to_safe_for_query_string(r, value, jhtml->entryp);
+      value = chxj_jreserved_tag_to_safe_for_query_string(r, value, jhtml->entryp, 0);
       value = chxj_add_cookie_parameter(r, value, jhtml->cookie);
       value = chxj_add_cookie_no_update_parameter(r, value);
       attr_src = value;

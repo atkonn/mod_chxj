@@ -621,21 +621,21 @@ s_jxhtml_start_html_tag(void *pdoc, Node *UNUSED(node))
   jxhtml  = GET_JXHTML(pdoc);
   doc    = jxhtml->doc;
   r      = doc->r;
-  DBG(r, "start s_jxhtml_start_html_tag()");
+  DBG(r, "REQ[%X] start s_jxhtml_start_html_tag()", (unsigned int)(apr_size_t)r);
 
-  W_L("<?xml version='1.0' encoding='Shift_JIS' ?>");
+  W_L("<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>");
   W_NLCODE();
-  W_L("<!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">");
+  W_L("<!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"xhtml-basic10-plus.dtd\">");
   W_NLCODE();
 
   /*--------------------------------------------------------------------------*/
   /* start HTML tag                                                           */
   /*--------------------------------------------------------------------------*/
-  W_L("<html>");
+  W_L("<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"ja\" xml:lang=\"ja\">");
 
   jxhtml->start_html_flag = 1;
 
-  DBG(r, "end s_jxhtml_start_html_tag()");
+  DBG(r, "REQ[%X] end s_jxhtml_start_html_tag()", (unsigned int)(apr_size_t)r);
 
   return jxhtml->out;
 }
@@ -1137,7 +1137,7 @@ s_jxhtml_start_a_tag(void *pdoc, Node *node)
       /*----------------------------------------------------------------------*/
       value = chxj_encoding_parameter(r, value, 1);
       if (! chxj_starts_with(value, "mailto:") && ! chxj_starts_with(value, "tel:")) {
-        value = chxj_jreserved_tag_to_safe_for_query_string(r, value, jxhtml->entryp);
+        value = chxj_jreserved_tag_to_safe_for_query_string(r, value, jxhtml->entryp, 1);
       }
       W_L(" href=\"");
       W_V(value);
@@ -1834,7 +1834,7 @@ s_jxhtml_start_input_tag(void *pdoc, Node *node)
   }
   if (attr_name) {
     W_L(" name=\"");
-    W_V(attr_name);
+    W_V(chxj_jreserved_to_safe_tag(r, attr_name, jxhtml->entryp));
     W_L("\"");
   }
   if (attr_value) {
@@ -2840,13 +2840,13 @@ s_jxhtml_start_img_tag(void *pdoc, Node *node)
       /*----------------------------------------------------------------------*/
 #ifdef IMG_NOT_CONVERT_FILENAME
       value = chxj_encoding_parameter(r, value, 1);
-      value = chxj_jreserved_tag_to_safe_for_query_string(r, value, jxhtml->entryp);
+      value = chxj_jreserved_tag_to_safe_for_query_string(r, value, jxhtml->entryp, 1);
       value = chxj_add_cookie_no_update_parameter(r, value);
       attr_src = value;
 #else
       value = chxj_img_conv(r, spec, value);
       value = chxj_encoding_parameter(r, value, 1);
-      value = chxj_jreserved_tag_to_safe_for_query_string(r, value, jxhtml->entryp);
+      value = chxj_jreserved_tag_to_safe_for_query_string(r, value, jxhtml->entryp, 1);
       value = chxj_add_cookie_no_update_parameter(r, value);
       attr_src = value;
 #endif
