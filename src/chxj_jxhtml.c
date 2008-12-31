@@ -621,7 +621,7 @@ s_jxhtml_start_html_tag(void *pdoc, Node *UNUSED(node))
   jxhtml  = GET_JXHTML(pdoc);
   doc    = jxhtml->doc;
   r      = doc->r;
-  DBG(r, "start s_jxhtml_start_html_tag()");
+  DBG(r, "REQ[%X] start s_jxhtml_start_html_tag()", (unsigned int)(apr_size_t)r);
 
   W_L("<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>");
   W_NLCODE();
@@ -635,7 +635,7 @@ s_jxhtml_start_html_tag(void *pdoc, Node *UNUSED(node))
 
   jxhtml->start_html_flag = 1;
 
-  DBG(r, "end s_jxhtml_start_html_tag()");
+  DBG(r, "REQ[%X] end s_jxhtml_start_html_tag()", (unsigned int)(apr_size_t)r);
 
   return jxhtml->out;
 }
