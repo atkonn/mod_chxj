@@ -463,7 +463,7 @@ chxj_convert_ixhtml10(
   ixhtml10.entryp = entryp;
   ixhtml10.cookie = cookie;
 
-  chxj_set_content_type(r, "application/xhtml+xml; charset=Windows-31J");
+  chxj_set_content_type(r, chxj_header_inf_set_content_type(r, "application/xhtml+xml; charset=Shift_JIS"));
 
   /*--------------------------------------------------------------------------*/
   /* The character string of the input is analyzed.                           */
@@ -627,7 +627,7 @@ s_ixhtml10_start_html_tag(void *pdoc, Node *UNUSED(node))
   /*--------------------------------------------------------------------------*/
   /* start HTML tag                                                           */
   /*--------------------------------------------------------------------------*/
-  W_L("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
+  W_L("<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"ja\" xml:lang=\"ja\">");
 
   DBG(r, "end s_ixhtml10_start_html_tag()");
 
@@ -718,7 +718,7 @@ s_ixhtml10_start_meta_tag(void *pdoc, Node *node)
           W_L(" ");
           W_V(name);
           W_L("=\"");
-          W_L("application/xhtml+xml; charset=Shift_JIS");
+          W_V(chxj_header_inf_set_content_type(r, "application/xhtml+xml; charset=Shift_JIS"));
           W_L("\"");
         }
         else
