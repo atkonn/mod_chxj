@@ -623,15 +623,15 @@ s_jxhtml_start_html_tag(void *pdoc, Node *UNUSED(node))
   r      = doc->r;
   DBG(r, "start s_jxhtml_start_html_tag()");
 
-  W_L("<?xml version='1.0' encoding='Shift_JIS' ?>");
+  W_L("<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>");
   W_NLCODE();
-  W_L("<!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"html-basic10-plus.dtd\">");
+  W_L("<!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"xhtml-basic10-plus.dtd\">");
   W_NLCODE();
 
   /*--------------------------------------------------------------------------*/
   /* start HTML tag                                                           */
   /*--------------------------------------------------------------------------*/
-  W_L("<html>");
+  W_L("<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"ja\" xml:lang=\"ja\">");
 
   jxhtml->start_html_flag = 1;
 
