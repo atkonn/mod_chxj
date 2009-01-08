@@ -624,6 +624,9 @@ chxj_form_action_to_hidden_tag(
   for (;;) {
     char *pair = apr_strtok(s, "&", &pstat);
     if (! pair) break;
+    if (strncasecmp(pair, "amp;", 4) == 0) {
+      pair += 4;
+    }
     s = NULL;
     char *key = apr_strtok(pair, "=",  &pstat2);
     char *val = "";
