@@ -351,6 +351,8 @@ chxj_encoding_parameter(request_rec *r, const char *value, int xmlflag)
   char *val;
   char *vstat;
   char *param;
+  char *anchor_pos;
+  char *anchor;
 
   int   use_amp_flag;
   
@@ -358,10 +360,22 @@ chxj_encoding_parameter(request_rec *r, const char *value, int xmlflag)
 
   src = apr_pstrdup(r->pool, value);
 
+  anchor_pos = strchr(src, '#');
+  if (anchor_pos) {
+    anchor_pos++;
+    anchor = apr_pstrdup(r->pool, anchor_pos);
+    anchor_pos--;
+    *anchor_pos = 0;
+  }
+
   spos = strchr(src, '?');
   if (!spos) {
     DBG(r, "REQ[%X] end   chxj_encoding_parameter()", (unsigned int)(apr_size_t)r);
-    return src;
+    if (anchor_pos) {
+      return apr_pstrcat(r->pool, src, "#", anchor, NULL);
+    } else {
+      return src;
+    }
   }
   *spos++ = 0;
 
@@ -433,7 +447,11 @@ chxj_encoding_parameter(request_rec *r, const char *value, int xmlflag)
   }
   DBG(r, "REQ[%X] end   chxj_encoding_parameter()", (unsigned int)(apr_size_t)r);
 
-  return apr_pstrcat(r->pool, src_sv, "?", param, NULL);
+  if (anchor_pos) {
+    return apr_pstrcat(r->pool, src_sv, "?", param, "#", anchor, NULL);
+  } else {
+    return apr_pstrcat(r->pool, src_sv, "?", param, NULL);
+  }
 }
 
 
