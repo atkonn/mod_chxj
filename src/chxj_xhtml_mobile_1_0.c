@@ -671,10 +671,9 @@ s_xhtml_search_emoji(xhtml_t *xhtml, char *txt, char **rslt)
  * @return The conversion result is returned.
  */
 static char *
-s_xhtml_1_0_start_html_tag(void *pdoc, Node *node) 
+s_xhtml_1_0_start_html_tag(void *pdoc, Node *UNUSED(node)) 
 {
   xhtml_t       *xhtml = GET_XHTML(pdoc);
-  Attr          *attr;
   Doc           *doc   = xhtml->doc;
 
   /*--------------------------------------------------------------------------*/

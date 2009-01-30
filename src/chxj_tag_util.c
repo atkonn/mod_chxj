@@ -624,6 +624,9 @@ chxj_form_action_to_hidden_tag(
   for (;;) {
     char *pair = apr_strtok(s, "&", &pstat);
     if (! pair) break;
+    if (strncasecmp(pair, "amp;", 4) == 0) {
+      pair += 4;
+    }
     s = NULL;
     char *key = apr_strtok(pair, "=",  &pstat2);
     char *val = "";
@@ -648,14 +651,28 @@ chxj_form_action_to_hidden_tag(
       else {
         if (! post || strcasecmp(key, "_chxj_cc") == 0 || strcasecmp(key, "_chxj_nc") == 0) {
           if (softbank) {
-            tmp = apr_psprintf(pool, "<input type=\"hidden\" name=\"%s\" value=\"%s\"%s>", chxj_jreserved_to_safe_tag(r, key, entryp), chxj_url_decode(pool, val), (xmlFlag == 1) ? " /" : "");
+            tmp = apr_psprintf(pool, 
+                               "<input type=\"hidden\" name=\"%s\" value=\"%s\"%s>", 
+                               chxj_jreserved_to_safe_tag(r, 
+                                                          chxj_url_decode(pool, key), 
+                                                          entryp), 
+                               chxj_url_decode(pool, val), 
+                               (xmlFlag == 1) ? " /" : "");
           }
           else {
-            tmp = apr_psprintf(pool, "<input type=\"hidden\" name=\"%s\" value=\"%s\"%s>", key, chxj_url_decode(pool, val), (xmlFlag == 1) ? " /" : "");
+            tmp = apr_psprintf(pool, 
+                               "<input type=\"hidden\" name=\"%s\" value=\"%s\"%s>", 
+                               chxj_url_decode(pool, key), 
+                               chxj_url_decode(pool, val), 
+                               (xmlFlag == 1) ? " /" : "");
           }
         }
         else {
-          tmp = apr_psprintf(pool, "<input type=\"hidden\" name=\"_chxj_qs_%s\" value=\"%s\"%s>", key, chxj_url_decode(pool, val), (xmlFlag == 1) ? " /" : "");
+          tmp = apr_psprintf(pool, 
+                             "<input type=\"hidden\" name=\"_chxj_qs_%s\" value=\"%s\"%s>", 
+                             chxj_url_decode(pool, key), 
+                             chxj_url_decode(pool, val), 
+                             (xmlFlag == 1) ? " /" : "");
         }
         if (result) {
           result = apr_pstrcat(pool, result, tmp, NULL);
