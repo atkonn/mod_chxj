@@ -468,8 +468,10 @@ chxj_chxjif_is_mine(device_table *spec, Doc *doc, Node *tag)
     if ((*name == 'l' || *name == 'L') && strcasecmp(name, "lang") == 0) {
 
       DBG(r, "lang found [%s] spec [%d]", value, spec->html_spec_type);
-
-      if (STRCASEEQ('x','X',"xhtml",value)) {
+      if (STRCASEEQ('a','A',"all",value)) {
+        return 1;
+      }
+      else if (STRCASEEQ('x','X',"xhtml",value)) {
         if (spec->html_spec_type == CHXJ_SPEC_XHtml_Mobile_1_0) {
           /* Yes , it is mine */
           return 1;
