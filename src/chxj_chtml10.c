@@ -629,9 +629,12 @@ chxj_chtml10_emoji_only_converter(request_rec *r, device_table *spec, const char
     }
   }
 
+  chtml10->out = chxj_buffered_write_flush(chtml10->out, &doc->buf);
+
   DBG(r, "REQ[%X] end chxj_chtml10_emoji_eonly_converter()", (apr_size_t)(unsigned int)r);
   return chtml10->out;
 }
+
 
 /**
  * It is a handler who processes the HTML tag.

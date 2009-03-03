@@ -624,6 +624,7 @@ chxj_chtml50_emoji_only_converter(request_rec *r, device_table *spec, const char
       W_V(one_byte);
     }
   }
+  chtml50->out = chxj_buffered_write_flush(chtml50->out, &doc->buf);
 
   DBG(r, "REQ[%X] end chxj_chtml50_emoji_eonly_converter()", (apr_size_t)(unsigned int)r);
   return chtml50->out;
