@@ -59,4 +59,7 @@ extern char *chxj_convert_jhtml(
   chxjconvrule_entry        *entryp,
   cookie_t                  *cookie);
 
+
+extern char *chxj_jhtml_emoji_only_converter(request_rec *r, const char *src, apr_size_t len);
+
 #endif
