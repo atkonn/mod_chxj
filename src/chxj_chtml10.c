@@ -602,18 +602,75 @@ s_chtml10_search_emoji(chtml10_t *chtml10, char *txt, char **rslt)
     &&  strlen(ee->imode->string) > 0
     &&  *ee->imode->string == *txt
     &&  strncasecmp(ee->imode->string, txt, strlen(ee->imode->string)) == 0) {
-      if (!spec || !spec->emoji_type) {
-        *rslt = apr_palloc(r->pool, 3);
-        (*rslt)[0] = ee->imode->hex1byte & 0xff;
-        (*rslt)[1] = ee->imode->hex2byte & 0xff;
-        (*rslt)[2] = 0;
-        return strlen(ee->imode->string);
-      }
-
-      return 0;
+      *rslt = apr_palloc(r->pool, 3);
+      (*rslt)[0] = ee->imode->hex1byte & 0xff;
+      (*rslt)[1] = ee->imode->hex2byte & 0xff;
+      (*rslt)[2] = 0;
+      return strlen(ee->imode->string);
     }
   }
   return 0;
+}
+
+char *
+chxj_chtml10_emoji_only_converter(request_rec *r, device_table *spec, const char *src, apr_size_t len)
+{
+  apr_size_t ii;
+  Doc __doc;
+  Doc *doc;
+  chtml10_t __chtml10;
+  chtml10_t *chtml10;
+  char one_byte[2];
+  char two_byte[3];
+  apr_pool_t *pool;
+
+  chtml10 = &__chtml10;
+  doc     = &__doc;
+
+  DBG(r, "REQ[%X] start chxj_chtml10_emoji_only_converter()", (apr_size_t)(unsigned int)r);
+  memset(doc,     0, sizeof(Doc));
+  memset(chtml10, 0, sizeof(chtml10_t));
+
+  doc->r        = r;
+  chtml10->doc  = doc;
+  chtml10->spec = spec;
+  chtml10->out  = qs_alloc_zero_byte_string(r->pool);
+  chtml10->conf = chxj_get_module_config(r->per_dir_config, &chxj_module);
+  chtml10->doc->parse_mode = PARSE_MODE_CHTML;
+
+  apr_pool_create(&pool, r->pool);
+
+  chxj_buffered_write_init(pool, &doc->buf);
+
+  for (ii=0; ii<len; ii++) {
+    char *out;
+    int   rtn;
+
+    rtn = s_chtml10_search_emoji(chtml10, (char *)&src[ii], &out);
+    if (rtn) {
+      W_V(out);
+      ii+=(rtn - 1);
+      continue;
+    }
+  
+    if (is_sjis_kanji(src[ii])) {
+      two_byte[0] = src[ii+0];
+      two_byte[1] = src[ii+1];
+      two_byte[2] = 0;
+      W_V(two_byte);
+      ii++;
+    }
+    else {
+      one_byte[0] = src[ii+0];
+      one_byte[1] = 0;
+      W_V(one_byte);
+    }
+  }
+
+  chtml10->out = chxj_buffered_write_flush(chtml10->out, &doc->buf);
+
+  DBG(r, "REQ[%X] end chxj_chtml10_emoji_only_converter()", (apr_size_t)(unsigned int)r);
+  return chtml10->out;
 }
 
 

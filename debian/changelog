@@ -1,3 +1,13 @@
+libapache2-mod-chxj (0.12.32-1) unstable; urgency=low
+
+  * Added new features. 
+    - Added EmojiOnly Option for ChxjConvertRule directive.
+  * Fixed bug.
+    - The conversion of QUERY_STRING in a tag is invalid.
+    - The conversion of QUERY_STRING in form tag is invalid.
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Wed,  4 Mar 2009 01:02:19 +0900
+
 libapache2-mod-chxj (0.12.31-1) unstable; urgency=low
 
   * Added new features. 

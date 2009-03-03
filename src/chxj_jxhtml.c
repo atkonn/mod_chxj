@@ -602,6 +602,67 @@ s_jxhtml_search_emoji(jxhtml_t *jxhtml, char *txt, char **rslt)
 }
 
 
+char *
+chxj_jxhtml_emoji_only_converter(request_rec *r, device_table *spec, const char *src, apr_size_t len)
+{
+  apr_size_t ii;
+  Doc __doc;
+  Doc *doc;
+  jxhtml_t __jxhtml;
+  jxhtml_t *jxhtml;
+  char one_byte[2];
+  char two_byte[3];
+  apr_pool_t *pool;
+
+  jxhtml = &__jxhtml;
+  doc    = &__doc;
+
+  DBG(r, "REQ[%X] start chxj_jxhtml_emoji_eonly_converter()", (apr_size_t)(unsigned int)r);
+  memset(doc,    0, sizeof(Doc));
+  memset(jxhtml, 0, sizeof(jxhtml_t));
+
+  doc->r       = r;
+  jxhtml->doc  = doc;
+  jxhtml->spec = spec;
+  jxhtml->out  = qs_alloc_zero_byte_string(r->pool);
+  jxhtml->conf = chxj_get_module_config(r->per_dir_config, &chxj_module);
+  jxhtml->doc->parse_mode = PARSE_MODE_CHTML;
+
+  apr_pool_create(&pool, r->pool);
+
+  chxj_buffered_write_init(pool, &doc->buf);
+
+  for (ii=0; ii<len; ii++) {
+    char *out;
+    int   rtn;
+
+    rtn = s_jxhtml_search_emoji(jxhtml, (char *)&src[ii], &out);
+    if (rtn) {
+      W_V(out);
+      ii+=(rtn - 1);
+      continue;
+    }
+
+    if (is_sjis_kanji(src[ii])) {
+      two_byte[0] = src[ii+0];
+      two_byte[1] = src[ii+1];
+      two_byte[2] = 0;
+      W_V(two_byte);
+      ii++;
+    }
+    else {
+      one_byte[0] = src[ii+0];
+      one_byte[1] = 0;
+      W_V(one_byte);
+    }
+  }
+  jxhtml->out = chxj_buffered_write_flush(jxhtml->out, &doc->buf);
+
+  DBG(r, "REQ[%X] end chxj_jxhtml_emoji_eonly_converter()", (apr_size_t)(unsigned int)r);
+  return jxhtml->out;
+}
+
+
 /**
  * It is a handler who processes the HTML tag.
  *
