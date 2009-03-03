@@ -589,10 +589,11 @@ s_jxhtml_search_emoji(jxhtml_t *jxhtml, char *txt, char **rslt)
 
 
 char *
-chxj_jxhtml_emoji_only_converter(request_rec *r, const char *src, apr_size_t len)
+chxj_jxhtml_emoji_only_converter(request_rec *r, device_table *spec, const char *src, apr_size_t len)
 {
   apr_size_t ii;
-  Doc doc;
+  Doc __doc;
+  Doc *doc;
   jxhtml_t __jxhtml;
   jxhtml_t *jxhtml;
   char one_byte[2];
@@ -600,12 +601,13 @@ chxj_jxhtml_emoji_only_converter(request_rec *r, const char *src, apr_size_t len
   apr_pool_t *pool;
 
   jxhtml = &__jxhtml;
+  doc    = &__doc;
 
   DBG(r, "REQ[%X] start chxj_jxhtml_emoji_eonly_converter()", (apr_size_t)(unsigned int)r);
-  memset(doc,     0, sizeof(Doc));
+  memset(doc,    0, sizeof(Doc));
   memset(jxhtml, 0, sizeof(jxhtml_t));
 
-  doc->r        = r;
+  doc->r       = r;
   jxhtml->doc  = doc;
   jxhtml->spec = spec;
   jxhtml->out  = qs_alloc_zero_byte_string(r->pool);
@@ -614,13 +616,13 @@ chxj_jxhtml_emoji_only_converter(request_rec *r, const char *src, apr_size_t len
 
   apr_pool_create(&pool, r->pool);
 
-  chxj_buffered_write_init(pool, &doc.buf);
+  chxj_buffered_write_init(pool, &doc->buf);
 
   for (ii=0; ii<len; ii++) {
     char *out;
     int   rtn;
 
-    rtn = s_jxhtml_search_emoji(jxhtml, &src[ii], &out);
+    rtn = s_jxhtml_search_emoji(jxhtml, (char *)&src[ii], &out);
     if (rtn) {
       W_V(out);
       ii+=(rtn - 1);
@@ -636,7 +638,7 @@ chxj_jxhtml_emoji_only_converter(request_rec *r, const char *src, apr_size_t len
     }
     else {
       one_byte[0] = src[ii+0];
-      one_Byte[1] = 0;
+      one_byte[1] = 0;
       W_V(one_byte);
     }
   }

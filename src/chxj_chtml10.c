@@ -575,10 +575,11 @@ s_chtml10_search_emoji(chtml10_t *chtml10, char *txt, char **rslt)
 }
 
 char *
-chxj_chtml10_emoji_only_converter(request_rec *r, const char *src, apr_size_t len)
+chxj_chtml10_emoji_only_converter(request_rec *r, device_table *spec, const char *src, apr_size_t len)
 {
   apr_size_t ii;
-  Doc doc;
+  Doc __doc;
+  Doc *doc;
   chtml10_t __chtml10;
   chtml10_t *chtml10;
   char one_byte[2];
@@ -586,6 +587,7 @@ chxj_chtml10_emoji_only_converter(request_rec *r, const char *src, apr_size_t le
   apr_pool_t *pool;
 
   chtml10 = &__chtml10;
+  doc     = &__doc;
 
   DBG(r, "REQ[%X] start chxj_chtml10_emoji_eonly_converter()", (apr_size_t)(unsigned int)r);
   memset(doc,     0, sizeof(Doc));
@@ -600,13 +602,13 @@ chxj_chtml10_emoji_only_converter(request_rec *r, const char *src, apr_size_t le
 
   apr_pool_create(&pool, r->pool);
 
-  chxj_buffered_write_init(pool, &doc.buf);
+  chxj_buffered_write_init(pool, &doc->buf);
 
   for (ii=0; ii<len; ii++) {
     char *out;
     int   rtn;
 
-    rtn = s_chtml10_search_emoji(chtml10, &src[ii], &out);
+    rtn = s_chtml10_search_emoji(chtml10, (char *)&src[ii], &out);
     if (rtn) {
       W_V(out);
       ii+=(rtn - 1);
@@ -622,7 +624,7 @@ chxj_chtml10_emoji_only_converter(request_rec *r, const char *src, apr_size_t le
     }
     else {
       one_byte[0] = src[ii+0];
-      one_Byte[1] = 0;
+      one_byte[1] = 0;
       W_V(one_byte);
     }
   }

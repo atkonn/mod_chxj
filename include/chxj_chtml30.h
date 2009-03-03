@@ -54,6 +54,6 @@ extern char *chxj_convert_chtml30(
   cookie_t              *cookie);
 
 
-extern char *chxj_chtml30_emoji_only_converter(request_rec *r, const char *src, apr_size_t len);
+extern char *chxj_chtml30_emoji_only_converter(request_rec *r, device_table *spec, const char *src, apr_size_t len);
 
 #endif

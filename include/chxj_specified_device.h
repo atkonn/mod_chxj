@@ -116,9 +116,10 @@ struct converter_t {
 
 
   char *(*emoji_only_converter)(
-                   request_rec      *r,
-                   const char       *src,
-                   apr_size_t       len);
+                   request_rec           *r,
+                   struct device_table_t *spec,
+                   const char            *src,
+                   apr_size_t            len);
 };
 
 extern converter_t convert_routine[];

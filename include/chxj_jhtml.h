@@ -60,6 +60,6 @@ extern char *chxj_convert_jhtml(
   cookie_t                  *cookie);
 
 
-extern char *chxj_jhtml_emoji_only_converter(request_rec *r, const char *src, apr_size_t len);
+extern char *chxj_jhtml_emoji_only_converter(request_rec *r, device_table *spec, const char *src, apr_size_t len);
 
 #endif

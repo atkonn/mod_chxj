@@ -379,7 +379,7 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
    * save cookie.
    */
   cookie = NULL;
-  if (entryp->action & CONVRULE_COOKIE_ON_BIT) {
+  if (entryp->action & CONVRULE_COOKIE_ON_BIT && !(entryp->action & CONVRULE_EMOJI_ONLY_BIT)) {
     switch(spec->html_spec_type) {
     case CHXJ_SPEC_Chtml_1_0:
     case CHXJ_SPEC_Chtml_2_0:
@@ -408,10 +408,10 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
     if (entryp->action & CONVRULE_EMOJI_ONLY_BIT) {
       if (convert_routine[spec->html_spec_type].emoji_only_converter) {
         if (tmp) {
-          dst = convert_routine[spec->html_spec_type].emoji_only_converter(r,tmp,*len);
+          dst = convert_routine[spec->html_spec_type].emoji_only_converter(r,spec, tmp,*len);
         }
         else {
-          dst = convert_routine[spec->html_spec_type].emoji_only_converter(r,*src,*len);
+          dst = convert_routine[spec->html_spec_type].emoji_only_converter(r,spec, *src,*len);
         }
         if (dst != NULL) {
           *len = strlen(dst);
