@@ -73,4 +73,7 @@ extern char *chxj_convert_jxhtml(
   chxjconvrule_entry        *entryp,
   cookie_t                  *cookie);
 
+
+extern char *chxj_jxhtml_emoji_only_converter(request_rec *r, device_table *spec, const char *src, apr_size_t len);
+
 #endif

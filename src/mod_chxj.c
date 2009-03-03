@@ -82,68 +82,81 @@
 converter_t convert_routine[] = {
   {
     /* CHXJ_SPEC_UNKNOWN          */
-    .converter = NULL,
-    .encoder  = NULL,
+    .converter            = NULL,
+    .encoder              = NULL,
+    .emoji_only_converter = NULL,
   },
   {
     /* CHXJ_SPEC_Chtml_1_0        */
-    .converter = chxj_convert_chtml10,
-    .encoder  = chxj_encoding,
+    .converter            = chxj_convert_chtml10,
+    .encoder              = chxj_encoding,
+    .emoji_only_converter = chxj_chtml10_emoji_only_converter,
   },
   {
     /* CHXJ_SPEC_Chtml_2_0        */
-    .converter = chxj_convert_chtml20,
-    .encoder  = chxj_encoding,
+    .converter            = chxj_convert_chtml20,
+    .encoder              = chxj_encoding,
+    .emoji_only_converter = chxj_chtml20_emoji_only_converter,
   },
   {
     /* CHXJ_SPEC_Chtml_3_0        */
-    .converter = chxj_convert_chtml30,
-    .encoder  = chxj_encoding,
+    .converter            = chxj_convert_chtml30,
+    .encoder              = chxj_encoding,
+    .emoji_only_converter = chxj_chtml30_emoji_only_converter,
   },
   {
     /* CHXJ_SPEC_Chtml_4_0        */
-    .converter = chxj_convert_chtml40,
-    .encoder  = chxj_encoding,
+    .converter            = chxj_convert_chtml40,
+    .encoder              = chxj_encoding,
+    .emoji_only_converter = chxj_chtml40_emoji_only_converter,
   },
   {
     /* CHXJ_SPEC_Chtml_5_0        */
-    .converter = chxj_convert_chtml50,
-    .encoder  = chxj_encoding,
+    .converter            = chxj_convert_chtml50,
+    .encoder              = chxj_encoding,
+    .emoji_only_converter = chxj_chtml50_emoji_only_converter,
   },
   {
     /* CHXJ_SPEC_Chtml_6_0        */
     .converter = chxj_convert_ixhtml10,
     .encoder  = chxj_encoding,
+    .emoji_only_converter = chxj_chtml50_emoji_only_converter, /* XXX: TODO */
   },
   {
     /* CHXJ_SPEC_Chtml_7_0        */
     .converter = chxj_convert_ixhtml10,
     .encoder  = chxj_encoding,
+    .emoji_only_converter = chxj_chtml50_emoji_only_converter, /* XXX: TODO */
   },
   {
     /* CHXJ_SPEC_XHtml_Mobile_1_0 */
-    .converter = chxj_convert_xhtml_mobile_1_0,
-    .encoder  = chxj_encoding,
+    .converter            = chxj_convert_xhtml_mobile_1_0,
+    .encoder              = chxj_encoding,
+    .emoji_only_converter = chxj_xhtml_emoji_only_converter,
   },
   {
     /* CHXJ_SPEC_Hdml             */
-    .converter = chxj_convert_hdml,
-    .encoder  = chxj_encoding,
+    .converter            = chxj_convert_hdml,
+    .encoder              = chxj_encoding,
+    .emoji_only_converter = NULL,
   },
   {
     /* CHXJ_SPEC_Jhtml            */
-    .converter = chxj_convert_jhtml,
-    .encoder  = chxj_encoding,
+    .converter            = chxj_convert_jhtml,
+    .encoder              = chxj_encoding,
+    .emoji_only_converter = chxj_jhtml_emoji_only_converter,
   },
   {
     /* CHXJ_SPEC_Jxhtml            */
-    .converter = chxj_convert_jxhtml,
-    .encoder  = chxj_encoding,
+    .converter            = chxj_convert_jxhtml,
+    .encoder              = chxj_encoding,
+    .emoji_only_converter = chxj_jxhtml_emoji_only_converter,
   },
   {
     /* CHXJ_SPEC_HTML             */
     .converter = NULL,
     .encoder  = NULL,
+    .emoji_only_converter = NULL,
   },
 };
 
@@ -213,10 +226,14 @@ chxj_headers_fixup(request_rec *r)
       DBG(r, "REQ[%X] end chxj_headers_fixup() (no pattern)", (unsigned int)(apr_size_t)r);
       return DECLINED;
     }
-    if (!entryp || !(entryp->action & CONVRULE_ENGINE_ON_BIT)) {
+    if (!(entryp->action & CONVRULE_ENGINE_ON_BIT)) {
       DBG(r, "REQ[%X] end chxj_headers_fixup() (engine off)", (unsigned int)(apr_size_t)r);
       return DECLINED;
     }
+    if (entryp->action & CONVRULE_EMOJI_ONLY_BIT) {
+      DBG(r, "REQ[%X] end chxj_headers_fixup() (emoji only)", (unsigned int)(apr_size_t)r);
+      return DECLINED;
+    } 
   
     apr_table_setn(r->headers_in, 
                    CHXJ_HTTP_USER_AGENT, 
@@ -367,7 +384,7 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
    * save cookie.
    */
   cookie = NULL;
-  if (entryp->action & CONVRULE_COOKIE_ON_BIT) {
+  if (entryp->action & CONVRULE_COOKIE_ON_BIT && !(entryp->action & CONVRULE_EMOJI_ONLY_BIT)) {
     switch(spec->html_spec_type) {
     case CHXJ_SPEC_Chtml_1_0:
     case CHXJ_SPEC_Chtml_2_0:
@@ -393,6 +410,27 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
                                                           *src, 
                                                           (apr_size_t *)len);
 
+    if (entryp->action & CONVRULE_EMOJI_ONLY_BIT) {
+      if (convert_routine[spec->html_spec_type].emoji_only_converter) {
+        if (tmp) {
+          dst = convert_routine[spec->html_spec_type].emoji_only_converter(r,spec, tmp,*len);
+        }
+        else {
+          dst = convert_routine[spec->html_spec_type].emoji_only_converter(r,spec, *src,*len);
+        }
+        if (dst != NULL) {
+          *len = strlen(dst);
+        }
+        else {
+          dst = apr_palloc(r->pool, 1);
+          *dst = 0;
+          *len = 0;
+        }
+      }
+      DBG(r, "REQ[%X] end of chxj_convert()(emoji only)", (unsigned int)(apr_size_t)r);
+      return dst;
+    }
+
     if (convert_routine[spec->html_spec_type].converter) {
       if (tmp)
         dst = convert_routine[spec->html_spec_type].converter(r, 
@@ -405,7 +443,7 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
       else
         dst = convert_routine[spec->html_spec_type].converter(r,
                                                               spec, 
-                                                              tmp, 
+                                                              *src, 
                                                               *len, 
                                                               len, 
                                                               entryp, 
@@ -2258,6 +2296,10 @@ cmd_convert_rule(cmd_parms *cmd, void *mconfig, const char *arg)
       else
       if (strcasecmp(CONVRULE_ENGINE_OFF_CMD, action) == 0) {
         newrule->action |= CONVRULE_ENGINE_OFF_BIT;
+      }
+      else
+      if (strcasecmp(CONVRULE_EMOJI_ONLY_CMD, action) == 0) {
+        newrule->action |= CONVRULE_EMOJI_ONLY_BIT;
       }
       break;
 

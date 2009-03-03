@@ -102,7 +102,7 @@ typedef struct converter_t converter_t;
 
 struct converter_t {
   /* convert routine */
-  char* (*converter)(request_rec                 *r,
+  char *(*converter)(request_rec                 *r,
                      struct device_table_t       *spec,
                      const char                  *src, 
                      apr_size_t                  srclen, 
@@ -110,9 +110,16 @@ struct converter_t {
                      struct chxjconvrule_entry   *entryp,
                      cookie_t                    *cookie);
 
-  char* (*encoder)(request_rec  *r,
+  char *(*encoder)(request_rec  *r,
                    const char   *src,
                    apr_size_t   *len);
+
+
+  char *(*emoji_only_converter)(
+                   request_rec           *r,
+                   struct device_table_t *spec,
+                   const char            *src,
+                   apr_size_t            len);
 };
 
 extern converter_t convert_routine[];
