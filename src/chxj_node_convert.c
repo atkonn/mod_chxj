@@ -925,6 +925,74 @@ chxj_node_convert(
 
   return NULL;
 }
+
+
+char *
+chxj_node_convert_chxjif_only(
+  request_rec  *r,
+  device_table *spec,
+  const char   *src,
+  apr_size_t   *len  
+)
+{
+  Doc  doc;
+  char *dst;
+  int  pass = 0;
+  apr_size_t dst_pos = 0;
+  apr_size_t ii;
+
+  memset(&doc, 0, sizeof(Doc));
+
+  apr_pool_create(&doc.pool, r->pool);
+  doc.r = r;
+
+  dst = apr_palloc(doc.pool, *len + 1);
+  memset(dst, 0, *len + 1);
+
+  for (ii =0; ii<*len; ii++) {
+    if (src[ii + 0] == '<') {
+      apr_size_t endpoint = chxj_cut_tag(&src[ii + 0], *len - ii);
+      Node *node   = qs_parse_tag(&doc, &src[ii], endpoint);
+      char *name   = qs_get_node_name(&doc,node);
+      if (STRCASEEQ('c','C',"chxj:if", name)) {
+        if (! chxj_chxjif_is_mine(spec, &doc, node)) {
+          pass = 1;
+        }
+        ii += endpoint;
+      }
+      else if (STRCASEEQ('/','/', "/chxj:if", name)) {
+        pass = 0;
+        ii += endpoint;
+      }
+      else {
+        if (! pass) {
+#if 0
+          memcpy(&dst[dst_pos], &src[ii], endpoint + 1);
+          dst_pos += (endpoint + 1);
+#else
+          dst[dst_pos++] = src[ii];
+#endif
+        }
+#if 0
+        ii += endpoint;
+#endif
+      }
+    }
+    else {
+      if (! pass) {
+        if (is_sjis_kanji(src[ii])) {
+          dst[dst_pos++] = src[ii++];
+          dst[dst_pos++] = src[ii];
+        }
+        else  {
+          dst[dst_pos++] = src[ii];
+        }
+      }
+    }
+  }
+  *len = strlen(dst);
+  return dst;
+}
 /*
  * vim:ts=2 et
  */
