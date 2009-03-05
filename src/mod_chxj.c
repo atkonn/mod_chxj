@@ -406,13 +406,14 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
                                                           (apr_size_t *)len);
 
     if (entryp->action & CONVRULE_EMOJI_ONLY_BIT) {
+      if (tmp) {
+        tmp = chxj_node_convert_chxjif_only(r, spec, (const char*)tmp, (apr_size_t *)len);
+      }
+      else {
+        tmp = chxj_node_convert_chxjif_only(r, spec, (const char *)*src, (apr_size_t *)len);
+      }
       if (convert_routine[spec->html_spec_type].emoji_only_converter) {
-        if (tmp) {
-          dst = convert_routine[spec->html_spec_type].emoji_only_converter(r,spec, tmp,*len);
-        }
-        else {
-          dst = convert_routine[spec->html_spec_type].emoji_only_converter(r,spec, *src,*len);
-        }
+        dst = convert_routine[spec->html_spec_type].emoji_only_converter(r,spec, tmp,*len);
         if (dst != NULL) {
           *len = strlen(dst);
         }
