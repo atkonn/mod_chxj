@@ -471,6 +471,12 @@ extern char* chxj_node_convert(
   Node         *node,
   int          indent
 );
+extern char *chxj_node_convert_chxjif_only(
+  request_rec  *r,
+  device_table *spec,
+  const char   *src,
+  apr_size_t   *len
+);
 
 #define IMAGE_CACHE_LIMIT_FMT_LEN  (20)
 
