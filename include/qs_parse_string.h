@@ -201,4 +201,6 @@ Attr* qs_get_attr(Doc* doc, Node* node) ;
 Attr* qs_get_next_attr(Doc* doc, Attr* attr) ;
 char* qs_get_attr_name(Doc* doc, Attr* attr) ;
 char* qs_get_attr_value(Doc* doc, Attr* attr) ;
+
+extern int chxj_cut_tag(const char *s, int len);
 #endif

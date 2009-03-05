@@ -445,6 +445,13 @@ qs_dump_node(Doc *doc, Node *node, int indent)
 
 
 
+int
+chxj_cut_tag(const char *s, int len)
+{
+  return s_cut_tag(s, len);
+}
+
+
 static int
 s_cut_tag(const char *s, int len) 
 {
