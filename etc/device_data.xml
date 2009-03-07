@@ -12129,6 +12129,36 @@
     </device>
 
 
+    <!--
+      L-01A
+      DoCoMo/2.0 L01A(c100;TB;W20H14)
+      DoCoMo/2.0 L01A(c100;TB;W24H17)
+      DoCoMo/2.0 L01A(c100;TB;W30H21)
+      DoCoMo/2.0 L01A(c100;TC;W20H14)
+      DoCoMo/2.0 L01A(c100;TC;W24H17)
+      DoCoMo/2.0 L01A(c100;TC;W30H21)
+    -->
+    <device>
+      <device_id>L01A</device_id>
+      <device_name>DoCoMo L-01A</device_name>
+      <html_spec_type>CHTML_6_0</html_spec_type><!-- IHTML6.0/IXHTML2.0 -->
+      <width>240</width>
+      <heigh>350</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>400</wp_heigh>
+      <cache>102400</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+
+
     <device>
       <device_id>UNKNOWN_DEVICE</device_id>
       <device_name>UNKNOWN DoCoMo Device</device_name>
