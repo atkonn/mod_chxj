@@ -12313,6 +12313,36 @@
       <dpi_heigh>96</dpi_heigh>
     </device>
 
+
+    <!--
+      F-05A
+      DoCoMo/2.0 F05A(c100;TB;W20H14)
+      DoCoMo/2.0 F05A(c100;TB;W24H17)
+      DoCoMo/2.0 F05A(c100;TB;W30H22)
+      DoCoMo/2.0 F05A(c100;TC;W20H14)
+      DoCoMo/2.0 F05A(c100;TC;W24H17)
+      DoCoMo/2.0 F05A(c100;TC;W30H22)
+    -->
+    <device>
+      <device_id>F05A</device_id>
+      <device_name>DoCoMo F-05A</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>352</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>432</wp_heigh>
+      <cache>102400</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+
     <device>
       <device_id>UNKNOWN_DEVICE</device_id>
       <device_name>UNKNOWN DoCoMo Device</device_name>
