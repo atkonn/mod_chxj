@@ -12019,6 +12019,327 @@
       <dpi_heigh>96</dpi_heigh>
     </device>
 
+    <!--
+      SH-03A
+      DoCoMo/2.0 SH03A(c100;TB;W16H08)
+      DoCoMo/2.0 SH03A(c100;TB;W16H10)
+      DoCoMo/2.0 SH03A(c100;TB;W20H10)
+      DoCoMo/2.0 SH03A(c100;TB;W20H13)
+      DoCoMo/2.0 SH03A(c100;TB;W24H12)
+      DoCoMo/2.0 SH03A(c100;TB;W24H16)
+      DoCoMo/2.0 SH03A(c100;TB;W30H15)
+      DoCoMo/2.0 SH03A(c100;TB;W30H20)
+      DoCoMo/2.0 SH03A(c100;TC;W16H08)
+      DoCoMo/2.0 SH03A(c100;TC;W16H10)
+      DoCoMo/2.0 SH03A(c100;TC;W20H10)
+      DoCoMo/2.0 SH03A(c100;TC;W20H13)
+      DoCoMo/2.0 SH03A(c100;TC;W24H12)
+      DoCoMo/2.0 SH03A(c100;TC;W24H16)
+      DoCoMo/2.0 SH03A(c100;TC;W30H15)
+      DoCoMo/2.0 SH03A(c100;TC;W30H20)
+    -->
+    <device>
+      <device_id>SH03A</device_id>
+      <device_name>DoCoMo SH-03A</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>320</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>16777216</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>102400</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+
+
+    <!--
+      P-03A
+      DoCoMo/2.0 P03A(c100;TB;W16H10)
+      DoCoMo/2.0 P03A(c100;TB;W20H13)
+      DoCoMo/2.0 P03A(c100;TB;W24H13)
+      DoCoMo/2.0 P03A(c100;TB;W24H15)
+      DoCoMo/2.0 P03A(c100;TB;W30H19)
+      DoCoMo/2.0 P03A(c100;TC;W16H10)
+      DoCoMo/2.0 P03A(c100;TC;W20H13)
+      DoCoMo/2.0 P03A(c100;TC;W24H13)
+      DoCoMo/2.0 P03A(c100;TC;W24H15)
+      DoCoMo/2.0 P03A(c100;TC;W30H19)
+      DoCoMo/2.0 P03A(c100;TD)
+      DoCoMo/2.0 P03A(c100;TJ)
+    -->
+    <device>
+      <device_id>P03A</device_id>
+      <device_name>DoCoMo P-03A</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>350</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>427</wp_heigh>
+      <cache>102400</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+
+
+    <!--
+      SH-02A
+      DoCoMo/2.0 SH02A(c100;TB;W16H10)
+      DoCoMo/2.0 SH02A(c100;TB;W20H13)
+      DoCoMo/2.0 SH02A(c100;TB;W24H16)
+      DoCoMo/2.0 SH02A(c100;TB;W30H20)
+      DoCoMo/2.0 SH02A(c100;TC;W16H10)
+      DoCoMo/2.0 SH02A(c100;TC;W20H13)
+      DoCoMo/2.0 SH02A(c100;TC;W24H16)
+      DoCoMo/2.0 SH02A(c100;TC;W30H20)
+    -->
+    <device>
+      <device_id>SH02A</device_id>
+      <device_name>DoCoMo SH-02A</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>320</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>16777216</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>102400</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+
+
+    <!--
+      L-01A
+      DoCoMo/2.0 L01A(c100;TB;W20H14)
+      DoCoMo/2.0 L01A(c100;TB;W24H17)
+      DoCoMo/2.0 L01A(c100;TB;W30H21)
+      DoCoMo/2.0 L01A(c100;TC;W20H14)
+      DoCoMo/2.0 L01A(c100;TC;W24H17)
+      DoCoMo/2.0 L01A(c100;TC;W30H21)
+    -->
+    <device>
+      <device_id>L01A</device_id>
+      <device_name>DoCoMo L-01A</device_name>
+      <html_spec_type>CHTML_6_0</html_spec_type><!-- IHTML6.0/IXHTML2.0 -->
+      <width>240</width>
+      <heigh>350</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>400</wp_heigh>
+      <cache>102400</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+
+
+    <!--
+      N-04A
+      DoCoMo/2.0 N04A(c100;TB;W16H10)
+      DoCoMo/2.0 N04A(c100;TB;W20H13)
+      DoCoMo/2.0 N04A(c100;TB;W24H16)
+      DoCoMo/2.0 N04A(c100;TB;W30H20)
+      DoCoMo/2.0 N04A(c100;TC;W16H10)
+      DoCoMo/2.0 N04A(c100;TC;W20H13)
+      DoCoMo/2.0 N04A(c100;TC;W24H16)
+      DoCoMo/2.0 N04A(c100;TC;W30H20)
+    -->
+    <device>
+      <device_id>N04A</device_id>
+      <device_name>DoCoMo N-04A</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>320</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>102400</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+
+    <!--
+      F-03A
+      DoCoMo/2.0 F03A(c100;TB;W17H12)
+      DoCoMo/2.0 F03A(c100;TB;W17H8)
+      DoCoMo/2.0 F03A(c100;TB;W20H10)
+      DoCoMo/2.0 F03A(c100;TB;W20H14)
+      DoCoMo/2.0 F03A(c100;TB;W24H12)
+      DoCoMo/2.0 F03A(c100;TB;W24H17)
+      DoCoMo/2.0 F03A(c100;TB;W30H15)
+      DoCoMo/2.0 F03A(c100;TB;W30H22)
+      DoCoMo/2.0 F03A(c100;TB;W40H20)
+      DoCoMo/2.0 F03A(c100;TB;W40H29)
+      DoCoMo/2.0 F03A(c100;TC;W17H12)
+      DoCoMo/2.0 F03A(c100;TC;W17H8)
+      DoCoMo/2.0 F03A(c100;TC;W20H10)
+      DoCoMo/2.0 F03A(c100;TC;W20H14)
+      DoCoMo/2.0 F03A(c100;TC;W24H12)
+      DoCoMo/2.0 F03A(c100;TC;W24H17)
+      DoCoMo/2.0 F03A(c100;TC;W30H15)
+      DoCoMo/2.0 F03A(c100;TC;W30H22)
+      DoCoMo/2.0 F03A(c100;TC;W40H20)
+      DoCoMo/2.0 F03A(c100;TC;W40H29)
+    -->
+    <device>
+      <device_id>F03A</device_id>
+      <device_name>DoCoMo F-03A</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>352</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>16777216</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>960</wp_heigh>
+      <cache>102400</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+
+
+
+    <!--
+      P-02A
+      DoCoMo/2.0 P02A(c100;TB;W16H10)
+      DoCoMo/2.0 P02A(c100;TB;W20H13)
+      DoCoMo/2.0 P02A(c100;TB;W24H13)
+      DoCoMo/2.0 P02A(c100;TB;W24H15)
+      DoCoMo/2.0 P02A(c100;TB;W30H19)
+      DoCoMo/2.0 P02A(c100;TC;W16H10)
+      DoCoMo/2.0 P02A(c100;TC;W20H13)
+      DoCoMo/2.0 P02A(c100;TC;W24H13)
+      DoCoMo/2.0 P02A(c100;TC;W24H15)
+      DoCoMo/2.0 P02A(c100;TC;W30H19)
+    -->
+    <device>
+      <device_id>P02A</device_id>
+      <device_name>DoCoMo P-02A</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>350</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>102400</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+
+
+
+    <!--
+      F-06A
+      DoCoMo/2.0 F06A(c100;TB;W17H12)
+      DoCoMo/2.0 F06A(c100;TB;W17H8)
+      DoCoMo/2.0 F06A(c100;TB;W20H10)
+      DoCoMo/2.0 F06A(c100;TB;W20H14)
+      DoCoMo/2.0 F06A(c100;TB;W24H12)
+      DoCoMo/2.0 F06A(c100;TB;W24H17)
+      DoCoMo/2.0 F06A(c100;TB;W30H15)
+      DoCoMo/2.0 F06A(c100;TB;W30H22)
+      DoCoMo/2.0 F06A(c100;TB;W40H20)
+      DoCoMo/2.0 F06A(c100;TB;W40H29)
+      DoCoMo/2.0 F06A(c100;TC;W17H12)
+      DoCoMo/2.0 F06A(c100;TC;W17H8)
+      DoCoMo/2.0 F06A(c100;TC;W20H10)
+      DoCoMo/2.0 F06A(c100;TC;W20H14)
+      DoCoMo/2.0 F06A(c100;TC;W24H12)
+      DoCoMo/2.0 F06A(c100;TC;W24H17)
+      DoCoMo/2.0 F06A(c100;TC;W30H15)
+      DoCoMo/2.0 F06A(c100;TC;W30H22)
+      DoCoMo/2.0 F06A(c100;TC;W40H20)
+      DoCoMo/2.0 F06A(c100;TC;W40H29)
+    -->
+    <device>
+      <device_id>F06A</device_id>
+      <device_name>DoCoMo F-06A</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>352</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>16777216</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>864</wp_heigh>
+      <cache>102400</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+
+
+    <!--
+      F-05A
+      DoCoMo/2.0 F05A(c100;TB;W20H14)
+      DoCoMo/2.0 F05A(c100;TB;W24H17)
+      DoCoMo/2.0 F05A(c100;TB;W30H22)
+      DoCoMo/2.0 F05A(c100;TC;W20H14)
+      DoCoMo/2.0 F05A(c100;TC;W24H17)
+      DoCoMo/2.0 F05A(c100;TC;W30H22)
+    -->
+    <device>
+      <device_id>F05A</device_id>
+      <device_name>DoCoMo F-05A</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>352</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>432</wp_heigh>
+      <cache>102400</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
 
     <device>
       <device_id>UNKNOWN_DEVICE</device_id>
