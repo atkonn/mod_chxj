@@ -3970,6 +3970,30 @@
       <dpi_width>96</dpi_width>
       <dpi_heigh>96</dpi_heigh>
     </device>
+
+    <!-- 
+      K001
+      KDDI-KC3M UP.Browser/6.2.0.15.1.1 (GUI) MMP/2.0
+    -->
+    <device>
+      <device_id>KC3M</device_id>
+      <device_name>au K001</device_name>
+      <html_spec_type>XHTML_MOBILE_1_0</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>232</width>
+      <heigh>348</heigh>
+      <emoji_type>D</emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>400</wp_heigh>
+      <cache>33000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
     <!--======================================================================-->
     <!-- A1100 series                                                         -->
     <!--======================================================================-->
