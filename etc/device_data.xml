@@ -18479,6 +18479,32 @@
       <dpi_heigh>96</dpi_heigh>
     </device>
 
+
+
+    <!--
+      831T
+      SoftBank/1.0/831T/TJ001[/serial] Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1
+    -->
+    <device>
+      <device_id>831T</device_id>
+      <device_name>SoftBank 831T</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>235</width>
+      <heigh>341</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>400</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+
     <!--
     -->
     <device>
