@@ -379,7 +379,9 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
    * save cookie.
    */
   cookie = NULL;
-  if (entryp->action & CONVRULE_COOKIE_ON_BIT && !(entryp->action & CONVRULE_EMOJI_ONLY_BIT)) {
+  if (entryp->action & CONVRULE_COOKIE_ON_BIT 
+      && !(entryp->action & CONVRULE_EMOJI_ONLY_BIT)
+      && !(entryp->action & CONVRULE_ENVINFO_ONLY_BIT)) {
     switch(spec->html_spec_type) {
     case CHXJ_SPEC_Chtml_1_0:
     case CHXJ_SPEC_Chtml_2_0:
@@ -424,29 +426,31 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
         }
       }
       DBG(r, "REQ[%X] end of chxj_convert()(emoji only)", (unsigned int)(apr_size_t)r);
-      return dst;
     }
 
-    if (convert_routine[spec->html_spec_type].converter) {
-      if (tmp)
-        dst = convert_routine[spec->html_spec_type].converter(r, 
-                                                              spec, 
-                                                              tmp, 
-                                                              *len, 
-                                                              len, 
-                                                              entryp, 
-                                                              cookie);
-      else
-        dst = convert_routine[spec->html_spec_type].converter(r,
-                                                              spec, 
-                                                              *src, 
-                                                              *len, 
-                                                              len, 
-                                                              entryp, 
-                                                              cookie);
-    }
-    if (dst && *len) {
-      dst = chxj_conv_z2h(r, dst, len, entryp);
+    if (   !(entryp->action & CONVRULE_EMOJI_ONLY_BIT) 
+        && !(entryp->action & CONVRULE_ENVINFO_ONLY_BIT)) {
+      if (convert_routine[spec->html_spec_type].converter) {
+        if (tmp)
+          dst = convert_routine[spec->html_spec_type].converter(r, 
+                                                                spec, 
+                                                                tmp, 
+                                                                *len, 
+                                                                len, 
+                                                                entryp, 
+                                                                cookie);
+        else
+          dst = convert_routine[spec->html_spec_type].converter(r,
+                                                                spec, 
+                                                                *src, 
+                                                                *len, 
+                                                                len, 
+                                                                entryp, 
+                                                                cookie);
+      }
+      if (dst && *len) {
+        dst = chxj_conv_z2h(r, dst, len, entryp);
+      }
     }
   }
   ap_set_content_length(r, *len);
@@ -2319,6 +2323,10 @@ cmd_convert_rule(cmd_parms *cmd, void *mconfig, const char *arg)
       else
       if (strcasecmp(CONVRULE_EMOJI_ONLY_CMD, action) == 0) {
         newrule->action |= CONVRULE_EMOJI_ONLY_BIT;
+      }
+      else
+      if (strcasecmp(CONVRULE_ENVINFO_ONLY_CMD, action) == 0) {
+        newrule->action |= CONVRULE_ENVINFO_ONLY_BIT;
       }
       break;
 

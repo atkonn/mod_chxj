@@ -381,6 +381,7 @@ struct mod_chxj_config {
 #define CONVRULE_JRCONV_OFF_BIT       (0x00000400)
 #define CONVRULE_NOCACHE_ON_BIT       (0x00000800)
 #define CONVRULE_EMOJI_ONLY_BIT       (0x00001000)
+#define CONVRULE_ENVINFO_ONLY_BIT     (0x00002000)
 
 #define CONVRULE_ENGINE_ON_CMD        "EngineOn"
 #define CONVRULE_ENGINE_OFF_CMD       "EngineOff"
@@ -398,6 +399,7 @@ struct mod_chxj_config {
 #define CONVRULE_JRCONV_OFF_CMD       "JRConvOff"
 #define CONVRULE_NOCACHE_ON_CMD       "NoCacheOn"
 #define CONVRULE_EMOJI_ONLY_CMD       "EmojiOnly"
+#define CONVRULE_ENVINFO_ONLY_CMD     "EnvInfoOnly"
 
 
 #define CONVRULE_FLAG_NOTMATCH        (0x00000001)
