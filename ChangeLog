@@ -1,3 +1,15 @@
+libapache2-mod-chxj (0.12.34-1) unstable; urgency=low
+
+      * Added New Features.
+        - Added EnvInfoOnly Option for ChxjConvertRule directive.
+        - Added ChxjAllowedCookieDomain directive.
+          (Requested by ippsio. thanks!)
+      * Fixed bug.
+        http://sourceforge.jp/ticket/browse.php?group_id=1608&tid=15853
+        (thanks!)
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Wed,  1 Apr 2009 01:28:25 +0900
+
 libapache2-mod-chxj (0.12.33-1) unstable; urgency=low
 
   * Added new features.
