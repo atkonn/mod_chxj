@@ -887,20 +887,36 @@ on_error:
 int
 chxj_cookie_check_host(request_rec *r, char *value) 
 {
-  char* hostnm;
+  char *hostnm;
+  mod_chxj_config *dconf;
 
   DBG(r, "REQ[%X] start chxj_cookie_check_host()", (unsigned int)(apr_size_t)r);
-  DBG(r, "hostname=[%s] vs Location:[%s]", r->hostname, value);
+  DBG(r, "REQ[%X] hostname=[%s] vs Location:[%s]", (unsigned int)(apr_size_t)r, r->hostname, value);
+
+  dconf = chxj_get_module_config(r->per_dir_config, &chxj_module);
 
   hostnm = s_get_hostname_from_url(r, value);
   if (hostnm) {
-    if (strcasecmp(hostnm, r->hostname) == 0) {
-      DBG(r, "REQ[%X] end chxj_cookie_check_host() (true)", (unsigned int)(apr_size_t)r);
-      return 0;
+    if (dconf->allowed_cookie_domain) {
+      DBG(r, "REQ[%X] allowed_domain[%s] vs Location:[%s]", (unsigned int)(apr_size_t)r, dconf->allowed_cookie_domain, value);
+      if (chxj_strcasenrcmp(r->pool, hostnm, dconf->allowed_cookie_domain, strlen(dconf->allowed_cookie_domain))) {
+        DBG(r, "REQ[%X] end chxj_cookie_check_host() (false/allowed_domain)", (unsigned int)(apr_size_t)r);
+        return 1;
+      }
+      else {
+        DBG(r, "REQ[%X] end chxj_cookie_check_host() (true/allowed_domain)", (unsigned int)(apr_size_t)r);
+        return 0;
+      }
     }
     else {
-      DBG(r, "REQ[%X] end chxj_cookie_check_host() (false)", (unsigned int)(apr_size_t)r);
-      return 1;
+      if (strcasecmp(hostnm, r->hostname) == 0) {
+        DBG(r, "REQ[%X] end chxj_cookie_check_host() (true)", (unsigned int)(apr_size_t)r);
+        return 0;
+      }
+      else {
+        DBG(r, "REQ[%X] end chxj_cookie_check_host() (false)", (unsigned int)(apr_size_t)r);
+        return 1;
+      }
     }
   }
   DBG(r, "REQ[%X] end chxj_cookie_check_host() (true)", (unsigned int)(apr_size_t)r);

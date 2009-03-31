@@ -353,6 +353,8 @@ struct mod_chxj_config {
   char                  *forward_url_base;  /* use input filter */
   char                  *forward_server_ip; /* use input filter */
 
+  char                  *allowed_cookie_domain; /* default is null */
+
   chxj_new_line_type_t  new_line_type;
 };
 

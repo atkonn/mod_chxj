@@ -1676,6 +1676,7 @@ chxj_create_per_dir_config(apr_pool_t *p, char *arg)
 #endif
   conf->forward_url_base = NULL;
   conf->forward_server_ip = NULL;
+  conf->allowed_cookie_domain = NULL;
 
   if (arg == NULL) {
     conf->dir                  = NULL;
@@ -1720,6 +1721,7 @@ chxj_merge_per_dir_config(apr_pool_t *p, void *basev, void *addv)
   mrg->new_line_type    = NLTYPE_NIL;
   mrg->forward_url_base = NULL;
   mrg->forward_server_ip = NULL;
+  mrg->allowed_cookie_domain = NULL;
 
   mrg->dir = apr_pstrdup(p, add->dir);
 
@@ -1937,6 +1939,13 @@ chxj_merge_per_dir_config(apr_pool_t *p, void *basev, void *addv)
   }
   else if (base->forward_url_base) {
     mrg->forward_url_base = base->forward_url_base;
+  }
+
+  if (add->allowed_cookie_domain) {
+    mrg->allowed_cookie_domain = add->allowed_cookie_domain;
+  }
+  else {
+    mrg->allowed_cookie_domain = base->allowed_cookie_domain;
   }
   return mrg;
 }
@@ -2741,6 +2750,24 @@ cmd_set_forward_server_ip(
 }
 
 static const char *
+cmd_allowed_cookie_domain(
+  cmd_parms   *cmd,
+  void        *mconfig,
+  const char  *arg)
+{
+  mod_chxj_config *dconf;
+
+  if (strlen(arg) > 255)
+    return "mod_chxj: ChxjAllowedCookieDomain is too long.";
+
+  dconf = (mod_chxj_config *)mconfig;
+
+  dconf->allowed_cookie_domain = apr_pstrdup(cmd->pool, arg);
+
+  return NULL;
+}
+
+static const char *
 cmd_set_new_line_type(
   cmd_parms   *UNUSED(cmd), 
   void        *mconfig, 
@@ -2920,6 +2947,12 @@ static const command_rec cmds[] = {
     NULL,
     OR_ALL,
     "The forward server ip(default: this server ip)"),
+  AP_INIT_TAKE1(
+    "ChxjAllowedCookieDomain",
+    cmd_allowed_cookie_domain,
+    NULL,
+    OR_ALL,
+    "Domain that permits parameter addition for cookie besides hostname.(Default:hostname Only)"),
   {NULL}
 };
 
