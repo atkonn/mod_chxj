@@ -1222,10 +1222,10 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
           if (apr_table_get(r->headers_out, "Location") || apr_table_get(r->err_headers_out, "Location")) {
             if (! ap_is_HTTP_REDIRECT(r->status)) {
               r->status = HTTP_MOVED_TEMPORARILY;
-              ctx->buffer = apr_pstrdup(pool, "");
-              ctx->len    = 0;
-              ap_set_content_length(r, (apr_off_t)ctx->len);
             }
+            ctx->buffer = apr_pstrdup(pool, "");
+            ctx->len    = 0;
+            ap_set_content_length(r, (apr_off_t)ctx->len);
           }
           chxj_cookie_unlock(r,lock);
           s_add_no_cache_headers(r, entryp);
