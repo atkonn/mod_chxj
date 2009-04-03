@@ -471,7 +471,12 @@ default_chxj_serf_post(request_rec *r, apr_pool_t *ppool, const char *url_path, 
   DBG(r, "response_code:[%d]", handler_ctx.response_code);
   DBG(r, "response:[%s][%" APR_SIZE_T_FMT "]", handler_ctx.response, handler_ctx.response_len);
   serf_connection_close(connection);
-  ret = apr_pstrdup(ppool, handler_ctx.response);
+  if (handler_ctx.response) {
+    ret = apr_pstrdup(ppool, handler_ctx.response);
+  }
+  else {
+    ret = apr_pstrdup(ppool, "");
+  }
   if (set_headers_flag) {
     r->headers_out = apr_table_copy(pool, handler_ctx.headers_out);
     *response_len = handler_ctx.response_len;

@@ -902,8 +902,13 @@ static serf_ssl_context_t *ssl_init_context(void)
     ssl_ctx->cached_cert = 0;
     ssl_ctx->cached_cert_pw = 0;
 
+#if 0  /* for mod_chxj only */
     SSL_CTX_set_verify(ssl_ctx->ctx, SSL_VERIFY_PEER,
                        validate_server_certificate);
+#else
+    SSL_CTX_set_verify(ssl_ctx->ctx, SSL_VERIFY_NONE,
+                       validate_server_certificate);
+#endif
     SSL_CTX_set_options(ssl_ctx->ctx, SSL_OP_ALL);
 
     ssl_ctx->ssl = SSL_new(ssl_ctx->ctx);
