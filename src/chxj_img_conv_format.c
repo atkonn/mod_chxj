@@ -241,22 +241,24 @@ chxj_img_conv_format_handler(request_rec *r)
   char                  *user_agent;
   device_table          *spec;
   chxjconvrule_entry    *entryp;
+  int                   rtn;
 
-  DBG(r, "start chxj_img_conv_format_handler()");
+  DBG(r, "REQ[%X] start chxj_img_conv_format_handler()", (apr_size_t)(unsigned int)r);
   
   if (r->handler && !STRCASEEQ('c','C',"chxj-picture",r->handler) && !STRCASEEQ('c','C',"chxj-qrcode",r->handler)) {
-    DBG(r, "end chxj_img_conv_format_handler()");
+    DBG(r, "REQ[%X] end chxj_img_conv_format_handler() r->handler is[%s]", (apr_size_t)(unsigned int)r, r->handler);
     return DECLINED;
   }
 
   qsp = s_get_query_string_param(r);
   conf = chxj_get_module_config(r->per_dir_config, &chxj_module);
   if (conf == NULL) {
-    DBG(r, "end chxj_img_conv_format_handler() conf is null");
+    DBG(r, "REQ[%X] end chxj_img_conv_format_handler() conf is null", (apr_size_t)(unsigned int)r);
     return DECLINED;
   }
 
   if (STRCASEEQ('c','C',"chxj-qrcode",r->handler) && conf->image == CHXJ_IMG_OFF) {
+    DBG(r, "REQ[%X] end chxj_img_conv_format_handler() chxj-qrcode and ImageEngineOff", (apr_size_t)(unsigned int)r);
     return DECLINED;
   }
 
@@ -286,11 +288,13 @@ chxj_img_conv_format_handler(request_rec *r)
   else
     spec = chxj_specified_device(r, user_agent);
 
-  DBG(r,"found device_name=[%s]", spec->device_name);
-  DBG(r,"User-Agent=[%s]", user_agent);
+  DBG(r,"REQ[%X] found device_name=[%s]", (apr_size_t)(unsigned int)r, spec->device_name);
+  DBG(r,"REQ[%X] User-Agent=[%s]", (apr_size_t)(unsigned int)r, user_agent);
 
 
-  return s_img_conv_format_from_file(r, conf, user_agent, qsp, spec);
+  rtn = s_img_conv_format_from_file(r, conf, user_agent, qsp, spec);
+  DBG(r, "REQ[%X] end chxj_img_conv_format_handler()", (apr_size_t)(unsigned int)r);
+  return rtn;
 }
 
 
@@ -313,11 +317,11 @@ chxj_convert_image(request_rec *r, const char **src, apr_size_t *len)
   char                  *conv_check;
   chxjconvrule_entry    *entryp;
 
-  DBG(r, "start chxj_convert_image()");
+  DBG(r, "REQ[%X] start chxj_convert_image()",(apr_size_t)(unsigned int)r);
 
   conv_check = (char*)apr_table_get(r->headers_in, "CHXJ_IMG_CONV");
   if (conv_check) {
-    DBG(r, "end chxj_exchnage_image() already convert.");
+    DBG(r, "REQ[%X] end chxj_convert_image() already convert.", (apr_size_t)(unsigned int)r);
     return NULL;
   }
 
@@ -325,7 +329,7 @@ chxj_convert_image(request_rec *r, const char **src, apr_size_t *len)
   qsp = s_get_query_string_param(r);
   conf = chxj_get_module_config(r->per_dir_config, &chxj_module);
   if (conf == NULL) {
-    DBG(r, "end chxj_convert_image()");
+    DBG(r, "REQ[%X] end chxj_convert_image()", (apr_size_t)(unsigned int)r);
     return NULL;
   }
 
@@ -353,14 +357,16 @@ chxj_convert_image(request_rec *r, const char **src, apr_size_t *len)
   DBG(r,"found device_name=[%s]", spec->device_name);
   DBG(r, "User-Agent=[%s]", user_agent);
 
-  if (spec->width == 0 || spec->heigh == 0) 
+  if (spec->width == 0 || spec->heigh == 0) {
+    DBG(r, "REQ[%X] end chxj_convert_image() not convert (width or height is 0)", (apr_size_t)(unsigned int)r);
     return NULL;
+  }
 
   dst = s_create_blob_data(r, spec, qsp, (char*)*src, len);
   if (dst == NULL) 
     *len = 0;
 
-  DBG(r, "end chxj_convert_image()");
+  DBG(r, "REQ[%X] end chxj_convert_image()", (apr_size_t)(unsigned int)r);
 
   return dst;
 }
