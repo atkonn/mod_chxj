@@ -230,6 +230,7 @@ static int s_convert_to_jpeg(MagickWand *magick_wand, request_rec *r, device_tab
 static int s_convert_to_png(MagickWand *maigck_wand, request_rec *r, device_table *spec);
 static int s_convert_to_gif(MagickWand *magick_wand, request_rec *r, device_table *spec);
 static int s_convert_to_bmp(MagickWand *magick_wand, request_rec *r, device_table *spec);
+static int s_chxj_trans_name2(request_rec *r);
 
 
 
@@ -245,9 +246,18 @@ chxj_img_conv_format_handler(request_rec *r)
 
   DBG(r, "REQ[%X] start chxj_img_conv_format_handler()", (apr_size_t)(unsigned int)r);
   
-  if (r->handler && !STRCASEEQ('c','C',"chxj-picture",r->handler) && !STRCASEEQ('c','C',"chxj-qrcode",r->handler)) {
-    DBG(r, "REQ[%X] end chxj_img_conv_format_handler() r->handler is[%s]", (apr_size_t)(unsigned int)r, r->handler);
-    return DECLINED;
+  if (! r->handler || 
+      (r->handler && !STRCASEEQ('c','C',"chxj-picture",r->handler) && !STRCASEEQ('c','C',"chxj-qrcode",r->handler))) {
+    DBG(r, "REQ[%X] Response Code:[%d]", (apr_size_t)(unsigned int)r, r->status);
+    s_chxj_trans_name2(r);
+    if (! r->handler) {
+      DBG(r, "REQ[%X] end chxj_img_conv_format_handler() r->handler is null", (apr_size_t)(unsigned int)r);
+      return DECLINED;
+    }
+    if (r->handler && !STRCASEEQ('c','C',"chxj-picture",r->handler) && !STRCASEEQ('c','C',"chxj-qrcode",r->handler)) {
+      DBG(r, "REQ[%X] end chxj_img_conv_format_handler() r->handler is[%s]", (apr_size_t)(unsigned int)r, r->handler);
+      return DECLINED;
+    }
   }
 
   qsp = s_get_query_string_param(r);
@@ -1943,10 +1953,15 @@ chxj_trans_name(request_rec *r)
   int             ii;
   char            *ext[] = {
           "jpg",
+          "JPG",
           "jpeg",
+          "JPEG",
           "png",
+          "PNG",
           "bmp",
+          "BMP",
           "gif",
+          "GIF",
           "qrc",    /* QRCode出力用ファイルの拡張子 */
           "",
   };
@@ -2066,6 +2081,124 @@ chxj_trans_name(request_rec *r)
       r->handler = apr_psprintf(r->pool, "chxj-picture");
   }
   DBG(r, "end chxj_trans_name()");
+  return OK;
+}
+
+
+
+static int
+s_chxj_trans_name2(request_rec *r)
+{
+  apr_finfo_t     st;
+  apr_status_t    rv;
+  mod_chxj_config *conf;
+  int             ii;
+  char            *ext[] = {
+          "jpg",
+          "JPG",
+          "jpeg",
+          "JPEG",
+          "png",
+          "PNG",
+          "bmp",
+          "BMP",
+          "gif",
+          "GIF",
+          "qrc",    /* QRCode出力用ファイルの拡張子 */
+          "",
+  };
+  char     *fname = NULL;
+  char     *filename_sv;
+  int      do_ext_check = TRUE;
+  int      next_ok      = FALSE;
+
+  DBG(r, "REQ[%X] start chxj_trans_name2()", (apr_size_t)(unsigned int)r);
+
+  conf = chxj_get_module_config(r->per_dir_config, &chxj_module);
+
+  if (conf == NULL) {
+    DBG(r, "REQ[%X] end chxj_trans_name2() conf is null[%s]", (apr_size_t)(unsigned int)r, r->uri);
+    return DECLINED;
+  }
+
+  if (conf->image != CHXJ_IMG_ON) {
+    DBG(r, "REQ[%X] end chxj_trans_name2() ImageEngineOff", (apr_size_t)(unsigned int)r);
+    return DECLINED;
+  }
+
+
+  DBG(r,"Match URI[%s]", r->uri);
+
+  if (r->filename == NULL) {
+    DBG(r, "REQ[%X] end chxj_trans_name2() r->filename is null", (apr_size_t)(unsigned int)r);
+    return DECLINED;
+  }
+     
+  filename_sv = r->filename;
+
+  DBG(r,"REQ[%x] r->filename[%s]", (apr_size_t)(unsigned int)r, filename_sv);
+
+  do_ext_check = TRUE;
+  for (ii=0; ii<7-1; ii++) {
+    char* pos = strrchr(filename_sv, '.');
+    if (pos && pos++) {
+      if (strcasecmp(pos, ext[ii]) == 0) {
+        do_ext_check = FALSE;
+        fname = apr_psprintf(r->pool, "%s", filename_sv);
+        break;
+      }
+    }
+  }
+
+  if (do_ext_check) {
+    for (ii=0; ii<7; ii++) {
+      if (strlen(ext[ii]) == 0) {
+        fname = apr_psprintf(r->pool, "%s", filename_sv);
+      }
+      else 
+        fname = apr_psprintf(r->pool, "%s.%s", filename_sv, ext[ii]);
+  
+      DBG(r,"search [%s]", fname);
+  
+      rv = apr_stat(&st, fname, APR_FINFO_MIN, r->pool);
+      if (rv == APR_SUCCESS) {
+        if (st.filetype != APR_DIR)
+          break;
+      }
+  
+      fname = NULL;
+    }
+  }
+  if (fname == NULL) {
+    DBG(r,"NotFound [%s]", r->filename);
+    return DECLINED;
+  }
+  for (ii=0; ii<7-1; ii++) {
+    char* pos = strrchr(fname, '.');
+    if (pos && pos++) {
+      if (strcasecmp(pos, ext[ii]) == 0) {
+        next_ok = TRUE;
+        break;
+      }
+    }
+  }
+
+  if (! next_ok)  {
+    DBG(r,"NotFound [%s]", r->filename);
+    return DECLINED;
+  }
+
+  if (r->handler == NULL || strcasecmp(r->handler, "chxj-qrcode") != 0) {
+    DBG(r,"Found [%s]", fname);
+
+    r->filename = apr_psprintf(r->pool, "%s", fname);
+  
+    if (strcasecmp("qrc", ext[ii]) == 0)
+      r->handler = apr_psprintf(r->pool, "chxj-qrcode");
+    else
+      r->handler = apr_psprintf(r->pool, "chxj-picture");
+  }
+  DBG(r, "REQ[%X] end chxj_trans_name()", (apr_size_t)(unsigned int)r);
   return OK;
 }
 
