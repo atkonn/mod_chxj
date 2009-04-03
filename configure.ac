@@ -161,6 +161,35 @@ fi
 
 dnl ==================================================
 dnl
+dnl OpenSSL
+dnl
+dnl ==================================================
+OPENSSL_PATH=""
+AC_ARG_WITH(openssl,
+  APR_HELP_STRING([--with-openssl=PATH],[Path to OpenSSL (eg. /usr/local/ssl)]),
+[
+  if test "$withval" = "yes"; then
+    AC_MSG_ERROR([--with-openssl requires a path])
+  else
+    openssl_prefix=$withval
+
+    if test "x$openssl_prefix" != "x" -a ! -d "$openssl_prefix"; then
+      AC_MSG_ERROR('--with-openssl requires a path to a directory')
+    fi
+
+    CPPFLAGS="${CPPFLAGS} -I${openssl_prefix}/include"
+    LDFLAGS="${LDFLAGS} -L${openssl_prefix}/lib"
+    LDFLAGS="${LDFLAGS} -R${openssl_prefix}/lib"
+    OPENSSL_PATH="--with-openssl ${openssl_prefix}"
+  fi
+])
+
+dnl Look for OpenSSL
+AC_CHECK_HEADER([openssl/opensslv.h], [],
+                [AC_MSG_ERROR([We require OpenSSL; try --with-openssl])])
+
+dnl ==================================================
+dnl
 dnl dump log for DEBUG
 dnl
 dnl ==================================================
@@ -249,6 +278,7 @@ LIBS="${LIBS} `${APU_CONFIG} --ldflags` `${APU_CONFIG} --libs` "
 LIBS="${LIBS} ${MYSQL_COOKIE_LIBS}"
 LIBS="${LIBS} ${MEMCACHE_COOKIE_LIBS} "
 LIBS="${LIBS} css/src/.libs/libscss.a"
+LIBS="${LIBS} -lcrypto -lssl "
 CFLAGS="${CFLAGS} `${WAND_CONFIG} --cppflags` `${WAND_CONFIG} --cflags`"
 CFLAGS="${CFLAGS} `${APR_CONFIG} --includes` `${APR_CONFIG} --cflags` `${APR_CONFIG} --cppflags`"
 CFLAGS="${CFLAGS} `${APU_CONFIG} --includes`"
@@ -302,6 +332,7 @@ AC_SUBST(LIBS)
 AC_SUBST(CFLAGS)
 AC_SUBST(APR_CONFIG)
 AC_SUBST(APU_CONFIG)
+AC_SUBST(OPENSSL_PATH)
 
 
 AC_CONFIG_FILES([Makefile src/Makefile support/centos/mod-chxj.spec])
