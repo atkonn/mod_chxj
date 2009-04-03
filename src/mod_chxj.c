@@ -1007,6 +1007,7 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
             || STRCASEEQ('j','J',"jpeg2000",        &r->content_type[6])         /* JPEG2000 */
             || STRCASEEQ('j','J',"jpeg2000-image",  &r->content_type[6])         /* JPEG2000 */
             || STRCASEEQ('x','X',"x-jpeg2000-image",&r->content_type[6])         /* JPEG2000 */
+            || STRCASEEQ('x','X',"x-ms-bmp",        &r->content_type[6])         /* BMP */
             || STRCASEEQ('p','P',"png",             &r->content_type[6])         /* PNG */
             || STRCASEEQ('x','X',"x-png",           &r->content_type[6])         /* PNG */
             || STRCASEEQ('g','G',"gif",             &r->content_type[6])))) {     /* GIF */
@@ -1185,7 +1186,9 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
               || STRCASEEQ('x','X',"x-jpeg2000-image",&r->content_type[6])         /* JPEG2000 */
               || STRCASEEQ('p','P',"png",             &r->content_type[6])         /* PNG */
               || STRCASEEQ('x','X',"x-png",           &r->content_type[6])         /* PNG */
+              || STRCASEEQ('x','X',"x-ms-bmp",     &r->content_type[6])         /* BMP */
               || STRCASEEQ('g','G',"gif",             &r->content_type[6]))) {     /* GIF */
+          DBG(r, "REQ[%X] detect convert target:[%s]", (unsigned int)(apr_size_t)r, r->content_type);
           if (ctx->len) {
             char *tmp;
 
