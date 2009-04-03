@@ -888,6 +888,7 @@ LIBOBJS
 with_apache_header
 QDEFS
 DDEFS
+OPENSSL_PATH
 LTLIBOBJS'
 ac_subst_files=''
       ac_precious_vars='build_alias
@@ -1515,6 +1516,7 @@ Optional Packages:
   --with-memcached-lib-dir Path of "libmemcached.so"
   --with-mysql-header=ARG  Path of "mysql.h"
   --with-mysql-lib-dir=ARG Path of libmysqlclient
+APR_HELP_STRING(--with-openssl=PATH,Path to OpenSSL (eg. /usr/local/ssl))
 
 Some influential environment variables:
   CC          C compiler command
@@ -4462,7 +4464,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 4465 "configure"' > conftest.$ac_ext
+  echo '#line 4467 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -7193,11 +7195,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7196: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7198: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7200: \$? = $ac_status" >&5
+   echo "$as_me:7202: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7461,11 +7463,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7464: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7466: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7468: \$? = $ac_status" >&5
+   echo "$as_me:7470: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7565,11 +7567,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7568: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7570: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:7572: \$? = $ac_status" >&5
+   echo "$as_me:7574: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -9862,7 +9864,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 9865 "configure"
+#line 9867 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -9962,7 +9964,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 9965 "configure"
+#line 9967 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -12298,11 +12300,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:12301: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:12303: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:12305: \$? = $ac_status" >&5
+   echo "$as_me:12307: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -12402,11 +12404,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:12405: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:12407: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:12409: \$? = $ac_status" >&5
+   echo "$as_me:12411: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -13963,11 +13965,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13966: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13968: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:13970: \$? = $ac_status" >&5
+   echo "$as_me:13972: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -14067,11 +14069,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:14070: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:14072: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:14074: \$? = $ac_status" >&5
+   echo "$as_me:14076: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -16254,11 +16256,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16257: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16259: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16261: \$? = $ac_status" >&5
+   echo "$as_me:16263: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16522,11 +16524,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16525: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16527: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16529: \$? = $ac_status" >&5
+   echo "$as_me:16531: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16626,11 +16628,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16629: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16631: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:16633: \$? = $ac_status" >&5
+   echo "$as_me:16635: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -19539,6 +19541,173 @@ else
   MYSQL_COOKIE_LIBS=""
 fi
 
+OPENSSL_PATH=""
+
+# Check whether --with-openssl was given.
+if test "${with_openssl+set}" = set; then
+  withval=$with_openssl;
+  if test "$withval" = "yes"; then
+    { { echo "$as_me:$LINENO: error: --with-openssl requires a path" >&5
+echo "$as_me: error: --with-openssl requires a path" >&2;}
+   { (exit 1); exit 1; }; }
+  else
+    openssl_prefix=$withval
+
+    if test "x$openssl_prefix" != "x" -a ! -d "$openssl_prefix"; then
+      { { echo "$as_me:$LINENO: error: '--with-openssl requires a path to a directory'" >&5
+echo "$as_me: error: '--with-openssl requires a path to a directory'" >&2;}
+   { (exit 1); exit 1; }; }
+    fi
+
+    CPPFLAGS="${CPPFLAGS} -I${openssl_prefix}/include"
+    LDFLAGS="${LDFLAGS} -L${openssl_prefix}/lib"
+    LDFLAGS="${LDFLAGS} -R${openssl_prefix}/lib"
+    OPENSSL_PATH="--with-openssl ${openssl_prefix}"
+  fi
+
+fi
+
+
+if test "${ac_cv_header_openssl_opensslv_h+set}" = set; then
+  { echo "$as_me:$LINENO: checking for openssl/opensslv.h" >&5
+echo $ECHO_N "checking for openssl/opensslv.h... $ECHO_C" >&6; }
+if test "${ac_cv_header_openssl_opensslv_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_header_openssl_opensslv_h" >&5
+echo "${ECHO_T}$ac_cv_header_openssl_opensslv_h" >&6; }
+else
+  # Is the header compilable?
+{ echo "$as_me:$LINENO: checking openssl/opensslv.h usability" >&5
+echo $ECHO_N "checking openssl/opensslv.h usability... $ECHO_C" >&6; }
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+#include <openssl/opensslv.h>
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+  ac_header_compiler=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_header_compiler=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+{ echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
+echo "${ECHO_T}$ac_header_compiler" >&6; }
+
+# Is the header present?
+{ echo "$as_me:$LINENO: checking openssl/opensslv.h presence" >&5
+echo $ECHO_N "checking openssl/opensslv.h presence... $ECHO_C" >&6; }
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <openssl/opensslv.h>
+_ACEOF
+if { (ac_try="$ac_cpp conftest.$ac_ext"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_cpp conftest.$ac_ext") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } >/dev/null && {
+	 test -z "$ac_c_preproc_warn_flag$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       }; then
+  ac_header_preproc=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+  ac_header_preproc=no
+fi
+
+rm -f conftest.err conftest.$ac_ext
+{ echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
+echo "${ECHO_T}$ac_header_preproc" >&6; }
+
+# So?  What about this header?
+case $ac_header_compiler:$ac_header_preproc:$ac_c_preproc_warn_flag in
+  yes:no: )
+    { echo "$as_me:$LINENO: WARNING: openssl/opensslv.h: accepted by the compiler, rejected by the preprocessor!" >&5
+echo "$as_me: WARNING: openssl/opensslv.h: accepted by the compiler, rejected by the preprocessor!" >&2;}
+    { echo "$as_me:$LINENO: WARNING: openssl/opensslv.h: proceeding with the compiler's result" >&5
+echo "$as_me: WARNING: openssl/opensslv.h: proceeding with the compiler's result" >&2;}
+    ac_header_preproc=yes
+    ;;
+  no:yes:* )
+    { echo "$as_me:$LINENO: WARNING: openssl/opensslv.h: present but cannot be compiled" >&5
+echo "$as_me: WARNING: openssl/opensslv.h: present but cannot be compiled" >&2;}
+    { echo "$as_me:$LINENO: WARNING: openssl/opensslv.h:     check for missing prerequisite headers?" >&5
+echo "$as_me: WARNING: openssl/opensslv.h:     check for missing prerequisite headers?" >&2;}
+    { echo "$as_me:$LINENO: WARNING: openssl/opensslv.h: see the Autoconf documentation" >&5
+echo "$as_me: WARNING: openssl/opensslv.h: see the Autoconf documentation" >&2;}
+    { echo "$as_me:$LINENO: WARNING: openssl/opensslv.h:     section \"Present But Cannot Be Compiled\"" >&5
+echo "$as_me: WARNING: openssl/opensslv.h:     section \"Present But Cannot Be Compiled\"" >&2;}
+    { echo "$as_me:$LINENO: WARNING: openssl/opensslv.h: proceeding with the preprocessor's result" >&5
+echo "$as_me: WARNING: openssl/opensslv.h: proceeding with the preprocessor's result" >&2;}
+    { echo "$as_me:$LINENO: WARNING: openssl/opensslv.h: in the future, the compiler will take precedence" >&5
+echo "$as_me: WARNING: openssl/opensslv.h: in the future, the compiler will take precedence" >&2;}
+    ( cat <<\_ASBOX
+## ---------------------------------------- ##
+## Report this to konn@users.sourceforge.jp ##
+## ---------------------------------------- ##
+_ASBOX
+     ) | sed "s/^/$as_me: WARNING:     /" >&2
+    ;;
+esac
+{ echo "$as_me:$LINENO: checking for openssl/opensslv.h" >&5
+echo $ECHO_N "checking for openssl/opensslv.h... $ECHO_C" >&6; }
+if test "${ac_cv_header_openssl_opensslv_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_cv_header_openssl_opensslv_h=$ac_header_preproc
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_header_openssl_opensslv_h" >&5
+echo "${ECHO_T}$ac_cv_header_openssl_opensslv_h" >&6; }
+
+fi
+if test $ac_cv_header_openssl_opensslv_h = yes; then
+  :
+else
+  { { echo "$as_me:$LINENO: error: We require OpenSSL; try --with-openssl" >&5
+echo "$as_me: error: We require OpenSSL; try --with-openssl" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+
+
 # Check whether --enable-dump-log was given.
 if test "${enable_dump_log+set}" = set; then
   enableval=$enable_dump_log;
@@ -19962,6 +20131,7 @@ LIBS="${LIBS} `${APR_CONFIG} --ldflags` `${APR_CONFIG} --libs` "
 LIBS="${LIBS} `${APU_CONFIG} --ldflags` `${APU_CONFIG} --libs` "
 LIBS="${LIBS} ${MYSQL_COOKIE_LIBS}"
 LIBS="${LIBS} ${MEMCACHE_COOKIE_LIBS} "
+LIBS="${LIBS} -lcrypto -lssl "
 CFLAGS="${CFLAGS} `${WAND_CONFIG} --cppflags` `${WAND_CONFIG} --cflags`"
 CFLAGS="${CFLAGS} `${APR_CONFIG} --includes` `${APR_CONFIG} --cflags` `${APR_CONFIG} --cppflags`"
 CFLAGS="${CFLAGS} `${APU_CONFIG} --includes`"
@@ -21454,6 +21624,7 @@ done
 
 
 
+
 ac_config_files="$ac_config_files Makefile src/Makefile support/centos/mod-chxj.spec"
 
 cat >confcache <<\_ACEOF
@@ -22267,10 +22438,11 @@ LIBOBJS!$LIBOBJS$ac_delim
 with_apache_header!$with_apache_header$ac_delim
 QDEFS!$QDEFS$ac_delim
 DDEFS!$DDEFS$ac_delim
+OPENSSL_PATH!$OPENSSL_PATH$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 23; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 24; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5

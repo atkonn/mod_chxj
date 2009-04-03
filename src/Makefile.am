@@ -54,7 +54,7 @@ make_so:
 	@if test ! -L mod_chxj.so ; then ln -s .libs/libmod_chxj.so mod_chxj.so ; fi
 
 serf/.libs/libserf-0.a:
-	(cd serf; CFLAGS=-fPIC CXXFLAGS=-fPIC ./configure --enable-shared --with-apr=`dirname @APR_CONFIG@` --with-apr-util=`dirname @APU_CONFIG@`; make)
+	(cd serf; CFLAGS=-fPIC CXXFLAGS=-fPIC ./configure --enable-shared --with-apr=`dirname @APR_CONFIG@` --with-apr-util=`dirname @APU_CONFIG@` @OPENSSL_PATH@; make)
 
 clean:
 	rm -fr .libs
