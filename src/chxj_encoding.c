@@ -343,7 +343,7 @@ chxj_encoding_parameter(request_rec *r, const char *value)
   char *vstat;
   char *param;
   char *anchor_pos;
-  char *anchor;
+  char *anchor = NULL;
 
   int   use_amp_flag;
   
@@ -396,9 +396,12 @@ chxj_encoding_parameter(request_rec *r, const char *value)
       pair = NULL;
     }
     if (key) {
+      apr_size_t klen = (apr_size_t)strlen(key);
       key = chxj_url_decode(r->pool, key);
       len = (apr_size_t)strlen(key);
-      key = chxj_encoding(r, key, &len);
+      if (klen != len) {
+        key = chxj_encoding(r, key, &len);
+      }
       key = chxj_url_encode(r->pool, key);
     }
     val = apr_strtok(pair, "=", &vstat);
@@ -406,9 +409,12 @@ chxj_encoding_parameter(request_rec *r, const char *value)
       val = apr_pstrdup(r->pool, "");
     }
     if (val) {
+      apr_size_t vlen = (apr_size_t)strlen(val);
       val = chxj_url_decode(r->pool, val);
       len = (apr_size_t)strlen(val);
-      val = chxj_encoding(r, val, &len);
+      if (vlen != len) {
+        val = chxj_encoding(r, val, &len);
+      }
       val = chxj_url_encode(r->pool, val);
       if (strlen(param) == 0) {
         param = apr_pstrcat(r->pool, param, key, "=", val, NULL);
