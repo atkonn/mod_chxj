@@ -1228,8 +1228,14 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
                                    (apr_size_t)ctx->len);
         }
         else {
+          ctx->buffer = apr_pstrdup(pool, "");
+          ctx->len    = 0;
+          ap_set_content_length(r, (apr_off_t)ctx->len);
           chxj_cookie_unlock(r, lock);
-
+          s_add_no_cache_headers(r, entryp);
+          rv = pass_data_to_filter(f, 
+                                   (const char *)ctx->buffer, 
+                                   (apr_size_t)ctx->len);
         }
         DBG(f->r, "REQ[%X] end of chxj_output_filter()", (unsigned int)(apr_size_t)r);
         return rv;
