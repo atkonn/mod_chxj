@@ -384,7 +384,9 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
    * save cookie.
    */
   cookie = NULL;
-  if (entryp->action & CONVRULE_COOKIE_ON_BIT && !(entryp->action & CONVRULE_EMOJI_ONLY_BIT)) {
+  if (entryp->action & CONVRULE_COOKIE_ON_BIT 
+      && !(entryp->action & CONVRULE_EMOJI_ONLY_BIT)
+      && !(entryp->action & CONVRULE_ENVINFO_ONLY_BIT)) {
     switch(spec->html_spec_type) {
     case CHXJ_SPEC_Chtml_1_0:
     case CHXJ_SPEC_Chtml_2_0:
@@ -429,29 +431,31 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
         }
       }
       DBG(r, "REQ[%X] end of chxj_convert()(emoji only)", (unsigned int)(apr_size_t)r);
-      return dst;
     }
 
-    if (convert_routine[spec->html_spec_type].converter) {
-      if (tmp)
-        dst = convert_routine[spec->html_spec_type].converter(r, 
-                                                              spec, 
-                                                              tmp, 
-                                                              *len, 
-                                                              len, 
-                                                              entryp, 
-                                                              cookie);
-      else
-        dst = convert_routine[spec->html_spec_type].converter(r,
-                                                              spec, 
-                                                              *src, 
-                                                              *len, 
-                                                              len, 
-                                                              entryp, 
-                                                              cookie);
-    }
-    if (dst && *len) {
-      dst = chxj_conv_z2h(r, dst, len, entryp);
+    if (   !(entryp->action & CONVRULE_EMOJI_ONLY_BIT) 
+        && !(entryp->action & CONVRULE_ENVINFO_ONLY_BIT)) {
+      if (convert_routine[spec->html_spec_type].converter) {
+        if (tmp)
+          dst = convert_routine[spec->html_spec_type].converter(r, 
+                                                                spec, 
+                                                                tmp, 
+                                                                *len, 
+                                                                len, 
+                                                                entryp, 
+                                                                cookie);
+        else
+          dst = convert_routine[spec->html_spec_type].converter(r,
+                                                                spec, 
+                                                                *src, 
+                                                                *len, 
+                                                                len, 
+                                                                entryp, 
+                                                                cookie);
+      }
+      if (dst && *len) {
+        dst = chxj_conv_z2h(r, dst, len, entryp);
+      }
     }
   }
   ap_set_content_length(r, *len);
@@ -1211,6 +1215,9 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
             if (! ap_is_HTTP_REDIRECT(r->status)) {
               r->status = HTTP_MOVED_TEMPORARILY;
             }
+            ctx->buffer = apr_pstrdup(pool, "");
+            ctx->len    = 0;
+            ap_set_content_length(r, (apr_off_t)ctx->len);
           }
           chxj_cookie_unlock(r,lock);
           s_add_no_cache_headers(r, entryp);
@@ -1668,6 +1675,7 @@ chxj_create_per_dir_config(apr_pool_t *p, char *arg)
 #endif
   conf->forward_url_base = NULL;
   conf->forward_server_ip = NULL;
+  conf->allowed_cookie_domain = NULL;
 
   if (arg == NULL) {
     conf->dir                  = NULL;
@@ -1712,6 +1720,7 @@ chxj_merge_per_dir_config(apr_pool_t *p, void *basev, void *addv)
   mrg->new_line_type    = NLTYPE_NIL;
   mrg->forward_url_base = NULL;
   mrg->forward_server_ip = NULL;
+  mrg->allowed_cookie_domain = NULL;
 
   mrg->dir = apr_pstrdup(p, add->dir);
 
@@ -1929,6 +1938,13 @@ chxj_merge_per_dir_config(apr_pool_t *p, void *basev, void *addv)
   }
   else if (base->forward_url_base) {
     mrg->forward_url_base = base->forward_url_base;
+  }
+
+  if (add->allowed_cookie_domain) {
+    mrg->allowed_cookie_domain = add->allowed_cookie_domain;
+  }
+  else {
+    mrg->allowed_cookie_domain = base->allowed_cookie_domain;
   }
   return mrg;
 }
@@ -2302,6 +2318,10 @@ cmd_convert_rule(cmd_parms *cmd, void *mconfig, const char *arg)
       else
       if (strcasecmp(CONVRULE_EMOJI_ONLY_CMD, action) == 0) {
         newrule->action |= CONVRULE_EMOJI_ONLY_BIT;
+      }
+      else
+      if (strcasecmp(CONVRULE_ENVINFO_ONLY_CMD, action) == 0) {
+        newrule->action |= CONVRULE_ENVINFO_ONLY_BIT;
       }
       break;
 
@@ -2742,6 +2762,24 @@ cmd_set_forward_server_ip(
 }
 
 static const char *
+cmd_allowed_cookie_domain(
+  cmd_parms   *cmd,
+  void        *mconfig,
+  const char  *arg)
+{
+  mod_chxj_config *dconf;
+
+  if (strlen(arg) > 255)
+    return "mod_chxj: ChxjAllowedCookieDomain is too long.";
+
+  dconf = (mod_chxj_config *)mconfig;
+
+  dconf->allowed_cookie_domain = apr_pstrdup(cmd->pool, arg);
+
+  return NULL;
+}
+
+static const char *
 cmd_set_new_line_type(
   cmd_parms   *UNUSED(cmd), 
   void        *mconfig, 
@@ -2921,6 +2959,12 @@ static const command_rec cmds[] = {
     NULL,
     OR_ALL,
     "The forward server ip(default: this server ip)"),
+  AP_INIT_TAKE1(
+    "ChxjAllowedCookieDomain",
+    cmd_allowed_cookie_domain,
+    NULL,
+    OR_ALL,
+    "Domain that permits parameter addition for cookie besides hostname.(Default:hostname Only)"),
   {NULL}
 };
 
