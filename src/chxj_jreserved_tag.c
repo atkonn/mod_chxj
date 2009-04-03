@@ -194,6 +194,12 @@ chxj_jreserved_tag_to_safe_for_query_string(request_rec *r, const char *query_st
     char *tmp = NULL;
     if (strcasecmp(key, "guid") == 0) {
       tmp = apr_psprintf(pool, "%s=%s", key, val);
+      if (result) {
+        result = apr_pstrcat(pool, result, "&" ,tmp, NULL);
+      }
+      else {
+        result = tmp;
+      }
     }
     else {
       tmp = apr_psprintf(pool, "%s=%s", chxj_jreserved_to_safe_tag(r, key, entryp), chxj_url_decode(pool, val));
