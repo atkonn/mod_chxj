@@ -1355,7 +1355,10 @@ chxj_input_handler(request_rec *r)
   apr_pool_create(&pool, r->pool);
 
   dconf      = chxj_get_module_config(r->per_dir_config, &chxj_module);
-  user_agent = (char*)apr_table_get(r->headers_in, "User-Agent");
+  user_agent = (char*)apr_table_get(r->headers_in, CHXJ_HTTP_USER_AGENT);
+  if (!user_agent) {
+    user_agent = (char*)apr_table_get(r->headers_in, HTTP_USER_AGENT);
+  }
   spec       = chxj_specified_device(r, user_agent);
   entryp     = chxj_apply_convrule(r, dconf->convrules);
 

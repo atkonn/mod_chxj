@@ -331,7 +331,10 @@ default_chxj_serf_get(request_rec *r, apr_pool_t *ppool, const char *url_path, i
   handler_ctx.host = url.hostinfo;
   handler_ctx.method = "GET";
   handler_ctx.path = url.path;
-  handler_ctx.user_agent = (char *)apr_table_get(r->headers_in, "User-Agent");
+  handler_ctx.user_agent = (char *)apr_table_get(r->headers_in, CHXJ_HTTP_USER_AGENT);
+  if (!handler_ctx.user_agent) {
+    handler_ctx.user_agent = (char *)apr_table_get(r->headers_in, HTTP_USER_AGENT);
+  }
   handler_ctx.post_data = NULL;
   handler_ctx.post_data_len = 0;
 
@@ -435,7 +438,10 @@ default_chxj_serf_post(request_rec *r, apr_pool_t *ppool, const char *url_path, 
   handler_ctx.host = url.hostinfo;
   handler_ctx.method = "POST";
   handler_ctx.path = url.path;
-  handler_ctx.user_agent = (char *)apr_table_get(r->headers_in, "User-Agent");
+  handler_ctx.user_agent = (char *)apr_table_get(r->headers_in, CHXJ_HTTP_USER_AGENT);
+  if (! handler_ctx.user_agent) {
+    handler_ctx.user_agent = (char *)apr_table_get(r->headers_in, HTTP_USER_AGENT);
+  }
   handler_ctx.post_data = post_data;
   handler_ctx.post_data_len = post_data_len;
 
