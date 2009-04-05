@@ -1,3 +1,37 @@
+libapache2-mod-chxj (0.12.35-1) unstable; urgency=low
+
+  * Fixed Bug.
+    - When the HTTP response code is 304, garbage in two bytes is transmitted
+      as Content.
+      http://sourceforge.jp/ticket/browse.php?group_id=1608&tid=15951
+      (Reported by isssk. Thanks!)
+    - In the SoftBank, ``guid=on'' in A tag is deleted.
+      http://sourceforge.jp/ticket/browse.php?group_id=1608&tid=15940
+      (Reported by isssk. Thanks!)
+    - The BMP image is not converted.
+      http://sourceforge.jp/ticket/browse.php?group_id=1608&tid=15934
+      (Reported by isssk. Thanks!)
+    - The setting by the htaccess context of the image transformation is not
+      effective.
+      http://sourceforge.jp/ticket/browse.php?group_id=1608&tid=15935
+      (Reported by isssk. Thanks!)
+    - If the extension is not specified when the image conversion setting is
+      done only in htaccess, it becomes 404.
+      http://sourceforge.jp/ticket/browse.php?group_id=1608&tid=15936
+      (Reported by isssk. Thanks!)
+    - The parameter name breaks when HANKAKU-KANA-DAKUTEN is specified for
+      REQUEST parameter name.
+      http://sourceforge.jp/ticket/browse.php?group_id=1608&tid=15939
+      (Reported by isssk. Thanks!)
+    - When UA other than carrying are specified by the fifth argument of
+      ChxjConvertRule, the conversion processing is not done.
+      (Reported by ippsio. Thanks!)
+    - When httpd has not linked with libssl and libcrypto, httpd cannot be
+      started.
+      (Reported by GLORIA (gloria_sf). Thansk!)
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Sun,  5 Apr 2009 18:16:51 +0900
+
 libapache2-mod-chxj (0.12.34-1) unstable; urgency=low
 
       * Added New Features.
