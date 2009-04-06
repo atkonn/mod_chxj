@@ -231,6 +231,7 @@ static int s_convert_to_png(MagickWand *maigck_wand, request_rec *r, device_tabl
 static int s_convert_to_gif(MagickWand *magick_wand, request_rec *r, device_table *spec);
 static int s_convert_to_bmp(MagickWand *magick_wand, request_rec *r, device_table *spec);
 static int s_chxj_trans_name2(request_rec *r);
+static char *s_add_comment_to_png(request_rec *r, char *data, apr_size_t *len);
 
 
 
@@ -692,7 +693,8 @@ s_create_cache_file(request_rec          *r,
     }
   }
 
-  writedata = (char*)MagickGetImageBlob(magick_wand, &writebyte);
+  char *sv_writedata;
+  sv_writedata = writedata = (char*)MagickGetImageBlob(magick_wand, &writebyte);
 
   if (! writebyte) {
     DestroyMagickWand(magick_wand);
@@ -700,15 +702,27 @@ s_create_cache_file(request_rec          *r,
 
     return HTTP_INTERNAL_SERVER_ERROR;
   }
+  writedata = apr_palloc(r->pool, writebyte);
+  memcpy(writedata, sv_writedata, writebyte);
 
   DBG(r, "end convert and compression");
+
+  /* Added PNG Comment if type is image/png. */
+  if (r->content_type && strcmp(r->content_type, "image/png") == 0) {
+    if ((writedata = s_add_comment_to_png(r, writedata, &writebyte)) == NULL) {
+      DBG(r, "REQ[%X] Add comment to PNG failure.",(apr_size_t)(unsigned int)r);
+      DestroyMagickWand(magick_wand);
+      if (sv_writedata) free(sv_writedata);
+      return HTTP_INTERNAL_SERVER_ERROR;
+    }
+  }
   
   /* check limit */
   rv = apr_stat(&cache_dir_st, conf->image_cache_dir, APR_FINFO_MIN, r->pool);
   if (rv != APR_SUCCESS) {
     DestroyMagickWand(magick_wand);
     ERR(r,"dir stat error.[%s]", conf->image_cache_dir);
-    if (writedata) free(writedata);
+    if (sv_writedata) free(sv_writedata);
     return HTTP_INTERNAL_SERVER_ERROR;
   }
   
@@ -726,7 +740,7 @@ s_create_cache_file(request_rec          *r,
     if (rv != APR_SUCCESS) { 
       DestroyMagickWand(magick_wand);
       ERR(r,"dir open error.[%s]", conf->image_cache_dir);
-      if (writedata) free(writedata);
+      if (sv_writedata) free(sv_writedata);
       return HTTP_INTERNAL_SERVER_ERROR;
     }
     memset(&dcf, 0, sizeof(apr_finfo_t));
@@ -757,7 +771,7 @@ s_create_cache_file(request_rec          *r,
       ERR(r, "At least the same size as %luByte is necessary for me.", (unsigned long)writebyte); 
       ERR(r, "Please specify the ChxjImageCacheLimit that is larger than now value. ");
       ERR(r, "==========================================");
-      if (writedata) free(writedata);
+      if (sv_writedata) free(sv_writedata);
       return HTTP_INTERNAL_SERVER_ERROR;
     }
     DBG(r, "Image Cache dir is full. total_size:[%lu] max_size:[%lu]", total_size + writebyte, max_size);
@@ -767,7 +781,7 @@ s_create_cache_file(request_rec          *r,
     rv = apr_file_remove(delete_file_name, r->pool);
     if (rv != APR_SUCCESS) {
       ERR(r, "cache file delete failure.[%s]", delete_file_name);
-      if (writedata) free(writedata);
+      if (sv_writedata) free(sv_writedata);
       return HTTP_INTERNAL_SERVER_ERROR;
     }
     DBG(r, "deleted image cache target:[%s]", delete_file_name);
@@ -784,7 +798,7 @@ s_create_cache_file(request_rec          *r,
   if (rv != APR_SUCCESS) {
     DestroyMagickWand(magick_wand);
     ERR(r,"file open error.[%s]", tmpfile);
-    if (writedata) free(writedata);
+    if (sv_writedata) free(sv_writedata);
     return HTTP_INTERNAL_SERVER_ERROR;
   }
 
@@ -792,7 +806,7 @@ s_create_cache_file(request_rec          *r,
   if (rv != APR_SUCCESS) {
     DestroyMagickWand(magick_wand);
     apr_file_close(fout);
-    if (writedata) free(writedata);
+    if (sv_writedata) free(sv_writedata);
     return HTTP_INTERNAL_SERVER_ERROR;
   }
 
@@ -807,20 +821,20 @@ s_create_cache_file(request_rec          *r,
     rv = apr_file_putc((crc >> 8)  & 0xff, fout);
     if (rv != APR_SUCCESS) {
       DestroyMagickWand(magick_wand);
-      if (writedata) free(writedata);
+      if (sv_writedata) free(sv_writedata);
       return HTTP_INTERNAL_SERVER_ERROR;
     }
 
     rv = apr_file_putc( crc        & 0xff, fout);
     if (rv != APR_SUCCESS) {
       DestroyMagickWand(magick_wand);
-      if (writedata) free(writedata);
+      if (sv_writedata) free(sv_writedata);
       return HTTP_INTERNAL_SERVER_ERROR;
     }
   }
 
   DestroyMagickWand(magick_wand);
-  if (writedata) free(writedata);
+  if (sv_writedata) free(sv_writedata);
 
   rv = apr_file_close(fout);
   if (rv != APR_SUCCESS) {
@@ -2321,6 +2335,85 @@ s_get_query_string_param(request_rec *r)
     param->mode = IMG_CONV_MODE_WALLPAPER;
 
   return param;
+}
+
+
+static char *
+s_add_comment_to_png(request_rec *r, char *data, apr_size_t *len)
+{
+  char *result = NULL;
+#define PNG_COPYRIGHT_KEY "Copyright"
+#define PNG_COPYRIGHT_VAL "kddi_copyright=on,copy=NO"
+#define PNG_SIG_AND_IHDR_SZ (33)
+  char *key = PNG_COPYRIGHT_KEY;
+  apr_size_t klen = sizeof(PNG_COPYRIGHT_KEY)-1;
+  char *val = PNG_COPYRIGHT_VAL;
+  apr_size_t vlen = sizeof(PNG_COPYRIGHT_VAL)-1;
+  apr_pool_t *pool;
+  apr_size_t total_tEXt_size;
+  apr_size_t tEXt_data_size;
+  apr_size_t pos;
+  apr_size_t ii;
+  char *buf;
+  char *valbuf;
+  uint32_t crc;
+  mod_chxj_config *conf = chxj_get_module_config(r->per_dir_config, &chxj_module);
+
+  DBG(r, "REQ[%X] start s_add_comment_to_png()",(apr_size_t)(unsigned int)r);
+  if (conf->image_copyright) {
+    apr_pool_create(&pool, r->pool);
+
+    valbuf = apr_psprintf(pool, "%s,%s", val, conf->image_copyright);
+    vlen = strlen(valbuf);
+  
+    /* total_size = length + "tEXt" + "Copyright" + '\0' + val + crc */
+    total_tEXt_size = 4 + 4 + klen + vlen + 1 + 4;
+    result = apr_palloc(pool, total_tEXt_size + *len);
+    if (!result) {
+      DBG(r, "REQ[%X] memory allocation error.", (apr_size_t)(unsigned int)r);
+      return NULL;
+    }
+    pos = PNG_SIG_AND_IHDR_SZ;
+    memcpy(result, data, pos); /* 33 = SIGNATURE + IHDR */
+    tEXt_data_size = klen + 1 + vlen;
+    result[pos + 0] = tEXt_data_size >> 24;
+    result[pos + 1] = tEXt_data_size >> 16;
+    result[pos + 2] = tEXt_data_size >> 8;
+    result[pos + 3] = tEXt_data_size;
+    pos += 4;
+    buf = apr_palloc(pool, 4 + klen + 1 + vlen);
+    memcpy(&buf[0], "tEXt", 4); 
+    memcpy(&buf[4], key, klen);
+    buf[4+klen] = 0;
+    memcpy(&buf[4+klen+1], valbuf, vlen);
+    
+    
+    DBG(r, "REQ[%X] buf:[%s]", (apr_size_t)(unsigned int)r, buf);
+  
+    crc = 0xffffffff;
+    for (ii = 0; ii < 4 + tEXt_data_size; ii++) {
+      crc = AU_CRC_TBL[(crc ^ buf[ii]) & 0xff] ^ (crc >> 8);
+    }
+    crc ^= 0xffffffff;
+    memcpy(&result[pos], buf, 4 + klen + 1 + vlen);
+    pos += (4 + klen + 1 + vlen);
+    result[pos + 0] = crc >> 24;
+    result[pos + 1] = crc >> 16;
+    result[pos + 2] = crc >> 8;
+    result[pos + 3] = crc;
+    pos += 4;
+    memcpy(&result[pos], &data[PNG_SIG_AND_IHDR_SZ] , *len - PNG_SIG_AND_IHDR_SZ);
+    *len = *len + total_tEXt_size;
+    DBG(r, "REQ[%X] writebyte:[%d]", (apr_size_t)(unsigned int)r, *len);
+  }
+  else {
+    result = data;
+  }
+  DBG(r, "REQ[%X] end s_add_comment_to_png()",(apr_size_t)(unsigned int)r);
+#undef PNG_SIG_AND_IHDR_SZ
+#undef PNG_COPYRIGHT_KEY
+#undef PNG_COPYRIGHT_VAL
+  return result;
 }
 /*
  * vim:ts=2 et
