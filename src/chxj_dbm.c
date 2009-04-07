@@ -56,9 +56,14 @@ chxj_save_cookie_dbm(request_rec *r, mod_chxj_config *m, const char *cookie_id, 
                            APR_OS_DEFAULT,
                            r->pool);
   if (retval != APR_SUCCESS) {
-    ERR(r, "could not open dbm (type %s) auth file: %s",
+    char errstr[256];
+    ERR(r, "%s:%d could not open dbm (type %s) auth file: %s(%d:%s)",
+            __FILE__,
+            __LINE__,
             "default",
-            chxj_cookie_db_name_create(r,m->cookie_db_dir));
+            chxj_cookie_db_name_create(r,m->cookie_db_dir),
+            retval,
+            apr_strerror(retval, errstr, 255));
     chxj_cookie_db_unlock(r, file);
     DBG(r, "end chxj_save_cookie_dbm() cookie_id:[%s]", cookie_id);
     return CHXJ_FALSE;
@@ -79,8 +84,13 @@ chxj_save_cookie_dbm(request_rec *r, mod_chxj_config *m, const char *cookie_id, 
    */
   retval = apr_dbm_store(f, dbmkey, dbmval);
   if (retval != APR_SUCCESS) {
-    ERR(r, "Cannot store Cookie data to DBM file `%s'",
-            chxj_cookie_db_name_create(r, m->cookie_db_dir));
+    char errstr[256];
+    ERR(r, "%s:%d Cannot store Cookie data to DBM file `%s' (%d:%s)",
+            __FILE__,
+            __LINE__,
+            chxj_cookie_db_name_create(r, m->cookie_db_dir),
+            retval,
+            apr_strerror(retval, errstr, 255));
     apr_dbm_close(f);
     chxj_cookie_db_unlock(r, file);
     DBG(r, "end chxj_save_cookie_dbm() cookie_id:[%s]", cookie_id);
