@@ -705,7 +705,7 @@ s_create_cache_file(request_rec          *r,
   /* Added PNG Comment if type is image/png. */
   if (r->content_type && strcmp(r->content_type, "image/png") == 0) {
     if ((writedata = s_add_comment_to_png(r, writedata, &writebyte)) == NULL) {
-      DBG(r, "REQ[%X] Add comment to PNG failure.",(apr_size_t)(unsigned int)r);
+      DBG(r, "REQ[%X] Add comment to PNG failure.",(unsigned int)(apr_size_t)r);
       DestroyMagickWand(magick_wand);
       if (sv_writedata) free(sv_writedata);
       return HTTP_INTERNAL_SERVER_ERROR;
