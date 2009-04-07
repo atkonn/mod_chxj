@@ -674,7 +674,7 @@ chxj_chtml20_emoji_only_converter(request_rec *r, device_table *spec, const char
   chtml20 = &__chtml20;
   doc     = &__doc;
 
-  DBG(r, "REQ[%X] start chxj_chtml20_emoji_eonly_converter()", (apr_size_t)(unsigned int)r);
+  DBG(r, "REQ[%X] start chxj_chtml20_emoji_eonly_converter()", (unsigned int)(apr_size_t)r);
   memset(doc,     0, sizeof(Doc));
   memset(chtml20, 0, sizeof(chtml20_t));
 
@@ -715,7 +715,7 @@ chxj_chtml20_emoji_only_converter(request_rec *r, device_table *spec, const char
   }
   chtml20->out = chxj_buffered_write_flush(chtml20->out, &doc->buf);
 
-  DBG(r, "REQ[%X] end chxj_chtml20_emoji_eonly_converter()", (apr_size_t)(unsigned int)r);
+  DBG(r, "REQ[%X] end chxj_chtml20_emoji_eonly_converter()", (unsigned int)(apr_size_t)r);
   return chtml20->out;
 }
 
