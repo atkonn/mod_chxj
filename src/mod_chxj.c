@@ -1548,7 +1548,11 @@ chxj_translate_name(request_rec *r)
   DBG(r, "REQ[%X] START REQUEST (uri:[%s] args:[%s])", (unsigned int)(apr_size_t)r, r->unparsed_uri, r->args ? r->args : "");
   DBG(r, "REQ[%X] ", (unsigned int)(apr_size_t)r);
   DBG(r, "REQ[%X] =======================================================================", (unsigned int)(apr_size_t)r);
+#if 0
   return chxj_trans_name(r);
+#else
+  return DECLINED;
+#endif
 }
 
 

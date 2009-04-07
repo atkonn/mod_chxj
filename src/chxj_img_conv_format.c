@@ -246,19 +246,14 @@ chxj_img_conv_format_handler(request_rec *r)
   int                   rtn;
 
   DBG(r, "REQ[%X] start chxj_img_conv_format_handler()", (apr_size_t)(unsigned int)r);
+
+  s_chxj_trans_name2(r);
   
   if (! r->handler || 
       (r->handler && !STRCASEEQ('c','C',"chxj-picture",r->handler) && !STRCASEEQ('c','C',"chxj-qrcode",r->handler))) {
     DBG(r, "REQ[%X] Response Code:[%d]", (apr_size_t)(unsigned int)r, r->status);
-    s_chxj_trans_name2(r);
-    if (! r->handler) {
-      DBG(r, "REQ[%X] end chxj_img_conv_format_handler() r->handler is null", (apr_size_t)(unsigned int)r);
-      return DECLINED;
-    }
-    if (r->handler && !STRCASEEQ('c','C',"chxj-picture",r->handler) && !STRCASEEQ('c','C',"chxj-qrcode",r->handler)) {
-      DBG(r, "REQ[%X] end chxj_img_conv_format_handler() r->handler is[%s]", (apr_size_t)(unsigned int)r, r->handler);
-      return DECLINED;
-    }
+    DBG(r, "REQ[%X] end chxj_img_conv_format_handler() r->handler is[%s]", (apr_size_t)(unsigned int)r, r->handler);
+    return DECLINED;
   }
 
   qsp = s_get_query_string_param(r);
@@ -2040,7 +2035,7 @@ chxj_trans_name(request_rec *r)
   DBG(r,"URI[%s]", filename_sv);
 
   do_ext_check = TRUE;
-  for (ii=0; ii<7-1; ii++) {
+  for (ii=0; ii<(int)(sizeof(ext)/sizeof(ext[0])); ii++) {
     char* pos = strrchr(filename_sv, '.');
     if (pos && pos++) {
       if (strcasecmp(pos, ext[ii]) == 0) {
@@ -2052,7 +2047,7 @@ chxj_trans_name(request_rec *r)
   }
 
   if (do_ext_check) {
-    for (ii=0; ii<7; ii++) {
+    for (ii=0; ii<(int)(sizeof(ext)/sizeof(ext[0])); ii++) {
       if (strlen(ext[ii]) == 0) {
         fname = apr_psprintf(r->pool, "%s", filename_sv);
       }
@@ -2074,7 +2069,7 @@ chxj_trans_name(request_rec *r)
     DBG(r,"NotFound [%s]", r->filename);
     return DECLINED;
   }
-  for (ii=0; ii<7-1; ii++) {
+  for (ii=0; ii<(int)(sizeof(ext)/sizeof(ext[0])); ii++) {
     char* pos = strrchr(fname, '.');
     if (pos && pos++) {
       if (strcasecmp(pos, ext[ii]) == 0) {
@@ -2158,7 +2153,7 @@ s_chxj_trans_name2(request_rec *r)
   DBG(r,"REQ[%x] r->filename[%s]", (apr_size_t)(unsigned int)r, filename_sv);
 
   do_ext_check = TRUE;
-  for (ii=0; ii<7-1; ii++) {
+  for (ii=0; ii<(int)(sizeof(ext)/sizeof(ext[0])); ii++) {
     char* pos = strrchr(filename_sv, '.');
     if (pos && pos++) {
       if (strcasecmp(pos, ext[ii]) == 0) {
@@ -2170,7 +2165,7 @@ s_chxj_trans_name2(request_rec *r)
   }
 
   if (do_ext_check) {
-    for (ii=0; ii<7; ii++) {
+    for (ii=0; ii<(int)(sizeof(ext)/sizeof(ext[0])); ii++) {
       if (strlen(ext[ii]) == 0) {
         fname = apr_psprintf(r->pool, "%s", filename_sv);
       }
@@ -2192,7 +2187,7 @@ s_chxj_trans_name2(request_rec *r)
     DBG(r,"NotFound [%s]", r->filename);
     return DECLINED;
   }
-  for (ii=0; ii<7-1; ii++) {
+  for (ii=0; ii<(int)(sizeof(ext)/sizeof(ext[0])); ii++) {
     char* pos = strrchr(fname, '.');
     if (pos && pos++) {
       if (strcasecmp(pos, ext[ii]) == 0) {
