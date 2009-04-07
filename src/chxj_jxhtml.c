@@ -617,7 +617,7 @@ chxj_jxhtml_emoji_only_converter(request_rec *r, device_table *spec, const char 
   jxhtml = &__jxhtml;
   doc    = &__doc;
 
-  DBG(r, "REQ[%X] start chxj_jxhtml_emoji_eonly_converter()", (apr_size_t)(unsigned int)r);
+  DBG(r, "REQ[%X] start chxj_jxhtml_emoji_eonly_converter()", (unsigned int)(apr_size_t)r);
   memset(doc,    0, sizeof(Doc));
   memset(jxhtml, 0, sizeof(jxhtml_t));
 
@@ -658,7 +658,7 @@ chxj_jxhtml_emoji_only_converter(request_rec *r, device_table *spec, const char 
   }
   jxhtml->out = chxj_buffered_write_flush(jxhtml->out, &doc->buf);
 
-  DBG(r, "REQ[%X] end chxj_jxhtml_emoji_eonly_converter()", (apr_size_t)(unsigned int)r);
+  DBG(r, "REQ[%X] end chxj_jxhtml_emoji_eonly_converter()", (unsigned int)(apr_size_t)r);
   return jxhtml->out;
 }
 

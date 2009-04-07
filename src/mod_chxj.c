@@ -489,7 +489,7 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
 static void
 s_convert_guid_parameter_to_header(request_rec *r, const char *param, device_table *spec)
 {
-  DBG(r, "REQ[%X] start s_convert_guid_parameter() param:[%s]", (apr_size_t)(unsigned int)r, param);
+  DBG(r, "REQ[%X] start s_convert_guid_parameter() param:[%s]", (unsigned int)(apr_size_t)r, param);
   if (strcasecmp(param, "guid") == 0) {
     switch(spec->html_spec_type) {
     case CHXJ_SPEC_XHtml_Mobile_1_0:
@@ -513,7 +513,7 @@ s_convert_guid_parameter_to_header(request_rec *r, const char *param, device_tab
       break;
     }
   }
-  DBG(r, "REQ[%X] end s_convert_guid_parameter()", (apr_size_t)(unsigned int)r);
+  DBG(r, "REQ[%X] end s_convert_guid_parameter()", (unsigned int)(apr_size_t)r);
 }
 
 /**
@@ -1573,7 +1573,7 @@ chxj_insert_filter(request_rec *r)
   apr_status_t        rv;
   char                *contentType;
 
-  DBG(r, "REQ[%X] start chxj_insert_filter()", (apr_size_t)(unsigned int)r);
+  DBG(r, "REQ[%X] start chxj_insert_filter()", (unsigned int)(apr_size_t)r);
 
   dconf = chxj_get_module_config(r->per_dir_config, &chxj_module);
 
@@ -1587,21 +1587,21 @@ chxj_insert_filter(request_rec *r)
   if (contentType
       && strncasecmp("multipart/form-data", contentType, 19) == 0) {
     DBG(r, "REQ[%X] detect multipart/form-data ==> no target", (apr_size_t)(unsigned int)r);
-    DBG(r, "REQ[%X] end chxj_insert_filter()", (apr_size_t)(unsigned int)r);
+    DBG(r, "REQ[%X] end chxj_insert_filter()", (unsigned int)(apr_size_t)r);
     return;
   }
 
   spec = chxj_specified_device(r, user_agent);
   entryp = chxj_apply_convrule(r, dconf->convrules);
   if (!entryp) {
-    DBG(r, "REQ[%X] end chxj_insert_filter()", (apr_size_t)(unsigned int)r);
+    DBG(r, "REQ[%X] end chxj_insert_filter()", (unsigned int)(apr_size_t)r);
     return;
   }
   ctx = apr_palloc(r->pool, sizeof(*ctx));
   memset(ctx, 0, sizeof(*ctx));
   if ((rv = apr_pool_create(&ctx->pool, r->pool)) != APR_SUCCESS) {
     ERR(r, "%s:%d: failed: new pool create. rv:[%d]", __FILE__,__LINE__,rv);
-    DBG(r, "REQ:[%X] end chxj_insert_filter()", (apr_size_t)(unsigned int)r);
+    DBG(r, "REQ:[%X] end chxj_insert_filter()", (unsigned int)(apr_size_t)r);
     return;
   }
   ctx->entryp = entryp;
@@ -1610,8 +1610,8 @@ chxj_insert_filter(request_rec *r)
   ctx->buffer[0] = 0;
 
   if (!entryp || !(entryp->action & CONVRULE_ENGINE_ON_BIT)) {
-    DBG(r,"REQ[%X] EngineOff", (apr_size_t)(unsigned int)r);
-    DBG(r, "REQ[%X] end chxj_insert_filter()", (apr_size_t)(unsigned int)r);
+    DBG(r,"REQ[%X] EngineOff", (unsigned int)(apr_size_t)r);
+    DBG(r, "REQ[%X] end chxj_insert_filter()", (unsigned int)(apr_size_t)r);
     return;
   }
 
@@ -1630,17 +1630,17 @@ chxj_insert_filter(request_rec *r)
     break;
 
   default:
-    DBG(r, "REQ[%X] end chxj_insert_filter() Unknown spec type.", (apr_size_t)(unsigned int)r);
+    DBG(r, "REQ[%X] end chxj_insert_filter() Unknown spec type.", (unsigned int)(apr_size_t)r);
     return;
   }
 
 
   if (! apr_table_get(r->headers_in, "X-Chxj-Forward")) {
     ap_add_output_filter("chxj_output_filter", ctx, r, r->connection);
-    DBG(r, "REQ[%X] added Output Filter", (apr_size_t)(unsigned int)r);
+    DBG(r, "REQ[%X] added Output Filter", (unsigned int)(apr_size_t)r);
   }
 
-  DBG(r, "REQ[%X] end chxj_insert_filter()", (apr_size_t)(unsigned int)r);
+  DBG(r, "REQ[%X] end chxj_insert_filter()", (unsigned int)(apr_size_t)r);
 }
 
 

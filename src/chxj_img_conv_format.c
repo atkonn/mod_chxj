@@ -245,26 +245,26 @@ chxj_img_conv_format_handler(request_rec *r)
   chxjconvrule_entry    *entryp;
   int                   rtn;
 
-  DBG(r, "REQ[%X] start chxj_img_conv_format_handler()", (apr_size_t)(unsigned int)r);
+  DBG(r, "REQ[%X] start chxj_img_conv_format_handler()", (unsigned int)(apr_size_t)r);
 
   s_chxj_trans_name2(r);
   
   if (! r->handler || 
       (r->handler && !STRCASEEQ('c','C',"chxj-picture",r->handler) && !STRCASEEQ('c','C',"chxj-qrcode",r->handler))) {
-    DBG(r, "REQ[%X] Response Code:[%d]", (apr_size_t)(unsigned int)r, r->status);
-    DBG(r, "REQ[%X] end chxj_img_conv_format_handler() r->handler is[%s]", (apr_size_t)(unsigned int)r, r->handler);
+    DBG(r, "REQ[%X] Response Code:[%d]", (unsigned int)(apr_size_t)r, r->status);
+    DBG(r, "REQ[%X] end chxj_img_conv_format_handler() r->handler is[%s]", (unsigned int)(apr_size_t)r, r->handler);
     return DECLINED;
   }
 
   qsp = s_get_query_string_param(r);
   conf = chxj_get_module_config(r->per_dir_config, &chxj_module);
   if (conf == NULL) {
-    DBG(r, "REQ[%X] end chxj_img_conv_format_handler() conf is null", (apr_size_t)(unsigned int)r);
+    DBG(r, "REQ[%X] end chxj_img_conv_format_handler() conf is null", (unsigned int)(apr_size_t)r);
     return DECLINED;
   }
 
   if (STRCASEEQ('c','C',"chxj-qrcode",r->handler) && conf->image == CHXJ_IMG_OFF) {
-    DBG(r, "REQ[%X] end chxj_img_conv_format_handler() chxj-qrcode and ImageEngineOff", (apr_size_t)(unsigned int)r);
+    DBG(r, "REQ[%X] end chxj_img_conv_format_handler() chxj-qrcode and ImageEngineOff", (unsigned int)(apr_size_t)r);
     return DECLINED;
   }
 
@@ -294,12 +294,12 @@ chxj_img_conv_format_handler(request_rec *r)
   else
     spec = chxj_specified_device(r, user_agent);
 
-  DBG(r,"REQ[%X] found device_name=[%s]", (apr_size_t)(unsigned int)r, spec->device_name);
-  DBG(r,"REQ[%X] User-Agent=[%s]", (apr_size_t)(unsigned int)r, user_agent);
+  DBG(r,"REQ[%X] found device_name=[%s]", (unsigned int)(apr_size_t)r, spec->device_name);
+  DBG(r,"REQ[%X] User-Agent=[%s]", (unsigned int)(apr_size_t)r, user_agent);
 
 
   rtn = s_img_conv_format_from_file(r, conf, user_agent, qsp, spec);
-  DBG(r, "REQ[%X] end chxj_img_conv_format_handler()", (apr_size_t)(unsigned int)r);
+  DBG(r, "REQ[%X] end chxj_img_conv_format_handler()", (unsigned int)(apr_size_t)r);
   return rtn;
 }
 
@@ -323,11 +323,11 @@ chxj_convert_image(request_rec *r, const char **src, apr_size_t *len)
   char                  *conv_check;
   chxjconvrule_entry    *entryp;
 
-  DBG(r, "REQ[%X] start chxj_convert_image()",(apr_size_t)(unsigned int)r);
+  DBG(r, "REQ[%X] start chxj_convert_image()",(unsigned int)(apr_size_t)r);
 
   conv_check = (char*)apr_table_get(r->headers_in, "CHXJ_IMG_CONV");
   if (conv_check) {
-    DBG(r, "REQ[%X] end chxj_convert_image() already convert.", (apr_size_t)(unsigned int)r);
+    DBG(r, "REQ[%X] end chxj_convert_image() already convert.", (unsigned int)(apr_size_t)r);
     return NULL;
   }
 
@@ -335,7 +335,7 @@ chxj_convert_image(request_rec *r, const char **src, apr_size_t *len)
   qsp = s_get_query_string_param(r);
   conf = chxj_get_module_config(r->per_dir_config, &chxj_module);
   if (conf == NULL) {
-    DBG(r, "REQ[%X] end chxj_convert_image()", (apr_size_t)(unsigned int)r);
+    DBG(r, "REQ[%X] end chxj_convert_image()", (unsigned int)(apr_size_t)r);
     return NULL;
   }
 
@@ -364,7 +364,7 @@ chxj_convert_image(request_rec *r, const char **src, apr_size_t *len)
   DBG(r, "User-Agent=[%s]", user_agent);
 
   if (spec->width == 0 || spec->heigh == 0) {
-    DBG(r, "REQ[%X] end chxj_convert_image() not convert (width or height is 0)", (apr_size_t)(unsigned int)r);
+    DBG(r, "REQ[%X] end chxj_convert_image() not convert (width or height is 0)", (unsigned int)(apr_size_t)r);
     return NULL;
   }
 
@@ -372,7 +372,7 @@ chxj_convert_image(request_rec *r, const char **src, apr_size_t *len)
   if (dst == NULL) 
     *len = 0;
 
-  DBG(r, "REQ[%X] end chxj_convert_image()", (apr_size_t)(unsigned int)r);
+  DBG(r, "REQ[%X] end chxj_convert_image()", (unsigned int)(apr_size_t)r);
 
   return dst;
 }
@@ -710,7 +710,7 @@ s_create_cache_file(request_rec          *r,
   /* Added PNG Comment if type is image/png. */
   if (r->content_type && strcmp(r->content_type, "image/png") == 0) {
     if ((writedata = s_add_comment_to_png(r, writedata, &writebyte)) == NULL) {
-      DBG(r, "REQ[%X] Add comment to PNG failure.",(apr_size_t)(unsigned int)r);
+      DBG(r, "REQ[%X] Add comment to PNG failure.",(unsigned int)(apr_size_t)r);
       DestroyMagickWand(magick_wand);
       if (sv_writedata) free(sv_writedata);
       return HTTP_INTERNAL_SERVER_ERROR;
@@ -2126,17 +2126,17 @@ s_chxj_trans_name2(request_rec *r)
   int      do_ext_check = TRUE;
   int      next_ok      = FALSE;
 
-  DBG(r, "REQ[%X] start chxj_trans_name2()", (apr_size_t)(unsigned int)r);
+  DBG(r, "REQ[%X] start chxj_trans_name2()", (unsigned int)(apr_size_t)r);
 
   conf = chxj_get_module_config(r->per_dir_config, &chxj_module);
 
   if (conf == NULL) {
-    DBG(r, "REQ[%X] end chxj_trans_name2() conf is null[%s]", (apr_size_t)(unsigned int)r, r->uri);
+    DBG(r, "REQ[%X] end chxj_trans_name2() conf is null[%s]", (unsigned int)(apr_size_t)r, r->uri);
     return DECLINED;
   }
 
   if (conf->image != CHXJ_IMG_ON) {
-    DBG(r, "REQ[%X] end chxj_trans_name2() ImageEngineOff", (apr_size_t)(unsigned int)r);
+    DBG(r, "REQ[%X] end chxj_trans_name2() ImageEngineOff", (unsigned int)(apr_size_t)r);
     return DECLINED;
   }
 
@@ -2144,13 +2144,13 @@ s_chxj_trans_name2(request_rec *r)
   DBG(r,"Match URI[%s]", r->uri);
 
   if (r->filename == NULL) {
-    DBG(r, "REQ[%X] end chxj_trans_name2() r->filename is null", (apr_size_t)(unsigned int)r);
+    DBG(r, "REQ[%X] end chxj_trans_name2() r->filename is null", (unsigned int)(apr_size_t)r);
     return DECLINED;
   }
      
   filename_sv = r->filename;
 
-  DBG(r,"REQ[%x] r->filename[%s]", (apr_size_t)(unsigned int)r, filename_sv);
+  DBG(r,"REQ[%x] r->filename[%s]", (unsigned int)(apr_size_t)r, filename_sv);
 
   do_ext_check = TRUE;
   for (ii=0; ii<(int)(sizeof(ext)/sizeof(ext[0])); ii++) {
@@ -2212,7 +2212,7 @@ s_chxj_trans_name2(request_rec *r)
     else
       r->handler = apr_psprintf(r->pool, "chxj-picture");
   }
-  DBG(r, "REQ[%X] end chxj_trans_name()", (apr_size_t)(unsigned int)r);
+  DBG(r, "REQ[%X] end chxj_trans_name()", (unsigned int)(apr_size_t)r);
   return OK;
 }
 
@@ -2359,7 +2359,7 @@ s_add_comment_to_png(request_rec *r, char *data, apr_size_t *len)
   uint32_t crc;
   mod_chxj_config *conf = chxj_get_module_config(r->per_dir_config, &chxj_module);
 
-  DBG(r, "REQ[%X] start s_add_comment_to_png()",(apr_size_t)(unsigned int)r);
+  DBG(r, "REQ[%X] start s_add_comment_to_png()",(unsigned int)(apr_size_t)r);
   if (conf->image_copyright) {
     apr_pool_create(&pool, r->pool);
 
@@ -2370,7 +2370,7 @@ s_add_comment_to_png(request_rec *r, char *data, apr_size_t *len)
     total_tEXt_size = 4 + 4 + klen + vlen + 1 + 4;
     result = apr_palloc(pool, total_tEXt_size + *len);
     if (!result) {
-      DBG(r, "REQ[%X] memory allocation error.", (apr_size_t)(unsigned int)r);
+      DBG(r, "REQ[%X] memory allocation error.", (unsigned int)(apr_size_t)r);
       return NULL;
     }
     pos = PNG_SIG_AND_IHDR_SZ;
@@ -2388,7 +2388,7 @@ s_add_comment_to_png(request_rec *r, char *data, apr_size_t *len)
     memcpy(&buf[4+klen+1], valbuf, vlen);
     
     
-    DBG(r, "REQ[%X] buf:[%s]", (apr_size_t)(unsigned int)r, buf);
+    DBG(r, "REQ[%X] buf:[%s]", (unsigned int)(apr_size_t)r, buf);
   
     crc = 0xffffffff;
     for (ii = 0; ii < 4 + tEXt_data_size; ii++) {
@@ -2404,12 +2404,12 @@ s_add_comment_to_png(request_rec *r, char *data, apr_size_t *len)
     pos += 4;
     memcpy(&result[pos], &data[PNG_SIG_AND_IHDR_SZ] , *len - PNG_SIG_AND_IHDR_SZ);
     *len = *len + total_tEXt_size;
-    DBG(r, "REQ[%X] writebyte:[%d]", (apr_size_t)(unsigned int)r, *len);
+    DBG(r, "REQ[%X] writebyte:[%d]", (unsigned int)(apr_size_t)r, *len);
   }
   else {
     result = data;
   }
-  DBG(r, "REQ[%X] end s_add_comment_to_png()",(apr_size_t)(unsigned int)r);
+  DBG(r, "REQ[%X] end s_add_comment_to_png()",(unsigned int)(apr_size_t)r);
 #undef PNG_SIG_AND_IHDR_SZ
 #undef PNG_COPYRIGHT_KEY
 #undef PNG_COPYRIGHT_VAL
