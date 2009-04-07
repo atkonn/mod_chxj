@@ -303,7 +303,14 @@ AC_CHECK_HEADERS([ap_config.h])
 ##include "ap_config.h"
 ##endif
 #]])
-AC_CHECK_HEADERS([ap_regex.h],use_pcre_flag="no",use_pcre_flag="yes")
+AC_CHECK_HEADERS([ap_regex.h],use_pcre_flag="no",use_pcre_flag="yes",
+[[#ifdef HAVE_APR_H
+# include "apr.h"
+#endif
+#ifdef HAVE_AP_CONFIG_H
+# include "ap_config.h"
+#endif
+]])
 if test "x$use_pcre_flag" = "xyes" ; then
   if test "x$with_pcre_config" = "x" ; then
     AC_PATH_PROG(PCRE_CONFIG, pcre-config, no, /usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin)
