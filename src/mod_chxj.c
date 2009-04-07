@@ -483,6 +483,7 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
 static void
 s_convert_guid_parameter_to_header(request_rec *r, const char *param, device_table *spec)
 {
+  DBG(r, "REQ[%X] start s_convert_guid_parameter() param:[%s]", (apr_size_t)(unsigned int)r, param);
   if (strcasecmp(param, "guid") == 0) {
     switch(spec->html_spec_type) {
     case CHXJ_SPEC_XHtml_Mobile_1_0:
@@ -506,6 +507,7 @@ s_convert_guid_parameter_to_header(request_rec *r, const char *param, device_tab
       break;
     }
   }
+  DBG(r, "REQ[%X] end s_convert_guid_parameter()", (apr_size_t)(unsigned int)r);
 }
 
 /**
@@ -584,7 +586,6 @@ chxj_convert_input_header(request_rec *r,chxjconvrule_entry *entryp, device_tabl
     value = apr_strtok(NULL, "=", &vstate);
     if (! name) continue;
     name = chxj_safe_to_jreserved_tag(r, name);
-
     if (strncasecmp(name, "_chxj", 5) != 0 && strncasecmp(name, "%5Fchxj", sizeof("%5Fchxj")-1) != 0) {
       if (strlen(result) != 0) 
         result = apr_pstrcat(r->pool, result, "&", NULL);
@@ -621,10 +622,13 @@ chxj_convert_input_header(request_rec *r,chxjconvrule_entry *entryp, device_tabl
         result = apr_pstrcat(r->pool, result, dname, "=", dvalue, NULL);
       }
       else {
-        if (strcmp(name, pair_sv) != 0)
+        s_convert_guid_parameter_to_header(r, name, spec);
+        if (strcmp(name, pair_sv) != 0) {
           result = apr_pstrcat(r->pool, result, name, "=", value, NULL);
-        else
+        } 
+        else {
           result = apr_pstrcat(r->pool, result, name, NULL);
+        }
       }
     }
     else
