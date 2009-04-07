@@ -1218,6 +1218,8 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
             if (! ap_is_HTTP_REDIRECT(r->status)) {
               r->status = HTTP_MOVED_TEMPORARILY;
             }
+          }
+          if (ctx->len && ap_is_HTTP_REDIRECT(r->status)) {
             ctx->buffer = apr_pstrdup(pool, "");
             ctx->len    = 0;
             ap_set_content_length(r, (apr_off_t)ctx->len);
