@@ -357,6 +357,8 @@ struct mod_chxj_config {
   char                  *allowed_cookie_domain; /* default is null */
 
   chxj_new_line_type_t  new_line_type;
+
+  char                  *post_log;              /* post log environment name. */
 };
 
 #define IS_COOKIE_STORE_DBM(X)      ((X) == COOKIE_STORE_TYPE_DBM)

@@ -264,6 +264,12 @@ chxj_headers_fixup(request_rec *r)
     else {
       char *client_ip = (char *)apr_table_get(r->headers_in, CHXJ_HEADER_ORIG_CLIENT_IP);
       if (client_ip) {
+        if (dconf->post_log) {
+          apr_table_setn(r->subprocess_env, dconf->post_log, dconf->post_log);
+        }
+        else {
+          apr_table_setn(r->subprocess_env, "chxj-post-log", "chxj-post-log");
+        }
         apr_sockaddr_t *address = NULL;
         apr_status_t rv = apr_sockaddr_info_get(&address, ap_get_server_name(r), APR_UNSPEC, ap_get_server_port(r), 0, r->pool);
         if (rv != APR_SUCCESS) {
@@ -1706,6 +1712,7 @@ chxj_create_per_dir_config(apr_pool_t *p, char *arg)
   conf->forward_url_base = NULL;
   conf->forward_server_ip = NULL;
   conf->allowed_cookie_domain = NULL;
+  conf->post_log              = NULL;
 
   if (arg == NULL) {
     conf->dir                  = NULL;
@@ -1751,6 +1758,7 @@ chxj_merge_per_dir_config(apr_pool_t *p, void *basev, void *addv)
   mrg->forward_url_base = NULL;
   mrg->forward_server_ip = NULL;
   mrg->allowed_cookie_domain = NULL;
+  mrg->post_log         = NULL;
 
   mrg->dir = apr_pstrdup(p, add->dir);
 
@@ -1975,6 +1983,12 @@ chxj_merge_per_dir_config(apr_pool_t *p, void *basev, void *addv)
   }
   else {
     mrg->allowed_cookie_domain = base->allowed_cookie_domain;
+  }
+  if (add->post_log) {
+    mrg->post_log = add->post_log;
+  }
+  else {
+    mrg->post_log = base->post_log;
   }
   return mrg;
 }
@@ -2839,6 +2853,23 @@ cmd_set_new_line_type(
   return NULL;
 }
 
+static const char *
+cmd_post_log_env(
+  cmd_parms   *cmd, 
+  void        *mconfig, 
+  const char  *arg)
+{
+  mod_chxj_config  *dconf;
+  if (strlen(arg) > 255)
+    return "mod_chxj: ChxjPostLogEnv is too long.";
+
+  dconf = (mod_chxj_config *)mconfig;
+
+  dconf->post_log = apr_pstrdup(cmd->pool, arg);
+
+  return NULL;
+}
+
 
 static const command_rec cmds[] = {
   AP_INIT_TAKE1(
@@ -2995,6 +3026,12 @@ static const command_rec cmds[] = {
     NULL,
     OR_ALL,
     "Domain that permits parameter addition for cookie besides hostname.(Default:hostname Only)"),
+  AP_INIT_TAKE1(
+    "ChxjPostLogEnv",
+    cmd_post_log_env,
+    NULL,
+    OR_ALL,
+    "for CustomLog directive. mod_chxj's internal POST log environment name.(Default:chxj-post-log)"),
   {NULL}
 };
 
