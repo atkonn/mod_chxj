@@ -295,8 +295,25 @@ APR_HEADER_DIR="`${APR_CONFIG} --includes | sed -e 's/-I//g' | sed -e 's/ //g'`"
 AC_CHECK_HEADERS([apr_shm.h apr_global_mutex.h])
 AC_CHECK_HEADERS([apr.h])
 AC_CHECK_HEADERS([ap_config.h])
-AC_CHECK_HEADERS([ap_regex.h],use_pcre_flag="no",use_pcre_flag="yes")
 AC_CHECK_HEADERS([libgen.h])
+#AC_CHECK_HEADERS([ap_regex.h],
+#  AC_DEFINE([HAVE_AP_REGEX_H], [], [Define to 1 if you have the <ap_regex.h> header file.]),[],
+#[[
+##ifdef HAVE_APR_H
+##include "apr.h"
+##endif
+##ifdef HAVE_AP_CONFIG_H
+##include "ap_config.h"
+##endif
+#]])
+AC_CHECK_HEADERS([ap_regex.h],use_pcre_flag="no",use_pcre_flag="yes",
+[[#ifdef HAVE_APR_H
+# include "apr.h"
+#endif
+#ifdef HAVE_AP_CONFIG_H
+# include "ap_config.h"
+#endif
+]])
 if test "x$use_pcre_flag" = "xyes" ; then
   if test "x$with_pcre_config" = "x" ; then
     AC_PATH_PROG(PCRE_CONFIG, pcre-config, no, /usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin)
