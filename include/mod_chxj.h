@@ -493,6 +493,8 @@ extern void chxj_dump_string(request_rec *r, const char *filename, int line, con
 extern void *rpl_malloc(size_t n);
 #endif
 
+
+#define TO_ADDR(X) ((unsigned int)(apr_size_t)(X))
 #endif
 /*
  * vim:ts=2 et
