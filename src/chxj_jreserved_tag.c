@@ -120,6 +120,21 @@ static r_table_t reserved_table[] = {
 };
 
 
+int
+chxj_is_jreserved_tag(const char *src) 
+{
+  int ii;
+  for (ii=0;ii<RESERVED_NELT;ii++) {
+    if (STRCASEEQ(reserved_table[ii].lower,
+                  reserved_table[ii].upper,
+                  reserved_table[ii].name, 
+                  src)) {
+      return 1;
+    }
+  }
+  return 0;
+}
+
 char *
 chxj_jreserved_to_safe_tag(request_rec *r, const char *src, chxjconvrule_entry *entryp)
 {
