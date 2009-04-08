@@ -671,11 +671,29 @@ chxj_form_action_to_hidden_tag(
           }
         }
         else {
-          tmp = apr_psprintf(pool, 
-                             "<input type=\"hidden\" name=\"_chxj_qs_%s\" value=\"%s\"%s>", 
-                             chxj_url_decode(pool, key), 
-                             chxj_url_decode(pool, val), 
-                             (xmlFlag == 1) ? " /" : "");
+          if (entryp->action & CONVRULE_JRCONV_OFF_BIT) {
+            if (chxj_is_jreserved_tag(key)) {
+              tmp = apr_psprintf(pool, 
+                                 "<input type=\"hidden\" name=\"%s\" value=\"%s\"%s>", 
+                                 chxj_url_decode(pool, key), 
+                                 chxj_url_decode(pool, val), 
+                                 (xmlFlag == 1) ? " /" : "");
+            }
+            else {
+              tmp = apr_psprintf(pool, 
+                                 "<input type=\"hidden\" name=\"_chxj_qs_%s\" value=\"%s\"%s>", 
+                                 chxj_url_decode(pool, key), 
+                                 chxj_url_decode(pool, val), 
+                                 (xmlFlag == 1) ? " /" : "");
+            }
+          }
+          else {
+            tmp = apr_psprintf(pool, 
+                               "<input type=\"hidden\" name=\"_chxj_qs_%s\" value=\"%s\"%s>", 
+                               chxj_url_decode(pool, key), 
+                               chxj_url_decode(pool, val), 
+                               (xmlFlag == 1) ? " /" : "");
+          }
         }
         if (result) {
           result = apr_pstrcat(pool, result, tmp, NULL);
