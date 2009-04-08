@@ -491,6 +491,8 @@ extern char *chxj_node_convert_chxjif_only(
 extern void *rpl_malloc(size_t n);
 #endif
 
+
+#define TO_ADDR(X) ((unsigned int)(apr_size_t)(X))
 #endif
 /*
  * vim:ts=2 et
