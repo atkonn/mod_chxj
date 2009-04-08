@@ -18,6 +18,7 @@
 #include "chxj_url_encode.h"
 #include "chxj_str_util.h"
 #include "chxj_jreserved_tag.h"
+#include "mod_chxj.h"
 
 
 /**
@@ -685,6 +686,57 @@ chxj_form_action_to_hidden_tag(
       }
     }
   }
+  return result;
+}
+
+
+char *
+chxj_delete_chxj_cc_param(
+  request_rec         *r,
+  const char          *str)
+{
+  apr_pool_t  *pool;
+  char        *s;
+  int         xmlFlag = 0;
+
+  DBG(r, "REQ[%X] start chxj_delete_chxj_cc_param() str:[%s]", TO_ADDR(r),str);
+
+  apr_pool_create(&pool, r->pool);
+  s = apr_pstrdup(pool, str);
+
+  if (!s) {
+    DBG(r, "REQ[%X] end chxj_delete_chxj_cc_param() Memory Allocation Error", TO_ADDR(r));
+    return NULL;
+  }
+  char *result = NULL;
+
+  char *pstat;
+  char *pstat2;
+  for (;;) {
+    char *pair = apr_strtok(s, "&", &pstat);
+    if (! pair) break;
+    if (strncasecmp(pair, "amp;", 4) == 0) {
+      pair += 4;
+      xmlFlag = 1;
+    }
+    s = NULL;
+    char *key = apr_strtok(pair, "=",  &pstat2);
+    char *val = "";
+    if (key) {
+      val = apr_strtok(NULL, "=", &pstat2);
+      if (!val) val = "";
+    }
+    if (strcasecmp(key, "_chxj_cc")) {
+      if (result) {
+        result = apr_pstrcat(pool, result, ((xmlFlag) ? "&amp;" : "&"), key, "=", val, NULL);
+      }
+      else {
+        result = apr_pstrcat(pool, key, "=", val, NULL);
+      }
+    }
+  }
+  DBG(r, "REQ[%X] result:[%s]", TO_ADDR(r), result);
+  DBG(r, "REQ[%X] end chxj_delete_chxj_cc_param() ", TO_ADDR(r));
   return result;
 }
 /*

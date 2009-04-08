@@ -159,7 +159,7 @@ chxj_save_cookie(request_rec *r)
 
   for (ii=0; ii<headers->nelts; ii++) {
     if (strcasecmp(hentryp[ii].key, "Set-Cookie") == 0) {
-      DBG(r, "REQ[%X] cookie=[%s:%s]", (unsigned int)(apr_size_t)r, hentryp[ii].key, hentryp[ii].val);
+      DBG(r, "REQ[%X] cookie=[%s:%s]", TO_ADDR(r), hentryp[ii].key, hentryp[ii].val);
 
       char* key;
       char* val;
@@ -181,7 +181,7 @@ chxj_save_cookie(request_rec *r)
   }
   for (ii=0; ii<err_headers->nelts; ii++) {
     if (strcasecmp(err_hentryp[ii].key, "Set-Cookie") == 0) {
-      DBG(r, "REQ[%X] cookie=[%s:%s]", (unsigned int)(apr_size_t)r, err_hentryp[ii].key, err_hentryp[ii].val);
+      DBG(r, "REQ[%X] cookie=[%s:%s]", TO_ADDR(r), err_hentryp[ii].key, err_hentryp[ii].val);
 
       char* key;
       char* val;
@@ -809,7 +809,7 @@ chxj_add_cookie_parameter(request_rec *r, char *value, cookie_t *cookie)
   char *dst;
   char *name = "";
 
-  DBG(r, "start chxj_add_cookie_parameter() cookie_id=[%s]", (cookie) ? cookie->cookie_id : NULL);
+  DBG(r, "REQ[%X] start chxj_add_cookie_parameter() cookie_id=[%s]", TO_ADDR(r), (cookie) ? cookie->cookie_id : NULL);
 
   dst = apr_pstrdup(r->pool, value);
 
@@ -820,7 +820,7 @@ chxj_add_cookie_parameter(request_rec *r, char *value, cookie_t *cookie)
     goto on_error;
 
   if (chxj_cookie_check_host(r, value) != 0) {
-    DBG(r, "end chxj_add_cookie_parameter()(check host)");
+    DBG(r, "REQ[%X] end chxj_add_cookie_parameter()(check host)", TO_ADDR(r));
     goto on_error;
   }
 
@@ -832,18 +832,27 @@ chxj_add_cookie_parameter(request_rec *r, char *value, cookie_t *cookie)
 
   qs = strchr(dst, '?');
   if (qs) {
+    char *sv_qs = qs;
+    qs = chxj_delete_chxj_cc_param(r, ++qs);
+    DBG(r, "REQ[%X] qs:[%s]",TO_ADDR(r), qs);
+    *sv_qs = 0;
+    if (qs && strlen(qs)) {
+      dst = apr_psprintf(r->pool, "%s?%s", dst, qs);
+    }
+  }
+  if (qs) {
     dst = apr_psprintf(r->pool, "%s&%s=%s%s", dst, CHXJ_COOKIE_PARAM, cookie->cookie_id, name);
   }
   else {
     dst = apr_psprintf(r->pool, "%s?%s=%s%s", dst, CHXJ_COOKIE_PARAM, cookie->cookie_id, name);
   }
 
-  DBG(r, "end   chxj_add_cookie_parameter() dst=[%s]", dst);
+  DBG(r, "REQ[%X] end   chxj_add_cookie_parameter() dst=[%s]", TO_ADDR(r), dst);
 
   return dst;
 
 on_error:
-  DBG(r, "end   chxj_add_cookie_parameter() (on_error)");
+  DBG(r, "REQ[%X] end   chxj_add_cookie_parameter() (on_error)", TO_ADDR(r));
   return dst;
 }
 

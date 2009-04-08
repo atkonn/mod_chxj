@@ -49,6 +49,7 @@ extern char *chxj_form_action_to_hidden_tag(
   int softbank,
   chxjconvrule_entry *entryp
   );
+extern char *chxj_delete_chxj_cc_param(request_rec *r, const char *str);
 
 #endif
 /*
