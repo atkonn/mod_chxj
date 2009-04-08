@@ -249,7 +249,7 @@ chxj_headers_fixup(request_rec *r)
     break;
   
   default:
-    DBG(r, "REQ[%X] end chxj_headers_fixup() (not mobile)", (unsigned int)(apr_size_t)r);
+    DBG(r, "REQ[%X] end chxj_headers_fixup() (not mobile) spec->device_name[%s]", (unsigned int)(apr_size_t)r, spec->device_name);
     return DECLINED;
 
   }
@@ -1630,7 +1630,7 @@ chxj_insert_filter(request_rec *r)
     break;
 
   default:
-    DBG(r, "REQ[%X] end chxj_insert_filter() Unknown spec type.", (unsigned int)(apr_size_t)r);
+    DBG(r, "REQ[%X] end chxj_insert_filter() Unknown spec type(%d).", (unsigned int)(apr_size_t)r, spec->html_spec_type);
     return;
   }
 
