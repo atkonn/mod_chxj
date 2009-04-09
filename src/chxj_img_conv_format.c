@@ -1589,22 +1589,23 @@ s_img_down_sizing(MagickWand *magick_wand, request_rec *r, device_table *spec)
 
 
 static apr_status_t 
-s_send_cache_file(device_table *UNUSED(spec), query_string_param_t *query_string, request_rec *r, const char *tmpfile)
+s_send_cache_file(device_table *spec, query_string_param_t *query_string, request_rec *r, const char *tmpfile)
 {
   apr_status_t rv;
   apr_finfo_t  st;
   apr_file_t   *fout;
   apr_size_t   sendbyte;
   char         *contentLength;
+  mod_chxj_config *conf = ap_get_module_config(r->per_dir_config, &chxj_module);
 
   rv = apr_stat(&st, tmpfile, APR_FINFO_MIN, r->pool);
   if (rv != APR_SUCCESS)
     return HTTP_NOT_FOUND;
 
-  DBG(r, "mode:[%d]",    query_string->mode);
-  DBG(r, "name:[%s]",    query_string->name);
-  DBG(r, "offset:[%ld]", query_string->offset);
-  DBG(r, "count:[%ld]",  query_string->count);
+  DBG(r, "REQ[%X] mode:[%d]",    TO_ADDR(r), query_string->mode);
+  DBG(r, "REQ[%X] name:[%s]",    TO_ADDR(r), query_string->name);
+  DBG(r, "REQ[%X] offset:[%ld]", TO_ADDR(r), query_string->offset);
+  DBG(r, "REQ[%X] count:[%ld]",  TO_ADDR(r), query_string->count);
 
   if (query_string->mode != IMG_CONV_MODE_EZGET && query_string->name == NULL) {
     contentLength = apr_psprintf(r->pool, "%d", (int)st.size);
@@ -1645,6 +1646,12 @@ s_send_cache_file(device_table *UNUSED(spec), query_string_param_t *query_string
         return HTTP_NOT_FOUND;
       }
     }
+    if (conf->image_copyright) {
+      DBG(r, "REQ[%X] Add COPYRIGHT Header for SoftBank [%s]", TO_ADDR(r), conf->image_copyright);
+      if (spec->html_spec_type == CHXJ_SPEC_Jhtml ||  spec->html_spec_type == CHXJ_SPEC_Jxhtml) {
+        apr_table_setn(r->headers_out, "x-jphone-copyright", "no-transfer");
+      }
+    }
     rv = apr_file_open(&fout, tmpfile, 
       APR_READ | APR_BINARY, APR_OS_DEFAULT, r->pool);
     if (rv != APR_SUCCESS) {
@@ -1654,7 +1661,7 @@ s_send_cache_file(device_table *UNUSED(spec), query_string_param_t *query_string
     ap_send_fd(fout, r, 0, st.size, &sendbyte);
     apr_file_close(fout);
     ap_rflush(r);
-    DBG(r, "send file data[%d]byte", (int)sendbyte);
+    DBG(r, "REQ[%X] send file data[%d]byte", TO_ADDR(r), (int)sendbyte);
   }
   else
   if (query_string->mode == IMG_CONV_MODE_EZGET) {
@@ -1749,11 +1756,12 @@ s_send_original_file(request_rec *r, const char *originalfile)
 
 
 static apr_status_t 
-s_header_only_cache_file(device_table *UNUSED(spec), query_string_param_t *query_string, request_rec *r, const char *tmpfile)
+s_header_only_cache_file(device_table *spec, query_string_param_t *query_string, request_rec *r, const char *tmpfile)
 {
   apr_status_t rv;
   apr_finfo_t  st;
   char         *contentLength;
+  mod_chxj_config *conf = ap_get_module_config(r->per_dir_config, &chxj_module);
 
   DBG(r, "REQ[%X] start s_header_only_cache_file()", TO_ADDR(r));
 
@@ -1845,6 +1853,12 @@ s_header_only_cache_file(device_table *UNUSED(spec), query_string_param_t *query
       apr_table_setn(r->headers_out, "Content-Length", (const char*)contentLength);
   
       DBG(r, "REQ[%X] Content-Length:[%d]", TO_ADDR(r), (int)st.size);
+    }
+  }
+  if (conf->image_copyright) {
+    DBG(r, "REQ[%X] Add COPYRIGHT Header for SoftBank [%s]", TO_ADDR(r), conf->image_copyright);
+    if (spec->html_spec_type == CHXJ_SPEC_Jhtml ||  spec->html_spec_type == CHXJ_SPEC_Jxhtml) {
+      apr_table_setn(r->headers_out, "x-jphone-copyright", "no-transfer");
     }
   }
   

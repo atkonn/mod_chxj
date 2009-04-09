@@ -61,6 +61,8 @@ char *default_chxj_serf_get(request_rec *r, apr_pool_t *ppool, const char *url_p
 char *(*chxj_serf_get)(request_rec *r, apr_pool_t *ppool, const char *url_path, int set_headers_flag, apr_size_t *response_len) = default_chxj_serf_get;
 char *default_chxj_serf_post(request_rec *r, apr_pool_t *ppool, const char *url_path, char *post_data, apr_size_t post_data_len, int set_headers_flag, apr_size_t *response_len, int *response_code);
 char *(*chxj_serf_post)(request_rec *r, apr_pool_t *ppool, const char *url_path, char *post_data, apr_size_t post_data_len, int set_headers_flag, apr_size_t *response_len, int *response_code) = default_chxj_serf_post;
+apr_table_t *default_chxj_serf_head(request_rec *r, apr_pool_t *ppool, const char *url_path, int *response_code);
+apr_table_t *(*chxj_serf_head)(request_rec *r, apr_pool_t *ppool, const char *url_path, int *response_code) = default_chxj_serf_head;
 
 
 void
@@ -495,6 +497,118 @@ default_chxj_serf_post(request_rec *r, apr_pool_t *ppool, const char *url_path, 
   *response_code = handler_ctx.response_code;
   DBG(r, "REQ:[%X] end chxj_serf_post()", (unsigned int)(apr_size_t)r);
   return ret;
+}
+
+
+apr_table_t *
+default_chxj_serf_head(request_rec *r, apr_pool_t *ppool, const char *url_path, int *response_code)
+{
+  apr_pool_t *pool;
+  apr_uri_t url;
+  apr_status_t rv;
+  apr_sockaddr_t *address = NULL;
+
+  serf_context_t *context;
+  serf_connection_t *connection;
+
+  app_ctx_t app_ctx;
+  handler_ctx_t handler_ctx;
+  char *ret;
+
+  DBG(r, "REQ:[%X] start chxj_serf_head()", (unsigned int)(apr_size_t)r);
+
+
+  s_init(ppool, &pool);
+
+  apr_uri_parse(pool, url_path, &url);
+  if (!url.port) {
+    url.port = apr_uri_port_of_scheme(url.scheme);
+  }
+  if (!url.port) {
+    url.port = 80;
+  }
+  if (!url.path) {
+    url.path = "/";
+  }
+  if (!url.hostname) {
+    url.hostname = "localhost";
+  }
+  if (url.query) {
+    url.path = apr_psprintf(pool, "%s?%s", url.path, url.query);
+  }
+
+  rv = apr_sockaddr_info_get(&address, url.hostname, APR_UNSPEC, url.port, 0, pool);
+  if (rv != APR_SUCCESS) {
+    char buf[256];
+    ERR(r, "apr_sockaddr_info_get() failed: rv:[%d|%s]", rv, apr_strerror(rv, buf, 256));
+    return NULL;
+  }
+  memset(&app_ctx, 0, sizeof(app_ctx_t));
+
+  app_ctx.bkt_alloc = serf_bucket_allocator_create(pool, NULL, NULL);
+  if (strcasecmp(url.scheme, "https") == 0) {
+    app_ctx.ssl_flag = 1;
+  }
+
+  context = serf_context_create(pool);
+  connection = serf_connection_create(context, address, s_connection_setup, &app_ctx, s_connection_closed, &app_ctx, pool);
+
+  memset(&handler_ctx, 0, sizeof(handler_ctx_t));
+  handler_ctx.requests_outstanding = 0;
+  handler_ctx.host = url.hostinfo;
+  /*========================================================================================================*/
+  /* XXX Maybe, libserf doesn't support the HEAD request. Because the part body is waited for with polling. */
+  /*========================================================================================================*/
+  handler_ctx.method = "GET";
+  handler_ctx.path = url.path;
+  handler_ctx.user_agent = (char *)apr_table_get(r->headers_in, CHXJ_HTTP_USER_AGENT);
+  if (! handler_ctx.user_agent) {
+    handler_ctx.user_agent = (char *)apr_table_get(r->headers_in, HTTP_USER_AGENT);
+  }
+  handler_ctx.post_data     = NULL;
+  handler_ctx.post_data_len = 0;
+
+  handler_ctx.acceptor     = s_accept_response;
+  handler_ctx.acceptor_ctx = &app_ctx;
+  handler_ctx.handler      = s_handle_response;
+  handler_ctx.pool         = pool;
+  handler_ctx.r            = r;
+  handler_ctx.response_len = 0;
+  handler_ctx.response     = NULL;
+
+  serf_connection_request_create(connection, s_setup_request, &handler_ctx);
+
+  while (1) {
+    rv = serf_context_run(context, SERF_DURATION_FOREVER, pool);
+    if (APR_STATUS_IS_TIMEUP(rv))
+      continue;
+    if (rv) {
+      char buf[200];
+      ERR(r, "Error running context: (%d) %s\n", rv, apr_strerror(rv, buf, sizeof(buf)));
+      break;
+    }
+    if (!apr_atomic_read32(&handler_ctx.requests_outstanding)) {
+      if (handler_ctx.rv != APR_SUCCESS) {
+        char buf[200];
+        ERR(r, "Error running context: (%d) %s\n", handler_ctx.rv, apr_strerror(handler_ctx.rv, buf, sizeof(buf)));
+      }
+      break;
+    }
+  }
+
+  DBG(r, "end of serf request");
+  DBG(r, "response_code:[%d]", handler_ctx.response_code);
+  DBG(r, "response:[%s][%" APR_SIZE_T_FMT "]", handler_ctx.response, handler_ctx.response_len);
+  serf_connection_close(connection);
+  if (handler_ctx.response) {
+    ret = apr_pstrdup(ppool, handler_ctx.response);
+  }
+  else {
+    ret = apr_pstrdup(ppool, "");
+  }
+  *response_code = handler_ctx.response_code;
+  DBG(r, "REQ:[%X] end chxj_serf_post()", (unsigned int)(apr_size_t)r);
+  return handler_ctx.headers_out;
 }
 /*
  * vim:ts=2 et
