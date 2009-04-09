@@ -403,7 +403,7 @@ s_img_conv_format_from_file(
   /* Create Workfile Name                                                     */
   /*--------------------------------------------------------------------------*/
   tmpfile = s_create_workfile_name(r, conf, user_agent, qsp);
-  DBG(r,"workfile=[%s]", tmpfile);
+  DBG(r,"REQ[%X] workfile=[%s]", TO_ADDR(r), tmpfile);
 
   rv = apr_stat(&st, r->filename, APR_FINFO_MIN, r->pool);
   if (rv != APR_SUCCESS)
@@ -424,7 +424,7 @@ s_img_conv_format_from_file(
         return rv;
     }
   
-    DBG(r,"color=[%d]", spec->color);
+    DBG(r,"REQ[%X] color=[%d]", TO_ADDR(r), spec->color);
     if (! r->header_only)  {
       rv = s_send_cache_file(spec, qsp,r, tmpfile);
     }
@@ -519,13 +519,13 @@ s_create_cache_file(request_rec          *r,
     readdata = apr_palloc(r->pool, st->size);
     rv = apr_file_read_full(fin, (void*)readdata, st->size, &readbyte);
     if (rv != APR_SUCCESS || readbyte != st->size) {
-      DBG(r,"file read failed.[%s]", r->filename);
+      DBG(r,"REQ[%X] file read failed.[%s]", TO_ADDR(r), r->filename);
       apr_file_close(fin);
   
       return HTTP_NOT_FOUND;
     }
   }
-  DBG(r,"start img convert");
+  DBG(r,"REQ[%X] start img convert", TO_ADDR(r));
 
 
   magick_wand = NewMagickWand();
@@ -561,7 +561,7 @@ s_create_cache_file(request_rec          *r,
       /*
        * The size of the image is changed.
        */
-      DBG(r,"call s_fixup_size()");
+      DBG(r,"REQ[%X] call s_fixup_size()", TO_ADDR(r));
   
       if ((magick_wand = s_fixup_size(magick_wand, r, spec, qsp)) == NULL) 
         return HTTP_NOT_FOUND;
@@ -571,7 +571,7 @@ s_create_cache_file(request_rec          *r,
     /*
      * The colors of the image is changed.
      */
-    DBG(r,"call s_fixup_color()");
+    DBG(r,"REQ[%X] call s_fixup_color()", TO_ADDR(r));
   
     if ((magick_wand = s_fixup_color(magick_wand, r,spec, mode)) == NULL) 
       return HTTP_NOT_FOUND;
@@ -579,7 +579,7 @@ s_create_cache_file(request_rec          *r,
     /*
      * DEPTH of the image is changed.
      */
-    DBG(r,"call s_fixup_depth()");
+    DBG(r,"REQ[%X] call s_fixup_depth()", TO_ADDR(r));
   
     if ((magick_wand = s_fixup_depth(magick_wand, r, spec)) == NULL) 
       return HTTP_NOT_FOUND;
@@ -589,7 +589,7 @@ s_create_cache_file(request_rec          *r,
       /*
        * The size of the image is changed.
        */
-      DBG(r,"call s_fixup_size()");
+      DBG(r,"REQ[%X] call s_fixup_size()", TO_ADDR(r));
       if ((magick_wand = s_fixup_size(magick_wand, r, spec, qsp)) == NULL) 
         return HTTP_NOT_FOUND;
     }
@@ -621,9 +621,17 @@ s_create_cache_file(request_rec          *r,
           fixFormatFlag = 1;
         }
       }
+      else if (STRCASEEQ('b','B',"bmp",nowFormat)) {
+        if (spec->available_bmp4 || spec->available_bmp2) {
+          if (s_convert_to_bmp(magick_wand, r, spec)) {
+            return HTTP_NOT_FOUND;
+          }
+          fixFormatFlag = 1;
+        }
+      }
     }
 
-    DBG(r,"start convert and compression");
+    DBG(r,"REQ[%X] start convert and compression", TO_ADDR(r));
   
     if (! fixFormatFlag) {
       if (spec->available_jpeg) {
@@ -1747,14 +1755,18 @@ s_header_only_cache_file(device_table *UNUSED(spec), query_string_param_t *query
   apr_finfo_t  st;
   char         *contentLength;
 
-  rv = apr_stat(&st, tmpfile, APR_FINFO_MIN, r->pool);
-  if (rv != APR_SUCCESS)
-    return HTTP_NOT_FOUND;
+  DBG(r, "REQ[%X] start s_header_only_cache_file()", TO_ADDR(r));
 
-  DBG(r, "mode:[%d]",    query_string->mode);
-  DBG(r, "name:[%s]",    query_string->name);
-  DBG(r, "offset:[%ld]", query_string->offset);
-  DBG(r, "count:[%ld]",  query_string->count);
+  rv = apr_stat(&st, tmpfile, APR_FINFO_MIN, r->pool);
+  if (rv != APR_SUCCESS) {
+    DBG(r, "REQ[%X] end s_header_only_cache_file()", TO_ADDR(r));
+    return HTTP_NOT_FOUND;
+  }
+
+  DBG(r, "REQ[%X] mode:[%d]",    TO_ADDR(r), query_string->mode);
+  DBG(r, "REQ[%X] name:[%s]",    TO_ADDR(r), query_string->name);
+  DBG(r, "REQ[%X] offset:[%ld]", TO_ADDR(r), query_string->offset);
+  DBG(r, "REQ[%X] count:[%ld]",  TO_ADDR(r), query_string->count);
 
   if (query_string->mode != IMG_CONV_MODE_EZGET && query_string->name == NULL) {
     contentLength = apr_psprintf(r->pool, "%d", (int)st.size);
@@ -1790,7 +1802,7 @@ s_header_only_cache_file(device_table *UNUSED(spec), query_string_param_t *query
         ap_set_content_type(r, "image/bmp");
       }
       else {
-        ERR(r, "detect unknown file");
+        ERR(r, "REQ[%X] detect unknown file", TO_ADDR(r));
         return HTTP_NOT_FOUND;
       }
     }
@@ -1832,10 +1844,11 @@ s_header_only_cache_file(device_table *UNUSED(spec), query_string_param_t *query
       contentLength = apr_psprintf(r->pool, "%ld", query_string->count);
       apr_table_setn(r->headers_out, "Content-Length", (const char*)contentLength);
   
-      DBG(r, "Content-Length:[%d]", (int)st.size);
+      DBG(r, "REQ[%X] Content-Length:[%d]", TO_ADDR(r), (int)st.size);
     }
   }
   
+  DBG(r, "REQ[%X] end s_header_only_cache_file()", TO_ADDR(r));
   return OK;
 }
 
