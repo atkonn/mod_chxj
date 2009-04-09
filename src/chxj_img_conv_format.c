@@ -252,14 +252,14 @@ chxj_img_conv_format_handler(request_rec *r)
   if (! r->handler || 
       (r->handler && !STRCASEEQ('c','C',"chxj-picture",r->handler) && !STRCASEEQ('c','C',"chxj-qrcode",r->handler))) {
     DBG(r, "REQ[%X] Response Code:[%d]", (unsigned int)(apr_size_t)r, r->status);
-    DBG(r, "REQ[%X] end chxj_img_conv_format_handler() r->handler is[%s]", (unsigned int)(apr_size_t)r, r->handler);
+    DBG(r, "REQ[%X] end chxj_img_conv_format_handler() r->handler is[%s]", TO_ADDR(r), r->handler);
     return DECLINED;
   }
 
   qsp = s_get_query_string_param(r);
   conf = chxj_get_module_config(r->per_dir_config, &chxj_module);
   if (conf == NULL) {
-    DBG(r, "REQ[%X] end chxj_img_conv_format_handler() conf is null", (unsigned int)(apr_size_t)r);
+    DBG(r, "REQ[%X] end chxj_img_conv_format_handler() conf is null",TO_ADDR(r));
     return DECLINED;
   }
 
