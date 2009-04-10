@@ -305,6 +305,11 @@ tag_handler jxhtml_handler[] = {
     s_jxhtml_chxjif_tag,
     NULL,
   },
+  /* tagCHXJRAW */
+  {
+    s_jxhtml_chxjif_tag,
+    NULL,
+  },
   /* tagNOBR */
   {
     NULL,

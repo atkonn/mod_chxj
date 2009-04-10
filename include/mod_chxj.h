@@ -258,6 +258,7 @@ typedef enum {
   tagOPTION,
   tagDIV,
   tagCHXJIF,  
+  tagCHXJRAW,  
   tagNOBR,  
   tagSMALL,  
   tagSTYLE,  

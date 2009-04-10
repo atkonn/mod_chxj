@@ -3029,7 +3029,7 @@ static const command_rec cmds[] = {
     NULL,
     OR_ALL,
     "for CustomLog directive. mod_chxj's internal POST log environment name.(Default:chxj-post-log)"),
-  {NULL}
+  {NULL,{NULL},NULL,0,0,NULL},
 };
 
 
