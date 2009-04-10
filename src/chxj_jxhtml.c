@@ -24,6 +24,7 @@
 #include "chxj_str_util.h"
 #include "chxj_header_inf.h"
 #include "chxj_jreserved_tag.h"
+#include "chxj_conv_z2h.h"
 
 
 #define GET_JXHTML(X) ((jxhtml_t *)(X))
@@ -1634,6 +1635,11 @@ s_jxhtml_start_input_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   if (value && *value) {
+    if (STRCASEEQ('s','S',"submit",type) || STRCASEEQ('r','R',"reset",type)) {
+      apr_size_t value_len = strlen(value);
+      value = chxj_conv_z2h(r, value, &value_len, jxhtml->entryp);
+    }
+
     W_L(" value=\"");
     W_V(chxj_add_slash_to_doublequote(doc->pool, value));
     W_L("\"");
@@ -2661,6 +2667,7 @@ s_jxhtml_text_tag(void* pdoc, Node* child)
   int          ii;
   int          tdst_len;
   request_rec* r;
+  apr_size_t   z2h_input_len;
 
   jxhtml = GET_JXHTML(pdoc);
   doc   = jxhtml->doc;
@@ -2711,6 +2718,9 @@ s_jxhtml_text_tag(void* pdoc, Node* child)
       }
     }
   }
+  z2h_input_len = strlen(tdst);
+  tdst = chxj_conv_z2h(r, tdst, &z2h_input_len, jxhtml->entryp);
+
   W_V(tdst);
   return jxhtml->out;
 }
