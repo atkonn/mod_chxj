@@ -1869,6 +1869,9 @@ s_chtml30_start_input_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   if (attr_value) {
+    apr_size_t value_len = strlen(attrvalue);
+    attr_value = chxj_conv_z2h(r, attr_value, &value_len, chtml30->entryp);
+
     W_L(" value=\"");
     W_V(chxj_add_slash_to_doublequote(doc->pool, attr_value));
     W_L("\"");
@@ -3987,6 +3990,7 @@ s_chtml30_text_tag(void *pdoc, Node *child)
   char        one_byte[2];
   int         ii;
   int         tdst_len;
+  apr_size_t  z2h_input_len;
 
   chtml30 = GET_CHTML30(pdoc);
   doc     = chtml30->doc;
@@ -4033,6 +4037,9 @@ s_chtml30_text_tag(void *pdoc, Node *child)
       tdst = qs_out_apr_pstrcat(r, tdst, one_byte, &tdst_len);
     }
   }
+  z2h_input_len = strlen(tdst);
+  tdst = chxj_conv_z2h(r, tdst, &z2h_input_len, chtml30->entryp);
+
   W_V(tdst);
   return chtml30->out;
 }
