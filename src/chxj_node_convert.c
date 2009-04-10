@@ -808,6 +808,15 @@ chxj_node_convert(
           }
         }
       }
+      /*----------------------------------------------------------------------*/
+      /* <CHXJ:RAW>                                                           */
+      /*----------------------------------------------------------------------*/
+      else
+      if (strcasecmp(name, "chxj:raw") == 0) {
+        if (handlers[tagCHXJRAW].start_tag_handler) {
+           handlers[tagCHXJRAW].start_tag_handler(pdoc, child);
+        }
+      }
       else {
         chxj_node_convert(spec, r, pdoc, doc, child, indent+1);
       }
