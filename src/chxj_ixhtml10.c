@@ -310,6 +310,11 @@ tag_handler ixhtml10_handler[] = {
     s_ixhtml10_chxjif_tag,
     NULL,
   },
+  /* tagCHXJRAW */
+  {
+    s_ixhtml10_chxjif_tag,
+    NULL,
+  },
   /* tagNOBR */
   {
     s_ixhtml10_start_nobr_tag,
