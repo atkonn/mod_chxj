@@ -1870,8 +1870,8 @@ s_chtml30_start_input_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   if (attr_value) {
-    if (STRCASEEQ('s','S',"submit",type) || STRCASEEQ('r','R',"reset",type)) {
-      apr_size_t value_len = strlen(attrvalue);
+    if (STRCASEEQ('s','S',"submit",attr_type) || STRCASEEQ('r','R',"reset",attr_type)) {
+      apr_size_t value_len = strlen(attr_value);
       attr_value = chxj_conv_z2h(r, attr_value, &value_len, chtml30->entryp);
     }
 
