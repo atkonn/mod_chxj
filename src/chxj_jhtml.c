@@ -25,6 +25,7 @@
 #include "chxj_header_inf.h"
 #include "chxj_jreserved_tag.h"
 #include "chxj_serf.h"
+#include "chxj_conv_z2h.h"
 
 
 #define GET_JHTML(X) ((jhtml_t *)(X))
@@ -1824,6 +1825,11 @@ s_jhtml_start_input_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   if (attr_value) {
+    if (STRCASEEQ('s','S',"submit",attr_type) || STRCASEEQ('r','R',"reset",attr_type)) {
+      apr_size_t value_len = strlen(attr_value);
+      attr_value = chxj_conv_z2h(r, attr_value, &value_len, jhtml->entryp);
+    }
+
     W_L(" value=\"");
     W_V(chxj_add_slash_to_doublequote(doc->pool, attr_value));
     W_L("\"");
@@ -3460,17 +3466,18 @@ s_jhtml_end_b_tag(void* pdoc, Node* UNUSED(child))
 }
 
 static char*
-s_jhtml_text_tag(void* pdoc, Node* child)
+s_jhtml_text_tag(void *pdoc, Node *child)
 {
-  jhtml_t*     jhtml;
-  Doc*         doc;
-  char*        textval;
-  char*        tmp;
-  char*        tdst;
+  jhtml_t      *jhtml;
+  Doc          *doc;
+  char         *textval;
+  char         *tmp;
+  char         *tdst;
   char         one_byte[2];
   int          ii;
   int          tdst_len;
-  request_rec* r;
+  request_rec  *r;
+  apr_size_t   z2h_input_len;
 
   jhtml = GET_JHTML(pdoc);
   doc   = jhtml->doc;
@@ -3522,6 +3529,9 @@ s_jhtml_text_tag(void* pdoc, Node* child)
       }
     }
   }
+  z2h_input_len = strlen(tdst);
+  tdst = chxj_conv_z2h(r, tdst, &z2h_input_len, jhtml->entryp);
+
   W_V(tdst);
   DBG(r, "end s_jhtml_text_tag()");
   return jhtml->out;
