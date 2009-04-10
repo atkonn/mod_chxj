@@ -295,6 +295,11 @@ tag_handler chtml20_handler[] = {
     s_chtml20_chxjif_tag,
     NULL,
   },
+  /* tagCHXJRAW */
+  {
+    s_chtml20_chxjif_tag,
+    NULL,
+  },
   /* tagNOBR */
   {
     NULL,

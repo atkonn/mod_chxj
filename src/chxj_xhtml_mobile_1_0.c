@@ -295,6 +295,11 @@ tag_handler xhtml_handler[] = {
     s_xhtml_1_0_chxjif_tag,
     NULL,
   },
+  /* tagCHXJRAW */
+  {
+    s_xhtml_1_0_chxjif_tag,
+    NULL,
+  },
   /* tagNOBR */
   {
     NULL,

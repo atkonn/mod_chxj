@@ -230,7 +230,7 @@ qs_parse_string(Doc *doc, const char *src, int srclen)
         }
         else
         if (doc->parse_mode == PARSE_MODE_NO_PARSE) {
-          if (STRCASEEQ('c','C',"chxj:if",&node->name[1]) || STRCASEEQ('p','P',"plaintext",&node->name[1])) {
+          if (STRCASEEQ('c','C',"chxj:if",&node->name[1]) || STRCASEEQ('p','P',"plaintext",&node->name[1]) || STRCASEEQ('c','C',"chxj:raw",&node->name[1])) {
             if (doc->now_parent_node->parent != NULL) {
               doc->now_parent_node = doc->now_parent_node->parent;
               doc->parse_mode = PARSE_MODE_CHTML;
@@ -257,7 +257,7 @@ qs_parse_string(Doc *doc, const char *src, int srclen)
           continue;
       }
 
-      if (doc->parse_mode == PARSE_MODE_CHTML && STRCASEEQ('c','C',"chxj:if", node->name)) {
+      if (doc->parse_mode == PARSE_MODE_CHTML && (STRCASEEQ('c','C',"chxj:if", node->name) || STRCASEEQ('c','C',"chxj:raw",node->name))) {
         Attr *parse_attr;
         doc->parse_mode = PARSE_MODE_NO_PARSE;
         doc->now_parent_node = node;
