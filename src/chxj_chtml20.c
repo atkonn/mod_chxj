@@ -1978,8 +1978,10 @@ s_chtml20_start_input_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   if (attr_value) {
-    apr_size_t value_len = strlen(attr_value);
-    attr_value = chxj_conv_z2h(r, attr_value, &value_len, chtml20->entryp);
+    if (STRCASEEQ('s','S',"submit",type) || STRCASEEQ('r','R',"reset",type)) {
+      apr_size_t value_len = strlen(attr_value);
+      attr_value = chxj_conv_z2h(r, attr_value, &value_len, chtml20->entryp);
+    }
 
     W_L(" value=\"");
     W_V(chxj_add_slash_to_doublequote(doc->pool, attr_value));
