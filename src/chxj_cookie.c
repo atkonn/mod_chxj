@@ -688,16 +688,16 @@ valid_domain(request_rec *r, const char *value)
   char *val;
   char *pstat;
   char *p = apr_pstrdup(r->pool, value);
-  const char *host = apr_table_get(r->headers_in, HTTP_HOST);
+  char *host = (char *)apr_table_get(r->headers_in, HTTP_HOST);
 
   DBG(r, "REQ[%X] start valid_domain() value:[%s]", TO_ADDR(r), value);
-  DBG(r, "REQ[%X] host:[%s]", TO_ADDR(r), host);
-  host = s_cut_until_end_hostname(r, host);
-  DBG(r, "REQ[%X] host:[%s](after s_cut_until_end_hostname())", TO_ADDR(r), host);
   if (!host) {
     DBG(r, "REQ[%X] end valid_domain() value:[%s]", TO_ADDR(r), value);
     return CHXJ_TRUE;
   }
+  DBG(r, "REQ[%X] host:[%s]", TO_ADDR(r), host);
+  host = s_cut_until_end_hostname(r, apr_pstrdup(r->pool, host));
+  DBG(r, "REQ[%X] host:[%s](after s_cut_until_end_hostname())", TO_ADDR(r), host);
 
   name = apr_strtok(p,"=", &pstat);
   name = qs_trim_string(r->pool, name);
