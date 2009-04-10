@@ -2053,8 +2053,10 @@ s_chtml10_start_input_tag(void *pdoc, Node *node)
   }
 
   if (value && *value != 0) {
-    apr_size_t value_len = strlen(value);
-    value = chxj_conv_z2h(r, value, &value_len, chtml10->entryp);
+    if (STRCASEEQ('s','S',"submit",type) || STRCASEEQ('r','R',"reset",type)) {
+      apr_size_t value_len = strlen(value);
+      value = chxj_conv_z2h(r, value, &value_len, chtml10->entryp);
+    }
 
     W_L(" value=\"");
     W_V(chxj_add_slash_to_doublequote(doc->pool, value));
