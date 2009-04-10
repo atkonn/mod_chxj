@@ -176,25 +176,21 @@ char *
 chxj_cookie_db_lock_name_create(request_rec *r, const char *dir)
 {
   char *dst;
-  DBG(r, "start  chxj_cookie_db_lock_name_create()");
+  DBG(r, "REQ[%X] start  chxj_cookie_db_lock_name_create()", TO_ADDR(r));
 
   if (!dir) {
-    DBG(r, " ");
     dst = apr_pstrdup(r->pool, DEFAULT_COOKIE_DB_DIR);
-    DBG(r, " ");
   }
   else {
     dst = apr_pstrdup(r->pool, dir);
-    DBG(r, " ");
   }
-  DBG(r, "dst[strlen(dst)-1]=[%c]", dst[strlen(dst)-1]);
   if (dst[strlen(dst)-1] != '/') {
     dst = apr_pstrcat(r->pool, dst, "/", COOKIE_DB_LOCK_NAME, NULL);
   }
   else {
     dst = apr_pstrcat(r->pool, dst, COOKIE_DB_LOCK_NAME, NULL);
   }
-  DBG(r, "end  chxj_cookie_db_lock_name_create()");
+  DBG(r, "REQ[%X] end  chxj_cookie_db_lock_name_create()", TO_ADDR(r));
   return dst;
 }
 
