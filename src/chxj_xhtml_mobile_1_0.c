@@ -24,6 +24,7 @@
 #include "chxj_buffered_write.h"
 #include "chxj_str_util.h"
 #include "chxj_header_inf.h"
+#include "chxj_conv_z2h.h"
 
 #define GET_XHTML(X) ((xhtml_t*)(X))
 #undef W_L
@@ -1896,6 +1897,11 @@ s_xhtml_1_0_start_input_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   if (value && *value) {
+    if (STRCASEEQ('s','S',"submit",type) || STRCASEEQ('r','R',"reset",type)) {
+      apr_size_t value_len = strlen(value);
+      value = chxj_conv_z2h(r, value, &value_len, xhtml->entryp);
+    }
+
     W_L(" value=\"");
     W_V(chxj_add_slash_to_doublequote(doc->pool, value));
     W_L("\"");
@@ -3992,6 +3998,7 @@ s_xhtml_1_0_text_tag(void *pdoc, Node *child)
   char        one_byte[2];
   int         ii;
   int         tdst_len;
+  apr_size_t  z2h_input_len;
   
   textval = qs_get_node_value(doc,child);
   if (strlen(textval) == 0) {
@@ -4034,6 +4041,9 @@ s_xhtml_1_0_text_tag(void *pdoc, Node *child)
       tdst = qs_out_apr_pstrcat(r, tdst, one_byte, &tdst_len);
     }
   }
+  z2h_input_len = strlen(tdst);
+  tdst = chxj_conv_z2h(r, tdst, &z2h_input_len, xhtml->entryp);
+
   W_V(tdst);
   return xhtml->out;
 }
