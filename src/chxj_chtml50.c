@@ -23,6 +23,7 @@
 #include "chxj_qr_code.h"
 #include "chxj_encoding.h"
 #include "chxj_header_inf.h"
+#include "chxj_conv_z2h.h"
 
 #define GET_CHTML50(X) ((chtml50_t *)(X))
 #undef W_L
@@ -1866,6 +1867,11 @@ s_chtml50_start_input_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   if (attr_value) {
+    if (STRCASEEQ('s','S',"submit",attr_type) || STRCASEEQ('r','R',"reset",attr_type)) {
+      apr_size_t value_len = strlen(attr_value);
+      attr_value = chxj_conv_z2h(r, attr_value, &value_len, chtml50->entryp);
+    }
+
     W_L(" value=\"");
     W_V(chxj_add_slash_to_doublequote(doc->pool, attr_value));
     W_L("\"");
@@ -4050,6 +4056,7 @@ s_chtml50_text_tag(void *pdoc, Node *child)
   char        one_byte[2];
   int         ii;
   int         tdst_len;
+  apr_size_t  z2h_input_len;
 
   chtml50 = GET_CHTML50(pdoc);
   doc     = chtml50->doc;
@@ -4096,6 +4103,8 @@ s_chtml50_text_tag(void *pdoc, Node *child)
       tdst = qs_out_apr_pstrcat(r, tdst, one_byte, &tdst_len);
     }
   }
+  z2h_input_len = strlen(tdst);
+  tdst = chxj_conv_z2h(r, tdst, &z2h_input_len, chtml50->entryp);
   W_V(tdst);
   return chtml50->out;
 }
