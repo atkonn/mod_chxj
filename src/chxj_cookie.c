@@ -465,7 +465,7 @@ chxj_load_cookie(request_rec *r, char *cookie_id)
   char                    *pair;
   char                    *header_cookie;
 
-  DBG(r, "start chxj_load_cookie() cookie_id=[%s]", cookie_id);
+  DBG(r, "REQ[%X] start chxj_load_cookie() cookie_id=[%s]", TO_ADDR(r), cookie_id);
   chxj_cookie_expire_gc(r);
 
   cookie = (cookie_t*)apr_palloc(r->pool, sizeof(cookie_t));
@@ -477,11 +477,11 @@ chxj_load_cookie(request_rec *r, char *cookie_id)
   dconf = chxj_get_module_config(r->per_dir_config, &chxj_module);
   entryp = chxj_apply_convrule(r, dconf->convrules);
   if (! entryp) {
-    DBG(r, "end chxj_load_cookie() no pattern");
+    DBG(r, "REQ[%X] end chxj_load_cookie() no pattern", TO_ADDR(r));
     goto on_error0;
   }
   if (! (entryp->action & CONVRULE_COOKIE_ON_BIT)) {
-    DBG(r, "end chxj_load_cookie() CookieOff");
+    DBG(r, "REQ[%X] end chxj_load_cookie() CookieOff", TO_ADDR(r));
     goto on_error0;
   }
   load_cookie_table = apr_table_make(r->pool, 0);
@@ -515,7 +515,7 @@ chxj_load_cookie(request_rec *r, char *cookie_id)
   }
 
   if (load_string) {
-    DBG(r, "load_string=[%s]", load_string);
+    DBG(r, "REQ[%X] load_string=[%s]", TO_ADDR(r), load_string);
     header_cookie = apr_palloc(r->pool, 1);
     header_cookie[0] = 0;
     for (;;) {
@@ -525,7 +525,7 @@ chxj_load_cookie(request_rec *r, char *cookie_id)
       load_string = NULL;
       if (!pair) break;
 
-      DBG(r, "Cookie:[%s]", pair);
+      DBG(r, "REQ[%X] Cookie:[%s]", TO_ADDR(r), pair);
 
       tmp_pair = apr_pstrdup(r->pool, pair);
       val = strchr(tmp_pair, '=');
@@ -533,7 +533,7 @@ chxj_load_cookie(request_rec *r, char *cookie_id)
         key = tmp_pair;
         *val++ = 0;
         apr_table_add(load_cookie_table, key, val);
-        DBG(r, "ADD key:[%s] val:[%s]", key, val);
+        DBG(r, "REQ[%X] ADD key:[%s] val:[%s]", TO_ADDR(r), key, val);
       }
       tmp_pair = apr_pstrdup(r->pool, pair);
       tmp_sem = strchr(tmp_pair, ';'); 
@@ -548,7 +548,7 @@ chxj_load_cookie(request_rec *r, char *cookie_id)
       }
     }
     if (strlen(header_cookie)) {
-      DBG(r, "ADD COOKIE to REQUEST HEADER:[%s]", header_cookie);
+      DBG(r, "REQ[%X] ADD COOKIE to REQUEST HEADER:[%s]", TO_ADDR(r), header_cookie);
       apr_table_add(r->headers_in, "Cookie", header_cookie);
     }
   
@@ -566,13 +566,13 @@ chxj_load_cookie(request_rec *r, char *cookie_id)
     apr_table_setn(r->headers_in, "CHXJ_COOKIE_ID", cookie->cookie_id);
   }
 
-  DBG(r, "end   chxj_load_cookie()");
+  DBG(r, "REQ[%X] end   chxj_load_cookie()", TO_ADDR(r));
   return cookie;
 
 
 on_error0:
 
-  DBG(r, "end   chxj_load_cookie()");
+  DBG(r, "REQ[%X] end   chxj_load_cookie()", TO_ADDR(r));
   return NULL;
 }
 
@@ -690,10 +690,14 @@ valid_domain(request_rec *r, const char *value)
   char *p = apr_pstrdup(r->pool, value);
   const char *host = apr_table_get(r->headers_in, HTTP_HOST);
 
-  DBG(r, "start valid_domain() value:[%s]", value);
-  DBG(r, "host:[%s]", host);
-  if (!host)
+  DBG(r, "REQ[%X] start valid_domain() value:[%s]", TO_ADDR(r), value);
+  DBG(r, "REQ[%X] host:[%s]", TO_ADDR(r), host);
+  host = s_cut_until_end_hostname(r, host);
+  DBG(r, "REQ[%X] host:[%s](after s_cut_until_end_hostname())", TO_ADDR(r), host);
+  if (!host) {
+    DBG(r, "REQ[%X] end valid_domain() value:[%s]", TO_ADDR(r), value);
     return CHXJ_TRUE;
+  }
 
   name = apr_strtok(p,"=", &pstat);
   name = qs_trim_string(r->pool, name);
@@ -702,11 +706,12 @@ valid_domain(request_rec *r, const char *value)
   len = strlen(host);
   if (len) {
     if (chxj_strcasenrcmp(r->pool, host, val, strlen(val))) {
-      DBG(r, "not match domain. host domain:[%s] vs value:[%s]", host, val);
+      DBG(r, "REQ[%X] not match domain. host domain:[%s] vs value:[%s]", TO_ADDR(r), host, val);
+      DBG(r, "REQ[%X] end valid_domain() value:[%s]", TO_ADDR(r), value);
       return CHXJ_FALSE;
     }
   }
-  DBG(r, "end valid_domain() value:[%s]", value);
+  DBG(r, "REQ[%X] end valid_domain() value:[%s]", TO_ADDR(r), value);
   return CHXJ_TRUE;
 }
 
