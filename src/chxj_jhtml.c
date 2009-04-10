@@ -1585,7 +1585,7 @@ s_jhtml_start_input_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   if (value && *value) {
-    if (STRCASEEQ('s','S',"submit",type) || STRCASEEQ('r','R',"reset",type)) {
+    if (type && (STRCASEEQ('s','S',"submit",type) || STRCASEEQ('r','R',"reset",type))) {
       apr_size_t value_len = strlen(value);
       value = chxj_conv_z2h(r, value, &value_len, jhtml->entryp);
     }

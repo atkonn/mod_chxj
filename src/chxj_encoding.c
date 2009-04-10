@@ -347,7 +347,7 @@ chxj_encoding_parameter(request_rec *r, const char *value)
 
   int   use_amp_flag;
   
-  DBG(r, "start chxj_encoding_parameter()");
+  DBG(r, "REQ[%X] start chxj_encoding_parameter()", TO_ADDR(r));
 
   src = apr_pstrdup(r->pool, value);
 
@@ -402,7 +402,9 @@ chxj_encoding_parameter(request_rec *r, const char *value)
       if (klen != len) {
         key = chxj_encoding(r, key, &len);
       }
+#if 0  /* XXX:2009/4/10 */
       key = chxj_url_encode(r->pool, key);
+#endif
     }
     val = apr_strtok(pair, "=", &vstat);
     if (! val && sep_pos) {
@@ -415,7 +417,9 @@ chxj_encoding_parameter(request_rec *r, const char *value)
       if (vlen != len) {
         val = chxj_encoding(r, val, &len);
       }
+#if 0  /* XXX:2009/4/10 */
       val = chxj_url_encode(r->pool, val);
+#endif
       if (strlen(param) == 0) {
         param = apr_pstrcat(r->pool, param, key, "=", val, NULL);
       }
@@ -442,7 +446,7 @@ chxj_encoding_parameter(request_rec *r, const char *value)
       }
     }
   }
-  DBG(r, "end   chxj_encoding_parameter()");
+  DBG(r, "REQ[%X] end   chxj_encoding_parameter()", TO_ADDR(r));
 
   if (anchor_pos) {
     return apr_pstrcat(r->pool, src_sv, "?", param, "#", anchor, NULL);
