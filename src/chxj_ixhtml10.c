@@ -22,6 +22,7 @@
 #include "chxj_encoding.h"
 #include "chxj_url_encode.h"
 #include "chxj_str_util.h"
+#include "chxj_conv_z2h.h"
 
 
 #define GET_IXHTML10(X) ((ixhtml10_t *)(X))
@@ -1904,6 +1905,11 @@ s_ixhtml10_start_input_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   if (attr_value) {
+    if (STRCASEEQ('s','S',"submit",attr_type) || STRCASEEQ('r','R',"reset",attr_type)) {
+      apr_size_t value_len = strlen(attr_value);
+      attr_value = chxj_conv_z2h(r, attr_value, &value_len, chtml20->entryp);
+    }
+
     W_L(" value=\"");
     W_V(chxj_add_slash_to_doublequote(doc->pool, attr_value));
     W_L("\"");
@@ -3726,6 +3732,7 @@ s_ixhtml10_text_tag(void* pdoc, Node* child)
   int          ii;
   int          tdst_len;
   request_rec* r;
+  apr_size_t  z2h_input_len;
 
   ixhtml10 = GET_IXHTML10(pdoc);
   doc   = ixhtml10->doc;
@@ -3776,6 +3783,9 @@ s_ixhtml10_text_tag(void* pdoc, Node* child)
       }
     }
   }
+  z2h_input_len = strlen(tdst);
+  tdst = chxj_conv_z2h(r, tdst, &z2h_input_len, ixhtml10->entryp);
+
   W_V(tdst);
   return ixhtml10->out;
 }
