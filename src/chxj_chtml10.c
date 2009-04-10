@@ -24,6 +24,7 @@
 #include "chxj_buffered_write.h"
 #include "chxj_str_util.h"
 #include "chxj_header_inf.h"
+#include "chxj_conv_z2h.h"
 
 #define GET_CHTML10(X) ((chtml10_t *)(X))
 #undef W_L
@@ -2324,6 +2325,9 @@ s_chtml10_start_input_tag(void *pdoc, Node *node)
   }
 
   if (value && *value != 0) {
+    apr_size_t value_len = strlen(value);
+    value = chxj_conv_z2h(r, value, &value_len, chtml10->entryp);
+
     W_L(" value=\"");
     W_V(chxj_add_slash_to_doublequote(doc->pool, value));
     W_L("\"");
@@ -3467,6 +3471,7 @@ s_chtml10_text(void *pdoc, Node *child)
   chtml10_t   *chtml10;
   Doc         *doc;
   request_rec *r;
+  apr_size_t  z2h_input_len;
 
   chtml10 = GET_CHTML10(pdoc);
   doc     = chtml10->doc;
@@ -3518,6 +3523,9 @@ s_chtml10_text(void *pdoc, Node *child)
       tdst = qs_out_apr_pstrcat(r, tdst, one_byte, &tdst_len);
     }
   }
+
+  z2h_input_len = strlen(tdst);
+  tdst = chxj_conv_z2h(r, tdst, &z2h_input_len, chtml10->entryp);
 
   W_V(tdst);
   return chtml10->out;
