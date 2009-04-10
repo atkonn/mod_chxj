@@ -247,7 +247,7 @@ chxj_headers_fixup(request_rec *r)
     break;
   
   default:
-    DBG(r, "REQ[%X] end chxj_headers_fixup() (not mobile) spec->device_name[%s]", (unsigned int)(apr_size_t)r, spec->device_name);
+    DBG(r, "REQ[%X] end chxj_headers_fixup() (not mobile) spec->device_name[%s] User-Agent:[%s]", (unsigned int)(apr_size_t)r, spec->device_name, user_agent);
     return DECLINED;
 
   }
@@ -455,7 +455,9 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
                                                                 cookie);
       }
       if (dst && *len) {
+#if 0 /* KONNO */
         dst = chxj_conv_z2h(r, dst, len, entryp);
+#endif
       }
     }
   }
