@@ -40,12 +40,12 @@ chxj_save_cookie_dbm(request_rec *r, mod_chxj_config *m, const char *cookie_id, 
   apr_dbm_t           *f;
   apr_file_t          *file;
 
-  DBG(r, "start chxj_save_cookie_dbm() cookie_id:[%s]", cookie_id);
+  DBG(r, "REQ[%X] start chxj_save_cookie_dbm() cookie_id:[%s]", TO_ADDR(r), cookie_id);
 
   file = chxj_cookie_db_lock(r);
   if (! file) {
-    ERR(r, "mod_chxj: Can't lock cookie db");
-    DBG(r, "end chxj_save_cookie_dbm() cookie_id:[%s]", cookie_id);
+    ERR(r, "%s:%d REQ[%X] mod_chxj: Can't lock cookie db", __FILE__,__LINE__,TO_ADDR(r));
+    DBG(r, "REQ[%X] end chxj_save_cookie_dbm() cookie_id:[%s]", TO_ADDR(r), cookie_id);
     return CHXJ_FALSE;
   }
 
@@ -65,7 +65,7 @@ chxj_save_cookie_dbm(request_rec *r, mod_chxj_config *m, const char *cookie_id, 
             retval,
             apr_strerror(retval, errstr, 255));
     chxj_cookie_db_unlock(r, file);
-    DBG(r, "end chxj_save_cookie_dbm() cookie_id:[%s]", cookie_id);
+    DBG(r, "REQ[%X] end chxj_save_cookie_dbm() cookie_id:[%s]", TO_ADDR(r), cookie_id);
     return CHXJ_FALSE;
   }
 
@@ -93,13 +93,13 @@ chxj_save_cookie_dbm(request_rec *r, mod_chxj_config *m, const char *cookie_id, 
             apr_strerror(retval, errstr, 255));
     apr_dbm_close(f);
     chxj_cookie_db_unlock(r, file);
-    DBG(r, "end chxj_save_cookie_dbm() cookie_id:[%s]", cookie_id);
+    DBG(r, "REQ[%X] end chxj_save_cookie_dbm() cookie_id:[%s]", TO_ADDR(r), cookie_id);
     return CHXJ_FALSE;
   }
 
   apr_dbm_close(f);
   chxj_cookie_db_unlock(r, file);
-  DBG(r, "end chxj_save_cookie_dbm() cookie_id:[%s]", cookie_id);
+  DBG(r, "REQ[%X] end chxj_save_cookie_dbm() cookie_id:[%s]", TO_ADDR(r), cookie_id);
   return CHXJ_TRUE;
 }
 
