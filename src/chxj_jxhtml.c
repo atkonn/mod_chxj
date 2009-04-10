@@ -483,7 +483,7 @@ chxj_convert_jxhtml(
 
   chxj_buffered_write_init(r->pool, &doc.buf);
   /*--------------------------------------------------------------------------*/
-  /* It converts it from CHTML to JXHTML.                                      */
+  /* It converts it from CHTML to JXHTML.                                     */
   /*--------------------------------------------------------------------------*/
   chxj_node_convert(spec,r,(void*)&jxhtml, &doc, qs_get_root(&doc), 0);
   jxhtml.out = chxj_buffered_write_flush(jxhtml.out, &doc.buf);
@@ -682,7 +682,7 @@ s_jxhtml_start_html_tag(void *pdoc, Node *UNUSED(node))
   jxhtml  = GET_JXHTML(pdoc);
   doc    = jxhtml->doc;
   r      = doc->r;
-  DBG(r, "REQ[%X] start s_jxhtml_start_html_tag()", (unsigned int)(apr_size_t)r);
+  DBG(r, "REQ[%X] start s_jxhtml_start_html_tag()", TO_ADDR(r));
 
   W_L("<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>");
   W_NLCODE();
@@ -696,7 +696,7 @@ s_jxhtml_start_html_tag(void *pdoc, Node *UNUSED(node))
 
   jxhtml->start_html_flag = 1;
 
-  DBG(r, "REQ[%X] end s_jxhtml_start_html_tag()", (unsigned int)(apr_size_t)r);
+  DBG(r, "REQ[%X] end s_jxhtml_start_html_tag()", TO_ADDR(r));
 
   return jxhtml->out;
 }

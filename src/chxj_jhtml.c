@@ -24,6 +24,7 @@
 #include "chxj_str_util.h"
 #include "chxj_header_inf.h"
 #include "chxj_jreserved_tag.h"
+#include "chxj_serf.h"
 
 
 #define GET_JHTML(X) ((jhtml_t *)(X))
@@ -132,6 +133,7 @@ static char *chxj_istyle_to_mode(apr_pool_t *p, const char *s);
 static css_prop_list_t *s_jhtml_push_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value);
 static css_prop_list_t *s_jhtml_nopush_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value);
 
+static char *s_add_copyright_parameter(request_rec *r, char *value);
 
 
 tag_handler jhtml_handler[] = {
@@ -2673,6 +2675,7 @@ s_jhtml_start_img_tag(void *pdoc, Node *node)
       value = chxj_jreserved_tag_to_safe_for_query_string(r, value, jhtml->entryp, 0);
       value = chxj_add_cookie_parameter(r, value, jhtml->cookie);
       value = chxj_add_cookie_no_update_parameter(r, value);
+      value = s_add_copyright_parameter(r, value);
       attr_src = value;
 #else
       value = chxj_img_conv(r, spec, value);
@@ -2680,6 +2683,7 @@ s_jhtml_start_img_tag(void *pdoc, Node *node)
       value = chxj_jreserved_tag_to_safe_for_query_string(r, value, jhtml->entryp, 0);
       value = chxj_add_cookie_parameter(r, value, jhtml->cookie);
       value = chxj_add_cookie_no_update_parameter(r, value);
+      value = s_add_copyright_parameter(r, value);
       attr_src = value;
 #endif
       }
@@ -5527,6 +5531,72 @@ s_jhtml_style_tag(void *pdoc, Node *node)
   }
   return jhtml->out;
 }
+
+static char *
+s_add_copyright_parameter(request_rec *r, char *value)
+{
+  request_rec *sub_req = NULL;
+  apr_pool_t *pool;
+  int rr_status;
+  char *content_type = NULL;
+  apr_table_t *headers_out = NULL;
+
+  DBG(r, "REQ[%X] start s_add_copyright_parameter", TO_ADDR(r));
+  apr_pool_create(&pool, r->pool);
+
+  if (chxj_starts_with(value, "http:") || chxj_starts_with(value, "https:")) {
+    apr_table_t *response;
+    int   response_code = 0;
+    response = chxj_serf_head(r, pool, value, &response_code);
+    if (response_code != HTTP_OK) {
+      DBG(r, "REQ[%X] end s_add_copyright_parameter (serf_req->status:[%d])", TO_ADDR(r), response_code);
+      return value;
+    }
+    content_type = (char *)apr_table_get(response, "Content-Type");
+    headers_out = response;
+  }
+  else {
+    //  sub_req = ap_sub_req_method_uri("GET", value, r, r->output_filters);
+    sub_req = ap_sub_req_lookup_uri(value, r, r->output_filters);
+    if (sub_req->status != HTTP_OK) {
+      DBG(r, "REQ[%X] end s_add_copyright_parameter (sub_req->status:[%d])", TO_ADDR(r), sub_req->status);
+      ap_destroy_sub_req(sub_req);
+      return value;
+    }
+    sub_req->header_only = 1;
+    sub_req->main = NULL;
+    rr_status = ap_run_sub_req(sub_req);
+    DBG(r, "REQ[%X] sub_req4:ContentType:[%s]", TO_ADDR(r), sub_req->content_type);
+    DBG(r, "REQ[%X] rr_status:[%d]", TO_ADDR(r), rr_status);
+    content_type = apr_pstrdup(pool, sub_req->content_type);
+    headers_out = sub_req->headers_out;
+  }
+  if (headers_out && apr_table_get(headers_out, "x-jphone-copyright")) {
+    if (content_type && strncasecmp("image/jpeg", content_type, 10) == 0) {
+      if (strchr(value, '?')) {
+        value = apr_psprintf(pool, "%s&_chxj_copy=.jpz", value);
+      }
+      else {
+        value = apr_psprintf(pool, "%s?_chxj_copy=.jpz", value);
+      }
+    }
+    else if (content_type && strncasecmp("image/png", content_type, 9) == 0) {
+      if (strchr(value, '?')) {
+        value = apr_psprintf(pool, "%s&_chxj_copy=.pnz", value);
+      }
+      else {
+        value = apr_psprintf(pool, "%s?_chxj_copy=.pnz", value);
+      }
+    }
+  }
+  if (sub_req) {
+    ap_destroy_sub_req(sub_req);
+  }
+  DBG(r, "REQ[%X] end s_add_copyright_parameter(result:[%s]", TO_ADDR(r), value);
+  return value;
+}
+
+
 /*
  * vim:ts=2 et
  */
