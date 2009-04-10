@@ -321,6 +321,11 @@ tag_handler chtml10_handler[] = {
     s_chtml10_chxjif_tag,
     NULL,
   },
+  /* tagCHXJRAW */
+  {
+    s_chtml10_chxjif_tag,
+    NULL,
+  },
   /* tagNOBR */
   {
     NULL,
