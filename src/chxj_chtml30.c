@@ -23,6 +23,7 @@
 #include "chxj_qr_code.h"
 #include "chxj_encoding.h"
 #include "chxj_header_inf.h"
+#include "chxj_conv_z2h.h"
 
 #define GET_CHTML30(X) ((chtml30_t *)(X))
 #undef W_L
