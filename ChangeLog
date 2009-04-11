@@ -1,3 +1,46 @@
+libapache2-mod-chxj (0.12.36-1) unstable; urgency=low
+
+  * Added Features.
+    - Added CHXJ:RAW origianl tag. this is an abbreviation of <CHXJ:IF
+      lang="all">.
+    - Expansion of copyright protection function. for OLD SoftBank.
+    - When JRConvOff is used, a part of QSConvOff is invalidated.
+    - An extra access log was not given for temporary.
+      (use env=!chxj-post-log)
+  * Changed Features.
+    - Changed the behavior of Z2hOn, and so on.
+  * Fixed Bug.
+    - When the port number has adhered to the Host header of the request,
+      Cookie might not be loaded.
+      (Reported by ippsio. Thanks!)
+    - When StatusCode is 304, garbage in two bytes outputs it.
+      (Reported by isssk. Thanks!)
+    - the BMP image is not converted.
+      (Reported by isssk. Thanks!)
+    - Guid=ON doesn't work when the third argument of ChxjConvertRule is NONE.
+      (Reported by isssk. Thanks!)
+    - Even if ChxjImageCopyright is specified, copyright information is not
+      added to PNG.
+      (Reported by isssk. Thanks!)
+    - The reservation parameter name of the QueryString inside of POST is
+      converted though it is JRConvOff.
+      (Reported by isssk. Thanks!)
+    - In the image conversion processing, when the extension is not specified,
+      bmp doesn't become an object.
+      (Reported by isssk. Thanks!)
+    - In the image conversion processing, when the extension is specified, the
+      cache file is not made.
+      (Reported by isssk. Thanks!)
+    - Dependence definition leakage of OpenSSL.
+    - The error log is output if there is no data that matches to the key when
+      Cookie is loaded.
+      (Reported by ippsio. Thanks!)
+    - _ chxj_cc is doubly added when there is already _ chxj_cc in the
+      Location header.
+      (Reported by ippsio. Thanks!)
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Sat, 11 Apr 2009 17:41:40 +0900
+
 libapache2-mod-chxj (0.12.35-1) unstable; urgency=low
 
   * Fixed Bug.
