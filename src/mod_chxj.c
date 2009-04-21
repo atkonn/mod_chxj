@@ -1696,6 +1696,7 @@ chxj_create_per_dir_config(apr_pool_t *p, char *arg)
   conf->cookie_timeout   = 0;
   conf->cookie_store_type = COOKIE_STORE_TYPE_NONE;
   conf->cookie_lazy_mode  = 0;
+  conf->cookie_dbm_type  = NULL;
 #if defined(USE_MYSQL_COOKIE)
   memset((void *)&conf->mysql, 0, sizeof(mysql_t));
   conf->mysql.port       = MYSQL_PORT;
@@ -1756,6 +1757,7 @@ chxj_merge_per_dir_config(apr_pool_t *p, void *basev, void *addv)
   mrg->forward_server_ip = NULL;
   mrg->allowed_cookie_domain = NULL;
   mrg->post_log         = NULL;
+  mrg->cookie_dbm_type  = NULL;
 
   mrg->dir = apr_pstrdup(p, add->dir);
 
@@ -1986,6 +1988,12 @@ chxj_merge_per_dir_config(apr_pool_t *p, void *basev, void *addv)
   }
   else {
     mrg->post_log = base->post_log;
+  }
+  if (add->cookie_dbm_type) {
+    mrg->cookie_dbm_type = add->cookie_dbm_type;
+  }
+  else {
+    mrg->cookie_dbm_type = base->cookie_dbm_type;
   }
   return mrg;
 }
@@ -2867,6 +2875,23 @@ cmd_post_log_env(
   return NULL;
 }
 
+static const char *
+cmd_cookie_dbm_type(
+  cmd_parms   *cmd, 
+  void        *mconfig, 
+  const char  *arg)
+{
+  mod_chxj_config  *dconf;
+  if (strlen(arg) > 255)
+    return "mod_chxj: ChxjCookieDbmType is too long.";
+
+  dconf = (mod_chxj_config *)mconfig;
+
+  dconf->cookie_dbm_type = apr_pstrdup(cmd->pool, arg);
+
+  return NULL;
+}
+
 
 static const command_rec cmds[] = {
   AP_INIT_TAKE1(
@@ -3029,6 +3054,12 @@ static const command_rec cmds[] = {
     NULL,
     OR_ALL,
     "for CustomLog directive. mod_chxj's internal POST log environment name.(Default:chxj-post-log)"),
+  AP_INIT_TAKE1(
+    "ChxjCookieDbmType",
+    cmd_cookie_dbm_type,
+    NULL,
+    OR_ALL,
+    "Kind of DBM used with Cookie simulator.(default|GDBM|SDBM|DB|NDBM)"),
   {NULL,{NULL},NULL,0,0,NULL},
 };
 
