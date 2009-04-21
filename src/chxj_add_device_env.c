@@ -78,5 +78,7 @@ chxj_add_device_env(request_rec *r, device_table *spec)
   apr_table_setn(r->headers_in, HTTP_X_CHXJ_WP_HEIGHT,apr_psprintf(r->pool, "%d", spec->wp_heigh));
   apr_table_setn(r->headers_in, HTTP_X_CHXJ_CACHE,    apr_psprintf(r->pool, "%d", spec->cache));
 
+  apr_table_setn(r->headers_in, HTTP_X_CHXJ_VERSION,  apr_pstrdup(r->pool, PACKAGE_VERSION));
+
   DBG(r, "REQ[%X] end chxj_add_device_env()", (unsigned int)(apr_size_t)r);
 }
