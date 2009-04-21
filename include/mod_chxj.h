@@ -344,6 +344,7 @@ struct mod_chxj_config {
   long                  cookie_timeout;
   cookie_store_type_t   cookie_store_type;
   int                   cookie_lazy_mode;
+  char                  *cookie_dbm_type;
 
 #if defined(USE_MYSQL_COOKIE)
   mysql_t               mysql;

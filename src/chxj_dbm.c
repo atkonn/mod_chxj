@@ -50,7 +50,7 @@ chxj_save_cookie_dbm(request_rec *r, mod_chxj_config *m, const char *cookie_id, 
   }
 
   retval = apr_dbm_open_ex(&f,
-                           "default",
+                           (m->cookie_dbm_type) ? m->cookie_dbm_type : "default",
                            chxj_cookie_db_name_create(r, m->cookie_db_dir),
                            APR_DBM_RWCREATE,
                            APR_OS_DEFAULT,
@@ -60,7 +60,7 @@ chxj_save_cookie_dbm(request_rec *r, mod_chxj_config *m, const char *cookie_id, 
     ERR(r, "%s:%d could not open dbm (type %s) auth file: %s(%d:%s)",
             __FILE__,
             __LINE__,
-            "default",
+            (m->cookie_dbm_type) ? m->cookie_dbm_type : "default",
             chxj_cookie_db_name_create(r,m->cookie_db_dir),
             retval,
             apr_strerror(retval, errstr, 255));
@@ -85,12 +85,15 @@ chxj_save_cookie_dbm(request_rec *r, mod_chxj_config *m, const char *cookie_id, 
   retval = apr_dbm_store(f, dbmkey, dbmval);
   if (retval != APR_SUCCESS) {
     char errstr[256];
-    ERR(r, "%s:%d Cannot store Cookie data to DBM file `%s' (%d:%s)",
+    ERR(r, "%s:%d Cannot store Cookie data to DBM file `%s' tye:[%s] (%d:%s) key:[%s] val:[%s]",
             __FILE__,
             __LINE__,
             chxj_cookie_db_name_create(r, m->cookie_db_dir),
+            (m->cookie_dbm_type) ? m->cookie_dbm_type : "default",
             retval,
-            apr_strerror(retval, errstr, 255));
+            apr_strerror(retval, errstr, 255), 
+            dbmkey.dptr,
+            dbmval.dptr);
     apr_dbm_close(f);
     chxj_cookie_db_unlock(r, file);
     DBG(r, "REQ[%X] end chxj_save_cookie_dbm() cookie_id:[%s]", TO_ADDR(r), cookie_id);
@@ -304,14 +307,14 @@ chxj_update_cookie_dbm(request_rec *r, mod_chxj_config *m, const char *cookie_id
   }
 
   retval = apr_dbm_open_ex(&f,
-                           "default",
+                           (m->cookie_dbm_type) ? m->cookie_dbm_type : "default",
                            chxj_cookie_db_name_create(r, m->cookie_db_dir),
                            APR_DBM_RWCREATE,
                            APR_OS_DEFAULT,
                            r->pool);
   if (retval != APR_SUCCESS) {
     ERR(r, "could not open dbm (type %s) auth file: %s",
-            "default",
+            (m->cookie_dbm_type) ? m->cookie_dbm_type : "default",
             chxj_cookie_db_name_create(r,m->cookie_db_dir));
     chxj_cookie_db_unlock(r, file);
     DBG(r, "end   chxj_update_cookie_dbm() cookie_id:[%s]", cookie_id);
@@ -337,8 +340,16 @@ chxj_update_cookie_dbm(request_rec *r, mod_chxj_config *m, const char *cookie_id
    */
   retval = apr_dbm_store(f, dbmkey, dbmval);
   if (retval != APR_SUCCESS) {
-    ERR(r, "Cannot store Cookie data to DBM file `%s'",
-            chxj_cookie_db_name_create(r, m->cookie_db_dir));
+    char errstr[256];
+    ERR(r, "%s:%d Cannot store Cookie data to DBM file `%s' tye:[%s] (%d:%s) key:[%s] val:[%s]",
+            __FILE__,
+            __LINE__,
+            chxj_cookie_db_name_create(r, m->cookie_db_dir),
+            (m->cookie_dbm_type) ? m->cookie_dbm_type : "default",
+            retval,
+            apr_strerror(retval, errstr, 255), 
+            dbmkey.dptr,
+            dbmval.dptr);
     apr_dbm_close(f);
     chxj_cookie_db_unlock(r, file);
     DBG(r, "end   chxj_update_cookie_dbm() cookie_id:[%s]", cookie_id);
@@ -370,7 +381,7 @@ chxj_load_cookie_dbm(request_rec *r, mod_chxj_config *m, const char *cookie_id)
   }
 
   retval = apr_dbm_open_ex(&f,
-                           "default",
+                           (m->cookie_dbm_type) ? m->cookie_dbm_type : "default",
                            chxj_cookie_db_name_create(r, m->cookie_db_dir),
                            APR_DBM_RWCREATE,
                            APR_OS_DEFAULT,
@@ -381,7 +392,7 @@ chxj_load_cookie_dbm(request_rec *r, mod_chxj_config *m, const char *cookie_id)
          "%s:%d could not open dbm (type %s) auth file: %s (%d:%s)",
          __FILE__,
          __LINE__,
-         "default",
+          (m->cookie_dbm_type) ? m->cookie_dbm_type : "default",
          chxj_cookie_db_name_create(r, m->cookie_db_dir),
          retval,
          apr_strerror(retval, errstr, 255));
@@ -404,7 +415,7 @@ chxj_load_cookie_dbm(request_rec *r, mod_chxj_config *m, const char *cookie_id)
           "%s:%d could not fetch dbm (type %s) auth file: %s(%d:%s)",
           __FILE__,
           __LINE__,
-          "default",
+          (m->cookie_dbm_type) ? m->cookie_dbm_type : "default",
           chxj_cookie_db_name_create(r, m->cookie_db_dir),
           retval,
           apr_strerror(retval, errstr, 255));
@@ -446,7 +457,7 @@ chxj_delete_cookie_dbm(request_rec *r, mod_chxj_config *m, const char *cookie_id
   }
 
   retval = apr_dbm_open_ex(&f,
-                           "default",
+                           (m->cookie_dbm_type) ? m->cookie_dbm_type : "default",
                            chxj_cookie_db_name_create(r, m->cookie_db_dir),
                            APR_DBM_RWCREATE,
                            APR_OS_DEFAULT,
@@ -454,7 +465,7 @@ chxj_delete_cookie_dbm(request_rec *r, mod_chxj_config *m, const char *cookie_id
   if (retval != APR_SUCCESS) {
     ERR(r,
          "could not open dbm (type %s) auth file: %s",
-         "default",
+         (m->cookie_dbm_type) ? m->cookie_dbm_type : "default",
          chxj_cookie_db_name_create(r,m->cookie_db_dir));
     chxj_cookie_db_unlock(r, file);
     DBG(r, "end   chxj_delete_cookie_dbm() cookie_id:[%s]", cookie_id);
@@ -495,14 +506,14 @@ chxj_save_cookie_expire_dbm(request_rec *r, mod_chxj_config *m, const char *cook
   }
 
   retval = apr_dbm_open_ex(&f, 
-                           "default", 
+                           (m->cookie_dbm_type) ? m->cookie_dbm_type : "default",
                            chxj_cookie_expire_db_name_create(r, m->cookie_db_dir), 
                            APR_DBM_RWCREATE, 
                            APR_OS_DEFAULT, 
                            r->pool);
   if (retval != APR_SUCCESS) {
     ERR(r, "could not open dbm (type %s) auth file: %s", 
-            "default", 
+            (m->cookie_dbm_type) ? m->cookie_dbm_type : "default",
             chxj_cookie_expire_db_name_create(r,m->cookie_db_dir));
     chxj_cookie_expire_db_unlock(r, file);
     DBG(r, "end   chxj_save_cookie_expire_dbm() cookie_id:[%s]", cookie_id);
@@ -561,7 +572,7 @@ chxj_delete_cookie_expire_dbm(request_rec *r, mod_chxj_config *m, const char *co
     return CHXJ_FALSE;
   }
   retval = apr_dbm_open_ex(&f,
-                           "default",
+                           (m->cookie_dbm_type) ? m->cookie_dbm_type : "default",
                            chxj_cookie_expire_db_name_create(r, m->cookie_db_dir),
                            APR_DBM_RWCREATE,
                            APR_OS_DEFAULT,
@@ -569,7 +580,7 @@ chxj_delete_cookie_expire_dbm(request_rec *r, mod_chxj_config *m, const char *co
   if (retval != APR_SUCCESS) {
     ERR(r,
          "could not open dbm (type %s) auth file: %s",
-         "default",
+         (m->cookie_dbm_type) ? m->cookie_dbm_type : "default",
          chxj_cookie_expire_db_name_create(r,m->cookie_db_dir));
     chxj_cookie_expire_db_unlock(r, file);
     DBG(r, "end   chxj_delete_cookie_expire_dbm() cookie_id:[%s]", cookie_id);
@@ -612,7 +623,7 @@ chxj_cookie_expire_gc_dbm(request_rec *r, mod_chxj_config *m)
   }
 
   retval = apr_dbm_open_ex(&f,
-                           "default",
+                           (m->cookie_dbm_type) ? m->cookie_dbm_type : "default",
                            chxj_cookie_expire_db_name_create(r, m->cookie_db_dir),
                            APR_DBM_RWCREATE,
                            APR_OS_DEFAULT,
@@ -620,7 +631,7 @@ chxj_cookie_expire_gc_dbm(request_rec *r, mod_chxj_config *m)
   if (retval != APR_SUCCESS) {
     ERR(r, 
          "could not open dbm (type %s) auth file: %s", 
-         "default", 
+         (m->cookie_dbm_type) ? m->cookie_dbm_type : "default",
          chxj_cookie_expire_db_name_create(r,m->cookie_db_dir));
     chxj_cookie_expire_db_unlock(r, file);
     DBG(r, "end   chxj_cookie_expire_gc_dbm()");
