@@ -66,6 +66,8 @@
 /* "X-Chxj-Cache"        => { <cache> } */
 #define HTTP_X_CHXJ_CACHE    "X-Chxj-Cache"
 
+#define HTTP_X_CHXJ_VERSION  "X-Chxj-Version"
+
 extern void chxj_add_device_env(request_rec *r, device_table *spec);
 
 #endif
