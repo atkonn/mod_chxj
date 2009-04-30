@@ -199,14 +199,7 @@ chxj_headers_fixup(request_rec *r)
     DBG(r, "REQ[%X] end chxj_headers_fixup()", (unsigned int)(apr_size_t)r);
     return DECLINED;
   }
-  if (r->method_number == M_POST) {
-    if (!apr_table_get(r->headers_in, "X-Chxj-Forward")) {
-      s_clear_cookie_header(r, spec);
-    }
-  }
-  else {
-    s_clear_cookie_header(r, spec);
-  }
+
 
   switch(spec->html_spec_type) {
   case CHXJ_SPEC_Chtml_1_0:
@@ -242,6 +235,19 @@ chxj_headers_fixup(request_rec *r)
       apr_table_setn(r->headers_in, 
                      HTTP_USER_AGENT, 
                      entryp->user_agent);
+    /*
+     * this clear process must do before chxj_convert_input_header function.
+     */
+    if (entryp->action & CONVRULE_COOKIE_ON_BIT) {
+      if (r->method_number == M_POST) {
+        if (! apr_table_get(r->headers_in, "X-Chxj-Forward")) {
+          s_clear_cookie_header(r, spec);
+        }
+      }
+      else {
+        s_clear_cookie_header(r, spec);
+      }
+    }
 
     chxj_convert_input_header(r,entryp, spec);
 
@@ -309,6 +315,7 @@ chxj_headers_fixup(request_rec *r)
 static void
 s_clear_cookie_header(request_rec *r, device_table *spec)
 {
+  DBG(r, "REQ[%X] start s_clear_cookie_header()", TO_ADDR(r));
   switch(spec->html_spec_type) {
   case CHXJ_SPEC_Chtml_1_0:
   case CHXJ_SPEC_Chtml_2_0:
@@ -324,6 +331,7 @@ s_clear_cookie_header(request_rec *r, device_table *spec)
   default:
     break;
   }
+  DBG(r, "REQ[%X] end   s_clear_cookie_header()", TO_ADDR(r));
 }
 
 
@@ -1000,6 +1008,42 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
   entryp = ctx->entryp;
   spec   = ctx->spec;
   dconf  = chxj_get_module_config(r->per_dir_config, &chxj_module);
+
+
+  if (apr_table_get(r->headers_out, "Location") || apr_table_get(r->err_headers_out, "Location")) {
+    DBG(r, "REQ[%X] found Location header", TO_ADDR(r));
+    if (entryp->action & CONVRULE_COOKIE_ON_BIT) {
+      cookie_lock_t *lock = NULL;
+      DBG(r, "REQ[%X] entryp->action == COOKIE_ON_BIT", TO_ADDR(r));
+      switch(spec->html_spec_type) {
+      case CHXJ_SPEC_Chtml_1_0:
+      case CHXJ_SPEC_Chtml_2_0:
+      case CHXJ_SPEC_Chtml_3_0:
+      case CHXJ_SPEC_Chtml_4_0:
+      case CHXJ_SPEC_Chtml_5_0:
+      case CHXJ_SPEC_Chtml_6_0:
+      case CHXJ_SPEC_Chtml_7_0:
+      case CHXJ_SPEC_XHtml_Mobile_1_0:
+      case CHXJ_SPEC_Jhtml:
+        lock = chxj_cookie_lock(r);
+        cookie = chxj_save_cookie(r);
+        s_add_cookie_id_if_has_location_header(r, cookie);
+        chxj_cookie_unlock(r, lock);
+        break;
+      default:
+        break;
+      }
+    }
+    if (! ap_is_HTTP_REDIRECT(r->status)) {
+      r->status = HTTP_MOVED_TEMPORARILY;
+    }
+    s_add_no_cache_headers(r, entryp);
+    /* must not send body. */
+    rv = pass_data_to_filter(f, "", 0);
+    DBG(f->r, "REQ[%X] end of chxj_output_filter()", TO_ADDR(r));
+    return rv;
+  }
+
 
   if (r->content_type) {
     if (! STRNCASEEQ('t','T',"text/html",r->content_type, sizeof("text/html")-1)
