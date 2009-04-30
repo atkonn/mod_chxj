@@ -292,6 +292,9 @@ chxj_save_cookie(request_rec *r)
   }
 
   DBG(r, "REQ[%X] TYPE:[%d]", (unsigned int)(apr_size_t)r, dconf->cookie_store_type);
+  DBG(r, "REQ[%X] STORE STRING:=======================================================", TO_ADDR(r));
+  DBG(r, "REQ[%X] [%s]", TO_ADDR(r), store_string);
+  DBG(r, "REQ[%X] =======================================================:STORE STRING", TO_ADDR(r));
 
   {
     int done_proc = 0;
