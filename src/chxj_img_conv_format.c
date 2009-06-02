@@ -551,6 +551,15 @@ s_create_cache_file(request_rec          *r,
     EXIT_MAGICK_ERROR();
     return HTTP_NOT_FOUND;
   }
+  {
+    MagickWand *magick_wand2;
+    if ((magick_wand2 = MagickCoalesceImages(magick_wand)) == NULL) {
+      EXIT_MAGICK_ERROR();
+      return HTTP_NOT_FOUND;
+    }
+    DestroyMagickWand(magick_wand);
+    magick_wand = magick_wand2;
+  }
 
   if (spec->html_spec_type != CHXJ_SPEC_UNKNOWN) {
     int oldw = MagickGetImageWidth(magick_wand);
@@ -1468,7 +1477,6 @@ s_img_down_sizing(MagickWand *magick_wand, request_rec *r, device_table *spec)
   apr_size_t         writebyte = 0;
   char               *writedata;
   apr_size_t         prev_size = 0;
-  int                revers_flag = 0;
   char               *fmt;
   int                fmt_type = 0;
   
@@ -1491,10 +1499,9 @@ s_img_down_sizing(MagickWand *magick_wand, request_rec *r, device_table *spec)
       }
   
       writedata = (char*)MagickGetImageBlob(magick_wand, &writebyte);
-      if (writebyte >= prev_size || revers_flag) {
+      if (writebyte >= prev_size) {
         DBG(r, "quality=[%ld] size=[%d]", (long)quality, (int)writebyte);
-        revers_flag = 1;
-        quality += 10;
+        quality += 5;
         if (quality > 100) {
           if (MagickSetImageCompression(magick_wand,NoCompression) == MagickFalse) {
             EXIT_MAGICK_ERROR();
@@ -1502,8 +1509,11 @@ s_img_down_sizing(MagickWand *magick_wand, request_rec *r, device_table *spec)
           }
           break;
         }
-        prev_size = writebyte;
-        continue;
+        if (MagickSetImageCompressionQuality(magick_wand, quality) == MagickFalse) {
+          EXIT_MAGICK_ERROR();
+          return NULL;
+        }
+        break;
       }
   
       DBG(r, "quality=[%ld] size=[%d]", (long)quality, (int)writebyte);
@@ -1514,7 +1524,7 @@ s_img_down_sizing(MagickWand *magick_wand, request_rec *r, device_table *spec)
       if (writebyte <= (unsigned int)spec->cache)
         break;
   
-      quality -= 10;
+      quality -= 5;
   
       if (quality == 0 || quality > 100)
         break;
