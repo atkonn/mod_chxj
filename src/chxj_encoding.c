@@ -401,6 +401,7 @@ chxj_encoding_parameter(request_rec *r, const char *value)
       len = (apr_size_t)strlen(key);
       if (klen != len) {
         key = chxj_encoding(r, key, &len);
+        key = chxj_url_encode(r->pool, key);
       }
 #if 0  /* XXX:2009/4/10 */
       key = chxj_url_encode(r->pool, key);
@@ -416,6 +417,7 @@ chxj_encoding_parameter(request_rec *r, const char *value)
       len = (apr_size_t)strlen(val);
       if (vlen != len) {
         val = chxj_encoding(r, val, &len);
+        val = chxj_url_encode(r->pool, val);
       }
 #if 0  /* XXX:2009/4/10 */
       val = chxj_url_encode(r->pool, val);
