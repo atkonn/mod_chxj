@@ -5577,6 +5577,7 @@ s_jhtml_style_tag(void *pdoc, Node *node)
   return jhtml->out;
 }
 
+
 static char *
 s_add_copyright_parameter(request_rec *r, char *value)
 {
