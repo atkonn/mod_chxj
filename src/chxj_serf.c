@@ -494,6 +494,9 @@ default_chxj_serf_post(request_rec *r, apr_pool_t *ppool, const char *url_path, 
       chxj_set_content_type(r, apr_pstrdup(r->pool, contentType));
     }
   }
+  if (rv) {
+    *response_len = 0;
+  }
   *response_code = handler_ctx.response_code;
   DBG(r, "REQ:[%X] end chxj_serf_post()", (unsigned int)(apr_size_t)r);
   return ret;
