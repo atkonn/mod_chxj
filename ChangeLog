@@ -7,8 +7,10 @@ libapache2-mod-chxj (0.12.37-1) unstable; urgency=low
     - Content-Type is not seen when there is Location header.
   * Fixed Bug.
     - Cookie is deleted though it is not CookieOn.
+      (Reported by isssk. Thanks!)
     - Fixed url dencode bug.
     - received SIGSEGV when connection was refused within libserf-0.2.0.
+      (Reported by kamiya. Thanks!)
 
  -- Atsushi Konno <konn@users.sourceforge.jp>  Mon, 15 Jun 2009 09:48:10 +0900
 
