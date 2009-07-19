@@ -485,7 +485,7 @@ default_chxj_serf_post(request_rec *r, apr_pool_t *ppool, const char *url_path, 
   else {
     ret = apr_pstrdup(ppool, "");
   }
-  if (set_headers_flag) {
+  if (set_headers_flag && !rv) {
     r->headers_out = apr_table_copy(pool, handler_ctx.headers_out);
     *response_len = handler_ctx.response_len;
     char *contentType = (char *)apr_table_get(handler_ctx.headers_out, "Content-Type");
@@ -493,6 +493,9 @@ default_chxj_serf_post(request_rec *r, apr_pool_t *ppool, const char *url_path, 
       DBG(r, "response content type[%s]", contentType);
       chxj_set_content_type(r, apr_pstrdup(r->pool, contentType));
     }
+  }
+  if (rv) {
+    *response_len = 0;
   }
   *response_code = handler_ctx.response_code;
   DBG(r, "REQ:[%X] end chxj_serf_post()", (unsigned int)(apr_size_t)r);

@@ -215,19 +215,20 @@ static int bio_bucket_read(BIO *bio, char *in, int inlen)
 static int bio_bucket_write(BIO *bio, const char *in, int inl)
 {
     serf_ssl_context_t *ctx = bio->ptr;
-    serf_bucket_t *tmp;
+    serf_bucket_t *tmp = NULL;
 
 #ifdef SSL_VERBOSE
     printf("bio_bucket_write called for %d bytes\n", inl);
 #endif
     BIO_clear_retry_flags(bio);
 
-    tmp = serf_bucket_simple_copy_create(in, inl,
-                                         ctx->encrypt.pending->allocator);
-
-    serf_bucket_aggregate_append(ctx->encrypt.pending, tmp);
-
-    return inl;
+    if (ctx && ctx->encrypt.pending && ctx->encrypt.pending->allocator) {
+      tmp = serf_bucket_simple_copy_create(in, inl,
+                                           ctx->encrypt.pending->allocator);
+      serf_bucket_aggregate_append(ctx->encrypt.pending, tmp);
+      return inl;
+    }
+    return 0;
 }
 
 /* Returns the amount read. */
