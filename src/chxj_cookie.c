@@ -142,7 +142,7 @@ chxj_save_cookie(request_rec *r)
     DBG(r, "end chxj_save_cookie() no pattern");
     return NULL;
   }
-  if (! (entryp->action & CONVRULE_COOKIE_ON_BIT)) {
+  if (! (entryp->action & CONVRULE_COOKIE_ON_BIT) && ! (entryp->action & CONVRULE_COOKIE_ONLY_BIT)) {
     DBG(r, "end chxj_save_cookie() CookieOff");
     return NULL;
   }
@@ -1258,14 +1258,168 @@ end_chxj_cookie_unlock:
 
 #include "chxj_encoding.h"
 char *
-chxj_cookie_only_mode(request_rec *r, const char *src, apr_size_t *len)
+s_convert_a_tag(request_rec *r, const char *s, apr_size_t *len, cookie_t *cookie)
+{
+  apr_pool_t *pool;
+  ap_regex_t *regexp = NULL;
+  int   nowpos = 0;
+  Doc       doc;
+  char *dst = NULL;
+
+  apr_pool_create(&pool, r->pool);
+  regexp = ap_pregcomp(pool, "(<a[^>]*>)", AP_REG_EXTENDED|AP_REG_ICASE);
+  doc.r = r;
+  qs_init_malloc(&doc);
+  qs_init_root_node(&doc);
+
+  while(1) {
+    ap_regmatch_t        match[10];
+    if (ap_regexec((const ap_regex_t *)regexp, &s[nowpos], (apr_size_t)regexp->re_nsub + 1, match, 0) == 0) {
+      apr_size_t plen = match[1].rm_so;
+      if (plen > 0) {
+        char *tmpstr = apr_palloc(pool, plen + 1);
+        memset(tmpstr, 0, plen + 1);
+        memcpy(tmpstr, &s[nowpos], plen);
+        dst = apr_pstrcat(pool, (dst) ? dst : "", tmpstr, NULL);
+      }
+      else {
+        plen = 0;
+      }
+      char *matchstr = ap_pregsub(pool, "$1", &s[nowpos], regexp->re_nsub + 1, match);
+      if (matchstr) {
+        Node *node = qs_parse_tag(&doc, matchstr, strlen(matchstr) - 1);
+        Attr *attr;
+
+        DBG(r, "matchstr:[%s]", matchstr);
+        dst = apr_pstrcat(pool, (dst) ? dst : "", "<a ", NULL);
+        for (attr = qs_get_attr(&doc,node);
+             attr;
+             attr = qs_get_next_attr(&doc,attr)) {
+          char *name  = qs_get_attr_name(&doc,attr);
+          char *value = qs_get_attr_value(&doc,attr);
+          DBG(r, "name:[%s] value=[%s]", name, value);
+          if (STRCASEEQ('h', 'H', "href", name)) {
+            if (strchr(value, '?') != 0) {
+              value = apr_pstrcat(pool, value, "&_chxj_cc=", cookie->cookie_id, NULL);
+            }
+            else {
+              value = apr_pstrcat(pool, value, "?_chxj_cc=", cookie->cookie_id, NULL);
+            }
+            dst = apr_pstrcat(pool, (dst) ? dst : "", "href='", value, "' ", NULL);
+          }
+          else {
+            dst = apr_pstrcat(pool, (dst) ? dst : "", name, "='", value, "' ", NULL);
+          }
+        }
+        dst = apr_pstrcat(pool, (dst) ? dst : "", ">", NULL);
+        plen += strlen(matchstr);
+      }
+      nowpos += plen;
+    }
+    else {
+      break;
+    }
+  }
+
+  if ((apr_size_t)nowpos < *len) {
+    apr_size_t plen = *len - nowpos;
+    char *tmpstr = apr_palloc(pool, plen + 1);
+    strncpy(tmpstr, &s[nowpos], plen);
+    dst = apr_pstrcat(pool, (dst) ? dst : "", tmpstr, NULL);
+  }
+
+  *len = strlen(dst);
+  return dst;
+}
+char *
+s_convert_img_tag(request_rec *r, const char *s, apr_size_t *len, cookie_t *cookie)
+{
+  apr_pool_t *pool;
+  ap_regex_t *regexp = NULL;
+  int   nowpos = 0;
+  Doc       doc;
+  char *dst = NULL;
+
+  apr_pool_create(&pool, r->pool);
+  regexp = ap_pregcomp(pool, "(<img[^>]*>)", AP_REG_EXTENDED|AP_REG_ICASE);
+  doc.r = r;
+  qs_init_malloc(&doc);
+  qs_init_root_node(&doc);
+
+  while(1) {
+    ap_regmatch_t        match[10];
+    if (ap_regexec((const ap_regex_t *)regexp, &s[nowpos], (apr_size_t)regexp->re_nsub + 1, match, 0) == 0) {
+      apr_size_t plen = match[1].rm_so;
+      if (plen > 0) {
+        char *tmpstr = apr_palloc(pool, plen + 1);
+        memset(tmpstr, 0, plen + 1);
+        memcpy(tmpstr, &s[nowpos], plen);
+        dst = apr_pstrcat(pool, (dst) ? dst : "", tmpstr, NULL);
+      }
+      else {
+        plen = 0;
+      }
+      char *matchstr = ap_pregsub(pool, "$1", &s[nowpos], regexp->re_nsub + 1, match);
+      if (matchstr) {
+        Node *node = qs_parse_tag(&doc, matchstr, strlen(matchstr) - 1);
+        Attr *attr;
+
+        DBG(r, "matchstr:[%s]", matchstr);
+        dst = apr_pstrcat(pool, (dst) ? dst : "", "<img ", NULL);
+        for (attr = qs_get_attr(&doc,node);
+             attr;
+             attr = qs_get_next_attr(&doc,attr)) {
+          char *name  = qs_get_attr_name(&doc,attr);
+          char *value = qs_get_attr_value(&doc,attr);
+          DBG(r, "name:[%s] value=[%s]", name, value);
+          if (STRCASEEQ('s', 'S', "src", name)) {
+            if (strchr(value, '?') != 0) {
+              value = apr_pstrcat(pool, value, "&_chxj_cc=", cookie->cookie_id, NULL);
+            }
+            else {
+              value = apr_pstrcat(pool, value, "?_chxj_cc=", cookie->cookie_id, NULL);
+            }
+            dst = apr_pstrcat(pool, (dst) ? dst : "", "src='", value, "' ", NULL);
+          }
+          else {
+            dst = apr_pstrcat(pool, (dst) ? dst : "", name, "='", value, "' ", NULL);
+          }
+        }
+        dst = apr_pstrcat(pool, (dst) ? dst : "", "/>", NULL);
+        plen += strlen(matchstr);
+      }
+      nowpos += plen;
+    }
+    else {
+      break;
+    }
+  }
+
+  if ((apr_size_t)nowpos < *len) {
+    apr_size_t plen = *len - nowpos;
+    char *tmpstr = apr_palloc(pool, plen + 1);
+    strncpy(tmpstr, &s[nowpos], plen);
+    dst = apr_pstrcat(pool, (dst) ? dst : "", tmpstr, NULL);
+  }
+
+  *len = strlen(dst);
+  return dst;
+}
+
+char *
+chxj_cookie_only_mode(request_rec *r, const char *src, apr_size_t *len, cookie_t* cookie)
 {
   char *s;
   char *result;
+  char *dst = NULL;
+
   DBG(r, "REQ[%X] start chxj_cookie_only_mode()", TO_ADDR(r));
   s = chxj_encoding(r, src, len);
-  /* XXX ここで処理する */
-  result = chxj_rencoding(r, s, len);
+
+  dst = s_convert_a_tag(r, s, len, cookie);
+  dst = s_convert_img_tag(r, dst, len, cookie);
+
+  result = chxj_rencoding(r, dst, len);
   DBG(r, "REQ[%X] end chxj_cookie_only_mode()", TO_ADDR(r));
   return result;
 }

@@ -414,8 +414,8 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
   }
 
   if (!r->header_only) {
-    if (entryp->action & CONVRULE_COOKIE_ONLY_BIT) {
-      dst = chxj_cookie_only_mode(r, *src, (apr_size_t *)len);    
+    if ((entryp->action & CONVRULE_COOKIE_ONLY_BIT) && cookie) {
+      dst = chxj_cookie_only_mode(r, *src, (apr_size_t *)len, cookie);
     }
     else {
       tmp = NULL;
