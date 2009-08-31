@@ -405,7 +405,7 @@ struct mod_chxj_config {
 #define CONVRULE_NOCACHE_ON_CMD       "NoCacheOn"
 #define CONVRULE_EMOJI_ONLY_CMD       "EmojiOnly"
 #define CONVRULE_ENVINFO_ONLY_CMD     "EnvInfoOnly"
-#define CONVRULE_COOOKIE_ONLY_CMD     "CookieOnly"
+#define CONVRULE_COOKIE_ONLY_CMD      "CookieOnly"
 
 
 #define CONVRULE_FLAG_NOTMATCH        (0x00000001)
