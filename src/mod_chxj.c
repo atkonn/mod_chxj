@@ -216,7 +216,7 @@ chxj_headers_fixup(request_rec *r)
       DBG(r, "REQ[%X] end chxj_headers_fixup() (no pattern)", (unsigned int)(apr_size_t)r);
       return DECLINED;
     }
-    if (!(entryp->action & CONVRULE_ENGINE_ON_BIT)) {
+    if (!(entryp->action & CONVRULE_ENGINE_ON_BIT) && !(entryp->action & CONVRULE_COOKIE_ONLY_BIT)) {
       DBG(r, "REQ[%X] end chxj_headers_fixup() (engine off)", (unsigned int)(apr_size_t)r);
       return DECLINED;
     }
@@ -236,7 +236,7 @@ chxj_headers_fixup(request_rec *r)
     /*
      * this clear process must do before chxj_convert_input_header function.
      */
-    if (entryp->action & CONVRULE_COOKIE_ON_BIT) {
+    if ((entryp->action & CONVRULE_COOKIE_ON_BIT) || (entryp->action & CONVRULE_COOKIE_ONLY_BIT)) {
       if (r->method_number == M_POST) {
         if (! apr_table_get(r->headers_in, "X-Chxj-Forward")) {
           s_clear_cookie_header(r, spec);
@@ -358,7 +358,7 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
 
   entryp = chxj_apply_convrule(r, dconf->convrules);
 
-  if (!entryp || !(entryp->action & CONVRULE_ENGINE_ON_BIT)) {
+  if (!entryp || (!(entryp->action & CONVRULE_ENGINE_ON_BIT) && !(entryp->action & CONVRULE_COOKIE_ONLY_BIT))) {
     DBG(r,"REQ[%X] end of chxj_convert()", (unsigned int)(apr_size_t)r);
     return (char *)*src;
   }
@@ -392,9 +392,10 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
    * save cookie.
    */
   cookie = NULL;
-  if (entryp->action & CONVRULE_COOKIE_ON_BIT 
+  if ((entryp->action & CONVRULE_COOKIE_ON_BIT 
       && !(entryp->action & CONVRULE_EMOJI_ONLY_BIT)
-      && !(entryp->action & CONVRULE_ENVINFO_ONLY_BIT)) {
+      && !(entryp->action & CONVRULE_ENVINFO_ONLY_BIT))
+      || (entryp->action & CONVRULE_COOKIE_ONLY_BIT)) {
     switch(spec->html_spec_type) {
     case CHXJ_SPEC_Chtml_1_0:
     case CHXJ_SPEC_Chtml_2_0:
@@ -413,53 +414,57 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
   }
 
   if (!r->header_only) {
-
-    tmp = NULL;
-    if (convert_routine[spec->html_spec_type].encoder)
-      tmp = convert_routine[spec->html_spec_type].encoder(r, 
-                                                          *src, 
-                                                          (apr_size_t *)len);
-
-    if (entryp->action & CONVRULE_EMOJI_ONLY_BIT) {
-      if (tmp) {
-        tmp = chxj_node_convert_chxjif_only(r, spec, (const char*)tmp, (apr_size_t *)len);
-      }
-      else {
-        tmp = chxj_node_convert_chxjif_only(r, spec, (const char *)*src, (apr_size_t *)len);
-      }
-      if (convert_routine[spec->html_spec_type].emoji_only_converter) {
-        dst = convert_routine[spec->html_spec_type].emoji_only_converter(r,spec, tmp,*len);
-        if (dst != NULL) {
-          *len = strlen(dst);
+    if (entryp->action & CONVRULE_COOKIE_ONLY_BIT) {
+      dst = chxj_cookie_only_mode(r, *src, (apr_size_t *)len);    
+    }
+    else {
+      tmp = NULL;
+      if (convert_routine[spec->html_spec_type].encoder)
+        tmp = convert_routine[spec->html_spec_type].encoder(r, 
+                                                            *src, 
+                                                            (apr_size_t *)len);
+  
+      if (entryp->action & CONVRULE_EMOJI_ONLY_BIT) {
+        if (tmp) {
+          tmp = chxj_node_convert_chxjif_only(r, spec, (const char*)tmp, (apr_size_t *)len);
         }
         else {
-          dst = apr_palloc(r->pool, 1);
-          *dst = 0;
-          *len = 0;
+          tmp = chxj_node_convert_chxjif_only(r, spec, (const char *)*src, (apr_size_t *)len);
         }
+        if (convert_routine[spec->html_spec_type].emoji_only_converter) {
+          dst = convert_routine[spec->html_spec_type].emoji_only_converter(r,spec, tmp,*len);
+          if (dst != NULL) {
+            *len = strlen(dst);
+          }
+          else {
+            dst = apr_palloc(r->pool, 1);
+            *dst = 0;
+            *len = 0;
+          }
+        }
+        DBG(r, "REQ[%X] end of chxj_convert()(emoji only)", (unsigned int)(apr_size_t)r);
       }
-      DBG(r, "REQ[%X] end of chxj_convert()(emoji only)", (unsigned int)(apr_size_t)r);
-    }
-
-    if (   !(entryp->action & CONVRULE_EMOJI_ONLY_BIT) 
-        && !(entryp->action & CONVRULE_ENVINFO_ONLY_BIT)) {
-      if (convert_routine[spec->html_spec_type].converter) {
-        if (tmp)
-          dst = convert_routine[spec->html_spec_type].converter(r, 
-                                                                spec, 
-                                                                tmp, 
-                                                                *len, 
-                                                                len, 
-                                                                entryp, 
-                                                                cookie);
-        else
-          dst = convert_routine[spec->html_spec_type].converter(r,
-                                                                spec, 
-                                                                *src, 
-                                                                *len, 
-                                                                len, 
-                                                                entryp, 
-                                                                cookie);
+  
+      if (   !(entryp->action & CONVRULE_EMOJI_ONLY_BIT) 
+          && !(entryp->action & CONVRULE_ENVINFO_ONLY_BIT)) {
+        if (convert_routine[spec->html_spec_type].converter) {
+          if (tmp)
+            dst = convert_routine[spec->html_spec_type].converter(r, 
+                                                                  spec, 
+                                                                  tmp, 
+                                                                  *len, 
+                                                                  len, 
+                                                                  entryp, 
+                                                                  cookie);
+          else
+            dst = convert_routine[spec->html_spec_type].converter(r,
+                                                                  spec, 
+                                                                  *src, 
+                                                                  *len, 
+                                                                  len, 
+                                                                  entryp, 
+                                                                  cookie);
+        }
       }
     }
   }
@@ -1658,7 +1663,7 @@ chxj_insert_filter(request_rec *r)
   ctx->buffer = apr_palloc(ctx->pool, 1);
   ctx->buffer[0] = 0;
 
-  if (!entryp || !(entryp->action & CONVRULE_ENGINE_ON_BIT)) {
+  if (!entryp || (!(entryp->action & CONVRULE_ENGINE_ON_BIT) && !(entryp->action & CONVRULE_COOKIE_ONLY_BIT))) {
     DBG(r,"REQ[%X] EngineOff", (unsigned int)(apr_size_t)r);
     DBG(r, "REQ[%X] end chxj_insert_filter()", (unsigned int)(apr_size_t)r);
     return;

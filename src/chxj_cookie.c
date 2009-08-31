@@ -1254,6 +1254,21 @@ end_chxj_cookie_unlock:
 
   return rtn;
 }
+
+
+#include "chxj_encoding.h"
+char *
+chxj_cookie_only_mode(request_rec *r, const char *src, apr_size_t *len)
+{
+  char *s;
+  char *result;
+  DBG(r, "REQ[%X] start chxj_cookie_only_mode()", TO_ADDR(r));
+  s = chxj_encoding(r, src, len);
+  /* XXX ここで処理する */
+  result = chxj_rencoding(r, s, len);
+  DBG(r, "REQ[%X] end chxj_cookie_only_mode()", TO_ADDR(r));
+  return result;
+}
 /*
  * vim:ts=2 et
  */
