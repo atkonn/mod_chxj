@@ -1025,7 +1025,7 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
 
   if (apr_table_get(r->headers_out, "Location") || apr_table_get(r->err_headers_out, "Location")) {
     DBG(r, "REQ[%X] found Location header", TO_ADDR(r));
-    if (entryp->action & CONVRULE_COOKIE_ON_BIT) {
+    if ((entryp->action & CONVRULE_COOKIE_ON_BIT) || (entryp->action & CONVRULE_COOKIE_ONLY_BIT)) {
       cookie_lock_t *lock = NULL;
       DBG(r, "REQ[%X] entryp->action == COOKIE_ON_BIT", TO_ADDR(r));
       switch(spec->html_spec_type) {
