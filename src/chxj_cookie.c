@@ -1298,7 +1298,9 @@ s_convert_a_tag(request_rec *r, const char *s, apr_size_t *len, cookie_t *cookie
           char *name  = qs_get_attr_name(&doc,attr);
           char *value = qs_get_attr_value(&doc,attr);
           DBG(r, "name:[%s] value=[%s]", name, value);
-          if (STRCASEEQ('h', 'H', "href", name)) {
+          if (STRCASEEQ('h', 'H', "href", name)
+              && ! chxj_starts_with(value, "mailto:") 
+              && ! chxj_starts_with(value, "tel:")) {
             if (strchr(value, '?') != 0) {
               value = apr_pstrcat(pool, value, "&_chxj_cc=", cookie->cookie_id, NULL);
             }
