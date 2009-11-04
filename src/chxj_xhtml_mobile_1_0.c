@@ -2186,6 +2186,11 @@ s_xhtml_1_0_start_hr_tag(void *pdoc, Node *node)
       css_property_t *border_style_prop = chxj_css_get_property_value(doc, style, "border-style");
       css_property_t *height_prop       = chxj_css_get_property_value(doc, style, "height");
       css_property_t *width_prop        = chxj_css_get_property_value(doc, style, "width");
+      
+      css_property_t *float_prop        = chxj_css_get_property_value(doc, style, "float");
+      css_property_t *border_color_prop = chxj_css_get_property_value(doc, style, "border-color");
+      
+      
       css_property_t *cur;
       for (cur = border_style_prop->next; cur != border_style_prop; cur = cur->next) {
         if (STRCASEEQ('s','S',"solid",cur->value)) {
@@ -2195,8 +2200,15 @@ s_xhtml_1_0_start_hr_tag(void *pdoc, Node *node)
       for (cur = height_prop->next; cur != height_prop; cur = cur->next) {
         char *tmp = apr_pstrdup(doc->pool, cur->value);
         char *tmpp = strstr(tmp, "px");
-        if (tmpp) { 
-          attr_size = apr_pstrdup(doc->pool, tmp);
+        if (tmpp) {
+          size_t len = strlen(tmp) - strlen(tmpp);
+          attr_size = apr_pstrndup(doc->pool, tmp,len);
+        }
+        else{
+          char *tmp2 = strstr(tmp,"%");
+          if(!tmp2){
+            attr_size = apr_pstrdup(doc->pool, tmp);
+          }
         }
       }
       for (cur = width_prop->next; cur != width_prop; cur = cur->next) {
@@ -2212,6 +2224,30 @@ s_xhtml_1_0_start_hr_tag(void *pdoc, Node *node)
           }
         }
       }
+      if(!attr_align){
+        for (cur = float_prop->next; cur != float_prop; cur = cur->next) {
+          char *tmp = apr_pstrdup(doc->pool, cur->value);
+          char *tmpp = strstr(tmp,"none");
+          if(tmpp){
+            attr_align = "center";
+          }
+          else{
+            if(tmp){
+              attr_align = apr_pstrdup(doc->pool, tmp);
+            }
+          }
+        }
+      }
+      if(!attr_color){
+        for (cur = border_color_prop->next; cur != border_color_prop; cur = cur->next) {
+          char *tmp = apr_pstrdup(doc->pool, cur->value);
+          if(tmp){
+            attr_color = apr_pstrdup(doc->pool, tmp);
+          }
+        }
+      }
+      
+      
     }
   }
   W_L("<hr");
@@ -2220,16 +2256,9 @@ s_xhtml_1_0_start_hr_tag(void *pdoc, Node *node)
     W_V(attr_align);
     W_L("\"");
   }
-  if (attr_size || attr_width || attr_noshade) {
+  if (attr_width) {
     W_L(" style=\"");
-    if (attr_size) {
-      W_L("height:");
-      W_V(attr_size);
-      if (!strstr(attr_size, "px")) {
-        W_L("px");
-      }
-      W_L(";");
-    }
+    
     if (attr_width) {
       W_L("width:");
       W_V(attr_width);
@@ -2238,16 +2267,22 @@ s_xhtml_1_0_start_hr_tag(void *pdoc, Node *node)
       }
       W_L(";");
     }
-    if (attr_noshade) {
-      W_L("border-style:solid;");
-    }
+    
     W_L("\"");
   }
+  
   if (attr_color) {
     W_L(" color=\"");
     W_V(attr_color);
     W_L("\"");
   }
+  
+  if(attr_size){
+    W_L(" size=\"");
+    W_V(attr_size);
+    W_L("\"");
+  }
+  
   W_L(" />");
 
   return xhtml->out;

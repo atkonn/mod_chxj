@@ -2791,6 +2791,7 @@ s_ixhtml10_start_hr_tag(void *pdoc, Node *node)
       css_property_t *width_prop        = chxj_css_get_property_value(doc, style, "width");
       css_property_t *color_prop        = chxj_css_get_property_value(doc, style, "border-color");
       css_property_t *bgcolor_prop      = chxj_css_get_property_value(doc, style, "background-color");
+      css_property_t *float_prop        = chxj_css_get_property_value(doc, style, "float");
       css_property_t *cur;
       for (cur = border_style_prop->next; cur != border_style_prop; cur = cur->next) {
         if (STRCASEEQ('s','S',"solid",cur->value)) {
@@ -2823,10 +2824,18 @@ s_ixhtml10_start_hr_tag(void *pdoc, Node *node)
           }
         }
       }
+      if(!attr_align){
+        for (cur = float_prop->next; cur != float_prop; cur = cur->next) {
+          char *tmp = apr_pstrdup(doc->pool, cur->value);
+          if(tmp){
+            attr_align = apr_pstrdup(doc->pool,tmp);
+          }
+        }
+      }
     }
   }
   W_L("<hr");
-  if (attr_align || attr_size || attr_width || attr_noshade || attr_color) {
+  if (attr_align || attr_size || attr_width || attr_noshade || attr_color || attr_bgcolor) {
     W_L(" style=\"");
     if (attr_align) {
       W_L("float:");
