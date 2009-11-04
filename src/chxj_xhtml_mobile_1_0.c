@@ -5370,6 +5370,7 @@ s_xhtml_1_0_start_span_tag(void *pdoc, Node *node)
   char *attr_marquee_dir = NULL;
   char *attr_marquee_style = NULL;
   char *attr_marquee_loop = NULL;
+  char *css_bgcolor       = NULL;
 
   xhtml = GET_XHTML(pdoc);
   doc     = xhtml->doc;
@@ -5394,6 +5395,8 @@ s_xhtml_1_0_start_span_tag(void *pdoc, Node *node)
       css_property_t *marquee_dir_prop = chxj_css_get_property_value(doc, style, "-wap-marquee-dir");
       css_property_t *marquee_style_prop = chxj_css_get_property_value(doc, style, "-wap-marquee-style");
       css_property_t *marquee_loop_prop = chxj_css_get_property_value(doc, style, "-wap-marquee-loop");
+      css_property_t *bgcolor_prop = chxj_css_get_property_value(doc, style, "background-color");
+      
       css_property_t *cur;
       for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
         attr_color = apr_pstrdup(doc->pool, cur->value);
@@ -5440,7 +5443,12 @@ s_xhtml_1_0_start_span_tag(void *pdoc, Node *node)
       }
       for (cur = marquee_loop_prop->next; cur != marquee_loop_prop; cur = cur->next) {
         if (cur->value && *cur->value) {
-          attr_marquee_loop = apr_pstrdup(doc->pool, cur->value);
+          if(strcmp(cur->value,"0") == 0 || strcmp(cur->value,"-1") == 0){
+            attr_marquee_loop = "infinite";
+          }
+          else{
+            attr_marquee_loop = apr_pstrdup(doc->pool, cur->value);
+          }
         }
       }
       for (cur = text_align_prop->next; cur != text_align_prop; cur = cur->next) {
@@ -5454,11 +5462,16 @@ s_xhtml_1_0_start_span_tag(void *pdoc, Node *node)
           attr_align = apr_pstrdup(doc->pool, "right");
         }
       }
+      for (cur = bgcolor_prop->next; cur != bgcolor_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          css_bgcolor = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
     }
   }
 
   W_L("<span");
-  if (attr_color || attr_size || attr_align || attr_blink || attr_marquee) {
+  if (attr_color || attr_size || attr_align || attr_blink || attr_marquee || css_bgcolor) {
     W_L(" style=\"");
     if (attr_color) {
       attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
@@ -5498,6 +5511,11 @@ s_xhtml_1_0_start_span_tag(void *pdoc, Node *node)
         W_V(attr_marquee_loop);
         W_L(";");
       }
+    }
+    if(css_bgcolor){
+      W_L("background-color:");
+      W_V(css_bgcolor);
+      W_L(";");
     }
     W_L("\"");
   }
