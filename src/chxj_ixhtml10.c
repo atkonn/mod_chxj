@@ -1352,8 +1352,9 @@ s_ixhtml10_start_br_tag(void *pdoc, Node *node)
       }
     }
   }
-  W_L("<br");
-  if (attr_clear) {
+  
+  if(attr_clear){
+    W_L("<div");
     W_L(" style=\"");
     W_L("clear:");
     if (STRCASEEQ('a','A',"all",attr_clear)) {
@@ -1364,8 +1365,12 @@ s_ixhtml10_start_br_tag(void *pdoc, Node *node)
     }
     W_L(";");
     W_L("\"");
+    W_L("></div>");
   }
-  W_L(" />");
+  else{
+    W_L("<br");
+    W_L(" />");
+  }
   return ixhtml10->out;
 }
 

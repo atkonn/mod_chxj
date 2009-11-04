@@ -1346,8 +1346,10 @@ s_jxhtml_start_br_tag(void *pdoc, Node *node)
   jxhtml = GET_JXHTML(pdoc);
   doc   = jxhtml->doc;
   r     = doc->r;
+  
+  char         *attr_style = NULL;
+  char         *attr_clear = NULL;
 
-  W_L("<br");
   /*--------------------------------------------------------------------------*/
   /* Get Attributes                                                           */
   /*--------------------------------------------------------------------------*/
@@ -1358,11 +1360,34 @@ s_jxhtml_start_br_tag(void *pdoc, Node *node)
     char *value = qs_get_attr_value(doc,attr);
     if (STRCASEEQ('c','C',"clear",name)) {
       if (value && (STRCASEEQ('l','L',"left",value) || STRCASEEQ('r','R',"right",value) || STRCASEEQ('a','A',"all",value))) {
-        W_L(" clear=\"");
-        W_V(value);
-        W_L("\"");
+        attr_clear = value;
       }
     }
+    else if (STRCASEEQ('s','S',"style",name)) {
+      attr_style = apr_pstrdup(doc->buf.pool, value);
+    }
+  }
+  if (IS_CSS_ON(jxhtml->entryp)) {
+    css_prop_list_t *style = s_jxhtml_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *clear_prop = chxj_css_get_property_value(doc, style, "clear");
+      css_property_t *cur;
+      for (cur = clear_prop->next; cur != clear_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          if ( STRCASEEQ('l','L',"left",  cur->value)
+            || STRCASEEQ('r','R',"right", cur->value)
+            || STRCASEEQ('b','B',"both"  ,cur->value)) {
+            attr_clear = apr_pstrdup(doc->pool, cur->value);
+          }
+        }
+      }
+    }
+  }
+  W_L("<br");
+  if(attr_clear){
+    W_L(" clear=\"");
+    W_V(attr_clear);
+    W_L("\"");
   }
   W_L(" />");
   return jxhtml->out;
