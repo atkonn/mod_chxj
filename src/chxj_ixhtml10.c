@@ -627,7 +627,7 @@ s_ixhtml10_start_html_tag(void *pdoc, Node *UNUSED(node))
 
   W_L("<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>");
   W_NLCODE();
-  W_L("<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">");
+  W_L("<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/2.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">");
   W_NLCODE();
 
   /*--------------------------------------------------------------------------*/
