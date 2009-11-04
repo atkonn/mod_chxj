@@ -825,7 +825,14 @@ s_jxhtml_start_meta_tag(void *pdoc, Node *node)
         }
       }
       break;
-    
+    case 'n':
+    case 'N':
+      if (strcasecmp(name, "name") == 0 && value && *value) {
+        W_L(" name=\"");
+        W_V(value);
+        W_L("\"");
+      }
+      break;
     default:
       break;
     }

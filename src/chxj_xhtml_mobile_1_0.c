@@ -831,7 +831,7 @@ s_xhtml_1_0_start_meta_tag(void *pdoc, Node *node)
         W_L(" ");
         W_V(name);
         W_L("=\"");
-        W_V(chxj_header_inf_set_content_type(r, "text/html; charset=Windows-31J"));
+        W_V(chxj_header_inf_set_content_type(r, "text/html; charset=Shift_JIS"));
         W_L("\"");
       }
       else {
