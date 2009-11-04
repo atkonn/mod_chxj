@@ -1153,6 +1153,8 @@ s_ixhtml10_start_a_tag(void *pdoc, Node *node)
   request_rec *r;
   Attr        *attr;
   char        *attr_style = NULL;
+  char        *attr_id    = NULL;
+  char        *attr_lcs   = NULL;
 
   ixhtml10 = GET_IXHTML10(pdoc);
   doc   = ixhtml10->doc;
@@ -1167,13 +1169,14 @@ s_ixhtml10_start_a_tag(void *pdoc, Node *node)
        attr = qs_get_next_attr(doc,attr)) {
     char *name  = qs_get_attr_name(doc,attr);
     char *value = qs_get_attr_value(doc,attr);
+    if (STRCASEEQ('i','I',"id",name)){
+      attr_id = apr_pstrdup(doc->buf.pool, value);
+    }
     if (STRCASEEQ('n','N',"name",name)) {
       /*----------------------------------------------------------------------*/
       /* CHTML1.0                                                             */
       /*----------------------------------------------------------------------*/
-      W_L(" name=\"");
-      W_V(value);
-      W_L("\"");
+      attr_id = apr_pstrdup(doc->buf.pool, value);
     }
     else if (STRCASEEQ('h','H',"href",name)) {
       /*----------------------------------------------------------------------*/
@@ -1214,7 +1217,7 @@ s_ixhtml10_start_a_tag(void *pdoc, Node *node)
       /* CHTML 3.0                                                            */
       /* It is special only for CHTML.                                        */
       /*----------------------------------------------------------------------*/
-      W_L(" utn ");
+      W_L(" utn=\"utn\"");
     }
     else if (STRCASEEQ('t','T',"telbook",name)) {
       /*----------------------------------------------------------------------*/
@@ -1264,7 +1267,20 @@ s_ixhtml10_start_a_tag(void *pdoc, Node *node)
       /*----------------------------------------------------------------------*/
       attr_style = value;
     }
+    if (STRCASEEQ('l','L',"lcs",name)) {
+      attr_lcs = "lcs";
+    }
   }
+  if(attr_id){
+    W_L(" id=\"");
+    W_V(attr_id);
+    W_L("\"");
+  }
+  
+  if(attr_lcs){
+    W_L(" lcs");
+  }
+  
   W_L(">");
 
   if (IS_CSS_ON(ixhtml10->entryp)) {
