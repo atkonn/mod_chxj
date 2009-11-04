@@ -3404,6 +3404,7 @@ s_ixhtml10_start_div_tag(void *pdoc, Node *node)
   char        *attr_color             = NULL;
   char        *attr_bgcolor           = NULL;
   char        *attr_font_size         = NULL;
+  char        *css_clear              = NULL;
 
   ixhtml10 = GET_IXHTML10(pdoc);
   doc   = ixhtml10->doc;
@@ -3437,6 +3438,7 @@ s_ixhtml10_start_div_tag(void *pdoc, Node *node)
       css_property_t *font_size_prop         = chxj_css_get_property_value(doc, style, "font-size");
       css_property_t *background_color_prop  = chxj_css_get_property_value(doc, style, "background-color");
       css_property_t *background_prop        = chxj_css_get_property_value(doc, style, "background");
+      css_property_t *clear_prop             = chxj_css_get_property_value(doc, style, "clear");
 
       css_property_t *cur;
       for (cur = display_prop->next; cur != display_prop; cur = cur->next) {
@@ -3495,8 +3497,16 @@ s_ixhtml10_start_div_tag(void *pdoc, Node *node)
           }
         }
         for (cur = wap_marquee_loop_prop->next; cur != wap_marquee_loop_prop; cur = cur->next) {
-          attr_wap_marquee_loop = apr_pstrdup(doc->pool, cur->value);
+          if(strcmp(cur->value,"0") == 0 || strcmp(cur->value,"-1") == 0){
+            attr_wap_marquee_loop = "infinite";
+          }
+          else{
+            attr_wap_marquee_loop = apr_pstrdup(doc->pool, cur->value);
+          }
         }
+      }
+      for (cur = clear_prop->next; cur != clear_prop; cur = cur->next) {
+        css_clear = apr_pstrdup(doc->pool, cur->value);
       }
     }
   }
@@ -3509,7 +3519,8 @@ s_ixhtml10_start_div_tag(void *pdoc, Node *node)
       || attr_wap_marquee_loop
       || attr_color
       || attr_bgcolor
-      || attr_font_size) {
+      || attr_font_size
+      || css_clear ) {
     W_L(" style=\"");
     if (attr_align) {
       W_L("text-align:");
@@ -3554,6 +3565,11 @@ s_ixhtml10_start_div_tag(void *pdoc, Node *node)
     if (attr_font_size) {
       W_L("font-size:");
       W_V(attr_font_size);
+      W_L(";");
+    }
+    if (css_clear){
+      W_L("clear:");
+      W_V(css_clear);
       W_L(";");
     }
     W_L("\"");
