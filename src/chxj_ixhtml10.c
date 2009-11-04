@@ -2923,6 +2923,15 @@ s_ixhtml10_start_img_tag(void *pdoc, Node *node)
   char        *attr_style  = NULL;
   char        *attr_hspace = NULL;
   char        *attr_vspace = NULL;
+  
+  char        *css_float          = NULL;
+  char        *css_margin_left    = NULL;
+  char        *css_margin_right   = NULL;
+  char        *css_margin_top     = NULL;
+  char        *css_margin_bottom  = NULL;
+  char        *css_display        = NULL;
+  char        *css_valign         = NULL;
+  
 #ifndef IMG_NOT_CONVERT_FILENAME
   device_table  *spec = ixhtml10->spec;
 #endif
@@ -3017,6 +3026,8 @@ s_ixhtml10_start_img_tag(void *pdoc, Node *node)
       css_property_t *margin_right_prop  = chxj_css_get_property_value(doc, style, "margin-right");
       css_property_t *margin_top_prop    = chxj_css_get_property_value(doc, style, "margin-top");
       css_property_t *margin_bottom_prop = chxj_css_get_property_value(doc, style, "margin-bottom");
+      
+      
       css_property_t *cur;
       for (cur = height_prop->next; cur != height_prop; cur = cur->next) {
         attr_height = apr_pstrdup(doc->pool, cur->value);
@@ -3025,26 +3036,43 @@ s_ixhtml10_start_img_tag(void *pdoc, Node *node)
         attr_width = apr_pstrdup(doc->pool, cur->value);
       }
       for (cur = valign_prop->next; cur != valign_prop; cur = cur->next) {
-        attr_align = apr_pstrdup(doc->pool, cur->value);
+        css_valign = apr_pstrdup(doc->pool, cur->value);
       }
-      for (cur = margin_left_prop->next; cur != margin_left_prop; cur = cur->next) {
-        attr_hspace = apr_pstrdup(doc->pool, cur->value);
-      }
+      
       if (! attr_hspace) {
+        for (cur = margin_left_prop->next; cur != margin_left_prop; cur = cur->next) {
+          css_margin_left   = apr_pstrdup(doc->pool, cur->value);
+        }
         for (cur = margin_right_prop->next; cur != margin_right_prop; cur = cur->next) {
-          attr_hspace = apr_pstrdup(doc->pool, cur->value);
+          css_margin_right  = apr_pstrdup(doc->pool, cur->value);
         }
       }
-      for (cur = margin_top_prop->next; cur != margin_top_prop; cur = cur->next) {
-        attr_vspace = apr_pstrdup(doc->pool, cur->value);
-      }
+      
       if (! attr_vspace) {
+        for (cur = margin_top_prop->next; cur != margin_top_prop; cur = cur->next) {
+          css_margin_top = apr_pstrdup(doc->pool, cur->value);
+        }
         for (cur = margin_bottom_prop->next; cur != margin_bottom_prop; cur = cur->next) {
-          attr_vspace = apr_pstrdup(doc->pool, cur->value);
+          css_margin_bottom = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+      
+      css_property_t *float_prop = chxj_css_get_property_value(doc, style, "float");
+      for (cur = float_prop->next; cur != float_prop; cur = cur->next) {
+        css_float = apr_pstrdup(doc->pool, cur->value);
+      }
+      css_property_t *display_prop       = chxj_css_get_property_value(doc, style, "display");
+      for (cur = display_prop->next; cur != display_prop; cur = cur->next) {
+        char *tmp = apr_pstrdup(doc->pool, cur->value);
+        char *tmpp = strstr(tmp, "none");
+        if(tmpp){
+          css_display = apr_pstrdup(doc->pool, tmp);
         }
       }
     }
   }
+  
+  if(!css_display){
 
   W_L("<img");
   if (attr_src) {
@@ -3052,25 +3080,43 @@ s_ixhtml10_start_img_tag(void *pdoc, Node *node)
     W_V(attr_src);
     W_L("\"");
   }
-  if (attr_align || attr_hspace || attr_vspace) {
+  if (attr_align || attr_hspace || attr_vspace || css_float || css_margin_left || css_margin_right || css_margin_top || css_margin_bottom || css_valign ) {
     W_L(" style=\"");
     if (attr_align) {
       if (STRCASEEQ('t','T',"top", attr_align)) {
+        css_valign = NULL;
         W_L("vertical-align:top;");
       }
       else if (STRCASEEQ('m','M',"middle", attr_align) || STRCASEEQ('c','C',"center",attr_align)) {
+        css_valign = NULL;
         W_L("vertical-align:middle;");
       }
       else if (STRCASEEQ('b','B',"bottom", attr_align)) {
+        css_valign = NULL;
         W_L("vertical-align:bottom;");
       }
       else if (STRCASEEQ('l','L',"left", attr_align)) {
+        css_float = NULL;
         W_L("float:left;");
       }
       else if (STRCASEEQ('r','R',"right", attr_align)) {
+        css_float = NULL;
         W_L("float:right;");
       }
+   }
+   
+   
+    if(css_float){
+      W_L("float:");
+      W_V(css_float);
+      W_L(";");
     }
+    if(css_valign){
+      W_L("vertical-align:");
+      W_V(css_valign);
+      W_L(";");
+    }
+    
     if (attr_hspace) {
       W_L("margin-left:");
       W_V(attr_hspace);
@@ -3079,6 +3125,18 @@ s_ixhtml10_start_img_tag(void *pdoc, Node *node)
       W_V(attr_hspace);
       W_L(";");
     }
+    else{
+      if(css_margin_left){
+        W_L("margin-left:");
+        W_V(css_margin_left);
+        W_L(";");
+      }
+      if(css_margin_right){
+        W_L("margin-right:");
+        W_V(css_margin_right);
+        W_L(";");
+      }
+    }
     if (attr_vspace) {
       W_L("margin-top:");
       W_V(attr_vspace);
@@ -3086,6 +3144,18 @@ s_ixhtml10_start_img_tag(void *pdoc, Node *node)
       W_L("margin-bottom:");
       W_V(attr_vspace);
       W_L(";");
+    }
+    else{
+      if(css_margin_top){
+        W_L("margin-top:");
+        W_V(css_margin_top);
+        W_L(";");
+      }
+      if(css_margin_bottom){
+        W_L("margin-bottom:");
+        W_V(css_margin_bottom);
+        W_L(";");
+      }
     }
     W_L("\"");
   }
@@ -3108,6 +3178,7 @@ s_ixhtml10_start_img_tag(void *pdoc, Node *node)
     W_L(" alt=\"\"");
   }
   W_L(" />");
+  }
   return ixhtml10->out;
 }
 
