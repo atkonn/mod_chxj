@@ -2471,6 +2471,7 @@ s_jxhtml_start_p_tag(void *pdoc, Node *node)
   char        *attr_style = NULL;
   char        *attr_color = NULL;
   char        *attr_blink = NULL;
+  char        *css_clear  = NULL;
 
   jxhtml = GET_JXHTML(pdoc);
   doc   = jxhtml->doc;
@@ -2500,6 +2501,7 @@ s_jxhtml_start_p_tag(void *pdoc, Node *node)
       css_property_t *text_align_prop = chxj_css_get_property_value(doc, style, "text-align");
       css_property_t *color_prop      = chxj_css_get_property_value(doc, style, "color");
       css_property_t *text_deco_prop  = chxj_css_get_property_value(doc, style, "text-decoration");
+      css_property_t *clear_prop      = chxj_css_get_property_value(doc, style, "clear");
       css_property_t *cur;
       for (cur = text_align_prop->next; cur != text_align_prop; cur = cur->next) {
         if (STRCASEEQ('l','L',"left",cur->value)) {
@@ -2522,10 +2524,13 @@ s_jxhtml_start_p_tag(void *pdoc, Node *node)
           attr_blink = apr_pstrdup(doc->pool, cur->value);
         }
       }
+      for (cur = clear_prop->next; cur != clear_prop; cur = cur->next) {
+        css_clear = apr_pstrdup(doc->pool, cur->value);
+      }
     }
   }
   W_L("<p");
-  if ((attr_align && *attr_align) || (attr_color && *attr_color) || (attr_blink && *attr_blink)) {
+  if ((attr_align && *attr_align) || (attr_color && *attr_color) || (attr_blink && *attr_blink) || css_clear) {
     W_L(" style=\"");
     if (attr_align) {
       W_L("text-align:");
@@ -2541,6 +2546,11 @@ s_jxhtml_start_p_tag(void *pdoc, Node *node)
     if (attr_blink) {
       W_L("text-decoration:");
       W_V(attr_blink);
+      W_L(";");
+    }
+    if (css_clear){
+      W_L("clear:");
+      W_V(css_clear);
       W_L(";");
     }
     W_L("\"");
