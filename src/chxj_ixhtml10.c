@@ -1938,9 +1938,11 @@ s_ixhtml10_start_input_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   if (attr_value) {
-    if (STRCASEEQ('s','S',"submit",attr_type) || STRCASEEQ('r','R',"reset",attr_type)) {
-      apr_size_t value_len = strlen(attr_value);
-      attr_value = chxj_conv_z2h(r, attr_value, &value_len, ixhtml10->entryp);
+    if (attr_type){
+      if (STRCASEEQ('s','S',"submit",attr_type) || STRCASEEQ('r','R',"reset",attr_type)) {
+        apr_size_t value_len = strlen(attr_value);
+        attr_value = chxj_conv_z2h(r, attr_value, &value_len, ixhtml10->entryp);
+      }
     }
 
     W_L(" value=\"");
