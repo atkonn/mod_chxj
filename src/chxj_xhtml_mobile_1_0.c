@@ -1838,37 +1838,15 @@ s_xhtml_1_0_start_input_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   if (attr_istyle && *attr_istyle && (*attr_istyle == '1' || *attr_istyle == '2' || *attr_istyle == '3' || *attr_istyle == '4')) {
-    char *fmt = qs_conv_istyle_to_format(r->pool,attr_istyle);
-    if (attr_max_length && *attr_max_length) {
-      int ii;
-      for (ii=0; (unsigned int)ii<strlen(attr_max_length); ii++) {
-        if (attr_max_length[ii] < '0' || attr_max_length[ii] > '9') {
-          attr_max_length = apr_psprintf(r->pool, "0");
-          break;
-        }
-      }
-
-      if (strcmp(attr_max_length, "0")) {
-        char *vv = apr_psprintf(r->pool, " FORMAT=\"%d%s\"", atoi(attr_max_length), fmt);
-        W_V(vv);
-      }
-    }
-    else {
-      W_L(" FORMAT=\"");
-      W_L("*");
-      W_V(fmt);
-      W_L("\"");
-    }
+    W_L(" istyle=\"");
+    W_V(attr_istyle);
+    W_L("\"");
   }
-  else {
-    if (attr_max_length && *attr_max_length) {
-      if (chxj_chk_numeric(attr_max_length) != 0) {
-        attr_max_length = apr_psprintf(r->pool, "0");
-      }
-      if (strcmp(attr_max_length, "0")) {
-        char *vv = apr_psprintf(r->pool, " FORMAT=\"%dm\"", atoi(attr_max_length));
-        W_V(vv);
-      }
+  if (attr_max_length && *attr_max_length) {
+    if (chxj_chk_numeric(attr_max_length) == 0) {
+      W_L(" maxlength=\"");
+      W_V(attr_max_length);
+      W_L("\"");
     }
   }
   /*--------------------------------------------------------------------------*/

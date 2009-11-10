@@ -1947,29 +1947,9 @@ s_jxhtml_start_input_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   if (attr_istyle && (*attr_istyle == '1' || *attr_istyle == '2' || *attr_istyle == '3' || *attr_istyle == '4')) {
-    /*------------------------------------------------------------------------*/
-    /* CHTML 2.0                                                              */
-    /*------------------------------------------------------------------------*/
-    if (attr_type && STRCASEEQ('p','P',"password", attr_type) && ! jxhtml->entryp->pc_flag ) {
-      char *vv = qs_conv_istyle_to_format(doc->buf.pool, "4");
-      W_L(" style=\"-wap-input-format:&quot;*");
-      W_V(vv);
-      W_L("&quot;;\"");
-    }
-    else {
-      char *vv = qs_conv_istyle_to_format(doc->buf.pool, attr_istyle);
-      W_L(" style=\"");
-      W_L("-wap-input-format:&quot;*");
-      W_V(vv);
-      W_L("&quot;;");
-      W_L("\"");
-    }
-  }
-  else if (attr_type && STRCASEEQ('p','P',"password",attr_type)) {
-    char *vv = qs_conv_istyle_to_format(doc->buf.pool, "4");
-    W_L(" style=\"-wap-input-format:&quot;*");
-    W_V(vv);
-    W_L("&quot;;\"");
+    W_L(" istyle=\"");
+    W_V(attr_istyle);
+    W_L("\"");
   }
   /*--------------------------------------------------------------------------*/
   /* The figure is default for the password.                                  */
