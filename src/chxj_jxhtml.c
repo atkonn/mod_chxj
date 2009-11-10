@@ -1951,6 +1951,9 @@ s_jxhtml_start_input_tag(void *pdoc, Node *node)
     W_V(attr_istyle);
     W_L("\"");
   }
+  else if(attr_type && STRCASEEQ('p','P',"password",attr_type)) {
+    W_L(" istyle=\"4\"");
+  }
   /*--------------------------------------------------------------------------*/
   /* The figure is default for the password.                                  */
   /*--------------------------------------------------------------------------*/

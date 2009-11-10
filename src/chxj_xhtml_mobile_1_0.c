@@ -1842,6 +1842,9 @@ s_xhtml_1_0_start_input_tag(void *pdoc, Node *node)
     W_V(attr_istyle);
     W_L("\"");
   }
+  else if(attr_type && STRCASEEQ('p','P',"password",attr_type)) {
+    W_L(" istyle=\"4\"");
+  }
   if (attr_max_length && *attr_max_length) {
     if (chxj_chk_numeric(attr_max_length) == 0) {
       W_L(" maxlength=\"");
