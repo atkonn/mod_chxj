@@ -62,8 +62,12 @@ static char *s_jxhtml_start_li_tag       (void *pdoc, Node *node);
 static char *s_jxhtml_end_li_tag         (void *pdoc, Node *node);
 static char *s_jxhtml_start_br_tag       (void *pdoc, Node *node);
 static char *s_jxhtml_end_br_tag         (void *pdoc, Node *node);
+static char *s_jxhtml_start_table_tag    (void *pdoc, Node *node);
+static char *s_jxhtml_end_table_tag      (void *pdoc, Node *node);
 static char *s_jxhtml_start_tr_tag       (void *pdoc, Node *node);
 static char *s_jxhtml_end_tr_tag         (void *pdoc, Node *node);
+static char *s_jxhtml_start_td_tag       (void *pdoc, Node *node);
+static char *s_jxhtml_end_td_tag         (void *pdoc, Node *node);
 static char *s_jxhtml_start_font_tag     (void *pdoc, Node *node);
 static char *s_jxhtml_end_font_tag       (void *pdoc, Node *node);
 static char *s_jxhtml_start_form_tag     (void *pdoc, Node *node);
@@ -237,8 +241,8 @@ tag_handler jxhtml_handler[] = {
   },
   /* tagTABLE */
   {
-    NULL,
-    NULL,
+    s_jxhtml_start_table_tag,
+    s_jxhtml_end_table_tag,
   },
   /* tagTR */
   {
@@ -247,8 +251,8 @@ tag_handler jxhtml_handler[] = {
   },
   /* tagTD */
   {
-    NULL,
-    NULL,
+    s_jxhtml_start_td_tag,
+    s_jxhtml_end_td_tag,
   },
   /* tagTBODY */
   {
@@ -1416,6 +1420,184 @@ s_jxhtml_end_br_tag(void *pdoc, Node *UNUSED(child))
   return jxhtml->out;
 }
 
+/**
+ * It is a handler who processes the TABLE tag.
+ *
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The TR tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_jxhtml_start_table_tag(void *pdoc, Node *node) 
+{
+  jxhtml_t     *jxhtml;
+  Doc          *doc;
+  request_rec  *r;
+  Attr         *attr;
+  
+  char         *attr_style  = NULL;
+  char         *attr_align  = NULL;
+  char         *attr_width  = NULL;
+  char         *attr_height = NULL;
+  char         *attr_bgcolor = NULL;
+  char         *attr_border_width  = NULL;
+  char         *attr_border_color  = NULL;
+
+  jxhtml = GET_JXHTML(pdoc);
+  doc   = jxhtml->doc;
+  r     = doc->r;
+  
+  /*--------------------------------------------------------------------------*/
+  /* Get Attributes                                                           */
+  /*--------------------------------------------------------------------------*/
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *name  = qs_get_attr_name(doc,attr);
+    char *val   = qs_get_attr_value(doc,attr);
+    if (STRCASEEQ('a','A',"align",name)) {
+      if (val && (STRCASEEQ('l','L',"left",val) || STRCASEEQ('r','R',"right",val) || STRCASEEQ('c','C',"center",val))) {
+        attr_align = apr_pstrdup(doc->buf.pool, val);
+      }
+    }
+    else if (STRCASEEQ('h','H',"height",name) && val && *val) {
+      attr_height = apr_pstrdup(doc->buf.pool, val);
+    }
+    else if (STRCASEEQ('w','W',"width",name) && val && *val) {
+      attr_width = apr_pstrdup(doc->buf.pool, val);
+    }
+    else if (STRCASEEQ('s','S',"style",name) && val && *val) {
+      attr_style = apr_pstrdup(doc->buf.pool, val);
+    }
+    else if (STRCASEEQ('b','B',"bgcolor",name) && val && *val) {
+      attr_bgcolor = apr_pstrdup(doc->buf.pool, val);
+      attr_bgcolor = chxj_css_rgb_func_to_value(doc->pool, attr_bgcolor);
+    }
+    else if (STRCASEEQ('b','B',"border",name) && val && *val) {
+      attr_border_width = apr_pstrdup(doc->buf.pool, val);
+    }
+    else if (STRCASEEQ('b','B',"bordercolor",name) && val && *val) {
+      attr_border_color = apr_pstrdup(doc->buf.pool, val);
+      attr_border_color = chxj_css_rgb_func_to_value(doc->pool, attr_border_color);
+    }
+  }
+  
+  if (IS_CSS_ON(jxhtml->entryp)) {
+    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *width_prop             = chxj_css_get_property_value(doc, style, "width");
+      css_property_t *height_prop            = chxj_css_get_property_value(doc, style, "height");
+      css_property_t *align_prop             = chxj_css_get_property_value(doc, style, "text-align");
+      css_property_t *bgcolor_prop           = chxj_css_get_property_value(doc, style, "background-color");
+      css_property_t *border_width_prop      = chxj_css_get_property_value(doc, style, "border-width");
+      css_property_t *border_color_prop      = chxj_css_get_property_value(doc, style, "border-color");
+      
+      css_property_t *cur;
+      for (cur = width_prop->next; cur != width_prop; cur = cur->next) {
+        char *tmp = apr_pstrdup(doc->pool, cur->value);
+        char *tmpp = strstr(tmp, "px");
+        if (tmpp) {
+          size_t len = strlen(tmp) - strlen(tmpp);
+          attr_width = apr_pstrndup(doc->pool, tmp,len);
+        }
+        else{
+          attr_width = apr_pstrdup(doc->pool, tmp);
+        }
+      }
+      for (cur = height_prop->next; cur != height_prop; cur = cur->next) {
+        char *tmp = apr_pstrdup(doc->pool, cur->value);
+        char *tmpp = strstr(tmp, "px");
+        if (tmpp) {
+          size_t len = strlen(tmp) - strlen(tmpp);
+          attr_height = apr_pstrndup(doc->pool, tmp,len);
+        }
+        else{
+          attr_height = apr_pstrdup(doc->pool, tmp);
+        }
+      }
+      for (cur = align_prop->next; cur != align_prop; cur = cur->next) {
+        if (cur->value && (STRCASEEQ('l','L',"left",cur->value) || STRCASEEQ('r','R',"right",cur->value) || STRCASEEQ('c','C',"center",cur->value))) {
+          attr_align = apr_pstrdup(doc->buf.pool, cur->value);
+        }
+      }
+      for (cur = bgcolor_prop->next; cur != bgcolor_prop; cur = cur->next) {
+        attr_bgcolor = apr_pstrdup(doc->pool, cur->value);
+        attr_bgcolor = chxj_css_rgb_func_to_value(doc->pool, attr_bgcolor);
+      }
+      for (cur = border_width_prop->next; cur != border_width_prop; cur = cur->next) {
+        attr_border_width = apr_pstrdup(doc->pool, cur->value);
+      }
+      for (cur = border_color_prop->next; cur != border_color_prop; cur = cur->next) {
+        attr_border_color = apr_pstrdup(doc->pool, cur->value);
+        attr_border_color = chxj_css_rgb_func_to_value(doc->pool, attr_border_color);
+      }
+    }
+  }
+
+  W_L("<table");
+  if (attr_align){
+    W_L(" align=\"");
+    W_V(attr_align);
+    W_L("\"");
+  }
+  if (attr_height){
+    W_L(" height=\"");
+    W_L(attr_height);
+    W_L("\"");
+  }
+  if (attr_width){
+    W_L(" width=\"");
+    W_V(attr_width);
+    W_L("\"");
+  }
+  if (attr_bgcolor && *attr_bgcolor){
+    W_L(" bgcolor=\"");
+    W_V(attr_bgcolor);
+    W_L("\"");
+  }
+  if (attr_border_width || attr_border_color ){
+    W_L(" style=\"");
+    if (attr_border_width){
+      W_L("border-width:");
+      W_V(attr_border_width);
+      W_L(";");
+    }
+    if (attr_border_color && *attr_border_color){
+      W_L("border-color:");
+      W_V(attr_border_color);
+      W_L(";");
+    }
+    W_L("\"");
+  }
+  W_L(">");
+  
+  return jxhtml->out;
+}
+
+/**
+ * It is a handler who processes the TABLE tag.
+ *
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The TR tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_jxhtml_end_table_tag(void *pdoc, Node *UNUSED(node)) 
+{
+  jxhtml_t      *jxhtml;
+  request_rec  *r;
+  Doc          *doc;
+
+  jxhtml = GET_JXHTML(pdoc);
+  doc   = jxhtml->doc;
+  r     = jxhtml->doc->r;
+  
+  W_L("</table>");
+  return jxhtml->out;
+}
+
 
 /**
  * It is a handler who processes the TR tag.
@@ -1426,17 +1608,92 @@ s_jxhtml_end_br_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_tr_tag(void *pdoc, Node *UNUSED(node)) 
+s_jxhtml_start_tr_tag(void *pdoc, Node *node) 
 {
   jxhtml_t      *jxhtml;
   Doc          *doc;
   request_rec  *r;
+  
+  Attr         *attr;
+  
+  char         *attr_style  = NULL;
+  char         *attr_align  = NULL;
+  char         *attr_valign = NULL;
+  char         *attr_bgcolor = NULL;
 
   jxhtml = GET_JXHTML(pdoc);
   doc   = jxhtml->doc;
   r     = doc->r;
+  
+  /*--------------------------------------------------------------------------*/
+  /* Get Attributes                                                           */
+  /*--------------------------------------------------------------------------*/
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *name  = qs_get_attr_name(doc,attr);
+    char *val   = qs_get_attr_value(doc,attr);
+    if (STRCASEEQ('a','A',"align",name)) {
+      if (val && (STRCASEEQ('l','L',"left",val) || STRCASEEQ('r','R',"right",val) || STRCASEEQ('c','C',"center",val))) {
+        attr_align = apr_pstrdup(doc->buf.pool, val);
+      }
+    }
+    else if (STRCASEEQ('v','V',"valign",name) && val && *val) {
+      if (val && (STRCASEEQ('t','T',"top",val) || STRCASEEQ('m','M',"middle",val) || STRCASEEQ('b','B',"bottom",val))) {
+        attr_valign = apr_pstrdup(doc->buf.pool, val);
+      }
+    }
+    else if (STRCASEEQ('s','S',"style",name) && val && *val) {
+      attr_style = apr_pstrdup(doc->buf.pool, val);
+    }
+    else if (STRCASEEQ('b','B',"bgcolor",name) && val && *val) {
+      attr_bgcolor = apr_pstrdup(doc->buf.pool, val);
+      attr_bgcolor = chxj_css_rgb_func_to_value(doc->pool, attr_bgcolor);
+    }
+  }
+  
+  if (IS_CSS_ON(jxhtml->entryp)) {
+    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *align_prop             = chxj_css_get_property_value(doc, style, "text-align");
+      css_property_t *valign_prop            = chxj_css_get_property_value(doc, style, "vertical-align");
+      css_property_t *bgcolor_prop           = chxj_css_get_property_value(doc, style, "background-color");
+      
+      css_property_t *cur;
+      for (cur = align_prop->next; cur != align_prop; cur = cur->next) {
+        if (cur->value && (STRCASEEQ('l','L',"left",cur->value) || STRCASEEQ('r','R',"right",cur->value) || STRCASEEQ('c','C',"center",cur->value))) {
+          attr_align = apr_pstrdup(doc->buf.pool, cur->value);
+        }
+      }
+      for (cur = valign_prop->next; cur != valign_prop; cur = cur->next) {
+        if (cur->value && (STRCASEEQ('t','T',"top",cur->value) || STRCASEEQ('m','M',"middle",cur->value) || STRCASEEQ('b','B',"bottom",cur->value))) {
+          attr_valign = apr_pstrdup(doc->buf.pool, cur->value);
+        }
+      }
+      for (cur = bgcolor_prop->next; cur != bgcolor_prop; cur = cur->next) {
+        attr_bgcolor = apr_pstrdup(doc->pool, cur->value);
+        attr_bgcolor = chxj_css_rgb_func_to_value(doc->pool, attr_bgcolor);
+      }
+    }
+  }
 
-  W_L("<br />");
+  W_L("<tr");
+  if (attr_align){
+    W_L(" align=\"");
+    W_V(attr_align);
+    W_L("\"");
+  }
+  if (attr_valign){
+    W_L(" valign=\"");
+    W_L(attr_valign);
+    W_L("\"");
+  }
+  if (attr_bgcolor && *attr_bgcolor){
+    W_L(" bgcolor=\"");
+    W_V(attr_bgcolor);
+    W_L("\"");
+  }
+  W_L(">");
   return jxhtml->out;
 }
 
@@ -1452,10 +1709,157 @@ s_jxhtml_start_tr_tag(void *pdoc, Node *UNUSED(node))
 static char *
 s_jxhtml_end_tr_tag(void *pdoc, Node *UNUSED(child)) 
 {
-  jxhtml_t *jxhtml = GET_JXHTML(pdoc);
+  jxhtml_t      *jxhtml;
+  request_rec  *r;
+  Doc          *doc;
+
+  jxhtml = GET_JXHTML(pdoc);
+  doc   = jxhtml->doc;
+  r     = jxhtml->doc->r;
+  
+  W_L("</tr>");
   return jxhtml->out;
 }
 
+/**
+ * It is a handler who processes the TD tag.
+ *
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The TR tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_jxhtml_start_td_tag(void *pdoc, Node *node) 
+{
+  jxhtml_t      *jxhtml;
+  Doc          *doc;
+  request_rec  *r;
+
+  Attr         *attr;
+  
+  char         *attr_style  = NULL;
+  char         *attr_align  = NULL;
+  char         *attr_valign = NULL;
+  char         *attr_bgcolor = NULL;
+  char         *attr_colspan = NULL;
+  char         *attr_rowspan = NULL;
+
+  jxhtml = GET_JXHTML(pdoc);
+  doc   = jxhtml->doc;
+  r     = doc->r;
+  
+  /*--------------------------------------------------------------------------*/
+  /* Get Attributes                                                           */
+  /*--------------------------------------------------------------------------*/
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *name  = qs_get_attr_name(doc,attr);
+    char *val   = qs_get_attr_value(doc,attr);
+    if (STRCASEEQ('a','A',"align",name)) {
+      if (val && (STRCASEEQ('l','L',"left",val) || STRCASEEQ('r','R',"right",val) || STRCASEEQ('c','C',"center",val))) {
+        attr_align = apr_pstrdup(doc->buf.pool, val);
+      }
+    }
+    else if (STRCASEEQ('v','V',"valign",name) && val && *val) {
+      if (val && (STRCASEEQ('t','T',"top",val) || STRCASEEQ('m','M',"middle",val) || STRCASEEQ('b','B',"bottom",val))) {
+        attr_valign = apr_pstrdup(doc->buf.pool, val);
+      }
+    }
+    else if (STRCASEEQ('s','S',"style",name) && val && *val) {
+      attr_style = apr_pstrdup(doc->buf.pool, val);
+    }
+    else if (STRCASEEQ('b','B',"bgcolor",name) && val && *val) {
+      attr_bgcolor = apr_pstrdup(doc->buf.pool, val);
+      attr_bgcolor = chxj_css_rgb_func_to_value(doc->pool, attr_bgcolor);
+    }
+    else if (STRCASEEQ('c','C',"colspan",name) && val && *val) {
+      attr_colspan = apr_pstrdup(doc->buf.pool, val);
+    }
+    else if (STRCASEEQ('r','R',"rowspan",name) && val && *val) {
+      attr_rowspan = apr_pstrdup(doc->buf.pool, val);
+    }
+  }
+  
+  if (IS_CSS_ON(jxhtml->entryp)) {
+    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *align_prop             = chxj_css_get_property_value(doc, style, "text-align");
+      css_property_t *valign_prop            = chxj_css_get_property_value(doc, style, "vertical-align");
+      css_property_t *bgcolor_prop           = chxj_css_get_property_value(doc, style, "background-color");
+      
+      css_property_t *cur;
+      for (cur = align_prop->next; cur != align_prop; cur = cur->next) {
+        if (cur->value && (STRCASEEQ('l','L',"left",cur->value) || STRCASEEQ('r','R',"right",cur->value) || STRCASEEQ('c','C',"center",cur->value))) {
+          attr_align = apr_pstrdup(doc->buf.pool, cur->value);
+        }
+      }
+      for (cur = valign_prop->next; cur != valign_prop; cur = cur->next) {
+        if (cur->value && (STRCASEEQ('t','T',"top",cur->value) || STRCASEEQ('m','M',"middle",cur->value) || STRCASEEQ('b','B',"bottom",cur->value))) {
+          attr_valign = apr_pstrdup(doc->buf.pool, cur->value);
+        }
+      }
+      for (cur = bgcolor_prop->next; cur != bgcolor_prop; cur = cur->next) {
+        attr_bgcolor = apr_pstrdup(doc->pool, cur->value);
+        attr_bgcolor = chxj_css_rgb_func_to_value(doc->pool, attr_bgcolor);
+      }
+    }
+  }
+
+  W_L("<td");
+  if (attr_align){
+    W_L(" align=\"");
+    W_V(attr_align);
+    W_L("\"");
+  }
+  if (attr_valign){
+    W_L(" valign=\"");
+    W_V(attr_valign);
+    W_L("\"");
+  }
+  if (attr_colspan){
+    W_L(" colspan=\"");
+    W_V(attr_colspan);
+    W_L("\"");
+  }
+  if (attr_rowspan){
+    W_L(" rowspan=\"");
+    W_V(attr_rowspan);
+    W_L("\"");
+  }
+  if (attr_bgcolor && *attr_bgcolor){
+    W_L(" bgcolor=\"");
+    W_V(attr_bgcolor);
+    W_L("\"");
+  }
+  W_L(">");
+  return jxhtml->out;
+}
+
+
+/**
+ * It is a handler who processes the TD tag.
+ *
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The TR tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_jxhtml_end_td_tag(void *pdoc, Node *UNUSED(child)) 
+{
+  jxhtml_t      *jxhtml;
+  request_rec  *r;
+  Doc          *doc;
+
+  jxhtml = GET_JXHTML(pdoc);
+  doc   = jxhtml->doc;
+  r     = jxhtml->doc->r;
+  
+  W_L("</td>");
+  return jxhtml->out;
+}
 
 /**
  * It is a handler who processes the FONT tag.
