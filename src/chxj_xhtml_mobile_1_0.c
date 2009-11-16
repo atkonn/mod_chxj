@@ -4636,9 +4636,8 @@ s_xhtml_1_0_start_textarea_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   if (attr_istyle) {
-    char *fmt = qs_conv_istyle_to_format(doc->r->pool, attr_istyle);
-    W_L(" FORMAT=\"*");
-    W_V(fmt);
+    W_L(" istyle=\"");
+    W_V(attr_istyle);
     W_L("\"");
   }
   W_L(">");

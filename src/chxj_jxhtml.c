@@ -4162,11 +4162,8 @@ s_jxhtml_start_textarea_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   if (attr_istyle) {
-    char *vv = qs_conv_istyle_to_format(doc->buf.pool, attr_istyle);
-    W_L(" style=\"");
-    W_L("-wap-input-format:&quot;*");
-    W_V(vv);
-    W_L("&quot;;");
+    W_L(" istyle=\"");
+    W_V(attr_istyle);
     W_L("\"");
   }
   W_L(">");
