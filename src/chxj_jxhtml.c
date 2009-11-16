@@ -1526,7 +1526,15 @@ s_jxhtml_start_table_tag(void *pdoc, Node *node)
         attr_bgcolor = chxj_css_rgb_func_to_value(doc->pool, attr_bgcolor);
       }
       for (cur = border_width_prop->next; cur != border_width_prop; cur = cur->next) {
-        attr_border_width = apr_pstrdup(doc->pool, cur->value);
+        char *tmp = apr_pstrdup(doc->pool, cur->value);
+        char *tmpp = strstr(tmp, "px");
+        if (tmpp) {
+          size_t len = strlen(tmp) - strlen(tmpp);
+          attr_border_width = apr_pstrndup(doc->pool, tmp,len);
+        }
+        else{
+          attr_border_width = apr_pstrdup(doc->pool, tmp);
+        }
       }
       for (cur = border_color_prop->next; cur != border_color_prop; cur = cur->next) {
         attr_border_color = apr_pstrdup(doc->pool, cur->value);
@@ -1557,18 +1565,20 @@ s_jxhtml_start_table_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   if (attr_border_width || attr_border_color ){
-    W_L(" style=\"");
+    W_L(" style=\"border:");
     if (attr_border_width){
-      W_L("border-width:");
       W_V(attr_border_width);
-      W_L(";");
     }
+    else{
+      W_L("1");
+    }
+    W_L("px solid");
+    
     if (attr_border_color && *attr_border_color){
-      W_L("border-color:");
+      W_L(" ");
       W_V(attr_border_color);
-      W_L(";");
     }
-    W_L("\"");
+    W_L(";\"");
   }
   W_L(">");
   
@@ -1685,7 +1695,7 @@ s_jxhtml_start_tr_tag(void *pdoc, Node *node)
   }
   if (attr_valign){
     W_L(" valign=\"");
-    W_L(attr_valign);
+    W_V(attr_valign);
     W_L("\"");
   }
   if (attr_bgcolor && *attr_bgcolor){
