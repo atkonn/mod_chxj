@@ -416,6 +416,16 @@ tag_handler xhtml_handler[] = {
     s_xhtml_1_0_newline_mark,
     NULL,
   },
+  /* tagObject */
+  {
+    NULL,
+    NULL,
+  },
+  /* tagParam */
+  {
+    NULL,
+    NULL,
+  },
 };
  
 /**

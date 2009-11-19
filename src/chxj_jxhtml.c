@@ -419,6 +419,16 @@ tag_handler jxhtml_handler[] = {
     s_jxhtml_newline_mark,
     NULL,
   },
+  /* tagObject */
+  {
+    NULL,
+    NULL,
+  },
+  /* tagParam */
+  {
+    NULL,
+    NULL,
+  },
 };
 
 

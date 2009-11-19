@@ -431,6 +431,16 @@ tag_handler chtml10_handler[] = {
     s_chtml10_newline_mark,
     NULL,
   },
+  /* tagObject */
+  {
+    NULL,
+    NULL,
+  },
+  /* tagParam */
+  {
+    NULL,
+    NULL,
+  },
 };
 
 

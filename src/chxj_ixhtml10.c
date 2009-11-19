@@ -424,6 +424,16 @@ tag_handler ixhtml10_handler[] = {
     s_ixhtml10_newline_mark,
     NULL,
   },
+  /* tagObject */
+  {
+    NULL,
+    NULL,
+  },
+  /* tagParam */
+  {
+    NULL,
+    NULL,
+  },
 };
 
 

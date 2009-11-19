@@ -418,6 +418,16 @@ tag_handler jhtml_handler[] = {
     s_jhtml_newline_mark,
     NULL,
   },
+  /* tagObject */
+  {
+    NULL,
+    NULL,
+  },
+  /* tagParam */
+  {
+    NULL,
+    NULL,
+  },
 };
 
 
