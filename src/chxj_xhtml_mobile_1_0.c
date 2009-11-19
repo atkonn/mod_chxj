@@ -1030,7 +1030,9 @@ s_xhtml_1_0_start_body_tag(void *pdoc, Node *node)
   char        *attr_bgcolor = NULL;
   char        *attr_text    = NULL;
   char        *attr_link    = NULL;
+  char        *attr_vlink   = NULL;
   char        *attr_style   = NULL;
+  char        *attr_background   = NULL;
 
   /*--------------------------------------------------------------------------*/
   /* Get Attributes                                                           */
@@ -1053,10 +1055,13 @@ s_xhtml_1_0_start_body_tag(void *pdoc, Node *node)
       /* ignore */
     }
     else if (STRCASEEQ('v','V',"vlink",name)) {
-      /* ignore */
+      attr_vlink = value;
     }
     else if (STRCASEEQ('s','S',"style",name) && value && *value) {
       attr_style = value;
+    }
+    else if (STRCASEEQ('b','B',"background",name) && value && *value) {
+      attr_background = value;
     }
   }
 
@@ -1065,6 +1070,7 @@ s_xhtml_1_0_start_body_tag(void *pdoc, Node *node)
     if (style) {
       css_property_t *color_prop      = chxj_css_get_property_value(doc, style, "color");
       css_property_t *bgcolor_prop    = chxj_css_get_property_value(doc, style, "background-color");
+      css_property_t *bgimage_prop    = chxj_css_get_property_value(doc, style, "background-image");
       css_property_t *cur;
       for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
         if (cur->value && *cur->value) {
@@ -1074,6 +1080,18 @@ s_xhtml_1_0_start_body_tag(void *pdoc, Node *node)
       for (cur = bgcolor_prop->next; cur != bgcolor_prop; cur = cur->next) {
         if (cur->value && *cur->value) {
           attr_bgcolor = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+      for (cur = bgimage_prop->next; cur != bgimage_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          char *tmp = apr_pstrdup(doc->pool, cur->value);
+          char *tmps = strstr(tmp,"(");
+          if(tmps){
+            char *tmpe = strstr(tmp,")");
+            size_t len = strlen(tmps) - strlen(tmpe) -1 ;
+            tmps++;
+            attr_background = apr_pstrndup(doc->pool, tmps,len);
+          }
         }
       }
     }
@@ -1086,6 +1104,14 @@ s_xhtml_1_0_start_body_tag(void *pdoc, Node *node)
           for (cur = cur_sel->property_head.next; cur != &cur_sel->property_head; cur = cur->next) {
             if (cur->name && strcasecmp(cur->name, "color") == 0) {
               attr_link = apr_pstrdup(doc->pool, cur->value);
+            }
+          }
+        }
+        else if (cur_sel->name && strcasecmp(cur_sel->name, "a:visited") == 0) {
+          css_property_t *cur;
+          for (cur = cur_sel->property_head.next; cur != &cur_sel->property_head; cur = cur->next) {
+            if (cur->name && strcasecmp(cur->name, "color") == 0) {
+              attr_vlink = apr_pstrdup(doc->pool, cur->value);
             }
           }
         }
@@ -1114,6 +1140,17 @@ s_xhtml_1_0_start_body_tag(void *pdoc, Node *node)
     attr_link = chxj_css_rgb_func_to_value(doc->pool, attr_link);
     W_L(" link=\"");
     W_V(attr_link);
+    W_L("\"");
+  }
+  if (attr_vlink) {
+    attr_vlink = chxj_css_rgb_func_to_value(doc->pool, attr_vlink);
+    W_L(" vlink=\"");
+    W_V(attr_vlink);
+    W_L("\"");
+  }
+  if (attr_background) {
+    W_L(" background=\"");
+    W_V(attr_background);
     W_L("\"");
   }
   W_L(">");

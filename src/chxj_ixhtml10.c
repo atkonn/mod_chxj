@@ -987,6 +987,7 @@ s_ixhtml10_start_body_tag(void *pdoc, Node *node)
   char        *attr_vlink   = NULL;
   char        *attr_alink   = NULL;
   char        *attr_style   = NULL;
+  char        *attr_background   = NULL;
 
   ixhtml10 = GET_IXHTML10(pdoc);
   doc   = ixhtml10->doc;
@@ -1030,6 +1031,12 @@ s_ixhtml10_start_body_tag(void *pdoc, Node *node)
       /*----------------------------------------------------------------------*/
       attr_vlink = value;
     }
+    else if (STRCASEEQ('b','B',"background",name) && value && *value) {
+      /*----------------------------------------------------------------------*/
+      /* CHTML 6.0                                                            */
+      /*----------------------------------------------------------------------*/
+      attr_background = value;
+    }
     else if (STRCASEEQ('s','S',"style",name) && value && *value) {
       attr_style = value;
     }
@@ -1040,6 +1047,7 @@ s_ixhtml10_start_body_tag(void *pdoc, Node *node)
     if (style) {
       css_property_t *color_prop      = chxj_css_get_property_value(doc, style, "color");
       css_property_t *bgcolor_prop    = chxj_css_get_property_value(doc, style, "background-color");
+      css_property_t *bgimage_prop    = chxj_css_get_property_value(doc, style, "background-image");
       css_property_t *cur;
       for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
         if (cur->value && *cur->value) {
@@ -1049,6 +1057,18 @@ s_ixhtml10_start_body_tag(void *pdoc, Node *node)
       for (cur = bgcolor_prop->next; cur != bgcolor_prop; cur = cur->next) {
         if (cur->value && *cur->value) {
           attr_bgcolor = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
+      for (cur = bgimage_prop->next; cur != bgimage_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          char *tmp = apr_pstrdup(doc->pool, cur->value);
+          char *tmps = strstr(tmp,"(");
+          if(tmps){
+            char *tmpe = strstr(tmp,")");
+            size_t len = strlen(tmps) - strlen(tmpe) -1 ;
+            tmps++;
+            attr_background = apr_pstrndup(doc->pool, tmps,len);
+          }
         }
       }
     }
@@ -1099,6 +1119,11 @@ s_ixhtml10_start_body_tag(void *pdoc, Node *node)
       W_L("color:");
       W_V(attr_text);
       W_L(";");
+    }
+    if( attr_background) {
+      W_L("background-image:url(");
+      W_V(attr_background);
+      W_L(");");
     }
     W_L("\"");
   }
