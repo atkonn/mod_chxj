@@ -128,6 +128,9 @@ static char *s_jxhtml_link_tag           (void *pdoc, Node *node);
 static char *s_jxhtml_start_span_tag     (void *pdoc, Node *node);
 static char *s_jxhtml_end_span_tag       (void *pdoc, Node *node);
 static char *s_jxhtml_style_tag       (void *pdoc, Node *node);
+static char *s_jxhtml_start_object_tag     (void *pdoc, Node *node);
+static char *s_jxhtml_end_object_tag       (void *pdoc, Node *node);
+static char *s_jxhtml_start_param_tag     (void *pdoc, Node *node);
 
 static void  s_init_jxhtml(jxhtml_t *jxhtml, Doc *doc, request_rec *r, device_table *spec);
 
@@ -421,12 +424,12 @@ tag_handler jxhtml_handler[] = {
   },
   /* tagObject */
   {
-    NULL,
-    NULL,
+    s_jxhtml_start_object_tag,
+    s_jxhtml_end_object_tag,
   },
   /* tagParam */
   {
-    NULL,
+    s_jxhtml_start_param_tag,
     NULL,
   },
 };
@@ -6367,6 +6370,174 @@ s_jxhtml_style_tag(void *pdoc, Node *node)
       DBG(doc->r, "end load CSS. value:[%s]", value);
     }
   }
+  return jxhtml->out;
+}
+/**
+ * It is a handler who processes the OBJECT tag.
+ *
+ * @param pdoc  [i/o] The pointer to the JHTML structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The OBJECT tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_jxhtml_start_object_tag(void *pdoc, Node *node)
+{
+  jxhtml_t *jxhtml = GET_JXHTML(pdoc);
+  Doc *doc = jxhtml->doc;
+  Attr *attr;
+  
+  char *attr_id            = NULL;
+  char *attr_width         = NULL;
+  char *attr_height        = NULL;
+  char *attr_data          = NULL;
+  char *attr_type          = NULL;
+  char *attr_declare       = NULL;
+  char *attr_classid       = NULL;
+  char *attr_codebase      = NULL;
+  
+  /*--------------------------------------------------------------------------*/
+  /* Get Attributes                                                           */
+  /*--------------------------------------------------------------------------*/
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *name   = qs_get_attr_name(doc,attr);
+    char *value  = qs_get_attr_value(doc,attr);
+    if (STRCASEEQ('i','I',"id",name)) {
+      attr_id = apr_pstrdup(doc->pool, value);
+    }
+    else if (STRCASEEQ('w','W',"width",name)) {
+      attr_width = apr_pstrdup(doc->pool, value);
+    }
+    else if (STRCASEEQ('h','H',"height",name)) {
+      attr_height = apr_pstrdup(doc->pool, value);
+    }
+    else if (STRCASEEQ('d','D',"data",name)) {
+      attr_data = apr_pstrdup(doc->pool, value);
+    }
+    else if  (STRCASEEQ('t','T',"type",name)) {
+      attr_type = apr_pstrdup(doc->pool, value);
+    }
+    else if  (STRCASEEQ('d','D',"declare",name)) {
+      attr_declare = apr_pstrdup(doc->pool, value);
+    }
+    else if (STRCASEEQ('c','C',"classid",name)) {
+      attr_classid = apr_pstrdup(doc->pool, value);
+    }
+    else if (STRCASEEQ('c','C',"codebase",name)) {
+      attr_codebase = apr_pstrdup(doc->pool, value);
+    }
+    
+  }
+  W_L("<object");
+  
+  if(attr_id){
+    W_L(" id=\"");
+    W_V(attr_id);
+    W_L("\"");
+  }
+  if(attr_width){
+    W_L(" width=\"");
+    W_V(attr_width);
+    W_L("\"");
+  }
+  if(attr_height){
+    W_L(" height=\"");
+    W_V(attr_height);
+    W_L("\"");
+  }
+  if(attr_data){
+    W_L(" data=\"");
+    W_V(attr_data);
+    W_L("\"");
+  }
+  if(attr_type){
+    W_L(" type=\"");
+    W_V(attr_type);
+    W_L("\"");
+  }
+  if(attr_declare){
+    W_L(" declare=\"declare\"");
+  }
+  if(attr_classid){
+    W_L(" classid=\"");
+    W_V(attr_classid);
+    W_L("\"");
+  }
+  if(attr_codebase){
+    W_L(" codebase=\"");
+    W_V(attr_codebase);
+    W_L("\"");
+  }
+  
+  W_L(">");
+  return jxhtml->out;
+}
+/**
+ * It is a handler who processes the OBJECT tag.
+ *
+ * @param pdoc  [i/o] The pointer to the JHTML structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The OBJECT tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_jxhtml_end_object_tag(void *pdoc, Node *UNUSED(node))
+{
+  jxhtml_t *jxhtml = GET_JXHTML(pdoc);
+  Doc *doc = jxhtml->doc;
+
+  W_L("</object>");
+  return jxhtml->out;
+}
+/**
+ * It is a handler who processes the OBJECT tag.
+ *
+ * @param pdoc  [i/o] The pointer to the JHTML structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The OBJECT tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_jxhtml_start_param_tag(void *pdoc, Node *node)
+{
+  jxhtml_t *jxhtml = GET_JXHTML(pdoc);
+  Doc *doc = jxhtml->doc;
+
+  Attr *attr;
+  char *attr_style         = NULL;
+  char *attr_name          = NULL;
+  char *attr_value         = NULL;
+  
+  /*--------------------------------------------------------------------------*/
+  /* Get Attributes                                                           */
+  /*--------------------------------------------------------------------------*/
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *name   = qs_get_attr_name(doc,attr);
+    char *value  = qs_get_attr_value(doc,attr);
+    if (STRCASEEQ('n','N',"name",name)) {
+      attr_name = apr_pstrdup(doc->pool, value);
+    }
+    else if (STRCASEEQ('v','V',"value",name)) {
+      attr_value = apr_pstrdup(doc->pool, value);
+    }
+  }
+  W_L("<param");
+  
+  if(attr_name){
+    W_L(" name=\"");
+    W_V(attr_name);
+    W_L("\"");
+  }
+  if(attr_value){
+    W_L(" value=\"");
+    W_V(attr_value);
+    W_L("\"");
+  }
+  W_L("/>");
   return jxhtml->out;
 }
 /*

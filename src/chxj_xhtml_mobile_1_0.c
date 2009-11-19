@@ -126,6 +126,9 @@ static char *s_xhtml_1_0_link_tag           (void *pdoc, Node *node);
 static char *s_xhtml_1_0_start_span_tag      (void *pdoc, Node *node);
 static char *s_xhtml_1_0_end_span_tag        (void *pdoc, Node *node);
 static char *s_xhtml_1_0_style_tag        (void *pdoc, Node *node);
+static char *s_xhtml_1_0_start_object_tag    (void *pdoc, Node *node);
+static char *s_xhtml_1_0_end_object_tag      (void *pdoc, Node *node);
+static char *s_xhtml_1_0_start_param_tag     (void *pdoc, Node *node);
 
 static void  s_init_xhtml(xhtml_t *xhtml, Doc *doc, request_rec *r, device_table *spec);
 static int   s_xhtml_search_emoji(xhtml_t *xhtml, char *txt, char **rslt);
@@ -418,12 +421,12 @@ tag_handler xhtml_handler[] = {
   },
   /* tagObject */
   {
-    NULL,
-    NULL,
+    s_xhtml_1_0_start_object_tag,
+    s_xhtml_1_0_end_object_tag,
   },
   /* tagParam */
   {
-    NULL,
+    s_xhtml_1_0_start_param_tag,
     NULL,
   },
 };
@@ -6131,6 +6134,152 @@ s_xhtml_1_0_style_tag(void *pdoc, Node *node)
       DBG(doc->r, "end load CSS. value:[%s]", value);
     }
   }
+  return xhtml->out;
+}
+
+/**
+ * It is a handler who processes the OBJECT tag.
+ *
+ * @param pdoc  [i/o] The pointer to the XHTML structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The OBJECT tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_xhtml_1_0_start_object_tag(void *pdoc, Node *node)
+{
+  xhtml_t *xhtml = GET_XHTML(pdoc);
+  Doc *doc = xhtml->doc;
+
+  Attr *attr;
+  
+  char *attr_id            = NULL;
+  char *attr_width         = NULL;
+  char *attr_height        = NULL;
+  char *attr_data          = NULL;
+  char *attr_type          = NULL;
+  
+  /*--------------------------------------------------------------------------*/
+  /* Get Attributes                                                           */
+  /*--------------------------------------------------------------------------*/
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *name   = qs_get_attr_name(doc,attr);
+    char *value  = qs_get_attr_value(doc,attr);
+    if (STRCASEEQ('i','I',"id",name)) {
+      attr_id = apr_pstrdup(doc->pool, value);
+    }
+    else if (STRCASEEQ('w','W',"width",name)) {
+      attr_width = apr_pstrdup(doc->pool, value);
+    }
+    else if (STRCASEEQ('h','H',"height",name)) {
+      attr_height = apr_pstrdup(doc->pool, value);
+    }
+    else if (STRCASEEQ('d','D',"data",name)) {
+      attr_data = apr_pstrdup(doc->pool, value);
+    }
+    else if  (STRCASEEQ('t','T',"type",name)) {
+      attr_type = apr_pstrdup(doc->pool, value);
+    }
+  }
+  W_L("<object");
+  
+  if(attr_id){
+    W_L(" id=\"");
+    W_V(attr_id);
+    W_L("\"");
+  }
+  if(attr_width){
+    W_L(" width=\"");
+    W_V(attr_width);
+    W_L("\"");
+  }
+  if(attr_height){
+    W_L(" height=\"");
+    W_V(attr_height);
+    W_L("\"");
+  }
+  if(attr_data){
+    W_L(" data=\"");
+    W_V(attr_data);
+    W_L("\"");
+  }
+  if(attr_type){
+    W_L(" type=\"");
+    W_V(attr_type);
+    W_L("\"");
+  }
+  
+  W_L(">");
+  return xhtml->out;
+}
+
+/**
+ * It is a handler who processes the OBJECT tag.
+ *
+ * @param pdoc  [i/o] The pointer to the XHTML structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The OBJECT tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_xhtml_1_0_end_object_tag(void *pdoc, Node *UNUSED(node))
+{
+  xhtml_t *xhtml = GET_XHTML(pdoc);
+  Doc *doc = xhtml->doc;
+
+  W_L("</object>");
+  return xhtml->out;
+}
+
+/**
+ * It is a handler who processes the OBJECT tag.
+ *
+ * @param pdoc  [i/o] The pointer to the XHTML structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The OBJECT tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_xhtml_1_0_start_param_tag(void *pdoc, Node *node)
+{
+  xhtml_t *xhtml = GET_XHTML(pdoc);
+  Doc *doc = xhtml->doc;
+
+  Attr *attr;
+  char *attr_style         = NULL;
+  char *attr_name          = NULL;
+  char *attr_value         = NULL;
+  
+  /*--------------------------------------------------------------------------*/
+  /* Get Attributes                                                           */
+  /*--------------------------------------------------------------------------*/
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *name   = qs_get_attr_name(doc,attr);
+    char *value  = qs_get_attr_value(doc,attr);
+    if (STRCASEEQ('n','N',"name",name)) {
+      attr_name = apr_pstrdup(doc->pool, value);
+    }
+    else if (STRCASEEQ('v','V',"value",name)) {
+      attr_value = apr_pstrdup(doc->pool, value);
+    }
+  }
+  W_L("<param");
+  
+  if(attr_name){
+    W_L(" name=\"");
+    W_V(attr_name);
+    W_L("\"");
+  }
+  if(attr_value){
+    W_L(" value=\"");
+    W_V(attr_value);
+    W_L("\"");
+  }
+  W_L("/>");
   return xhtml->out;
 }
 /*
