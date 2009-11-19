@@ -280,8 +280,8 @@ typedef enum {
   tagMARQUEE,
   tagLINK,
   tagNLMARK,      /* New Line Code */
-  tagObject,
-  tagParam,
+  tagOBJECT,
+  tagPARAM,
 } tag_type;
 
 typedef struct mod_chxj_config mod_chxj_config;

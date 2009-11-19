@@ -270,7 +270,13 @@ chxj_node_convert(
       /* <PARAM>                                                              */
       /*----------------------------------------------------------------------*/
       else if (strcasecmp(name, "param") == 0) {
-        /* ignore param tag block. */
+        if (handlers[tagPARAM].start_tag_handler) 
+          handlers[tagPARAM].start_tag_handler(pdoc, child);
+
+        chxj_node_convert(spec, r, pdoc, doc, child, indent+1);
+
+        if (handlers[tagPARAM].end_tag_handler)
+          handlers[tagPARAM].end_tag_handler(pdoc, child);
       }
       else {
         chxj_node_convert(spec, r, pdoc, doc, child, indent+1);
@@ -406,7 +412,13 @@ chxj_node_convert(
       /* <OBJECT>                                                             */
       /*----------------------------------------------------------------------*/
       if (strcasecmp(name, "object") == 0) {
-        /* ignore object block */
+        if (handlers[tagOBJECT].start_tag_handler) 
+          handlers[tagOBJECT].start_tag_handler(pdoc, child);
+
+        chxj_node_convert(spec, r, pdoc, doc, child, indent+1);
+
+        if (handlers[tagOBJECT].end_tag_handler)
+          handlers[tagOBJECT].end_tag_handler(pdoc, child);
       }
       else {
         chxj_node_convert(spec, r, pdoc, doc, child, indent+1);
