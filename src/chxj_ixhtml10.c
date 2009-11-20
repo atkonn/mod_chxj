@@ -64,8 +64,12 @@ static char *s_ixhtml10_start_table_tag    (void *pdoc, Node *node);
 static char *s_ixhtml10_end_table_tag      (void *pdoc, Node *node);
 static char *s_ixhtml10_start_tr_tag       (void *pdoc, Node *node);
 static char *s_ixhtml10_end_tr_tag         (void *pdoc, Node *node);
+static char *s_ixhtml10_start_th_tag       (void *pdoc, Node *node);
+static char *s_ixhtml10_end_th_tag         (void *pdoc, Node *node);
 static char *s_ixhtml10_start_td_tag       (void *pdoc, Node *node);
 static char *s_ixhtml10_end_td_tag         (void *pdoc, Node *node);
+static char *s_ixhtml10_start_td_or_th_tag       (void *pdoc, Node *node,char *tagName);
+static char *s_ixhtml10_end_td_or_th_tag         (void *pdoc, Node *node,char *tagName);
 static char *s_ixhtml10_start_font_tag     (void *pdoc, Node *node);
 static char *s_ixhtml10_end_font_tag       (void *pdoc, Node *node);
 static char *s_ixhtml10_start_form_tag     (void *pdoc, Node *node);
@@ -349,8 +353,8 @@ tag_handler ixhtml10_handler[] = {
   },
   /* tagTH */
   {
-    NULL,
-    NULL,
+    s_ixhtml10_start_th_tag,
+    s_ixhtml10_end_th_tag,
   },
   /* tagB */
   {
@@ -1775,7 +1779,7 @@ s_ixhtml10_end_tr_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_ixhtml10_start_td_tag(void *pdoc, Node *node)
+s_ixhtml10_start_td_or_th_tag(void *pdoc, Node *node,char *tagName)
 {
   ixhtml10_t      *ixhtml10;
   Doc          *doc;
@@ -1851,7 +1855,8 @@ s_ixhtml10_start_td_tag(void *pdoc, Node *node)
     }
   }
 
-  W_L("<td");
+  W_L("<");
+  W_V(tagName);
   if (attr_align){
     W_L(" align=\"");
     W_V(attr_align);
@@ -1891,7 +1896,7 @@ s_ixhtml10_start_td_tag(void *pdoc, Node *node)
  * @return The conversion result is returned.
  */
 static char *
-s_ixhtml10_end_td_tag(void *pdoc, Node *UNUSED(child))
+s_ixhtml10_end_td_or_th_tag(void *pdoc, Node *UNUSED(child),char *tagName)
 {
   ixhtml10_t      *ixhtml10;
   Doc          *doc;
@@ -1901,9 +1906,66 @@ s_ixhtml10_end_td_tag(void *pdoc, Node *UNUSED(child))
   doc   = ixhtml10->doc;
   r     = doc->r;
   
-  W_L("</td>");
+  W_L("</");
+  W_V(tagName);
+  W_L(">");
   return ixhtml10->out;
 }
+
+/**
+ * It is a handler who processes the TABLE tag.
+ *
+ * @param pdoc  [i/o] The pointer to the IXHTML10 structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The TR tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_ixhtml10_start_td_tag(void *pdoc, Node *node)
+{
+  return s_ixhtml10_start_td_or_th_tag(pdoc,node,"td");
+}
+/**
+ * It is a handler who processes the TABLE tag.
+ *
+ * @param pdoc  [i/o] The pointer to the IXHTML10 structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The TR tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_ixhtml10_end_td_tag(void *pdoc, Node *node)
+{
+  return s_ixhtml10_end_td_or_th_tag(pdoc,node,"td");
+}
+
+/**
+ * It is a handler who processes the TABLE tag.
+ *
+ * @param pdoc  [i/o] The pointer to the IXHTML10 structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The TR tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_ixhtml10_start_th_tag(void *pdoc, Node *node)
+{
+  return s_ixhtml10_start_td_or_th_tag(pdoc,node,"th");
+}
+/**
+ * It is a handler who processes the TABLE tag.
+ *
+ * @param pdoc  [i/o] The pointer to the IXHTML10 structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The TR tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_ixhtml10_end_th_tag(void *pdoc, Node *node)
+{
+  return s_ixhtml10_end_td_or_th_tag(pdoc,node,"th");
+}
+
 
 
 /**

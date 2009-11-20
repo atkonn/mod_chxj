@@ -79,6 +79,10 @@ static char *s_xhtml_1_0_start_tr_tag     (void *pdoc, Node *node);
 static char *s_xhtml_1_0_end_tr_tag       (void *pdoc, Node *node);
 static char *s_xhtml_1_0_start_td_tag     (void *pdoc, Node *node);
 static char *s_xhtml_1_0_end_td_tag       (void *pdoc, Node *node);
+static char *s_xhtml_1_0_start_th_tag     (void *pdoc, Node *node);
+static char *s_xhtml_1_0_end_th_tag       (void *pdoc, Node *node);
+static char *s_xhtml_1_0_start_td_or_th_tag     (void *pdoc, Node *node,char *tagName);
+static char *s_xhtml_1_0_end_td_or_th_tag       (void *pdoc, Node *node,char *tagName);
 static char *s_xhtml_1_0_start_font_tag   (void *pdoc, Node *node);
 static char *s_xhtml_1_0_end_font_tag     (void *pdoc, Node *node);
 static char *s_xhtml_1_0_start_form_tag   (void *pdoc, Node *node);
@@ -341,8 +345,8 @@ tag_handler xhtml_handler[] = {
   },
   /* tagTH */
   {
-    NULL,
-    NULL,
+    s_xhtml_1_0_start_th_tag,
+    s_xhtml_1_0_end_th_tag,
   },
   /* tagB */
   {
@@ -1679,7 +1683,7 @@ s_xhtml_1_0_end_tr_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_xhtml_1_0_start_td_tag(void *pdoc, Node *node) 
+s_xhtml_1_0_start_td_or_th_tag(void *pdoc, Node *node,char *tagName) 
 {
   xhtml_t *xhtml = GET_XHTML(pdoc);
   Doc     *doc   = xhtml->doc;
@@ -1752,7 +1756,8 @@ s_xhtml_1_0_start_td_tag(void *pdoc, Node *node)
     }
   }
 
-  W_L("<td");
+  W_L("<");
+  W_V(tagName);
   if (attr_align){
     W_L(" align=\"");
     W_V(attr_align);
@@ -1793,15 +1798,75 @@ s_xhtml_1_0_start_td_tag(void *pdoc, Node *node)
  * @return The conversion result is returned.
  */
 static char *
-s_xhtml_1_0_end_td_tag(void *pdoc, Node *UNUSED(child)) 
+s_xhtml_1_0_end_td_or_th_tag(void *pdoc, Node *UNUSED(child),char *tagName) 
 {
   xhtml_t *xhtml = GET_XHTML(pdoc);
   Doc     *doc   = xhtml->doc;
 
-  W_L("</td>");
+  W_L("</");
+  W_V(tagName);
+  W_L(">");
 
   return xhtml->out;
 }
+
+/**
+ * It is a handler who processes the TD tag.
+ *
+ * @param pdoc  [i/o] The pointer to the XHTML structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The TD tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_xhtml_1_0_start_td_tag(void *pdoc, Node *child) 
+{
+  return s_xhtml_1_0_start_td_or_th_tag(pdoc,child,"td"); 
+}
+
+/**
+ * It is a handler who processes the TD tag.
+ *
+ * @param pdoc  [i/o] The pointer to the XHTML structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The TD tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_xhtml_1_0_end_td_tag(void *pdoc, Node *child) 
+{
+  return s_xhtml_1_0_end_td_or_th_tag(pdoc,child,"td"); 
+}
+
+/**
+ * It is a handler who processes the TD tag.
+ *
+ * @param pdoc  [i/o] The pointer to the XHTML structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The TH tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_xhtml_1_0_start_th_tag(void *pdoc, Node *child) 
+{
+  return s_xhtml_1_0_start_td_or_th_tag(pdoc,child,"th"); 
+}
+
+/**
+ * It is a handler who processes the TD tag.
+ *
+ * @param pdoc  [i/o] The pointer to the XHTML structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The TH tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_xhtml_1_0_end_th_tag(void *pdoc, Node *child) 
+{
+  return s_xhtml_1_0_end_td_or_th_tag(pdoc,child,"th"); 
+}
+
+
 
 /**
  * It is a handler who processes the FONT tag.
@@ -3439,7 +3504,7 @@ static char *
 s_xhtml_1_0_end_h4_tag(void *pdoc, Node *UNUSED(child)) 
 {
   xhtml_t *xhtml = GET_XHTML(pdoc);
-  Doc     *doc   = xhtml->doc;
+   Doc     *doc   = xhtml->doc;
 
   W_L("</h4>");
   if (IS_CSS_ON(xhtml->entryp)) {

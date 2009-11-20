@@ -62,12 +62,18 @@ static char *s_jxhtml_start_li_tag       (void *pdoc, Node *node);
 static char *s_jxhtml_end_li_tag         (void *pdoc, Node *node);
 static char *s_jxhtml_start_br_tag       (void *pdoc, Node *node);
 static char *s_jxhtml_end_br_tag         (void *pdoc, Node *node);
+
 static char *s_jxhtml_start_table_tag    (void *pdoc, Node *node);
 static char *s_jxhtml_end_table_tag      (void *pdoc, Node *node);
 static char *s_jxhtml_start_tr_tag       (void *pdoc, Node *node);
 static char *s_jxhtml_end_tr_tag         (void *pdoc, Node *node);
+static char *s_jxhtml_start_td_or_th_tag       (void *pdoc, Node *node,char *tagName);
+static char *s_jxhtml_end_td_or_th_tag         (void *pdoc, Node *node,char *tagName);
 static char *s_jxhtml_start_td_tag       (void *pdoc, Node *node);
 static char *s_jxhtml_end_td_tag         (void *pdoc, Node *node);
+static char *s_jxhtml_start_th_tag       (void *pdoc, Node *node);
+static char *s_jxhtml_end_th_tag         (void *pdoc, Node *node);
+
 static char *s_jxhtml_start_font_tag     (void *pdoc, Node *node);
 static char *s_jxhtml_end_font_tag       (void *pdoc, Node *node);
 static char *s_jxhtml_start_form_tag     (void *pdoc, Node *node);
@@ -344,8 +350,8 @@ tag_handler jxhtml_handler[] = {
   },
   /* tagTH */
   {
-    NULL,
-    NULL,
+    s_jxhtml_start_th_tag,
+    s_jxhtml_end_th_tag,
   },
   /* tagB */
   {
@@ -1793,7 +1799,7 @@ s_jxhtml_end_tr_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_td_tag(void *pdoc, Node *node) 
+s_jxhtml_start_td_or_th_tag(void *pdoc, Node *node,char *tagName) 
 {
   jxhtml_t      *jxhtml;
   Doc          *doc;
@@ -1870,7 +1876,8 @@ s_jxhtml_start_td_tag(void *pdoc, Node *node)
     }
   }
 
-  W_L("<td");
+  W_L("<");
+  W_V(tagName);
   if (attr_align){
     W_L(" align=\"");
     W_V(attr_align);
@@ -1910,7 +1917,7 @@ s_jxhtml_start_td_tag(void *pdoc, Node *node)
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_td_tag(void *pdoc, Node *UNUSED(child)) 
+s_jxhtml_end_td_or_th_tag(void *pdoc, Node *UNUSED(child),char *tagName) 
 {
   jxhtml_t      *jxhtml;
   request_rec  *r;
@@ -1920,8 +1927,64 @@ s_jxhtml_end_td_tag(void *pdoc, Node *UNUSED(child))
   doc   = jxhtml->doc;
   r     = jxhtml->doc->r;
   
-  W_L("</td>");
+  W_L("</");
+  W_V(tagName);
+  W_L(">");
   return jxhtml->out;
+}
+
+/**
+ * It is a handler who processes the TD tag.
+ *
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The TD tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_jxhtml_start_td_tag(void *pdoc, Node *node) 
+{
+  return s_jxhtml_start_td_or_th_tag(pdoc,node,"td");
+}
+/**
+ * It is a handler who processes the TD tag.
+ *
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The TD tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_jxhtml_end_td_tag(void *pdoc, Node *node) 
+{
+  return s_jxhtml_end_td_or_th_tag(pdoc,node,"td");
+}
+
+/**
+ * It is a handler who processes the TD tag.
+ *
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The TD tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_jxhtml_start_th_tag(void *pdoc, Node *node) 
+{
+  return s_jxhtml_start_td_or_th_tag(pdoc,node,"th");
+}
+/**
+ * It is a handler who processes the TD tag.
+ *
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The TD tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_jxhtml_end_th_tag(void *pdoc, Node *node) 
+{
+  return s_jxhtml_end_td_or_th_tag(pdoc,node,"th");
 }
 
 /**
