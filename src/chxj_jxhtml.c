@@ -6654,6 +6654,7 @@ s_jxhtml_start_param_tag(void *pdoc, Node *node)
   char *attr_style         = NULL;
   char *attr_name          = NULL;
   char *attr_value         = NULL;
+  char *attr_valuetype     = NULL;
   
   /*--------------------------------------------------------------------------*/
   /* Get Attributes                                                           */
@@ -6669,6 +6670,9 @@ s_jxhtml_start_param_tag(void *pdoc, Node *node)
     else if (STRCASEEQ('v','V',"value",name)) {
       attr_value = apr_pstrdup(doc->pool, value);
     }
+    else if (STRCASEEQ('v','V',"valuetype",name)) {
+      attr_valuetype = apr_pstrdup(doc->pool, value);
+    }
   }
   W_L("<param");
   
@@ -6682,7 +6686,12 @@ s_jxhtml_start_param_tag(void *pdoc, Node *node)
     W_V(attr_value);
     W_L("\"");
   }
-  W_L("/>");
+  if(attr_valuetype){
+    W_L(" valuetype=\"");
+    W_V(attr_valuetype);
+    W_L("\"");
+  }
+  W_L(" />");
   return jxhtml->out;
 }
 /*
