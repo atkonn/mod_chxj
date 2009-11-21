@@ -1697,6 +1697,8 @@ s_xhtml_1_0_start_td_or_th_tag(void *pdoc, Node *node,char *tagName)
   char         *attr_bgcolor = NULL;
   char         *attr_colspan = NULL;
   char         *attr_rowspan = NULL;
+  char         *attr_width   = NULL;
+  char         *attr_height  = NULL;
   
   /*--------------------------------------------------------------------------*/
   /* Get Attributes                                                           */
@@ -1729,6 +1731,24 @@ s_xhtml_1_0_start_td_or_th_tag(void *pdoc, Node *node,char *tagName)
     else if (STRCASEEQ('r','R',"rowspan",name) && val && *val) {
       attr_rowspan = apr_pstrdup(doc->buf.pool, val);
     }
+    else if (STRCASEEQ('w','W',"width",name) && val && *val) {
+      char *tmp = strstr(val, "%");
+      if(tmp){
+        attr_width = apr_pstrdup(doc->buf.pool, val);
+      }
+      else{
+        attr_width = apr_psprintf(doc->buf.pool,"%spx",val);
+      }
+    }
+    else if (STRCASEEQ('h','H',"height",name) && val && *val) {
+      char *tmp = strstr(val, "%");
+      if(tmp){
+        attr_height = apr_pstrdup(doc->buf.pool, val);
+      }
+      else{
+        attr_height = apr_psprintf(doc->buf.pool,"%spx",val);
+      }
+    }
   }
   
   if (IS_CSS_ON(xhtml->entryp)) {
@@ -1737,6 +1757,8 @@ s_xhtml_1_0_start_td_or_th_tag(void *pdoc, Node *node,char *tagName)
       css_property_t *align_prop             = chxj_css_get_property_value(doc, style, "text-align");
       css_property_t *valign_prop            = chxj_css_get_property_value(doc, style, "vertical-align");
       css_property_t *bgcolor_prop           = chxj_css_get_property_value(doc, style, "background-color");
+      css_property_t *width_prop             = chxj_css_get_property_value(doc, style, "width");
+      css_property_t *height_prop            = chxj_css_get_property_value(doc, style, "height");
       
       css_property_t *cur;
       for (cur = align_prop->next; cur != align_prop; cur = cur->next) {
@@ -1752,6 +1774,12 @@ s_xhtml_1_0_start_td_or_th_tag(void *pdoc, Node *node,char *tagName)
       for (cur = bgcolor_prop->next; cur != bgcolor_prop; cur = cur->next) {
         attr_bgcolor = apr_pstrdup(doc->pool, cur->value);
         attr_bgcolor = chxj_css_rgb_func_to_value(doc->pool, attr_bgcolor);
+      }
+      for (cur = width_prop->next; cur != width_prop; cur = cur->next) {
+        attr_width = apr_pstrdup(doc->pool, cur->value);
+      }
+      for (cur = height_prop->next; cur != height_prop; cur = cur->next) {
+        attr_height = apr_pstrdup(doc->pool, cur->value);
       }
     }
   }
@@ -1781,6 +1809,20 @@ s_xhtml_1_0_start_td_or_th_tag(void *pdoc, Node *node,char *tagName)
   if (attr_bgcolor && *attr_bgcolor){
     W_L(" bgcolor=\"");
     W_V(attr_bgcolor);
+    W_L("\"");
+  }
+  if (attr_width || attr_height ){
+    W_L(" style=\"");
+    if (attr_width){
+      W_L("width:");
+      W_V(attr_width);
+      W_L(";");
+    }
+    if (attr_height){
+      W_L("height:");
+      W_V(attr_height);
+      W_L(";");
+    }
     W_L("\"");
   }
   W_L(">");
