@@ -3863,7 +3863,7 @@ s_ixhtml10_start_select_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   if (multiple) {
-    W_L(" multiple");
+    W_L(" multiple=\"multiple\"");
   }
   W_L(">");
 
