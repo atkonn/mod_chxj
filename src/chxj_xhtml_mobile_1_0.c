@@ -2101,6 +2101,7 @@ s_xhtml_1_0_start_form_tag(void *pdoc, Node *node)
   char        *attr_color  = NULL;
   char        *attr_align  = NULL;
   char        *attr_name   = NULL;
+  char        *css_clear   = NULL;
   char        *new_hidden_tag = NULL;
 
   /*--------------------------------------------------------------------------*/
@@ -2158,6 +2159,7 @@ s_xhtml_1_0_start_form_tag(void *pdoc, Node *node)
     if (style) {
       css_property_t *text_align_prop = chxj_css_get_property_value(doc, style, "text-align");
       css_property_t *color_prop      = chxj_css_get_property_value(doc, style, "color");
+      css_property_t *clear_prop      = chxj_css_get_property_value(doc, style, "clear");
       css_property_t *cur;
       for (cur = text_align_prop->next; cur != text_align_prop; cur = cur->next) {
         if (STRCASEEQ('l','L',"left", cur->value)) {
@@ -2172,6 +2174,9 @@ s_xhtml_1_0_start_form_tag(void *pdoc, Node *node)
       }
       for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
         attr_color = apr_pstrdup(doc->pool, cur->value);
+      }
+      for (cur = clear_prop->next; cur != clear_prop; cur = cur->next) {
+        css_clear = apr_pstrdup(doc->pool, cur->value);
       }
     }
   }
@@ -2207,6 +2212,12 @@ s_xhtml_1_0_start_form_tag(void *pdoc, Node *node)
   if (attr_name) {
     W_L(" name=\"");
     W_V(attr_name);
+    W_L("\"");
+  }
+  if (css_clear) {
+    W_L(" style=\"");
+    W_L("clear:");
+    W_V(css_clear);
     W_L("\"");
   }
   W_L(">");
