@@ -1202,6 +1202,7 @@ s_xhtml_1_0_start_a_tag(void *pdoc, Node *node)
   request_rec *r     = doc->r;
   Attr        *attr;
   char        *attr_style = NULL;
+  char        *attr_id    = NULL;
 
   W_L("<a");
   /*--------------------------------------------------------------------------*/
@@ -1212,10 +1213,11 @@ s_xhtml_1_0_start_a_tag(void *pdoc, Node *node)
        attr = qs_get_next_attr(doc,attr)) {
     char* name  = qs_get_attr_name(doc,attr);
     char* value = qs_get_attr_value(doc,attr);
-    if (STRCASEEQ('n','N',"name",name) && value && *value) {
-      W_L(" id=\"");
-      W_V(value);
-      W_L("\"");
+    if (STRCASEEQ('i','I',"id",name)){
+      attr_id = apr_pstrdup(doc->buf.pool, value);
+    }
+    else if (STRCASEEQ('n','N',"name",name)) {
+      attr_id = apr_pstrdup(doc->buf.pool, value);
     }
     else if (STRCASEEQ('h','H',"href", name) && value && *value) {
       value = chxj_encoding_parameter(r, value, 1);
@@ -1264,6 +1266,11 @@ s_xhtml_1_0_start_a_tag(void *pdoc, Node *node)
     else if (STRCASEEQ('s','S',"style",name) && value && *value) {
       attr_style = value;
     }
+  }
+  if(attr_id){
+    W_L(" id=\"");
+    W_V(attr_id);
+    W_L("\"");
   }
   W_L(">");
 

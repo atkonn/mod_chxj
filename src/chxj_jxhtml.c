@@ -1246,6 +1246,7 @@ s_jxhtml_start_a_tag(void *pdoc, Node *node)
   request_rec *r;
   Attr        *attr;
   char        *attr_style = NULL;
+  char        *attr_id    = NULL;
 
   jxhtml = GET_JXHTML(pdoc);
   doc   = jxhtml->doc;
@@ -1260,13 +1261,11 @@ s_jxhtml_start_a_tag(void *pdoc, Node *node)
        attr = qs_get_next_attr(doc,attr)) {
     char *name  = qs_get_attr_name(doc,attr);
     char *value = qs_get_attr_value(doc,attr);
-    if (STRCASEEQ('n','N',"name",name)) {
-      /*----------------------------------------------------------------------*/
-      /* CHTML1.0                                                             */
-      /*----------------------------------------------------------------------*/
-      W_L(" name=\"");
-      W_V(chxj_jreserved_to_safe_tag(r, value, jxhtml->entryp));
-      W_L("\"");
+    if (STRCASEEQ('i','I',"id",name)){
+      attr_id = chxj_jreserved_to_safe_tag(r, value, jxhtml->entryp);
+    }
+    else if (STRCASEEQ('n','N',"name",name)) {
+      attr_id = chxj_jreserved_to_safe_tag(r, value, jxhtml->entryp);
     }
     else if (STRCASEEQ('h','H',"href",name)) {
       /*----------------------------------------------------------------------*/
@@ -1357,6 +1356,11 @@ s_jxhtml_start_a_tag(void *pdoc, Node *node)
       /*----------------------------------------------------------------------*/
       attr_style = value;
     }
+  }
+  if(attr_id){
+    W_L(" name=\"");
+    W_V(attr_id);
+    W_L("\"");
   }
   W_L(">");
 
