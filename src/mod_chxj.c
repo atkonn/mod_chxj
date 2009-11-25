@@ -1736,6 +1736,7 @@ chxj_create_per_dir_config(apr_pool_t *p, char *arg)
   conf->emoji_data_file  = NULL;
   conf->emoji            = NULL;
   conf->emoji_tail       = NULL;
+  conf->imode_emoji_color = CHXJ_IMODE_EMOJI_COLOR_NONE;
   conf->image            = CHXJ_IMG_NONE;
   conf->image_cache_dir  = apr_psprintf(p, "%s",DEFAULT_IMAGE_CACHE_DIR);
   conf->image_cache_limit = 0;
@@ -1800,6 +1801,7 @@ chxj_merge_per_dir_config(apr_pool_t *p, void *basev, void *addv)
   mrg->image_cache_limit  = 0;
   mrg->emoji            = NULL;
   mrg->emoji_tail       = NULL;
+  mrg->imode_emoji_color = CHXJ_IMODE_EMOJI_COLOR_NONE;
   mrg->new_line_type    = NLTYPE_NIL;
   mrg->forward_url_base = NULL;
   mrg->forward_server_ip = NULL;
@@ -2043,6 +2045,14 @@ chxj_merge_per_dir_config(apr_pool_t *p, void *basev, void *addv)
   else {
     mrg->cookie_dbm_type = base->cookie_dbm_type;
   }
+  
+  if (add->imode_emoji_color == CHXJ_IMODE_EMOJI_COLOR_NONE) {
+    mrg->imode_emoji_color = base->imode_emoji_color;
+  }
+  else {
+    mrg->imode_emoji_color = add->imode_emoji_color;
+  }
+  
   return mrg;
 }
 
@@ -2943,6 +2953,31 @@ cmd_cookie_dbm_type(
   return NULL;
 }
 
+static const char *
+cmd_imode_emoji_color(
+  cmd_parms   *cmd, 
+  void        *mconfig, 
+  const char  *arg)
+{
+  mod_chxj_config  *dconf;
+  
+  if (strlen(arg) > 256) 
+    return "imode emoji color is too long.";
+
+  dconf = (mod_chxj_config *)mconfig;
+  if (strcasecmp("ON", arg) == 0) {
+    dconf->imode_emoji_color = CHXJ_IMODE_EMOJI_COLOR_ON;
+  }
+  else if(strcasecmp("AUTO",arg) == 0) {
+    dconf->imode_emoji_color = CHXJ_IMODE_EMOJI_COLOR_AUTO;
+  }
+  else {
+    dconf->imode_emoji_color = CHXJ_IMODE_EMOJI_COLOR_OFF;
+  }
+  
+  return NULL;
+}
+
 
 static const command_rec cmds[] = {
   AP_INIT_TAKE1(
@@ -3111,6 +3146,12 @@ static const command_rec cmds[] = {
     NULL,
     OR_ALL,
     "Kind of DBM used with Cookie simulator.(default|GDBM|SDBM|DB|NDBM)"),
+  AP_INIT_TAKE1(
+    "ChxjImodeEmojiColor",
+    cmd_imode_emoji_color,
+    NULL,
+    OR_ALL,
+    "Auto i-mode emoji color"),
   {NULL,{NULL},NULL,0,0,NULL},
 };
 

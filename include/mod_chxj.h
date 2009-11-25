@@ -169,6 +169,7 @@ struct imode_emoji_t {
   char  hex1byte;
   char  hex2byte;
   char* string;
+  char* color;
   char *description;
 };
 
@@ -337,6 +338,7 @@ struct mod_chxj_config {
   device_table_list     *devices;
   emoji_t               *emoji;
   emoji_t               *emoji_tail;
+  int                   imode_emoji_color;
   char                  *server_side_encoding;
 
   char                  *dir; /* for LOG */
@@ -453,6 +455,11 @@ module AP_MODULE_DECLARE_DATA chxj_module;
 #define CHXJ_IMG_ON     (2)
 #define CHXJ_IMG_OFF    (1)
 #define CHXJ_IMG_NONE   (0)
+
+#define CHXJ_IMODE_EMOJI_COLOR_ON   (3)
+#define CHXJ_IMODE_EMOJI_COLOR_AUTO (2)
+#define CHXJ_IMODE_EMOJI_COLOR_OFF  (1)
+#define CHXJ_IMODE_EMOJI_COLOR_NONE (0)
 
 
 #define DBG(X,args...)  chxj_log_rerror(APLOG_MARK,APLOG_DEBUG,0,(request_rec*)(X),##args)

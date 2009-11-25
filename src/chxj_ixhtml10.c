@@ -141,7 +141,7 @@ static char *s_ixhtml10_start_param_tag    (void *pdoc, Node *node);
 
 static void  s_init_ixhtml10(ixhtml10_t *ixhtml10, Doc *doc, request_rec *r, device_table *spec);
 
-static int   s_ixhtml10_search_emoji(ixhtml10_t *ixhtml10, char *txt, char **rslt);
+static int   s_ixhtml10_search_emoji(ixhtml10_t *ixhtml10, char *txt, char **rslt,Node *node);
 
 static char *s_ixhtml10_istyle_to_wap_input_format(apr_pool_t *p, const char *s);
 static css_prop_list_t *s_ixhtml10_nopush_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value);
@@ -579,10 +579,11 @@ s_init_ixhtml10(ixhtml10_t *ixhtml10, Doc *doc, request_rec *r, device_table *sp
  *                      EMOJI is specified.
  * @param rslt    [o]   The pointer to the pointer that stores the result is
  *                      specified.
+ * @param node    [i]   The current node to check whether tag is span/font for CHXJ_IMODE_EMOJI_COLOR_AUTO.
  * @return When corresponding EMOJI exists, it returns it excluding 0.
  */
 static int
-s_ixhtml10_search_emoji(ixhtml10_t *ixhtml10, char *txt, char **rslt)
+s_ixhtml10_search_emoji(ixhtml10_t *ixhtml10, char *txt, char **rslt, Node *node)
 {
   emoji_t       *ee;
   request_rec   *r;
@@ -597,7 +598,8 @@ s_ixhtml10_search_emoji(ixhtml10_t *ixhtml10, char *txt, char **rslt)
   if (!spec) {
     DBG(r,"spec is NULL");
   }
-
+  
+  
   for (ee = ixhtml10->conf->emoji;
        ee;
        ee = ee->next) {
@@ -615,6 +617,20 @@ s_ixhtml10_search_emoji(ixhtml10_t *ixhtml10, char *txt, char **rslt)
         (*rslt)[0] = ee->imode->hex1byte & 0xff;
         (*rslt)[1] = ee->imode->hex2byte & 0xff;
         (*rslt)[2] = 0;
+        
+        if(ixhtml10->conf->imode_emoji_color >= CHXJ_IMODE_EMOJI_COLOR_AUTO ){
+          if(ee->imode->color != NULL){
+            if(ixhtml10->conf->imode_emoji_color == CHXJ_IMODE_EMOJI_COLOR_AUTO ){
+              if(strcasecmp(node->parent->name, "span") == 0 ||
+                 strcasecmp(node->parent->name, "font")  == 0 ){
+                return strlen(ee->imode->string);
+              }
+            }
+            char *tmp = apr_pstrdup(r->pool,*rslt);
+            *rslt = apr_psprintf(r->pool,
+                        "<span style=\"color:%s\">%s</span>",ee->imode->color,tmp);
+          }
+        }
         return strlen(ee->imode->string);
       }
 
@@ -4456,7 +4472,7 @@ s_ixhtml10_text_tag(void* pdoc, Node* child)
 
   for (ii=0; ii<qs_get_node_size(doc,child); ii++) {
     char* out;
-    int rtn = s_ixhtml10_search_emoji(ixhtml10, &textval[ii], &out);
+    int rtn = s_ixhtml10_search_emoji(ixhtml10, &textval[ii], &out,child);
     if (rtn) {
       tdst = qs_out_apr_pstrcat(r, tdst, out, &tdst_len);
       ii+=(rtn - 1);
