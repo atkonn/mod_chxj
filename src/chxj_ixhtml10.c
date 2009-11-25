@@ -1406,7 +1406,7 @@ s_ixhtml10_start_br_tag(void *pdoc, Node *node)
     }
   }
   if (IS_CSS_ON(ixhtml10->entryp)) {
-    css_prop_list_t *style = s_ixhtml10_push_and_get_now_style(pdoc, node, attr_style);
+    css_prop_list_t *style = s_ixhtml10_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *clear_prop = chxj_css_get_property_value(doc, style, "clear");
       css_property_t *cur;

@@ -1335,16 +1335,18 @@ s_xhtml_1_0_start_br_tag(void *pdoc, Node *node)
     }
   }
   if (IS_CSS_ON(xhtml->entryp)) {
-    css_prop_list_t *style = s_xhtml_1_0_push_and_get_now_style(pdoc, node, attr_style);
+    css_prop_list_t *style = s_xhtml_1_0_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *clear_prop = chxj_css_get_property_value(doc, style, "clear");
       css_property_t *cur;
       for (cur = clear_prop->next; cur != clear_prop; cur = cur->next) {
         if (cur->value && *cur->value) {
           if ( STRCASEEQ('l','L',"left",  cur->value)
-            || STRCASEEQ('r','R',"right", cur->value)
-            || STRCASEEQ('b','B',"both"  ,cur->value)) {
+            || STRCASEEQ('r','R',"right", cur->value)) {
             attr_clear = apr_pstrdup(doc->pool, cur->value);
+          }
+          else if(STRCASEEQ('b','B',"both"  ,cur->value)) {
+            attr_clear = apr_pstrdup(doc->pool, "all");
           }
         }
       }
