@@ -133,6 +133,8 @@ static char *s_xhtml_1_0_style_tag        (void *pdoc, Node *node);
 static char *s_xhtml_1_0_start_object_tag    (void *pdoc, Node *node);
 static char *s_xhtml_1_0_end_object_tag      (void *pdoc, Node *node);
 static char *s_xhtml_1_0_start_param_tag     (void *pdoc, Node *node);
+static char *s_xhtml_1_0_start_caption_tag    (void *pdoc, Node *node);
+static char *s_xhtml_1_0_end_caption_tag      (void *pdoc, Node *node);
 
 static void  s_init_xhtml(xhtml_t *xhtml, Doc *doc, request_rec *r, device_table *spec);
 static int   s_xhtml_search_emoji(xhtml_t *xhtml, char *txt, char **rslt);
@@ -432,6 +434,11 @@ tag_handler xhtml_handler[] = {
   {
     s_xhtml_1_0_start_param_tag,
     NULL,
+  },
+  /* tagCAPTION */
+  {
+    s_xhtml_1_0_start_caption_tag,
+    s_xhtml_1_0_end_caption_tag,
   },
 };
  
@@ -6455,6 +6462,74 @@ s_xhtml_1_0_start_param_tag(void *pdoc, Node *node)
   W_L(" />");
   return xhtml->out;
 }
+/**
+ * It is a handler who processes the CAPTION tag.
+ *
+ * @param pdoc  [i/o] The pointer to the XHTML structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The CAPTION tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_xhtml_1_0_start_caption_tag(void *pdoc, Node *node) 
+{
+  xhtml_t *xhtml = GET_XHTML(pdoc);
+  Doc     *doc   = xhtml->doc;
+  Attr    *attr;
+  char    *attr_style = NULL;
+  char    *attr_align = NULL;
+
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *name  = qs_get_attr_name(doc,attr);
+    char *value = qs_get_attr_value(doc,attr);
+    if (STRCASEEQ('a','A',"align", name)) {
+      if (value && 
+          (STRCASEEQ('l','L',"left",value) 
+        || STRCASEEQ('r','R',"right",value) 
+        || STRCASEEQ('t','T',"top",value)
+        || STRCASEEQ('b','B',"bottom",value) 
+        )) {
+        attr_align = value;
+      }
+    }
+    else if (STRCASEEQ('s','S',"style",name) && value && *value) {
+      attr_style = value;
+    }
+  }
+  
+  W_L("<h1");
+  if(attr_align){
+    W_L(" align=\"");
+    W_V(attr_align);
+    W_L("\"");
+  }
+  W_L(">");
+
+  return xhtml->out;
+}
+
+
+/**
+ * It is a handler who processes the CAPTION tag.
+ *
+ * @param pdoc  [i/o] The pointer to the XHTML structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The CAPTION tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_xhtml_1_0_end_caption_tag(void *pdoc, Node *UNUSED(child)) 
+{
+  xhtml_t *xhtml = GET_XHTML(pdoc);
+  Doc     *doc   = xhtml->doc;
+
+  W_L("</caption>");
+  return xhtml->out;
+}
+
+
 /*
  * vim:ts=2 et
  */

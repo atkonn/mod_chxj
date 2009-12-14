@@ -137,6 +137,8 @@ static char *s_jxhtml_style_tag       (void *pdoc, Node *node);
 static char *s_jxhtml_start_object_tag     (void *pdoc, Node *node);
 static char *s_jxhtml_end_object_tag       (void *pdoc, Node *node);
 static char *s_jxhtml_start_param_tag     (void *pdoc, Node *node);
+static char *s_jxhtml_start_caption_tag     (void *pdoc, Node *node);
+static char *s_jxhtml_end_caption_tag       (void *pdoc, Node *node);
 
 static void  s_init_jxhtml(jxhtml_t *jxhtml, Doc *doc, request_rec *r, device_table *spec);
 
@@ -437,6 +439,11 @@ tag_handler jxhtml_handler[] = {
   {
     s_jxhtml_start_param_tag,
     NULL,
+  },
+  /* tagCAPTION */
+  {
+    s_jxhtml_start_caption_tag,
+    s_jxhtml_end_caption_tag,
   },
 };
 
@@ -6784,6 +6791,80 @@ s_jxhtml_start_param_tag(void *pdoc, Node *node)
   W_L(" />");
   return jxhtml->out;
 }
+/**
+ * It is a handler who processes the CAPTION tag.
+ *
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The CAPTION tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_jxhtml_start_caption_tag(void *pdoc, Node *node)
+{
+  jxhtml_t    *jxhtml;
+  Doc         *doc;
+  request_rec *r;
+  Attr        *attr;
+  char        *attr_style = NULL;
+  char        *attr_align = NULL;
+
+  jxhtml = GET_JXHTML(pdoc);
+  doc    = jxhtml->doc;
+  r      = doc->r;
+
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *name  = qs_get_attr_name(doc,attr);
+    char *value = qs_get_attr_value(doc,attr);
+    if (STRCASEEQ('a','A',"align", name)) {
+      if (value && 
+          (STRCASEEQ('l','L',"left",value) 
+        || STRCASEEQ('r','R',"right",value) 
+        || STRCASEEQ('t','T',"top",value)
+        || STRCASEEQ('b','B',"bottom",value) 
+        )) {
+        attr_align = value;
+      }
+    }
+    else if (STRCASEEQ('s','S',"style",name) && value && *value) {
+      attr_style = value;
+    }
+  }
+  
+  W_L("<caption");
+  if(attr_align){
+    W_L(" align=\"");
+    W_V(attr_align);
+    W_L("\"");
+  }
+  W_L(">");
+
+  return jxhtml->out;
+}
+
+
+/**
+ * It is a handler who processes the CAPTION tag.
+ *
+ * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The CAPTION tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_jxhtml_end_caption_tag(void *pdoc, Node *UNUSED(child)) 
+{
+  jxhtml_t*    jxhtml = GET_JXHTML(pdoc);
+  Doc*          doc   = jxhtml->doc;
+  
+  W_L("</caption>");
+  
+  return jxhtml->out;
+}
+
+
 /*
  * vim:ts=2 et
  */

@@ -283,6 +283,7 @@ typedef enum {
   tagNLMARK,      /* New Line Code */
   tagOBJECT,
   tagPARAM,
+  tagCAPTION,
 } tag_type;
 
 typedef struct mod_chxj_config mod_chxj_config;

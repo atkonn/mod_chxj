@@ -386,6 +386,11 @@ tag_handler hdml_handler[] = {
     NULL,
     NULL,
   },
+  /* tagCAPTION */
+  {
+    NULL,
+    NULL,
+  },
 };
 
 /**

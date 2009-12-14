@@ -439,6 +439,11 @@ tag_handler chtml40_handler[] = {
     NULL,
     NULL,
   },
+  /* tagCAPTION */
+  {
+    NULL,
+    NULL,
+  },
 };
 
 

@@ -139,6 +139,8 @@ static char *s_ixhtml10_end_small_tag      (void *pdoc, Node *node);
 static char *s_ixhtml10_start_object_tag    (void *pdoc, Node *node);
 static char *s_ixhtml10_end_object_tag      (void *pdoc, Node *node);
 static char *s_ixhtml10_start_param_tag    (void *pdoc, Node *node);
+static char *s_ixhtml10_start_caption_tag    (void *pdoc, Node *node);
+static char *s_ixhtml10_end_caption_tag      (void *pdoc, Node *node);
 
 static void  s_init_ixhtml10(ixhtml10_t *ixhtml10, Doc *doc, request_rec *r, device_table *spec);
 
@@ -441,6 +443,11 @@ tag_handler ixhtml10_handler[] = {
   {
     s_ixhtml10_start_param_tag,
     NULL,
+  },
+  /* tagCAPTION */
+  {
+    s_ixhtml10_start_caption_tag,
+    s_ixhtml10_end_caption_tag,
   },
 };
 
@@ -6901,6 +6908,76 @@ s_ixhtml10_start_param_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   W_L("/>");
+  return ixhtml10->out;
+}
+
+/**
+ * It is a handler who processes the CAPTION tag.
+ *
+ * @param pdoc  [i/o] The pointer to the IXHTML10 structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The CAPTION tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_ixhtml10_start_caption_tag(void *pdoc, Node *node)
+{
+  ixhtml10_t    *ixhtml10;
+  Doc         *doc;
+  request_rec *r;
+  Attr        *attr;
+  char        *attr_style = NULL;
+  char        *attr_align = NULL;
+
+  ixhtml10   = GET_IXHTML10(pdoc);
+  doc     = ixhtml10->doc;
+  r       = doc->r;
+
+  for (attr = qs_get_attr(doc,node);
+       attr;
+       attr = qs_get_next_attr(doc,attr)) {
+    char *name  = qs_get_attr_name(doc,attr);
+    char *value = qs_get_attr_value(doc,attr);
+    if (STRCASEEQ('a','A',"align", name)) {
+      if (value && 
+          (STRCASEEQ('l','L',"left",value) 
+        || STRCASEEQ('r','R',"right",value) 
+        || STRCASEEQ('t','T',"top",value)
+        || STRCASEEQ('b','B',"bottom",value) 
+        )) {
+        attr_align = value;
+      }
+    }
+    else if (STRCASEEQ('s','S',"style",name) && value && *value) {
+      attr_style = value;
+    }
+  }
+  W_L("<caption");
+  if(attr_align){
+    W_L(" align=\"");
+    W_V(attr_align);
+    W_L("\"");
+  }
+  W_L(">");
+  return ixhtml10->out;
+}
+
+
+/**
+ * It is a handler who processes the CAPTION tag.
+ *
+ * @param pdoc  [i/o] The pointer to the IXHTML10 structure at the output
+ *                     destination is specified.
+ * @param node   [i]   The CAPTION tag node is specified.
+ * @return The conversion result is returned.
+ */
+static char *
+s_ixhtml10_end_caption_tag(void *pdoc, Node *UNUSED(node))
+{
+  ixhtml10_t *ixhtml10 = GET_IXHTML10(pdoc);
+  Doc *doc = ixhtml10->doc;
+
+  W_L("</caption>");
   return ixhtml10->out;
 }
 
