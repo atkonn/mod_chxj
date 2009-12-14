@@ -1616,7 +1616,7 @@ s_jxhtml_start_table_tag(void *pdoc, Node *node)
   }
   if (attr_height){
     W_L(" height=\"");
-    W_L(attr_height);
+    W_V(attr_height);
     W_L("\"");
   }
   if (attr_width){
