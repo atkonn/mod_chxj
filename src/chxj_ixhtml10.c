@@ -2947,6 +2947,7 @@ s_ixhtml10_start_ol_tag(void *pdoc, Node *node)
   char        *attr_style = NULL;
   char        *attr_start = NULL;
   char        *attr_type  = NULL;
+  char        *css_clear  = NULL;
 
   ixhtml10 = GET_IXHTML10(pdoc);
   doc   = ixhtml10->doc;
@@ -2982,6 +2983,7 @@ s_ixhtml10_start_ol_tag(void *pdoc, Node *node)
     css_prop_list_t *style = s_ixhtml10_push_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *list_style_type_prop = chxj_css_get_property_value(doc, style, "list-style-type");
+      css_property_t *clear_prop           = chxj_css_get_property_value(doc, style, "clear");
       css_property_t *cur;
       for (cur = list_style_type_prop->next; cur != list_style_type_prop; cur = cur->next) {
         if (STRCASEEQ('d','D',"decimal", cur->value)) {
@@ -2994,14 +2996,24 @@ s_ixhtml10_start_ol_tag(void *pdoc, Node *node)
           attr_type = apr_pstrdup(doc->pool, "lower-alpha");
         }
       }
+      for (cur = clear_prop->next; cur != clear_prop; cur = cur->next) {
+        css_clear = apr_pstrdup(doc->pool, cur->value);
+      }
     }
   }
   W_L("<ol");
-  if (attr_type) {
+  if (attr_type || css_clear) {
     W_L(" style=\"");
-    W_L("list-style-type:");
-    W_V(attr_type);
-    W_L(";");
+    if (attr_type) {
+      W_L("list-style-type:");
+      W_V(attr_type);
+      W_L(";");
+    }
+    if (css_clear) {
+      W_L("clear:");
+      W_V(css_clear);
+      W_L(";");
+    }
     W_L("\"");
   }
   if (attr_start) {
@@ -3188,6 +3200,7 @@ s_ixhtml10_start_pre_tag(void *pdoc, Node *node)
   Doc       *doc   = ixhtml10->doc;
   Attr      *attr;
   char      *attr_style = NULL;
+  char      *css_clear  = NULL;
 
   for (attr = qs_get_attr(doc,node);
        attr;
@@ -3200,11 +3213,27 @@ s_ixhtml10_start_pre_tag(void *pdoc, Node *node)
   }
 
   if (IS_CSS_ON(ixhtml10->entryp)) {
-    s_ixhtml10_push_and_get_now_style(pdoc, node, attr_style);
+    css_prop_list_t *style = s_ixhtml10_push_and_get_now_style(pdoc, node, attr_style);
+    if (style) {
+      css_property_t *clear_prop           = chxj_css_get_property_value(doc, style, "clear");
+      
+      css_property_t *cur;
+      for (cur = clear_prop->next; cur != clear_prop; cur = cur->next) {
+        css_clear = apr_pstrdup(doc->pool, cur->value);
+      }
+    }
   }
 
   ixhtml10->pre_flag++;
-  W_L("<pre>");
+  W_L("<pre");
+  if (css_clear) {
+    W_L(" style=\"");
+    W_L("clear:");
+    W_V(css_clear);
+    W_L(";");
+    W_L("\"");
+  }
+  W_L(">");
   return ixhtml10->out;
 }
 
@@ -3249,6 +3278,8 @@ s_ixhtml10_start_ul_tag(void *pdoc, Node *node)
   Attr     *attr;
   char     *attr_type = NULL;
   char     *attr_style = NULL;
+  char     *css_clear  = NULL;
+  
   /*--------------------------------------------------------------------------*/
   /* Get Attributes                                                           */
   /*--------------------------------------------------------------------------*/
@@ -3270,6 +3301,7 @@ s_ixhtml10_start_ul_tag(void *pdoc, Node *node)
     css_prop_list_t *style = s_ixhtml10_push_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *list_style_type_prop = chxj_css_get_property_value(doc, style, "list-style-type");
+      css_property_t *clear_prop      = chxj_css_get_property_value(doc, style, "clear");
       css_property_t *cur;
       for (cur = list_style_type_prop->next; cur != list_style_type_prop; cur = cur->next) {
         if (STRCASEEQ('d','D',"disc",cur->value)) {
@@ -3282,14 +3314,24 @@ s_ixhtml10_start_ul_tag(void *pdoc, Node *node)
           attr_type = apr_pstrdup(doc->pool, "square");
         }
       }
+      for (cur = clear_prop->next; cur != clear_prop; cur = cur->next) {
+        css_clear = apr_pstrdup(doc->pool, cur->value);
+      }
     }
   }
   W_L("<ul");
-  if (attr_type) {
+  if (attr_type || css_clear) {
     W_L(" style=\"");
-    W_L("list-style-type:");
-    W_V(attr_type);
-    W_L(";");
+    if (attr_type) {
+      W_L("list-style-type:");
+      W_V(attr_type);
+      W_L(";");
+    }
+    if (css_clear) {
+      W_L("clear:");
+      W_V(css_clear);
+      W_L(";");
+    }
     W_L("\"");
   }
   W_L(">");
@@ -4544,6 +4586,7 @@ s_ixhtml10_start_blockquote_tag(void *pdoc, Node *node)
   char     *attr_style = NULL;
   char     *attr_color = NULL;
   char     *attr_size  = NULL;
+  char     *css_clear  = NULL;
 
   ixhtml10  = GET_IXHTML10(pdoc);
   doc     = ixhtml10->doc;
@@ -4561,6 +4604,8 @@ s_ixhtml10_start_blockquote_tag(void *pdoc, Node *node)
     if (style) {
       css_property_t *color_prop = chxj_css_get_property_value(doc, style, "color");
       css_property_t *font_size_prop = chxj_css_get_property_value(doc, style, "font-size");
+      css_property_t *clear_prop           = chxj_css_get_property_value(doc, style, "clear");
+      
       css_property_t *cur;
       for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
         if (cur->value && *cur->value) {
@@ -4592,10 +4637,13 @@ s_ixhtml10_start_blockquote_tag(void *pdoc, Node *node)
           }
         }
       }
+      for (cur = clear_prop->next; cur != clear_prop; cur = cur->next) {
+        css_clear = apr_pstrdup(doc->pool, cur->value);
+      }
     }
   }
   W_L("<blockquote");
-  if (attr_color || attr_size) {
+  if (attr_color || attr_size || css_clear) {
     W_L(" style=\"");
     if (attr_color) {
       attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
@@ -4606,6 +4654,11 @@ s_ixhtml10_start_blockquote_tag(void *pdoc, Node *node)
     if (attr_size) {
       W_L("font-size:");
       W_V(attr_size);
+      W_L(";");
+    }
+    if (css_clear) {
+      W_L("clear:");
+      W_V(css_clear);
       W_L(";");
     }
     W_L("\"");
@@ -4776,6 +4829,8 @@ s_ixhtml10_start_dl_tag(void *pdoc, Node *node)
   char      *attr_style = NULL;
   char      *attr_color = NULL;
   char      *attr_size  = NULL;
+  char      *css_clear  = NULL;
+  
   for (attr = qs_get_attr(doc,node);
        attr;
        attr = qs_get_next_attr(doc,attr)) {
@@ -4790,6 +4845,8 @@ s_ixhtml10_start_dl_tag(void *pdoc, Node *node)
     if (style) {
       css_property_t *color_prop           = chxj_css_get_property_value(doc, style, "color");
       css_property_t *size_prop            = chxj_css_get_property_value(doc, style, "font-size");
+      css_property_t *clear_prop           = chxj_css_get_property_value(doc, style, "clear");
+      
       css_property_t *cur;
       for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
         if (cur->value && *cur->value) {
@@ -4821,10 +4878,13 @@ s_ixhtml10_start_dl_tag(void *pdoc, Node *node)
           }
         }
       }
+      for (cur = clear_prop->next; cur != clear_prop; cur = cur->next) {
+        css_clear = apr_pstrdup(doc->pool, cur->value);
+      }
     }
   }
   W_L("<dl");
-  if (attr_color || attr_size) {
+  if (attr_color || attr_size || css_clear) {
     W_L(" style=\"");
     if (attr_color) {
       attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
@@ -4835,6 +4895,11 @@ s_ixhtml10_start_dl_tag(void *pdoc, Node *node)
     if (attr_size) {
       W_L("font-size:");
       W_V(attr_size);
+      W_L(";");
+    }
+    if (css_clear) {
+      W_L("clear:");
+      W_V(css_clear);
       W_L(";");
     }
     W_L("\"");
