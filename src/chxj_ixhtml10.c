@@ -3383,6 +3383,7 @@ s_ixhtml10_start_hr_tag(void *pdoc, Node *node)
   char        *attr_style   = NULL;
   char        *attr_color   = NULL;
   char        *attr_bgcolor = NULL;
+  char        *css_clear    = NULL;
 
   ixhtml10   = GET_IXHTML10(pdoc);
   doc     = ixhtml10->doc;
@@ -3469,6 +3470,7 @@ s_ixhtml10_start_hr_tag(void *pdoc, Node *node)
       css_property_t *color_prop        = chxj_css_get_property_value(doc, style, "border-color");
       css_property_t *bgcolor_prop      = chxj_css_get_property_value(doc, style, "background-color");
       css_property_t *float_prop        = chxj_css_get_property_value(doc, style, "float");
+      css_property_t *clear_prop        = chxj_css_get_property_value(doc, style, "clear");
       css_property_t *cur;
       for (cur = border_style_prop->next; cur != border_style_prop; cur = cur->next) {
         if (STRCASEEQ('s','S',"solid",cur->value)) {
@@ -3482,11 +3484,7 @@ s_ixhtml10_start_hr_tag(void *pdoc, Node *node)
         attr_bgcolor = apr_pstrdup(doc->pool, cur->value);
       }
       for (cur = height_prop->next; cur != height_prop; cur = cur->next) {
-        char *tmp = apr_pstrdup(doc->pool, cur->value);
-        char *tmpp = strstr(tmp, "px");
-        if (tmpp) {
-          attr_size = apr_pstrdup(doc->pool, tmp);
-        }
+        attr_size = apr_pstrdup(doc->pool, cur->value);
       }
       for (cur = width_prop->next; cur != width_prop; cur = cur->next) {
         char *tmp = apr_pstrdup(doc->pool, cur->value);
@@ -3509,10 +3507,13 @@ s_ixhtml10_start_hr_tag(void *pdoc, Node *node)
           }
         }
       }
+      for (cur = clear_prop->next; cur != clear_prop; cur = cur->next) {
+        css_clear = apr_pstrdup(doc->pool, cur->value);
+      }
     }
   }
   W_L("<hr");
-  if (attr_align || attr_size || attr_width || attr_noshade || attr_color || attr_bgcolor) {
+  if (attr_align || attr_size || attr_width || attr_noshade || attr_color || attr_bgcolor || css_clear) {
     W_L(" style=\"");
     if (attr_align) {
       W_L("float:");
@@ -3527,7 +3528,7 @@ s_ixhtml10_start_hr_tag(void *pdoc, Node *node)
     if (attr_size) {
       W_L("height:");
       W_V(attr_size);
-      if (!strstr(attr_size, "px")) {
+      if (chxj_chk_numeric(attr_size) == 0) {
         W_L("px");
       }
       W_L(";");
@@ -3551,6 +3552,11 @@ s_ixhtml10_start_hr_tag(void *pdoc, Node *node)
     if (attr_bgcolor) {
       W_L("background-color:");
       W_V(attr_bgcolor);
+      W_L(";");
+    }
+    if (css_clear){
+      W_L("clear:");
+      W_V(css_clear);
       W_L(";");
     }
     W_L("\"");

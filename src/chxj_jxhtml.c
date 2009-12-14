@@ -3368,6 +3368,7 @@ s_jxhtml_start_hr_tag(void *pdoc, Node *node)
   
   char        *style_float  = NULL;
   char        *style_border_color = NULL;
+  char        *css_clear          = NULL;
 
   jxhtml   = GET_JXHTML(pdoc);
   doc     = jxhtml->doc;
@@ -3454,6 +3455,7 @@ s_jxhtml_start_hr_tag(void *pdoc, Node *node)
       css_property_t *bgcolor_prop      = chxj_css_get_property_value(doc, style, "background-color");
       css_property_t *float_prop        = chxj_css_get_property_value(doc, style, "float");
       css_property_t *border_color_prop = chxj_css_get_property_value(doc, style, "border-color");
+      css_property_t *clear_prop        = chxj_css_get_property_value(doc, style, "clear");
       css_property_t *cur;
       
       for (cur = border_style_prop->next; cur != border_style_prop; cur = cur->next) {
@@ -3462,11 +3464,7 @@ s_jxhtml_start_hr_tag(void *pdoc, Node *node)
         }
       }
       for (cur = height_prop->next; cur != height_prop; cur = cur->next) {
-        char *tmp = apr_pstrdup(doc->pool, cur->value);
-        char *tmpp = strstr(tmp, "px");
-        if (tmpp) { 
-          attr_size = apr_pstrdup(doc->pool, tmp);
-        }
+        attr_size = apr_pstrdup(doc->pool, cur->value);
       }
       if(!attr_color){
           for(cur = bgcolor_prop->next; cur != bgcolor_prop; cur = cur->next){
@@ -3506,6 +3504,9 @@ s_jxhtml_start_hr_tag(void *pdoc, Node *node)
           style_border_color = apr_pstrdup(doc->pool, tmp);
         }
       }
+      for (cur = clear_prop->next; cur != clear_prop; cur = cur->next) {
+        css_clear = apr_pstrdup(doc->pool, cur->value);
+      }
     }
   }
   W_L("<hr");
@@ -3521,12 +3522,12 @@ s_jxhtml_start_hr_tag(void *pdoc, Node *node)
       W_L("\"");
     }
   }
-  if (attr_size || attr_width || attr_noshade || style_border_color) {
+  if (attr_size || attr_width || attr_noshade || style_border_color || css_clear) {
     W_L(" style=\"");
     if (attr_size) {
       W_L("height:");
       W_V(attr_size);
-      if (!strstr(attr_size, "px")) {
+      if (chxj_chk_numeric(attr_size) == 0) {
         W_L("px");
       }
       W_L(";");
@@ -3546,6 +3547,11 @@ s_jxhtml_start_hr_tag(void *pdoc, Node *node)
       W_L("border-color:");
       W_V(style_border_color);
       W_V(";");
+    }
+    if (css_clear){
+      W_L("clear:");
+      W_V(css_clear);
+      W_L(";");
     }
     W_L("\"");
   }
