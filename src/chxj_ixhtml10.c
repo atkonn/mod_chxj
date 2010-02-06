@@ -23,6 +23,7 @@
 #include "chxj_url_encode.h"
 #include "chxj_str_util.h"
 #include "chxj_conv_z2h.h"
+#include "chxj_header_inf.h"
 
 
 #define GET_IXHTML10(X) ((ixhtml10_t *)(X))
