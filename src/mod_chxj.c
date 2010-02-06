@@ -1631,7 +1631,7 @@ chxj_insert_filter(request_rec *r)
   contentType = (char *)apr_table_get(r->headers_in, "Content-Type");
   if (contentType
       && strncasecmp("multipart/form-data", contentType, 19) == 0) {
-    DBG(r, "REQ[%X] detect multipart/form-data ==> no target", (apr_size_t)(unsigned int)r);
+    DBG(r, "REQ[%X] detect multipart/form-data ==> no target", (unsigned int)(apr_size_t)r);
     DBG(r, "REQ[%X] end chxj_insert_filter()", (unsigned int)(apr_size_t)r);
     return;
   }
