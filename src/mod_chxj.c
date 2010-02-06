@@ -872,10 +872,12 @@ chxj_input_convert(
     }
     else
     if ( strncasecmp(name, CHXJ_QUERY_STRING_PARAM_PREFIX,     sizeof(CHXJ_QUERY_STRING_PARAM_PREFIX)-1) == 0) {
-      apr_size_t dlen;
+      apr_size_t dlen = 0;
       char*      dvalue;
-      dlen   = strlen(value);
-      if (dlen && value) {
+      if (value) {
+        dlen   = strlen(value);
+      }
+      if (dlen) {
         value = chxj_url_decode(pool, value);
         dvalue = chxj_rencoding(r, value, &dlen);
         dvalue = chxj_url_encode(pool,dvalue);
