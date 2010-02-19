@@ -68,6 +68,8 @@
 
 #define HTTP_X_CHXJ_VERSION  "X-Chxj-Version"
 
+#define HTTP_X_CHXJ_INFO     "X-Chxj-Info"
+
 extern void chxj_add_device_env(request_rec *r, device_table *spec);
 
 #endif

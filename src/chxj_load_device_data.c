@@ -136,6 +136,7 @@ s_set_device_data(Doc *doc, apr_pool_t *p, device_table_list *dtl, Node *node)
 
   dt = apr_pcalloc(p, sizeof(device_table));
   dt->next           = NULL;
+  dt->provider       = CHXJ_PROVIDER_UNKNOWN;
   dt->device_id      = NULL;
   dt->device_name    = NULL;
   dt->html_spec_type = CHXJ_SPEC_Chtml_3_0;
@@ -218,36 +219,47 @@ s_set_device_data(Doc *doc, apr_pool_t *p, device_table_list *dtl, Node *node)
           char *vv = qs_get_node_value(doc, ch);
           if (STRCASEEQ('x','X',"xhtml_mobile_1_0",vv)) {
             dt->html_spec_type = CHXJ_SPEC_XHtml_Mobile_1_0;
+            dt->provider       = CHXJ_PROVIDER_AU;
           }
           else if (STRCASEEQ('c','C',"chtml_1_0",vv)) {
             dt->html_spec_type = CHXJ_SPEC_Chtml_1_0;
+            dt->provider       = CHXJ_PROVIDER_DOCOMO;
           }
           else if (STRCASEEQ('c','C',"chtml_2_0",vv)) {
             dt->html_spec_type = CHXJ_SPEC_Chtml_2_0;
+            dt->provider       = CHXJ_PROVIDER_DOCOMO;
           }
           else if (STRCASEEQ('c','C',"chtml_3_0",vv)) {
             dt->html_spec_type = CHXJ_SPEC_Chtml_3_0;
+            dt->provider       = CHXJ_PROVIDER_DOCOMO;
           }
           else if (STRCASEEQ('c','C',"chtml_4_0",vv)) {
             dt->html_spec_type = CHXJ_SPEC_Chtml_4_0;
+            dt->provider       = CHXJ_PROVIDER_DOCOMO;
           }
           else if (STRCASEEQ('c','C',"chtml_5_0",vv)) {
             dt->html_spec_type = CHXJ_SPEC_Chtml_5_0;
+            dt->provider       = CHXJ_PROVIDER_DOCOMO;
           }
           else if (STRCASEEQ('c','C',"chtml_6_0",vv)) {
             dt->html_spec_type = CHXJ_SPEC_Chtml_6_0;
+            dt->provider       = CHXJ_PROVIDER_DOCOMO;
           }
           else if (STRCASEEQ('c','C',"chtml_7_0",vv)) {
             dt->html_spec_type = CHXJ_SPEC_Chtml_7_0;
+            dt->provider       = CHXJ_PROVIDER_DOCOMO;
           }
           else if (STRCASEEQ('h','H',"hdml",vv)) {
             dt->html_spec_type = CHXJ_SPEC_Hdml;
+            dt->provider       = CHXJ_PROVIDER_AU;
           }
           else if (STRCASEEQ('j','J',"jhtml",vv)) {
             dt->html_spec_type = CHXJ_SPEC_Jhtml;
+            dt->provider       = CHXJ_PROVIDER_SOFTBANK;
           }
           else if (STRCASEEQ('j','J',"jxhtml",vv)) {
             dt->html_spec_type = CHXJ_SPEC_Jxhtml;
+            dt->provider       = CHXJ_PROVIDER_SOFTBANK;
           }
         }
       }
@@ -456,6 +468,87 @@ s_set_device_data(Doc *doc, apr_pool_t *p, device_table_list *dtl, Node *node)
     }
   }
 }
+
+/**
+ * load device_data.xml
+ */
+void
+chxj_load_device_tsv_data(apr_file_t *fp,apr_pool_t *p, mod_chxj_config *conf) 
+{
+  apr_status_t st;
+  
+  char *pstat;
+  char *pair;
+  
+  char *line = apr_palloc(p,256);
+  
+  int is_header = 1;
+  int keynum = 0;
+  int valnum = 0;
+  
+  conf->device_keys = apr_array_make(p,2, sizeof(const char*));
+  conf->device_hash = apr_hash_make(p);
+  
+  while(APR_EOF != (st=apr_file_eof(fp))){
+    st = apr_file_gets(line,1024,fp);
+    if(st == APR_SUCCESS){
+      if(is_header){
+        keynum=0;
+        
+        for(pair = apr_strtok(line,"\t",&pstat); pair != NULL; pair = apr_strtok(NULL,"\t",&pstat)){
+          apr_collapse_spaces(pair,pair);
+          if(keynum < 128){
+            *(const char**)apr_array_push(conf->device_keys) = apr_pstrdup(p,pair);
+          }
+          
+          //ap_log_error(APLOG_MARK, APLOG_CRIT, 0, NULL, "V[[%s]]", pair);
+          keynum++;
+        }
+        is_header = 0;
+      }
+      else{
+        apr_table_t *tsv_table = apr_table_make(p,keynum);
+        valnum = 0;
+        char *uid = NULL;
+        char *provider = NULL;
+        for(pair = apr_strtok(line,"\t",&pstat); pair != NULL; pair = apr_strtok(NULL,"\t",&pstat)){
+          apr_collapse_spaces(pair,pair);
+          if(valnum < keynum){
+            const char *kn = ((const char**)conf->device_keys->elts)[valnum];
+            if(strcasecmp("-",pair) != 0){
+              apr_table_set(tsv_table,kn,pair);
+              if(strcasecmp(kn,"device_id") == 0){
+                uid = apr_pstrdup(p,pair);
+              }
+              else if(strcasecmp(kn,"provider") == 0){
+                if(strcasecmp(pair,"docomo") == 0){
+                  provider = "1";
+                }
+                else if(strcasecmp(pair,"au") == 0){
+                  provider = "2";
+                }
+                else if(strcasecmp(pair,"softbank") == 0){
+                  provider = "3";
+                }
+                else{
+                  provider = apr_pstrdup(p,pair);
+                }
+              }
+              //ap_log_error(APLOG_MARK, APLOG_CRIT, 0, NULL, "[%s] %d:V[%s] = [%s]", uid,valnum,kn,pair);
+            }
+          }
+          valnum++;
+        }
+        if(uid != NULL && *uid && provider != NULL && *provider){
+          char *key = apr_psprintf(p,"%s.%s",provider,uid);
+          //ap_log_error(APLOG_MARK, APLOG_CRIT, 0, NULL, "save hash [%s]",key );
+          apr_hash_set(conf->device_hash,key,APR_HASH_KEY_STRING,tsv_table);
+        }
+      }
+    }
+  }
+}
+
 /*
  * vim:ts=2 et
  */

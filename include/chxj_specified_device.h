@@ -44,6 +44,7 @@ typedef struct device_table_t device_table;
 
 struct device_table_t {
   struct device_table_t* next;
+  int                    provider;              /* DOCOMO|AU|SOFTBANK|UNKNOWN */
   const char*            device_id;
   const char*            device_name;
   spec_type              html_spec_type;
@@ -127,5 +128,14 @@ extern converter_t convert_routine[];
 extern device_table* chxj_specified_device(
   request_rec             *r, 
   const char              *user_agent);
+
+extern device_table* chxj_specified_device_from_xml(
+  request_rec             *r,
+  const char              *user_agent);
+
+extern device_table* chxj_specified_device_from_tsv(
+    request_rec           *r,
+    device_table          *spec,
+    const char            *user_agent);
 
 #endif

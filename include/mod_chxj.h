@@ -43,6 +43,7 @@
 #include "apr_dso.h"
 #include "apr_general.h"
 #include "apr_pools.h"
+#include "apr_hash.h"
 
 #if defined(AP_NEED_SET_MUTEX_PERMS)
 #  include "unixd.h"
@@ -351,6 +352,8 @@ struct mod_chxj_config {
   cookie_store_type_t   cookie_store_type;
   int                   cookie_lazy_mode;
   char                  *cookie_dbm_type;
+  
+  int                   detect_device_type; /* XML|TSV */
 
 #if defined(USE_MYSQL_COOKIE)
   mysql_t               mysql;
@@ -366,6 +369,9 @@ struct mod_chxj_config {
   chxj_new_line_type_t  new_line_type;
 
   char                  *post_log;              /* post log environment name. */
+  
+  apr_array_header_t    *device_keys;           /* TSV header array */
+  apr_hash_t            *device_hash;           /* TSV device data hash table */
 };
 
 #define IS_COOKIE_STORE_DBM(X)      ((X) == COOKIE_STORE_TYPE_DBM)
@@ -461,6 +467,14 @@ module AP_MODULE_DECLARE_DATA chxj_module;
 #define CHXJ_IMODE_EMOJI_COLOR_AUTO (2)
 #define CHXJ_IMODE_EMOJI_COLOR_OFF  (1)
 #define CHXJ_IMODE_EMOJI_COLOR_NONE (0)
+
+#define CHXJ_ADD_DETECT_DEVICE_TYPE_TSV     (1)
+#define CHXJ_ADD_DETECT_DEVICE_TYPE_NONE    (0)
+
+#define CHXJ_PROVIDER_UNKNOWN  (0)
+#define CHXJ_PROVIDER_DOCOMO   (1)
+#define CHXJ_PROVIDER_AU       (2)
+#define CHXJ_PROVIDER_SOFTBANK (3)
 
 
 #define DBG(X,args...)  chxj_log_rerror(APLOG_MARK,APLOG_DEBUG,0,(request_rec*)(X),##args)

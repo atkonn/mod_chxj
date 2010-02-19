@@ -33,6 +33,7 @@
 #include "apr_dso.h"
 #include "apr_general.h"
 #include "apr_pools.h"
+#include "apr_file_info.h"
 
 #include "mod_chxj.h"
 #include "chxj_encoding.h"
@@ -1748,6 +1749,9 @@ chxj_create_per_dir_config(apr_pool_t *p, char *arg)
   conf->cookie_store_type = COOKIE_STORE_TYPE_NONE;
   conf->cookie_lazy_mode  = 0;
   conf->cookie_dbm_type  = NULL;
+  
+  conf->detect_device_type = CHXJ_ADD_DETECT_DEVICE_TYPE_NONE;
+  
 #if defined(USE_MYSQL_COOKIE)
   memset((void *)&conf->mysql, 0, sizeof(mysql_t));
   conf->mysql.port       = MYSQL_PORT;
@@ -1810,6 +1814,9 @@ chxj_merge_per_dir_config(apr_pool_t *p, void *basev, void *addv)
   mrg->allowed_cookie_domain = NULL;
   mrg->post_log         = NULL;
   mrg->cookie_dbm_type  = NULL;
+  
+  mrg->device_keys      = NULL;
+  mrg->device_hash      = NULL;
 
   mrg->dir = apr_pstrdup(p, add->dir);
 
@@ -2053,6 +2060,27 @@ chxj_merge_per_dir_config(apr_pool_t *p, void *basev, void *addv)
   }
   else {
     mrg->imode_emoji_color = add->imode_emoji_color;
+  }
+  
+  if (add->detect_device_type == CHXJ_ADD_DETECT_DEVICE_TYPE_NONE) {
+    mrg->detect_device_type = base->detect_device_type;
+  }
+  else {
+    mrg->detect_device_type = add->detect_device_type;
+  }
+  
+  if (add->device_keys) {
+    mrg->device_keys = add->device_keys;
+  }
+  else{
+    mrg->device_keys = base->device_keys;
+  }
+  
+  if (add->device_hash) {
+    mrg->device_hash = add->device_hash;
+  }
+  else{
+    mrg->device_hash = base->device_hash;
   }
   
   return mrg;
@@ -2991,6 +3019,36 @@ cmd_imode_emoji_color(
   return NULL;
 }
 
+static const char *
+cmd_add_device_data_tsv(cmd_parms *parms, void *mconfig, const char *arg) 
+{
+  mod_chxj_config  *conf;
+  
+  if (strlen(arg) > 256) 
+    return "mod_chxj: device tsv filename too long.";
+
+  conf = (mod_chxj_config *)mconfig;
+  
+  conf->detect_device_type = CHXJ_ADD_DETECT_DEVICE_TYPE_TSV;
+  
+  apr_finfo_t info;
+  apr_status_t res = apr_stat(&info,arg,APR_FINFO_TYPE,parms->pool);
+  if(res != APR_SUCCESS){
+    return apr_psprintf(parms->pool,"ChxjDeviceTSV [%s]: not found ",arg);
+  }
+  else{
+    if(info.filetype != APR_REG ){
+      return apr_psprintf(parms->pool,"ChxjDeviceTSV [%s]: is not file ",arg);
+    }
+  }
+  apr_file_t *fp;
+  apr_file_open(&fp, arg, APR_READ|APR_BUFFERED, APR_OS_DEFAULT, parms->pool);
+  
+  chxj_load_device_tsv_data(fp,parms->pool,conf);
+  
+  apr_file_close(fp);
+  return NULL;
+}
 
 static const command_rec cmds[] = {
   AP_INIT_TAKE1(
@@ -3165,6 +3223,12 @@ static const command_rec cmds[] = {
     NULL,
     OR_ALL,
     "Auto i-mode emoji color"),
+  AP_INIT_TAKE1(
+    "ChxjAddDeviceDataTSV",
+    cmd_add_device_data_tsv,
+    NULL,
+    OR_ALL,
+    "Additional devices TSV data"),
   {NULL,{NULL},NULL,0,0,NULL},
 };
 
