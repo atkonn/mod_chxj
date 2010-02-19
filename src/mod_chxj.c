@@ -2317,6 +2317,17 @@ cmd_set_image_cache_dir(cmd_parms *parms, void *mconfig, const char *arg)
 
   if (strlen(arg) > 256) 
     return "cache dir name is too long.";
+  
+  apr_finfo_t info;
+  apr_status_t res = apr_stat(&info,arg,APR_FINFO_TYPE,parms->pool);
+  if(res != APR_SUCCESS){
+    return apr_psprintf(parms->pool,"ChxjImageCacheDir [%s]: not found ",arg);
+  }
+  else{
+    if(info.filetype != APR_DIR){
+      return apr_psprintf(parms->pool,"ChxjImageCacheDir [%s]: is not directory ",arg);
+    }
+  }
 
   conf = (mod_chxj_config *)mconfig;
   conf->image_cache_dir = apr_pstrdup(parms->pool, arg);
