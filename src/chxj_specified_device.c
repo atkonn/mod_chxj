@@ -325,6 +325,9 @@ chxj_specified_device_from_tsv(request_rec *r,device_table *spec,const char *use
         else if (STRCASEEQ('h','H',"hdml",val)) {
           spec->html_spec_type = CHXJ_SPEC_Hdml;
         }
+        else if (STRCASEEQ('i','I',"ixhtml",val)) {
+          spec->html_spec_type = CHXJ_SPEC_Chtml_7_0;
+        }
         else if (STRCASEEQ('j','J',"jhtml",val)) {
           spec->html_spec_type = CHXJ_SPEC_Jhtml;
         }
