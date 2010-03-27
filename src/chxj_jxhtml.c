@@ -2418,6 +2418,23 @@ s_jxhtml_end_form_tag(void *pdoc, Node *node)
   return jxhtml->out;
 }
 
+static char *
+s_jxhtml_istyle_to_wap_input_format(apr_pool_t *p, const char *s)
+{
+  if (s) {
+    switch (s[0]) {
+    case '1': return apr_psprintf(p, "&quot;*&lt;ja:h&gt;&quot;");
+    case '2': return apr_psprintf(p, "&quot;*&lt;ja:hk&gt;&quot;");
+    case '3': return apr_psprintf(p, "&quot;*&lt;ja:en&gt;&quot;");
+    case '4': return apr_psprintf(p, "&quot;*&lt;ja:n&gt;&quot;");
+    default:
+      return apr_pstrdup(p, "");
+    }
+  }
+
+  return apr_pstrdup(p,"");
+}
+
 
 /**
  * It is a handler who processes the INPUT tag.
@@ -2546,9 +2563,23 @@ s_jxhtml_start_input_tag(void *pdoc, Node *node)
     W_L(" istyle=\"");
     W_V(attr_istyle);
     W_L("\"");
+
+    char *vv = s_jxhtml_istyle_to_wap_input_format(doc->buf.pool,attr_istyle);
+    W_L(" style=\"");
+    W_L("-wrap-input-format:");
+    W_V(vv);
+    W_L(";");
+    W_L("\"");
   }
   else if(attr_type && STRCASEEQ('p','P',"password",attr_type)) {
     W_L(" istyle=\"4\"");
+
+    char *vv = s_jxhtml_istyle_to_wap_input_format(doc->buf.pool,"4");
+    W_L(" style=\"");
+    W_L("-wrap-input-format:");
+    W_V(vv);
+    W_L(";");
+    W_L("\"");
   }
   /*--------------------------------------------------------------------------*/
   /* The figure is default for the password.                                  */
@@ -4397,6 +4428,14 @@ s_jxhtml_start_textarea_tag(void *pdoc, Node *node)
     W_L(" istyle=\"");
     W_V(attr_istyle);
     W_L("\"");
+
+    char *vv = s_jxhtml_istyle_to_wap_input_format(doc->buf.pool,attr_istyle);
+        W_L(" style=\"");
+        W_L("-wap-input-format:");
+        W_V(vv);
+        W_L(";");
+        W_L("\"");
+
   }
   W_L(">");
   return jxhtml->out;
