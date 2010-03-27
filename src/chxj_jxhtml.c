@@ -1117,7 +1117,7 @@ s_jxhtml_start_body_tag(void *pdoc, Node *node)
   }
 
   if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_push_and_get_now_style(pdoc, node, attr_style);
+    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *color_prop      = chxj_css_get_property_value(doc, style, "color");
       css_property_t *bgcolor_prop    = chxj_css_get_property_value(doc, style, "background-color");
@@ -1372,7 +1372,7 @@ s_jxhtml_start_a_tag(void *pdoc, Node *node)
   W_L(">");
 
   if (IS_CSS_ON(jxhtml->entryp)) {
-    s_jxhtml_push_and_get_now_style(pdoc, node, attr_style);
+    s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
   }
 
   return jxhtml->out;
@@ -2087,7 +2087,7 @@ s_jxhtml_start_font_tag(void *pdoc, Node *node)
     }
   }
   if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_push_and_get_now_style(pdoc, node, attr_style);
+    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *color_prop = chxj_css_get_property_value(doc, style, "color");
       css_property_t *size_prop  = chxj_css_get_property_value(doc, style, "font-size");
@@ -2299,7 +2299,7 @@ s_jxhtml_start_form_tag(void *pdoc, Node *node)
     }
   }
   if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_push_and_get_now_style(pdoc, node, attr_style);
+    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *text_align_prop = chxj_css_get_property_value(doc, style, "text-align");
       css_property_t *color_prop      = chxj_css_get_property_value(doc, style, "color");
@@ -2726,7 +2726,7 @@ s_jxhtml_start_center_tag(void *pdoc, Node *node)
     }
   }
   if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_push_and_get_now_style(pdoc, node, attr_style);
+    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *color_prop      = chxj_css_get_property_value(doc, style, "color");
       css_property_t *size_prop       = chxj_css_get_property_value(doc, style, "font-size");
@@ -2845,7 +2845,7 @@ s_jxhtml_start_li_tag(void *pdoc, Node *node)
     }
   }
   if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_push_and_get_now_style(pdoc, node, attr_style);
+    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *list_style_type_prop = chxj_css_get_property_value(doc, style, "list-style-type");
       css_property_t *cur;
@@ -2969,7 +2969,7 @@ s_jxhtml_start_ol_tag(void *pdoc, Node *node)
     }
   }
   if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_push_and_get_now_style(pdoc, node, attr_style);
+    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *list_style_type_prop = chxj_css_get_property_value(doc, style, "list-style-type");
       css_property_t *clear_prop           = chxj_css_get_property_value(doc, style, "clear");
@@ -3088,7 +3088,7 @@ s_jxhtml_start_p_tag(void *pdoc, Node *node)
     }
   }
   if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_push_and_get_now_style(pdoc, node, attr_style);
+    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *text_align_prop = chxj_css_get_property_value(doc, style, "text-align");
       css_property_t *color_prop      = chxj_css_get_property_value(doc, style, "color");
@@ -3202,7 +3202,7 @@ s_jxhtml_start_pre_tag(void *pdoc, Node *node)
   }
 
   if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_push_and_get_now_style(pdoc, node, attr_style);
+    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *clear_prop           = chxj_css_get_property_value(doc, style, "clear");
       
@@ -3287,7 +3287,7 @@ s_jxhtml_start_ul_tag(void *pdoc, Node *node)
     }
   }
   if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_push_and_get_now_style(pdoc, node, attr_style);
+    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *list_style_type_prop = chxj_css_get_property_value(doc, style, "list-style-type");
       css_property_t *clear_prop           = chxj_css_get_property_value(doc, style, "clear");
@@ -3933,7 +3933,7 @@ s_jxhtml_start_select_tag(void *pdoc, Node *node)
   W_L(">");
 
   if (IS_CSS_ON(jxhtml->entryp)) {
-    s_jxhtml_push_and_get_now_style(pdoc, node, attr_style);
+    s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
   }
 
   return jxhtml->out;
@@ -4017,7 +4017,7 @@ s_jxhtml_start_option_tag(void *pdoc, Node *node)
   W_L(">");
 
   if (IS_CSS_ON(jxhtml->entryp)) {
-    s_jxhtml_push_and_get_now_style(pdoc, node, attr_style);
+    s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
   }
 
   return jxhtml->out;
@@ -4573,7 +4573,7 @@ s_jxhtml_start_blockquote_tag(void *pdoc, Node *node)
     }
   }
   if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_push_and_get_now_style(pdoc, node, attr_style);
+    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *color_prop = chxj_css_get_property_value(doc, style, "color");
       css_property_t *font_size_prop = chxj_css_get_property_value(doc, style, "font-size");
@@ -4695,7 +4695,7 @@ s_jxhtml_start_dir_tag(void *pdoc, Node *node)
     }
   }
   if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_push_and_get_now_style(pdoc, node, attr_style);
+    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *color_prop           = chxj_css_get_property_value(doc, style, "color");
       css_property_t *size_prop            = chxj_css_get_property_value(doc, style, "font-size");
@@ -4814,7 +4814,7 @@ s_jxhtml_start_dl_tag(void *pdoc, Node *node)
     }
   }
   if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_push_and_get_now_style(pdoc, node, attr_style);
+    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *color_prop           = chxj_css_get_property_value(doc, style, "color");
       css_property_t *size_prop            = chxj_css_get_property_value(doc, style, "font-size");
@@ -4930,7 +4930,7 @@ s_jxhtml_start_dt_tag(void *pdoc, Node *node)
     }
   }
   if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_push_and_get_now_style(pdoc, node, attr_style);
+    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *color_prop           = chxj_css_get_property_value(doc, style, "color");
       css_property_t *size_prop            = chxj_css_get_property_value(doc, style, "font-size");
@@ -5036,7 +5036,7 @@ s_jxhtml_start_dd_tag(void *pdoc, Node *node)
     }
   }
   if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_push_and_get_now_style(pdoc, node, attr_style);
+    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *color_prop           = chxj_css_get_property_value(doc, style, "color");
       css_property_t *size_prop            = chxj_css_get_property_value(doc, style, "font-size");
@@ -5153,7 +5153,7 @@ s_jxhtml_start_h1_tag(void *pdoc, Node *node)
     }
   }
   if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_push_and_get_now_style(pdoc, node, attr_style);
+    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *list_style_type_prop = chxj_css_get_property_value(doc, style, "text-align");
       css_property_t *clear_prop           = chxj_css_get_property_value(doc, style, "clear");
@@ -5269,7 +5269,7 @@ s_jxhtml_start_h2_tag(void *pdoc, Node *node)
     }
   }
   if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_push_and_get_now_style(pdoc, node, attr_style);
+    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *list_style_type_prop = chxj_css_get_property_value(doc, style, "text-align");
       css_property_t *clear_prop           = chxj_css_get_property_value(doc, style, "clear");
@@ -5384,7 +5384,7 @@ s_jxhtml_start_h3_tag(void *pdoc, Node *node)
     }
   }
   if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_push_and_get_now_style(pdoc, node, attr_style);
+    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *list_style_type_prop = chxj_css_get_property_value(doc, style, "text-align");
       css_property_t *clear_prop           = chxj_css_get_property_value(doc, style, "clear");
@@ -5499,7 +5499,7 @@ s_jxhtml_start_h4_tag(void *pdoc, Node *node)
     }
   }
   if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_push_and_get_now_style(pdoc, node, attr_style);
+    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *list_style_type_prop = chxj_css_get_property_value(doc, style, "text-align");
       css_property_t *clear_prop           = chxj_css_get_property_value(doc, style, "clear");
@@ -5615,7 +5615,7 @@ s_jxhtml_start_h5_tag(void *pdoc, Node *node)
     }
   }
   if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_push_and_get_now_style(pdoc, node, attr_style);
+    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *list_style_type_prop = chxj_css_get_property_value(doc, style, "text-align");
       css_property_t *clear_prop           = chxj_css_get_property_value(doc, style, "clear");
@@ -5731,7 +5731,7 @@ s_jxhtml_start_h6_tag(void *pdoc, Node *node)
     }
   }
   if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_push_and_get_now_style(pdoc, node, attr_style);
+    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *list_style_type_prop = chxj_css_get_property_value(doc, style, "text-align");
       css_property_t *clear_prop           = chxj_css_get_property_value(doc, style, "clear");
@@ -5842,7 +5842,7 @@ s_jxhtml_start_menu_tag(void *pdoc, Node *node)
     }
   }
   if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_push_and_get_now_style(pdoc, node, attr_style);
+    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *color_prop           = chxj_css_get_property_value(doc, style, "color");
       css_property_t *size_prop            = chxj_css_get_property_value(doc, style, "font-size");
@@ -6014,7 +6014,7 @@ s_jxhtml_start_blink_tag(void *pdoc, Node *node)
     }
   }
   if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_push_and_get_now_style(pdoc, node, attr_style);
+    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *color_prop           = chxj_css_get_property_value(doc, style, "color");
       css_property_t *size_prop            = chxj_css_get_property_value(doc, style, "font-size");
@@ -6146,7 +6146,7 @@ s_jxhtml_start_marquee_tag(void *pdoc, Node *node)
     }
   }
   if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_push_and_get_now_style(pdoc, node, attr_style);
+    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *color_prop = chxj_css_get_property_value(doc, style, "color");
       css_property_t *size_prop  = chxj_css_get_property_value(doc, style, "font-size");
@@ -6406,7 +6406,7 @@ s_jxhtml_start_span_tag(void *pdoc, Node *node)
     }
   }
   if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_push_and_get_now_style(pdoc, node, attr_style);
+    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *color_prop = chxj_css_get_property_value(doc, style, "color");
       css_property_t *size_prop = chxj_css_get_property_value(doc, style, "font-size");
