@@ -498,6 +498,9 @@ chxj_convert_ixhtml10(
   ixhtml10.entryp = entryp;
   ixhtml10.cookie = cookie;
 
+  if (strcasecmp(spec->output_encoding,"UTF-8") == 0 ){
+    apr_table_setn(r->headers_out,HTTP_X_CHXJ_SET_CONTENT_TYPE,"application/xhtml+xml; charset=UTF-8");
+  }
   chxj_set_content_type(r, chxj_header_inf_set_content_type(r, "application/xhtml+xml; charset=Shift_JIS"));
 
   /*--------------------------------------------------------------------------*/
@@ -670,7 +673,9 @@ s_ixhtml10_start_html_tag(void *pdoc, Node *UNUSED(node))
   r      = doc->r;
   DBG(r, "REQ[%X] start s_ixhtml10_start_html_tag()", (unsigned int)(apr_size_t)r);
 
-  W_L("<?xml version=\"1.0\" encoding=\"Shift_JIS\" ?>");
+  W_L("<?xml version=\"1.0\" encoding=\"");
+  W_V(ixhtml10->spec->output_encoding);
+  W_L("\" ?>");
   W_NLCODE();
   W_L("<!DOCTYPE html PUBLIC \"-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/2.0) 1.0//EN\" \"i-xhtml_4ja_10.dtd\">");
   W_NLCODE();

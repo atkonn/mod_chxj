@@ -57,6 +57,7 @@ static device_table  UNKNOWN_DEVICE      = {
   /*--------------------------------------------------------------------------*/
   .color = 15680000,
   .emoji_type = NULL,
+  .output_encoding = "Shift_JIS",
 };
 
 int
@@ -334,6 +335,9 @@ chxj_specified_device_from_tsv(request_rec *r,device_table *spec,const char *use
         else if (STRCASEEQ('j','J',"jxhtml",val)) {
           spec->html_spec_type = CHXJ_SPEC_Jxhtml;
         }
+      }
+      else if (STRCASEEQ('o','O',"output_encoding",k)){
+          spec->output_encoding = apr_pstrdup(r->pool,val);
       }
     }
   }

@@ -86,6 +86,7 @@ struct device_table_t {
   /*--------------------------------------------------------------------------*/
   int                    color;
   char*                  emoji_type;
+  char*                  output_encoding;  /* Output encoding */
 };
 
 typedef struct device_table_list_t  device_table_list;

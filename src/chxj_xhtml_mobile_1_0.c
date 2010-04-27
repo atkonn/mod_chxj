@@ -486,6 +486,9 @@ chxj_convert_xhtml_mobile_1_0(
   xhtml.entryp = entryp;
   xhtml.cookie = cookie;
 
+  if (strcasecmp(spec->output_encoding,"UTF-8") == 0 ){
+    apr_table_setn(r->headers_out,HTTP_X_CHXJ_SET_CONTENT_TYPE,"text/html; charset=UTF-8");
+  }
   chxj_set_content_type(r, chxj_header_inf_set_content_type(r, "text/html; charset=Windows-31J"));
 
   /*--------------------------------------------------------------------------*/
@@ -774,7 +777,9 @@ s_xhtml_1_0_start_html_tag(void *pdoc, Node *UNUSED(node))
   /*--------------------------------------------------------------------------*/
   /* Add XML Declare                                                          */
   /*--------------------------------------------------------------------------*/
-  W_L("<?xml version=\"1.0\" encoding=\"Shift_JIS\"?>");
+  W_L("<?xml version=\"1.0\" encoding=\"");
+  W_V(xhtml->spec->output_encoding);
+  W_L("\"?>");
   W_NLCODE();
   /*--------------------------------------------------------------------------*/
   /* Add DocType                                                              */
