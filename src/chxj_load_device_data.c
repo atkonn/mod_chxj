@@ -149,6 +149,7 @@ s_set_device_data(Doc *doc, apr_pool_t *p, device_table_list *dtl, Node *node)
   dt->color          = 256;
   dt->dpi_width      = 96;
   dt->dpi_heigh      = 96;
+  dt->output_encoding = "Shift_JIS";
 
   for (child = qs_get_child_node(doc,node); 
        child ;
@@ -450,6 +451,15 @@ s_set_device_data(Doc *doc, apr_pool_t *p, device_table_list *dtl, Node *node)
         Node *ch = qs_get_child_node(doc, child);
         if (ch && strcasecmp(qs_get_node_name(doc,ch), "text") == 0) 
           dt->emoji_type = apr_pstrdup(p, qs_get_node_value(doc, ch));
+      }
+      break;
+    case 'o':
+    case 'O':
+      if (strcasecmp(name, "output_encoding") == 0) {
+        Node *ch = qs_get_child_node(doc, child);
+        if (ch && strcasecmp(qs_get_node_name(doc,ch), "text") == 0){
+          dt->output_encoding = apr_pstrdup(p, qs_get_node_value(doc, ch));
+        }
       }
       break;
     default:

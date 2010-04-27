@@ -420,6 +420,7 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
   }
 
   if (!r->header_only) {
+
     if ((entryp->action & CONVRULE_COOKIE_ONLY_BIT) && cookie) {
       dst = chxj_cookie_only_mode(r, *src, (apr_size_t *)len, cookie);
     }
@@ -474,6 +475,13 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
       }
     }
   }
+  if (*len > 0){
+    if (strcasecmp(spec->output_encoding,"UTF-8") == 0){
+      dst = chxj_iconv(r,r->pool,dst,len,"CP932","UTF-8");
+    }
+  }
+
+
   ap_set_content_length(r, *len);
 
   if (*len == 0) {
@@ -484,6 +492,7 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
   if (cookie) {
     *cookiep = cookie;
   }
+
 
 
   DBG(r, "REQ[%X] end of chxj_convert()", (unsigned int)(apr_size_t)r);
@@ -616,7 +625,7 @@ chxj_convert_input_header(request_rec *r,chxjconvrule_entry *entryp, device_tabl
           dlen   = strlen(value);
           DBG(r, "************ before encoding[%s]", value);
   
-          dvalue = chxj_rencoding(r, value, &dlen);
+          dvalue = chxj_rencoding(r, value, &dlen,spec->output_encoding);
           dvalue = chxj_url_encode(r->pool, dvalue);
   
           DBG(r, "************ after encoding[%s]", dvalue);
@@ -628,7 +637,7 @@ chxj_convert_input_header(request_rec *r,chxjconvrule_entry *entryp, device_tabl
         if (name && *name != 0) {
           name = chxj_url_decode(r->pool, name);
           dlen = strlen(name);
-          dname = chxj_rencoding(r, name, &dlen);
+          dname = chxj_rencoding(r, name, &dlen,spec->output_encoding);
           dname = chxj_url_encode(r->pool, dname);
         }
         else {
@@ -793,7 +802,7 @@ chxj_input_convert(
         if (value && *value != 0) {
           value = chxj_url_decode(pool, value);
           dlen   = strlen(value);
-          dvalue = chxj_rencoding(r, value, &dlen);
+          dvalue = chxj_rencoding(r, value, &dlen,spec->output_encoding);
           dvalue = chxj_url_encode(pool, dvalue);
         }
         else {
@@ -803,7 +812,7 @@ chxj_input_convert(
         if (name && *name != 0) {
           name = chxj_url_decode(pool, name);
           dlen = strlen(name);
-          dname = chxj_rencoding(r, name, &dlen);
+          dname = chxj_rencoding(r, name, &dlen,spec->output_encoding);
           dname = chxj_url_encode(pool, dname);
         }
         else {
@@ -836,7 +845,7 @@ chxj_input_convert(
 
         dlen   = strlen(value);
         value = chxj_url_decode(pool, value);
-        dvalue = chxj_rencoding(r, value, &dlen);
+        dvalue = chxj_rencoding(r, value, &dlen,spec->output_encoding);
         dvalue = chxj_url_encode(pool,dvalue);
         result = apr_pstrcat(pool, result, &name[8], "=", dvalue, NULL);
 
@@ -880,7 +889,7 @@ chxj_input_convert(
       }
       if (dlen) {
         value = chxj_url_decode(pool, value);
-        dvalue = chxj_rencoding(r, value, &dlen);
+        dvalue = chxj_rencoding(r, value, &dlen,spec->output_encoding);
         dvalue = chxj_url_encode(pool,dvalue);
         if (r->args && strlen(r->args) > 0) {
           r->args = apr_pstrcat(pool, r->args, "&", &name[sizeof(CHXJ_QUERY_STRING_PARAM_PREFIX)-1], "=", dvalue, NULL);
@@ -898,7 +907,7 @@ chxj_input_convert(
       dlen   = strlen(value);
       if (dlen && value) {
         value = chxj_url_decode(pool, value);
-        dvalue = chxj_rencoding(r, value, &dlen);
+        dvalue = chxj_rencoding(r, value, &dlen,spec->output_encoding);
         dvalue = chxj_url_encode(pool,dvalue);
         if (r->args && strlen(r->args) > 0) {
           r->args = apr_pstrcat(pool, r->args, "&", &name[sizeof(CHXJ_QUERY_STRING_PARAM_PREFIX_ENC)-1], "=", dvalue, NULL);

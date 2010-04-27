@@ -241,7 +241,7 @@ chxj_convert_illegal_charactor_sequence(request_rec *r, chxjconvrule_entry  *ent
 
 
 char *
-chxj_rencoding(request_rec *r, const char *src, apr_size_t *len)
+chxj_rencoding(request_rec *r, const char *src, apr_size_t *len,const char *enc)
 {
   char                *obuf;
   char                *ibuf;
@@ -298,11 +298,17 @@ chxj_rencoding(request_rec *r, const char *src, apr_size_t *len)
     DBG(r,"REQ[%X] end   chxj_rencoding()", (unsigned int)(apr_size_t)r);
     return ibuf;
   }
-  DBG(r,"encode convert [%s] -> [%s]", "CP932", entryp->encoding);
-
+  char *from_enc = enc;
+  if (!enc){
+    from_enc = "CP932";
+  }
+  if (strcasecmp(enc,"Shift_JIS") == 0){
+    from_enc = "CP932";
+  }
+  DBG(r,"encode convert [%s] -> [%s]", from_enc, entryp->encoding);
   memset(obuf, 0, olen);
 
-  cd = iconv_open(entryp->encoding, "CP932");
+  cd = iconv_open(entryp->encoding, from_enc);
   if (cd == (iconv_t)-1) {
     if (EINVAL == errno) {
       ERR(r, "The conversion from %s to %s is not supported by the implementation.", "CP932", entryp->encoding);
