@@ -77,6 +77,7 @@ struct query_string_param_t {
 /*----------------------------------------------------------------------------*/
 static device_table v_ignore_spec = {
   NULL,
+  0,
   "IGN",
   "IGN",
   CHXJ_SPEC_HTML,
@@ -94,6 +95,7 @@ static device_table v_ignore_spec = {
   96,
   65536,
   NULL,
+  "Shift_JIS"
 };
 
 /*----------------------------------------------------------------------------*/
