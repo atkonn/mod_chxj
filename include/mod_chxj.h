@@ -372,6 +372,10 @@ struct mod_chxj_config {
   
   apr_array_header_t    *device_keys;           /* TSV header array */
   apr_hash_t            *device_hash;           /* TSV device data hash table */
+
+  int                   image_rewrite;
+  char                  *image_rewrite_url;
+  int                   image_rewrite_mode;
 };
 
 #define IS_COOKIE_STORE_DBM(X)      ((X) == COOKIE_STORE_TYPE_DBM)
@@ -476,6 +480,14 @@ module AP_MODULE_DECLARE_DATA chxj_module;
 #define CHXJ_PROVIDER_AU       (2)
 #define CHXJ_PROVIDER_SOFTBANK (3)
 
+#define CHXJ_IMG_REWRITE_ON     (2)
+#define CHXJ_IMG_REWRITE_OFF    (1)
+#define CHXJ_IMG_REWRITE_NONE   (0)
+
+#define CHXJ_IMG_REWRITE_MODE_ALL  (3)
+#define CHXJ_IMG_REWRITE_MODE_USER (2)
+#define CHXJ_IMG_REWRITE_MODE_TAG  (1)
+#define CHXJ_IMG_REWRITE_MODE_NONE (0)
 
 #define DBG(X,args...)  chxj_log_rerror(APLOG_MARK,APLOG_DEBUG,0,(request_rec*)(X),##args)
 #define SDBG(X,Y)       chxj_log_error(APLOG_MARK,APLOG_DEBUG,0,(X),(Y))

@@ -1789,6 +1789,10 @@ chxj_create_per_dir_config(apr_pool_t *p, char *arg)
   /* Default is copyleft */
   conf->image_copyright = NULL; 
 
+  conf->image_rewrite = CHXJ_IMG_REWRITE_NONE;
+  conf->image_rewrite_mode = CHXJ_IMG_REWRITE_MODE_NONE;
+  conf->image_rewrite_url = NULL;
+
   return conf;
 }
 
@@ -2092,6 +2096,27 @@ chxj_merge_per_dir_config(apr_pool_t *p, void *basev, void *addv)
     mrg->device_hash = base->device_hash;
   }
   
+  if (add->image_rewrite == CHXJ_IMG_REWRITE_NONE){
+    mrg->image_rewrite = base->image_rewrite;
+  }
+  else{
+    mrg->image_rewrite = add->image_rewrite;
+  }
+
+  if (add->image_rewrite_url) {
+    mrg->image_rewrite_url = add->image_rewrite_url;
+  }
+  else{
+    mrg->image_rewrite_url = base->image_rewrite_url;
+  }
+
+  if (add->image_rewrite_mode == CHXJ_IMG_REWRITE_MODE_NONE){
+    mrg->image_rewrite_mode = base->image_rewrite_mode;
+  }
+  else{
+    mrg->image_rewrite_mode = add->image_rewrite_mode;
+  }
+
   return mrg;
 }
 
@@ -3059,6 +3084,62 @@ cmd_add_device_data_tsv(cmd_parms *parms, void *mconfig, const char *arg)
   return NULL;
 }
 
+static const char *
+cmd_image_rewrite(cmd_parms *parms, void *mconfig, const char *arg)
+{
+  mod_chxj_config *conf;
+  if (strlen(arg) > 256){
+    return "mod_chxj: set rewrite too long.";
+  }
+  conf = (mod_chxj_config *)mconfig;
+  if (strcasecmp("ON", arg) == 0) {
+    conf->image_rewrite = CHXJ_IMG_REWRITE_ON;
+  }
+  else if(strcasecmp("OFF",arg) == 0) {
+    conf->image_rewrite = CHXJ_IMG_REWRITE_OFF;
+  }
+  else {
+    conf->image_rewrite = CHXJ_IMG_REWRITE_NONE;
+  }
+  return NULL;
+}
+
+static const char *
+cmd_image_rewrite_url(cmd_parms *parms, void *mconfig, const char *arg)
+{
+  mod_chxj_config *conf;
+  if (strlen(arg) > 256){
+    return "mod_chxj: set rewrite url too long.";
+  }
+  conf = (mod_chxj_config *)mconfig;
+  conf->image_rewrite_url = apr_pstrdup(parms->pool, arg);;
+  return NULL;
+}
+
+static const char *
+cmd_image_rewrite_mode(cmd_parms *parms, void *mconfig, const char *arg)
+{
+  mod_chxj_config *conf;
+  if (strlen(arg) > 256){
+    return "mod_chxj: set rewrite mode is too long.";
+  }
+
+  conf = (mod_chxj_config *)mconfig;
+  if (strcasecmp("all",arg) == 0) {
+    conf->image_rewrite_mode = CHXJ_IMG_REWRITE_MODE_ALL;
+  }
+  else if (strcasecmp("user",arg) == 0) {
+    conf->image_rewrite_mode = CHXJ_IMG_REWRITE_MODE_USER;
+  }
+  else if (strcasecmp("tag",arg) == 0) {
+    conf->image_rewrite_mode = CHXJ_IMG_REWRITE_MODE_USER;
+  }
+  else{
+    conf->image_rewrite_mode = CHXJ_IMG_REWRITE_MODE_NONE;
+  }
+  return NULL;
+}
+
 static const command_rec cmds[] = {
   AP_INIT_TAKE1(
     "ChxjLoadDeviceData",
@@ -3238,6 +3319,27 @@ static const command_rec cmds[] = {
     NULL,
     OR_ALL,
     "Additional devices TSV data"),
+  AP_INIT_TAKE1(
+    "ChxjImageRewrite",
+    cmd_image_rewrite,
+    NULL,
+    OR_ALL,
+    "Rewrite Image"
+   ),
+  AP_INIT_TAKE1(
+    "ChxjImageRewriteUrl",
+    cmd_image_rewrite_url,
+    NULL,
+    OR_ALL,
+    "Set rewrite Image url"
+   ),
+  AP_INIT_TAKE1(
+    "ChxjImageRewriteMode",
+    cmd_image_rewrite_mode,
+    NULL,
+    OR_ALL,
+    "Set rewrite Image rewrite url mode"
+   ),
   {NULL,{NULL},NULL,0,0,NULL},
 };
 
