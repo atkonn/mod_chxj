@@ -304,12 +304,59 @@ chxj_headers_fixup(request_rec *r)
       }
     }
   }
+  else{
+    if(strncmp(r->content_type,"image/",6) == 0){
+
+    if (dconf->image_rewrite == CHXJ_IMG_REWRITE_ON && !apr_table_get(r->headers_in, CHXJ_IMG_X_HTTP_IMAGE_FILENAME)){
+      DBG(r," fixup: image rewrite is ON [%s]",r->content_type);
+      if(dconf->image_rewrite_mode == CHXJ_IMG_REWRITE_MODE_ALL){
+        // all image
+        apr_table_set(r->headers_in, CHXJ_IMG_X_HTTP_IMAGE_FILENAME, r->filename);
+        apr_table_set(r->headers_in, CHXJ_IMG_X_HTTP_IMAGE_TYPE,r->content_type);
+        r->filename = apr_pstrcat(r->pool,"img-redirect:",dconf->image_rewrite_url,NULL);
+        r->handler = "chxj-image-redirect-handler";
+        return OK;
+      }
+      else{
+        //   has _chxj_imgrewrite=on in args
+        char *args_tmp = chxj_url_decode(r->pool, r->args);
+        DBG(r," fixup: image rewrite MODE is !ALL: %s, %s",args_tmp,CHXJ_IMG_REWRITE_URL_STRING);
+        if (strstr(args_tmp,CHXJ_IMG_REWRITE_URL_STRING)){
+          apr_table_set(r->headers_in, CHXJ_IMG_X_HTTP_IMAGE_FILENAME, r->filename);
+          apr_table_set(r->headers_in, CHXJ_IMG_X_HTTP_IMAGE_TYPE,r->content_type);
+          r->filename = apr_pstrcat(r->pool,"img-redirect:",dconf->image_rewrite_url,NULL);
+          r->handler = "chxj-image-redirect-handler";
+          DBG(r, "chxj-image-redirect-handler: %s?%s",dconf->image_rewrite_url,r->args);
+          return OK;
+        }
+      }
+    }
+    }
+  }
 
   chxj_add_device_env(r, spec);
 
   DBG(r, "REQ[%X] end chxj_headers_fixup()", (unsigned int)(apr_size_t)r);
 
   return DECLINED;
+}
+
+static int
+chxj_image_redirect_handler(request_rec *r)
+{
+
+  if (strcmp(r->handler, "chxj-image-redirect-handler")) {
+    return DECLINED;
+  }
+
+  if (strncmp(r->filename, "img-redirect:", 13) != 0) {
+    return DECLINED;
+  }
+  DBG(r,"start chxj_image_redirect_handler");
+  ap_internal_redirect(apr_pstrcat(r->pool, r->filename+13,
+                                       r->args ? "?" : NULL, r->args, NULL), r);
+  DBG(r,"end chxj_image_redirect_handler");
+  return OK;
 }
 
 
@@ -1611,6 +1658,19 @@ chxj_translate_name(request_rec *r)
   DBG(r, "REQ[%X] METHOD [%s]", TO_ADDR(r), r->method);
   DBG(r, "REQ[%X] ", (unsigned int)(apr_size_t)r);
   DBG(r, "REQ[%X] =======================================================================", (unsigned int)(apr_size_t)r);
+
+  mod_chxj_config *dconf;
+  dconf = chxj_get_module_config(r->per_dir_config, &chxj_module);
+  /*
+  if (dconf->image_rewrite ==CHXJ_IMG_REWRITE_ON ){
+    if(r->args && strcasecmp(r->args,"rewrite") == 0){
+      DBG(r, "image rewrite is ON [%s] - %s", dconf->image_rewrite_url ,r->content_type);
+      r->filename = apr_pstrcat(r->pool,dconf->image_rewrite_url,NULL);
+      return OK;
+    }
+  }
+  */
+
 #if 0
   return chxj_trans_name(r);
 #else
@@ -1726,8 +1786,12 @@ chxj_register_hooks(apr_pool_t *UNUSED(p))
   ap_hook_handler(chxj_img_conv_format_handler, NULL, NULL, APR_HOOK_MIDDLE);
   ap_hook_handler(chxj_qr_code_handler, NULL, NULL, APR_HOOK_MIDDLE);
   ap_hook_handler(chxj_input_handler, NULL, NULL, APR_HOOK_MIDDLE);
+
+  ap_hook_handler(chxj_image_redirect_handler, NULL, NULL, APR_HOOK_MIDDLE);
+
   ap_hook_translate_name(chxj_translate_name, NULL, NULL, APR_HOOK_MIDDLE);
   ap_hook_fixups(chxj_headers_fixup, NULL, NULL, APR_HOOK_FIRST);
+
 }
 
 
@@ -3132,7 +3196,7 @@ cmd_image_rewrite_mode(cmd_parms *parms, void *mconfig, const char *arg)
     conf->image_rewrite_mode = CHXJ_IMG_REWRITE_MODE_USER;
   }
   else if (strcasecmp("tag",arg) == 0) {
-    conf->image_rewrite_mode = CHXJ_IMG_REWRITE_MODE_USER;
+    conf->image_rewrite_mode = CHXJ_IMG_REWRITE_MODE_TAG;
   }
   else{
     conf->image_rewrite_mode = CHXJ_IMG_REWRITE_MODE_NONE;
