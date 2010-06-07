@@ -489,6 +489,10 @@ module AP_MODULE_DECLARE_DATA chxj_module;
 #define CHXJ_IMG_REWRITE_MODE_TAG  (1)
 #define CHXJ_IMG_REWRITE_MODE_NONE (0)
 
+#define CHXJ_IMG_REWRITE_URL_STRING             "_x-chxj_imgrewrite=on"
+#define CHXJ_IMG_X_HTTP_IMAGE_FILENAME          "X-Chxj-Image-Filename"
+#define CHXJ_IMG_X_HTTP_IMAGE_TYPE              "X-Chxj-Image-Type"
+
 #define DBG(X,args...)  chxj_log_rerror(APLOG_MARK,APLOG_DEBUG,0,(request_rec*)(X),##args)
 #define SDBG(X,Y)       chxj_log_error(APLOG_MARK,APLOG_DEBUG,0,(X),(Y))
 #define PDBG(X,args...) chxj_log_perror(APLOG_MARK,APLOG_DEBUG,0,(apr_pool_t *)(X),##args)
