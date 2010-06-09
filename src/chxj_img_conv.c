@@ -58,10 +58,16 @@ chxj_img_rewrite_parameter(
     mod_chxj_config *conf,
     const char *href)
 {
-  if(strstr(href,"?")){
-    return apr_pstrcat(r->pool,href,"&",CHXJ_IMG_REWRITE_URL_STRING,NULL);
+  if (conf->image_rewrite == CHXJ_IMG_REWRITE_ON &&
+      conf->image_rewrite_mode == CHXJ_IMG_REWRITE_MODE_TAG){
+    if(strstr(href,"?")){
+      return apr_pstrcat(r->pool,href,"&",CHXJ_IMG_REWRITE_URL_STRING,NULL);
+    }
+    else{
+      return apr_pstrcat(r->pool,href,"?",CHXJ_IMG_REWRITE_URL_STRING,NULL);
+    }
   }
   else{
-    return apr_pstrcat(r->pool,href,"?",CHXJ_IMG_REWRITE_URL_STRING,NULL);
+    return apr_pstrcat(r->pool,href,NULL);
   }
 }
