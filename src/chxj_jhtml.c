@@ -2701,6 +2701,7 @@ s_jhtml_start_img_tag(void *pdoc, Node *node)
       value = chxj_jreserved_tag_to_safe_for_query_string(r, value, jhtml->entryp, 0);
       value = chxj_add_cookie_parameter(r, value, jhtml->cookie);
       value = chxj_add_cookie_no_update_parameter(r, value);
+      value = chxj_img_rewrite_parameter(r,jhtml->conf,value);
       value = s_add_copyright_parameter(r, value);
       attr_src = value;
 #else
@@ -2709,6 +2710,7 @@ s_jhtml_start_img_tag(void *pdoc, Node *node)
       value = chxj_jreserved_tag_to_safe_for_query_string(r, value, jhtml->entryp, 0);
       value = chxj_add_cookie_parameter(r, value, jhtml->cookie);
       value = chxj_add_cookie_no_update_parameter(r, value);
+      value = chxj_img_rewrite_parameter(r,jhtml->conf,value);
       value = s_add_copyright_parameter(r, value);
       attr_src = value;
 #endif

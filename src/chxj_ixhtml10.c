@@ -3647,12 +3647,14 @@ s_ixhtml10_start_img_tag(void *pdoc, Node *node)
       value = chxj_encoding_parameter(r, value, 1);
       value = chxj_add_cookie_parameter(r, value, ixhtml10->cookie);
       value = chxj_add_cookie_no_update_parameter(r, value);
+      value = chxj_img_rewrite_parameter(r,ixhtml10->conf,value);
       attr_src = value;
 #else
       value = chxj_img_conv(r, spec, value);
       value = chxj_encoding_parameter(r, value, 1);
       value = chxj_add_cookie_parameter(r, value, ixhtml10->cookie);
       value = chxj_add_cookie_no_update_parameter(r, value);
+      value = chxj_img_rewrite_parameter(r,ixhtml10->conf,value);
       attr_src = value;
 #endif
     }
@@ -3773,6 +3775,7 @@ s_ixhtml10_start_img_tag(void *pdoc, Node *node)
   if (attr_src) {
     W_L(" src=\"");
     W_V(attr_src);
+    DBG(r,"mode is %d -> %s",ixhtml10->conf->image_rewrite_mode);
     W_L("\"");
   }
   if (attr_align || attr_hspace || attr_vspace || css_float || css_margin_left || css_margin_right || css_margin_top || css_margin_bottom || css_valign ) {

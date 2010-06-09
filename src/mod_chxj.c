@@ -306,31 +306,27 @@ chxj_headers_fixup(request_rec *r)
   }
   else{
     if(strncmp(r->content_type,"image/",6) == 0){
-
-    if (dconf->image_rewrite == CHXJ_IMG_REWRITE_ON && !apr_table_get(r->headers_in, CHXJ_IMG_X_HTTP_IMAGE_FILENAME)){
-      DBG(r," fixup: image rewrite is ON [%s]",r->content_type);
-      if(dconf->image_rewrite_mode == CHXJ_IMG_REWRITE_MODE_ALL){
-        // all image
-        apr_table_set(r->headers_in, CHXJ_IMG_X_HTTP_IMAGE_FILENAME, r->filename);
-        apr_table_set(r->headers_in, CHXJ_IMG_X_HTTP_IMAGE_TYPE,r->content_type);
-        r->filename = apr_pstrcat(r->pool,"img-redirect:",dconf->image_rewrite_url,NULL);
-        r->handler = "chxj-image-redirect-handler";
-        return OK;
-      }
-      else{
-        //   has _chxj_imgrewrite=on in args
-        char *args_tmp = chxj_url_decode(r->pool, r->args);
-        DBG(r," fixup: image rewrite MODE is !ALL: %s, %s",args_tmp,CHXJ_IMG_REWRITE_URL_STRING);
-        if (strstr(args_tmp,CHXJ_IMG_REWRITE_URL_STRING)){
+      if (dconf->image_rewrite == CHXJ_IMG_REWRITE_ON && !apr_table_get(r->headers_in, CHXJ_IMG_X_HTTP_IMAGE_FILENAME)){
+        if(dconf->image_rewrite_mode == CHXJ_IMG_REWRITE_MODE_ALL){
+          // all image
           apr_table_set(r->headers_in, CHXJ_IMG_X_HTTP_IMAGE_FILENAME, r->filename);
           apr_table_set(r->headers_in, CHXJ_IMG_X_HTTP_IMAGE_TYPE,r->content_type);
           r->filename = apr_pstrcat(r->pool,"img-redirect:",dconf->image_rewrite_url,NULL);
           r->handler = "chxj-image-redirect-handler";
-          DBG(r, "chxj-image-redirect-handler: %s?%s",dconf->image_rewrite_url,r->args);
           return OK;
         }
+        else{
+          //   has _chxj_imgrewrite=on in args
+          char *args_tmp = chxj_url_decode(r->pool, r->args);
+          if (strstr(args_tmp,CHXJ_IMG_REWRITE_URL_STRING)){
+            apr_table_set(r->headers_in, CHXJ_IMG_X_HTTP_IMAGE_FILENAME, r->filename);
+            apr_table_set(r->headers_in, CHXJ_IMG_X_HTTP_IMAGE_TYPE,r->content_type);
+            r->filename = apr_pstrcat(r->pool,"img-redirect:",dconf->image_rewrite_url,NULL);
+            r->handler = "chxj-image-redirect-handler";
+            return OK;
+          }
+        }
       }
-    }
     }
   }
 
