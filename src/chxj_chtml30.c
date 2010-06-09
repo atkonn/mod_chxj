@@ -2290,12 +2290,14 @@ s_chtml30_start_img_tag(void *pdoc, Node *node)
       value = chxj_encoding_parameter(r, value, 0);
       value = chxj_add_cookie_parameter(r, value, chtml30->cookie);
       value = chxj_add_cookie_no_update_parameter(r, value);
+      value = chxj_img_rewrite_parameter(r,chtml30->conf,value);
       attr_src = value;
 #else
       value = chxj_img_conv(r,spec,value);
       value = chxj_encoding_parameter(r, value, 0);
       value = chxj_add_cookie_parameter(r, value, chtml30->cookie);
       value = chxj_add_cookie_no_update_parameter(r, value);
+      value = chxj_img_rewrite_parameter(r,chtml30->conf,value);
       attr_src = value;
 #endif
       }

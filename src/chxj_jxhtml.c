@@ -3677,12 +3677,14 @@ s_jxhtml_start_img_tag(void *pdoc, Node *node)
       value = chxj_encoding_parameter(r, value, 1);
       value = chxj_jreserved_tag_to_safe_for_query_string(r, value, jxhtml->entryp, 1);
       value = chxj_add_cookie_no_update_parameter(r, value);
+      value = chxj_img_rewrite_parameter(r,jxhtml->conf,value);
       attr_src = value;
 #else
       value = chxj_img_conv(r, spec, value);
       value = chxj_encoding_parameter(r, value, 1);
       value = chxj_jreserved_tag_to_safe_for_query_string(r, value, jxhtml->entryp, 1);
       value = chxj_add_cookie_no_update_parameter(r, value);
+      value = chxj_img_rewrite_parameter(r,jxhtml->conf,value);
       attr_src = value;
 #endif
     }

@@ -51,3 +51,17 @@ chxj_img_conv(
 
   return dst;
 }
+
+char *
+chxj_img_rewrite_parameter(
+    request_rec *r,
+    mod_chxj_config *conf,
+    const char *href)
+{
+  if(strstr(href,"?")){
+    return apr_pstrcat(r->pool,href,"&",CHXJ_IMG_REWRITE_URL_STRING,NULL);
+  }
+  else{
+    return apr_pstrcat(r->pool,href,"?",CHXJ_IMG_REWRITE_URL_STRING,NULL);
+  }
+}
