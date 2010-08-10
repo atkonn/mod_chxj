@@ -1139,7 +1139,7 @@ s_ixhtml10_start_body_tag(void *pdoc, Node *node)
 
 
   W_L("<body");
-  if (attr_bgcolor || attr_text) {
+  if (attr_bgcolor || attr_text || attr_background) {
     W_L(" style=\"");
     if (attr_bgcolor) {
       attr_bgcolor = chxj_css_rgb_func_to_value(doc->pool, attr_bgcolor);
