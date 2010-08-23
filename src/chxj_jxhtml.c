@@ -2959,7 +2959,7 @@ s_jxhtml_start_h1_tag(void *pdoc, Node *node)
   if (align) {
     W_L("<div align=\"");
     W_V(align);
-    W_L("\">");
+    W_L("\"><h1>");
   }
   return jxhtml->out;
 }
@@ -2986,7 +2986,7 @@ s_jxhtml_end_h1_tag(void *pdoc, Node *UNUSED(child))
   
   if (jxhtml->h1_align_flag) {
     jxhtml->h1_align_flag--;
-    W_L("</div>");
+    W_L("</h1></div>");
   }
   return jxhtml->out;
 }
@@ -3029,7 +3029,7 @@ s_jxhtml_start_h2_tag(void *pdoc, Node *node)
   if (align) {
     W_L("<div align=\"");
     W_V(align);
-    W_L("\">");
+    W_L("\"><h2>");
   }
   return jxhtml->out;
 }
@@ -3056,7 +3056,7 @@ s_jxhtml_end_h2_tag(void *pdoc, Node *UNUSED(child))
   
   if (jxhtml->h2_align_flag) {
     jxhtml->h2_align_flag--;
-    W_L("</div>");
+    W_L("</h2></div>");
   }
   return jxhtml->out;
 }
@@ -3101,7 +3101,7 @@ s_jxhtml_start_h3_tag(void *pdoc, Node *node)
   if (align) {
     W_L("<div align=\"");
     W_V(align);
-    W_L("\">");
+    W_L("\"><h3>");
   }
   return jxhtml->out;
 }
@@ -3128,7 +3128,7 @@ s_jxhtml_end_h3_tag(void *pdoc, Node *UNUSED(child))
   
   if (jxhtml->h3_align_flag) {
     jxhtml->h3_align_flag--;
-    W_L("</div>");
+    W_L("</h3></div>");
   }
   return jxhtml->out;
 }
@@ -3171,7 +3171,7 @@ s_jxhtml_start_h4_tag(void *pdoc, Node *node)
   if (align) {
     W_L("<div align=\"");
     W_V(align);
-    W_L("\">");
+    W_L("\"><h4>");
   }
   return jxhtml->out;
 }
@@ -3198,7 +3198,7 @@ s_jxhtml_end_h4_tag(void *pdoc, Node *UNUSED(child))
   
   if (jxhtml->h4_align_flag) {
     jxhtml->h4_align_flag--;
-    W_L("</div>");
+    W_L("</h4></div>");
   }
   return jxhtml->out;
 }
@@ -3241,7 +3241,7 @@ s_jxhtml_start_h5_tag(void *pdoc, Node *node)
   if (align) {
     W_L("<div align=\"");
     W_V(align);
-    W_L("\">");
+    W_L("\"><h5>");
   }
   return jxhtml->out;
 }
@@ -3268,7 +3268,7 @@ s_jxhtml_end_h5_tag(void *pdoc, Node *UNUSED(child))
   
   if (jxhtml->h5_align_flag) {
     jxhtml->h5_align_flag--;
-    W_L("</div>");
+    W_L("</h5></div>");
   }
   return jxhtml->out;
 }
