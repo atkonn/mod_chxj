@@ -2875,8 +2875,9 @@ s_jhtml_start_h1_tag(void *pdoc, Node *node)
   if (align) {
     W_L("<div align=\"");
     W_V(align);
-    W_L("\"><h1>");
+    W_L("\">");
   }
+  W_L("<h1>");
   return jhtml->out;
 }
 
@@ -2900,9 +2901,10 @@ s_jhtml_end_h1_tag(void *pdoc, Node *UNUSED(child))
   doc     = jhtml->doc;
   r       = doc->r;
   
+  W_L("</h1>");
   if (jhtml->h1_align_flag) {
     jhtml->h1_align_flag--;
-    W_L("</h1></div>");
+    W_L("</div>");
   }
   return jhtml->out;
 }
@@ -2947,8 +2949,9 @@ s_jhtml_start_h2_tag(void *pdoc, Node *node)
   if (align) {
     W_L("<div align=\"");
     W_V(align);
-    W_L("\"><h2>");
+    W_L("\">");
   }
+  W_L("<h2>");
   return jhtml->out;
 }
 
@@ -2972,9 +2975,10 @@ s_jhtml_end_h2_tag(void *pdoc, Node *UNUSED(child))
   doc     = jhtml->doc;
   r       = doc->r;
   
+  W_L("</h2>");
   if (jhtml->h2_align_flag) {
     jhtml->h2_align_flag--;
-    W_L("</h2></div>");
+    W_L("</div>");
   }
   return jhtml->out;
 }
@@ -3019,8 +3023,9 @@ s_jhtml_start_h3_tag(void *pdoc, Node *node)
   if (align) {
     W_L("<div align=\"");
     W_V(align);
-    W_L("\"><h3>");
+    W_L("\">");
   }
+  W_L("<h3>");
   return jhtml->out;
 }
 
@@ -3044,9 +3049,10 @@ s_jhtml_end_h3_tag(void *pdoc, Node *UNUSED(child))
   doc     = jhtml->doc;
   r       = doc->r;
   
+  W_L("</h3>");
   if (jhtml->h3_align_flag) {
     jhtml->h3_align_flag--;
-    W_L("</h3></div>");
+    W_L("</div>");
   }
   return jhtml->out;
 }
@@ -3089,8 +3095,9 @@ s_jhtml_start_h4_tag(void *pdoc, Node *node)
   if (align) {
     W_L("<div align=\"");
     W_V(align);
-    W_L("\"><h4>");
+    W_L("\">");
   }
+  W_L("<h4>");
   return jhtml->out;
 }
 
@@ -3114,9 +3121,10 @@ s_jhtml_end_h4_tag(void *pdoc, Node *UNUSED(child))
   doc     = jhtml->doc;
   r       = doc->r;
   
+  W_L("</h4>");
   if (jhtml->h4_align_flag) {
     jhtml->h4_align_flag--;
-    W_L("</h4></div>");
+    W_L("</div>");
   }
   return jhtml->out;
 }
@@ -3159,8 +3167,9 @@ s_jhtml_start_h5_tag(void *pdoc, Node *node)
   if (align) {
     W_L("<div align=\"");
     W_V(align);
-    W_L("\"><h5>");
+    W_L("\">");
   }
+  W_L("<h5>");
   return jhtml->out;
 }
 
@@ -3184,9 +3193,10 @@ s_jhtml_end_h5_tag(void *pdoc, Node *UNUSED(child))
   doc     = jhtml->doc;
   r       = doc->r;
   
+  W_L("</h5>");
   if (jhtml->h5_align_flag) {
     jhtml->h5_align_flag--;
-    W_L("</h5></div>");
+    W_L("</div>");
   }
   return jhtml->out;
 }
@@ -3231,6 +3241,7 @@ s_jhtml_start_h6_tag(void *pdoc, Node *node)
     W_V(align);
     W_L("\">");
   }
+  W_L("<h6>");
   return jhtml->out;
 }
 
@@ -3254,6 +3265,7 @@ s_jhtml_end_h6_tag(void *pdoc, Node *UNUSED(child))
   doc     = jhtml->doc;
   r       = doc->r;
   
+  W_L("</h6>");
   if (jhtml->h6_align_flag) {
     jhtml->h6_align_flag--;
     W_L("</div>");
