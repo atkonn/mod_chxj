@@ -30,6 +30,9 @@
 
 #include <wand/magick_wand.h>
 
+#if !defined(LONG_LONG_MAX) && defined(LLONG_MAX)
+#  define LONG_LONG_MAX LLONG_MAX
+#endif
 
 #define EXIT_MAGICK_ERROR() \
   do { \
