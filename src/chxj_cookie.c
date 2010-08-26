@@ -1301,11 +1301,23 @@ s_convert_a_tag(request_rec *r, const char *s, apr_size_t *len, cookie_t *cookie
           if (STRCASEEQ('h', 'H', "href", name)
               && ! chxj_starts_with(value, "mailto:") 
               && ! chxj_starts_with(value, "tel:")) {
+            char *flgp = strchr(value, '#');
+            char *flgsv = NULL;
+            if (flgp) {
+              int flgl = strlen(flgp);
+              flgsv = apr_palloc(pool, flgl+1);
+              memset(flgsv, 0, flgl + 1);
+              memcpy(flgsv, flgp, flgl);
+              *flgp = 0;
+            }
             if (strchr(value, '?') != 0) {
               value = apr_pstrcat(pool, value, "&_chxj_cc=", cookie->cookie_id, NULL);
             }
             else {
               value = apr_pstrcat(pool, value, "?_chxj_cc=", cookie->cookie_id, NULL);
+            }
+            if (flgsv) {
+              value = apr_pstrcat(pool, value, flgsv, NULL);
             }
             dst = apr_pstrcat(pool, (dst) ? dst : "", "href='", value, "' ", NULL);
           }
