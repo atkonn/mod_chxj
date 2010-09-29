@@ -33,6 +33,7 @@
 #include "apr_dso.h"
 #include "apr_general.h"
 #include "apr_pools.h"
+#include "apr_file_info.h"
 
 #include "mod_chxj.h"
 #include "chxj_encoding.h"
@@ -303,12 +304,55 @@ chxj_headers_fixup(request_rec *r)
       }
     }
   }
+  else{
+    if(strncmp(r->content_type,"image/",6) == 0){
+      if (dconf->image_rewrite == CHXJ_IMG_REWRITE_ON && !apr_table_get(r->headers_in, CHXJ_IMG_X_HTTP_IMAGE_FILENAME)){
+        if(dconf->image_rewrite_mode == CHXJ_IMG_REWRITE_MODE_ALL){
+          // all image
+          apr_table_set(r->headers_in, CHXJ_IMG_X_HTTP_IMAGE_FILENAME, r->filename);
+          apr_table_set(r->headers_in, CHXJ_IMG_X_HTTP_IMAGE_TYPE,r->content_type);
+          r->filename = apr_pstrcat(r->pool,"img-redirect:",dconf->image_rewrite_url,NULL);
+          r->handler = "chxj-image-redirect-handler";
+          return OK;
+        }
+        else{
+          //   has _chxj_imgrewrite=on in args
+          char *args_tmp = chxj_url_decode(r->pool, r->args);
+          if (strstr(args_tmp,CHXJ_IMG_REWRITE_URL_STRING)){
+            apr_table_set(r->headers_in, CHXJ_IMG_X_HTTP_IMAGE_FILENAME, r->filename);
+            apr_table_set(r->headers_in, CHXJ_IMG_X_HTTP_IMAGE_TYPE,r->content_type);
+            r->filename = apr_pstrcat(r->pool,"img-redirect:",dconf->image_rewrite_url,NULL);
+            r->handler = "chxj-image-redirect-handler";
+            return OK;
+          }
+        }
+      }
+    }
+  }
 
   chxj_add_device_env(r, spec);
 
   DBG(r, "REQ[%X] end chxj_headers_fixup()", (unsigned int)(apr_size_t)r);
 
   return DECLINED;
+}
+
+static int
+chxj_image_redirect_handler(request_rec *r)
+{
+
+  if (strcmp(r->handler, "chxj-image-redirect-handler")) {
+    return DECLINED;
+  }
+
+  if (strncmp(r->filename, "img-redirect:", 13) != 0) {
+    return DECLINED;
+  }
+  DBG(r,"start chxj_image_redirect_handler");
+  ap_internal_redirect(apr_pstrcat(r->pool, r->filename+13,
+                                       r->args ? "?" : NULL, r->args, NULL), r);
+  DBG(r,"end chxj_image_redirect_handler");
+  return OK;
 }
 
 
@@ -419,6 +463,7 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
   }
 
   if (!r->header_only) {
+
     if ((entryp->action & CONVRULE_COOKIE_ONLY_BIT) && cookie) {
       dst = chxj_cookie_only_mode(r, *src, (apr_size_t *)len, cookie);
     }
@@ -473,6 +518,13 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
       }
     }
   }
+  if (*len > 0){
+    if (strcasecmp(spec->output_encoding,"UTF-8") == 0){
+      dst = chxj_iconv(r,r->pool,dst,len,"CP932","UTF-8");
+    }
+  }
+
+
   ap_set_content_length(r, *len);
 
   if (*len == 0) {
@@ -483,6 +535,7 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
   if (cookie) {
     *cookiep = cookie;
   }
+
 
 
   DBG(r, "REQ[%X] end of chxj_convert()", (unsigned int)(apr_size_t)r);
@@ -615,7 +668,7 @@ chxj_convert_input_header(request_rec *r,chxjconvrule_entry *entryp, device_tabl
           dlen   = strlen(value);
           DBG(r, "************ before encoding[%s]", value);
   
-          dvalue = chxj_rencoding(r, value, &dlen);
+          dvalue = chxj_rencoding(r, value, &dlen,spec->output_encoding);
           dvalue = chxj_url_encode(r->pool, dvalue);
   
           DBG(r, "************ after encoding[%s]", dvalue);
@@ -627,7 +680,7 @@ chxj_convert_input_header(request_rec *r,chxjconvrule_entry *entryp, device_tabl
         if (name && *name != 0) {
           name = chxj_url_decode(r->pool, name);
           dlen = strlen(name);
-          dname = chxj_rencoding(r, name, &dlen);
+          dname = chxj_rencoding(r, name, &dlen,spec->output_encoding);
           dname = chxj_url_encode(r->pool, dname);
         }
         else {
@@ -792,7 +845,7 @@ chxj_input_convert(
         if (value && *value != 0) {
           value = chxj_url_decode(pool, value);
           dlen   = strlen(value);
-          dvalue = chxj_rencoding(r, value, &dlen);
+          dvalue = chxj_rencoding(r, value, &dlen,spec->output_encoding);
           dvalue = chxj_url_encode(pool, dvalue);
         }
         else {
@@ -802,7 +855,7 @@ chxj_input_convert(
         if (name && *name != 0) {
           name = chxj_url_decode(pool, name);
           dlen = strlen(name);
-          dname = chxj_rencoding(r, name, &dlen);
+          dname = chxj_rencoding(r, name, &dlen,spec->output_encoding);
           dname = chxj_url_encode(pool, dname);
         }
         else {
@@ -835,7 +888,7 @@ chxj_input_convert(
 
         dlen   = strlen(value);
         value = chxj_url_decode(pool, value);
-        dvalue = chxj_rencoding(r, value, &dlen);
+        dvalue = chxj_rencoding(r, value, &dlen,spec->output_encoding);
         dvalue = chxj_url_encode(pool,dvalue);
         result = apr_pstrcat(pool, result, &name[8], "=", dvalue, NULL);
 
@@ -872,12 +925,14 @@ chxj_input_convert(
     }
     else
     if ( strncasecmp(name, CHXJ_QUERY_STRING_PARAM_PREFIX,     sizeof(CHXJ_QUERY_STRING_PARAM_PREFIX)-1) == 0) {
-      apr_size_t dlen;
+      apr_size_t dlen = 0;
       char*      dvalue;
-      dlen   = strlen(value);
-      if (dlen && value) {
+      if (value) {
+        dlen   = strlen(value);
+      }
+      if (dlen) {
         value = chxj_url_decode(pool, value);
-        dvalue = chxj_rencoding(r, value, &dlen);
+        dvalue = chxj_rencoding(r, value, &dlen,spec->output_encoding);
         dvalue = chxj_url_encode(pool,dvalue);
         if (r->args && strlen(r->args) > 0) {
           r->args = apr_pstrcat(pool, r->args, "&", &name[sizeof(CHXJ_QUERY_STRING_PARAM_PREFIX)-1], "=", dvalue, NULL);
@@ -895,7 +950,7 @@ chxj_input_convert(
       dlen   = strlen(value);
       if (dlen && value) {
         value = chxj_url_decode(pool, value);
-        dvalue = chxj_rencoding(r, value, &dlen);
+        dvalue = chxj_rencoding(r, value, &dlen,spec->output_encoding);
         dvalue = chxj_url_encode(pool,dvalue);
         if (r->args && strlen(r->args) > 0) {
           r->args = apr_pstrcat(pool, r->args, "&", &name[sizeof(CHXJ_QUERY_STRING_PARAM_PREFIX_ENC)-1], "=", dvalue, NULL);
@@ -1599,6 +1654,19 @@ chxj_translate_name(request_rec *r)
   DBG(r, "REQ[%X] METHOD [%s]", TO_ADDR(r), r->method);
   DBG(r, "REQ[%X] ", (unsigned int)(apr_size_t)r);
   DBG(r, "REQ[%X] =======================================================================", (unsigned int)(apr_size_t)r);
+
+  mod_chxj_config *dconf;
+  dconf = chxj_get_module_config(r->per_dir_config, &chxj_module);
+  /*
+  if (dconf->image_rewrite ==CHXJ_IMG_REWRITE_ON ){
+    if(r->args && strcasecmp(r->args,"rewrite") == 0){
+      DBG(r, "image rewrite is ON [%s] - %s", dconf->image_rewrite_url ,r->content_type);
+      r->filename = apr_pstrcat(r->pool,dconf->image_rewrite_url,NULL);
+      return OK;
+    }
+  }
+  */
+
 #if 0
   return chxj_trans_name(r);
 #else
@@ -1631,7 +1699,7 @@ chxj_insert_filter(request_rec *r)
   contentType = (char *)apr_table_get(r->headers_in, "Content-Type");
   if (contentType
       && strncasecmp("multipart/form-data", contentType, 19) == 0) {
-    DBG(r, "REQ[%X] detect multipart/form-data ==> no target", (apr_size_t)(unsigned int)r);
+    DBG(r, "REQ[%X] detect multipart/form-data ==> no target", (unsigned int)(apr_size_t)r);
     DBG(r, "REQ[%X] end chxj_insert_filter()", (unsigned int)(apr_size_t)r);
     return;
   }
@@ -1714,8 +1782,12 @@ chxj_register_hooks(apr_pool_t *UNUSED(p))
   ap_hook_handler(chxj_img_conv_format_handler, NULL, NULL, APR_HOOK_MIDDLE);
   ap_hook_handler(chxj_qr_code_handler, NULL, NULL, APR_HOOK_MIDDLE);
   ap_hook_handler(chxj_input_handler, NULL, NULL, APR_HOOK_MIDDLE);
+
+  ap_hook_handler(chxj_image_redirect_handler, NULL, NULL, APR_HOOK_MIDDLE);
+
   ap_hook_translate_name(chxj_translate_name, NULL, NULL, APR_HOOK_MIDDLE);
   ap_hook_fixups(chxj_headers_fixup, NULL, NULL, APR_HOOK_FIRST);
+
 }
 
 
@@ -1736,6 +1808,7 @@ chxj_create_per_dir_config(apr_pool_t *p, char *arg)
   conf->emoji_data_file  = NULL;
   conf->emoji            = NULL;
   conf->emoji_tail       = NULL;
+  conf->imode_emoji_color = CHXJ_IMODE_EMOJI_COLOR_NONE;
   conf->image            = CHXJ_IMG_NONE;
   conf->image_cache_dir  = apr_psprintf(p, "%s",DEFAULT_IMAGE_CACHE_DIR);
   conf->image_cache_limit = 0;
@@ -1745,6 +1818,9 @@ chxj_create_per_dir_config(apr_pool_t *p, char *arg)
   conf->cookie_store_type = COOKIE_STORE_TYPE_NONE;
   conf->cookie_lazy_mode  = 0;
   conf->cookie_dbm_type  = NULL;
+  
+  conf->detect_device_type = CHXJ_ADD_DETECT_DEVICE_TYPE_NONE;
+  
 #if defined(USE_MYSQL_COOKIE)
   memset((void *)&conf->mysql, 0, sizeof(mysql_t));
   conf->mysql.port       = MYSQL_PORT;
@@ -1773,6 +1849,10 @@ chxj_create_per_dir_config(apr_pool_t *p, char *arg)
   /* Default is copyleft */
   conf->image_copyright = NULL; 
 
+  conf->image_rewrite = CHXJ_IMG_REWRITE_NONE;
+  conf->image_rewrite_mode = CHXJ_IMG_REWRITE_MODE_NONE;
+  conf->image_rewrite_url = NULL;
+
   return conf;
 }
 
@@ -1800,12 +1880,16 @@ chxj_merge_per_dir_config(apr_pool_t *p, void *basev, void *addv)
   mrg->image_cache_limit  = 0;
   mrg->emoji            = NULL;
   mrg->emoji_tail       = NULL;
+  mrg->imode_emoji_color = CHXJ_IMODE_EMOJI_COLOR_NONE;
   mrg->new_line_type    = NLTYPE_NIL;
   mrg->forward_url_base = NULL;
   mrg->forward_server_ip = NULL;
   mrg->allowed_cookie_domain = NULL;
   mrg->post_log         = NULL;
   mrg->cookie_dbm_type  = NULL;
+  
+  mrg->device_keys      = NULL;
+  mrg->device_hash      = NULL;
 
   mrg->dir = apr_pstrdup(p, add->dir);
 
@@ -2043,6 +2127,56 @@ chxj_merge_per_dir_config(apr_pool_t *p, void *basev, void *addv)
   else {
     mrg->cookie_dbm_type = base->cookie_dbm_type;
   }
+  
+  if (add->imode_emoji_color == CHXJ_IMODE_EMOJI_COLOR_NONE) {
+    mrg->imode_emoji_color = base->imode_emoji_color;
+  }
+  else {
+    mrg->imode_emoji_color = add->imode_emoji_color;
+  }
+  
+  if (add->detect_device_type == CHXJ_ADD_DETECT_DEVICE_TYPE_NONE) {
+    mrg->detect_device_type = base->detect_device_type;
+  }
+  else {
+    mrg->detect_device_type = add->detect_device_type;
+  }
+  
+  if (add->device_keys) {
+    mrg->device_keys = add->device_keys;
+  }
+  else{
+    mrg->device_keys = base->device_keys;
+  }
+  
+  if (add->device_hash) {
+    mrg->device_hash = add->device_hash;
+  }
+  else{
+    mrg->device_hash = base->device_hash;
+  }
+  
+  if (add->image_rewrite == CHXJ_IMG_REWRITE_NONE){
+    mrg->image_rewrite = base->image_rewrite;
+  }
+  else{
+    mrg->image_rewrite = add->image_rewrite;
+  }
+
+  if (add->image_rewrite_url) {
+    mrg->image_rewrite_url = add->image_rewrite_url;
+  }
+  else{
+    mrg->image_rewrite_url = base->image_rewrite_url;
+  }
+
+  if (add->image_rewrite_mode == CHXJ_IMG_REWRITE_MODE_NONE){
+    mrg->image_rewrite_mode = base->image_rewrite_mode;
+  }
+  else{
+    mrg->image_rewrite_mode = add->image_rewrite_mode;
+  }
+
   return mrg;
 }
 
@@ -2305,6 +2439,17 @@ cmd_set_image_cache_dir(cmd_parms *parms, void *mconfig, const char *arg)
 
   if (strlen(arg) > 256) 
     return "cache dir name is too long.";
+  
+  apr_finfo_t info;
+  apr_status_t res = apr_stat(&info,arg,APR_FINFO_TYPE,parms->pool);
+  if(res != APR_SUCCESS){
+    return apr_psprintf(parms->pool,"ChxjImageCacheDir [%s]: not found ",arg);
+  }
+  else{
+    if(info.filetype != APR_DIR){
+      return apr_psprintf(parms->pool,"ChxjImageCacheDir [%s]: is not directory ",arg);
+    }
+  }
 
   conf = (mod_chxj_config *)mconfig;
   conf->image_cache_dir = apr_pstrdup(parms->pool, arg);
@@ -2943,6 +3088,117 @@ cmd_cookie_dbm_type(
   return NULL;
 }
 
+static const char *
+cmd_imode_emoji_color(
+  cmd_parms   *cmd, 
+  void        *mconfig, 
+  const char  *arg)
+{
+  mod_chxj_config  *dconf;
+  
+  if (strlen(arg) > 256) 
+    return "imode emoji color is too long.";
+
+  dconf = (mod_chxj_config *)mconfig;
+  if (strcasecmp("ON", arg) == 0) {
+    dconf->imode_emoji_color = CHXJ_IMODE_EMOJI_COLOR_ON;
+  }
+  else if(strcasecmp("AUTO",arg) == 0) {
+    dconf->imode_emoji_color = CHXJ_IMODE_EMOJI_COLOR_AUTO;
+  }
+  else {
+    dconf->imode_emoji_color = CHXJ_IMODE_EMOJI_COLOR_OFF;
+  }
+  
+  return NULL;
+}
+
+static const char *
+cmd_add_device_data_tsv(cmd_parms *parms, void *mconfig, const char *arg) 
+{
+  mod_chxj_config  *conf;
+  
+  if (strlen(arg) > 256) 
+    return "mod_chxj: device tsv filename too long.";
+
+  conf = (mod_chxj_config *)mconfig;
+  
+  conf->detect_device_type = CHXJ_ADD_DETECT_DEVICE_TYPE_TSV;
+  
+  apr_finfo_t info;
+  apr_status_t res = apr_stat(&info,arg,APR_FINFO_TYPE,parms->pool);
+  if(res != APR_SUCCESS){
+    return apr_psprintf(parms->pool,"ChxjDeviceTSV [%s]: not found ",arg);
+  }
+  else{
+    if(info.filetype != APR_REG ){
+      return apr_psprintf(parms->pool,"ChxjDeviceTSV [%s]: is not file ",arg);
+    }
+  }
+  apr_file_t *fp;
+  apr_file_open(&fp, arg, APR_READ|APR_BUFFERED, APR_OS_DEFAULT, parms->pool);
+  
+  chxj_load_device_tsv_data(fp,parms->pool,conf);
+  
+  apr_file_close(fp);
+  return NULL;
+}
+
+static const char *
+cmd_image_rewrite(cmd_parms *parms, void *mconfig, const char *arg)
+{
+  mod_chxj_config *conf;
+  if (strlen(arg) > 256){
+    return "mod_chxj: set rewrite too long.";
+  }
+  conf = (mod_chxj_config *)mconfig;
+  if (strcasecmp("ON", arg) == 0) {
+    conf->image_rewrite = CHXJ_IMG_REWRITE_ON;
+  }
+  else if(strcasecmp("OFF",arg) == 0) {
+    conf->image_rewrite = CHXJ_IMG_REWRITE_OFF;
+  }
+  else {
+    conf->image_rewrite = CHXJ_IMG_REWRITE_NONE;
+  }
+  return NULL;
+}
+
+static const char *
+cmd_image_rewrite_url(cmd_parms *parms, void *mconfig, const char *arg)
+{
+  mod_chxj_config *conf;
+  if (strlen(arg) > 256){
+    return "mod_chxj: set rewrite url too long.";
+  }
+  conf = (mod_chxj_config *)mconfig;
+  conf->image_rewrite_url = apr_pstrdup(parms->pool, arg);;
+  return NULL;
+}
+
+static const char *
+cmd_image_rewrite_mode(cmd_parms *parms, void *mconfig, const char *arg)
+{
+  mod_chxj_config *conf;
+  if (strlen(arg) > 256){
+    return "mod_chxj: set rewrite mode is too long.";
+  }
+
+  conf = (mod_chxj_config *)mconfig;
+  if (strcasecmp("all",arg) == 0) {
+    conf->image_rewrite_mode = CHXJ_IMG_REWRITE_MODE_ALL;
+  }
+  else if (strcasecmp("user",arg) == 0) {
+    conf->image_rewrite_mode = CHXJ_IMG_REWRITE_MODE_USER;
+  }
+  else if (strcasecmp("tag",arg) == 0) {
+    conf->image_rewrite_mode = CHXJ_IMG_REWRITE_MODE_TAG;
+  }
+  else{
+    conf->image_rewrite_mode = CHXJ_IMG_REWRITE_MODE_NONE;
+  }
+  return NULL;
+}
 
 static const command_rec cmds[] = {
   AP_INIT_TAKE1(
@@ -3111,6 +3367,39 @@ static const command_rec cmds[] = {
     NULL,
     OR_ALL,
     "Kind of DBM used with Cookie simulator.(default|GDBM|SDBM|DB|NDBM)"),
+  AP_INIT_TAKE1(
+    "ChxjImodeEmojiColor",
+    cmd_imode_emoji_color,
+    NULL,
+    OR_ALL,
+    "Auto i-mode emoji color"),
+  AP_INIT_TAKE1(
+    "ChxjAddDeviceDataTSV",
+    cmd_add_device_data_tsv,
+    NULL,
+    OR_ALL,
+    "Additional devices TSV data"),
+  AP_INIT_TAKE1(
+    "ChxjImageRewrite",
+    cmd_image_rewrite,
+    NULL,
+    OR_ALL,
+    "Rewrite Image"
+   ),
+  AP_INIT_TAKE1(
+    "ChxjImageRewriteUrl",
+    cmd_image_rewrite_url,
+    NULL,
+    OR_ALL,
+    "Set rewrite Image url"
+   ),
+  AP_INIT_TAKE1(
+    "ChxjImageRewriteMode",
+    cmd_image_rewrite_mode,
+    NULL,
+    OR_ALL,
+    "Set rewrite Image rewrite url mode"
+   ),
   {NULL,{NULL},NULL,0,0,NULL},
 };
 

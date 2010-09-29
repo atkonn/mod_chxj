@@ -79,6 +79,28 @@ chxj_add_device_env(request_rec *r, device_table *spec)
   apr_table_setn(r->headers_in, HTTP_X_CHXJ_CACHE,    apr_psprintf(r->pool, "%d", spec->cache));
 
   apr_table_setn(r->headers_in, HTTP_X_CHXJ_VERSION,  apr_pstrdup(r->pool, PACKAGE_VERSION));
+  
+  mod_chxj_config*    dconf;
+  dconf = chxj_get_module_config(r->per_dir_config, &chxj_module);
+  if (dconf->detect_device_type == CHXJ_ADD_DETECT_DEVICE_TYPE_TSV ){
+    if (spec->device_id     != NULL &&
+        dconf->device_hash  != NULL){
+      char *key = apr_psprintf(r->pool,"%d.%s",spec->provider,spec->device_id);
+      apr_table_t *ht = apr_hash_get(dconf->device_hash,key,APR_HASH_KEY_STRING);
+  
+      if(ht != NULL){
+        int i;
+        for ( i=0; i< dconf->device_keys->nelts; i++){
+          const char *k = ((const char**)dconf->device_keys->elts)[i];
+          char *val = (char *)apr_table_get(ht,k);
+          if(val != NULL){
+            char *info_key = apr_psprintf(r->pool,"%s-%s",HTTP_X_CHXJ_INFO,k);
+            apr_table_setn(r->headers_in, info_key, val);
+          }
+        }
+      }
+    }
+  }
 
   DBG(r, "REQ[%X] end chxj_add_device_env()", (unsigned int)(apr_size_t)r);
 }

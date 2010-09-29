@@ -51,3 +51,23 @@ chxj_img_conv(
 
   return dst;
 }
+
+char *
+chxj_img_rewrite_parameter(
+    request_rec *r,
+    mod_chxj_config *conf,
+    const char *href)
+{
+  if (conf->image_rewrite == CHXJ_IMG_REWRITE_ON &&
+      conf->image_rewrite_mode == CHXJ_IMG_REWRITE_MODE_TAG){
+    if(strstr(href,"?")){
+      return apr_pstrcat(r->pool,href,"&",CHXJ_IMG_REWRITE_URL_STRING,NULL);
+    }
+    else{
+      return apr_pstrcat(r->pool,href,"?",CHXJ_IMG_REWRITE_URL_STRING,NULL);
+    }
+  }
+  else{
+    return apr_pstrcat(r->pool,href,NULL);
+  }
+}

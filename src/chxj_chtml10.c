@@ -431,6 +431,21 @@ tag_handler chtml10_handler[] = {
     s_chtml10_newline_mark,
     NULL,
   },
+  /* tagObject */
+  {
+    NULL,
+    NULL,
+  },
+  /* tagParam */
+  {
+    NULL,
+    NULL,
+  },
+  /* tagCAPTION */
+  {
+    NULL,
+    NULL,
+  },
 };
 
 
@@ -2681,12 +2696,14 @@ s_chtml10_start_img_tag(void *pdoc, Node *node)
         value = chxj_encoding_parameter(r, value, 0);
         value = chxj_add_cookie_parameter(r, value, chtml10->cookie);
         value = chxj_add_cookie_no_update_parameter(r, value);
+        value = chxj_img_rewrite_parameter(r,chtml10->conf,value);
         attr_src = value;
 #else
         value = chxj_img_conv(r, spec, value);
         value = chxj_encoding_parameter(r, value, 0);
         value = chxj_add_cookie_parameter(r, value, chtml10->cookie);
         value = chxj_add_cookie_no_update_parameter(r, value);
+        value = chxj_img_rewrite_parameter(r,chtml10->conf,value);
         attr_src = value;
 #endif
       }

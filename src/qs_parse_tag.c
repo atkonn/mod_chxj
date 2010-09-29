@@ -49,7 +49,13 @@ qs_parse_tag(Doc *doc, const char *s, int len)
   /* 
    * s[0] == '<' && s[len] == '>' 
    */
-  tag_name = (char *)s_get_tag_name(doc, ++s, --ll);
+  if (sv_s[len-1] == '/'){
+	ll -= 2;
+	tag_name = (char *)s_get_tag_name(doc, ++s, ll);
+  }
+  else{
+	tag_name = (char *)s_get_tag_name(doc, ++s, --ll);
+  }
 
   node = (Node *)qs_new_tag(doc);
   if (! node) {
@@ -111,7 +117,7 @@ s_get_tag_name(Doc *doc, const char *s, int len)
 
   sp = ii;
   for (;ii<len; ii++) {
-    if (is_white_space(s[ii])) 
+    if (is_white_space(s[ii]))
       break;
   }
 

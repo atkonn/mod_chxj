@@ -197,7 +197,7 @@ static char *s_chtml20_end_span_tag      (void *pdoc, Node *node);
 
 static void  s_init_chtml20(chtml20_t *chtml, Doc *doc, request_rec *r, device_table *spec);
 
-static int   s_chtml20_search_emoji(chtml20_t *chtml, char *txt, char **rslt);
+static int   s_chtml20_search_emoji(chtml20_t *chtml, char *txt, char **rslt, Node *node);
 
 static char *s_chtml20_chxjif_tag(void *pdoc, Node *node); 
 static char *s_chtml20_text_tag(void *pdoc, Node *node);
@@ -487,6 +487,21 @@ tag_handler chtml20_handler[] = {
     s_chtml20_newline_mark,
     NULL,
   },
+  /* tagObject */
+  {
+    NULL,
+    NULL,
+  },
+  /* tagParam */
+  {
+    NULL,
+    NULL,
+  },
+  /* tagCAPTION */
+  {
+    NULL,
+    NULL,
+  },
 };
 
 /**
@@ -620,10 +635,11 @@ s_init_chtml20(chtml20_t *chtml20, Doc *doc, request_rec *r, device_table *spec)
  *                      EMOJI is specified. 
  * @param rslt    [o]   The pointer to the pointer that stores the result is 
  *                      specified. 
+ * @param node    [i]   The current node to check whether tag is span/font for CHXJ_IMODE_EMOJI_COLOR_AUTO.
  * @return When corresponding EMOJI exists, it returns it excluding 0. 
  */
 static int
-s_chtml20_search_emoji(chtml20_t *chtml20, char *txt, char **rslt)
+s_chtml20_search_emoji(chtml20_t *chtml20, char *txt, char **rslt, Node *node)
 {
   emoji_t       *ee;
   request_rec   *r;
@@ -655,6 +671,20 @@ s_chtml20_search_emoji(chtml20_t *chtml20, char *txt, char **rslt)
         (*rslt)[0] = ee->imode->hex1byte & 0xff;
         (*rslt)[1] = ee->imode->hex2byte & 0xff;
         (*rslt)[2] = 0;
+        
+        if(chtml20->conf->imode_emoji_color >= CHXJ_IMODE_EMOJI_COLOR_AUTO ){
+          if(ee->imode->color != NULL){
+            if(chtml20->conf->imode_emoji_color == CHXJ_IMODE_EMOJI_COLOR_AUTO && node != NULL ){
+              if(strcasecmp(node->parent->name, "span") == 0 ||
+                 strcasecmp(node->parent->name, "font")  == 0 ){
+                return strlen(ee->imode->string);
+              }
+            }
+            char *tmp = apr_pstrdup(r->pool,*rslt);
+            *rslt = apr_psprintf(r->pool,
+                        "<font color=\"%s\">%s</font>",ee->imode->color,tmp);
+          }
+        }
         return strlen(ee->imode->string);
       }
 
@@ -699,7 +729,7 @@ chxj_chtml20_emoji_only_converter(request_rec *r, device_table *spec, const char
     char *out;
     int   rtn;
 
-    rtn = s_chtml20_search_emoji(chtml20, (char *)&src[ii], &out);
+    rtn = s_chtml20_search_emoji(chtml20, (char *)&src[ii], &out, NULL);
     if (rtn) {
       W_V(out);
       ii+=(rtn - 1);
@@ -2638,12 +2668,14 @@ s_chtml20_start_img_tag(void *pdoc, Node *node)
         value = chxj_encoding_parameter(r, value, 0);
         value = chxj_add_cookie_parameter(r, value, chtml20->cookie);
         value = chxj_add_cookie_no_update_parameter(r, value);
+        value = chxj_img_rewrite_parameter(r,chtml20->conf,value);
         attr_src = value;
 #else
         value = chxj_img_conv(r, spec, value);
         value = chxj_encoding_parameter(r, value, 0);
         value = chxj_add_cookie_parameter(r, value, chtml20->cookie);
         value = chxj_add_cookie_no_update_parameter(r, value);
+        value = chxj_img_rewrite_parameter(r,chtml20->conf,value);
         attr_src = value;
 #endif
       }
@@ -4164,7 +4196,7 @@ s_chtml20_text_tag(void *pdoc, Node *child)
   
   for (ii=0; ii<qs_get_node_size(doc,child); ii++) {
     char *out;
-    int rtn = s_chtml20_search_emoji(chtml20, &textval[ii], &out);
+    int rtn = s_chtml20_search_emoji(chtml20, &textval[ii], &out, child);
     if (rtn != 0) {
       tdst = qs_out_apr_pstrcat(r, tdst, out, &tdst_len);
       ii+=(rtn - 1);

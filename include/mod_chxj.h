@@ -43,6 +43,7 @@
 #include "apr_dso.h"
 #include "apr_general.h"
 #include "apr_pools.h"
+#include "apr_hash.h"
 
 #if defined(AP_NEED_SET_MUTEX_PERMS)
 #  include "unixd.h"
@@ -169,6 +170,7 @@ struct imode_emoji_t {
   char  hex1byte;
   char  hex2byte;
   char* string;
+  char* color;
   char *description;
 };
 
@@ -280,6 +282,9 @@ typedef enum {
   tagMARQUEE,
   tagLINK,
   tagNLMARK,      /* New Line Code */
+  tagOBJECT,
+  tagPARAM,
+  tagCAPTION,
 } tag_type;
 
 typedef struct mod_chxj_config mod_chxj_config;
@@ -335,6 +340,7 @@ struct mod_chxj_config {
   device_table_list     *devices;
   emoji_t               *emoji;
   emoji_t               *emoji_tail;
+  int                   imode_emoji_color;
   char                  *server_side_encoding;
 
   char                  *dir; /* for LOG */
@@ -346,6 +352,8 @@ struct mod_chxj_config {
   cookie_store_type_t   cookie_store_type;
   int                   cookie_lazy_mode;
   char                  *cookie_dbm_type;
+  
+  int                   detect_device_type; /* XML|TSV */
 
 #if defined(USE_MYSQL_COOKIE)
   mysql_t               mysql;
@@ -361,6 +369,13 @@ struct mod_chxj_config {
   chxj_new_line_type_t  new_line_type;
 
   char                  *post_log;              /* post log environment name. */
+  
+  apr_array_header_t    *device_keys;           /* TSV header array */
+  apr_hash_t            *device_hash;           /* TSV device data hash table */
+
+  int                   image_rewrite;
+  char                  *image_rewrite_url;
+  int                   image_rewrite_mode;
 };
 
 #define IS_COOKIE_STORE_DBM(X)      ((X) == COOKIE_STORE_TYPE_DBM)
@@ -452,6 +467,31 @@ module AP_MODULE_DECLARE_DATA chxj_module;
 #define CHXJ_IMG_OFF    (1)
 #define CHXJ_IMG_NONE   (0)
 
+#define CHXJ_IMODE_EMOJI_COLOR_ON   (3)
+#define CHXJ_IMODE_EMOJI_COLOR_AUTO (2)
+#define CHXJ_IMODE_EMOJI_COLOR_OFF  (1)
+#define CHXJ_IMODE_EMOJI_COLOR_NONE (0)
+
+#define CHXJ_ADD_DETECT_DEVICE_TYPE_TSV     (1)
+#define CHXJ_ADD_DETECT_DEVICE_TYPE_NONE    (0)
+
+#define CHXJ_PROVIDER_UNKNOWN  (0)
+#define CHXJ_PROVIDER_DOCOMO   (1)
+#define CHXJ_PROVIDER_AU       (2)
+#define CHXJ_PROVIDER_SOFTBANK (3)
+
+#define CHXJ_IMG_REWRITE_ON     (2)
+#define CHXJ_IMG_REWRITE_OFF    (1)
+#define CHXJ_IMG_REWRITE_NONE   (0)
+
+#define CHXJ_IMG_REWRITE_MODE_ALL  (3)
+#define CHXJ_IMG_REWRITE_MODE_USER (2)
+#define CHXJ_IMG_REWRITE_MODE_TAG  (1)
+#define CHXJ_IMG_REWRITE_MODE_NONE (0)
+
+#define CHXJ_IMG_REWRITE_URL_STRING             "_x-chxj_imgrewrite=on"
+#define CHXJ_IMG_X_HTTP_IMAGE_FILENAME          "X-Chxj-Image-Filename"
+#define CHXJ_IMG_X_HTTP_IMAGE_TYPE              "X-Chxj-Image-Type"
 
 #define DBG(X,args...)  chxj_log_rerror(APLOG_MARK,APLOG_DEBUG,0,(request_rec*)(X),##args)
 #define SDBG(X,Y)       chxj_log_error(APLOG_MARK,APLOG_DEBUG,0,(X),(Y))
