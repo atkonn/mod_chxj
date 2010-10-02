@@ -4018,6 +4018,30 @@
       <dpi_heigh>72</dpi_heigh>
     </device>
 
+    <!--
+      2009.5.29
+      KDDI-CA3E UP.Browser/6.2_7.2.7.1.K.2.231 (GUI) MMP/2.0
+    -->
+    <device>
+      <device_id>CA3E</device_id>
+      <device_name>CA002</device_name>
+      <html_spec_type>XHTML_MOBILE_1_0</html_spec_type>
+      <width>232</width>
+      <heigh>333</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type>C</emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>400</wp_heigh>
+      <cache>9740</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+
     <!--======================================================================-->
     <!-- UNKNOWN                                                              -->
     <!--======================================================================-->
