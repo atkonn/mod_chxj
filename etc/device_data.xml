@@ -21493,6 +21493,30 @@
       <dpi_heigh>96</dpi_heigh>
     </device>
 
+    <!-- 
+      2010.8.6
+      SoftBank/1.0/941SC/SCJ001[/Serial] Browser/NetFront/3.5 Profile/MIDP-2.0 Configuration/CLDC-1.1
+    -->
+    <device>
+      <device_id>941SC</device_id>
+      <device_name>SoftBank 941SC</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>16777216</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>480</width>
+      <heigh>512</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>800</wp_heigh>
+      <cache>300000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+
     <!--
     -->
     <device>
