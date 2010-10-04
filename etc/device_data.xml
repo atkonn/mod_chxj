@@ -21802,6 +21802,30 @@
       <dpi_heigh>96</dpi_heigh>
     </device>
 
+    <!-- 
+      2010.6.25
+      SoftBank/1.0/840SC/SCJ001[/Serial] Browser/NetFront/3.3 Profile/MIDP-2.0 Configuration/CLDC-1.1
+    -->
+    <device>
+      <device_id>840SC</device_id>
+      <device_name>SoftBank 840SC</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>232</width>
+      <heigh>344</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>400</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+
     <!--
     -->
     <device>
