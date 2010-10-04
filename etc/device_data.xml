@@ -4233,6 +4233,30 @@
       <dpi_heigh>96</dpi_heigh>
     </device>
 
+    <!--
+      2010.6.4
+      KDDI-SN3P UP.Browser/6.2_7.2.7.1.K.5.183 (GUI) MMP/2.0
+    -->
+    <device>
+      <device_id>SN3P</device_id>
+      <device_name>au S004</device_name>
+      <html_spec_type>XHTML_MOBILE_1_0</html_spec_type>
+      <width>234</width>
+      <heigh>375</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>16777216</color>
+      <emoji_type>C</emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>131072</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+
     <!--======================================================================-->
     <!-- UNKNOWN                                                              -->
     <!--======================================================================-->
