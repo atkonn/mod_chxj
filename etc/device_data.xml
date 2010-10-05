@@ -4353,6 +4353,30 @@
       <dpi_heigh>96</dpi_heigh>
     </device>
 
+    <!--
+      2009.10.30
+      KDDI-SN3M UP.Browser/6.2.0.14.1.2 (GUI) MMP/2.0
+    -->
+    <device>
+      <device_id>SN3M</device_id>
+      <device_name>au S002</device_name>
+      <html_spec_type>XHTML_MOBILE_1_0</html_spec_type>
+      <width>228</width>
+      <heigh>368</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>65536</color>
+      <emoji_type>C</emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>432</wp_heigh>
+      <cache>131072</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+
     <!--======================================================================-->
     <!-- UNKNOWN                                                              -->
     <!--======================================================================-->
@@ -21395,8 +21419,8 @@
       <dpi_heigh>96</dpi_heigh>
     </device>
 	<!--
-		S940SC
-		oftBank/1.0/940SC/SCJ001[/Serial] Browser/NetFront/3.5 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+    940SC
+		SoftBank/1.0/940SC/SCJ001[/Serial] Browser/NetFront/3.5 Profile/MIDP-2.0 Configuration/CLDC-1.1 
 		SoftBank/1.0/940SC/SCJ001[/Serial] Java/Java/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 
 		SoftBank/1.0/940SC/SCJ001 Widgets/NetFront/1.0 
 		SoftBank/1.0/940SC/SCJ001[/Serial] Flash/Flash-Lite/3.1 
