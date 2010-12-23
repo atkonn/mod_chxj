@@ -1271,17 +1271,15 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
           if (ctx->len) {
             char *tmp;
 
-            tmp = apr_palloc(pool, ctx->len + 1);
+            DBG(r, "REQ[%X] ctx->len[%d]", (unsigned int)(apr_size_t)r, ctx->len);
 
+            tmp = apr_palloc(pool, ctx->len + 1);
             memset(tmp, 0, ctx->len + 1);
             memcpy(tmp, ctx->buffer, ctx->len);
             ctx->buffer = 
               chxj_convert_image(r, 
                                   (const char **)&tmp,
                                   (apr_size_t *)&ctx->len);
-            if (ctx->buffer == NULL) {
-              ctx->buffer = tmp;
-            }
           }
         }
 
@@ -1480,12 +1478,14 @@ chxj_input_handler(request_rec *r)
   apr_table_unset(r->headers_in, "Content-Length");
   apr_table_setn(r->headers_in, "Content-Length", apr_psprintf(pool, "%" APR_SIZE_T_FMT, post_data_len));
   response = chxj_serf_post(r, pool, url_path, post_data, post_data_len, 1, &res_len, &response_code);
+/*
   DBG(r, "REQ[%X] -------------------------------------------------------", (unsigned int)(apr_size_t)r);
   DBG(r, "REQ[%X] response length:[%" APR_SIZE_T_FMT "]", (unsigned int)(apr_size_t)r, res_len);
   for (ii=0; ii<res_len/64; ii++) {
     DBG(r, "REQ[%X] response:[%.*s]", (unsigned int)(apr_size_t)r, 64, &response[ii*64]);
   }
   DBG(r, "REQ[%X] -------------------------------------------------------", (unsigned int)(apr_size_t)r);
+*/
 
   char *chunked;
   if ((chunked = (char *)apr_table_get(r->headers_out, "Transfer-Encoding")) != NULL) {
@@ -1505,7 +1505,7 @@ chxj_input_handler(request_rec *r)
     apr_bucket *e;
     apr_status_t rv;
     conn_rec *c = r->connection;
-    
+
     bb = apr_brigade_create(wpool, c->bucket_alloc);
     e  = apr_bucket_transient_create(response, res_len, c->bucket_alloc);
     APR_BRIGADE_INSERT_TAIL(bb, e);

@@ -241,14 +241,17 @@ s_setup_request(serf_request_t           *request,
   apr_array_header_t *headers = (apr_array_header_t*)apr_table_elts(r->headers_in);
   apr_table_entry_t  *hentryp = (apr_table_entry_t*)headers->elts;
   for (ii=headers->nelts-1; ii>=0; ii--) {
-    serf_bucket_headers_setc(hdrs_bkt, hentryp[ii].key, hentryp[ii].val);
-    DBG(ctx->r, "REQ[%X] REQUEST key:[%s], val:[%s]", (unsigned int)(apr_size_t)ctx->r, hentryp[ii].key, hentryp[ii].val);
+    DBG(ctx->r, "REQ[%X] REQUEST PREV key:[%s], val:[%s]", (unsigned int)(apr_size_t)ctx->r, hentryp[ii].key, hentryp[ii].val);
+    serf_bucket_headers_setc(hdrs_bkt, hentryp[ii].key, (hentryp[ii].val) ? hentryp[ii].val : "");
+    DBG(ctx->r, "REQ[%X] REQUEST AFTER key:[%s], val:[%s]", (unsigned int)(apr_size_t)ctx->r, hentryp[ii].key, hentryp[ii].val);
   }
   if (ctx->post_data) {
+    DBG(ctx->r, "REQ[%X] REQUEST PREV key:[%s], val:[%s]", (unsigned int)(apr_size_t)ctx->r, "X-Chxj-Forward", "Done");
     serf_bucket_headers_setc(hdrs_bkt, "X-Chxj-Forward", "Done");
+    DBG(ctx->r, "REQ[%X] REQUEST AFTER key:[%s], val:[%s]", (unsigned int)(apr_size_t)ctx->r, "X-Chxj-Forward", "Done");
+    DBG(ctx->r, "REQ[%X] REQUEST PREV key:[%s], val:[%s]", (unsigned int)(apr_size_t)ctx->r, "X-Chxj-Content-Length", apr_psprintf(r->pool, "%" APR_SIZE_T_FMT, ctx->post_data_len));
     serf_bucket_headers_setc(hdrs_bkt, "X-Chxj-Content-Length", apr_psprintf(r->pool, "%" APR_SIZE_T_FMT , ctx->post_data_len));
-    DBG(ctx->r, "REQ[%X] REQUEST key:[%s], val:[%s]", (unsigned int)(apr_size_t)ctx->r, "X-Chxj-Forward", "Done");
-    DBG(ctx->r, "REQ[%X] REQUEST key:[%s], val:[%s]", (unsigned int)(apr_size_t)ctx->r, "X-Chxj-Content-Length", apr_psprintf(r->pool, "%" APR_SIZE_T_FMT, ctx->post_data_len));
+    DBG(ctx->r, "REQ[%X] REQUEST AFTER key:[%s], val:[%s]", (unsigned int)(apr_size_t)ctx->r, "X-Chxj-Content-Length", apr_psprintf(r->pool, "%" APR_SIZE_T_FMT, ctx->post_data_len));
 
   }
   DBG(ctx->r, "REQ[%X] REQUEST Content-Length:[%s]", (unsigned int)(apr_size_t)r, serf_bucket_headers_get(hdrs_bkt, "Content-Length"));
@@ -480,7 +483,13 @@ default_chxj_serf_post(request_rec *r, apr_pool_t *ppool, const char *url_path, 
   DBG(r, "response:[%s][%" APR_SIZE_T_FMT "]", handler_ctx.response, handler_ctx.response_len);
   serf_connection_close(connection);
   if (handler_ctx.response) {
+#if 0
     ret = apr_pstrdup(ppool, handler_ctx.response);
+#else
+    ret = apr_palloc(ppool, handler_ctx.response_len + 1);
+    memset(ret, 0, handler_ctx.response_len + 1);
+    memcpy(ret, handler_ctx.response, handler_ctx.response_len);
+#endif
   }
   else {
     ret = apr_pstrdup(ppool, "");
