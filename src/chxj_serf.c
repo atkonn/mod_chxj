@@ -483,13 +483,9 @@ default_chxj_serf_post(request_rec *r, apr_pool_t *ppool, const char *url_path, 
   DBG(r, "response:[%s][%" APR_SIZE_T_FMT "]", handler_ctx.response, handler_ctx.response_len);
   serf_connection_close(connection);
   if (handler_ctx.response) {
-#if 0
-    ret = apr_pstrdup(ppool, handler_ctx.response);
-#else
     ret = apr_palloc(ppool, handler_ctx.response_len + 1);
     memset(ret, 0, handler_ctx.response_len + 1);
     memcpy(ret, handler_ctx.response, handler_ctx.response_len);
-#endif
   }
   else {
     ret = apr_pstrdup(ppool, "");
