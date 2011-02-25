@@ -1615,10 +1615,17 @@ s_send_cache_file(device_table *spec, query_string_param_t *query_string, reques
   if (rv != APR_SUCCESS)
     return HTTP_NOT_FOUND;
 
+
   DBG(r, "REQ[%X] mode:[%d]",    TO_ADDR(r), query_string->mode);
   DBG(r, "REQ[%X] name:[%s]",    TO_ADDR(r), query_string->name);
   DBG(r, "REQ[%X] offset:[%ld]", TO_ADDR(r), query_string->offset);
   DBG(r, "REQ[%X] count:[%ld]",  TO_ADDR(r), query_string->count);
+
+  /* for With mod_cache */
+  {
+    apr_table_setn(r->headers_out, "Vary", "User-Agent");
+    apr_table_setn(r->err_headers_out, "Vary", "User-Agent");
+  }
 
   if (query_string->mode != IMG_CONV_MODE_EZGET && query_string->name == NULL) {
     contentLength = apr_psprintf(r->pool, "%d", (int)st.size);
@@ -1751,6 +1758,12 @@ s_send_original_file(request_rec *r, const char *originalfile)
   rv = apr_stat(&st, originalfile, APR_FINFO_MIN, r->pool);
   if (rv != APR_SUCCESS)
     return HTTP_NOT_FOUND;
+
+  /* for With mod_cache */
+  {
+    apr_table_setn(r->headers_out, "Vary", "User-Agent");
+    apr_table_setn(r->err_headers_out, "Vary", "User-Agent");
+  }
 
   rv = apr_file_open(&fout, originalfile, 
     APR_READ | APR_BINARY, APR_OS_DEFAULT, r->pool);
