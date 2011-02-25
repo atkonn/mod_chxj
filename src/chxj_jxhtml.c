@@ -3643,7 +3643,6 @@ s_jxhtml_start_img_tag(void *pdoc, Node *node)
   char        *attr_src    = NULL;
   char        *attr_height = NULL;
   char        *attr_width  = NULL;
-  char        *attr_align  = NULL;
   char        *attr_alt    = NULL;
   char        *attr_style  = NULL;
   char        *attr_hspace = NULL;
@@ -5071,6 +5070,8 @@ s_jxhtml_start_dd_tag(void *pdoc, Node *node)
   char      *attr_style = NULL;
   char      *attr_color = NULL;
   char      *attr_size  = NULL;
+  char      *css_clear  = NULL;
+
   for (attr = qs_get_attr(doc,node);
        attr;
        attr = qs_get_next_attr(doc,attr)) {
@@ -5085,6 +5086,7 @@ s_jxhtml_start_dd_tag(void *pdoc, Node *node)
     if (style) {
       css_property_t *color_prop           = chxj_css_get_property_value(doc, style, "color");
       css_property_t *size_prop            = chxj_css_get_property_value(doc, style, "font-size");
+      css_property_t *clear_prop           = chxj_css_get_property_value(doc, style, "clear");
       css_property_t *cur;
       for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
         if (cur->value && *cur->value) {
@@ -5115,6 +5117,9 @@ s_jxhtml_start_dd_tag(void *pdoc, Node *node)
             attr_size = apr_pstrdup(doc->pool, cur->value);
           }
         }
+      }
+      for (cur = clear_prop->next; cur != clear_prop; cur = cur->next) {
+        css_clear = apr_pstrdup(doc->pool, cur->value);
       }
     }
   }
@@ -5877,6 +5882,8 @@ s_jxhtml_start_menu_tag(void *pdoc, Node *node)
   char      *attr_color = NULL;
   char      *attr_type  = NULL;
   char      *attr_size  = NULL;
+  char      *css_clear  = NULL;
+
   for (attr = qs_get_attr(doc,node);
        attr;
        attr = qs_get_next_attr(doc,attr)) {
@@ -5897,6 +5904,7 @@ s_jxhtml_start_menu_tag(void *pdoc, Node *node)
       css_property_t *color_prop           = chxj_css_get_property_value(doc, style, "color");
       css_property_t *size_prop            = chxj_css_get_property_value(doc, style, "font-size");
       css_property_t *list_style_type_prop = chxj_css_get_property_value(doc, style, "list-style-type");
+      css_property_t *clear_prop           = chxj_css_get_property_value(doc, style, "clear");
       css_property_t *cur;
       for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
         if (cur->value && *cur->value) {
@@ -5931,6 +5939,17 @@ s_jxhtml_start_menu_tag(void *pdoc, Node *node)
           else if (STRCASEEQ('x','X',"xx-large",cur->value)) {
             attr_size = apr_pstrdup(doc->pool, cur->value);
           }
+        }
+      }
+      for (cur = clear_prop->next; cur != clear_prop; cur = cur->next) {
+        if (STRCASEEQ('b','B',"both", cur->value)) {
+          css_clear = apr_pstrdup(doc->pool, "both");
+        }
+        else if (STRCASEEQ('r','R',"right", cur->value)) {
+          css_clear = apr_pstrdup(doc->pool, "right");
+        }
+        else if (STRCASEEQ('l','L',"left", cur->value)) {
+          css_clear = apr_pstrdup(doc->pool, "left");
         }
       }
     }
@@ -6059,7 +6078,6 @@ s_jxhtml_start_blink_tag(void *pdoc, Node *node)
   char      *attr_style = NULL;
   char      *attr_color = NULL;
   char      *attr_size  = NULL;
-  char      *css_clear  = NULL;
   
   for (attr = qs_get_attr(doc,node);
        attr;
@@ -6075,7 +6093,6 @@ s_jxhtml_start_blink_tag(void *pdoc, Node *node)
     if (style) {
       css_property_t *color_prop           = chxj_css_get_property_value(doc, style, "color");
       css_property_t *size_prop            = chxj_css_get_property_value(doc, style, "font-size");
-      css_property_t *clear_prop           = chxj_css_get_property_value(doc, style, "clear");
       
       css_property_t *cur;
       for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
@@ -6807,7 +6824,6 @@ s_jxhtml_start_param_tag(void *pdoc, Node *node)
   Doc *doc = jxhtml->doc;
 
   Attr *attr;
-  char *attr_style         = NULL;
   char *attr_name          = NULL;
   char *attr_value         = NULL;
   char *attr_valuetype     = NULL;

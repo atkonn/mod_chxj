@@ -2438,7 +2438,7 @@ s_add_comment_to_png(request_rec *r, char *data, apr_size_t *len)
     pos += 4;
     memcpy(&result[pos], &data[PNG_SIG_AND_IHDR_SZ] , *len - PNG_SIG_AND_IHDR_SZ);
     *len = *len + total_tEXt_size;
-    DBG(r, "REQ[%X] writebyte:[%d]", (unsigned int)(apr_size_t)r, *len);
+    DBG(r, "REQ[%X] writebyte:[%d]", (unsigned int)(apr_size_t)r, (unsigned int)*len);
   }
   else {
     result = data;
