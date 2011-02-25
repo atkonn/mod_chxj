@@ -1621,10 +1621,12 @@ s_send_cache_file(device_table *spec, query_string_param_t *query_string, reques
   DBG(r, "REQ[%X] offset:[%ld]", TO_ADDR(r), query_string->offset);
   DBG(r, "REQ[%X] count:[%ld]",  TO_ADDR(r), query_string->count);
 
-  /* for With mod_cache */
+  /* for mod_cache */
   {
     apr_table_setn(r->headers_out, "Vary", "User-Agent");
     apr_table_setn(r->err_headers_out, "Vary", "User-Agent");
+    ap_update_mtime(r, st.mtime);
+    ap_set_last_modified(r);
   }
 
   if (query_string->mode != IMG_CONV_MODE_EZGET && query_string->name == NULL) {
@@ -1763,6 +1765,8 @@ s_send_original_file(request_rec *r, const char *originalfile)
   {
     apr_table_setn(r->headers_out, "Vary", "User-Agent");
     apr_table_setn(r->err_headers_out, "Vary", "User-Agent");
+    ap_update_mtime(r, st.mtime);
+    ap_set_last_modified(r);
   }
 
   rv = apr_file_open(&fout, originalfile, 
