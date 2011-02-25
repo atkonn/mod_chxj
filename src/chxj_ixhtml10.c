@@ -3775,7 +3775,7 @@ s_ixhtml10_start_img_tag(void *pdoc, Node *node)
   if (attr_src) {
     W_L(" src=\"");
     W_V(attr_src);
-    DBG(r,"mode is %d -> %s",ixhtml10->conf->image_rewrite_mode);
+    DBG(r,"mode is %d -> %s",ixhtml10->conf->image_rewrite_mode, attr_src);
     W_L("\"");
   }
   if (attr_align || attr_hspace || attr_vspace || css_float || css_margin_left || css_margin_right || css_margin_top || css_margin_bottom || css_valign ) {
