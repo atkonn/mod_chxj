@@ -180,7 +180,7 @@ AC_ARG_WITH(openssl,
     CPPFLAGS="${CPPFLAGS} -I${openssl_prefix}/include"
     LDFLAGS="${LDFLAGS} -L${openssl_prefix}/lib"
     LDFLAGS="${LDFLAGS} -R${openssl_prefix}/lib"
-    OPENSSL_PATH="--with-openssl ${openssl_prefix}"
+    OPENSSL_PATH="--with-openssl=${openssl_prefix}"
   fi
 ])
 
