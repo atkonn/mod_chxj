@@ -57,6 +57,7 @@ static device_table  UNKNOWN_DEVICE      = {
   .color = 15680000,
   .emoji_type = NULL,
 };
+static device_table * s_get_device_data(request_rec *r, const char *device_id, device_table_list *dtl);
 
 /**
  * The device is specified from UserAgent. 
@@ -78,7 +79,7 @@ chxj_specified_device(request_rec *r, const char *user_agent)
     return returnType;
             
 
-  DBG(r, "start chxj_specified_device()");
+  DBG(r, "REQ[%x] start chxj_specified_device()", (unsigned int)(apr_size_t)r);
 
   conf = chxj_get_module_config(r->per_dir_config, &chxj_module);
   if (! conf->devices) {
@@ -101,30 +102,15 @@ chxj_specified_device(request_rec *r, const char *user_agent)
     if (ap_regexec((const ap_regex_t *)dtl->regexp, user_agent, (apr_size_t)dtl->regexp->re_nsub + 1, match, 0) == 0) {
       device_id = ap_pregsub(r->pool, "$1", user_agent, dtl->regexp->re_nsub + 1, match);
       DBG(r, "device_id:[%s]", device_id);
-      for (dt = dtl->table; dt; dt = dt->next) {
-        if (strcasecmp(device_id, dt->device_id) == 0) {
-          DBG(r, "device_name:[%s]", dt->device_name);
-          returnType = dt;
-          break;
-        }
-      }
+      returnType = s_get_device_data(r, device_id, dtl);
+      DBG(r, "device_id:[%s] is NOT FOUND", device_id);
 
-      if (! dt) {
-#if 0
-        for (dt = dtl->table; dt; dt = dt->next) {
-          if (dt->next == NULL)
-            break;
-        }
-#else
-        dt = dtl->tail;
-#endif
-
-        if (dt)
-          returnType = dt;
+      if (! returnType) {
+        returnType = dtl->tail;
       }
     }
 
-    if (returnType != &UNKNOWN_DEVICE) {
+    if (returnType) {
       DBG(r,"end chxj_specified_device()");
       return returnType;
     }
@@ -132,9 +118,42 @@ chxj_specified_device(request_rec *r, const char *user_agent)
 
   DBG(r,"end chxj_specified_device()");
 
-  return returnType;
+  return &UNKNOWN_DEVICE;
 }
 
+
+#include <stdlib.h>
+static int 
+s_compar(const void *a, const void *b)
+{
+  device_table *aa = *(device_table **)a;
+  device_table *bb = *(device_table **)b;
+  return strcasecmp(aa->device_id, bb->device_id);
+}
+static device_table *
+s_get_device_data(request_rec *r, const char *device_id, device_table_list *dtl)
+{
+#if 0
+  device_table *dt;
+  for (dt = dtl->table; dt; dt = dt->next) {
+    if (strcasecmp(device_id, dt->device_id) == 0) {
+      DBG(r, "device_name:[%s]", dt->device_name);
+      return dt;
+    }
+  }
+  return NULL;
+#else
+  device_table dt;
+  device_table *_dt;
+  dt.device_id = device_id;
+  _dt = &dt;
+  device_table **ret = bsearch(&_dt, dtl->sort_table, dtl->table_count, sizeof(device_table *), s_compar);
+  if (ret && *ret) {
+    return *ret;
+  }
+  return NULL;
+#endif
+}
 /*
  * vim:ts=2 et
  */
