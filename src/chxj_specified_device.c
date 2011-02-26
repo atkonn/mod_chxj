@@ -110,10 +110,14 @@ chxj_specified_device(request_rec *r, const char *user_agent)
       }
 
       if (! dt) {
+#if 0
         for (dt = dtl->table; dt; dt = dt->next) {
           if (dt->next == NULL)
             break;
         }
+#else
+        dt = dtl->tail;
+#endif
 
         if (dt)
           returnType = dt;
