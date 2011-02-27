@@ -24,4 +24,9 @@ extern void chxj_load_device_data(
   apr_pool_t*              p, 
   mod_chxj_config*         conf);
 
+extern void chxj_load_device_tsv_data(
+  apr_file_t*              fp,
+  apr_pool_t*              p, 
+  mod_chxj_config*         conf);
+
 #endif

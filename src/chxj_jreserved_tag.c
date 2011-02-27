@@ -187,30 +187,35 @@ chxj_jreserved_tag_to_safe_for_query_string(request_rec *r, const char *query_st
   s++;
   fname = apr_pstrdup(pool, result);
   result = NULL;
-
-  char *pstat;
+	
+	char *pstat;
   char *pstat2;
   for (;;) {
     char *pair = NULL;
-    if (xmlflag) {
-      pair = apr_strtok(s, "&amp;", &pstat);
-    }
-    else {
-      pair = apr_strtok(s, "&", &pstat);
-    }
+    pair = apr_strtok(s, "&", &pstat);
+    
     if (! pair) break;
     s = NULL;
+		
+		if(strncasecmp(pair,"amp;",4) == 0){
+			pair += 4;
+		}
+		
     char *key = apr_strtok(pair, "=",  &pstat2);
     char *val = "";
     if (key) {
       val = apr_strtok(NULL, "=", &pstat2);
+			
       if (!val) val = "";
     }
     char *tmp = NULL;
     if (strcasecmp(key, "guid") == 0) {
       tmp = apr_psprintf(pool, "%s=%s", key, val);
       if (result) {
-        result = apr_pstrcat(pool, result, "&" ,tmp, NULL);
+				if(xmlflag)
+					result = apr_pstrcat(pool, result, "&amp;" ,tmp, NULL);
+				else
+        	result = apr_pstrcat(pool, result, "&" ,tmp, NULL);
       }
       else {
         result = tmp;

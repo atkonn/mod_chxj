@@ -233,6 +233,7 @@ s_load_emoji_imode_tag(
   em->imode->hex1byte    = 0;
   em->imode->hex2byte    = 0;
   em->imode->string      = NULL;
+  em->imode->color       = NULL;
   em->imode->description = NULL;
 
   for (child = qs_get_child_node(doc, node);
@@ -311,7 +312,24 @@ s_load_emoji_imode_tag(
         }
       }
       break;
+    case 'c':
+    case 'C':
+        if (strcasecmp(name, "color") == 0) {
+          Node* color_node = qs_get_child_node(doc, child);
 
+          if (color_node) {
+            char* cname = qs_get_node_name(doc, color_node);
+            char* cvalue = qs_get_node_value(doc, color_node);
+
+            if ((*cname == 't' || *cname == 'T') && strcasecmp(cname, "text") == 0)
+              em->imode->color = apr_pstrdup(p, cvalue);
+          }
+          else {
+            em->imode->color    = apr_palloc(p, 1);
+            em->imode->color[0] = 0;
+          }
+      }
+      break;
     default:
       break;
     }

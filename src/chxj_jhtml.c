@@ -418,6 +418,21 @@ tag_handler jhtml_handler[] = {
     s_jhtml_newline_mark,
     NULL,
   },
+  /* tagObject */
+  {
+    NULL,
+    NULL,
+  },
+  /* tagParam */
+  {
+    NULL,
+    NULL,
+  },
+  /* tagCAPTION */
+  {
+    NULL,
+    NULL,
+  },
 };
 
 
@@ -2073,36 +2088,6 @@ s_jhtml_start_li_tag(void *pdoc, Node *node)
     W_V(attr_value);
     W_L("\"");
   }
-  if (IS_CSS_ON(jhtml->entryp)) {
-    css_prop_list_t *style = s_jhtml_push_and_get_now_style(pdoc, node, attr_style);
-    if (style) {
-      css_property_t *list_style_type_prop = chxj_css_get_property_value(doc, style, "list-style-type");
-      css_property_t *cur;
-      for (cur = list_style_type_prop->next; cur != list_style_type_prop; cur = cur->next) {
-        if (STRCASEEQ('d','D',"decimal", cur->value)) {
-          attr_type = apr_pstrdup(doc->pool, "1");
-        }
-        else if (STRCASEEQ('u','U',"upper-alpha", cur->value)) {
-          attr_type = apr_pstrdup(doc->pool, "A");
-        }
-        else if (STRCASEEQ('l','L',"lower-alpha", cur->value)) {
-          attr_type = apr_pstrdup(doc->pool, "a");
-        }
-      }
-    }
-  }
-
-  W_L("<li");
-  if (attr_type) {
-    W_L(" type=\"");
-    W_V(attr_type);
-    W_L("\"");
-  }
-  if (attr_value) {
-    W_L(" value=\"");
-    W_V(attr_value);
-    W_L("\"");
-  }
   W_L(">");
   return jhtml->out;
 }
@@ -2716,6 +2701,7 @@ s_jhtml_start_img_tag(void *pdoc, Node *node)
       value = chxj_jreserved_tag_to_safe_for_query_string(r, value, jhtml->entryp, 0);
       value = chxj_add_cookie_parameter(r, value, jhtml->cookie);
       value = chxj_add_cookie_no_update_parameter(r, value);
+      value = chxj_img_rewrite_parameter(r,jhtml->conf,value);
       value = s_add_copyright_parameter(r, value);
       attr_src = value;
 #else
@@ -2724,6 +2710,7 @@ s_jhtml_start_img_tag(void *pdoc, Node *node)
       value = chxj_jreserved_tag_to_safe_for_query_string(r, value, jhtml->entryp, 0);
       value = chxj_add_cookie_parameter(r, value, jhtml->cookie);
       value = chxj_add_cookie_no_update_parameter(r, value);
+      value = chxj_img_rewrite_parameter(r,jhtml->conf,value);
       value = s_add_copyright_parameter(r, value);
       attr_src = value;
 #endif

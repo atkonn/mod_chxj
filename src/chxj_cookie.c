@@ -1478,7 +1478,7 @@ chxj_cookie_only_mode(request_rec *r, const char *src, apr_size_t *len, cookie_t
   dst = s_convert_img_tag(r, dst, len, cookie);
   dst = s_convert_form_tag(r, dst, len, cookie);
 
-  result = chxj_rencoding(r, dst, len);
+  result = chxj_rencoding(r, dst, len, NULL);
   DBG(r, "REQ[%X] end chxj_cookie_only_mode()", TO_ADDR(r));
   return result;
 }

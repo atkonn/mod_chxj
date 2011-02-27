@@ -200,7 +200,7 @@ static char *s_chtml30_end_span_tag       (void *pdoc, Node *node);
 
 static void  s_init_chtml30(chtml30_t *chtml, Doc *doc, request_rec *r, device_table *spec);
 
-static int   s_chtml30_search_emoji(chtml30_t *chtml, char *txt, char **rslt);
+static int   s_chtml30_search_emoji(chtml30_t *chtml, char *txt, char **rslt, Node *node);
 static css_prop_list_t *s_chtml30_push_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value);
 static css_prop_list_t *s_chtml30_nopush_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value);
 
@@ -486,6 +486,21 @@ tag_handler chtml30_handler[] = {
     s_chtml30_newline_mark,
     NULL,
   },
+  /* tagObject */
+  {
+    NULL,
+    NULL,
+  },
+  /* tagParam */
+  {
+    NULL,
+    NULL,
+  },
+  /* tagCAPTION */
+  {
+    NULL,
+    NULL,
+  },
 };
 
 
@@ -622,10 +637,11 @@ s_init_chtml30(chtml30_t *chtml30, Doc *doc, request_rec *r, device_table *spec)
  *                      EMOJI is specified. 
  * @param rslt    [o]   The pointer to the pointer that stores the result is 
  *                      specified. 
+ * @param node    [i]   The current node to check whether tag is span/font for CHXJ_IMODE_EMOJI_COLOR_AUTO
  * @return When corresponding EMOJI exists, it returns it excluding 0. 
  */
 static int
-s_chtml30_search_emoji(chtml30_t *chtml30, char *txt, char **rslt)
+s_chtml30_search_emoji(chtml30_t *chtml30, char *txt, char **rslt, Node *node)
 {
   emoji_t       *ee;
   request_rec   *r;
@@ -658,6 +674,22 @@ s_chtml30_search_emoji(chtml30_t *chtml30, char *txt, char **rslt)
         (*rslt)[0] = ee->imode->hex1byte & 0xff;
         (*rslt)[1] = ee->imode->hex2byte & 0xff;
         (*rslt)[2] = 0;
+        
+        if(chtml30->conf->imode_emoji_color >= CHXJ_IMODE_EMOJI_COLOR_AUTO ){
+          if(ee->imode->color != NULL){
+            if(chtml30->conf->imode_emoji_color == CHXJ_IMODE_EMOJI_COLOR_AUTO && node != NULL ){
+              if(strcasecmp(node->parent->name, "span") == 0 ||
+                 strcasecmp(node->parent->name, "font")  == 0 ){
+                return strlen(ee->imode->string);
+              }
+            }
+            char *tmp = apr_pstrdup(r->pool,*rslt);
+            *rslt = apr_psprintf(r->pool,
+                        "<font color=\"%s\">%s</font>",ee->imode->color,tmp);
+          }
+        }
+        return strlen(ee->imode->string);
+        
         return strlen(ee->imode->string);
       }
 
@@ -703,7 +735,7 @@ chxj_chtml30_emoji_only_converter(request_rec *r, device_table *spec, const char
     char *out;
     int   rtn;
 
-    rtn = s_chtml30_search_emoji(chtml30, (char *)&src[ii], &out);
+    rtn = s_chtml30_search_emoji(chtml30, (char *)&src[ii], &out, NULL);
     if (rtn) {
       W_V(out);
       ii+=(rtn - 1);
@@ -2258,12 +2290,14 @@ s_chtml30_start_img_tag(void *pdoc, Node *node)
       value = chxj_encoding_parameter(r, value, 0);
       value = chxj_add_cookie_parameter(r, value, chtml30->cookie);
       value = chxj_add_cookie_no_update_parameter(r, value);
+      value = chxj_img_rewrite_parameter(r,chtml30->conf,value);
       attr_src = value;
 #else
       value = chxj_img_conv(r,spec,value);
       value = chxj_encoding_parameter(r, value, 0);
       value = chxj_add_cookie_parameter(r, value, chtml30->cookie);
       value = chxj_add_cookie_no_update_parameter(r, value);
+      value = chxj_img_rewrite_parameter(r,chtml30->conf,value);
       attr_src = value;
 #endif
       }
@@ -3227,18 +3261,6 @@ s_chtml30_start_li_tag(void *pdoc, Node *node)
     W_V(attr_value);
     W_L("\"");
   }
-
-  W_L("<li");
-  if (attr_type) {
-    W_L(" type=\"");
-    W_V(attr_type);
-    W_L("\"");
-  }
-  if (attr_value) {
-    W_L(" value=\"");
-    W_V(attr_value);
-    W_L("\"");
-  }
   W_L(">");
   return chtml30->out;
 }
@@ -3684,12 +3706,6 @@ s_chtml30_start_h5_tag(void *pdoc, Node *node)
     W_V(attr_align);
     W_L("\"");
   }
-  W_L("<h5");
-  if (attr_align) {
-    W_L(" align=\"");
-    W_V(attr_align);
-    W_L("\"");
-  }
   W_L(">");
 
   return chtml30->out;
@@ -3859,33 +3875,6 @@ s_chtml30_start_textarea_tag(void *pdoc, Node *node)
     else if (STRCASEEQ('s','S',"style", name) && value && *value) {
       attr_style = value;
     }
-  }  
-
-  W_L("<textarea");
-  if (attr_accesskey) {
-    W_L(" accesskey=\"");
-    W_V(attr_accesskey);
-    W_L("\"");
-  }
-  if (attr_name) {
-    W_L(" name=\"");
-    W_V(attr_name);
-    W_L("\"");
-  }
-  if (attr_rows) {
-    W_L(" rows=\"");
-    W_V(attr_rows);
-    W_L("\"");
-  }
-  if (attr_cols) {
-    W_L(" cols=\"");
-    W_V(attr_cols);
-    W_L("\"");
-  }
-  if (attr_istyle) {
-    W_L(" istyle=\"");
-    W_V(attr_istyle);
-    W_L("\"");
   }
 
   if (IS_CSS_ON(chtml30->entryp)) {
@@ -4018,7 +4007,7 @@ s_chtml30_text_tag(void *pdoc, Node *child)
   
   for (ii=0; ii<qs_get_node_size(doc,child); ii++) {
     char* out;
-    int rtn = s_chtml30_search_emoji(chtml30, &textval[ii], &out);
+    int rtn = s_chtml30_search_emoji(chtml30, &textval[ii], &out, child);
     if (rtn) {
       tdst = qs_out_apr_pstrcat(r, tdst, out, &tdst_len);
       ii+=(rtn - 1);
@@ -4376,22 +4365,6 @@ s_chtml30_start_marquee_tag(void *pdoc, Node *node)
         }
       }
     }
-  }
-  W_L("<marquee");
-  if (attr_direction) {
-    W_L(" direction=\"");
-    W_V(attr_direction);
-    W_L("\"");
-  }
-  if (attr_behavior) {
-    W_L(" behavior=\"");
-    W_V(attr_behavior);
-    W_L("\"");
-  }
-  if (attr_loop) {
-    W_L(" loop=\"");
-    W_V(attr_loop);
-    W_L("\"");
   }
   W_L("<marquee");
   if (attr_direction) {

@@ -123,7 +123,7 @@ static char *s_chtml50_style_tag       (void *pdoc, Node *node);
 
 static void  s_init_chtml50(chtml50_t *chtml, Doc *doc, request_rec *r, device_table *spec);
 
-static int   s_chtml50_search_emoji(chtml50_t *chtml, char *txt, char **rslt);
+static int   s_chtml50_search_emoji(chtml50_t *chtml, char *txt, char **rslt, Node *node);
 static css_prop_list_t *s_chtml50_push_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value);
 static css_prop_list_t *s_chtml50_nopush_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value);
 
@@ -409,6 +409,21 @@ tag_handler chtml50_handler[] = {
     s_chtml50_newline_mark,
     NULL,
   },
+  /* tagObject */
+  {
+    NULL,
+    NULL,
+  },
+  /* tagParam */
+  {
+    NULL,
+    NULL,
+  },
+  /* tagCAPTION */
+  {
+    NULL,
+    NULL,
+  },
 };
 
 
@@ -545,10 +560,11 @@ s_init_chtml50(chtml50_t *chtml50, Doc *doc, request_rec *r, device_table *spec)
  *                      EMOJI is specified. 
  * @param rslt    [o]   The pointer to the pointer that stores the result is 
  *                      specified. 
+ * @param node    [i]   The current node to check whether tag is span/font for CHXJ_IMODE_EMOJI_COLOR_AUTO.
  * @return When corresponding EMOJI exists, it returns it excluding 0. 
  */
 static int
-s_chtml50_search_emoji(chtml50_t *chtml50, char *txt, char **rslt)
+s_chtml50_search_emoji(chtml50_t *chtml50, char *txt, char **rslt, Node *node)
 {
   emoji_t       *ee;
   request_rec   *r;
@@ -581,6 +597,20 @@ s_chtml50_search_emoji(chtml50_t *chtml50, char *txt, char **rslt)
         (*rslt)[0] = ee->imode->hex1byte & 0xff;
         (*rslt)[1] = ee->imode->hex2byte & 0xff;
         (*rslt)[2] = 0;
+        
+        if(chtml50->conf->imode_emoji_color >= CHXJ_IMODE_EMOJI_COLOR_AUTO ){
+          if(ee->imode->color != NULL){
+            if(chtml50->conf->imode_emoji_color == CHXJ_IMODE_EMOJI_COLOR_AUTO && node != NULL ){
+              if(strcasecmp(node->parent->name, "span") == 0 ||
+                 strcasecmp(node->parent->name, "font")  == 0 ){
+                return strlen(ee->imode->string);
+              }
+            }
+            char *tmp = apr_pstrdup(r->pool,*rslt);
+            *rslt = apr_psprintf(r->pool,
+                        "<font color=\"%s\">%s</font>",ee->imode->color,tmp);
+          }
+        }
         return strlen(ee->imode->string);
       }
 
@@ -626,7 +656,7 @@ chxj_chtml50_emoji_only_converter(request_rec *r, device_table *spec, const char
     char *out;
     int   rtn;
 
-    rtn = s_chtml50_search_emoji(chtml50, (char *)&src[ii], &out);
+    rtn = s_chtml50_search_emoji(chtml50, (char *)&src[ii], &out, NULL);
     if (rtn) {
       W_V(out);
       ii+=(rtn - 1);
@@ -1071,38 +1101,6 @@ s_chtml50_start_body_tag(void *pdoc, Node *node)
         }
       }
     }
-  }
-
-  W_L("<body");
-  if (attr_bgcolor) {
-    attr_bgcolor = chxj_css_rgb_func_to_value(doc->pool, attr_bgcolor);
-    W_L(" bgcolor=\"");
-    W_V(attr_bgcolor);
-    W_L("\"");
-  }
-  if (attr_text) {
-    attr_text = chxj_css_rgb_func_to_value(doc->pool, attr_text);
-    W_L(" text=\"");
-    W_V(attr_text);
-    W_L("\"");
-  }
-  if (attr_link) {
-    attr_link = chxj_css_rgb_func_to_value(doc->pool, attr_link);
-    W_L(" link=\"");
-    W_V(attr_link);
-    W_L("\"");
-  }
-  if (attr_alink) {
-    attr_alink = chxj_css_rgb_func_to_value(doc->pool, attr_alink);
-    W_L(" alink=\"");
-    W_V(attr_alink);
-    W_L("\"");
-  }
-  if (attr_vlink) {
-    attr_vlink = chxj_css_rgb_func_to_value(doc->pool, attr_vlink);
-    W_L(" vlink=\"");
-    W_V(attr_vlink);
-    W_L("\"");
   }
 
   W_L("<body");
@@ -2324,12 +2322,14 @@ s_chtml50_start_img_tag(void *pdoc, Node *node)
       value = chxj_encoding_parameter(r, value, 0);
       value = chxj_add_cookie_parameter(r, value, chtml50->cookie);
       value = chxj_add_cookie_no_update_parameter(r, value);
+      value = chxj_img_rewrite_parameter(r,chtml50->conf,value);
       attr_src = value;
 #else
       value = chxj_img_conv(r,spec,value);
       value = chxj_encoding_parameter(r, value, 0);
       value = chxj_add_cookie_parameter(r, value, chtml50->cookie);
       value = chxj_add_cookie_no_update_parameter(r, value);
+      value = chxj_img_rewrite_parameter(r,chtml50->conf,value);
       attr_src = value;
 #endif
       }
@@ -3266,17 +3266,6 @@ s_chtml50_start_ol_tag(void *pdoc, Node *node)
     W_V(attr_start);
     W_L("\"");
   }
-  W_L("<ol");
-  if (attr_type) {
-    W_L(" type=\"");
-    W_V(attr_type);
-    W_L("\"");
-  }
-  if (attr_start) {
-    W_L(" start=\"");
-    W_V(attr_start);
-    W_L("\"");
-  }
   W_L(">");
 
   return chtml50->out;
@@ -3647,12 +3636,6 @@ s_chtml50_start_h3_tag(void *pdoc, Node *node)
     W_V(attr_align);
     W_L("\"");
   }
-  W_L("<h3");
-  if (attr_align) {
-    W_L(" align=\"");
-    W_V(attr_align);
-    W_L("\"");
-  }
   W_L(">");
 
   return chtml50->out;
@@ -3824,12 +3807,6 @@ s_chtml50_start_h5_tag(void *pdoc, Node *node)
         }
       }
     }
-  }
-  W_L("<h5");
-  if (attr_align) {
-    W_L(" align=\"");
-    W_V(attr_align);
-    W_L("\"");
   }
   W_L("<h5");
   if (attr_align) {
@@ -4136,7 +4113,7 @@ s_chtml50_text_tag(void *pdoc, Node *child)
   
   for (ii=0; ii<qs_get_node_size(doc,child); ii++) {
     char* out;
-    int rtn = s_chtml50_search_emoji(chtml50, &textval[ii], &out);
+    int rtn = s_chtml50_search_emoji(chtml50, &textval[ii], &out, child);
     if (rtn) {
       tdst = qs_out_apr_pstrcat(r, tdst, out, &tdst_len);
       ii+=(rtn - 1);
@@ -5142,12 +5119,6 @@ s_chtml50_start_menu_tag(void *pdoc, Node *node)
         }
       }
     }
-  }
-  W_L("<menu");
-  if (attr_type) {
-    W_L(" type=\"");
-    W_V(attr_type);
-    W_L("\"");
   }
   W_L("<menu");
   if (attr_type) {

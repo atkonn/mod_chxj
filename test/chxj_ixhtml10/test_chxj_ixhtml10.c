@@ -24151,6 +24151,8 @@ void test_ixhtml10_div_tag_with_css_042()
   ret = chxj_rencoding(&r, ret, &destlen);
   fprintf(stderr, "actual:[%s]\n", ret);
   fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+<<<<<<< HEAD:test/chxj_ixhtml10/test_chxj_ixhtml10.c
+=======
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);
@@ -24240,6 +24242,7 @@ void test_ixhtml10_div_tag_with_css_044()
   ret = chxj_rencoding(&r, ret, &destlen);
   fprintf(stderr, "actual:[%s]\n", ret);
   fprintf(stderr, "expect:[%s]\n", RESULT_STRING);
+>>>>>>> master:test/chxj_ixhtml10/test_chxj_ixhtml10.c
   CU_ASSERT(ret != NULL);
   CU_ASSERT(strcmp(RESULT_STRING, ret) == 0);
   CU_ASSERT(destlen == sizeof(RESULT_STRING)-1);

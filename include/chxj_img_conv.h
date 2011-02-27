@@ -24,4 +24,10 @@ extern char* chxj_img_conv(
   device_table*        spec, 
   const char*          s);
 
+extern char*
+chxj_img_rewrite_parameter(
+    request_rec *r,
+    mod_chxj_config *conf,
+    const char *href);
+
 #endif

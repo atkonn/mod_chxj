@@ -77,6 +77,7 @@ struct query_string_param_t {
 /*----------------------------------------------------------------------------*/
 static device_table v_ignore_spec = {
   NULL,
+  0,
   "IGN",
   "IGN",
   CHXJ_SPEC_HTML,
@@ -94,6 +95,7 @@ static device_table v_ignore_spec = {
   96,
   65536,
   NULL,
+  "Shift_JIS"
 };
 
 /*----------------------------------------------------------------------------*/
@@ -530,11 +532,6 @@ s_create_cache_file(request_rec          *r,
 
   magick_wand = NewMagickWand();
   if (MagickReadImageBlob(magick_wand,readdata, readbyte) == MagickFalse) {
-    EXIT_MAGICK_ERROR();
-    return HTTP_NOT_FOUND;
-  }
-  if (MagickStripImage(magick_wand) == MagickFalse) {
-    ERR(r, "mod_chxj: strip image failure.");
     EXIT_MAGICK_ERROR();
     return HTTP_NOT_FOUND;
   }
@@ -1622,6 +1619,14 @@ s_send_cache_file(device_table *spec, query_string_param_t *query_string, reques
   DBG(r, "REQ[%X] offset:[%ld]", TO_ADDR(r), query_string->offset);
   DBG(r, "REQ[%X] count:[%ld]",  TO_ADDR(r), query_string->count);
 
+  /* for mod_cache */
+  {
+    apr_table_setn(r->headers_out, "Vary", "User-Agent");
+    apr_table_setn(r->err_headers_out, "Vary", "User-Agent");
+    ap_update_mtime(r, st.mtime);
+    ap_set_last_modified(r);
+  }
+
   if (query_string->mode != IMG_CONV_MODE_EZGET && query_string->name == NULL) {
     contentLength = apr_psprintf(r->pool, "%d", (int)st.size);
     apr_table_setn(r->headers_out, "Content-Length", (const char*)contentLength);
@@ -1753,6 +1758,14 @@ s_send_original_file(request_rec *r, const char *originalfile)
   rv = apr_stat(&st, originalfile, APR_FINFO_MIN, r->pool);
   if (rv != APR_SUCCESS)
     return HTTP_NOT_FOUND;
+
+  /* for mod_cache */
+  {
+    apr_table_setn(r->headers_out, "Vary", "User-Agent");
+    apr_table_setn(r->err_headers_out, "Vary", "User-Agent");
+    ap_update_mtime(r, st.mtime);
+    ap_set_last_modified(r);
+  }
 
   rv = apr_file_open(&fout, originalfile, 
     APR_READ | APR_BINARY, APR_OS_DEFAULT, r->pool);
@@ -2441,7 +2454,7 @@ s_add_comment_to_png(request_rec *r, char *data, apr_size_t *len)
     pos += 4;
     memcpy(&result[pos], &data[PNG_SIG_AND_IHDR_SZ] , *len - PNG_SIG_AND_IHDR_SZ);
     *len = *len + total_tEXt_size;
-    DBG(r, "REQ[%X] writebyte:[%d]", (unsigned int)(apr_size_t)r, *len);
+    DBG(r, "REQ[%X] writebyte:[%d]", (unsigned int)(apr_size_t)r, (unsigned int)*len);
   }
   else {
     result = data;
