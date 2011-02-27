@@ -44,6 +44,34 @@ static void s_set_device_data(
   device_table_list *dtl, 
   Node              *node) ;
 
+static int s_sort_table_compare(const void *a, const void *b);
+static void s_set_sort_table(Doc *doc, apr_pool_t *p, device_table_list *dtl);
+
+#if 0
+#include <stdio.h>
+static void
+s_debug_dump(device_table_list *dtl) 
+{
+  size_t ii=0;
+  FILE *fp = fopen("/tmp/device_dump.log", "a");
+  fprintf(fp, "===================== %d\n", dtl->table_count);
+  fflush(fp);
+  for (ii=0; ii<dtl->table_count; ii++) {
+    if (dtl->sort_table == NULL) {
+      fprintf(fp, "sort_table is NULL\n"); 
+      fflush(fp);
+    }
+    if (dtl->sort_table[ii] == NULL) {
+      fprintf(fp, "sort_table[%d] is NULL\n", ii);
+      fflush(fp);
+    }
+    fprintf(fp, "[%s]\n", dtl->sort_table[ii]->device_id); 
+  }
+  fclose(fp);
+}
+#endif
+#define DBG_DUMP(X) 
+
 
 /**
  * load device_data.xml
@@ -122,7 +150,9 @@ s_set_user_agent_data(Doc *doc, apr_pool_t *p, mod_chxj_config *conf, Node *node
             dtl->regexp = ap_pregcomp(p, (const char *)dtl->pattern, AP_REG_EXTENDED|AP_REG_ICASE);
         }
       }
+      dtl->table_count = 0;
       s_set_device_data(doc, p, dtl, child);
+      s_set_sort_table(doc, p, dtl);
     }
   }
 }
@@ -454,8 +484,42 @@ s_set_device_data(Doc *doc, apr_pool_t *p, device_table_list *dtl, Node *node)
       dtl->tail->next = dt;
       dtl->tail = dt;
     }
+    dtl->table_count++;
   }
 }
+
+
+static void
+s_set_sort_table(Doc *doc, apr_pool_t *p, device_table_list *dtl)
+{
+  device_table **sort_table;
+  device_table *dt;
+  size_t ii=0;
+
+  sort_table = apr_palloc(p, sizeof(device_table) * dtl->table_count);
+
+  for (dt = dtl->table; dt; dt = dt->next) {
+    sort_table[ii++] = dt;
+  }
+
+  dtl->sort_table = sort_table;
+  DBG_DUMP(dtl);
+
+  qsort((void *)sort_table, (size_t)dtl->table_count, sizeof(*sort_table), s_sort_table_compare);
+
+
+  DBG_DUMP(dtl);
+}
+
+static int
+s_sort_table_compare(const void *a, const void *b)
+{
+  device_table *aa = *(device_table **)a;
+  device_table *bb = *(device_table **)b;
+  /* not strcasecmp. for LOAD */
+  return strcmp(aa->device_id, bb->device_id);
+}
+
 /*
  * vim:ts=2 et
  */

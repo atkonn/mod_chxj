@@ -257,7 +257,7 @@ chxj_headers_fixup(request_rec *r)
 
   }
 
-  char *x_client_type = apr_table_get(r->headers_out, "X-Client-Type");
+  char *x_client_type = (char *)apr_table_get(r->headers_out, "X-Client-Type");
   apr_table_unset(r->headers_out, "X-Client-Type");
   if (x_client_type) {
     apr_table_setn(r->headers_in, "X-Client-Type", x_client_type);

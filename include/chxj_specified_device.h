@@ -96,6 +96,9 @@ struct device_table_list_t {
   ap_regex_t                  *regexp;
   device_table                *table;
   device_table                *tail;
+
+  device_table                **sort_table;
+  size_t                      table_count;
 };
 
 typedef struct converter_t converter_t;
