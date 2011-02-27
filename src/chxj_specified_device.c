@@ -103,7 +103,7 @@ chxj_specified_device(request_rec *r, const char *user_agent)
 
   for (dtl = conf->devices; dtl; dtl = dtl->next) {
     if (! dtl->pattern) {
-      DBG(r, "pattern is null");
+      /* DBG(r, "pattern is null"); */
       continue;
     }
 
