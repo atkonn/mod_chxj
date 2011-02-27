@@ -305,10 +305,7 @@ chxj_headers_fixup(request_rec *r)
     }
   }
   else{
-    if (! r->content_type) {
-      DBG(r, "REQ[%X] r->content_type is NULL. (Probably access From PC?)", (unsigned int)(apr_size_t)r);
-    }
-    else if(strncmp(r->content_type,"image/",6) == 0){
+    if(strncmp(r->content_type,"image/",6) == 0){
       if (dconf->image_rewrite == CHXJ_IMG_REWRITE_ON && !apr_table_get(r->headers_in, CHXJ_IMG_X_HTTP_IMAGE_FILENAME)){
         if(dconf->image_rewrite_mode == CHXJ_IMG_REWRITE_MODE_ALL){
           // all image

@@ -6614,6 +6614,199 @@
     </device>
   </user_agent>
 
+  <!-- OSAKANA TARO add start -->
+  <user_agent pattern="^DoCoMo/2.0[ ]+(ISIM)+([^( ]+)(\(.+\))*$">
+  <!--
+  iモードHTMLシミュレータII (ver8.4)
+  -->
+  <!--
+  iHTML5.0/Flash Lite 1.1/Deco-mail1.0
+    DoCoMo/2.0 ISIM0801(c100;TB;W48H32)
+  -->
+      <device>
+      <device_id>ISIM0801</device_id>
+      <device_name>DoCoMo ISIM0801</device_name>
+      <html_spec_type>CHTML_5_0</html_spec_type><!-- IHTML5.0 -->
+      <width>240</width>
+      <heigh>320</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>65536</color>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>320</wp_heigh>
+      <cache>102400</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+  <!--
+  iHTML5.0/Flash Lite 1.1/Adobe Reader LE1.0/Deco-mail1.0
+    DoCoMo/2.0 ISIM0802(c100;TB;W48H32)
+  -->
+    <device>
+      <device_id>ISIM0802</device_id>
+      <device_name>DoCoMo ISIM0802</device_name>
+      <html_spec_type>CHTML_5_0</html_spec_type><!-- IHTML5.0 -->
+      <width>240</width>
+      <heigh>320</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>65536</color>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>320</wp_heigh>
+      <cache>102400</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+  <!--
+  iHTML6.0/Flash Lite 1.1/Adobe Reader LE1.0/Deco-mail2.0/ToruCa1.0
+    DoCoMo/2.0 ISIM0803(c100;TB;W48H32)
+  -->
+    <device>
+      <device_id>ISIM0803</device_id>
+      <device_name>DoCoMo ISIM0803</device_name>
+      <html_spec_type>CHTML_6_0</html_spec_type><!-- IHTML6.0/IXHTML2.0 -->
+      <width>240</width>
+      <heigh>320</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>320</wp_heigh>
+      <cache>102400</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+  <!--
+  iHTML7.0/Flash Lite 1.1/Adobe Reader LE2.0/Deco-mail3.0/ToruCa2.0
+    DoCoMo/2.0 ISIM0804(c100;TB;W48H32)
+  -->
+    <device>
+      <device_id>ISIM0804</device_id>
+      <device_name>DoCoMo ISIM0804</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>320</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>320</wp_heigh>
+      <cache>102400</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+  <!--
+  iHTML7.1/Flash Lite 3.0/Adobe Reader LE2.0/Deco-mail3.0/ToruCa2.0
+    DoCoMo/2.0 ISIM0805(c100;TB;W48H32)
+  -->
+    <device>
+      <device_id>ISIM0805</device_id>
+      <device_name>DoCoMo ISIM0805</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.1/IXHTML2.1 -->
+      <width>240</width>
+      <heigh>320</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>320</wp_heigh>
+      <cache>102400</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+  <!--
+  iHTML7.2/Flash Lite 3.0/Adobe Reader LE2.0/Deco-mail4.0/ToruCa2.0
+    DoCoMo/2.0 ISIM0806(c100;TB;W48H32)
+  -->
+    <device>
+      <device_id>ISIM0806</device_id>
+      <device_name>DoCoMo ISIM0806</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>320</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>320</wp_heigh>
+      <cache>102400</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+  <!--
+  iHTML7.2/Flash Lite 3.1/Adobe Reader LE2.0/Deco-mail4.0/ToruCa2.1
+    DoCoMo/2.0 ISIM0807(c100;TB;W48H32)
+  -->
+    <device>
+      <device_id>ISIM0807</device_id>
+      <device_name>DoCoMo ISIM0807</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>320</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>320</wp_heigh>
+      <cache>102400</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+
+  <!--
+	QVGA: i-mode Browser2.0/Flash Lite 3.1/Adobe Reader LE2.0/Deco-mail4.0/ToruCa2.1
+    iMode2.0 DoCoMo/2.0 ISIM0808(c500;TB;W24H16)
+  -->
+    <device>
+      <device_id>ISIM0808</device_id>
+      <device_name>DoCoMo ISIM0808</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>480</width>
+      <heigh>640</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>512000</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>640</wp_heigh>
+      <cache>102400</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+  
+  </user_agent>
+  <!-- OSAKANA TARO add end -->
   <!-- Sale in 2007.6 F904i_H -->
   <user_agent pattern="^DoCoMo/2.0[ 	]+(F904i)\(c100;TB;W24H17\)$">
     <!--
@@ -12487,6 +12680,1513 @@
       <dpi_heigh>96</dpi_heigh>
     </device>
 
+	<!-- OSAKANA TARO add start -->
+	<!-- iモード対応HTML7.2（FOMA 906iなど） -->
+    <!--
+		DoCoMo/2.0 P04A(c100;TB;W24H15) （ブラウザからの通信時、ADF取得時）
+		DoCoMo/2.0 P04A(c100;TB;W20H13) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 P04A(c100;TB;W30H19) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 P04A(c100;TB;W16H10) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 P04A(c100;TB;W24H13) （トルカ詳細化時）
+		DoCoMo/2.0 P04A(c100;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 P04A(c100;TJ) （iアプリからの通信時（DoJaプロファイル））  
+	-->
+    <device>
+      <device_id>P04A</device_id>
+      <device_name>DoCoMo P-04A</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>350</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>427</wp_heigh>
+      <cache>102400</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	
+	<!--
+		DoCoMo/2.0 P05A(c100;TB;W24H15) （ブラウザからの通信時、ADF取得時）
+		DoCoMo/2.0 P05A(c100;TB;W20H13) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 P05A(c100;TB;W30H19) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 P05A(c100;TB;W16H10) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 P05A(c100;TB;W24H13) （トルカ詳細化時）
+		DoCoMo/2.0 P05A(c100;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 P05A(c100;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->
+    <device>
+      <device_id>P05A</device_id>
+      <device_name>DoCoMo P-05A</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>350</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>427</wp_heigh>
+      <cache>102400</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		DoCoMo/2.0 P06A(c100;TB;W20H13) （ブラウザからの通信時、ADF取得時）
+		DoCoMo/2.0 P06A(c100;TB;W24H15) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 P06A(c100;TB;W30H19) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 P06A(c100;TB;W16H10) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 P06A(c100;TB;W24H13) （トルカ詳細化時）
+		DoCoMo/2.0 P06A(c100;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 P06A(c100;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->
+    <device>
+      <device_id>P06A</device_id>
+      <device_name>DoCoMo P-06A</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>350</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>427</wp_heigh>
+      <cache>102400</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	
+	<!--
+		DoCoMo/2.0 P10A(c100;TB;W24H15) （ブラウザからの通信時、ADF取得時）
+		DoCoMo/2.0 P10A(c100;TB;W20H13) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 P10A(c100;TB;W30H19) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 P10A(c100;TB;W16H10) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 P10A(c100;TB;W24H13) （トルカ詳細化時）
+		DoCoMo/2.0 P10A(c100;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 P10A(c100;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->
+    <device>
+      <device_id>P10A</device_id>
+      <device_name>DoCoMo P-10A</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>350</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>427</wp_heigh>
+      <cache>102400</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	
+	<!--
+		DoCoMo/2.0 SH04A(c100;TB;W24H16) （ブラウザからの通信時、ADF取得時（縦画面））
+		DoCoMo/2.0 SH04A(c100;TB;W24H12) （ブラウザからの通信時、ADF取得時（横画面））
+		DoCoMo/2.0 SH04A(c100;TB;W20H13) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 SH04A(c100;TB;W20H10) （ブラウザからの通信時、ADF取得時（横画面））1
+		DoCoMo/2.0 SH04A(c100;TB;W30H20) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 SH04A(c100;TB;W30H15) （ブラウザからの通信時、ADF取得時（横画面））1
+		DoCoMo/2.0 SH04A(c100;TB;W16H10) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 SH04A(c100;TB;W16H08) （ブラウザからの通信時、ADF取得時（横画面））1
+		DoCoMo/2.0 SH04A(c100;SD) （JAR取得時（Starプロファイル））
+		DoCoMo/2.0 SH04A(c100;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 SH04A(c100;SJ) （iアプリからの通信時（Starプロファイル））
+		DoCoMo/2.0 SH04A(c100;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->
+    <device>
+      <device_id>SH04A</device_id>
+      <device_name>DoCoMo SH-04A</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>320</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>16777216</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>102400</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+
+	<!-- iモード対応HTML7.2（FOMA 906iなど） end -->
+	<!-- iモードブラウザ2.0 start -->
+	
+	<!--
+		DoCoMo/2.0 P07A3(c500;TB;W24H15) （ブラウザからの通信時、ADF取得時（縦画面））
+		DoCoMo/2.0 P07A3(c500;TB;W42H08) （ブラウザからの通信時、ADF取得時（横画面））
+		DoCoMo/2.0 P07A3(c500;TB;W20H12) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 P07A3(c500;TB;W35H06) （ブラウザからの通信時、ADF取得時（横画面））1
+		DoCoMo/2.0 P07A3(c500;TB;W30H18) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 P07A3(c500;TB;W53H09) （ブラウザからの通信時、ADF取得時（横画面））1
+		DoCoMo/2.0 P07A3(c500;TB;W16H10) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 P07A3(c500;TB;W28H05) （ブラウザからの通信時、ADF取得時（横画面））1
+		DoCoMo/2.0 P07A3(c500;TB;W24H13) （トルカ詳細化時）
+		DoCoMo/2.0 P07A3(c500;SD) （JAR取得時（Starプロファイル））
+		DoCoMo/2.0 P07A3(c500;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 P07A3(c500;SJ) （iアプリからの通信時（Starプロファイル））
+		DoCoMo/2.0 P07A3(c500;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->
+    <device>
+      <device_id>P07A</device_id>
+      <device_name>DoCoMo P-07A</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>331</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>512000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	
+	<!--
+		DoCoMo/2.0 P08A3(c500;TB;W24H15) （ブラウザからの通信時、ADF取得時）
+		DoCoMo/2.0 P08A3(c500;TB;W20H12) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 P08A3(c500;TB;W30H18) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 P08A3(c500;TB;W16H10) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 P08A3(c500;TB;W24H13) （トルカ詳細化時）
+		DoCoMo/2.0 P08A3(c500;SD) （JAR取得時（Starプロファイル））
+		DoCoMo/2.0 P08A3(c500;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 P08A3(c500;SJ) （iアプリからの通信時（Starプロファイル））
+		DoCoMo/2.0 P08A3(c500;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->
+    <device>
+      <device_id>P08A</device_id>
+      <device_name>DoCoMo P-08A</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>331</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>512000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+
+	<!--
+		DoCoMo/2.0 P09A3(c500;TB;W24H15) （ブラウザからの通信時、ADF取得時）
+		DoCoMo/2.0 P09A3(c500;TB;W20H12) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 P09A3(c500;TB;W30H18) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 P09A3(c500;TB;W16H10) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 P09A3(c500;TB;W24H13) （トルカ詳細化時）
+		DoCoMo/2.0 P09A3(c500;SD) （JAR取得時（Starプロファイル））
+		DoCoMo/2.0 P09A3(c500;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 P09A3(c500;SJ) （iアプリからの通信時（Starプロファイル））
+		DoCoMo/2.0 P09A3(c500;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->
+    <device>
+      <device_id>P09A</device_id>
+      <device_name>DoCoMo P-09A</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>331</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>512000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+
+	<!--
+		DoCoMo/2.0 N06A3(c500;TB;W24H16) （ブラウザからの通信時、ADF取得時（縦画面））
+		DoCoMo/2.0 N06A3(c500;TB;W24H12) （ブラウザからの通信時（横画面））
+		DoCoMo/2.0 N06A3(c500;TB;W20H13) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 N06A3(c500;TB;W20H10) （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 N06A3(c500;TB;W30H20) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 N06A3(c500;TB;W30H15) （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 N06A3(c500;TB;W16H10) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 N06A3(c500;TB;W16H8) （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 N06A3(c500;SD) （JAR取得時（Starプロファイル））
+		DoCoMo/2.0 N06A3(c500;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 N06A3(c500;SJ) （iアプリからの通信時（Starプロファイル））
+		DoCoMo/2.0 N06A3(c500;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->
+	<device>
+      <device_id>N06A</device_id>
+      <device_name>DoCoMo N-06A</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>320</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>512000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+
+	<!--
+		DoCoMo/2.0 N07A3(c500;TB;W24H16) （ブラウザからの通信時、ADF取得時）
+		DoCoMo/2.0 N07A3(c500;TB;W20H13) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 N07A3(c500;TB;W30H20) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 N07A3(c500;TB;W16H10) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 N07A3(c500;SD) （JAR取得時（Starプロファイル））
+		DoCoMo/2.0 N07A3(c500;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 N07A3(c500;SJ) （iアプリからの通信時（Starプロファイル））
+		DoCoMo/2.0 N07A3(c500;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->
+	<device>
+      <device_id>N07A</device_id>
+      <device_name>DoCoMo N-07A</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>320</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>512000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		DoCoMo/2.0 N08A3(c500;TB;W24H16) （ブラウザからの通信時、ADF取得時）
+		DoCoMo/2.0 N08A3(c500;TB;W20H13) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 N08A3(c500;TB;W30H20) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 N08A3(c500;TB;W16H10) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 N08A3(c500;SD) （JAR取得時（Starプロファイル））
+		DoCoMo/2.0 N08A3(c500;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 N08A3(c500;SJ) （iアプリからの通信時（Starプロファイル））
+		DoCoMo/2.0 N08A3(c500;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->
+	<device>
+      <device_id>N08A</device_id>
+      <device_name>DoCoMo N-08A</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>320</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>512000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+
+	<!--
+		DoCoMo/2.0 N09A3(c500;TB;W24H16) （ブラウザからの通信時、ADF取得時）
+		DoCoMo/2.0 N09A3(c500;TB;W20H13) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 N09A3(c500;TB;W30H20) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 N09A3(c500;TB;W16H10) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 N09A3(c500;SD) （JAR取得時（Starプロファイル））
+		DoCoMo/2.0 N09A3(c500;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 N09A3(c500;SJ) （iアプリからの通信時（Starプロファイル））
+		DoCoMo/2.0 N09A3(c500;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->
+	<device>
+      <device_id>N09A</device_id>
+      <device_name>DoCoMo N-09A</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>320</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>512000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+
+	<!--
+		DoCoMo/2.0 F08A3(c500;TB;W24H16) （ブラウザからの通信時、ADF取得時（縦画面））
+		DoCoMo/2.0 F08A3(c500;TB;W24H17) （ブラウザからの通信時（縦全画面））
+		DoCoMo/2.0 F08A3(c500;TB;W42H09) （ブラウザからの通信時（横画面））
+		DoCoMo/2.0 F08A3(c500;TB;W24H10) （ブラウザからの通信時（横マルチ画面））
+		DoCoMo/2.0 F08A3(c500;TB;W20H13) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 F08A3(c500;TB;W20H14) （ブラウザからの通信時（縦全画面））1
+		DoCoMo/2.0 F08A3(c500;TB;W35H08) （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 F08A3(c500;TB;W20H08) （ブラウザからの通信時（横マルチ画面））1
+		DoCoMo/2.0 F08A3(c500;TB;W30H20) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 F08A3(c500;TB;W30H22) （ブラウザからの通信時（縦全画面））1
+		DoCoMo/2.0 F08A3(c500;TB;W53H12) （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 F08A3(c500;TB;W30H13) （ブラウザからの通信時（横マルチ画面））1
+		DoCoMo/2.0 F08A3(c500;TB;W16H10) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 F08A3(c500;TB;W16H11) （ブラウザからの通信時（縦全画面））1
+		DoCoMo/2.0 F08A3(c500;TB;W28H06) （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 F08A3(c500;TB;W16H07) （ブラウザからの通信時（横マルチ画面））1
+		DoCoMo/2.0 F08A3(c500;TB;W12H08) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 F08A3(c500;TB;W12H08) （ブラウザからの通信時（縦全画面））1
+		DoCoMo/2.0 F08A3(c500;TB;W21H04) （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 F08A3(c500;TB;W12H05) （ブラウザからの通信時（横マルチ画面））1
+		DoCoMo/2.0 F08A3(c500;SD) （JAR取得時（Starプロファイル））
+		DoCoMo/2.0 F08A3(c500;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 F08A3(c500;SJ) （iアプリからの通信時（Starプロファイル））
+		DoCoMo/2.0 F08A3(c500;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->
+	<device>
+      <device_id>F08A</device_id>
+      <device_name>DoCoMo F-08A</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>324</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>512000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+
+	<!--
+		DoCoMo/2.0 F09A3(c500;TB;W24H16) （ブラウザからの通信時、ADF取得時（縦画面））
+		DoCoMo/2.0 F09A3(c500;TB;W24H14) （ブラウザからの通信時（縦画面パッド表示））
+		DoCoMo/2.0 F09A3(c500;TB;W24H20) （ブラウザからの通信時（縦全画面））
+		DoCoMo/2.0 F09A3(c500;TB;W24H18) （ブラウザからの通信時（縦全画面パッド表示））
+		DoCoMo/2.0 F09A3(c500;TB;W48H09) （ブラウザからの通信時（横画面））
+		DoCoMo/2.0 F09A3(c500;TB;W43H09) （ブラウザからの通信時（横画面パッド表示））
+		DoCoMo/2.0 F09A3(c500;TB;W24H10) （ブラウザからの通信時（横マルチ画面））
+		DoCoMo/2.0 F09A3(c500;TB;W24H08) （ブラウザからの通信時（横マルチ画面パッド表示））
+		DoCoMo/2.0 F09A3(c500;TB;W20H13) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 F09A3(c500;TB;W20H11) （ブラウザからの通信時（縦画面パッド表示））1
+		DoCoMo/2.0 F09A3(c500;TB;W20H17) （ブラウザからの通信時（縦全画面））1
+		DoCoMo/2.0 F09A3(c500;TB;W20H15) （ブラウザからの通信時（縦全画面パッド表示））1
+		DoCoMo/2.0 F09A3(c500;TB;W40H08) （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 F09A3(c500;TB;W36H08) （ブラウザからの通信時（横画面パッド表示））1
+		DoCoMo/2.0 F09A3(c500;TB;W20H08) （ブラウザからの通信時（横マルチ画面））1
+		DoCoMo/2.0 F09A3(c500;TB;W20H07) （ブラウザからの通信時（横マルチ画面パッド表示））1
+		DoCoMo/2.0 F09A3(c500;TB;W30H20) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 F09A3(c500;TB;W30H17) （ブラウザからの通信時（縦画面パッド表示））1
+		DoCoMo/2.0 F09A3(c500;TB;W30H25) （ブラウザからの通信時（縦全画面））1
+		DoCoMo/2.0 F09A3(c500;TB;W30H23) （ブラウザからの通信時（縦全画面パッド表示））1
+		DoCoMo/2.0 F09A3(c500;TB;W60H12) （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 F09A3(c500;TB;W54H12) （ブラウザからの通信時（横画面パッド表示））1
+		DoCoMo/2.0 F09A3(c500;TB;W30H13) （ブラウザからの通信時（横マルチ画面））1
+		DoCoMo/2.0 F09A3(c500;TB;W30H10) （ブラウザからの通信時（横マルチ画面パッド表示））1
+		DoCoMo/2.0 F09A3(c500;TB;W16H10) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 F09A3(c500;TB;W16H09) （ブラウザからの通信時（縦画面パッド表示））1
+		DoCoMo/2.0 F09A3(c500;TB;W16H13) （ブラウザからの通信時（縦全画面））1
+		DoCoMo/2.0 F09A3(c500;TB;W16H12) （ブラウザからの通信時（縦全画面パッド表示））1
+		DoCoMo/2.0 F09A3(c500;TB;W32H06) （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 F09A3(c500;TB;W28H06) （ブラウザからの通信時（横画面パッド表示））1
+		DoCoMo/2.0 F09A3(c500;TB;W16H07) （ブラウザからの通信時（横マルチ画面））1
+		DoCoMo/2.0 F09A3(c500;TB;W16H05) （ブラウザからの通信時（横マルチ画面パッド表示））1
+		DoCoMo/2.0 F09A3(c500;TB;W12H08) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 F09A3(c500;TB;W12H07) （ブラウザからの通信時（縦画面パッド表示））1
+		DoCoMo/2.0 F09A3(c500;TB;W12H10) （ブラウザからの通信時（縦全画面））1
+		DoCoMo/2.0 F09A3(c500;TB;W12H09) （ブラウザからの通信時（縦全画面パッド表示））1
+		DoCoMo/2.0 F09A3(c500;TB;W24H04) （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 F09A3(c500;TB;W21H04) （ブラウザからの通信時（横画面パッド表示））1
+		DoCoMo/2.0 F09A3(c500;TB;W12H05) （ブラウザからの通信時（横マルチ画面））1
+		DoCoMo/2.0 F09A3(c500;TB;W12H04) （ブラウザからの通信時（横マルチ画面パッド表示））1
+		DoCoMo/2.0 F09A3(c500;SD) （JAR取得時（Starプロファイル））
+		DoCoMo/2.0 F09A3(c500;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 F09A3(c500;SJ) （iアプリからの通信時（Starプロファイル））
+		DoCoMo/2.0 F09A3(c500;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->
+	<device>
+      <device_id>F09A</device_id>
+      <device_name>DoCoMo F-09A</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>324</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>16777216</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>960</wp_heigh>
+      <cache>512000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+
+	<!--
+		DoCoMo/2.0 SH05A3(c500;TB;W24H14) （ブラウザからの通信時）
+		DoCoMo/2.0 SH05A3(c500;TB;W20H12) （ブラウザからの通信時）1
+		DoCoMo/2.0 SH05A3(c500;TB;W30H18) （ブラウザからの通信時）1
+		DoCoMo/2.0 SH05A3(c500;TB;W16H09) （ブラウザからの通信時）1
+		DoCoMo/2.0 SH05A3(c500;TB;W24H16) （ADF取得時）
+		DoCoMo/2.0 SH05A3(c500;TB;W20H13) （ADF取得時）1
+		DoCoMo/2.0 SH05A3(c500;TB;W30H20) （ADF取得時）1
+		DoCoMo/2.0 SH05A3(c500;TB;W16H10) （ADF取得時）1
+		DoCoMo/2.0 SH05A3(c500;TB;W24H16) （トルカ詳細化時）
+		DoCoMo/2.0 SH05A3(c500;SD) （JAR取得時（Starプロファイル））
+		DoCoMo/2.0 SH05A3(c500;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 SH05A3(c500;SJ) （iアプリからの通信時（Starプロファイル））
+		DoCoMo/2.0 SH05A3(c500;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->
+	<device>
+      <device_id>SH05A</device_id>
+      <device_name>DoCoMo SH-05A</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>296</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>16777216</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>512000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		DoCoMo/2.0 SH06A3(c500;TB;W24H14) （ブラウザからの通信時（縦画面））
+		DoCoMo/2.0 SH06A3(c500;TB;W24H10) （ブラウザからの通信時（横画面））
+		DoCoMo/2.0 SH06A3(c500;TB;W20H12) （ブラウザからの通信時（縦画面））1
+		DoCoMo/2.0 SH06A3(c500;TB;W20H09) （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 SH06A3(c500;TB;W30H18) （ブラウザからの通信時（縦画面））1
+		DoCoMo/2.0 SH06A3(c500;TB;W30H13) （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 SH06A3(c500;TB;W16H09) （ブラウザからの通信時（縦画面））1
+		DoCoMo/2.0 SH06A3(c500;TB;W16H07) （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 SH06A3(c500;TB;W24H16) （ADF取得時（縦画面））
+		DoCoMo/2.0 SH06A3(c500;TB;W24H12) （ADF取得時（横画面））
+		DoCoMo/2.0 SH06A3(c500;TB;W20H13) （ADF取得時（縦画面））1
+		DoCoMo/2.0 SH06A3(c500;TB;W20H10) （ADF取得時（横画面））1
+		DoCoMo/2.0 SH06A3(c500;TB;W30H20) （ADF取得時（縦画面））1
+		DoCoMo/2.0 SH06A3(c500;TB;W30H15) （ADF取得時（横画面））1
+		DoCoMo/2.0 SH06A3(c500;TB;W16H10) （ADF取得時（縦画面））1
+		DoCoMo/2.0 SH06A3(c500;TB;W16H08) （ADF取得時（横画面））1
+		DoCoMo/2.0 SH06A3(c500;TB;W24H16) （トルカ詳細化時）
+		DoCoMo/2.0 SH06A3(c500;SD) （JAR取得時（Starプロファイル））
+		DoCoMo/2.0 SH06A3(c500;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 SH06A3(c500;SJ) （iアプリからの通信時（Starプロファイル））
+		DoCoMo/2.0 SH06A3(c500;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->
+	<device>
+      <device_id>SH06A</device_id>
+      <device_name>DoCoMo SH-06A</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>296</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>16777216</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>512000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		DoCoMo/2.0 SH07A3(c500;TB;W24H14) （ブラウザからの通信時（縦画面））
+		DoCoMo/2.0 SH07A3(c500;TB;W24H10) （ブラウザからの通信時（横画面））
+		DoCoMo/2.0 SH07A3(c500;TB;W20H12) （ブラウザからの通信時（縦画面））1
+		DoCoMo/2.0 SH07A3(c500;TB;W20H09) （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 SH07A3(c500;TB;W30H18) （ブラウザからの通信時（縦画面））1
+		DoCoMo/2.0 SH07A3(c500;TB;W30H13) （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 SH07A3(c500;TB;W16H09) （ブラウザからの通信時（縦画面））1
+		DoCoMo/2.0 SH07A3(c500;TB;W16H07) （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 SH07A3(c500;TB;W24H16) （ADF取得時（縦画面））
+		DoCoMo/2.0 SH07A3(c500;TB;W24H12) （ADF取得時（横画面））
+		DoCoMo/2.0 SH07A3(c500;TB;W20H13) （ADF取得時（縦画面））1
+		DoCoMo/2.0 SH07A3(c500;TB;W20H10) （ADF取得時（横画面））1
+		DoCoMo/2.0 SH07A3(c500;TB;W30H20) （ADF取得時（縦画面））1
+		DoCoMo/2.0 SH07A3(c500;TB;W30H15) （ADF取得時（横画面））1
+		DoCoMo/2.0 SH07A3(c500;TB;W16H10) （ADF取得時（縦画面））1
+		DoCoMo/2.0 SH07A3(c500;TB;W16H08) （ADF取得時（横画面））1
+		DoCoMo/2.0 SH07A3(c500;TB;W24H16) （トルカ詳細化時）
+		DoCoMo/2.0 SH07A3(c500;SD) （JAR取得時（Starプロファイル））
+		DoCoMo/2.0 SH07A3(c500;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 SH07A3(c500;SJ) （iアプリからの通信時（Starプロファイル））
+		DoCoMo/2.0 SH07A3(c500;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->
+	<device>
+      <device_id>SH07A</device_id>
+      <device_name>DoCoMo SH-07A</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>296</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>16777216</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>512000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		DoCoMo/2.0 SH08A(c500;TB;W24H14) （ブラウザからの通信時）
+		DoCoMo/2.0 SH08A(c500;TB;W20H12) （ブラウザからの通信時）1
+		DoCoMo/2.0 SH08A(c500;TB;W30H18) （ブラウザからの通信時）1
+		DoCoMo/2.0 SH08A(c500;TB;W16H09) （ブラウザからの通信時）1
+		DoCoMo/2.0 SH08A(c500;TB;W24H16) （ADF取得時）
+		DoCoMo/2.0 SH08A(c500;TB;W20H13) （ADF取得時）1
+		DoCoMo/2.0 SH08A(c500;TB;W30H20) （ADF取得時）1
+		DoCoMo/2.0 SH08A(c500;TB;W16H10) （ADF取得時）1
+		DoCoMo/2.0 SH08A(c500;TB;W24H16) （トルカ詳細化時）
+		DoCoMo/2.0 SH08A(c500;SD) （JAR取得時（Starプロファイル））
+		DoCoMo/2.0 SH08A(c500;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 SH08A(c500;SJ) （iアプリからの通信時（Starプロファイル））
+		DoCoMo/2.0 SH08A(c500;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->
+	<device>
+      <device_id>SH08A</device_id>
+      <device_name>DoCoMo SH-08A</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>296</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>16777216</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>512000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		DoCoMo/2.0 SH01B(c500;TB;W24H16) （ブラウザからの通信時（縦画面））
+		DoCoMo/2.0 SH01B(c500;TB;W24H10) （ブラウザからの通信時（横画面））
+		DoCoMo/2.0 SH01B(c500;TB;W24H14) （ブラウザからの通信時（縦閉画面））
+		DoCoMo/2.0 SH01B(c500;TB;W20H13) （ブラウザからの通信時（縦画面））1
+		DoCoMo/2.0 SH01B(c500;TB;W20H09) （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 SH01B(c500;TB;W20H12) （ブラウザからの通信時（縦閉画面））1
+		DoCoMo/2.0 SH01B(c500;TB;W30H20) （ブラウザからの通信時（縦画面））1
+		DoCoMo/2.0 SH01B(c500;TB;W30H13) （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 SH01B(c500;TB;W30H18) （ブラウザからの通信時（縦閉画面））1
+		DoCoMo/2.0 SH01B(c500;TB;W16H10) （ブラウザからの通信時（縦画面））1
+		DoCoMo/2.0 SH01B(c500;TB;W16H07) （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 SH01B(c500;TB;W16H09) （ブラウザからの通信時（縦閉画面））1
+		DoCoMo/2.0 SH01B(c500;TB;W40H26) （ブラウザからの通信時（縦画面））1
+		DoCoMo/2.0 SH01B(c500;TB;W40H18) （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 SH01B(c500;TB;W40H24) （ブラウザからの通信時（縦閉画面））1
+		DoCoMo/2.0 SH01B(c500;TB;W24H16) （ADF取得時）
+		DoCoMo/2.0 SH01B(c500;SD) （JAR取得時（Starプロファイル））
+		DoCoMo/2.0 SH01B(c500;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 SH01B(c500;SJ) （iアプリからの通信時（Starプロファイル））
+		DoCoMo/2.0 SH01B(c500;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->
+	<device>
+      <device_id>SH01B</device_id>
+      <device_name>DoCoMo SH-01B</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>323</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>16777216</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>512000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		DoCoMo/2.0 SH02B(c500;TB;W24H16) （ブラウザからの通信時（通常画面））
+		DoCoMo/2.0 SH02B(c500;TB;W24H10) （ブラウザからの通信時（マルチ画面））
+		DoCoMo/2.0 SH02B(c500;TB;W20H13) （ブラウザからの通信時（通常画面））1
+		DoCoMo/2.0 SH02B(c500;TB;W20H09) （ブラウザからの通信時（マルチ画面））1
+		DoCoMo/2.0 SH02B(c500;TB;W30H20) （ブラウザからの通信時（通常画面））1
+		DoCoMo/2.0 SH02B(c500;TB;W30H13) （ブラウザからの通信時（マルチ画面））1
+		DoCoMo/2.0 SH02B(c500;TB;W16H10) （ブラウザからの通信時（通常画面））1
+		DoCoMo/2.0 SH02B(c500;TB;W16H07) （ブラウザからの通信時（マルチ画面））1
+		DoCoMo/2.0 SH02B(c500;TB;W40H26) （ブラウザからの通信時（通常画面））1
+		DoCoMo/2.0 SH02B(c500;TB;W40H18) （ブラウザからの通信時（マルチ画面））1
+		DoCoMo/2.0 SH02B(c500;TB;W24H16) （ADF取得時）
+		DoCoMo/2.0 SH02B(c500;SD) （JAR取得時（Starプロファイル））
+		DoCoMo/2.0 SH02B(c500;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 SH02B(c500;SJ) （iアプリからの通信時（Starプロファイル））
+		DoCoMo/2.0 SH02B(c500;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->
+	<device>
+      <device_id>SH02B</device_id>
+      <device_name>DoCoMo SH-02B</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>323</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>16777216</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>512000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		DoCoMo/2.0 SH03B(c500;TB;W30H18) （ブラウザからの通信時（縦画面））
+		DoCoMo/2.0 SH03B(c500;TB;W30H13) （ブラウザからの通信時（横画面））
+		DoCoMo/2.0 SH03B(c500;TB;W20H12) （ブラウザからの通信時（縦画面））1
+		DoCoMo/2.0 SH03B(c500;TB;W20H09) （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 SH03B(c500;TB;W24H14) （ブラウザからの通信時（縦画面））1
+		DoCoMo/2.0 SH03B(c500;TB;W24H10) （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 SH03B(c500;TB;W40H24) （ブラウザからの通信時（縦画面））1
+		DoCoMo/2.0 SH03B(c500;TB;W40H18) （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 SH03B(c500;TB;W16H09) （ブラウザからの通信時（縦画面））1
+		DoCoMo/2.0 SH03B(c500;TB;W16H07) （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 SH03B(c500;TB;W24H16) （ADF取得時）
+		DoCoMo/2.0 SH03B(c500;TB;W24H16) （トルカ詳細化時）
+		DoCoMo/2.0 SH03B(c500;SD) （JAR取得時（Starプロファイル））
+		DoCoMo/2.0 SH03B(c500;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 SH03B(c500;SJ) （iアプリからの通信時（Starプロファイル））
+		DoCoMo/2.0 SH03B(c500;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->
+	<device>
+      <device_id>SH03B</device_id>
+      <device_name>DoCoMo SH-03B</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>296</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>16777216</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>512000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		DoCoMo/2.0 SH04B(c500;TB;W24H14) （ブラウザからの通信時（通常画面））
+		DoCoMo/2.0 SH04B(c500;TB;W24H10) （ブラウザからの通信時（マルチ画面））
+		DoCoMo/2.0 SH04B(c500;TB;W20H12) （ブラウザからの通信時（通常画面））1
+		DoCoMo/2.0 SH04B(c500;TB;W20H09) （ブラウザからの通信時（マルチ画面））1
+		DoCoMo/2.0 SH04B(c500;TB;W30H18) （ブラウザからの通信時（通常画面））1
+		DoCoMo/2.0 SH04B(c500;TB;W30H13) （ブラウザからの通信時（マルチ画面））1
+		DoCoMo/2.0 SH04B(c500;TB;W16H09) （ブラウザからの通信時（通常画面））1
+		DoCoMo/2.0 SH04B(c500;TB;W16H07) （ブラウザからの通信時（マルチ画面））1
+		DoCoMo/2.0 SH04B(c500;TB;W24H16) （ADF取得時（通常画面））
+		DoCoMo/2.0 SH04B(c500;TB;W24H12) （ADF取得時（マルチ画面））
+		DoCoMo/2.0 SH04B(c500;TB;W20H13) （ADF取得時（通常画面））1
+		DoCoMo/2.0 SH04B(c500;TB;W20H10) （ADF取得時（マルチ画面））1
+		DoCoMo/2.0 SH04B(c500;TB;W30H20) （ADF取得時（通常画面））1
+		DoCoMo/2.0 SH04B(c500;TB;W30H15) （ADF取得時（マルチ画面））1
+		DoCoMo/2.0 SH04B(c500;TB;W16H10) （ADF取得時（通常画面））1
+		DoCoMo/2.0 SH04B(c500;TB;W16H08) （ADF取得時（マルチ画面））1
+		DoCoMo/2.0 SH04B(c500;TB;W24H16) （トルカ詳細化時）
+		DoCoMo/2.0 SH04B(c500;SD) （JAR取得時（Starプロファイル））
+		DoCoMo/2.0 SH04B(c500;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 SH04B(c500;SJ) （iアプリからの通信時（Starプロファイル））
+		DoCoMo/2.0 SH04B(c500;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->
+	<device>
+      <device_id>SH04B</device_id>
+      <device_name>DoCoMo SH-04B</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>296</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>16777216</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>512000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		DoCoMo/2.0 SH05B(c500;TB;W24H16) （ブラウザからの通信時（通常画面））
+		DoCoMo/2.0 SH05B(c500;TB;W24H10) （ブラウザからの通信時（マルチ画面））
+		DoCoMo/2.0 SH05B(c500;TB;W20H13) （ブラウザからの通信時（通常画面））1
+		DoCoMo/2.0 SH05B(c500;TB;W20H09) （ブラウザからの通信時（マルチ画面））1
+		DoCoMo/2.0 SH05B(c500;TB;W30H20) （ブラウザからの通信時（通常画面））1
+		DoCoMo/2.0 SH05B(c500;TB;W30H13) （ブラウザからの通信時（マルチ画面））1
+		DoCoMo/2.0 SH05B(c500;TB;W16H10) （ブラウザからの通信時（通常画面））1
+		DoCoMo/2.0 SH05B(c500;TB;W16H07) （ブラウザからの通信時（マルチ画面））1
+		DoCoMo/2.0 SH05B(c500;TB;W40H26) （ブラウザからの通信時（通常画面））1
+		DoCoMo/2.0 SH05B(c500;TB;W40H18) （ブラウザからの通信時（マルチ画面））1
+		DoCoMo/2.0 SH05B(c500;TB;W24H16) （ADF取得時）
+		DoCoMo/2.0 SH05B(c500;SD) （JAR取得時（Starプロファイル））
+		DoCoMo/2.0 SH05B(c500;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 SH05B(c500;SJ) （iアプリからの通信時（Starプロファイル））
+		DoCoMo/2.0 SH05B(c500;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->
+	<device>
+      <device_id>SH05B</device_id>
+      <device_name>DoCoMo SH-05B</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>323</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>16777216</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>512000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		DoCoMo/2.0 F01B(c500;TB;W24H16) （ブラウザからの通信時、ADF取得時（縦画面））
+		DoCoMo/2.0 F01B(c500;TB;W24H14) （ブラウザからの通信時（縦画面パッド表示））
+		DoCoMo/2.0 F01B(c500;TB;W24H20) （ブラウザからの通信時（縦全画面））
+		DoCoMo/2.0 F01B(c500;TB;W24H18) （ブラウザからの通信時（縦全画面パッド表示））
+		DoCoMo/2.0 F01B(c500;TB;W48H09) （ブラウザからの通信時（横画面））
+		DoCoMo/2.0 F01B(c500;TB;W43H09) （ブラウザからの通信時（横画面パッド表示））
+		DoCoMo/2.0 F01B(c500;TB;W24H10) （ブラウザからの通信時（縦マルチ画面））
+		DoCoMo/2.0 F01B(c500;TB;W24H08) （ブラウザからの通信時（横マルチ画面パッド表示））
+		DoCoMo/2.0 F01B(c500;TB;W20H13) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 F01B(c500;TB;W20H11) （ブラウザからの通信時（縦画面パッド表示））1
+		DoCoMo/2.0 F01B(c500;TB;W20H16) （ブラウザからの通信時（縦全画面））1
+		DoCoMo/2.0 F01B(c500;TB;W20H15) （ブラウザからの通信時（縦全画面パッド表示））1
+		DoCoMo/2.0 F01B(c500;TB;W40H08) （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 F01B(c500;TB;W36H08) （ブラウザからの通信時（横画面パッド表示））1
+		DoCoMo/2.0 F01B(c500;TB;W20H08) （ブラウザからの通信時（縦マルチ画面））1
+		DoCoMo/2.0 F01B(c500;TB;W20H07) （ブラウザからの通信時（横マルチ画面パッド表示））1
+		DoCoMo/2.0 F01B(c500;TB;W30H20) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 F01B(c500;TB;W30H17) （ブラウザからの通信時（縦画面パッド表示））1
+		DoCoMo/2.0 F01B(c500;TB;W30H25) （ブラウザからの通信時（縦全画面））1
+		DoCoMo/2.0 F01B(c500;TB;W30H22) （ブラウザからの通信時（縦全画面パッド表示））1
+		DoCoMo/2.0 F01B(c500;TB;W60H12) （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 F01B(c500;TB;W54H12) （ブラウザからの通信時（横画面パッド表示））1
+		DoCoMo/2.0 F01B(c500;TB;W30H13) （ブラウザからの通信時（縦マルチ画面））1
+		DoCoMo/2.0 F01B(c500;TB;W30H10) （ブラウザからの通信時（横マルチ画面パッド表示））1
+		DoCoMo/2.0 F01B(c500;TB;W16H10) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 F01B(c500;TB;W16H09) （ブラウザからの通信時（縦画面パッド表示））1
+		DoCoMo/2.0 F01B(c500;TB;W16H13) （ブラウザからの通信時（縦全画面））1
+		DoCoMo/2.0 F01B(c500;TB;W16H12) （ブラウザからの通信時（縦全画面パッド表示））1
+		DoCoMo/2.0 F01B(c500;TB;W32H06) （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 F01B(c500;TB;W28H06) （ブラウザからの通信時（横画面パッド表示））1
+		DoCoMo/2.0 F01B(c500;TB;W16H07) （ブラウザからの通信時（縦マルチ画面））1
+		DoCoMo/2.0 F01B(c500;TB;W16H05) （ブラウザからの通信時（横マルチ画面パッド表示））1
+		DoCoMo/2.0 F01B(c500;TB;W12H08) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 F01B(c500;TB;W12H07) （ブラウザからの通信時（縦画面パッド表示））1
+		DoCoMo/2.0 F01B(c500;TB;W12H10) （ブラウザからの通信時（縦全画面））1
+		DoCoMo/2.0 F01B(c500;TB;W12H09) （ブラウザからの通信時（縦全画面パッド表示））1
+		DoCoMo/2.0 F01B(c500;TB;W24H04) （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 F01B(c500;TB;W21H04) （ブラウザからの通信時（横画面パッド表示））1
+		DoCoMo/2.0 F01B(c500;TB;W12H05) （ブラウザからの通信時（縦マルチ画面））1
+		DoCoMo/2.0 F01B(c500;TB;W12H04) （ブラウザからの通信時（横マルチ画面パッド表示））1
+		DoCoMo/2.0 F01B(c500;SD) （JAR取得時（Starプロファイル））
+		DoCoMo/2.0 F01B(c500;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 F01B(c500;SJ) （iアプリからの通信時（Starプロファイル））
+		DoCoMo/2.0 F01B(c500;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->
+	<device>
+      <device_id>F01B</device_id>
+      <device_name>DoCoMo F-01B</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>324</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>16777216</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>960</wp_heigh>
+      <cache>512000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		DoCoMo/2.0 F02B(c500;TB;W24H16) （ブラウザからの通信時、ADF取得時（縦画面））
+		DoCoMo/2.0 F02B(c500;TB;W24H17) （ブラウザからの通信時（縦全画面））
+		DoCoMo/2.0 F02B(c500;TB;W42H09) （ブラウザからの通信時（横画面））
+		DoCoMo/2.0 F02B(c500;TB;W24H10) （ブラウザからの通信時（縦マルチ画面））
+		DoCoMo/2.0 F02B(c500;TB;W20H13) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 F02B(c500;TB;W20H14) （ブラウザからの通信時（縦全画面））1
+		DoCoMo/2.0 F02B(c500;TB;W35H08) （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 F02B(c500;TB;W20H08) （ブラウザからの通信時（縦マルチ画面））1
+		DoCoMo/2.0 F02B(c500;TB;W30H20) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 F02B(c500;TB;W30H22) （ブラウザからの通信時（縦全画面））1
+		DoCoMo/2.0 F02B(c500;TB;W53H12) （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 F02B(c500;TB;W30H13) （ブラウザからの通信時（縦マルチ画面））1
+		DoCoMo/2.0 F02B(c500;TB;W16H10) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 F02B(c500;TB;W16H11) （ブラウザからの通信時（縦全画面））1
+		DoCoMo/2.0 F02B(c500;TB;W28H06) （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 F02B(c500;TB;W16H07) （ブラウザからの通信時（縦マルチ画面））1
+		DoCoMo/2.0 F02B(c500;TB;W12H08) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 F02B(c500;TB;W12H08) （ブラウザからの通信時（縦全画面））1
+		DoCoMo/2.0 F02B(c500;TB;W21H04) （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 F02B(c500;TB;W12H05) （ブラウザからの通信時（縦マルチ画面））1
+		DoCoMo/2.0 F02B(c500;SD) （JAR取得時（Starプロファイル））
+		DoCoMo/2.0 F02B(c500;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 F02B(c500;SJ) （iアプリからの通信時（Starプロファイル））
+		DoCoMo/2.0 F02B(c500;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->
+	<device>
+      <device_id>F02B</device_id>
+      <device_name>DoCoMo F-02B</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>324</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>16777216</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>512000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		DoCoMo/2.0 F03B(c500;TB;W24H16) （ブラウザからの通信時、ADF取得時（縦画面））
+		DoCoMo/2.0 F03B(c500;TB;W24H17) （ブラウザからの通信時（縦全画面））
+		DoCoMo/2.0 F03B(c500;TB;W42H09) （ブラウザからの通信時（横画面））
+		DoCoMo/2.0 F03B(c500;TB;W24H10) （ブラウザからの通信時（縦マルチ画面））
+		DoCoMo/2.0 F03B(c500;TB;W20H13) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 F03B(c500;TB;W20H14) （ブラウザからの通信時（縦全画面））1
+		DoCoMo/2.0 F03B(c500;TB;W35H08) （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 F03B(c500;TB;W20H08) （ブラウザからの通信時（縦マルチ画面））1
+		DoCoMo/2.0 F03B(c500;TB;W30H20) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 F03B(c500;TB;W30H22) （ブラウザからの通信時（縦全画面））1
+		DoCoMo/2.0 F03B(c500;TB;W53H12) （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 F03B(c500;TB;W30H13) （ブラウザからの通信時（縦マルチ画面））1
+		DoCoMo/2.0 F03B(c500;TB;W16H10) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 F03B(c500;TB;W16H11) （ブラウザからの通信時（縦全画面））1
+		DoCoMo/2.0 F03B(c500;TB;W28H06) （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 F03B(c500;TB;W16H07) （ブラウザからの通信時（縦マルチ画面））1
+		DoCoMo/2.0 F03B(c500;TB;W12H08) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 F03B(c500;TB;W12H08) （ブラウザからの通信時（縦全画面））1
+		DoCoMo/2.0 F03B(c500;TB;W21H04) （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 F03B(c500;TB;W12H05) （ブラウザからの通信時（縦マルチ画面））1
+		DoCoMo/2.0 F03B(c500;SD) （JAR取得時（Starプロファイル））
+		DoCoMo/2.0 F03B(c500;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 F03B(c500;SJ) （iアプリからの通信時（Starプロファイル））
+		DoCoMo/2.0 F03B(c500;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->
+	<device>
+      <device_id>F03B</device_id>
+      <device_name>DoCoMo F-03B</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>324</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>16777216</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>512000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		DoCoMo/2.0 F04B(c500;TB;W24H16)  （ブラウザからの通信時、ADF取得時（通常画面））
+		DoCoMo/2.0 F04B(c500;TB;W24H14)  （ブラウザからの通信時（通常画面パッド表示））
+		DoCoMo/2.0 F04B(c500;TB;W24H20)  （ブラウザからの通信時（縦全画面））
+		DoCoMo/2.0 F04B(c500;TB;W24H18)  （ブラウザからの通信時（縦全画面パッド表示））
+		DoCoMo/2.0 F04B(c500;TB;W48H09)  （ブラウザからの通信時（横画面））
+		DoCoMo/2.0 F04B(c500;TB;W43H09)  （ブラウザからの通信時（横画面パッド表示））
+		DoCoMo/2.0 F04B(c500;TB;W24H10)  （ブラウザからの通信時（縦マルチ画面））
+		DoCoMo/2.0 F04B(c500;TB;W24H08)  （ブラウザからの通信時（横マルチ画面パッド表示））
+		DoCoMo/2.0 F04B(c500;TB;W20H13)  （ブラウザからの通信時、ADF取得時（通常画面））1
+		DoCoMo/2.0 F04B(c500;TB;W20H11)  （ブラウザからの通信時（通常画面パッド表示））1
+		DoCoMo/2.0 F04B(c500;TB;W20H16)  （ブラウザからの通信時（縦全画面））1
+		DoCoMo/2.0 F04B(c500;TB;W20H15)  （ブラウザからの通信時（縦全画面パッド表示））1
+		DoCoMo/2.0 F04B(c500;TB;W40H08)  （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 F04B(c500;TB;W36H08)  （ブラウザからの通信時（横画面パッド表示））1
+		DoCoMo/2.0 F04B(c500;TB;W20H08)  （ブラウザからの通信時（縦マルチ画面））1
+		DoCoMo/2.0 F04B(c500;TB;W20H07)  （ブラウザからの通信時（横マルチ画面パッド表示））1
+		DoCoMo/2.0 F04B(c500;TB;W30H20)  （ブラウザからの通信時、ADF取得時（通常画面））1
+		DoCoMo/2.0 F04B(c500;TB;W30H17)  （ブラウザからの通信時（通常画面パッド表示））1
+		DoCoMo/2.0 F04B(c500;TB;W30H25)  （ブラウザからの通信時（縦全画面））1
+		DoCoMo/2.0 F04B(c500;TB;W30H22)  （ブラウザからの通信時（縦全画面パッド表示））1
+		DoCoMo/2.0 F04B(c500;TB;W60H12)  （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 F04B(c500;TB;W54H12)  （ブラウザからの通信時（横画面パッド表示））1
+		DoCoMo/2.0 F04B(c500;TB;W30H13)  （ブラウザからの通信時（縦マルチ画面））1
+		DoCoMo/2.0 F04B(c500;TB;W30H10)  （ブラウザからの通信時（横マルチ画面パッド表示））1
+		DoCoMo/2.0 F04B(c500;TB;W16H10)  （ブラウザからの通信時、ADF取得時（通常画面））1
+		DoCoMo/2.0 F04B(c500;TB;W16H09)  （ブラウザからの通信時（通常画面パッド表示））1
+		DoCoMo/2.0 F04B(c500;TB;W16H13)  （ブラウザからの通信時（縦全画面））1
+		DoCoMo/2.0 F04B(c500;TB;W16H12)  （ブラウザからの通信時（縦全画面パッド表示））1
+		DoCoMo/2.0 F04B(c500;TB;W32H06)  （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 F04B(c500;TB;W28H06)  （ブラウザからの通信時（横画面パッド表示））1
+		DoCoMo/2.0 F04B(c500;TB;W16H07)  （ブラウザからの通信時（縦マルチ画面））1
+		DoCoMo/2.0 F04B(c500;TB;W16H05)  （ブラウザからの通信時（横マルチ画面パッド表示））1
+		DoCoMo/2.0 F04B(c500;TB;W12H08)  （ブラウザからの通信時、ADF取得時（通常画面））1
+		DoCoMo/2.0 F04B(c500;TB;W12H07)  （ブラウザからの通信時（通常画面パッド表示））1
+		DoCoMo/2.0 F04B(c500;TB;W12H10)  （ブラウザからの通信時（縦全画面））1
+		DoCoMo/2.0 F04B(c500;TB;W12H09)  （ブラウザからの通信時（縦全画面パッド表示））1
+		DoCoMo/2.0 F04B(c500;TB;W24H04)  （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 F04B(c500;TB;W21H04)  （ブラウザからの通信時（横画面パッド表示））1
+		DoCoMo/2.0 F04B(c500;TB;W12H05)  （ブラウザからの通信時（縦マルチ画面））1
+		DoCoMo/2.0 F04B(c500;TB;W12H04)  （ブラウザからの通信時（横マルチ画面パッド表示））1
+		DoCoMo/2.0 F04B(c500;SD)  （JAR取得時（Starプロファイル））
+		DoCoMo/2.0 F04B(c500;TD)  （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 F04B(c500;SJ)  （iアプリからの通信時（Starプロファイル））
+		DoCoMo/2.0 F04B(c500;TJ)  （iアプリからの通信時（DoJaプロファイル）） 
+	-->
+	<device>
+      <device_id>F04B</device_id>
+      <device_name>DoCoMo F-04B</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>324</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>16777216</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>960</wp_heigh>
+      <cache>512000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		DoCoMo/2.0 P01B(c500;TB;W24H16) （ブラウザからの通信時、ADF取得時（縦画面））
+		DoCoMo/2.0 P01B(c500;TB;W24H15) （ブラウザからの通信時、ADF取得時（縦画面））
+		DoCoMo/2.0 P01B(c500;TB;W42H08) （ブラウザからの通信時、ADF取得時（横画面））
+		DoCoMo/2.0 P01B(c500;TB;W20H13) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 P01B(c500;TB;W20H12) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 P01B(c500;TB;W35H07) （ブラウザからの通信時、ADF取得時（横画面））1
+		DoCoMo/2.0 P01B(c500;TB;W35H06) （ブラウザからの通信時、ADF取得時（横画面））1
+		DoCoMo/2.0 P01B(c500;TB;W30H20) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 P01B(c500;TB;W30H18) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 P01B(c500;TB;W53H11) （ブラウザからの通信時、ADF取得時（横画面））1
+		DoCoMo/2.0 P01B(c500;TB;W53H09) （ブラウザからの通信時、ADF取得時（横画面））1
+		DoCoMo/2.0 P01B(c500;TB;W16H11) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 P01B(c500;TB;W16H10) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 P01B(c500;TB;W28H05) （ブラウザからの通信時、ADF取得時（横画面））1
+		DoCoMo/2.0 P01B(c500;TB;W24H16) （トルカ詳細化時）
+		DoCoMo/2.0 P01B(c500;TB;W24H13) （トルカ詳細化時）
+		DoCoMo/2.0 P01B(c500;SD) （JAR取得時（Starプロファイル））
+		DoCoMo/2.0 P01B(c500;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 P01B(c500;SJ) （iアプリからの通信時（Starプロファイル））
+		DoCoMo/2.0 P01B(c500;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->
+	<device>
+      <device_id>P01B</device_id>
+      <device_name>DoCoMo P-01B</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>331</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>512000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		DoCoMo/2.0 P02B(c500;TB;W24H16) （ブラウザからの通信時、ADF取得時（縦画面））
+		DoCoMo/2.0 P02B(c500;TB;W42H08) （ブラウザからの通信時、ADF取得時（横画面））
+		DoCoMo/2.0 P02B(c500;TB;W20H13) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 P02B(c500;TB;W35H07) （ブラウザからの通信時、ADF取得時（横画面））1
+		DoCoMo/2.0 P02B(c500;TB;W30H20) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 P02B(c500;TB;W53H11) （ブラウザからの通信時、ADF取得時（横画面））1
+		DoCoMo/2.0 P02B(c500;TB;W16H11) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 P02B(c500;TB;W28H05) （ブラウザからの通信時、ADF取得時（横画面））1
+		DoCoMo/2.0 P02B(c500;SD) （JAR取得時（Starプロファイル））
+		DoCoMo/2.0 P02B(c500;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 P02B(c500;SJ) （iアプリからの通信時（Starプロファイル））
+		DoCoMo/2.0 P02B(c500;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->
+	<device>
+      <device_id>P02B</device_id>
+      <device_name>DoCoMo P-02B</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>331</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>512000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		DoCoMo/2.0 N01B(c500;TB;W24H16) （ブラウザからの通信時、ADF取得時）
+		DoCoMo/2.0 N01B(c500;TB;W20H13) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 N01B(c500;TB;W30H20) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 N01B(c500;TB;W16H10) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 N01B(c500;SD) （JAR取得時（Starプロファイル））
+		DoCoMo/2.0 N01B(c500;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 N01B(c500;SJ) （iアプリからの通信時（Starプロファイル））
+		DoCoMo/2.0 N01B(c500;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->
+	<device>
+      <device_id>N01B</device_id>
+      <device_name>DoCoMo N-01B</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>320</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>512000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		DoCoMo/2.0 N02B(c500;TB;W24H16) （ブラウザからの通信時、ADF取得時）
+		DoCoMo/2.0 N02B(c500;TB;W20H13) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 N02B(c500;TB;W30H20) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 N02B(c500;TB;W16H10) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 N02B(c500;SD) （JAR取得時（Starプロファイル））
+		DoCoMo/2.0 N02B(c500;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 N02B(c500;SJ) （iアプリからの通信時（Starプロファイル））
+		DoCoMo/2.0 N02B(c500;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->
+	<device>
+      <device_id>N02B</device_id>
+      <device_name>DoCoMo N-02B</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>320</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>512000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		DoCoMo/2.0 N03B(c500;TB;W24H16) （ブラウザからの通信時、ADF取得時）
+		DoCoMo/2.0 N03B(c500;TB;W20H13) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 N03B(c500;TB;W30H20) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 N03B(c500;TB;W16H10) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 N03B(c500;SD) （JAR取得時（Starプロファイル））
+		DoCoMo/2.0 N03B(c500;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 N03B(c500;SJ) （iアプリからの通信時（Starプロファイル））
+		DoCoMo/2.0 N03B(c500;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->
+	<device>
+      <device_id>N03B</device_id>
+      <device_name>DoCoMo N-03B</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>320</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>512000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+
+	<!-- iモードブラウザ2.0 end -->
+	<!-- iモードブラウザ2.0LE start -->
+	<!--
+		DoCoMo/2.0 P03B(c500;TB;W24H16) （ブラウザからの通信時、ADF取得時（縦画面））
+		DoCoMo/2.0 P03B(c500;TB;W42H08) （ブラウザからの通信時、ADF取得時（横画面））
+		DoCoMo/2.0 P03B(c500;TB;W20H13) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 P03B(c500;TB;W35H07) （ブラウザからの通信時、ADF取得時（横画面））1
+		DoCoMo/2.0 P03B(c500;TB;W30H20) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 P03B(c500;TB;W53H11) （ブラウザからの通信時、ADF取得時（横画面））1
+		DoCoMo/2.0 P03B(c500;TB;W16H11) （ブラウザからの通信時、ADF取得時（縦画面））1
+		DoCoMo/2.0 P03B(c500;TB;W28H05) （ブラウザからの通信時、ADF取得時（横画面））1
+		DoCoMo/2.0 P03B(c500;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 P03B(c500;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->
+	<device>
+      <device_id>P03B</device_id>
+      <device_name>DoCoMo P-03B</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>331</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>427</wp_heigh>
+      <cache>512000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		DoCoMo/2.0 L01B(c500;TB;W24H16)  （ブラウザからの通信時（縦画面））
+		DoCoMo/2.0 L01B(c500;TB;W40H10)  （ブラウザからの通信時（横画面））
+		DoCoMo/2.0 L01B(c500;TB;W20H13)  （ブラウザからの通信時（縦画面））1
+		DoCoMo/2.0 L01B(c500;TB;W33H09)  （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 L01B(c500;TB;W30H20)  （ブラウザからの通信時（縦画面））1
+		DoCoMo/2.0 L01B(c500;TB;W50H13)  （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 L01B(c500;TB;W16H11)  （ブラウザからの通信時（縦画面））1
+		DoCoMo/2.0 L01B(c500;TB;W26H07)  （ブラウザからの通信時（横画面））1
+		DoCoMo/2.0 L01B(c500;TB;W21H11)  （ADF取得時）
+		DoCoMo/2.0 L01B(c500;TD)  （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 L01B(c500;TJ)  （iアプリからの通信時（DoJaプロファイル））
+	-->
+		<device>
+      <device_id>L01B</device_id>
+      <device_name>DoCoMo L-01B</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.2/IXHTML2.3 -->
+      <width>240</width>
+      <heigh>330</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>800</wp_heigh>
+      <cache>512000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+
+	<!-- iモードブラウザ2.0LE end -->
+	
+	<!-- iモード対応HTML6.0（FOMA 902iなど） の追加分 start -->
+	<!--
+		DoCoMo/2.0 L03A(c100;TB;W16H09) （ブラウザからの通信時）
+		DoCoMo/2.0 L03A(c100;TB;W20H11) （ブラウザからの通信時）1
+		DoCoMo/2.0 L03A(c100;TB;W24H14) （ブラウザからの通信時）1
+		DoCoMo/2.0 L03A(c100;TB;W20H11) （ADF取得時）
+		DoCoMo/2.0 L03A(c100;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 L03A(c100;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->
+	  <device>
+      <device_id>L03A</device_id>
+      <device_name>DoCoMo L-03A</device_name>
+      <html_spec_type>CHTML_6_0</html_spec_type><!-- IHTML6.0/IXHTML2.0 -->
+      <width>240</width>
+      <heigh>280</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>320</wp_heigh>
+      <cache>102400</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+
+	<!--
+		DoCoMo/2.0 L04A(c100;TB;W24H15) （ブラウザからの通信時、ADF取得時）
+		DoCoMo/2.0 L04A(c100;TB;W20H13) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 L04A(c100;TB;W30H19) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 L04A(c100;TB;W16H10) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 L04A(c100;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 L04A(c100;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->
+	  <device>
+      <device_id>L03A</device_id>
+      <device_name>DoCoMo L-03A</device_name>
+      <html_spec_type>CHTML_6_0</html_spec_type><!-- IHTML6.0/IXHTML2.0 -->
+      <width>240</width>
+      <heigh>313</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>800</wp_heigh>
+      <cache>102400</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+
+	<!--
+		DoCoMo/2.0 L06A(c100;TB;W24H15) （ブラウザからの通信時、ADF取得時）
+		DoCoMo/2.0 L06A(c100;TB;W20H13) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 L06A(c100;TB;W30H19) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 L06A(c100;TB;W16H10) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 L06A(c100;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 L06A(c100;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->
+	<device>
+      <device_id>L06A</device_id>
+      <device_name>DoCoMo L-06A</device_name>
+      <html_spec_type>CHTML_6_0</html_spec_type><!-- IHTML6.0/IXHTML2.0 -->
+      <width>240</width>
+      <heigh>313</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>800</wp_heigh>
+      <cache>102400</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		DoCoMo/2.0 L02B(c100;TB;W24H16) （ブラウザからの通信時）
+		DoCoMo/2.0 L02B(c100;TB;W20H13) （ブラウザからの通信時）1
+		DoCoMo/2.0 L02B(c100;TB;W30H20) （ブラウザからの通信時）1
+		DoCoMo/2.0 L02B(c100;TB;W16H11) （ブラウザからの通信時）1
+		DoCoMo/2.0 L02B(c100;TB;W21H11) （ADF取得時）1
+		DoCoMo/2.0 L02B(c100;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 L02B(c100;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->
+	<device>
+      <device_id>L02B</device_id>
+      <device_name>DoCoMo L-02B</device_name>
+      <html_spec_type>CHTML_6_0</html_spec_type><!-- IHTML6.0/IXHTML2.0 -->
+      <width>240</width>
+      <heigh>330</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>800</wp_heigh>
+      <cache>102400</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		DoCoMo/2.0 L03B(c100;TB;W24H16) （ブラウザからの通信時）
+		DoCoMo/2.0 L03B(c100;TB;W20H13) （ブラウザからの通信時）1
+		DoCoMo/2.0 L03B(c100;TB;W30H20) （ブラウザからの通信時）1
+		DoCoMo/2.0 L03B(c100;TB;W16H11) （ブラウザからの通信時）1
+		DoCoMo/2.0 L03B(c100;TB;W21H11) （ADF取得時）
+		DoCoMo/2.0 L03B(c100;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 L03B(c100;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->
+	<device>
+      <device_id>L03B</device_id>
+      <device_name>DoCoMo L-03B</device_name>
+      <html_spec_type>CHTML_6_0</html_spec_type><!-- IHTML6.0/IXHTML2.0 -->
+      <width>240</width>
+      <heigh>330</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>800</wp_heigh>
+      <cache>102400</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	
+	<!-- iモード対応HTML6.0（FOMA 902iなど） の追加分 end -->
+
+	<!-- iモード対応HTML7.1（FOMA 905iなど） の追加分 start -->
+	<!--
+		DoCoMo/2.0 N05A(c100;TB;W20H13) （ブラウザからの通信時、ADF取得時）
+		DoCoMo/2.0 N05A(c100;TB;W24H16) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 N05A(c100;TB;W30H20) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 N05A(c100;TB;W16H10) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 N05A(c100;TB;W24H16) （トルカ詳細化時）
+		DoCoMo/2.0 N05A(c100;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 N05A(c100;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->
+    <device>
+      <device_id>N05A</device_id>
+      <device_name>DoCoMo N-05A</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.1/IXHTML2.2 -->
+      <width>240</width>
+      <heigh>320</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>427</wp_heigh>
+      <cache>102400</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+	F-07A（らくらくホン ベーシックII）
+		DoCoMo/2.0 F07A(c100;TB;W20H08) （ブラウザからの通信時）
+		DoCoMo/2.0 F07A(c100;TB;W16H08) （ブラウザからの通信時）1
+	-->
+    <device>
+      <device_id>F07A</device_id>
+      <device_name>DoCoMo F-07A</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.1/IXHTML2.2 -->
+      <width>240</width>
+      <heigh>256</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>320</wp_heigh>
+      <cache>102400</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+	F-10A（らくらくホン6）
+		DoCoMo/2.0 F10A(c100;TB;W20H09) （ブラウザからの通信時、ADF取得時）
+		DoCoMo/2.0 F10A(c100;TB;W16H09) （ブラウザからの通信時、ADF取得時）1
+		DoCoMo/2.0 F10A(c100;TD) （JAR取得時（DoJaプロファイル））
+		DoCoMo/2.0 F10A(c100;TJ) （iアプリからの通信時（DoJaプロファイル））
+	-->	
+    <device>
+      <device_id>F10A</device_id>
+      <device_name>DoCoMo F-10A</device_name>
+      <html_spec_type>CHTML_7_0</html_spec_type><!-- IHTML7.1/IXHTML2.2 -->
+      <width>240</width>
+      <heigh>330</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>400</wp_heigh>
+      <cache>102400</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!-- iモード対応HTML7.1（FOMA 905iなど） の追加分 end -->
+	
+	<!-- OSAKANA TARO add end -->
+	
+	
     <device>
       <device_id>UNKNOWN_DEVICE</device_id>
       <device_name>UNKNOWN DoCoMo Device</device_name>
@@ -17786,7 +19486,7 @@
       <dpi_heigh>96</dpi_heigh>
     </device>
 
-    <!--
+    <!-- 
     -->
     <device>
       <device_id>822SH</device_id>
@@ -17809,7 +19509,7 @@
       <dpi_heigh>96</dpi_heigh>
     </device>
 
-    <!--
+    <!-- 
     -->
     <device>
       <device_id>920T</device_id>
@@ -17832,7 +19532,7 @@
       <dpi_heigh>96</dpi_heigh>
     </device>
 
-    <!--
+    <!-- 
     -->
     <device>
       <device_id>920SC</device_id>
@@ -17855,7 +19555,7 @@
       <dpi_heigh>96</dpi_heigh>
     </device>
 
-    <!--
+    <!-- 
     -->
     <device>
       <device_id>822P</device_id>
@@ -17876,7 +19576,7 @@
       <dpi_width>96</dpi_width>
       <dpi_heigh>96</dpi_heigh>
     </device>
-    <!--
+    <!-- 
     -->
     <device>
       <device_id>DM001SH</device_id>
@@ -17897,7 +19597,7 @@
       <dpi_width>96</dpi_width>
       <dpi_heigh>96</dpi_heigh>
     </device>
-    <!--
+    <!-- 
     -->
     <device>
       <device_id>820T</device_id>
@@ -17918,7 +19618,7 @@
       <dpi_width>96</dpi_width>
       <dpi_heigh>96</dpi_heigh>
     </device>
-    <!--
+    <!-- 
     -->
     <device>
       <device_id>820SC</device_id>
@@ -17940,7 +19640,7 @@
       <dpi_heigh>96</dpi_heigh>
     </device>
 
-    <!--
+    <!-- 
     -->
     <device>
       <device_id>920P</device_id>
@@ -17962,7 +19662,7 @@
       <dpi_heigh>96</dpi_heigh>
     </device>
 
-    <!--
+    <!-- 
     -->
     <device>
       <device_id>822T</device_id>
@@ -17984,7 +19684,7 @@
       <dpi_heigh>96</dpi_heigh>
     </device>
 
-    <!--
+    <!-- 
     -->
     <device>
       <device_id>921SH</device_id>
@@ -18006,7 +19706,7 @@
       <dpi_heigh>96</dpi_heigh>
     </device>
 
-    <!--
+    <!-- 
     -->
     <device>
       <device_id>823SH</device_id>
@@ -18028,7 +19728,7 @@
       <dpi_heigh>96</dpi_heigh>
     </device>
 
-    <!--
+    <!-- 
     -->
     <device>
       <device_id>821T</device_id>
@@ -18050,7 +19750,7 @@
       <dpi_heigh>96</dpi_heigh>
     </device>
 
-    <!--
+    <!-- 
     -->
     <device>
       <device_id>921T</device_id>
@@ -18073,7 +19773,7 @@
       <dpi_heigh>96</dpi_heigh>
     </device>
 
-    <!--
+    <!-- 
     -->
     <device>
       <device_id>922SH</device_id>
@@ -18673,6 +20373,1053 @@
       <dpi_width>96</dpi_width>
       <dpi_heigh>96</dpi_heigh>
     </device>
+
+	<!-- OSAKANA TARO add start -->
+	<!--
+		831SH
+		SoftBank/1.0/831SH/SHJ001[/Serial] Browser/NetFront/3.5 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/831SH/SHJ001[/Serial] Java/Java/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/831SH/SHJ001 Widgets/Widgets/1.0 
+		SoftBank/1.0/831SH/SHJ001[/Serial] Flash/Flash-Lite/3.0 
+		Mozilla/5.0 (831SH;SoftBank[;Serial]) NetFront/3.5 
+	-->
+    <device>
+      <device_id>831SH</device_id>
+      <device_name>SoftBank 831SH</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>240</width>
+      <heigh>350</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>400</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+
+	<!--
+		932SH
+		SoftBank/1.0/932SH/SHJ001[/Serial] Browser/NetFront/3.5 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/932SH/SHJ001[/Serial] Java/Java/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/932SH/SHJ001 Widgets/Widgets/1.0 
+		SoftBank/1.0/932SH/SHJ001[/Serial] Flash/Flash-Lite/3.0 
+		Mozilla/5.0 (932SH;SoftBank[;Serial]) NetFront/3.5 
+	-->
+    <device>
+      <device_id>932SH</device_id>
+      <device_name>SoftBank 932SH</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>480</width>
+      <heigh>754</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		830N
+		SoftBank/1.0/830N/NJ001[/Serial] Browser/NetFront/3.4 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/830N/NJ001[/Serial] Java/Java/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/830N/NJ001 Widgets/WGTClient/1.0 
+		SoftBank/1.0/830N/NJ001[/Serial] Flash/Flash-Lite/3.0 
+		Mozilla/4.08 (830N;SoftBank[;Serial]) NetFront/3.4 
+	-->
+    <device>
+      <device_id>830N</device_id>
+      <device_name>SoftBank 830N</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>480</width>
+      <heigh>650</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		830SH for Biz
+		SoftBank/1.0/830SHe/SHJ001[/Serial] Browser/NetFront/3.4 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/830SHe/SHJ001[/Serial] Java/Java/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		× 
+		SoftBank/1.0/830SHe/SHJ001[/Serial] Flash/Flash-Lite/2.0 
+		Mozilla/5.0 (830SHe;SoftBank[;Serial]) NetFront/3.4 
+	-->
+	<device>
+      <device_id>830SHe</device_id>
+      <device_name>SoftBank 830SHe</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>240</width>
+      <heigh>270</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>320</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		930CA
+		SoftBank/1.0/930CA/CAJ001[/Serial] Browser/NetFront/3.4 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/930CA/CAJ001[/Serial] Java/Java/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		× 
+		SoftBank/1.0/930CA/CAJ001[/Serial] Flash/Flash-Lite/3.0 
+		Mozilla/4.08 (930CA;SoftBank[;Serial]) NetFront/3.4 
+	-->
+    <device>
+      <device_id>930CA</device_id>
+      <device_name>SoftBank 930CA</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>480</width>
+      <heigh>700</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		831P
+		SoftBank/1.0/831P/PJP10[/Serial] Browser/NetFront/3.4 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/831P/PJP10[/Serial] Java/Java/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		× 
+		SoftBank/1.0/831P/PJP10[/Serial] Flash/Flash-Lite/2.0 
+		Mozilla/4.08 (831P;SoftBank[;Serial]) NetFront/3.4 
+	-->
+    <device>
+      <device_id>831P</device_id>
+      <device_name>SoftBank 831P</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>240</width>
+      <heigh>350</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>427</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		731SC
+		SoftBank/1.0/731SC/SCJ001[/Serial] Browser/NetFront/3.3 
+		× 
+		× 
+		× 
+		Mozilla/4.08 (731SC;SoftBank[;Serial]) NetFront/3.3 
+	-->
+    <device>
+      <device_id>731SC</device_id>
+      <device_name>SoftBank 731SC</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>230</width>
+      <heigh>264</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>320</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		830SH Preminum
+		SoftBank/1.0/830SHp/SHJ001[/Serial] Browser/NetFront/3.4 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/830SHp/SHJ001[/Serial] Java/Java/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		× 
+		SoftBank/1.0/830SHp/SHJ001[/Serial] Flash/Flash-Lite/2.0 
+		Mozilla/5.0 (830SHp;SoftBank[;Serial]) NetFront/3.4 
+	-->
+    <device>
+      <device_id>830SHp</device_id>
+      <device_name>SoftBank 830SHp</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>240</width>
+      <heigh>270</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>320</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		831SH KT→831SHと同じ
+		SoftBank/1.0/831SH/SHJ001[/Serial] Browser/NetFront/3.5 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/831SH/SHJ001[/Serial] Java/Java/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/831SH/SHJ001 Widgets/Widgets/1.0 
+		SoftBank/1.0/831SH/SHJ001[/Serial] Flash/Flash-Lite/3.0 
+		Mozilla/5.0 (831SH;SoftBank[;Serial]) NetFront/3.5 
+	-->
+	<!--
+		831SHs
+		SoftBank/1.0/831SHs/SHJ001[/Serial] Browser/NetFront/3.5 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/831SHs/SHJ001[/Serial] Java/Java/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/831SHs/SHJ001 Widgets/Widgets/1.0 
+		SoftBank/1.0/831SHs/SHJ001[/Serial] Flash/Flash-Lite/3.0 
+		Mozilla/5.0 (831SHs;SoftBank[;Serial]) NetFront/3.5 
+	-->
+    <device>
+      <device_id>831SHs</device_id>
+      <device_name>SoftBank 831SHs</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>240</width>
+      <heigh>350</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>400</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		832P
+		SoftBank/1.0/832P/PJP10[/Serial] Browser/NetFront/3.4 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/832P/PJP10[/Serial] Java/Java/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		× 
+		SoftBank/1.0/832P/PJP10[/Serial] Flash/Flash-Lite/3.0 
+		Mozilla/4.08 (832P;SoftBank[;Serial]) NetFront/3.4 
+	-->
+    <device>
+      <device_id>832P</device_id>
+      <device_name>SoftBank 832P</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>231</width>
+      <heigh>350</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>427</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		933SH
+		SoftBank/1.0/933SH/SHJ001[/Serial] Browser/NetFront/3.5 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/933SH/SHJ001[/Serial] Java/Java/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/933SH/SHJ001 Widgets/Widgets/1.0 
+		SoftBank/1.0/933SH/SHJ001[/Serial] Flash/Flash-Lite/3.0 
+		Mozilla/5.0 (933SH;SoftBank[;Serial]) NetFront/3.5 
+	-->
+    <device>
+      <device_id>933SH</device_id>
+      <device_name>SoftBank 933SH</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>480</width>
+      <heigh>738</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		934SH
+		SoftBank/1.0/934SH/SHJ001[/Serial] Browser/NetFront/3.5 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/934SH/SHJ001[/Serial] Java/Java/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/934SH/SHJ001 Widgets/Widgets/1.0 
+		SoftBank/1.0/934SH/SHJ001[/Serial] Flash/Flash-Lite/3.0 
+		Mozilla/5.0 (934SH;SoftBank[;Serial]) NetFront/3.5 
+	-->
+    <device>
+      <device_id>934SH</device_id>
+      <device_name>SoftBank 934SH</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>480</width>
+      <heigh>754</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		930N
+		SoftBank/1.0/930N/NJ001[/Serial] Browser/NetFront/3.4 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/930N/NJ001[/Serial] Java/Java/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/930N/NJ001 Widgets/WGTClient/1.0 
+		SoftBank/1.0/930N/NJ001[/Serial] Flash/Flash-Lite/3.0 
+		Mozilla/4.08 (930N;SoftBank[;Serial]) NetFront/3.4 
+	-->
+    <device>
+      <device_id>930N</device_id>
+      <device_name>SoftBank 930N</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>480</width>
+      <heigh>650</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		931SC
+		SoftBank/1.0/931SC/SCJ001[/Serial] Browser/NetFront/3.4 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/931SC/SCJ001[/Serial] Java/Java/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		× 
+		SoftBank/1.0/931SC/SCJ001[/Serial] Flash/Flash-Lite/3.1 
+		Mozilla/4.08 (931SC;SoftBank[;Serial]) NetFront/3.4 
+	-->
+    <device>
+      <device_id>931SC</device_id>
+      <device_name>SoftBank 931SC</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>471</width>
+      <heigh>512</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>800</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		832T
+		SoftBank/1.0/832T/TJ001[/Serial] Browser/NetFront/3.3 
+		× 
+		× 
+		SoftBank/1.0/832T/TJ001[/Serial] Flash/Flash-Lite/2.0 
+		× 
+	-->
+    <device>
+      <device_id>832T</device_id>
+      <device_name>SoftBank 832T</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>234</width>
+      <heigh>243</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>320</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		931P
+		SoftBank/1.0/931P/PJP10[/Serial] Browser/NetFront/3.4 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/931P/PJP10[/Serial] Java/Java/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/931P/PJP10 Widgets/Widgets/1.0 
+		SoftBank/1.0/931P/PJP10[/Serial] Flash/Flash-Lite/3.0 
+		Mozilla/4.08 (931P;SoftBank[;Serial]) NetFront/3.4 
+	-->
+    <device>
+      <device_id>931P</device_id>
+      <device_name>SoftBank 931P</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>471</width>
+      <heigh>700</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		935SH
+		SoftBank/1.0/935SH/SHJ001[/Serial] Browser/NetFront/3.5 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/935SH/SHJ001[/Serial] Java/Java/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/935SH/SHJ001 Widgets/Widgets/1.0 
+		SoftBank/1.0/935SH/SHJ001[/Serial] Flash/Flash-Lite/3.0 
+		Mozilla/5.0 (935SH;SoftBank[;Serial]) NetFront/3.5 
+	-->
+    <device>
+      <device_id>935SH</device_id>
+      <device_name>SoftBank 935SH</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>480</width>
+      <heigh>754</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		832SH
+		SoftBank/1.0/832SH/SHJ001[/Serial] Browser/NetFront/3.5 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/832SH/SHJ001[/Serial] Java/Java/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/832SH/SHJ001 Widgets/Widgets/1.0 
+		SoftBank/1.0/832SH/SHJ001[/Serial] Flash/Flash-Lite/3.0 
+		Mozilla/5.0 (832SH;SoftBank[;Serial]) NetFront/3.5 
+	-->
+    <device>
+      <device_id>832SH</device_id>
+      <device_name>SoftBank 832SH</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>240</width>
+      <heigh>350</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>400</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		936SH
+		SoftBank/1.0/936SH/SHJ001[/Serial] Browser/NetFront/3.5 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/936SH/SHJ001[/Serial] Java/Java/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/936SH/SHJ001 Widgets/Widgets/1.0 
+		SoftBank/1.0/936SH/SHJ001[/Serial] Flash/Flash-Lite/3.0 
+		Mozilla/5.0 (936SH;SoftBank[;Serial]) NetFront/3.5 
+	-->
+    <device>
+      <device_id>936SH</device_id>
+      <device_name>SoftBank 936SH</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>480</width>
+      <heigh>754</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		830SC
+		SoftBank/1.0/830SC/SCJ001[/Serial] Browser/NetFront/3.3 
+		× 
+		× 
+		× 
+		Mozilla/4.08 (830SC;SoftBank[;Serial]) NetFront/3.3 
+	-->
+    <device>
+      <device_id>830SC</device_id>
+      <device_name>SoftBank 830SC</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>232</width>
+      <heigh>264</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>320</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		831N
+		SoftBank/1.0/831N/NJ001[/Serial] Browser/NetFront/3.4 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/831N/NJ001[/Serial] Java/Java/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		× 
+		SoftBank/1.0/831N/NJ001[/Serial] Flash/Flash-Lite/3.0 
+		Mozilla/4.08 (831N;SoftBank[;Serial]) NetFront/3.4 
+	-->
+    <device>
+      <device_id>831N</device_id>
+      <device_name>SoftBank 831N</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>240</width>
+      <heigh>325</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>427</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		740SC
+		SoftBank/1.0/740SC/SCJ001[/Serial] Browser/NetFront/3.3 
+		× 
+		× 
+		× 
+		Mozilla/4.08 (740SC;SoftBank[;Serial]) NetFront/3.3 
+	-->
+    <device>
+      <device_id>740SC</device_id>
+      <device_name>SoftBank 740SC</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>232</width>
+      <heigh>264</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>320</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		832SHs
+		SoftBank/1.0/832SHs/SHJ001[/Serial] Browser/NetFront/3.5 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/832SHs/SHJ001[/Serial] Java/Java/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/832SHs/SHJ001 Widgets/Widgets/1.0 
+		SoftBank/1.0/832SHs/SHJ001[/Serial] Flash/Flash-Lite/3.0 
+		Mozilla/5.0 (832SHs;SoftBank[;Serial]) NetFront/3.5 
+	-->
+    <device>
+      <device_id>832SHs</device_id>
+      <device_name>SoftBank 832SHs</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>240</width>
+      <heigh>350</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>400</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		940SH
+		SoftBank/1.0/940SH/SHJ001[/Serial] Browser/NetFront/3.5 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/940SH/SHJ001[/Serial] Java/Java/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/940SH/SHJ001 Widgets/Widgets/1.0 
+		SoftBank/1.0/940SH/SHJ001[/Serial] Flash/Flash-Lite/3.1 
+		Mozilla/5.0 (940SH;SoftBank[;Serial]) NetFront/3.5 
+	-->
+    <device>
+      <device_id>940SH</device_id>
+      <device_name>SoftBank 940SH</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>480</width>
+      <heigh>738</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		931N
+		SoftBank/1.0/931N/NJ001[/Serial] Browser/NetFront/3.4 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/931N/NJ001[/Serial] Java/Java/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/931N/NJ001 Widgets/WGTClient/1.0 
+		SoftBank/1.0/931N/NJ001[/Serial] Flash/Flash-Lite/3.0 
+		Mozilla/4.08 (931N;SoftBank[;Serial]) NetFront/3.4 
+	-->
+    <device>
+      <device_id>931N</device_id>
+      <device_name>SoftBank 931N</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>480</width>
+      <heigh>640</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		S940SC
+		oftBank/1.0/940SC/SCJ001[/Serial] Browser/NetFront/3.5 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/940SC/SCJ001[/Serial] Java/Java/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/940SC/SCJ001 Widgets/NetFront/1.0 
+		SoftBank/1.0/940SC/SCJ001[/Serial] Flash/Flash-Lite/3.1 
+		Mozilla/5.0 (940SC;SoftBank[;Serial]) NetFront/3.5 
+	-->
+    <device>
+      <device_id>940SC</device_id>
+      <device_name>SoftBank 940SC</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>480</width>
+      <heigh>512</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>800</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		941SH
+		SoftBank/1.0/941SH/SHJ001[/Serial] Browser/NetFront/3.5 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/941SH/SHJ001[/Serial] Java/Java/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/941SH/SHJ001 Widgets/Widgets/1.0 
+		SoftBank/1.0/941SH/SHJ001[/Serial] Flash/Flash-Lite/3.1 
+		Mozilla/5.0 (941SH;SoftBank[;Serial]) NetFront/3.5 
+	-->
+    <device>
+      <device_id>941SH</device_id>
+      <device_name>SoftBank 941SH</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>480</width>
+      <heigh>824</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>1024</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		840P
+		SoftBank/1.0/840P/PJP10[/Serial] Browser/NetFront/3.4 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/840P/PJP10[/Serial] Java/Java/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		× 
+		SoftBank/1.0/840P/PJP10[/Serial] Flash/Flash-Lite/2.0 
+		Mozilla/4.08 (840P;SoftBank[;Serial]) NetFront/3.4 
+	-->
+    <device>
+      <device_id>840P</device_id>
+      <device_name>SoftBank 840P</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>236</width>
+      <heigh>369</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>427</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		940N
+		SoftBank/1.0/940N/NJ001[/Serial] Browser/NetFront/3.4 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/940N/NJ001[/Serial] Java/Java/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/940N/NJ001 Widgets/WGTClient/1.0 
+		SoftBank/1.0/940N/NJ001[/Serial] Flash/Flash-Lite/3.0 
+		Mozilla/4.08 (940N;SoftBank[;Serial]) NetFront/3.4 
+	-->
+    <device>
+      <device_id>940N</device_id>
+      <device_name>SoftBank 940N</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>480</width>
+      <heigh>650</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		940P
+		SoftBank/1.0/940P/PJP10[/Serial] Browser/NetFront/3.4 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/940P/PJP10[/Serial] Java/Java/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/940P/PJP10 Widgets/Widgets/1.0 
+		SoftBank/1.0/940P/PJP10[/Serial] Flash/Flash-Lite/3.0 
+		Mozilla/4.08 (940P;SoftBank[;Serial]) NetFront/3.4 
+	-->
+    <device>
+      <device_id>940P</device_id>
+      <device_name>SoftBank 940P</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>471</width>
+      <heigh>700</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		840SH
+		SoftBank/1.0/840SH/SHJ001[/Serial] Browser/NetFront/3.5 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/840SH/SHJ001[/Serial] Java/Java/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		× 
+		SoftBank/1.0/840SH/SHJ001[/Serial] Flash/Flash-Lite/3.0 
+		Mozilla/5.0 (840SH;SoftBank[;Serial]) NetFront/3.5 
+	-->
+    <device>
+      <device_id>840SH</device_id>
+      <device_name>SoftBank 840SH</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>240</width>
+      <heigh>350</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>400</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		941P
+		SoftBank/1.0/941P/PJP10[/Serial] Browser/NetFront/3.4 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/941P/PJP10[/Serial] Java/Java/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/941P/PJP10 Widgets/Widgets/1.0 
+		SoftBank/1.0/941P/PJP10[/Serial] Flash/Flash-Lite/3.0 
+		Mozilla/4.08 (941P;SoftBank[;Serial]) NetFront/3.4 
+	-->
+    <device>
+      <device_id>941P</device_id>
+      <device_name>SoftBank 941P</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>471</width>
+      <heigh>700</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		942SH
+		SoftBank/1.0/942SH/SHJ001[/Serial] Browser/NetFront/3.5 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/942SH/SHJ001[/Serial] Java/Java/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/942SH/SHJ001 Widgets/Widgets/1.0 
+		SoftBank/1.0/942SH/SHJ001[/Serial] Flash/Flash-Lite/3.1 
+		Mozilla/5.0 (942SH;SoftBank[;Serial]) NetFront/3.5 
+	-->
+    <device>
+      <device_id>942SH</device_id>
+      <device_name>SoftBank 942SH</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>480</width>
+      <heigh>754</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		840P for Biz
+		SoftBank/1.0/840Pe/PJP10[/Serial] Browser/NetFront/3.4 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/840Pe/PJP10[/Serial] Java/Java/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		× 
+		SoftBank/1.0/840Pe/PJP10[/Serial] Flash/Flash-Lite/2.0 
+		Mozilla/4.08 (840Pe;SoftBank[;Serial]) NetFront/3.4 
+	-->
+    <device>
+      <device_id>840Pe</device_id>
+      <device_name>SoftBank 840Pe</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>236</width>
+      <heigh>369</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>427</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		841P
+		SoftBank/1.0/841P/PJP10[/Serial] Browser/NetFront/3.4 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/841P/PJP10[/Serial] Java/Java/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		× 
+		SoftBank/1.0/841P/PJP10[/Serial] Flash/Flash-Lite/2.0 
+		Mozilla/4.08 (841P;SoftBank[;Serial]) NetFront/3.4 
+	-->
+    <device>
+      <device_id>841P</device_id>
+      <device_name>SoftBank 941P</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>236</width>
+      <heigh>369</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>427</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		943SH
+		SoftBank/1.0/943SH/SHJ001[/Serial] Browser/NetFront/3.5 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/943SH/SHJ001[/Serial] Java/Java/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/943SH/SHJ001 Widgets/Widgets/2.0 
+		SoftBank/1.0/943SH/SHJ001[/Serial] Flash/Flash-Lite/3.1 
+		Mozilla/5.0 (943SH;SoftBank[;Serial]) NetFront/3.5 
+	-->
+    <device>
+      <device_id>943SH</device_id>
+      <device_name>SoftBank 943SH</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>480</width>
+      <heigh>754</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+
+	<!--
+		942SH KT → 942SHと同じ
+		SoftBank/1.0/942SH/SHJ001[/Serial] Browser/NetFront/3.5 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/942SH/SHJ001[/Serial] Java/Java/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/942SH/SHJ001 Widgets/Widgets/1.0 
+		SoftBank/1.0/942SH/SHJ001[/Serial] Flash/Flash-Lite/3.1 
+		Mozilla/5.0 (942SH;SoftBank[;Serial]) NetFront/3.5 
+	-->
+
+	<!-- Disney Mobile -->
+	<!--
+		SoftBank/1.0/DM004SH/SHJ001[/Serial] Browser/NetFront/3.5 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/DM004SH/SHJ001[/Serial] Java/Java/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/DM004SH/SHJ001 Widgets/Widgets/1.0 
+		SoftBank/1.0/DM004SH/SHJ001[/Serial] Flash/Flash-Lite/3.0 
+		Mozilla/5.0 (DM004SH;SoftBank[;Serial]) NetFront/3.5 
+	-->
+    <device>
+      <device_id>DM004SH</device_id>
+      <device_name>SoftBank DM004SH</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>240</width>
+      <heigh>350</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>240</wp_width>
+      <wp_heigh>400</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!--
+		SoftBank/1.0/DM005SH/SHJ001[/Serial] Browser/NetFront/3.5 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/DM005SH/SHJ001[/Serial] Java/Java/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 
+		SoftBank/1.0/DM005SH/SHJ001 Widgets/Widgets/1.0 
+		SoftBank/1.0/DM005SH/SHJ001[/Serial] Flash/Flash-Lite/3.1 
+		Mozilla/5.0 (DM005SH;SoftBank[;Serial]) NetFront/3.5 
+	-->
+    <device>
+      <device_id>DM005SH</device_id>
+      <device_name>SoftBank DM005SH</device_name>
+      <html_spec_type>JXHTML</html_spec_type>
+      <color>262144</color>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <width>480</width>
+      <heigh>754</heigh>
+      <emoji_type></emoji_type>
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>307200</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+    </device>
+	<!-- OSAKANA TARO add end -->
 
     <!--
     -->

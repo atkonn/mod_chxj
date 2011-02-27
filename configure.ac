@@ -1,6 +1,6 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
-AC_INIT([mod_chxj],[0.13.0-rc],[konn@users.sourceforge.jp])
+AC_INIT([mod_chxj],[0.13.0],[konn@users.sourceforge.jp])
 AC_PREREQ(2.59)
 AC_CONFIG_SRCDIR([src/mod_chxj.c])
 AC_CANONICAL_TARGET
@@ -180,7 +180,7 @@ AC_ARG_WITH(openssl,
     CPPFLAGS="${CPPFLAGS} -I${openssl_prefix}/include"
     LDFLAGS="${LDFLAGS} -L${openssl_prefix}/lib"
     LDFLAGS="${LDFLAGS} -R${openssl_prefix}/lib"
-    OPENSSL_PATH="--with-openssl ${openssl_prefix}"
+    OPENSSL_PATH="--with-openssl=${openssl_prefix}"
   fi
 ])
 
