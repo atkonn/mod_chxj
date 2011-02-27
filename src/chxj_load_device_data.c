@@ -516,7 +516,8 @@ s_sort_table_compare(const void *a, const void *b)
 {
   device_table *aa = *(device_table **)a;
   device_table *bb = *(device_table **)b;
-  return strcasecmp(aa->device_id, bb->device_id);
+  /* not strcasecmp. for LOAD */
+  return strcmp(aa->device_id, bb->device_id);
 }
 
 /*

@@ -511,7 +511,7 @@ s_create_cache_file(request_rec          *r,
     /*------------------------------------------------------------------------*/
     rv = apr_file_open(&fin, 
                     r->filename, 
-                    APR_READ|APR_BINARY ,
+                    APR_FOPEN_READ | APR_FOPEN_BINARY | APR_FOPEN_BUFFERED | APR_FOPEN_SHARELOCK | APR_FOPEN_SENDFILE_ENABLED,
                     APR_OS_DEFAULT, 
                     r->pool);
     if (rv != APR_SUCCESS) {
@@ -808,8 +808,8 @@ s_create_cache_file(request_rec          *r,
 
   /* to cache */
   rv = apr_file_open(&fout, tmpfile,
-                  APR_WRITE| APR_CREATE | APR_BINARY | APR_SHARELOCK ,APR_OS_DEFAULT,
-                  r->pool);
+                  APR_FOPEN_WRITE| APR_FOPEN_CREATE | APR_FOPEN_BINARY | APR_SHARELOCK ,
+                  APR_OS_DEFAULT, r->pool);
   if (rv != APR_SUCCESS) {
     DestroyMagickWand(magick_wand);
     ERR(r,"file open error.[%s]", tmpfile);
@@ -1675,7 +1675,8 @@ s_send_cache_file(device_table *spec, query_string_param_t *query_string, reques
       }
     }
     rv = apr_file_open(&fout, tmpfile, 
-      APR_READ | APR_BINARY, APR_OS_DEFAULT, r->pool);
+      APR_FOPEN_READ | APR_FOPEN_BINARY | APR_FOPEN_BUFFERED | APR_FOPEN_SHARELOCK | APR_FOPEN_SENDFILE_ENABLED, 
+      APR_OS_DEFAULT, r->pool);
     if (rv != APR_SUCCESS) {
       DBG(r, "cache file open failed[%s]", tmpfile);
       return HTTP_NOT_FOUND;
@@ -1731,7 +1732,8 @@ s_send_cache_file(device_table *spec, query_string_param_t *query_string, reques
       DBG(r, "Content-Length:[%d]", (int)st.size);
 
       rv = apr_file_open(&fout, tmpfile, 
-        APR_READ | APR_BINARY, APR_OS_DEFAULT, r->pool);
+        APR_FOPEN_READ | APR_FOPEN_BINARY | APR_FOPEN_BUFFERED | APR_FOPEN_SHARELOCK | APR_FOPEN_SENDFILE_ENABLED, 
+        APR_OS_DEFAULT, r->pool);
 
       if (rv != APR_SUCCESS) {
         DBG(r,"tmpfile open failed[%s]", tmpfile);
@@ -1770,7 +1772,8 @@ s_send_original_file(request_rec *r, const char *originalfile)
   }
 
   rv = apr_file_open(&fout, originalfile, 
-    APR_READ | APR_BINARY, APR_OS_DEFAULT, r->pool);
+    APR_FOPEN_READ | APR_FOPEN_BINARY | APR_FOPEN_BUFFERED | APR_FOPEN_SHARELOCK | APR_FOPEN_SENDFILE_ENABLED, 
+    APR_OS_DEFAULT, r->pool);
   if (rv != APR_SUCCESS) {
     DBG(r, "originalfile open failed[%s]", originalfile);
     return HTTP_NOT_FOUND;

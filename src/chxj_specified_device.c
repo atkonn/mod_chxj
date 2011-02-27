@@ -150,7 +150,8 @@ s_compar(const void *a, const void *b)
 #if 0
 {FILE *fp=fopen("/tmp/erer.log","a");fprintf(fp, "aa[%s] vs bb[%s]\n", aa->device_id, bb->device_id); fclose(fp);}
 #endif
-  return strcasecmp(aa->device_id, bb->device_id);
+  /* Not strcasecmp. for LOAD */
+  return strcmp(aa->device_id, bb->device_id);
 }
 static device_table *
 s_get_device_data(request_rec *r, const char *device_id, device_table_list *dtl)
