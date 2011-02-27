@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 #include "mod_chxj.h"
+#include "chxj_add_device_env.h"
 
 static device_table  UNKNOWN_DEVICE      = {
   .next = NULL,
@@ -57,6 +58,7 @@ static device_table  UNKNOWN_DEVICE      = {
   .color = 15680000,
   .emoji_type = NULL,
 };
+static __thread device_table *v_spec = NULL;
 static device_table * s_get_device_data(request_rec *r, const char *device_id, device_table_list *dtl);
 
 /**
@@ -71,15 +73,27 @@ chxj_specified_device(request_rec *r, const char *user_agent)
   ap_regmatch_t        match[10];
   device_table         *returnType = &UNKNOWN_DEVICE;
   device_table_list    *dtl;
-  device_table         *dt;
   mod_chxj_config      *conf; 
   char                 *device_id;
+  char                 *spec_check = NULL;
 
   if (! user_agent) 
     return returnType;
-            
 
   DBG(r, "REQ[%x] start chxj_specified_device()", (unsigned int)(apr_size_t)r);
+
+
+  spec_check = (char *)apr_table_get(r->headers_in, "X-Chxj-Spec-Check");
+  if (spec_check && STRCASEEQ('d','D',"done",spec_check)) {
+#if 0
+    returnType = chxj_get_device_env(r);
+#else 
+    returnType = v_spec;
+#endif
+    DBG(r, "REQ[%x] end chxj_specified_device() (Spec-Check-Done)", (unsigned int)(apr_size_t)r);
+    return returnType;
+  }
+
 
   conf = chxj_get_module_config(r->per_dir_config, &chxj_module);
   if (! conf->devices) {
@@ -109,15 +123,19 @@ chxj_specified_device(request_rec *r, const char *user_agent)
         returnType = dtl->tail;
       }
     }
+    v_spec = returnType;
 
-    if (returnType) {
+    if (returnType && returnType != &UNKNOWN_DEVICE) {
+      apr_table_setn(r->headers_in, "X-Chxj-Spec-Check", "done");
       DBG(r,"end chxj_specified_device()");
       return returnType;
     }
   }
 
+  apr_table_setn(r->headers_in, "X-Chxj-Spec-Check", "done");
   DBG(r,"end chxj_specified_device()");
 
+  v_spec = &UNKNOWN_DEVICE;
   return &UNKNOWN_DEVICE;
 }
 
@@ -128,6 +146,7 @@ s_compar(const void *a, const void *b)
 {
   device_table *aa = *(device_table **)a;
   device_table *bb = *(device_table **)b;
+{FILE *fp=fopen("/tmp/erer.log","a");fprintf(fp, "aa[%s] vs bb[%s]\n", aa->device_id, bb->device_id); fclose(fp);}
   return strcasecmp(aa->device_id, bb->device_id);
 }
 static device_table *

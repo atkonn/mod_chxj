@@ -66,9 +66,22 @@
 /* "X-Chxj-Cache"        => { <cache> } */
 #define HTTP_X_CHXJ_CACHE    "X-Chxj-Cache"
 
+/* "X-Chxj-Dpi-Width"        => { <dpi_width> } */
+#define HTTP_X_CHXJ_DPI_WIDTH "X-Chxj-Dpi-Width"
+
+/* "X-Chxj-Dpi-Height"       => { <dpi_heigh> } */
+#define HTTP_X_CHXJ_DPI_HEIGHT "X-Chxj-Dpi-Height"
+
+/* "X-Chxj-Color"       => { <color> } */
+#define HTTP_X_CHXJ_COLOR "X-Chxj-Color"
+
+/* "X-Chxj-Emoji-Type"  => { <emoji_type> } */
+#define HTTP_X_CHXJ_EMOJI_TYPE "X-Chxj-Emoji-Type"
+
 #define HTTP_X_CHXJ_VERSION  "X-Chxj-Version"
 
 extern void chxj_add_device_env(request_rec *r, device_table *spec);
+extern device_table *chxj_get_device_env(request_rec *r);
 
 #endif
 /*
