@@ -77,27 +77,27 @@ chxj_specified_device(request_rec *r, const char *user_agent)
   char                 *device_id;
   char                 *spec_check = NULL;
 
-  if (! user_agent) 
-    return returnType;
-
   DBG(r, "REQ[%x] start chxj_specified_device()", (unsigned int)(apr_size_t)r);
 
-
-  spec_check = (char *)apr_table_get(r->headers_in, "X-Chxj-Spec-Check");
-  if (spec_check && STRCASEEQ('d','D',"done",spec_check)) {
-#if 0
-    returnType = chxj_get_device_env(r);
-#else 
-    returnType = v_spec;
-#endif
-    DBG(r, "REQ[%x] end chxj_specified_device() (Spec-Check-Done)", (unsigned int)(apr_size_t)r);
+  if (! user_agent) {
+    DBG(r, "REQ[%x] end chxj_specified_device() (User-Agent is NULL)", (unsigned int)(apr_size_t)r);
     return returnType;
   }
 
 
+
+  spec_check = (char *)apr_table_get(r->headers_in, "X-Chxj-Spec-Check");
+  if (spec_check && STRCASEEQ('d','D',"done",spec_check)) {
+    DBG(r, "REQ[%x] Use spec cache.", (unsigned int)(apr_size_t)r);
+    returnType = v_spec;
+    DBG(r, "REQ[%x] end chxj_specified_device() (Spec-Check-Done)", (unsigned int)(apr_size_t)r);
+    return returnType;
+  }
+
   conf = chxj_get_module_config(r->per_dir_config, &chxj_module);
   if (! conf->devices) {
-    DBG(r, "device_data.xml load failure");
+    ERR(r, "device_data.xml load failure");
+    DBG(r, "REQ[%x] end chxj_specified_device() (Spec-Check-Done)", (unsigned int)(apr_size_t)r);
     return returnType;
   }
 
@@ -109,7 +109,8 @@ chxj_specified_device(request_rec *r, const char *user_agent)
 
     /* DBG(r, "pattern is [%s]", dtl->pattern); */
     if (! dtl->regexp) {
-      DBG(r,"compile failed.");
+      ERR(r,"compile failed.");
+      DBG(r, "REQ[%x] end chxj_specified_device() (Spec-Check-Done)", (unsigned int)(apr_size_t)r);
       return returnType;
     }
 
@@ -117,25 +118,25 @@ chxj_specified_device(request_rec *r, const char *user_agent)
       device_id = ap_pregsub(r->pool, "$1", user_agent, dtl->regexp->re_nsub + 1, match);
       DBG(r, "device_id:[%s]", device_id);
       returnType = s_get_device_data(r, device_id, dtl);
-      DBG(r, "device_id:[%s] is NOT FOUND", device_id);
-
       if (! returnType) {
-        returnType = dtl->tail;
+        if (dtl->tail) {
+          returnType = dtl->tail;
+        }
+        else {
+          returnType = &UNKNOWN_DEVICE;
+        }
       }
-    }
-    v_spec = returnType;
-
-    if (returnType && returnType != &UNKNOWN_DEVICE) {
+      v_spec = returnType;
       apr_table_setn(r->headers_in, "X-Chxj-Spec-Check", "done");
-      DBG(r,"end chxj_specified_device()");
+      DBG(r,"REQ[%X] end chxj_specified_device() (Found User-Agent Type)", (unsigned int)(apr_size_t)r);
       return returnType;
     }
   }
 
-  apr_table_setn(r->headers_in, "X-Chxj-Spec-Check", "done");
-  DBG(r,"end chxj_specified_device()");
-
   v_spec = &UNKNOWN_DEVICE;
+  apr_table_setn(r->headers_in, "X-Chxj-Spec-Check", "done");
+  DBG(r,"REQ[%X] end chxj_specified_device() (Not Found User-Agent Type) [%s]",(unsigned int)(apr_size_t)r, user_agent);
+
   return &UNKNOWN_DEVICE;
 }
 
@@ -146,7 +147,9 @@ s_compar(const void *a, const void *b)
 {
   device_table *aa = *(device_table **)a;
   device_table *bb = *(device_table **)b;
+#if 0
 {FILE *fp=fopen("/tmp/erer.log","a");fprintf(fp, "aa[%s] vs bb[%s]\n", aa->device_id, bb->device_id); fclose(fp);}
+#endif
   return strcasecmp(aa->device_id, bb->device_id);
 }
 static device_table *
