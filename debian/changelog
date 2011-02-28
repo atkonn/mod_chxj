@@ -1,3 +1,25 @@
+libapache2-mod-chxj (0.12.38) unstable; urgency=low
+
+  * Added Features. 
+    - Added CookieOnlyMode
+    - for use X-Client-Type
+    - h1,h2,h3,h4,h5,h6 was left for SoftBank
+    - Added the Vary header for the cash server when the image is converted
+    - The model specific function is changed from a linear search to a binary
+      search. 
+  * Fixed Bug.
+    - Optional ``--with-openssl'' is not reflected in libserf.
+    - The cookie parameter is added after the fragment when there is a
+       fragment in URL at the cookie simulator. 
+    - cannot be compiled when LONG_LONG_MAX is undefined
+    - The XHTML terminal of SoftBank was made within the range of the cover of
+      the Cookie simulator. 
+    - The parameter for the cookie simulator is added to tel and mailto. 
+    - The parameter for the cookie simulator has not been added to the
+      Location header for CookieOnlyMode. 
+
+ -- konno <konn@users.sourceforge.jp>  Mon, 28 Feb 2011 14:07:30 +0900
+
 libapache2-mod-chxj (0.12.37-1) unstable; urgency=low
 
   * Added Features.
