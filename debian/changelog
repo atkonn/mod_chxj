@@ -2,6 +2,10 @@ libapache2-mod-chxj (0.13.0-1) unstable; urgency=low
 
   * Added Features.
     - CSS support by coltware _at_ gmail.com.
+    - CSS support by coltware _at_ gmail.com.
+    - <output_encoding> in device_data.xml.
+    - load device_data from tsv.
+    - rewrite mode for image converter.
 
  -- konno <konno@users.sourceforge.jp>  Mon, 28 Feb 2011 19:12:24 +0900
 
