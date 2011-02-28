@@ -1,3 +1,10 @@
+libapache2-mod-chxj (0.13.0-1) unstable; urgency=low
+
+  * Added Features.
+    - CSS support by coltware _at_ gmail.com.
+
+ -- konno <konno@users.sourceforge.jp>  Mon, 28 Feb 2011 19:12:24 +0900
+
 libapache2-mod-chxj (0.12.37-1) unstable; urgency=low
 
   * Added Features.
