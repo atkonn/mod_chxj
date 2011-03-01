@@ -39,8 +39,8 @@ make
             --with-mysql-header=/usr/include/mysql  \
             --with-mysql-lib-dir=/usr/lib/mysql \
             --enable-memcache-cookie \
-            --with-memcached-header=%{_topdir}/libmemcached-0.47 \
-            --with-memcached-lib-dir=%{_topdir}/libmemcached-0.47/libmemcached/ \
+            --with-memcached-header=%{_topdir}/BUILD/libmemcached-0.47 \
+            --with-memcached-lib-dir=%{_topdir}/BUILD/libmemcached-0.47/libmemcached/ \
             --enable-memcached-static 
 %{__make}
 
