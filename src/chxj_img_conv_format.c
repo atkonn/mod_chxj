@@ -523,7 +523,7 @@ s_create_cache_file(request_rec          *r,
     readdata = apr_palloc(r->pool, st->size);
     rv = apr_file_read_full(fin, (void*)readdata, st->size, &readbyte);
     if (rv != APR_SUCCESS || readbyte != st->size) {
-      DBG(r,"REQ[%X] file read failed.[%s]", TO_ADDR(r), r->filename);
+      ERR(r,"REQ[%X] file read failed.[%s]", TO_ADDR(r), r->filename);
       apr_file_close(fin);
   
       return HTTP_NOT_FOUND;
@@ -820,6 +820,7 @@ s_create_cache_file(request_rec          *r,
 
   rv = apr_file_write(fout, (void*)writedata, &writebyte);
   if (rv != APR_SUCCESS) {
+    ERR(r,"REQ[%X] file write error.[%s]", TO_ADDR(r), tmpfile);
     DestroyMagickWand(magick_wand);
     apr_file_close(fout);
     if (sv_writedata) free(sv_writedata);
@@ -836,6 +837,7 @@ s_create_cache_file(request_rec          *r,
 
     rv = apr_file_putc((crc >> 8)  & 0xff, fout);
     if (rv != APR_SUCCESS) {
+      ERR(r,"REQ[%X] file write error.[%s]", TO_ADDR(r), tmpfile);
       DestroyMagickWand(magick_wand);
       if (sv_writedata) free(sv_writedata);
       return HTTP_INTERNAL_SERVER_ERROR;
@@ -843,6 +845,7 @@ s_create_cache_file(request_rec          *r,
 
     rv = apr_file_putc( crc        & 0xff, fout);
     if (rv != APR_SUCCESS) {
+      ERR(r,"REQ[%X] file write error.[%s]", TO_ADDR(r), tmpfile);
       DestroyMagickWand(magick_wand);
       if (sv_writedata) free(sv_writedata);
       return HTTP_INTERNAL_SERVER_ERROR;
@@ -854,7 +857,7 @@ s_create_cache_file(request_rec          *r,
 
   rv = apr_file_close(fout);
   if (rv != APR_SUCCESS) {
-    DBG(r,"file write error.[%s]", tmpfile);
+    ERR(r,"REQ[%X] file write error.[%s]", TO_ADDR(r), tmpfile);
     return HTTP_INTERNAL_SERVER_ERROR;
   }
 
