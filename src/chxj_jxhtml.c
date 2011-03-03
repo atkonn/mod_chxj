@@ -3643,7 +3643,6 @@ s_jxhtml_start_img_tag(void *pdoc, Node *node)
   char        *attr_src    = NULL;
   char        *attr_height = NULL;
   char        *attr_width  = NULL;
-  char        *attr_align  = NULL;
   char        *attr_alt    = NULL;
   char        *attr_style  = NULL;
   char        *attr_hspace = NULL;
@@ -6793,7 +6792,6 @@ s_jxhtml_start_param_tag(void *pdoc, Node *node)
   Doc *doc = jxhtml->doc;
 
   Attr *attr;
-  char *attr_style         = NULL;
   char *attr_name          = NULL;
   char *attr_value         = NULL;
   char *attr_valuetype     = NULL;

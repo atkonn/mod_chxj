@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 #include "mod_chxj.h"
+#include "chxj_str_util.h"
 
 static device_table  UNKNOWN_DEVICE      = {
   .next = NULL,

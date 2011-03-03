@@ -260,7 +260,7 @@ chxj_headers_fixup(request_rec *r)
 
   }
 
-  char *x_client_type = apr_table_get(r->headers_out, "X-Client-Type");
+  char *x_client_type = (char *)apr_table_get(r->headers_out, "X-Client-Type");
   apr_table_unset(r->headers_out, "X-Client-Type");
   if (x_client_type) {
     apr_table_setn(r->headers_in, "X-Client-Type", x_client_type);
@@ -1330,7 +1330,7 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
           if (ctx->len) {
             char *tmp;
 
-            DBG(r, "REQ[%X] ctx->len[%d]", (unsigned int)(apr_size_t)r, ctx->len);
+            DBG(r, "REQ[%X] ctx->len[%d]", (unsigned int)(apr_size_t)r, (unsigned int)ctx->len);
             tmp = apr_palloc(pool, ctx->len + 1);
 
             memset(tmp, 0, ctx->len + 1);
@@ -1474,7 +1474,6 @@ chxj_input_handler(request_rec *r)
   char                *response;
   char                *user_agent;
   apr_pool_t          *pool;
-  apr_size_t          ii;
   int                 response_code = 0;
   
   DBG(r, "start of chxj_input_handler()");
@@ -1533,7 +1532,7 @@ chxj_input_handler(request_rec *r)
 
   apr_size_t res_len;
   apr_table_setn(r->headers_in, CHXJ_HEADER_ORIG_CLIENT_IP, r->connection->remote_ip);
-  char *x_client_type = apr_table_get(r->headers_in, "X-Client-Type");
+  char *x_client_type = (char *)apr_table_get(r->headers_in, "X-Client-Type");
   if (x_client_type) {
     apr_table_setn(r->headers_in, CHXJ_HEADER_ORIG_CLIENT_TYPE, x_client_type); /* for mod_cidr_lookup */
   }

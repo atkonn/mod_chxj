@@ -6774,7 +6774,6 @@ s_ixhtml10_start_object_tag(void *pdoc, Node *node)
   ixhtml10_t *ixhtml10 = GET_IXHTML10(pdoc);
   Doc       *doc = ixhtml10->doc;
   Attr *attr;
-  char *attr_style         = NULL;
   char *attr_id            = NULL;
   char *attr_width         = NULL;
   char *attr_height        = NULL;
@@ -6877,7 +6876,6 @@ s_ixhtml10_start_param_tag(void *pdoc, Node *node)
   ixhtml10_t *ixhtml10 = GET_IXHTML10(pdoc);
   Doc       *doc = ixhtml10->doc;
   Attr *attr;
-  char *attr_style         = NULL;
   char *attr_name          = NULL;
   char *attr_value         = NULL;
   char *attr_valuetype     = NULL;
