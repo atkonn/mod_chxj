@@ -260,6 +260,14 @@ chxj_headers_fixup(request_rec *r)
 
   }
 
+  char *x_client_type = apr_table_get(r->headers_out, "X-Client-Type");
+  apr_table_unset(r->headers_out, "X-Client-Type");
+  if (x_client_type) {
+    apr_table_setn(r->headers_in, "X-Client-Type", x_client_type);
+  }
+  else {
+    apr_table_setn(r->headers_in, "X-Client-Type", "");
+  }
 
   if (r->method_number == M_POST) {
     if (! apr_table_get(r->headers_in, "X-Chxj-Forward")) {
@@ -298,8 +306,13 @@ chxj_headers_fixup(request_rec *r)
           if (entryp->action & CONVRULE_OVERWRITE_X_CLIENT_TYPE_BIT) {
             char *client_type = (char *)apr_table_get(r->headers_in, CHXJ_HEADER_ORIG_CLIENT_TYPE);
             DBG(r, "REQ[%X] Overwrite X-Client-Type to [%s]", (unsigned int)(apr_size_t)r, client_type);
-            apr_table_setn(r->subprocess_env, "X_CLIENT_TYPE", client_type);
-            apr_table_setn(r->headers_in, "X-Client-Type", client_type);
+            if (client_type) {
+              apr_table_setn(r->subprocess_env, "X_CLIENT_TYPE", client_type);
+              apr_table_setn(r->headers_in, "X-Client-Type", client_type);
+            }
+            else {
+              apr_table_unset(r->headers_in, "X-Client-Type");
+            }
           }
         }
         if (! apr_table_get(r->headers_in, "Content-Length")) {
@@ -1520,7 +1533,13 @@ chxj_input_handler(request_rec *r)
 
   apr_size_t res_len;
   apr_table_setn(r->headers_in, CHXJ_HEADER_ORIG_CLIENT_IP, r->connection->remote_ip);
-  apr_table_setn(r->headers_in, CHXJ_HEADER_ORIG_CLIENT_TYPE, apr_table_get(r->headers_in, "X-Client-Type")); /* for mod_cidr_lookup */
+  char *x_client_type = apr_table_get(r->headers_in, "X-Client-Type");
+  if (x_client_type) {
+    apr_table_setn(r->headers_in, CHXJ_HEADER_ORIG_CLIENT_TYPE, x_client_type); /* for mod_cidr_lookup */
+  }
+  else {
+    apr_table_unset(r->headers_in, "X-Client-Type");
+  }
   apr_table_unset(r->headers_in, "Content-Length");
   apr_table_setn(r->headers_in, "Content-Length", apr_psprintf(pool, "%" APR_SIZE_T_FMT, post_data_len));
   response = chxj_serf_post(r, pool, url_path, post_data, post_data_len, 1, &res_len, &response_code);
