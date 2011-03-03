@@ -294,6 +294,13 @@ chxj_headers_fixup(request_rec *r)
         DBG(r, "REQ[%X] Client IP:[%s] vs Orig Client IP:[%s] vs Server IP:[%s]", (unsigned int)(apr_size_t)r, r->connection->remote_ip, client_ip, addr);
         if (strcmp(addr, r->connection->remote_ip) == 0) {
           r->connection->remote_ip = apr_pstrdup(r->connection->pool, client_ip);
+          /* For mod_cidr_lookup */
+          if (entryp->action & CONVRULE_OVERWRITE_X_CLIENT_TYPE_BIT) {
+            char *client_type = (char *)apr_table_get(r->headers_in, CHXJ_HEADER_ORIG_CLIENT_TYPE);
+            DBG(r, "REQ[%X] Overwrite X-Client-Type to [%s]", (unsigned int)(apr_size_t)r, client_type);
+            apr_table_setn(r->subprocess_env, "X_CLIENT_TYPE", client_type);
+            apr_table_setn(r->headers_in, "X-Client-Type", client_type);
+          }
         }
         if (! apr_table_get(r->headers_in, "Content-Length")) {
           contentLength = (char *)apr_table_get(r->headers_in, "X-Chxj-Content-Length");
@@ -1515,6 +1522,7 @@ chxj_input_handler(request_rec *r)
 
   apr_size_t res_len;
   apr_table_setn(r->headers_in, CHXJ_HEADER_ORIG_CLIENT_IP, r->connection->remote_ip);
+  apr_table_setn(r->headers_in, CHXJ_HEADER_ORIG_CLIENT_TYPE, apr_table_get(r->headers_in, "X-Client-Type")); /* for mod_cidr_lookup */
   apr_table_unset(r->headers_in, "Content-Length");
   apr_table_setn(r->headers_in, "Content-Length", apr_psprintf(pool, "%" APR_SIZE_T_FMT, post_data_len));
   response = chxj_serf_post(r, pool, url_path, post_data, post_data_len, 1, &res_len, &response_code);
@@ -2574,6 +2582,13 @@ cmd_convert_rule(cmd_parms *cmd, void *mconfig, const char *arg)
       else
       if (strcasecmp(CONVRULE_ENVINFO_ONLY_CMD, action) == 0) {
         newrule->action |= CONVRULE_ENVINFO_ONLY_BIT;
+      }
+      break;
+
+    case 'O':
+    case 'o':
+      if (strcasecmp(CONVRULE_OVERWRITE_X_CLIENT_TYPE_CMD, action) == 0) {
+        newrule->action |= CONVRULE_OVERWRITE_X_CLIENT_TYPE_BIT;
       }
       break;
 

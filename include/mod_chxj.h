@@ -404,6 +404,7 @@ struct mod_chxj_config {
 #define CONVRULE_EMOJI_ONLY_BIT       (0x00001000)
 #define CONVRULE_ENVINFO_ONLY_BIT     (0x00002000)
 #define CONVRULE_COOKIE_ONLY_BIT      (0x00004000)
+#define CONVRULE_OVERWRITE_X_CLIENT_TYPE_BIT (0x00008000)
 
 #define CONVRULE_ENGINE_ON_CMD        "EngineOn"
 #define CONVRULE_ENGINE_OFF_CMD       "EngineOff"
@@ -425,6 +426,7 @@ struct mod_chxj_config {
 #define CONVRULE_EMOJI_ONLY_CMD       "EmojiOnly"
 #define CONVRULE_ENVINFO_ONLY_CMD     "EnvInfoOnly"
 #define CONVRULE_COOKIE_ONLY_CMD      "CookieOnly"
+#define CONVRULE_OVERWRITE_X_CLIENT_TYPE_CMD "OverwriteXClientType"
 
 
 #define CONVRULE_FLAG_NOTMATCH        (0x00000001)
@@ -460,6 +462,7 @@ typedef struct {
 #define HTTP_HOST             "Host"
 #define CHXJ_HTTP_USER_AGENT  "CHXJ_HTTP_USER_AGENT"
 #define CHXJ_HEADER_ORIG_CLIENT_IP "X-Chxj-Orig-Client-Ip"
+#define CHXJ_HEADER_ORIG_CLIENT_TYPE "X-Chxj-Orig-Client-Type"
 
 module AP_MODULE_DECLARE_DATA chxj_module;
 
