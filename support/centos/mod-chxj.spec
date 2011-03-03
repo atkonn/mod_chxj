@@ -1,4 +1,4 @@
-%define version 0.12.38
+%define version 0.12.39rc1
 
 Summary: CHTML to HDML,XHTML,JHTML convert module for Apache HTTPD.
 Name:  mod_chxj
@@ -10,7 +10,7 @@ Vendor: Atsushi Konno
 URL: http://sourceforge.jp/projects/modchxj/
 Source:  http://sourceforge.jp/projects/modchxj/downloads/33637/mod-chxj_%{version}.src.tar.gz
 Source1: http://launchpad.net/libmemcached/1.0/0.47/+download/libmemcached-0.47.tar.gz
-Packager:  Atsushi Konno <konn@users.sourceforge.jp>
+Packager:  Atsushi Konno <konn@sourceforge.jp>
 Requires: ImageMagick >= 6.2.8.0, httpd >= 2.2.3, apr >= 1.2.7, apr-util >= 1.2.7, mysql >= 5.0.22, openssl >= 0.9.8
 BuildPreReq: mysql-devel httpd-devel ImageMagick-devel gcc-c++ libtool openssl-devel
 
@@ -30,7 +30,7 @@ if [ $STATUS -ne 0 ]; then
   exit $STATUS
 fi
 cd libmemcached-0.47
-./configure --with-pic
+./configure --with-pic --enable-static
 make
 %setup -q -n mod-chxj_%{version}
 
@@ -40,8 +40,8 @@ make
             --with-mysql-lib-dir=/usr/lib/mysql \
             --enable-memcache-cookie \
             --with-memcached-header=%{_topdir}/BUILD/libmemcached-0.47 \
-            --with-memcached-lib-dir=%{_topdir}/BUILD/libmemcached-0.47/libmemcached/ \
-            --enable-memcached-static 
+            --with-memcached-lib-dir=%{_topdir}/BUILD/libmemcached-0.47/libmemcached/.libs \
+            --enable-memcached-static
 %{__make}
 
 %install
