@@ -4180,7 +4180,6 @@ s_jhtml_start_h1_tag(void *pdoc, Node *node)
       }
     }
   }
-  W_L("<h1>");
   if (attr_align) {
     W_L("<div align=\"");
     W_V(attr_align);
@@ -4193,6 +4192,7 @@ s_jhtml_start_h1_tag(void *pdoc, Node *node)
   else {
     node->userData = NULL;
   }
+  W_L("<h1>");
 
   return jhtml->out;
 }
@@ -4284,7 +4284,6 @@ s_jhtml_start_h2_tag(void *pdoc, Node *node)
       }
     }
   }
-  W_L("<h2>");
   if (attr_align) {
     W_L("<div align=\"");
     W_V(attr_align);
@@ -4297,6 +4296,7 @@ s_jhtml_start_h2_tag(void *pdoc, Node *node)
   else {
     node->userData = NULL;
   }
+  W_L("<h2>");
 
   return jhtml->out;
 }
@@ -4388,7 +4388,6 @@ s_jhtml_start_h3_tag(void *pdoc, Node *node)
       }
     }
   }
-  W_L("<h3>");
   if (attr_align) {
     W_L("<div align=\"");
     W_V(attr_align);
@@ -4401,6 +4400,7 @@ s_jhtml_start_h3_tag(void *pdoc, Node *node)
   else {
     node->userData = NULL;
   }
+  W_L("<h3>");
 
   return jhtml->out;
 }
@@ -4493,7 +4493,6 @@ s_jhtml_start_h4_tag(void *pdoc, Node *node)
       }
     }
   }
-  W_L("<h4>");
   if (attr_align) {
     W_L("<div align=\"");
     W_V(attr_align);
@@ -4506,6 +4505,7 @@ s_jhtml_start_h4_tag(void *pdoc, Node *node)
   else {
     node->userData = NULL;
   }
+  W_L("<h4>");
   return jhtml->out;
 }
 
@@ -4596,7 +4596,6 @@ s_jhtml_start_h5_tag(void *pdoc, Node *node)
       }
     }
   }
-  W_L("<h5>");
   if (attr_align) {
     W_L("<div align=\"");
     W_V(attr_align);
@@ -4609,6 +4608,7 @@ s_jhtml_start_h5_tag(void *pdoc, Node *node)
   else {
     node->userData = NULL;
   }
+  W_L("<h5>");
   return jhtml->out;
 }
 
@@ -4700,7 +4700,6 @@ s_jhtml_start_h6_tag(void *pdoc, Node *node)
       }
     }
   }
-  W_L("<h6>");
   if (attr_align) {
     W_L("<div align=\"");
     W_V(attr_align);
@@ -4713,6 +4712,7 @@ s_jhtml_start_h6_tag(void *pdoc, Node *node)
   else {
     node->userData = NULL;
   }
+  W_L("<h6>");
 
   return jhtml->out;
 }
