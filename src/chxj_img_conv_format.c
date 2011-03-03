@@ -39,7 +39,7 @@
   do { \
     char *description; ExceptionType severity; \
     description=MagickGetException(magick_wand,&severity); \
-    ap_log_rerror(APLOG_MARK,APLOG_DEBUG, 0, r,"%s %s %d %s\n",__FILE__,(__func__),__LINE__,description); \
+    ap_log_rerror(APLOG_MARK,APLOG_ERR, 0, r,"%s %s %d %s\n",__FILE__,(__func__),__LINE__,description); \
     description=(char *) MagickRelinquishMemory(description); \
     DestroyMagickWand(magick_wand); \
   } while(0) 
