@@ -4183,7 +4183,7 @@ s_jhtml_start_h1_tag(void *pdoc, Node *node)
   if (attr_align) {
     W_L("<div align=\"");
     W_V(attr_align);
-    W_L("\">");
+    W_L("\"><h1>");
     jhtml_flags_t *flg = apr_palloc(doc->pool, sizeof(*flg));
     memset(flg, 0, sizeof(*flg));
     flg->with_div_align_flag = 1;
@@ -4218,7 +4218,7 @@ s_jhtml_end_h1_tag(void *pdoc, Node *node)
   
   jhtml_flags_t *flg = node->userData;
   if (flg && flg->with_div_align_flag) {
-    W_L("</div>");
+    W_L("</h1></div>");
     node->userData = NULL; 
   }
   if (IS_CSS_ON(jhtml->entryp)) {
@@ -4285,7 +4285,7 @@ s_jhtml_start_h2_tag(void *pdoc, Node *node)
   if (attr_align) {
     W_L("<div align=\"");
     W_V(attr_align);
-    W_L("\">");
+    W_L("\"><h2>");
     jhtml_flags_t *flg = apr_palloc(doc->pool, sizeof(*flg));
     memset(flg, 0, sizeof(*flg));
     flg->with_div_align_flag = 1;
@@ -4320,7 +4320,7 @@ s_jhtml_end_h2_tag(void *pdoc, Node *node)
 
   jhtml_flags_t *flg = node->userData;
   if (flg && flg->with_div_align_flag) {
-    W_L("</div>");
+    W_L("</h2></div>");
     node->userData = NULL;
   }
   if (IS_CSS_ON(jhtml->entryp)) {
@@ -4387,7 +4387,7 @@ s_jhtml_start_h3_tag(void *pdoc, Node *node)
   if (attr_align) {
     W_L("<div align=\"");
     W_V(attr_align);
-    W_L("\">");
+    W_L("\"><h3>");
     jhtml_flags_t *flg = apr_palloc(doc->pool, sizeof(*flg));
     memset(flg, 0, sizeof(*flg));
     flg->with_div_align_flag = 1;
@@ -4422,7 +4422,7 @@ s_jhtml_end_h3_tag(void *pdoc, Node *node)
   
   jhtml_flags_t *flg = node->userData;
   if (flg && flg->with_div_align_flag) {
-    W_L("</div>");
+    W_L("</h3></div>");
     node->userData = NULL;
   }
   if (IS_CSS_ON(jhtml->entryp)) {
@@ -4490,7 +4490,7 @@ s_jhtml_start_h4_tag(void *pdoc, Node *node)
   if (attr_align) {
     W_L("<div align=\"");
     W_V(attr_align);
-    W_L("\">");
+    W_L("\"><h4>");
     jhtml_flags_t *flg = apr_palloc(doc->pool, sizeof(*flg));
     memset(flg, 0, sizeof(*flg));
     flg->with_div_align_flag = 1;
@@ -4524,7 +4524,7 @@ s_jhtml_end_h4_tag(void *pdoc, Node *node)
   
   jhtml_flags_t *flg = node->userData;
   if (flg && flg->with_div_align_flag) {
-    W_L("</div>");
+    W_L("</h4></div>");
     node->userData = NULL;
   }
   if (IS_CSS_ON(jhtml->entryp)) {
@@ -4591,7 +4591,7 @@ s_jhtml_start_h5_tag(void *pdoc, Node *node)
   if (attr_align) {
     W_L("<div align=\"");
     W_V(attr_align);
-    W_L("\">");
+    W_L("\"><h5>");
     jhtml_flags_t *flg = apr_palloc(doc->pool, sizeof(*flg));
     memset(flg, 0, sizeof(*flg));
     flg->with_div_align_flag = 1;
@@ -4625,7 +4625,7 @@ s_jhtml_end_h5_tag(void *pdoc, Node *node)
   
   jhtml_flags_t *flg = node->userData;
   if (flg && flg->with_div_align_flag) {
-    W_L("</div>");
+    W_L("</h5></div>");
     node->userData = NULL;
   }
   if (IS_CSS_ON(jhtml->entryp)) {
@@ -4693,7 +4693,7 @@ s_jhtml_start_h6_tag(void *pdoc, Node *node)
   if (attr_align) {
     W_L("<div align=\"");
     W_V(attr_align);
-    W_L("\">");
+    W_L("\"><h6>");
     jhtml_flags_t *flg = apr_palloc(doc->pool, sizeof(*flg));
     memset(flg, 0, sizeof(*flg));
     flg->with_div_align_flag = 1;
@@ -4728,7 +4728,7 @@ s_jhtml_end_h6_tag(void *pdoc, Node *node)
   
   jhtml_flags_t *flg = node->userData;
   if (flg && flg->with_div_align_flag) {
-    W_L("</div>");
+    W_L("</h6></div>");
     node->userData = NULL;
   }
   if (IS_CSS_ON(jhtml->entryp)) {
