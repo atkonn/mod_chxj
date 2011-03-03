@@ -370,6 +370,7 @@ s_clear_cookie_header(request_rec *r, device_table *spec)
   case CHXJ_SPEC_Chtml_7_0:
   case CHXJ_SPEC_XHtml_Mobile_1_0:
   case CHXJ_SPEC_Jhtml:
+  case CHXJ_SPEC_Jxhtml:
     apr_table_unset(r->headers_in, "Cookie");
     break;
   default:
@@ -455,6 +456,7 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
     case CHXJ_SPEC_Chtml_7_0:
     case CHXJ_SPEC_XHtml_Mobile_1_0:
     case CHXJ_SPEC_Jhtml:
+    case CHXJ_SPEC_Jxhtml:
       cookie = chxj_save_cookie(r);
       break;
     default:
@@ -464,8 +466,13 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
 
   if (!r->header_only) {
 
-    if ((entryp->action & CONVRULE_COOKIE_ONLY_BIT) && cookie) {
-      dst = chxj_cookie_only_mode(r, *src, (apr_size_t *)len, cookie);
+    if ((entryp->action & CONVRULE_COOKIE_ONLY_BIT)) {
+      if (cookie) {
+        dst = chxj_cookie_only_mode(r, *src, (apr_size_t *)len, cookie);
+      }
+      else {
+        /* ignore */
+      }
     }
     else {
       tmp = NULL;
@@ -1084,6 +1091,7 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
       case CHXJ_SPEC_Chtml_7_0:
       case CHXJ_SPEC_XHtml_Mobile_1_0:
       case CHXJ_SPEC_Jhtml:
+      case CHXJ_SPEC_Jxhtml:
         lock = chxj_cookie_lock(r);
         cookie = chxj_save_cookie(r);
         s_add_cookie_id_if_has_location_header(r, cookie);
@@ -1135,6 +1143,7 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
         case CHXJ_SPEC_Chtml_7_0:
         case CHXJ_SPEC_XHtml_Mobile_1_0:
         case CHXJ_SPEC_Jhtml:
+        case CHXJ_SPEC_Jxhtml:
           lock = chxj_cookie_lock(r);
           cookie = chxj_save_cookie(r);
           s_add_cookie_id_if_has_location_header(r, cookie);
@@ -1371,6 +1380,7 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
           case CHXJ_SPEC_Chtml_7_0:
           case CHXJ_SPEC_XHtml_Mobile_1_0:
           case CHXJ_SPEC_Jhtml:
+          case CHXJ_SPEC_Jxhtml:
             lock = chxj_cookie_lock(r);
             cookie = chxj_save_cookie(r);
             /*
