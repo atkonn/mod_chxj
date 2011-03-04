@@ -1415,7 +1415,6 @@ s_xhtml_1_0_start_table_tag(void *pdoc, Node *node)
 {
   xhtml_t *xhtml = GET_XHTML(pdoc);
   Doc     *doc   = xhtml->doc;
-  request_rec *r     = doc->r;
   Attr        *attr;
   char         *attr_style  = NULL;
   char         *attr_align  = NULL;
@@ -1596,7 +1595,6 @@ s_xhtml_1_0_start_tr_tag(void *pdoc, Node *node)
   xhtml_t *xhtml = GET_XHTML(pdoc);
   Doc     *doc   = xhtml->doc;
 
-  request_rec *r     = doc->r;
   Attr        *attr;
   
   char         *attr_style  = NULL;
@@ -1711,7 +1709,6 @@ s_xhtml_1_0_start_td_or_th_tag(void *pdoc, Node *node,char *tagName)
   xhtml_t *xhtml = GET_XHTML(pdoc);
   Doc     *doc   = xhtml->doc;
 
-  request_rec *r     = doc->r;
   Attr        *attr;
   
   char         *attr_style  = NULL;
@@ -2309,7 +2306,6 @@ s_xhtml_1_0_start_input_tag(void *pdoc, Node *node)
 {
   xhtml_t     *xhtml       = GET_XHTML(pdoc);
   Doc         *doc         = xhtml->doc;
-  request_rec *r           = doc->r;
   Attr        *attr;
   char        *attr_max_length  = NULL;
   char        *attr_type        = NULL;
@@ -6425,7 +6421,6 @@ s_xhtml_1_0_start_param_tag(void *pdoc, Node *node)
   Doc *doc = xhtml->doc;
 
   Attr *attr;
-  char *attr_style         = NULL;
   char *attr_name          = NULL;
   char *attr_value         = NULL;
   char *attr_valuetype     = NULL;

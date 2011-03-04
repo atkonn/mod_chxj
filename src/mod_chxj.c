@@ -260,6 +260,14 @@ chxj_headers_fixup(request_rec *r)
 
   }
 
+  char *x_client_type = (char *)apr_table_get(r->headers_out, "X-Client-Type");
+  apr_table_unset(r->headers_out, "X-Client-Type");
+  if (x_client_type) {
+    apr_table_setn(r->headers_in, "X-Client-Type", x_client_type);
+  }
+  else {
+    apr_table_setn(r->headers_in, "X-Client-Type", "");
+  }
 
   if (r->method_number == M_POST) {
     if (! apr_table_get(r->headers_in, "X-Chxj-Forward")) {
@@ -294,6 +302,18 @@ chxj_headers_fixup(request_rec *r)
         DBG(r, "REQ[%X] Client IP:[%s] vs Orig Client IP:[%s] vs Server IP:[%s]", (unsigned int)(apr_size_t)r, r->connection->remote_ip, client_ip, addr);
         if (strcmp(addr, r->connection->remote_ip) == 0) {
           r->connection->remote_ip = apr_pstrdup(r->connection->pool, client_ip);
+          /* For mod_cidr_lookup */
+          if (entryp->action & CONVRULE_OVERWRITE_X_CLIENT_TYPE_BIT) {
+            char *client_type = (char *)apr_table_get(r->headers_in, CHXJ_HEADER_ORIG_CLIENT_TYPE);
+            DBG(r, "REQ[%X] Overwrite X-Client-Type to [%s]", (unsigned int)(apr_size_t)r, client_type);
+            if (client_type) {
+              apr_table_setn(r->subprocess_env, "X_CLIENT_TYPE", client_type);
+              apr_table_setn(r->headers_in, "X-Client-Type", client_type);
+            }
+            else {
+              apr_table_unset(r->headers_in, "X-Client-Type");
+            }
+          }
         }
         if (! apr_table_get(r->headers_in, "Content-Length")) {
           contentLength = (char *)apr_table_get(r->headers_in, "X-Chxj-Content-Length");
@@ -370,6 +390,7 @@ s_clear_cookie_header(request_rec *r, device_table *spec)
   case CHXJ_SPEC_Chtml_7_0:
   case CHXJ_SPEC_XHtml_Mobile_1_0:
   case CHXJ_SPEC_Jhtml:
+  case CHXJ_SPEC_Jxhtml:
     apr_table_unset(r->headers_in, "Cookie");
     break;
   default:
@@ -455,6 +476,7 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
     case CHXJ_SPEC_Chtml_7_0:
     case CHXJ_SPEC_XHtml_Mobile_1_0:
     case CHXJ_SPEC_Jhtml:
+    case CHXJ_SPEC_Jxhtml:
       cookie = chxj_save_cookie(r);
       break;
     default:
@@ -464,8 +486,13 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
 
   if (!r->header_only) {
 
-    if ((entryp->action & CONVRULE_COOKIE_ONLY_BIT) && cookie) {
-      dst = chxj_cookie_only_mode(r, *src, (apr_size_t *)len, cookie);
+    if ((entryp->action & CONVRULE_COOKIE_ONLY_BIT)) {
+      if (cookie) {
+        dst = chxj_cookie_only_mode(r, *src, (apr_size_t *)len, cookie);
+      }
+      else {
+        /* ignore */
+      }
     }
     else {
       tmp = NULL;
@@ -1084,6 +1111,7 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
       case CHXJ_SPEC_Chtml_7_0:
       case CHXJ_SPEC_XHtml_Mobile_1_0:
       case CHXJ_SPEC_Jhtml:
+      case CHXJ_SPEC_Jxhtml:
         lock = chxj_cookie_lock(r);
         cookie = chxj_save_cookie(r);
         s_add_cookie_id_if_has_location_header(r, cookie);
@@ -1135,6 +1163,7 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
         case CHXJ_SPEC_Chtml_7_0:
         case CHXJ_SPEC_XHtml_Mobile_1_0:
         case CHXJ_SPEC_Jhtml:
+        case CHXJ_SPEC_Jxhtml:
           lock = chxj_cookie_lock(r);
           cookie = chxj_save_cookie(r);
           s_add_cookie_id_if_has_location_header(r, cookie);
@@ -1301,6 +1330,7 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
           if (ctx->len) {
             char *tmp;
 
+            DBG(r, "REQ[%X] ctx->len[%d]", (unsigned int)(apr_size_t)r, (unsigned int)ctx->len);
             tmp = apr_palloc(pool, ctx->len + 1);
 
             memset(tmp, 0, ctx->len + 1);
@@ -1309,9 +1339,6 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
               chxj_convert_image(r, 
                                   (const char **)&tmp,
                                   (apr_size_t *)&ctx->len);
-            if (ctx->buffer == NULL) {
-              ctx->buffer = tmp;
-            }
           }
         }
 
@@ -1371,6 +1398,7 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
           case CHXJ_SPEC_Chtml_7_0:
           case CHXJ_SPEC_XHtml_Mobile_1_0:
           case CHXJ_SPEC_Jhtml:
+          case CHXJ_SPEC_Jxhtml:
             lock = chxj_cookie_lock(r);
             cookie = chxj_save_cookie(r);
             /*
@@ -1446,7 +1474,6 @@ chxj_input_handler(request_rec *r)
   char                *response;
   char                *user_agent;
   apr_pool_t          *pool;
-  apr_size_t          ii;
   int                 response_code = 0;
   
   DBG(r, "start of chxj_input_handler()");
@@ -1505,15 +1532,24 @@ chxj_input_handler(request_rec *r)
 
   apr_size_t res_len;
   apr_table_setn(r->headers_in, CHXJ_HEADER_ORIG_CLIENT_IP, r->connection->remote_ip);
+  char *x_client_type = (char *)apr_table_get(r->headers_in, "X-Client-Type");
+  if (x_client_type) {
+    apr_table_setn(r->headers_in, CHXJ_HEADER_ORIG_CLIENT_TYPE, x_client_type); /* for mod_cidr_lookup */
+  }
+  else {
+    apr_table_unset(r->headers_in, "X-Client-Type");
+  }
   apr_table_unset(r->headers_in, "Content-Length");
   apr_table_setn(r->headers_in, "Content-Length", apr_psprintf(pool, "%" APR_SIZE_T_FMT, post_data_len));
   response = chxj_serf_post(r, pool, url_path, post_data, post_data_len, 1, &res_len, &response_code);
+#if 0
   DBG(r, "REQ[%X] -------------------------------------------------------", (unsigned int)(apr_size_t)r);
   DBG(r, "REQ[%X] response length:[%" APR_SIZE_T_FMT "]", (unsigned int)(apr_size_t)r, res_len);
   for (ii=0; ii<res_len/64; ii++) {
     DBG(r, "REQ[%X] response:[%.*s]", (unsigned int)(apr_size_t)r, 64, &response[ii*64]);
   }
   DBG(r, "REQ[%X] -------------------------------------------------------", (unsigned int)(apr_size_t)r);
+#endif
 
   char *chunked;
   if ((chunked = (char *)apr_table_get(r->headers_out, "Transfer-Encoding")) != NULL) {
@@ -2564,6 +2600,13 @@ cmd_convert_rule(cmd_parms *cmd, void *mconfig, const char *arg)
       else
       if (strcasecmp(CONVRULE_ENVINFO_ONLY_CMD, action) == 0) {
         newrule->action |= CONVRULE_ENVINFO_ONLY_BIT;
+      }
+      break;
+
+    case 'O':
+    case 'o':
+      if (strcasecmp(CONVRULE_OVERWRITE_X_CLIENT_TYPE_CMD, action) == 0) {
+        newrule->action |= CONVRULE_OVERWRITE_X_CLIENT_TYPE_BIT;
       }
       break;
 

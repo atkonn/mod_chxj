@@ -329,7 +329,7 @@ variables_saved_for_relink="PATH LD_LIBRARY_PATH LD_RUN_PATH GCC_EXEC_PREFIX COM
 link_all_deplibs=no
 
 # Compile-time system search path for libraries
-sys_lib_search_path_spec="/usr/lib/gcc/x86_64-linux-gnu/4.3.2 /usr/lib /lib"
+sys_lib_search_path_spec=" /usr/lib/gcc/x86_64-linux-gnu/4.1.3/ /usr/lib/gcc/x86_64-linux-gnu/4.1.3/ /usr/lib/gcc/x86_64-linux-gnu/4.1.3/../../../../x86_64-linux-gnu/lib/x86_64-linux-gnu/4.1.3/ /usr/lib/gcc/x86_64-linux-gnu/4.1.3/../../../../x86_64-linux-gnu/lib/ /usr/lib/gcc/x86_64-linux-gnu/4.1.3/../../../x86_64-linux-gnu/4.1.3/ /usr/lib/gcc/x86_64-linux-gnu/4.1.3/../../../ /lib/x86_64-linux-gnu/4.1.3/ /lib/ /usr/lib/x86_64-linux-gnu/4.1.3/ /usr/lib/"
 
 # Run-time system search path for libraries
 sys_lib_dlsearch_path_spec="/lib /usr/lib /usr/local/lib /lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu /usr/local/lib64 /usr/lib /var/lenny-386-chroot/lib /var/lenny-386-chroot/usr/lib /var/lenny-386-chroot/usr/X11R6/lib /var/lenny-386-chroot/usr/local/lib "

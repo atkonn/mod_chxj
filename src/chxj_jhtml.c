@@ -4192,6 +4192,7 @@ s_jhtml_start_h1_tag(void *pdoc, Node *node)
   else {
     node->userData = NULL;
   }
+  W_L("<h1>");
 
   return jhtml->out;
 }
@@ -4217,6 +4218,7 @@ s_jhtml_end_h1_tag(void *pdoc, Node *node)
   r       = doc->r;
   
   jhtml_flags_t *flg = node->userData;
+  W_L("</h1>");
   if (flg && flg->with_div_align_flag) {
     W_L("</div>");
     node->userData = NULL; 
@@ -4294,6 +4296,7 @@ s_jhtml_start_h2_tag(void *pdoc, Node *node)
   else {
     node->userData = NULL;
   }
+  W_L("<h2>");
 
   return jhtml->out;
 }
@@ -4319,6 +4322,7 @@ s_jhtml_end_h2_tag(void *pdoc, Node *node)
   r       = doc->r;
 
   jhtml_flags_t *flg = node->userData;
+  W_L("</h2>");
   if (flg && flg->with_div_align_flag) {
     W_L("</div>");
     node->userData = NULL;
@@ -4396,6 +4400,7 @@ s_jhtml_start_h3_tag(void *pdoc, Node *node)
   else {
     node->userData = NULL;
   }
+  W_L("<h3>");
 
   return jhtml->out;
 }
@@ -4421,6 +4426,7 @@ s_jhtml_end_h3_tag(void *pdoc, Node *node)
   r       = doc->r;
   
   jhtml_flags_t *flg = node->userData;
+  W_L("</h3>");
   if (flg && flg->with_div_align_flag) {
     W_L("</div>");
     node->userData = NULL;
@@ -4499,6 +4505,7 @@ s_jhtml_start_h4_tag(void *pdoc, Node *node)
   else {
     node->userData = NULL;
   }
+  W_L("<h4>");
   return jhtml->out;
 }
 
@@ -4523,6 +4530,7 @@ s_jhtml_end_h4_tag(void *pdoc, Node *node)
   r       = doc->r;
   
   jhtml_flags_t *flg = node->userData;
+  W_L("</h4>");
   if (flg && flg->with_div_align_flag) {
     W_L("</div>");
     node->userData = NULL;
@@ -4600,6 +4608,7 @@ s_jhtml_start_h5_tag(void *pdoc, Node *node)
   else {
     node->userData = NULL;
   }
+  W_L("<h5>");
   return jhtml->out;
 }
 
@@ -4624,6 +4633,7 @@ s_jhtml_end_h5_tag(void *pdoc, Node *node)
   r       = doc->r;
   
   jhtml_flags_t *flg = node->userData;
+  W_L("</h5>");
   if (flg && flg->with_div_align_flag) {
     W_L("</div>");
     node->userData = NULL;
@@ -4702,6 +4712,7 @@ s_jhtml_start_h6_tag(void *pdoc, Node *node)
   else {
     node->userData = NULL;
   }
+  W_L("<h6>");
 
   return jhtml->out;
 }
@@ -4727,6 +4738,7 @@ s_jhtml_end_h6_tag(void *pdoc, Node *node)
   r       = doc->r;
   
   jhtml_flags_t *flg = node->userData;
+  W_L("</h6>");
   if (flg && flg->with_div_align_flag) {
     W_L("</div>");
     node->userData = NULL;
