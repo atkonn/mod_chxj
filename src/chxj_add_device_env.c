@@ -80,7 +80,7 @@ chxj_add_device_env(request_rec *r, device_table *spec)
   apr_table_setn(r->headers_in, HTTP_X_CHXJ_CACHE,    apr_psprintf(r->pool, "%d", spec->cache));
   apr_table_setn(r->headers_in, HTTP_X_CHXJ_DPI_WIDTH,    apr_psprintf(r->pool, "%d", spec->dpi_width));
   apr_table_setn(r->headers_in, HTTP_X_CHXJ_DPI_HEIGHT,   apr_psprintf(r->pool, "%d", spec->dpi_heigh));
-  apr_table_setn(r->headers_in, HTTP_X_CHXJ_EMOJI_TYPE,   spec->emoji_type);
+  apr_table_setn(r->headers_in, HTTP_X_CHXJ_EMOJI_TYPE,   (spec->emoji_type) ? spec->emoji_type : "");
 
   apr_table_setn(r->headers_in, HTTP_X_CHXJ_VERSION,  apr_pstrdup(r->pool, PACKAGE_VERSION));
   

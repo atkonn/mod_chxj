@@ -186,7 +186,8 @@ static apr_status_t s_create_cache_file(request_rec          *r,
                                         query_string_param_t *qsp,
                                         mod_chxj_config      *conf);
 
-static apr_status_t s_send_cache_file(device_table          *spec,
+static apr_status_t s_send_cache_file(mod_chxj_config       *conf,
+                                      device_table          *spec,
                                       query_string_param_t  *query_string,
                                       request_rec           *r,
                                       const char            *tmpfile);
@@ -432,7 +433,7 @@ s_img_conv_format_from_file(
   
     DBG(r,"REQ[%X] color=[%d]", TO_ADDR(r), spec->color);
     if (! r->header_only)  {
-      rv = s_send_cache_file(spec, qsp,r, tmpfile);
+      rv = s_send_cache_file(conf, spec, qsp,r, tmpfile);
     }
     else {
       rv = s_header_only_cache_file(spec, qsp, r, tmpfile);
@@ -514,7 +515,7 @@ s_create_cache_file(request_rec          *r,
     /*------------------------------------------------------------------------*/
     rv = apr_file_open(&fin, 
                     r->filename, 
-                    APR_READ|APR_BINARY ,
+                    APR_FOPEN_READ | APR_FOPEN_BINARY | APR_FOPEN_BUFFERED | APR_FOPEN_SHARELOCK | APR_FOPEN_SENDFILE_ENABLED,
                     APR_OS_DEFAULT, 
                     r->pool);
     if (rv != APR_SUCCESS) {
@@ -811,11 +812,12 @@ s_create_cache_file(request_rec          *r,
 
   /* to cache */
   rv = apr_file_open(&fout, tmpfile,
-                  APR_WRITE| APR_CREATE | APR_BINARY | APR_SHARELOCK ,APR_OS_DEFAULT,
+                  APR_FOPEN_WRITE| APR_FOPEN_CREATE | APR_FOPEN_BINARY | APR_SHARELOCK ,
+                  APR_OS_DEFAULT,
                   r->pool);
   if (rv != APR_SUCCESS) {
     DestroyMagickWand(magick_wand);
-    ERR(r,"file open error.[%s]", tmpfile);
+    ERR(r,"REQ[%X] file open error.[%s]", TO_ADDR(r), tmpfile);
     if (sv_writedata) free(sv_writedata);
     return HTTP_INTERNAL_SERVER_ERROR;
   }
@@ -1605,14 +1607,18 @@ s_img_down_sizing(MagickWand *magick_wand, request_rec *r, device_table *spec)
 
 
 static apr_status_t 
-s_send_cache_file(device_table *spec, query_string_param_t *query_string, request_rec *r, const char *tmpfile)
+s_send_cache_file(
+  mod_chxj_config      *conf,
+  device_table         *spec, 
+  query_string_param_t *query_string, 
+  request_rec          *r, 
+  const char           *tmpfile)
 {
   apr_status_t rv;
   apr_finfo_t  st;
   apr_file_t   *fout;
   apr_size_t   sendbyte;
   char         *contentLength;
-  mod_chxj_config *conf = ap_get_module_config(r->per_dir_config, &chxj_module);
 
   rv = apr_stat(&st, tmpfile, APR_FINFO_MIN, r->pool);
   if (rv != APR_SUCCESS)
@@ -1677,7 +1683,8 @@ s_send_cache_file(device_table *spec, query_string_param_t *query_string, reques
       }
     }
     rv = apr_file_open(&fout, tmpfile, 
-      APR_READ | APR_BINARY, APR_OS_DEFAULT, r->pool);
+      APR_FOPEN_READ | APR_FOPEN_BINARY | APR_FOPEN_BUFFERED | APR_FOPEN_SHARELOCK | APR_FOPEN_SENDFILE_ENABLED, 
+      APR_OS_DEFAULT, r->pool);
     if (rv != APR_SUCCESS) {
       DBG(r, "cache file open failed[%s]", tmpfile);
       return HTTP_NOT_FOUND;
@@ -1733,7 +1740,8 @@ s_send_cache_file(device_table *spec, query_string_param_t *query_string, reques
       DBG(r, "Content-Length:[%d]", (int)st.size);
 
       rv = apr_file_open(&fout, tmpfile, 
-        APR_READ | APR_BINARY, APR_OS_DEFAULT, r->pool);
+        APR_FOPEN_READ | APR_FOPEN_BINARY | APR_FOPEN_BUFFERED | APR_FOPEN_SHARELOCK | APR_FOPEN_SENDFILE_ENABLED, 
+        APR_OS_DEFAULT, r->pool);
 
       if (rv != APR_SUCCESS) {
         DBG(r,"tmpfile open failed[%s]", tmpfile);
@@ -1772,7 +1780,8 @@ s_send_original_file(request_rec *r, const char *originalfile)
   }
 
   rv = apr_file_open(&fout, originalfile, 
-    APR_READ | APR_BINARY, APR_OS_DEFAULT, r->pool);
+    APR_FOPEN_READ | APR_FOPEN_BINARY | APR_FOPEN_BUFFERED | APR_FOPEN_SHARELOCK | APR_FOPEN_SENDFILE_ENABLED,
+    APR_OS_DEFAULT, r->pool);
   if (rv != APR_SUCCESS) {
     DBG(r, "originalfile open failed[%s]", originalfile);
     return HTTP_NOT_FOUND;

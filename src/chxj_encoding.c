@@ -298,7 +298,7 @@ chxj_rencoding(request_rec *r, const char *src, apr_size_t *len,const char *enc)
     DBG(r,"REQ[%X] end   chxj_rencoding()", (unsigned int)(apr_size_t)r);
     return ibuf;
   }
-  char *from_enc = enc;
+  char *from_enc = (char *)enc;
   if (!enc){
     from_enc = "CP932";
   }
