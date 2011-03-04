@@ -325,7 +325,7 @@ chxj_headers_fixup(request_rec *r)
     }
   }
   else{
-    if(strncmp(r->content_type,"image/",6) == 0){
+    if(r->content_type && strncmp(r->content_type,"image/",6) == 0){
       if (dconf->image_rewrite == CHXJ_IMG_REWRITE_ON && !apr_table_get(r->headers_in, CHXJ_IMG_X_HTTP_IMAGE_FILENAME)){
         if(dconf->image_rewrite_mode == CHXJ_IMG_REWRITE_MODE_ALL){
           // all image

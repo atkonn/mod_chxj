@@ -482,8 +482,8 @@ s_set_device_data(Doc *doc, apr_pool_t *p, device_table_list *dtl, Node *node)
       dtl->tail->next = dt;
       dtl->tail = dt;
     }
+    dtl->table_count++;
   }
-  dtl->table_count++;
 }
 
 
@@ -506,6 +506,7 @@ s_sort_table_compare(const void *a, const void *b)
 {
   device_table *aa = *(device_table **)a;
   device_table *bb = *(device_table **)b;
+
   /* 
    * do not use strcasecmp for LOAD!!
    */

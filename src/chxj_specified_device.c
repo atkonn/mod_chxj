@@ -183,15 +183,16 @@ s_specified_device_from_xml(request_rec *r, mod_chxj_config * conf, const char *
           if (conf->detect_device_type > CHXJ_ADD_DETECT_DEVICE_TYPE_NONE ){
             dt->device_id = device_id;
           }
-          returnType = dt;
+          DBG(r,"REQ[%X] end %s (Not Found) use [%s]", TO_ADDR(r), __func__, dt->device_id);
+          return dt;
         }
       }
-      DBG(r,"REQ[%X] end chxj_specified_device()", TO_ADDR(r));
-      return returnType;
+      DBG(r,"REQ[%X] end %s (Found) use [%s]", TO_ADDR(r), __func__, dt->device_id);
+      return dt;
     }
   }
 
-  DBG(r,"REQ[%X] end s_specified_device()", TO_ADDR(r));
+  DBG(r,"REQ[%X] end %s()", TO_ADDR(r), __func__);
 
   return returnType;
 }
