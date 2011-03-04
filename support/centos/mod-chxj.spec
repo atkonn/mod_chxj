@@ -9,8 +9,8 @@ Group: System Environment/Daemons
 Vendor: Atsushi Konno
 URL: http://sourceforge.jp/projects/modchxj/
 Source:  http://sourceforge.jp/projects/modchxj/downloads/33637/mod-chxj_%{version}.src.tar.gz
-Source1: http://download.tangent.org/libmemcached-0.23.tar.gz
-Packager:  Atsushi Konno <konn@sourceforge.jp>
+Source1: http://launchpad.net/libmemcached/1.0/0.47/+download/libmemcached-0.47.tar.gz
+Packager:  Atsushi Konno <konn@users.sourceforge.jp>
 Requires: ImageMagick >= 6.2.8.0, httpd >= 2.2.3, apr >= 1.2.7, apr-util >= 1.2.7, mysql >= 5.0.22, openssl >= 0.9.8
 BuildPreReq: mysql-devel httpd-devel ImageMagick-devel gcc-c++ libtool openssl-devel
 
@@ -23,14 +23,14 @@ function.
 
 %prep
 cd $RPM_BUILD_DIR
-rm -rf libmemcached-0.23
-/bin/gzip -dc $RPM_SOURCE_DIR/libmemcached-0.23.tar.gz | tar -xf -
+rm -rf libmemcached-0.47
+/bin/gzip -dc $RPM_SOURCE_DIR/libmemcached-0.47.tar.gz | tar -xf -
 STATUS=$?
 if [ $STATUS -ne 0 ]; then
   exit $STATUS
 fi
-cd libmemcached-0.23
-./configure --with-pic
+cd libmemcached-0.47
+./configure --with-pic --enable-static
 make
 %setup -q -n mod-chxj_%{version}
 
@@ -39,8 +39,8 @@ make
             --with-mysql-header=/usr/include/mysql  \
             --with-mysql-lib-dir=/usr/lib/mysql \
             --enable-memcache-cookie \
-            --with-memcached-header=../libmemcached-0.23 \
-            --with-memcached-lib-dir=../../libmemcached-0.23/libmemcached/.libs \
+            --with-memcached-header=${_topdir}/BUILD/libmemcached-0.47 \
+            --with-memcached-lib-dir=${_topdir}/BUILD/libmemcached-0.47/libmemcached/.libs \
             --enable-memcached-static
 %{__make}
 
@@ -64,5 +64,7 @@ make
 %{_libdir}/httpd/modules/mod_chxj.so
 
 %changelog
+* Fri Mar 4 2011 Atsushi Konno <konn@users.sourceforge.jp> 0.13.0
+- Changed libmemcached version.
 * Fri Nov  7 2008 Atsushi Konno <konn@users.sourceforge.jp> 0.12.17-1
 - Added initial package for CentOS5.1.

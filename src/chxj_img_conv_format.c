@@ -1921,7 +1921,7 @@ s_init_serial_pattern(apr_pool_t *p)
     v_docomo_serial_pattern3 = chxj_compile_for_preg_replace(p, ";icc[^;\\)]+");
   }  
   if (!v_softbank_serial_pattern1) {
-    v_softbank_serial_pattern1 = chxj_compile_for_preg_replace(p, "/SN[0-9a-zA-Z][0-9a-zA-Z][0-9a-zA-Z][0-9a-zA-Z][0-9a-zA-Z][0-9a-zA-Z][0-9a-zA-Z][0-9a-zA-Z][0-9a-zA-Z][0-9a-zA-Z][0-9a-zA-Z] ");
+    v_softbank_serial_pattern1 = chxj_compile_for_preg_replace(p, "/SN[0-9a-zA-Z]+ ");
   }  
 }
 

@@ -10,7 +10,7 @@ Vendor: Atsushi Konno
 URL: http://sourceforge.jp/projects/modchxj/
 Source:  http://sourceforge.jp/projects/modchxj/downloads/33637/mod-chxj_%{version}.src.tar.gz
 Source1: http://launchpad.net/libmemcached/1.0/0.47/+download/libmemcached-0.47.tar.gz
-Packager:  Atsushi Konno <konn@sourceforge.jp>
+Packager:  Atsushi Konno <konn@users.sourceforge.jp>
 Requires: ImageMagick >= 6.2.8.0, httpd >= 2.2.3, apr >= 1.2.7, apr-util >= 1.2.7, mysql >= 5.0.22, openssl >= 0.9.8
 BuildPreReq: mysql-devel httpd-devel ImageMagick-devel gcc-c++ libtool openssl-devel
 
