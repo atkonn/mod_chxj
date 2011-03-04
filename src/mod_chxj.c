@@ -181,10 +181,10 @@ chxj_headers_fixup(request_rec *r)
   char                *contentType;
   char                *contentLength;
 
-  DBG(r, "REQ[%X] start chxj_headers_fixup()", (unsigned int)(apr_size_t)r);
+  DBG(r, "REQ[%X] start %s()", TO_ADDR(r), __func__);
   if (r->main) {
-    DBG(r, "REQ[%X] detect internal redirect.", (unsigned int)(apr_size_t)r);
-    DBG(r, "REQ[%X] end chxj_headers_fixup()",  (unsigned int)(apr_size_t)r);
+    DBG(r, "REQ[%X] detect internal redirect.", TO_ADDR(r));
+    DBG(r, "REQ[%X] end %s()",  TO_ADDR(r),__func__);
     return DECLINED;
   }
 
@@ -196,8 +196,8 @@ chxj_headers_fixup(request_rec *r)
   contentType = (char *)apr_table_get(r->headers_in, "Content-Type");
   if (contentType
       && strncasecmp("multipart/form-data", contentType, 19) == 0) {
-    DBG(r, "REQ[%X] detect multipart/form-data ==> no target", (unsigned int)(apr_size_t)r);
-    DBG(r, "REQ[%X] end chxj_headers_fixup()", (unsigned int)(apr_size_t)r);
+    DBG(r, "REQ[%X] detect multipart/form-data ==> no target", TO_ADDR(r));
+    DBG(r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
     return DECLINED;
   }
 
@@ -216,15 +216,15 @@ chxj_headers_fixup(request_rec *r)
   case CHXJ_SPEC_Jxhtml:
     entryp = chxj_apply_convrule(r, dconf->convrules);
     if (! entryp) {
-      DBG(r, "REQ[%X] end chxj_headers_fixup() (no pattern)", (unsigned int)(apr_size_t)r);
+      DBG(r, "REQ[%X] end %s() (no pattern)", TO_ADDR(r),__func__);
       return DECLINED;
     }
     if (!(entryp->action & CONVRULE_ENGINE_ON_BIT) && !(entryp->action & CONVRULE_COOKIE_ONLY_BIT)) {
-      DBG(r, "REQ[%X] end chxj_headers_fixup() (engine off)", (unsigned int)(apr_size_t)r);
+      DBG(r, "REQ[%X] end %s() (engine off)", TO_ADDR(r),__func__);
       return DECLINED;
     }
     if (entryp->action & CONVRULE_EMOJI_ONLY_BIT) {
-      DBG(r, "REQ[%X] end chxj_headers_fixup() (emoji only)", (unsigned int)(apr_size_t)r);
+      DBG(r, "REQ[%X] end %s() (emoji only)", TO_ADDR(r),__func__);
       return DECLINED;
     } 
   
@@ -255,7 +255,7 @@ chxj_headers_fixup(request_rec *r)
     break;
   
   default:
-    DBG(r, "REQ[%X] end chxj_headers_fixup() (not mobile) spec->device_name[%s] User-Agent:[%s]", (unsigned int)(apr_size_t)r, spec->device_name, user_agent);
+    DBG(r, "REQ[%X] end %s() (not mobile) spec->device_name[%s] User-Agent:[%s]", TO_ADDR(r),__func__, spec->device_name, user_agent);
     return DECLINED;
 
   }
@@ -271,7 +271,7 @@ chxj_headers_fixup(request_rec *r)
 
   if (r->method_number == M_POST) {
     if (! apr_table_get(r->headers_in, "X-Chxj-Forward")) {
-        DBG(r, "REQ[%X] set Input handler old:[%s] proxyreq:[%d] uri:[%s] filename:[%s]", (unsigned int)(apr_size_t)r, r->handler, r->proxyreq, r->uri, r->filename);
+        DBG(r, "REQ[%X] set Input handler old:[%s] proxyreq:[%d] uri:[%s] filename:[%s]", TO_ADDR(r), r->handler, r->proxyreq, r->uri, r->filename);
         r->proxyreq = PROXYREQ_NONE;
         r->handler = apr_psprintf(r->pool, "chxj-input-handler");
     }
@@ -288,8 +288,8 @@ chxj_headers_fixup(request_rec *r)
         apr_status_t rv = apr_sockaddr_info_get(&address, ap_get_server_name(r), APR_UNSPEC, ap_get_server_port(r), 0, r->pool);
         if (rv != APR_SUCCESS) {
           char buf[256];
-          ERR(r, "REQ[%X] %s:%d apr_sockaddr_info_get() failed: rv:[%d|%s]", (unsigned int)(apr_size_t)r, APLOG_MARK, rv, apr_strerror(rv, buf, 256));
-          DBG(r, "REQ[%X] end chxj_headers_fixup()", (unsigned int)(apr_size_t)r);
+          ERR(r, "REQ[%X] %s:%d apr_sockaddr_info_get() failed: rv:[%d|%s]", TO_ADDR(r), APLOG_MARK, rv, apr_strerror(rv, buf, 256));
+          DBG(r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
           return DECLINED;
         }
         char *addr;
@@ -299,13 +299,13 @@ chxj_headers_fixup(request_rec *r)
         else {
           apr_sockaddr_ip_get(&addr, address);
         }
-        DBG(r, "REQ[%X] Client IP:[%s] vs Orig Client IP:[%s] vs Server IP:[%s]", (unsigned int)(apr_size_t)r, r->connection->remote_ip, client_ip, addr);
+        DBG(r, "REQ[%X] Client IP:[%s] vs Orig Client IP:[%s] vs Server IP:[%s]", TO_ADDR(r), r->connection->remote_ip, client_ip, addr);
         if (strcmp(addr, r->connection->remote_ip) == 0) {
           r->connection->remote_ip = apr_pstrdup(r->connection->pool, client_ip);
           /* For mod_cidr_lookup */
           if (entryp->action & CONVRULE_OVERWRITE_X_CLIENT_TYPE_BIT) {
             char *client_type = (char *)apr_table_get(r->headers_in, CHXJ_HEADER_ORIG_CLIENT_TYPE);
-            DBG(r, "REQ[%X] Overwrite X-Client-Type to [%s]", (unsigned int)(apr_size_t)r, client_type);
+            DBG(r, "REQ[%X] Overwrite X-Client-Type to [%s]", TO_ADDR(r), client_type);
             if (client_type) {
               apr_table_setn(r->subprocess_env, "X_CLIENT_TYPE", client_type);
               apr_table_setn(r->headers_in, "X-Client-Type", client_type);
@@ -352,7 +352,7 @@ chxj_headers_fixup(request_rec *r)
 
   chxj_add_device_env(r, spec);
 
-  DBG(r, "REQ[%X] end chxj_headers_fixup()", (unsigned int)(apr_size_t)r);
+  DBG(r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
 
   return DECLINED;
 }
@@ -368,10 +368,10 @@ chxj_image_redirect_handler(request_rec *r)
   if (strncmp(r->filename, "img-redirect:", 13) != 0) {
     return DECLINED;
   }
-  DBG(r,"start chxj_image_redirect_handler");
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
   ap_internal_redirect(apr_pstrcat(r->pool, r->filename+13,
                                        r->args ? "?" : NULL, r->args, NULL), r);
-  DBG(r,"end chxj_image_redirect_handler");
+  DBG(r,"REQ[%X] end %s()", TO_ADDR(r),__func__);
   return OK;
 }
 
@@ -379,7 +379,7 @@ chxj_image_redirect_handler(request_rec *r)
 static void
 s_clear_cookie_header(request_rec *r, device_table *spec)
 {
-  DBG(r, "REQ[%X] start s_clear_cookie_header()", TO_ADDR(r));
+  DBG(r, "REQ[%X] start %s()", TO_ADDR(r),__func__);
   switch(spec->html_spec_type) {
   case CHXJ_SPEC_Chtml_1_0:
   case CHXJ_SPEC_Chtml_2_0:
@@ -396,7 +396,7 @@ s_clear_cookie_header(request_rec *r, device_table *spec)
   default:
     break;
   }
-  DBG(r, "REQ[%X] end   s_clear_cookie_header()", TO_ADDR(r));
+  DBG(r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
 }
 
 
@@ -417,7 +417,7 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
   mod_chxj_config     *dconf; 
   chxjconvrule_entry  *entryp;
 
-  DBG(r,"REQ[%X] start of chxj_convert()", (unsigned int)(apr_size_t)r);
+  DBG(r,"REQ[%X] start %s()", TO_ADDR(r),__func__);
 
   chxj_dump_string(r, APLOG_MARK, "INPUT Data", *src, *len);
 
@@ -429,7 +429,7 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
   entryp = chxj_apply_convrule(r, dconf->convrules);
 
   if (!entryp || (!(entryp->action & CONVRULE_ENGINE_ON_BIT) && !(entryp->action & CONVRULE_COOKIE_ONLY_BIT))) {
-    DBG(r,"REQ[%X] end of chxj_convert()", (unsigned int)(apr_size_t)r);
+    DBG(r,"REQ[%X] end %s()", TO_ADDR(r),__func__);
     return (char *)*src;
   }
 
@@ -442,14 +442,14 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
   else
     user_agent = (char *)apr_table_get(r->headers_in, HTTP_USER_AGENT);
 
-  DBG(r,"REQ[%X] User-Agent:[%s]", (unsigned int)(apr_size_t)r, user_agent);
-  DBG(r,"REQ[%X] content type is %s", (unsigned int)(apr_size_t)r, r->content_type);
+  DBG(r,"REQ[%X] User-Agent:[%s]", TO_ADDR(r), user_agent);
+  DBG(r,"REQ[%X] content type is [%s]", TO_ADDR(r), r->content_type);
 
 
   if (  ! STRNCASEEQ('t','T', "text/html", r->content_type, sizeof("text/html")-1)
     &&  ! STRNCASEEQ('a','A', "application/xhtml+xml", r->content_type, sizeof("application/xhtml+xml")-1)) {
-    DBG(r,"REQ[%X] no convert. content type is %s", (unsigned int)(apr_size_t)r, r->content_type);
-    DBG(r,"REQ[%X] end of chxj_convert()", (unsigned int)(apr_size_t)r);
+    DBG(r,"REQ[%X] no convert. content type is [%s]", TO_ADDR(r), r->content_type);
+    DBG(r,"REQ[%X] end %s()", TO_ADDR(r),__func__);
     return (char *)*src;
   }
 
@@ -519,7 +519,7 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
             *len = 0;
           }
         }
-        DBG(r, "REQ[%X] end of chxj_convert()(emoji only)", (unsigned int)(apr_size_t)r);
+        DBG(r, "REQ[%X] end %s()(emoji only)", TO_ADDR(r),__func__);
       }
   
       if (   !(entryp->action & CONVRULE_EMOJI_ONLY_BIT) 
@@ -565,7 +565,7 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
 
 
 
-  DBG(r, "REQ[%X] end of chxj_convert()", (unsigned int)(apr_size_t)r);
+  DBG(r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
 
   return dst;
 }
@@ -578,7 +578,7 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
 static void
 s_convert_guid_parameter_to_header(request_rec *r, const char *param, device_table *spec)
 {
-  DBG(r, "REQ[%X] start s_convert_guid_parameter() param:[%s]", (unsigned int)(apr_size_t)r, param);
+  DBG(r, "REQ[%X] start %s() param:[%s]", TO_ADDR(r),__func__, param);
   if (strcasecmp(param, "guid") == 0) {
     switch(spec->html_spec_type) {
     case CHXJ_SPEC_XHtml_Mobile_1_0:
@@ -602,7 +602,7 @@ s_convert_guid_parameter_to_header(request_rec *r, const char *param, device_tab
       break;
     }
   }
-  DBG(r, "REQ[%X] end s_convert_guid_parameter()", (unsigned int)(apr_size_t)r);
+  DBG(r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
 }
 
 /**
@@ -626,11 +626,11 @@ chxj_convert_input_header(request_rec *r,chxjconvrule_entry *entryp, device_tabl
   cookie_t   *cookie = NULL;
   int        no_update_flag = 0;
 
-  DBG(r, "REQ[%X] start chxj_convert_input_header()", (unsigned int)(apr_size_t)r);
+  DBG(r, "REQ[%X] start %s()", TO_ADDR(r),__func__);
 
   if (! r->args) {
-    DBG(r, "REQ[%X] r->args=[null]", (unsigned int)(apr_size_t)r);
-    DBG(r, "REQ[%X] end   chxj_convert_input_header()", (unsigned int)(apr_size_t)r);
+    DBG(r, "REQ[%X] r->args=[null]", TO_ADDR(r));
+    DBG(r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
     return 0;
   }
   urilen = strlen(r->args);
@@ -654,13 +654,13 @@ chxj_convert_input_header(request_rec *r,chxjconvrule_entry *entryp, device_tabl
     value = apr_strtok(NULL, "=", &vstate);
     if (! name) continue;
     if (strcasecmp(name, CHXJ_COOKIE_NOUPDATE_PARAM) == 0 || strcasecmp(name, chxj_url_encode(r->pool, CHXJ_COOKIE_NOUPDATE_PARAM)) == 0) {
-      DBG(r, "REQ[%X] found cookie no update parameter", (unsigned int)(apr_size_t)r);
+      DBG(r, "REQ[%X] found cookie no update parameter", TO_ADDR(r));
       no_update_flag++;
     }
   }
 
   buff = apr_pstrdup(r->pool, r->args);
-  DBG(r, "REQ[%X] r->args=[%s]", (unsigned int)(apr_size_t)r, buff);
+  DBG(r, "REQ[%X] r->args=[%s]", TO_ADDR(r), buff);
 
   /* _chxj_dmy */
   /* _chxj_c_ */
@@ -693,12 +693,12 @@ chxj_convert_input_header(request_rec *r,chxjconvrule_entry *entryp, device_tabl
         if (value && *value != 0) {
           value = chxj_url_decode(r->pool, value);
           dlen   = strlen(value);
-          DBG(r, "************ before encoding[%s]", value);
+          DBG(r, "REQ[%X] ************ before encoding[%s]", TO_ADDR(r),value);
   
           dvalue = chxj_rencoding(r, value, &dlen,spec->output_encoding);
           dvalue = chxj_url_encode(r->pool, dvalue);
   
-          DBG(r, "************ after encoding[%s]", dvalue);
+          DBG(r, "REQ[%X] ************ after encoding[%s]", TO_ADDR(r),dvalue);
         }
         else {
           dvalue = "";
@@ -745,11 +745,9 @@ chxj_convert_input_header(request_rec *r,chxjconvrule_entry *entryp, device_tabl
     if (strcasecmp(name, CHXJ_COOKIE_PARAM) == 0 || strcasecmp(name, "%5Fchxj%5Fcc") == 0) {
       if (! cookie) {
         apr_table_unset(r->headers_in, "Cookie");
-        DBG(r, "REQ[%X] found cookie parameter[%s]",    (unsigned int)(apr_size_t)r, value);
-        DBG(r, "REQ[%X] call start chxj_load_cookie()", (unsigned int)(apr_size_t)r);
+        DBG(r, "REQ[%X] found cookie parameter[%s]", TO_ADDR(r), value);
         cookie_lock_t *lock = chxj_cookie_lock(r);
         cookie = chxj_load_cookie(r, value);
-        DBG(r, "REQ[%X] call end   chxj_load_cookie()", (unsigned int)(apr_size_t)r);
         if (! no_update_flag && cookie) {
           cookie = chxj_update_cookie(r, cookie);
         }
@@ -774,8 +772,8 @@ chxj_convert_input_header(request_rec *r,chxjconvrule_entry *entryp, device_tabl
   }
   r->args = result;
 
-  DBG(r, "REQ[%X] result r->args=[%s]",               (unsigned int)(apr_size_t)r, r->args);
-  DBG(r, "REQ[%X] end   chxj_convert_input_header()", (unsigned int)(apr_size_t)r);
+  DBG(r, "REQ[%X] result r->args=[%s]", TO_ADDR(r), r->args);
+  DBG(r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
   return 0;
 }
 
@@ -808,10 +806,10 @@ chxj_input_convert(
   apr_size_t ilen = 0;
   apr_pool_t *pool;
 
-  DBG(r, "REQ[%X] start of chxj_input_convert()", (unsigned int)(apr_size_t)r);
+  DBG(r, "REQ[%X] start %s()", TO_ADDR(r),__func__);
 
   if (! *src) {
-    DBG(r, "REQ[%X] end of chxj_input_convert() (input is null)", (unsigned int)(apr_size_t)r);
+    DBG(r, "REQ[%X] end %s() (input is null)", TO_ADDR(r),__func__);
     return apr_pstrdup(r->pool, "");
   }
 
@@ -840,7 +838,7 @@ chxj_input_convert(
     value = apr_strtok(NULL, "=", &vstate);
     if (! name) continue;
     if (strcasecmp(name, CHXJ_COOKIE_NOUPDATE_PARAM) == 0 || strcasecmp(name, chxj_url_encode(r->pool, CHXJ_COOKIE_NOUPDATE_PARAM)) == 0) {
-      DBG(r, "REQ[%X] found cookie no update parameter", (unsigned int)(apr_size_t)r);
+      DBG(r, "REQ[%X] found cookie no update parameter", TO_ADDR(r));
       no_update_flag++;
     }
   }
@@ -928,11 +926,9 @@ chxj_input_convert(
     if (strcasecmp(name, CHXJ_COOKIE_PARAM) == 0 || strcasecmp(name, "%5Fchxj%5Fcc") == 0) {
       if (! cookie) {
         apr_table_unset(r->headers_in, "Cookie");
-        DBG(r, "REQ[%X] found cookie parameter[%s]",    (unsigned int)(apr_size_t)r, value);
-        DBG(r, "REQ[%X] call start chxj_load_cookie()", (unsigned int)(apr_size_t)r);
+        DBG(r, "REQ[%X] found cookie parameter[%s]",    TO_ADDR(r), value);
         cookie_lock_t *lock = chxj_cookie_lock(r);
         cookie = chxj_load_cookie(r, value);
-        DBG(r, "REQ[%X] call end   chxj_load_cookie()", (unsigned int)(apr_size_t)r);
         if (! no_update_flag && cookie) {
           cookie = chxj_update_cookie(r, cookie);
         }
@@ -988,7 +984,7 @@ chxj_input_convert(
         s_convert_guid_parameter_to_header(r, &name[sizeof(CHXJ_QUERY_STRING_PARAM_PREFIX_ENC)-1], spec);
       }
     }
-    DBG(r, "REQ[%X] ************************ name:[%s]", (unsigned int)(apr_size_t)r, name);
+    DBG(r, "REQ[%X] ************************ name:[%s]", TO_ADDR(r), name);
   }
   *len = strlen(result);
   apr_table_setn(r->headers_in, "X-Chxj-Cookie-No-Update", "true");
@@ -996,8 +992,8 @@ chxj_input_convert(
     result = apr_pstrcat(pool, result, "&_chxj_nc=true", NULL);
   }
 
-  DBG(r, "REQ[%X] AFTER input convert result = [%s]", (unsigned int)(apr_size_t)r, result);
-  DBG(r, "REQ[%X] end chxj_input_convert()", (unsigned int)(apr_size_t)r);
+  DBG(r, "REQ[%X] AFTER input convert result = [%s]", TO_ADDR(r), result);
+  DBG(r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
 
   return result;
 }
@@ -1020,7 +1016,7 @@ pass_data_to_filter(ap_filter_t *f, const char *data,
   apr_bucket_brigade  *bb;
   apr_bucket          *b;
 
-  DBG(r, "REQ[%X] start pass_data_to_filter()", (unsigned int)(apr_size_t)r);
+  DBG(r, "REQ[%X] start %s()", TO_ADDR(r),__func__);
 
   chxj_header_inf_clear(r);
 
@@ -1033,11 +1029,11 @@ pass_data_to_filter(ap_filter_t *f, const char *data,
 
   rv = ap_pass_brigade(f->next, bb);
   if (rv != APR_SUCCESS) {
-    DBG(r, "REQ[%X] end pass_data_to_filter() (apr_pass_brigade)", (unsigned int)(apr_size_t)r);
+    DBG(r, "REQ[%X] end %s() (apr_pass_brigade)", TO_ADDR(r),__func__);
     return rv;
   }
 
-  DBG(r, "REQ[%X] end pass_data_to_filter()", (unsigned int)(apr_size_t)r);
+  DBG(r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
 
   return rv;
 }
@@ -1086,7 +1082,7 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
   apr_pool_t          *pool;
 
   r  = f->r;
-  DBG(f->r, "REQ[%X] start of chxj_output_filter()", (unsigned int)(apr_size_t)r);
+  DBG(f->r, "REQ[%X] start %s()", TO_ADDR(r),__func__);
   rv = APR_SUCCESS;
 
   apr_pool_create(&pool, r->pool);
@@ -1127,7 +1123,7 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
     s_add_no_cache_headers(r, entryp);
     /* must not send body. */
     rv = pass_data_to_filter(f, "", 0);
-    DBG(f->r, "REQ[%X] end of chxj_output_filter()", TO_ADDR(r));
+    DBG(f->r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
     return rv;
   }
 
@@ -1149,10 +1145,10 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
             || STRCASEEQ('x','X',"x-png",           &r->content_type[6])         /* PNG */
             || STRCASEEQ('g','G',"gif",             &r->content_type[6])))) {     /* GIF */
       
-      DBG(r, "REQ[%X] not convert content-type:[%s] dconf->image:[%d]", (unsigned int)(apr_size_t)r, r->content_type, dconf->image);
+      DBG(r, "REQ[%X] not convert content-type:[%s] dconf->image:[%d]", TO_ADDR(r), r->content_type, dconf->image);
       if (entryp->action & CONVRULE_COOKIE_ON_BIT) {
         cookie_lock_t *lock = NULL;
-        DBG(r, "REQ[%X] entryp->action == COOKIE_ON_BIT", (unsigned int)(apr_size_t)r);
+        DBG(r, "REQ[%X] entryp->action == COOKIE_ON_BIT", TO_ADDR(r));
         switch(spec->html_spec_type) {
         case CHXJ_SPEC_Chtml_1_0:
         case CHXJ_SPEC_Chtml_2_0:
@@ -1180,14 +1176,14 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
       }
       s_add_no_cache_headers(r, entryp);
       ap_pass_brigade(f->next, bb);
-      DBG(f->r, "REQ[%X] end of chxj_output_filter()", (unsigned int)(apr_size_t)r);
+      DBG(f->r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
       return APR_SUCCESS;
     }
   }
   else {
-    DBG(r, "REQ[%X] not convert content-type:[(null)]", (unsigned int)(apr_size_t)r);
+    DBG(r, "REQ[%X] not convert content-type:[(null)]", TO_ADDR(r));
     ap_pass_brigade(f->next, bb);
-    DBG(f->r, "REQ[%X] end of chxj_output_filter()", (unsigned int)(apr_size_t)r);
+    DBG(f->r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
     return APR_SUCCESS;
   }
 
@@ -1203,7 +1199,7 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
       /* append data                                                        */
       /*--------------------------------------------------------------------*/
       char *tmp;
-      DBG(r, "append data start");
+      DBG(r, "REQ[%X] append data start", TO_ADDR(r));
       ctx = (mod_chxj_ctx *)f->ctx;
 
       if (len > 0) {
@@ -1217,12 +1213,12 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
 
         ctx->len += len;
       }
-      DBG(r, "REQ[%X] append data end", (unsigned int)(apr_size_t)r);
+      DBG(r, "REQ[%X] append data end", TO_ADDR(r));
     }
 
     if (APR_BUCKET_IS_EOS(b)) {
 
-      DBG(r, "REQ[%X] eos", (unsigned int)(apr_size_t)r);
+      DBG(r, "REQ[%X] eos", TO_ADDR(r));
       /*----------------------------------------------------------------------*/
       /* End Of File                                                          */
       /*----------------------------------------------------------------------*/
@@ -1230,14 +1226,14 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
         cookie_lock_t *lock = NULL;
         ctx = (mod_chxj_ctx *)f->ctx;
 
-        DBG(r, "REQ[%X] content_type=[%s]", (unsigned int)(apr_size_t)r, r->content_type);
+        DBG(r, "REQ[%X] content_type=[%s]", TO_ADDR(r), r->content_type);
         lock = chxj_cookie_lock(r);
 
         if (spec->html_spec_type != CHXJ_SPEC_UNKNOWN 
             && r->content_type 
             && (STRNCASEEQ('a','A',"application/xhtml+xml", r->content_type, sizeof("application/xhtml+xml")-1)
             ||  STRNCASEEQ('t','T',"text/html", r->content_type, sizeof("text/html")-1))) {
-          DBG(r, "REQ[%X] detect convert target:[%s]", (unsigned int)(apr_size_t)r, r->content_type);
+          DBG(r, "REQ[%X] detect convert target:[%s]", TO_ADDR(r), r->content_type);
 
           if (ctx->len) {
             char *tmp;
@@ -1268,7 +1264,7 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
         if (r->content_type
             && *(char *)r->content_type == 't'
             && strncmp(r->content_type, "text/xml",   8) == 0) {
-          DBG(r, "REQ[%X] text/XML", (unsigned int)(apr_size_t)r);
+          DBG(r, "REQ[%X] text/XML", TO_ADDR(r));
 
           Doc       doc;
           Node      *root;
@@ -1303,9 +1299,9 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
             chxj_qrcode_node_to_qrcode(&qrcode, root);
             sts = chxj_qrcode_create_image_data(&qrcode, &ctx->buffer, &ctx->len);
             if (sts != OK) {
-              ERR(r, "REQ[%X] qrcode create failed.", (unsigned int)(apr_size_t)r);
+              ERR(r, "REQ[%X] qrcode create failed.", TO_ADDR(r));
               chxj_cookie_unlock(r, lock);
-              DBG(f->r, "REQ[%X] end of chxj_output_filter()", (unsigned int)(apr_size_t)r);
+              DBG(f->r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
               return sts;
             }
             r->content_type = apr_psprintf(r->pool, "image/jpeg");
@@ -1326,11 +1322,11 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
               || STRCASEEQ('x','X',"x-png",           &r->content_type[6])         /* PNG */
               || STRCASEEQ('x','X',"x-ms-bmp",     &r->content_type[6])         /* BMP */
               || STRCASEEQ('g','G',"gif",             &r->content_type[6]))) {     /* GIF */
-          DBG(r, "REQ[%X] detect convert target:[%s]", (unsigned int)(apr_size_t)r, r->content_type);
+          DBG(r, "REQ[%X] detect convert target:[%s]", TO_ADDR(r), r->content_type);
           if (ctx->len) {
             char *tmp;
 
-            DBG(r, "REQ[%X] ctx->len[%d]", (unsigned int)(apr_size_t)r, (unsigned int)ctx->len);
+            DBG(r, "REQ[%X] ctx->len[%d]", TO_ADDR(r), (unsigned int)ctx->len);
             tmp = apr_palloc(pool, ctx->len + 1);
 
             memset(tmp, 0, ctx->len + 1);
@@ -1348,7 +1344,7 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
 
         
         if (ctx->len > 0) {
-          DBG(r, "REQ[%X] call pass_data_to_filter()", (unsigned int)(apr_size_t)r);
+          DBG(r, "REQ[%X] call %s()", TO_ADDR(r),__func__);
           s_add_cookie_id_if_has_location_header(r, cookie);
           if (apr_table_get(r->headers_out, "Location") || apr_table_get(r->err_headers_out, "Location")) {
             if (! ap_is_HTTP_REDIRECT(r->status)) {
@@ -1376,18 +1372,18 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
                                    (const char *)ctx->buffer, 
                                    (apr_size_t)ctx->len);
         }
-        DBG(f->r, "REQ[%X] end of chxj_output_filter()", (unsigned int)(apr_size_t)r);
+        DBG(f->r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
         return rv;
       }
       else {
-        DBG(r, "REQ[%X] SAVE COOKIE[%x]", (unsigned int)(apr_size_t)r, entryp->action);
+        DBG(r, "REQ[%X] SAVE COOKIE[%x]", TO_ADDR(r), entryp->action);
 
         /*
          * save cookie.
          */
         if (entryp->action & CONVRULE_COOKIE_ON_BIT) {
           cookie_lock_t *lock = NULL;
-          DBG(r, "REQ[%X] entryp->action == COOKIE_ON_BIT", (unsigned int)(apr_size_t)r);
+          DBG(r, "REQ[%X] entryp->action == COOKIE_ON_BIT", TO_ADDR(r));
           switch(spec->html_spec_type) {
           case CHXJ_SPEC_Chtml_1_0:
           case CHXJ_SPEC_Chtml_2_0:
@@ -1420,17 +1416,15 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
           }
         }
         apr_table_setn(r->headers_out, "Content-Length", "0");
-        DBG(r, "REQ[%X] call pass_data_to_filter()", (unsigned int)(apr_size_t)r);
         s_add_no_cache_headers(r, entryp);
         rv = pass_data_to_filter(f, (const char *)"", (apr_size_t)0);
-        DBG(f->r, "REQ[%X] end of chxj_output_filter()", (unsigned int)(apr_size_t)r);
         return rv;
       }
     }
   }
   apr_brigade_destroy(bb);
 
-  DBG(f->r, "REQ[%X] end of chxj_output_filter()", (unsigned int)(apr_size_t)r);
+  DBG(f->r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
 
   return APR_SUCCESS;
 }
@@ -1441,22 +1435,24 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
 static void
 s_add_cookie_id_if_has_location_header(request_rec *r, cookie_t *cookie)
 {
+  DBG(r, "REQ[%X] start %s()", TO_ADDR(r),__func__);
   char *location_header = (char *)apr_table_get(r->headers_out, "Location");
   if (! location_header) {
     location_header = (char *)apr_table_get(r->err_headers_out, "Location");
   }
   if (cookie && location_header) {
-    DBG(r, "REQ[%X] Location Header=[%s]", (unsigned int)(apr_size_t)r, location_header);
+    DBG(r, "REQ[%X] Location Header=[%s]", TO_ADDR(r), location_header);
     location_header = chxj_add_cookie_parameter(r,
                                                 location_header,
                                                 cookie);
     apr_table_unset(r->headers_out, "Location");
     apr_table_setn(r->headers_out, "Location", location_header);
-    DBG(r, "REQ[%X] Location Header=[%s]", (unsigned int)(apr_size_t)r, location_header);
+    DBG(r, "REQ[%X] Location Header=[%s]", TO_ADDR(r), location_header);
     if (!ap_is_HTTP_REDIRECT(r->status)) {
       r->status = HTTP_MOVED_TEMPORARILY;
     }
   }
+  DBG(r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
 }
 
 /**
@@ -1476,10 +1472,10 @@ chxj_input_handler(request_rec *r)
   apr_pool_t          *pool;
   int                 response_code = 0;
   
-  DBG(r, "start of chxj_input_handler()");
+  DBG(r, "REQ[%X] start %s()",TO_ADDR(r),__func__);
 
   if (strcasecmp(r->handler, "chxj-input-handler")) {
-    DBG(r, "end chxj_input_handler()");
+    DBG(r, "REQ[%X] end %s()",TO_ADDR(r),__func__);
     return DECLINED;
   }
   apr_pool_create(&pool, r->pool);
@@ -1515,7 +1511,7 @@ chxj_input_handler(request_rec *r)
    */
   if (post_data_len > 0) {
     post_data = chxj_input_convert(r, (const char**)&post_data, (apr_size_t*)&post_data_len, entryp, spec);
-    DBG(r, "(in:exchange)POSTDATA:[%s]", post_data);
+    DBG(r, "REQ[%X] (in:exchange)POSTDATA:[%s]", TO_ADDR(r),post_data);
   }
 
   char *url_path;
@@ -1528,7 +1524,7 @@ chxj_input_handler(request_rec *r)
   if (r->args) {
     url_path = apr_pstrcat(pool, url_path, "?", r->args, NULL);
   }
-  DBG(r, "==> new url_path:[%s]", url_path);
+  DBG(r, "REQ[%X] ==> new url_path:[%s]", TO_ADDR(r),url_path);
 
   apr_size_t res_len;
   apr_table_setn(r->headers_in, CHXJ_HEADER_ORIG_CLIENT_IP, r->connection->remote_ip);
@@ -1543,12 +1539,12 @@ chxj_input_handler(request_rec *r)
   apr_table_setn(r->headers_in, "Content-Length", apr_psprintf(pool, "%" APR_SIZE_T_FMT, post_data_len));
   response = chxj_serf_post(r, pool, url_path, post_data, post_data_len, 1, &res_len, &response_code);
 #if 0
-  DBG(r, "REQ[%X] -------------------------------------------------------", (unsigned int)(apr_size_t)r);
+  DBG(r, "REQ[%X] -------------------------------------------------------", TO_ADDR(r));
   DBG(r, "REQ[%X] response length:[%" APR_SIZE_T_FMT "]", (unsigned int)(apr_size_t)r, res_len);
   for (ii=0; ii<res_len/64; ii++) {
-    DBG(r, "REQ[%X] response:[%.*s]", (unsigned int)(apr_size_t)r, 64, &response[ii*64]);
+    DBG(r, "REQ[%X] response:[%.*s]", TO_ADDR(r), 64, &response[ii*64]);
   }
-  DBG(r, "REQ[%X] -------------------------------------------------------", (unsigned int)(apr_size_t)r);
+  DBG(r, "REQ[%X] -------------------------------------------------------", TO_ADDR(r));
 #endif
 
   char *chunked;
@@ -1559,7 +1555,7 @@ chxj_input_handler(request_rec *r)
     }
   }
   if (ap_is_HTTP_ERROR(response_code)) {
-    DBG(r, "REQ[%X] end of chxj_input_handler() (HTTP-ERROR received. response code:[%d])", (unsigned int)(apr_size_t)r, response_code);
+    DBG(r, "REQ[%X] end %s() (HTTP-ERROR received. response code:[%d])", TO_ADDR(r), __func__,response_code);
     return response_code;
   }
   {
@@ -1576,13 +1572,13 @@ chxj_input_handler(request_rec *r)
     e = apr_bucket_eos_create(c->bucket_alloc);
     APR_BRIGADE_INSERT_TAIL(bb, e);
     if ((rv = ap_pass_brigade(r->output_filters, bb)) != APR_SUCCESS) {
-      ERR(r, "REQ[%X] %s:%d failed ap_pass_brigade()", (unsigned int)(apr_size_t)r, APLOG_MARK);
+      ERR(r, "REQ[%X] %s:%d failed ap_pass_brigade()", TO_ADDR(r), APLOG_MARK);
       return rv;
     }
     apr_brigade_cleanup(bb);
   }
 
-  DBG(r, "REQ[%X] end of chxj_input_handler()", (unsigned int)(apr_size_t)r);
+  DBG(r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
   return APR_SUCCESS;
 }
 
@@ -1684,12 +1680,12 @@ chxj_config_server_create(apr_pool_t *p, server_rec *s)
 static int
 chxj_translate_name(request_rec *r)
 {
-  DBG(r, "REQ[%X] =======================================================================", (unsigned int)(apr_size_t)r);
-  DBG(r, "REQ[%X] ", (unsigned int)(apr_size_t)r);
-  DBG(r, "REQ[%X] START REQUEST (uri:[%s] args:[%s])", (unsigned int)(apr_size_t)r, r->unparsed_uri, r->args ? r->args : "");
-  DBG(r, "REQ[%X] METHOD [%s]", TO_ADDR(r), r->method);
-  DBG(r, "REQ[%X] ", (unsigned int)(apr_size_t)r);
-  DBG(r, "REQ[%X] =======================================================================", (unsigned int)(apr_size_t)r);
+  DBG(r, "REQ[%X] =======================================================================", TO_ADDR(r));
+  DBG(r, "REQ[%X] ",                                                                        TO_ADDR(r));
+  DBG(r, "REQ[%X] START REQUEST (uri:[%s] args:[%s])",                                      TO_ADDR(r), r->unparsed_uri, r->args ? r->args : "");
+  DBG(r, "REQ[%X] METHOD [%s]",                                                             TO_ADDR(r), r->method);
+  DBG(r, "REQ[%X] ",                                                                        TO_ADDR(r));
+  DBG(r, "REQ[%X] =======================================================================", TO_ADDR(r));
 
   mod_chxj_config *dconf;
   dconf = chxj_get_module_config(r->per_dir_config, &chxj_module);
@@ -1722,7 +1718,7 @@ chxj_insert_filter(request_rec *r)
   apr_status_t        rv;
   char                *contentType;
 
-  DBG(r, "REQ[%X] start chxj_insert_filter()", (unsigned int)(apr_size_t)r);
+  DBG(r, "REQ[%X] start %s()", TO_ADDR(r),__func__);
 
   dconf = chxj_get_module_config(r->per_dir_config, &chxj_module);
 
@@ -1735,22 +1731,22 @@ chxj_insert_filter(request_rec *r)
   contentType = (char *)apr_table_get(r->headers_in, "Content-Type");
   if (contentType
       && strncasecmp("multipart/form-data", contentType, 19) == 0) {
-    DBG(r, "REQ[%X] detect multipart/form-data ==> no target", (unsigned int)(apr_size_t)r);
-    DBG(r, "REQ[%X] end chxj_insert_filter()", (unsigned int)(apr_size_t)r);
+    DBG(r, "REQ[%X] detect multipart/form-data ==> no target", TO_ADDR(r));
+    DBG(r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
     return;
   }
 
   spec = chxj_specified_device(r, user_agent);
   entryp = chxj_apply_convrule(r, dconf->convrules);
   if (!entryp) {
-    DBG(r, "REQ[%X] end chxj_insert_filter()", (unsigned int)(apr_size_t)r);
+    DBG(r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
     return;
   }
   ctx = apr_palloc(r->pool, sizeof(*ctx));
   memset(ctx, 0, sizeof(*ctx));
   if ((rv = apr_pool_create(&ctx->pool, r->pool)) != APR_SUCCESS) {
-    ERR(r, "%s:%d: failed: new pool create. rv:[%d]", __FILE__,__LINE__,rv);
-    DBG(r, "REQ:[%X] end chxj_insert_filter()", (unsigned int)(apr_size_t)r);
+    ERR(r, "REQ[%X] %s:%d: failed: new pool create. rv:[%d]", TO_ADDR(r),__FILE__,__LINE__,rv);
+    DBG(r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
     return;
   }
   ctx->entryp = entryp;
@@ -1759,8 +1755,8 @@ chxj_insert_filter(request_rec *r)
   ctx->buffer[0] = 0;
 
   if (!entryp || (!(entryp->action & CONVRULE_ENGINE_ON_BIT) && !(entryp->action & CONVRULE_COOKIE_ONLY_BIT))) {
-    DBG(r,"REQ[%X] EngineOff", (unsigned int)(apr_size_t)r);
-    DBG(r, "REQ[%X] end chxj_insert_filter()", (unsigned int)(apr_size_t)r);
+    DBG(r,"REQ[%X] EngineOff", TO_ADDR(r));
+    DBG(r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
     return;
   }
 
@@ -1779,17 +1775,17 @@ chxj_insert_filter(request_rec *r)
     break;
 
   default:
-    DBG(r, "REQ[%X] end chxj_insert_filter() Unknown spec type(%d).", (unsigned int)(apr_size_t)r, spec->html_spec_type);
+    DBG(r, "REQ[%X] end %s() Unknown spec type(%d).", TO_ADDR(r), __func__,spec->html_spec_type);
     return;
   }
 
 
   if (! apr_table_get(r->headers_in, "X-Chxj-Forward")) {
     ap_add_output_filter("chxj_output_filter", ctx, r, r->connection);
-    DBG(r, "REQ[%X] added Output Filter", (unsigned int)(apr_size_t)r);
+    DBG(r, "REQ[%X] added Output Filter", TO_ADDR(r));
   }
 
-  DBG(r, "REQ[%X] end chxj_insert_filter()", (unsigned int)(apr_size_t)r);
+  DBG(r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
 }
 
 
