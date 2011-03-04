@@ -16,6 +16,7 @@
  */
 #include "mod_chxj.h"
 #include "chxj_str_util.h"
+#include "chxj_add_device_env.h"
 
 static device_table  UNKNOWN_DEVICE      = {
   .next = NULL,
@@ -60,6 +61,12 @@ static device_table  UNKNOWN_DEVICE      = {
   .emoji_type = NULL,
   .output_encoding = "Shift_JIS",
 };
+/* spec cache */
+static __thread device_table *v_spec = NULL;
+static device_table *s_get_device_data(request_rec *r, const char *device_id, device_table_list *dtl);
+static device_table *s_specified_device_from_xml(request_rec *r, mod_chxj_config * conf, const char *user_agent);
+static device_table *s_specified_device_from_tsv(request_rec *r,device_table *spec,const char *user_agent);
+
 
 int
 get_boolean_value(request_rec *r,const char *val){
@@ -91,25 +98,39 @@ get_boolean_value(request_rec *r,const char *val){
 device_table *
 chxj_specified_device(request_rec *r, const char *user_agent) 
 {
-  device_table         *returnType = &UNKNOWN_DEVICE;
-  device_table         *dt;
+  device_table         *dt = &UNKNOWN_DEVICE;
   mod_chxj_config      *conf;
+  char                 *spec_check = NULL;
+  
+  DBG(r, "REQ[%X] start chxj_specified_device()", TO_ADDR(r));
+
+  /*
+   * if I have spec cache, I will use it.
+   */
+  spec_check = (char *)apr_table_get(r->headers_in, "X-Chxj-Spec-Check");
+  if (spec_check && STRCASEEQ('d','D',"done",spec_check)) {
+    dt = v_spec;
+    DBG(r, "REQ[%x] Use spec cache.", TO_ADDR(r));
+    DBG(r, "REQ[%x] end chxj_specified_device() (Spec-Check-Done)", (unsigned int)(apr_size_t)r);
+    return dt;
+  }
   
   conf = chxj_get_module_config(r->per_dir_config, &chxj_module);
-  
-  DBG(r, "start chxj_specified_device() %d",conf->detect_device_type);
-  
   if(! user_agent){
-    return returnType;
+    DBG(r, "REQ[%X] end chxj_specified_device() %d", TO_ADDR(r), conf->detect_device_type);
+    return dt;
   }
   
-  dt = chxj_specified_device_from_xml(r,user_agent);
+  dt = s_specified_device_from_xml(r,conf, user_agent);
 
   if (conf->detect_device_type == CHXJ_ADD_DETECT_DEVICE_TYPE_TSV ){
-    chxj_specified_device_from_tsv(r,dt,user_agent);
+    s_specified_device_from_tsv(r,dt,user_agent);
   }
+  /* save to spec cache */
+  v_spec = dt;
+  apr_table_setn(r->headers_in, "X-Chxj-Spec-Check", "done");
   
-  DBG(r, "end chxj_specified_device() %d",conf->detect_device_type);
+  DBG(r, "REQ[%X] end chxj_specified_device() %d",TO_ADDR(r), conf->detect_device_type);
   return dt;
 }
 /**
@@ -118,57 +139,46 @@ chxj_specified_device(request_rec *r, const char *user_agent)
  * @param userAgent UserAgent is appointed here,
  * @return The style which corresponds is returned.
  */
-device_table *
-chxj_specified_device_from_xml(request_rec *r, const char *user_agent) 
+static device_table *
+s_specified_device_from_xml(request_rec *r, mod_chxj_config * conf, const char *user_agent) 
 {
   ap_regmatch_t        match[10];
   device_table         *returnType = &UNKNOWN_DEVICE;
   device_table_list    *dtl;
   device_table         *dt;
-  mod_chxj_config      *conf; 
   char                 *device_id;
 
   if (! user_agent) 
     return returnType;
             
 
-  DBG(r, "start chxj_specified_device()");
+  DBG(r, "REQ[%X] start s_specified_device()", TO_ADDR(r));
 
-  conf = chxj_get_module_config(r->per_dir_config, &chxj_module);
   if (! conf->devices) {
-    DBG(r, "device_data.xml load failure");
+    ERR(r, "REQ[%X] device_data.xml load failure", TO_ADDR(r));
+    DBG(r, "REQ[%X] end chxj_specified_device()", TO_ADDR(r));
     return returnType;
   }
 
   for (dtl = conf->devices; dtl; dtl = dtl->next) {
     if (! dtl->pattern) {
-      DBG(r, "pattern is null");
       continue;
     }
 
     /* DBG(r, "pattern is [%s]", dtl->pattern); */
     if (! dtl->regexp) {
-      DBG(r,"compile failed.");
+      ERR(r,"REQ[%X] compile failed.", TO_ADDR(r));
+      DBG(r, "REQ[%X] end chxj_specified_device()", TO_ADDR(r));
       return returnType;
     }
 
     if (ap_regexec((const ap_regex_t *)dtl->regexp, user_agent, (apr_size_t)dtl->regexp->re_nsub + 1, match, 0) == 0) {
       device_id = ap_pregsub(r->pool, "$1", user_agent, dtl->regexp->re_nsub + 1, match);
-      DBG(r, "device_id:[%s]", device_id);
-      for (dt = dtl->table; dt; dt = dt->next) {
-        if (strcasecmp(device_id, dt->device_id) == 0) {
-          DBG(r, "device_name:[%s]", dt->device_name);
-          returnType = dt;
-          break;
-        }
-      }
+      DBG(r, "REQ[%X] device_id:[%s]", TO_ADDR(r), device_id);
 
+      dt = s_get_device_data(r, device_id, dtl);
       if (! dt) {
-        for (dt = dtl->table; dt; dt = dt->next) {
-          if (dt->next == NULL)
-            break;
-        }
-
+        dt = dtl->tail;
         if (dt){
           if (conf->detect_device_type > CHXJ_ADD_DETECT_DEVICE_TYPE_NONE ){
             dt->device_id = device_id;
@@ -176,37 +186,62 @@ chxj_specified_device_from_xml(request_rec *r, const char *user_agent)
           returnType = dt;
         }
       }
-    }
-
-    if (returnType != &UNKNOWN_DEVICE) {
-      DBG(r,"end chxj_specified_device()");
+      DBG(r,"REQ[%X] end chxj_specified_device()", TO_ADDR(r));
       return returnType;
     }
   }
 
-  DBG(r,"end chxj_specified_device()");
+  DBG(r,"REQ[%X] end s_specified_device()", TO_ADDR(r));
 
   return returnType;
 }
+
+
+#include <stdlib.h>
+static int 
+s_compar(const void *a, const void *b)
+{
+  device_table *aa = *(device_table **)a;
+  device_table *bb = *(device_table **)b;
+  return strcasecmp(aa->device_id, bb->device_id);
+}
+
+
+static device_table *
+s_get_device_data(request_rec *r, const char *device_id, device_table_list *dtl)
+{
+  device_table dt;
+  device_table *_dt;
+  dt.device_id = device_id;
+  _dt = &dt;
+  device_table **ret = bsearch(&_dt, dtl->sort_table, dtl->table_count, sizeof(device_table *), s_compar);
+  if (ret && *ret) {
+    return *ret;
+  }
+  return NULL;
+}
+
+
 /**
  * The device is specified from TSV file. 
  * @param r Request_rec is appointed.
  * @param userAgent UserAgent is appointed here,
  * @return The style which corresponds is returned.
  */
-device_table *
-chxj_specified_device_from_tsv(request_rec *r,device_table *spec,const char *user_agent)
+static device_table *
+s_specified_device_from_tsv(request_rec *r,device_table *spec,const char *user_agent)
 {
   if(spec->device_id == NULL){
     return spec;
   }
   
-  DBG(r, "start chxj_specified_device_from_tsv() device_id:[%s]",spec->device_id);
+  DBG(r, "REQ[%X] start s_specified_device_from_tsv() device_id:[%s]", TO_ADDR(r), spec->device_id);
   mod_chxj_config      *conf;
   
   conf = chxj_get_module_config(r->per_dir_config, &chxj_module);
   
   if(conf->device_hash == NULL){
+    DBG(r, "REQ[%X] end s_specified_device_from_tsv()", TO_ADDR(r));
     return spec;
   }
   char *key = apr_psprintf(r->pool,"%d.%s",spec->provider,spec->device_id);
@@ -214,7 +249,7 @@ chxj_specified_device_from_tsv(request_rec *r,device_table *spec,const char *use
   apr_table_t *ht = apr_hash_get(conf->device_hash,key,APR_HASH_KEY_STRING);
   
   if(ht != NULL){
-    DBG(r, "found ! chxj_specified_device_from_tsv() %s",key);
+    DBG(r, "REQ[%X] found ! s_specified_device_from_tsv() %s", TO_ADDR(r), key);
     int i;
     for ( i=0; i< conf->device_keys->nelts; i++){
       const char *k = ((const char**)conf->device_keys->elts)[i];
@@ -343,7 +378,7 @@ chxj_specified_device_from_tsv(request_rec *r,device_table *spec,const char *use
     }
   }
   
-  DBG(r, "end chxj_specified_device_from_tsv() [%d]",spec->provider);
+  DBG(r, "REQ[%X] end s_specified_device_from_tsv() [%d]",TO_ADDR(r),spec->provider);
   return spec;
 }
 

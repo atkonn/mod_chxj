@@ -98,6 +98,9 @@ struct device_table_list_t {
   ap_regex_t                  *regexp;
   device_table                *table;
   device_table                *tail;
+
+  device_table                **sort_table;
+  size_t                      table_count;
 };
 
 typedef struct converter_t converter_t;
@@ -129,14 +132,5 @@ extern converter_t convert_routine[];
 extern device_table* chxj_specified_device(
   request_rec             *r, 
   const char              *user_agent);
-
-extern device_table* chxj_specified_device_from_xml(
-  request_rec             *r,
-  const char              *user_agent);
-
-extern device_table* chxj_specified_device_from_tsv(
-    request_rec           *r,
-    device_table          *spec,
-    const char            *user_agent);
 
 #endif

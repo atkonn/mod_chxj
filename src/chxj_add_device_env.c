@@ -16,6 +16,7 @@
  */
 #include "mod_chxj.h"
 #include "chxj_add_device_env.h"
+#include "chxj_str_util.h"
 
 void
 chxj_add_device_env(request_rec *r, device_table *spec)
@@ -77,6 +78,9 @@ chxj_add_device_env(request_rec *r, device_table *spec)
   apr_table_setn(r->headers_in, HTTP_X_CHXJ_WP_WIDTH, apr_psprintf(r->pool, "%d", spec->wp_width));
   apr_table_setn(r->headers_in, HTTP_X_CHXJ_WP_HEIGHT,apr_psprintf(r->pool, "%d", spec->wp_heigh));
   apr_table_setn(r->headers_in, HTTP_X_CHXJ_CACHE,    apr_psprintf(r->pool, "%d", spec->cache));
+  apr_table_setn(r->headers_in, HTTP_X_CHXJ_DPI_WIDTH,    apr_psprintf(r->pool, "%d", spec->dpi_width));
+  apr_table_setn(r->headers_in, HTTP_X_CHXJ_DPI_HEIGHT,   apr_psprintf(r->pool, "%d", spec->dpi_heigh));
+  apr_table_setn(r->headers_in, HTTP_X_CHXJ_EMOJI_TYPE,   spec->emoji_type);
 
   apr_table_setn(r->headers_in, HTTP_X_CHXJ_VERSION,  apr_pstrdup(r->pool, PACKAGE_VERSION));
   
@@ -103,4 +107,186 @@ chxj_add_device_env(request_rec *r, device_table *spec)
   }
 
   DBG(r, "REQ[%X] end chxj_add_device_env()", (unsigned int)(apr_size_t)r);
+}
+
+device_table *
+chxj_get_device_env(request_rec *r)
+{
+  device_table *spec;
+  char *tmp;
+  DBG(r, "REQ[%X] start chxj_get_device_env()", (unsigned int)(apr_size_t)r);
+
+  spec = apr_palloc(r->pool, sizeof(device_table));
+  tmp = (char *)apr_table_get(r->headers_in, HTTP_X_CHXJ_HTMLSPECTYPE);
+  if (! tmp) {
+    DBG(r, "REQ[%X] end chxj_get_device_env()", (unsigned int)(apr_size_t)r);
+    return NULL;
+  }
+  if (STRCASEEQ('c','C', "CHTML1.0", tmp)) {
+    spec->html_spec_type = CHXJ_SPEC_Chtml_1_0;
+  }
+  else if (STRCASEEQ('c','C', "CHTML2.0", tmp)) {
+    spec->html_spec_type = CHXJ_SPEC_Chtml_2_0;
+  }
+  else if (STRCASEEQ('c','C', "CHTML3.0", tmp)) {
+    spec->html_spec_type = CHXJ_SPEC_Chtml_3_0;
+  }
+  else if (STRCASEEQ('c','C', "CHTML4.0", tmp)) {
+    spec->html_spec_type = CHXJ_SPEC_Chtml_4_0;
+  }
+  else if (STRCASEEQ('c','C', "CHTML5.0", tmp)) {
+    spec->html_spec_type = CHXJ_SPEC_Chtml_5_0;
+  }
+  else if (STRCASEEQ('c','C', "CHTML6.0", tmp)) {
+    spec->html_spec_type = CHXJ_SPEC_Chtml_6_0;
+  }
+  else if (STRCASEEQ('c','C', "CHTML7.0", tmp)) {
+    spec->html_spec_type = CHXJ_SPEC_Chtml_7_0;
+  }
+  else if (STRCASEEQ('x','X', "XHTML", tmp)) {
+    spec->html_spec_type = CHXJ_SPEC_XHtml_Mobile_1_0;
+  }
+  else if (STRCASEEQ('h','H', "HDML", tmp)) {
+    spec->html_spec_type = CHXJ_SPEC_Hdml;
+  }
+  else if (STRCASEEQ('j','j', "JHTML", tmp)) {
+    spec->html_spec_type = CHXJ_SPEC_Jhtml;
+  }
+  else if (STRCASEEQ('j','j', "JXHTML", tmp)) {
+    spec->html_spec_type = CHXJ_SPEC_Jxhtml;
+  }
+  else {
+    spec->html_spec_type = CHXJ_SPEC_UNKNOWN;
+  }
+  
+  tmp = (char *)apr_table_get(r->headers_in, HTTP_X_CHXJ_DEVICEID);
+  if (tmp) {
+    spec->device_id = apr_pstrdup(r->pool, tmp);
+  }
+  else {
+    spec->device_id = apr_pstrdup(r->pool, "");
+  }
+
+  tmp = (char *)apr_table_get(r->headers_in, HTTP_X_CHXJ_DEVICENAME);
+  if (tmp) {
+    spec->device_name = apr_pstrdup(r->pool, tmp);
+  }
+  else {
+    spec->device_name = apr_pstrdup(r->pool, "UNKNOWN");
+  }
+
+  tmp = (char *)apr_table_get(r->headers_in, HTTP_X_CHXJ_WIDTH);
+  if (tmp) {
+    spec->width = chxj_atoi(tmp); 
+  }
+  else {
+    spec->width = 640;
+  }
+
+  tmp = (char *)apr_table_get(r->headers_in, HTTP_X_CHXJ_HEIGHT);
+  if (tmp) {
+    spec->heigh = chxj_atoi(tmp); 
+  }
+  else {
+    spec->heigh = 480; 
+  }
+
+  tmp = (char *)apr_table_get(r->headers_in, HTTP_X_CHXJ_GIF);
+  if (STRCASEEQ('t','T',"true",tmp)) {
+    spec->available_gif = 1;
+  }
+  else {
+    spec->available_gif = 0;
+  }
+
+  tmp = (char *)apr_table_get(r->headers_in, HTTP_X_CHXJ_JPEG);
+  if (STRCASEEQ('t','T',"true",tmp)) {
+    spec->available_jpeg = 1;
+  }
+  else {
+    spec->available_jpeg = 0;
+  }
+
+  tmp = (char *)apr_table_get(r->headers_in, HTTP_X_CHXJ_PNG);
+  if (STRCASEEQ('t','T',"true",tmp)) {
+    spec->available_png = 1;
+  }
+  else {
+    spec->available_png = 0;
+  }
+
+  tmp = (char *)apr_table_get(r->headers_in, HTTP_X_CHXJ_BMP2);
+  if (STRCASEEQ('t','T',"true",tmp)) {
+    spec->available_bmp2 = 1;
+  }
+  else {
+    spec->available_bmp2 = 0;
+  }
+
+  tmp = (char *)apr_table_get(r->headers_in, HTTP_X_CHXJ_BMP4);
+  if (STRCASEEQ('t','T',"true",tmp)) {
+    spec->available_bmp4 = 1;
+  }
+  else {
+    spec->available_bmp4 = 0;
+  }
+
+  tmp = (char *)apr_table_get(r->headers_in, HTTP_X_CHXJ_COLOR);
+  if (tmp) {
+    spec->color = chxj_atoi(tmp); 
+  }
+  else {
+    spec->color = 15680000; 
+  }
+
+  tmp = (char *)apr_table_get(r->headers_in, HTTP_X_CHXJ_WP_WIDTH);
+  if (tmp) {
+    spec->wp_width = chxj_atoi(tmp); 
+  }
+  else {
+    spec->wp_width = 640; 
+  }
+
+  tmp = (char *)apr_table_get(r->headers_in, HTTP_X_CHXJ_WP_HEIGHT);
+  if (tmp) {
+    spec->wp_heigh = chxj_atoi(tmp); 
+  }
+  else {
+    spec->wp_heigh = 480; 
+  }
+
+  tmp = (char *)apr_table_get(r->headers_in, HTTP_X_CHXJ_CACHE);
+  if (tmp) {
+    spec->cache = chxj_atoi(tmp); 
+  }
+  else {
+    spec->cache = 10000000; 
+  }
+
+  tmp = (char *)apr_table_get(r->headers_in, HTTP_X_CHXJ_DPI_WIDTH);
+  if (tmp) {
+    spec->dpi_width = chxj_atoi(tmp); 
+  }
+  else {
+    spec->dpi_width = 96;
+  }
+
+  tmp = (char *)apr_table_get(r->headers_in, HTTP_X_CHXJ_DPI_HEIGHT);
+  if (tmp) {
+    spec->dpi_heigh = chxj_atoi(tmp); 
+  }
+  else {
+    spec->dpi_heigh = 96;
+  }
+
+  tmp = (char *)apr_table_get(r->headers_in, HTTP_X_CHXJ_EMOJI_TYPE);
+  if (tmp) {
+    spec->emoji_type = apr_pstrdup(r->pool, tmp);
+  }
+  else {
+    spec->emoji_type = apr_pstrdup(r->pool, "");
+  }
+
+  DBG(r, "REQ[%X] end chxj_get_device_env()", (unsigned int)(apr_size_t)r);
+  return spec;
 }

@@ -44,6 +44,9 @@ static void s_set_device_data(
   device_table_list *dtl, 
   Node              *node) ;
 
+static void s_set_sort_table(Doc *doc, apr_pool_t *p, device_table_list *dtl);
+static int s_sort_table_compare(const void *a, const void *b);
+
 
 /**
  * load device_data.xml
@@ -122,7 +125,10 @@ s_set_user_agent_data(Doc *doc, apr_pool_t *p, mod_chxj_config *conf, Node *node
             dtl->regexp = ap_pregcomp(p, (const char *)dtl->pattern, AP_REG_EXTENDED|AP_REG_ICASE);
         }
       }
+
+      dtl->table_count = 0;
       s_set_device_data(doc, p, dtl, child);
+      s_set_sort_table(doc, p, dtl);
     }
   }
 }
@@ -477,7 +483,32 @@ s_set_device_data(Doc *doc, apr_pool_t *p, device_table_list *dtl, Node *node)
       dtl->tail = dt;
     }
   }
+  dtl->table_count++;
 }
+
+
+static void
+s_set_sort_table(Doc *doc, apr_pool_t *p, device_table_list *dtl)
+{
+  device_table **sort_table;
+  device_table *dt;
+  size_t ii=0;
+  sort_table = apr_palloc(p, sizeof(device_table) * dtl->table_count);
+  for (dt = dtl->table; dt; dt = dt->next) {
+    sort_table[ii++] = dt;
+  }
+  dtl->sort_table = sort_table;
+  qsort((void *)sort_table, (size_t)dtl->table_count, sizeof(*sort_table), s_sort_table_compare);
+}
+
+static int
+s_sort_table_compare(const void *a, const void *b)
+{
+  device_table *aa = *(device_table **)a;
+  device_table *bb = *(device_table **)b;
+  return strcasecmp(aa->device_id, bb->device_id);
+}
+
 
 /**
  * load device_data.xml
