@@ -147,25 +147,12 @@ s_compar(const void *a, const void *b)
 {
   device_table *aa = *(device_table **)a;
   device_table *bb = *(device_table **)b;
-#if 0
-{FILE *fp=fopen("/tmp/erer.log","a");fprintf(fp, "aa[%s] vs bb[%s]\n", aa->device_id, bb->device_id); fclose(fp);}
-#endif
   /* Not strcasecmp. for LOAD */
   return strcmp(aa->device_id, bb->device_id);
 }
 static device_table *
 s_get_device_data(request_rec *r, const char *device_id, device_table_list *dtl)
 {
-#if 0
-  device_table *dt;
-  for (dt = dtl->table; dt; dt = dt->next) {
-    if (strcasecmp(device_id, dt->device_id) == 0) {
-      DBG(r, "device_name:[%s]", dt->device_name);
-      return dt;
-    }
-  }
-  return NULL;
-#else
   device_table dt;
   device_table *_dt;
   dt.device_id = device_id;
@@ -175,7 +162,6 @@ s_get_device_data(request_rec *r, const char *device_id, device_table_list *dtl)
     return *ret;
   }
   return NULL;
-#endif
 }
 /*
  * vim:ts=2 et
