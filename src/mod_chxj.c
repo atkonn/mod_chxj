@@ -1431,7 +1431,7 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
   apr_brigade_destroy(bb);
 
   chxj_specified_cleanup(r);
-  DB(f->r, "REQ[%X]nend %s()", TO_ADDR(r),__func__);
+  DBG(r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
 
   return APR_SUCCESS;
 }
