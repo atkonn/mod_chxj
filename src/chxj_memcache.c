@@ -76,15 +76,16 @@ _memcache_cleanup(void *UNUSED(unused))
 int
 chxj_memcache_init(request_rec *r, mod_chxj_config *m)
 {
-  DBG(r, "start chxj_memcache_init()");
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
   if (! memc) {
     if (!chxj_memcache_and_memcache_server_create(r, m)) {
-      ERR(r, "%s:%d end chxj_memcache_init() failed: chxj_memcache_and_memcache_server_create()", APLOG_MARK);
+      ERR(r,"REQ[%X] %s:%d end chxj_memcache_init() failed: chxj_memcache_and_memcache_server_create()", TO_ADDR(r),APLOG_MARK);
+      DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
       return CHXJ_FALSE;
     }
     apr_pool_cleanup_register(r->pool, NULL, _memcache_cleanup, _memcache_cleanup);
   }
-  DBG(r, "end chxj_memcache_init()");
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return CHXJ_TRUE;
 }
 
@@ -92,11 +93,12 @@ int
 chxj_memcache_and_memcache_server_create(request_rec *r, mod_chxj_config *m)
 {
   memcached_return rc;
-  DBG(r, "start chxj_memcache_server_create()");
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
   
   memc = memcached_create(NULL);
   if (! memc) {
-    ERR(r, "%s:%d end chxj_memcache_server_create(): failed allocation of memcached_st.", APLOG_MARK);
+    ERR(r, "REQ[%X] %s:%d end chxj_memcache_server_create(): failed allocation of memcached_st.", TO_ADDR(r),APLOG_MARK);
+    DBG(r, "REQ[%X] end %s()",TO_ADDR(r),__func__);
     return CHXJ_FALSE;
   }
   servers = memcached_server_list_append(NULL, m->memcache.host, m->memcache.port, &rc);
@@ -126,7 +128,7 @@ chxj_memcache_and_memcache_server_create(request_rec *r, mod_chxj_config *m)
     return CHXJ_FALSE;
   }
   
-  DBG(r, "end chxj_memcache_server_create()");
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return CHXJ_TRUE;
 }
 
@@ -136,17 +138,18 @@ chxj_memcache_set_cookie(request_rec *r, mod_chxj_config *m, const char *cookie_
 {
   memcached_return rc;
   time_t timeout = (time_t) ((m->cookie_timeout) ? m->cookie_timeout : DEFAULT_COOKIE_TIMEOUT);
-  DBG(r, "start chxj_memcache_set_cookie()");
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
 
   rc= memcached_set(memc, (char *)cookie_id, strlen(cookie_id),
                     (char *)store_string, strlen(store_string),
                     (time_t)timeout, (uint32_t)0);
   if (rc != MEMCACHED_SUCCESS && rc != MEMCACHED_BUFFERED) {
-    ERR(r, "%s:%d end chxj_memcache_set_cookie(): failed memcache_set(): %s", APLOG_MARK, memcached_strerror(memc, rc));
+    ERR(r,"REQ[%X] %s:%d end chxj_memcache_set_cookie(): failed memcache_set(): %s", TO_ADDR(r),APLOG_MARK, memcached_strerror(memc, rc));
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return CHXJ_FALSE;
   }
 
-  DBG(r, "end chxj_memcache_set_cookie()");
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return CHXJ_TRUE;
 }
 
@@ -155,19 +158,21 @@ int
 chxj_memcache_reset_cookie(request_rec *r, mod_chxj_config *m, const char *cookie_id)
 {
   char *store_string;
-  DBG(r, "start chxj_memcache_reset_cookie()");
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
 
   if (! (store_string = chxj_memcache_get_cookie(r, m, cookie_id))) {
-    ERR(r, "%s:%d end chxj_memcache_reset_cookie() failed: chxj_memcache_get_cookie() cookie_id:[%s]", APLOG_MARK, cookie_id);
+    ERR(r, "REQ[%X] %s:%d end chxj_memcache_reset_cookie() failed: chxj_memcache_get_cookie() cookie_id:[%s]", TO_ADDR(r),APLOG_MARK, cookie_id);
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return CHXJ_FALSE;
   }
 
   if (! chxj_memcache_set_cookie(r, m, cookie_id, store_string)) {
-    ERR(r, "%s:%d end chxj_memcache_reset_cookie() failed: chxj_memcache_set_cookie() cookie_id:[%s]", APLOG_MARK, cookie_id);
+    ERR(r, "REQ[%X] %s:%d end chxj_memcache_reset_cookie() failed: chxj_memcache_set_cookie() cookie_id:[%s]", TO_ADDR(r),APLOG_MARK, cookie_id);
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return CHXJ_FALSE;
   }
 
-  DBG(r, "end chxj_memcache_reset_cookie()");
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return CHXJ_TRUE;
 }
 
@@ -181,17 +186,19 @@ chxj_memcache_get_cookie(request_rec *r, mod_chxj_config *UNUSED(m), const char 
   uint32_t flags;
   memcached_return rc;
 
-  DBG(r, "start chxj_memcache_get_cookie()");
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
 
   load_string = memcached_get(memc, (char *)cookie_id, strlen(cookie_id), &value_length, &flags, &rc);
   if (rc != MEMCACHED_SUCCESS) {
-    ERR(r, "%s:%d end chxj_memcache_get_cookie(): failed memcached_get(): %s", APLOG_MARK, memcached_strerror(memc, rc));
+    ERR(r, "REQ[%X] %s:%d end chxj_memcache_get_cookie(): failed memcached_get(): %s", 
+      TO_ADDR(r),APLOG_MARK, memcached_strerror(memc, rc));
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return NULL;
   }
   ret = apr_pstrdup(r->pool, load_string);
   free(load_string);
   
-  DBG(r, "end chxj_memcache_get_cookie()");
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return ret;
 }
 
@@ -201,15 +208,17 @@ chxj_memcache_delete_cookie(request_rec *r, mod_chxj_config *UNUSED(m),  const c
 {
   memcached_return rc;
 
-  DBG(r, "start chxj_memcache_delete_cookie()");
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
 
   rc = memcached_delete(memc, (char *)cookie_id, strlen(cookie_id), (time_t)0);
   if (rc != MEMCACHED_SUCCESS && rc == MEMCACHED_BUFFERED) {
-    ERR(r,"%s:%d end chxj_memcache_delete_cookie(): failed memcached_delete(): %s", APLOG_MARK, memcached_strerror(memc, rc));
+    ERR(r,"REQ[%X] %s:%d end chxj_memcache_delete_cookie(): failed memcached_delete(): %s", 
+      TO_ADDR(r),APLOG_MARK, memcached_strerror(memc, rc));
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return CHXJ_FALSE;
   }
 
-  DBG(r, "end chxj_memcache_delete_cookie()");
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return CHXJ_TRUE;
 }
 
@@ -218,7 +227,8 @@ chxj_memcache_delete_cookie(request_rec *r, mod_chxj_config *UNUSED(m),  const c
 int
 chxj_save_cookie_memcache(request_rec *r, mod_chxj_config *m, const char *cookie_id, const char *store_string)
 {
-  DBG(r, "start chxj_save_cookie_memcache() cookie_id:[%s]", cookie_id);
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
+  DBG(r,"REQ[%X] cookie_id:[%s]", TO_ADDR(r),cookie_id);
 
   if (! chxj_memcache_init(r, m)) {
     ERR(r, "%s:%d end chxj_save_cookie_memcache(): Cannot create memcache server: cookie_id:[%s] store_string:[%s]", APLOG_MARK, cookie_id, store_string);
@@ -226,13 +236,14 @@ chxj_save_cookie_memcache(request_rec *r, mod_chxj_config *m, const char *cookie
   }
 
   if (! chxj_memcache_set_cookie(r, m, cookie_id, store_string)) {
-    ERR(r, "%s:%d end chxj_save_cookie_memcache(): cannot store to memcache host:[%s] port:[%d] cookie_id:[%s] store_string:[%s]", 
-        APLOG_MARK, m->memcache.host, m->memcache.port, cookie_id, store_string);
+    ERR(r, "REQ[%X] %s:%d end chxj_save_cookie_memcache(): cannot store to memcache host:[%s] port:[%d] cookie_id:[%s] store_string:[%s]", 
+        TO_ADDR(r),APLOG_MARK, m->memcache.host, m->memcache.port, cookie_id, store_string);
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return CHXJ_FALSE;
   }
 
-  DBG(r, "stored DATA:[%s]", chxj_memcache_get_cookie(r, m, cookie_id));
-  DBG(r, "end chxj_save_cookie_memcache() cookie_id:[%s]", cookie_id);
+  DBG(r, "REQ[%X] cookie_id:[%s]", TO_ADDR(r),cookie_id);
+  DBG(r, "REQ[%X] stored DATA:[%s]", TO_ADDR(r),chxj_memcache_get_cookie(r, m, cookie_id));
   return CHXJ_TRUE;
 }
 
@@ -240,19 +251,24 @@ chxj_save_cookie_memcache(request_rec *r, mod_chxj_config *m, const char *cookie
 int
 chxj_update_cookie_memcache(request_rec *r, mod_chxj_config *m, const char *cookie_id, const char *store_string)
 {
-  DBG(r, "start chxj_update_cookie_memcache() cookie_id:[%s]", cookie_id);
+  DBG(r, "REQ[%X] start %s()",TO_ADDR(r),__func__);
+  DBG(r, "REQ[%X] cookie_id:[%s]", TO_ADDR(r),cookie_id);
   if (! chxj_memcache_init(r, m)) {
-    ERR(r, "%s:%d end chxj_update_cookie_memcache(): Cannot create memcache server: cookie_id:[%s] store_string:[%s]",APLOG_MARK,cookie_id, store_string);
+    ERR(r,"REQ[%X] %s:%d end chxj_update_cookie_memcache(): Cannot create memcache server: cookie_id:[%s] store_string:[%s]",
+      TO_ADDR(r),APLOG_MARK,cookie_id, store_string);
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return CHXJ_FALSE;
   }
 
   if (! chxj_memcache_set_cookie(r, m, cookie_id, store_string)) {
     ERR(r, 
-        "%s:%d end chxj_update_cookie_memcache(): cannot store to memcache host:[%s] port:[%d] cookie_id:[%s] store_string:[%s]", 
-        APLOG_MARK, m->memcache.host, m->memcache.port, cookie_id, store_string);
+        "REQ[%X] %s:%d end chxj_update_cookie_memcache(): cannot store to memcache host:[%s] port:[%d] cookie_id:[%s] store_string:[%s]", 
+        TO_ADDR(r),APLOG_MARK, m->memcache.host, m->memcache.port, cookie_id, store_string);
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return CHXJ_FALSE;
   }
-  DBG(r, "end chxj_update_cookie_memcache() cookie_id:[%s]", cookie_id);
+  DBG(r,"REQ[%X] cookie_id:[%s]", TO_ADDR(r),cookie_id);
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return CHXJ_TRUE;
 }
 
@@ -261,19 +277,24 @@ char *
 chxj_load_cookie_memcache(request_rec *r, mod_chxj_config *m, const char *cookie_id)
 {
   char *load_string;
-  DBG(r, "start chxj_load_cookie_memcache() cookie_id:[%s]", cookie_id);
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
+  DBG(r,"REQ[%X] cookie_id:[%s]", TO_ADDR(r),cookie_id);
 
   if (! chxj_memcache_init(r, m)) {
-    ERR(r, "%s:%d end chxj_load_cookie_memcache(): Cannot create memcache server: cookie_id:[%s]",APLOG_MARK, cookie_id);
+    ERR(r,"REQ[%X] %s:%d end chxj_load_cookie_memcache(): Cannot create memcache server: cookie_id:[%s]",
+        TO_ADDR(r),APLOG_MARK, cookie_id);
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return NULL;
   }
 
   if (! (load_string = chxj_memcache_get_cookie(r, m, cookie_id))) {
-    ERR(r, "%s:%d end chxj_load_cookie_memcache(): cannot store to memcache host:[%s] port:[%d] cookie_id:[%s]", APLOG_MARK, 
+    ERR(r, "REQ[%X] %s:%d end chxj_load_cookie_memcache(): cannot store to memcache host:[%s] port:[%d] cookie_id:[%s]", TO_ADDR(r),APLOG_MARK, 
         m->memcache.host, m->memcache.port, cookie_id);
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return NULL;
   }
-  DBG(r, "end   chxj_load_cookie_memcache() cookie_id:[%s]", cookie_id);
+  DBG(r,"REQ[%X] cookie_id:[%s]", TO_ADDR(r),cookie_id);
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return load_string;
 }
 
@@ -281,18 +302,22 @@ chxj_load_cookie_memcache(request_rec *r, mod_chxj_config *m, const char *cookie
 int
 chxj_delete_cookie_memcache(request_rec *r, mod_chxj_config *m, const char *cookie_id)
 {
-  DBG(r, "start chxj_delete_cookie_memcache() cookie_id:[%s]", cookie_id);
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
+  DBG(r,"REQ[%X] cookie_id:[%s]", TO_ADDR(r),cookie_id);
   if (! chxj_memcache_init(r, m)) {
-    ERR(r, "%s:%d end chxj_delete_cookie_memcache(): Cannot create memcache server: cookie_id:[%s]",APLOG_MARK, cookie_id);
+    ERR(r,"REQ[%X] %s:%d end chxj_delete_cookie_memcache(): Cannot create memcache server: cookie_id:[%s]",TO_ADDR(r),APLOG_MARK, cookie_id);
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return CHXJ_FALSE;
   }
 
   if (! chxj_memcache_delete_cookie(r, m, cookie_id)) {
-    ERR(r, "%s:%d end chxj_delete_cookie_memcache(): Cannot store to memcache host:[%s] port:[%d] cookie_id:[%s]", APLOG_MARK,
+    ERR(r, "REQ[%X] %s:%d end chxj_delete_cookie_memcache(): Cannot store to memcache host:[%s] port:[%d] cookie_id:[%s]", TO_ADDR(r),APLOG_MARK,
         m->memcache.host, m->memcache.port, cookie_id);
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return CHXJ_FALSE;
   }
-  DBG(r, "end   chxj_delete_cookie_memcache() cookie_id:[%s]", cookie_id);
+  DBG(r,"REQ[%X] cookie_id:[%s]", TO_ADDR(r),cookie_id);
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return CHXJ_TRUE;
 }
 
@@ -300,18 +325,22 @@ chxj_delete_cookie_memcache(request_rec *r, mod_chxj_config *m, const char *cook
 int
 chxj_save_cookie_expire_memcache(request_rec *r, mod_chxj_config *m, const char *cookie_id)
 {
-  DBG(r, "start chxj_save_cookie_expire_memcache() cookie_id:[%s]", cookie_id);
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
+  DBG(r,"REQ[%X] cookie_id:[%s]", TO_ADDR(r),cookie_id);
   if (! chxj_memcache_init(r, m)) {
-    ERR(r, "%s:%d end chxj_save_cookie_expire_memcache(): Cannot create memcache server: cookie_id:[%s]",APLOG_MARK,cookie_id);
+    ERR(r,"REQ[%X] %s:%d end chxj_save_cookie_expire_memcache(): Cannot create memcache server: cookie_id:[%s]",TO_ADDR(r),APLOG_MARK,cookie_id);
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return CHXJ_FALSE;
   }
 
   if (! chxj_memcache_reset_cookie(r, m, cookie_id)) {
-    ERR(r, "%s:%d end chxj_save_cookie_expire_memcache(): Cannot store to memcache host:[%s] port:[%d] cookie_id:[%s]", APLOG_MARK, 
+    ERR(r, "REQ[%X] %s:%d end chxj_save_cookie_expire_memcache(): Cannot store to memcache host:[%s] port:[%d] cookie_id:[%s]", TO_ADDR(r),APLOG_MARK, 
         m->memcache.host, m->memcache.port, cookie_id);
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return CHXJ_FALSE;
   }
-  DBG(r, "end   chxj_save_cookie_expire_memcache() cookie_id:[%s]", cookie_id);
+  DBG(r,"REQ[%X] cookie_id:[%s]", TO_ADDR(r),cookie_id);
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return CHXJ_TRUE;
 }
 
@@ -319,9 +348,11 @@ chxj_save_cookie_expire_memcache(request_rec *r, mod_chxj_config *m, const char 
 int
 chxj_delete_cookie_expire_memcache(request_rec *r, mod_chxj_config *UNUSED(m), const char *cookie_id)
 {
-  DBG(r, "start chxj_delete_cookie_expire_memcache() cookie_id:[%s]", cookie_id);
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
+  DBG(r,"REQ[%X] cookie_id:[%s]", TO_ADDR(r),cookie_id);
   /* PASS */
-  DBG(r, "end   chxj_delete_cookie_expire_memcache() cookie_id:[%s]", cookie_id);
+  DBG(r,"REQ[%X] cookie_id:[%s]", TO_ADDR(r),cookie_id);
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return CHXJ_TRUE;
 }
 
@@ -329,9 +360,9 @@ chxj_delete_cookie_expire_memcache(request_rec *r, mod_chxj_config *UNUSED(m), c
 int
 chxj_cookie_expire_gc_memcache(request_rec *r, mod_chxj_config *UNUSED(m))
 {
-  DBG(r, "start chxj_cookie_expire_gc_memcache()");
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
   /* PASS */
-  DBG(r, "end   chxj_cookie_expire_gc_memcache()");
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return CHXJ_TRUE;
 }
 
@@ -344,10 +375,11 @@ chxj_cookie_lock_memcache(request_rec *r, mod_chxj_config *m)
   apr_uint32_t timeout = (apr_uint32_t) ((m->cookie_timeout) ? m->cookie_timeout : DEFAULT_COOKIE_TIMEOUT);
   apr_interval_time_t wait_time = MEMCACHE_WAIT_MICRO_SECOND;
 
-  DBG(r, "start chxj_cookie_lock_memcache()");
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
 
   if (! chxj_memcache_init(r, m)) {
-    ERR(r, "%s:%d end chxj_cookie_lock_memcache(): Cannot create memcache server", APLOG_MARK);
+    ERR(r, "REQ[%X] %s:%d end chxj_cookie_lock_memcache(): Cannot create memcache server", TO_ADDR(r),APLOG_MARK);
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return CHXJ_FALSE;
   }
 
@@ -356,23 +388,25 @@ chxj_cookie_lock_memcache(request_rec *r, mod_chxj_config *m)
     memcached_return rc;
     rc = memcached_add(memc, MEMCACHE_LOCK_KEY, sizeof(MEMCACHE_LOCK_KEY)-1, baton, strlen(baton), (time_t)timeout, (uint32_t)0);
     if (rc != MEMCACHED_SUCCESS && rc != MEMCACHED_STORED && rc != MEMCACHED_NOTSTORED) {
-      ERR(r, "%s:%d end chxj_cookie_lock_memcache(): failed memcached_add(): %s\n", APLOG_MARK, memcached_strerror(memc, rc));
+      ERR(r,"REQ[%X] %s:%d end chxj_cookie_lock_memcache(): failed memcached_add(): %s\n", TO_ADDR(r),APLOG_MARK, memcached_strerror(memc, rc));
+      DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
       return CHXJ_FALSE;
     }
     if (rc == MEMCACHED_SUCCESS || rc == MEMCACHED_STORED) {
       /* got lock */
-      DBG(r, "got lock");
+      DBG(r, "REQ[%X] got lock", TO_ADDR(r));
       break;
     }
     retry_count++;
     if (retry_count >= MEMCACHE_LOCK_RETRY_COUNT) {
-      ERR(r, "%s:%d end chxj_cookie_lock_memcache(): retry over.",APLOG_MARK);
+      ERR(r, "REQ[%X] %s:%d end chxj_cookie_lock_memcache(): retry over.",TO_ADDR(r),APLOG_MARK);
+      DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
       return CHXJ_FALSE;
     }
     apr_sleep(wait_time);
   }
 
-  DBG(r, "end chxj_cookie_lock_memcache()");
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return CHXJ_TRUE;
 }
 
@@ -380,17 +414,19 @@ chxj_cookie_lock_memcache(request_rec *r, mod_chxj_config *m)
 int
 chxj_cookie_unlock_memcache(request_rec *r, mod_chxj_config *m)
 {
-  DBG(r, "start chxj_cookie_unlock_memcache()");
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
   if (! memc) {
-    ERR(r, "%s:%d end chxj_cookie_unlock_memcache(): runtime exception: programing failure.", APLOG_MARK);
+    ERR(r,"REQ[%X] %s:%d end chxj_cookie_unlock_memcache(): runtime exception: programing failure.", TO_ADDR(r),APLOG_MARK);
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return CHXJ_FALSE;
   }
 
   if (! chxj_memcache_delete_cookie(r, m, MEMCACHE_LOCK_KEY)) {
-    ERR(r, "%s:%d end chxj_cookie_unlock_memcache(): failed: chxj_memcache_delete_cookie() (lock data)", APLOG_MARK);
+    ERR(r,"REQ[%X] %s:%d end chxj_cookie_unlock_memcache(): failed: chxj_memcache_delete_cookie() (lock data)", TO_ADDR(r),APLOG_MARK);
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return CHXJ_FALSE;
   }
-  DBG(r, "end chxj_cookie_unlock_memcache()");
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return CHXJ_TRUE;
 }
 

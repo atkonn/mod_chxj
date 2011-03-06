@@ -427,7 +427,7 @@ chxj_convert_chtml10(
   dst = NULL;
 
   t = apr_time_now();
-  DBG(r, "start chxj_convert_chtml10() cookie_id=[%s]", (cookie) ? cookie->cookie_id : "");
+  DBG(r, "REQ[%X] start %s() cookie_id=[%s]", TO_ADDR(r),__func__, (cookie) ? cookie->cookie_id : "");
 
   /*--------------------------------------------------------------------------*/
   /* If qrcode xml                                                            */
@@ -435,10 +435,11 @@ chxj_convert_chtml10(
   *dstlen = srclen;
   dst = chxj_qr_code_blob_handler(r, src, (size_t*)dstlen);
   if (dst) {
-    DBG(r,"i found qrcode xml");
+    DBG(r, "REQ[%X] found qrcode xml", TO_ADDR(r));
+    DBG(r, "REQ[%X] end %s()",TO_ADDR(r),__func__);
     return dst;
   }
-  DBG(r,"not found qrcode xml");
+  DBG(r,"REQ[%X] not found qrcode xml", TO_ADDR(r));
 
   /*--------------------------------------------------------------------------*/
   /* The CHTML structure is initialized.                                      */
@@ -477,6 +478,7 @@ chxj_convert_chtml10(
   qs_all_free(&doc,QX_LOGMARK);
 
   if (!dst) {
+    DBG(r, "REQ[%X] end %s()",TO_ADDR(r),__func__);
     return apr_pstrdup(r->pool,ss);
   }
 
@@ -489,7 +491,8 @@ chxj_convert_chtml10(
   chxj_dump_out("[dst] CHTML -> CHTML1.0", dst, *dstlen);
 #endif
 
-  DBG(r, "end   chxj_convert_chtml10() cookie_id=[%s] time=[%" APR_TIME_T_FMT "]", (cookie) ? cookie->cookie_id : "", apr_time_now() - t);
+  DBG(r, "REQ[%X] cookie_id=[%s] time=[%" APR_TIME_T_FMT "]", TO_ADDR(r),(cookie) ? cookie->cookie_id : "", apr_time_now() - t);
+  DBG(r, "REQ[%X] end %s()",TO_ADDR(r),__func__);
 
   return dst;
 }
@@ -549,7 +552,7 @@ s_chtml10_search_emoji(chtml10_t *chtml10, char *txt, char **rslt)
   r = chtml10->doc->r;
 
   if (!spec) {
-    DBG(r,"spec is NULL");
+    DBG(r,"REQ[%X] spec is NULL", TO_ADDR(r));
   }
 
   for (ee = chtml10->conf->emoji;
@@ -557,7 +560,7 @@ s_chtml10_search_emoji(chtml10_t *chtml10, char *txt, char **rslt)
        ee = ee->next) {
 
     if (!ee->imode) {
-      DBG(r,"emoji->imode is NULL");
+      DBG(r,"REQ[%X] emoji->imode is NULL", TO_ADDR(r));
       continue;
     }
 
@@ -591,7 +594,7 @@ chxj_chtml10_emoji_only_converter(request_rec *r, device_table *spec, const char
   chtml10 = &__chtml10;
   doc     = &__doc;
 
-  DBG(r, "REQ[%X] start chxj_chtml10_emoji_only_converter()", (unsigned int)(apr_size_t)r);
+  DBG(r, "REQ[%X] start %s()", TO_ADDR(r),__func__);
   memset(doc,     0, sizeof(Doc));
   memset(chtml10, 0, sizeof(chtml10_t));
 
@@ -633,7 +636,7 @@ chxj_chtml10_emoji_only_converter(request_rec *r, device_table *spec, const char
 
   chtml10->out = chxj_buffered_write_flush(chtml10->out, &doc->buf);
 
-  DBG(r, "REQ[%X] end chxj_chtml10_emoji_only_converter()", (unsigned int)(apr_size_t)r);
+  DBG(r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
   return chtml10->out;
 }
 

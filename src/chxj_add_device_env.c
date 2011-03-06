@@ -21,7 +21,7 @@
 void
 chxj_add_device_env(request_rec *r, device_table *spec)
 {
-  DBG(r, "REQ[%X] start chxj_add_device_env()", (unsigned int)(apr_size_t)r);
+  DBG(r, "REQ[%X] start %s()", TO_ADDR(r),__func__);
   switch(spec->html_spec_type) {
   case CHXJ_SPEC_Chtml_1_0:
   case CHXJ_SPEC_Chtml_2_0:
@@ -86,7 +86,7 @@ chxj_add_device_env(request_rec *r, device_table *spec)
 
   apr_table_setn(r->headers_in, HTTP_X_CHXJ_VERSION,  apr_pstrdup(r->pool, PACKAGE_VERSION));
 
-  DBG(r, "REQ[%X] end chxj_add_device_env()", (unsigned int)(apr_size_t)r);
+  DBG(r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
 }
 
 
@@ -95,12 +95,12 @@ chxj_get_device_env(request_rec *r)
 {
   device_table *spec;
   char *tmp;
-  DBG(r, "REQ[%X] start chxj_get_device_env()", (unsigned int)(apr_size_t)r);
+  DBG(r, "REQ[%X] start %s()", TO_ADDR(r),__func__);
 
   spec = apr_palloc(r->pool, sizeof(device_table));
   tmp = (char *)apr_table_get(r->headers_in, HTTP_X_CHXJ_HTMLSPECTYPE);
   if (! tmp) {
-    DBG(r, "REQ[%X] end chxj_get_device_env()", (unsigned int)(apr_size_t)r);
+    DBG(r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
     return NULL;
   }
   if (STRCASEEQ('c','C', "CHTML1.0", tmp)) {
@@ -268,6 +268,6 @@ chxj_get_device_env(request_rec *r)
     spec->emoji_type = apr_pstrdup(r->pool, "");
   }
 
-  DBG(r, "REQ[%X] end chxj_get_device_env()", (unsigned int)(apr_size_t)r);
+  DBG(r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
   return spec;
 }

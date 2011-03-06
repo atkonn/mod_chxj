@@ -426,7 +426,7 @@ chxj_convert_chtml30(
   chtml30_t chtml30;
   Doc       doc;
 
-  DBG(r, "start chxj_convert_chtml30()");
+  DBG(r, "REQ[%X] start %s()",TO_ADDR(r),__func__);
 
   /*--------------------------------------------------------------------------*/
   /* If qrcode xml                                                            */
@@ -434,11 +434,11 @@ chxj_convert_chtml30(
   *dstlen = srclen;
   dst = chxj_qr_code_blob_handler(r, src, (size_t*)dstlen);
   if (dst) {
-    DBG(r,"i found qrcode xml");
-    DBG(r, "end chxj_convert_chtml30()");
+    DBG(r,"REQ[%X] found qrcode xml", TO_ADDR(r));
+    DBG(r, "REQ[%X] end %s()",TO_ADDR(r),__func__);
     return dst;
   }
-  DBG(r,"not found qrcode xml");
+  DBG(r,"REQ[%X] not found qrcode xml", TO_ADDR(r));
 
   /*--------------------------------------------------------------------------*/
   /* The CHTML structure is initialized.                                      */
@@ -490,7 +490,7 @@ chxj_convert_chtml30(
   chxj_dump_out("[src] CHTML -> CHTML3.0", dst, *dstlen);
 #endif
 
-  DBG(r, "end chxj_convert_chtml30()");
+  DBG(r, "REQ[%X] end %s()",TO_ADDR(r),__func__);
   return dst;
 }
 
@@ -545,14 +545,14 @@ s_chtml30_search_emoji(chtml30_t *chtml30, char *txt, char **rslt)
   r   = chtml30->doc->r;
 
   if (!spec) {
-    DBG(r,"spec is NULL");
+    DBG(r,"REQ[%X] spec is NULL", TO_ADDR(r));
   }
 
   for (ee = chtml30->conf->emoji;
        ee;
        ee = ee->next) {
     if (ee->imode == NULL) {
-      DBG(r, "emoji->imode is NULL");
+      DBG(r, "REQ[%X] emoji->imode is NULL", TO_ADDR(r));
       continue;
     }
 
@@ -591,7 +591,7 @@ chxj_chtml30_emoji_only_converter(request_rec *r, device_table *spec, const char
   chtml30 = &__chtml30;
   doc     = &__doc;
 
-  DBG(r, "REQ[%X] start chxj_chtml30_emoji_eonly_converter()", (unsigned int)(apr_size_t)r);
+  DBG(r, "REQ[%X] start %s()", TO_ADDR(r),__func__);
   memset(doc,     0, sizeof(Doc));
   memset(chtml30, 0, sizeof(chtml30_t));
 
@@ -632,7 +632,7 @@ chxj_chtml30_emoji_only_converter(request_rec *r, device_table *spec, const char
   }
   chtml30->out = chxj_buffered_write_flush(chtml30->out, &doc->buf);
 
-  DBG(r, "REQ[%X] end chxj_chtml30_emoji_eonly_converter()", (unsigned int)(apr_size_t)r);
+  DBG(r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
   return chtml30->out;
 }
 

@@ -41,6 +41,7 @@ libmod_chxj_la_SOURCES = mod_chxj.c \
     chxj_add_device_env.c \
     chxj_serf.c \
     chxj_conv_z2h.c \
+    chxj_conv_z2h_num.c \
     chxj_header_inf.c \
     chxj_jreserved_tag.c
 

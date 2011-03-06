@@ -441,10 +441,9 @@ chxj_convert_jxhtml(
   *dstlen = srclen;
   dst = chxj_qr_code_blob_handler(r, src, (size_t*)dstlen);
   if (dst) {
-    DBG(r,"I found qrcode xml");
+    DBG(r,"REQ[%X] I found qrcode xml",TO_ADDR(r));
     return dst;
   }
-  DBG(r,"not found qrcode xml");
 
   /*--------------------------------------------------------------------------*/
   /* The CHTML structure is initialized.                                      */
@@ -550,7 +549,7 @@ s_jxhtml_search_emoji(jxhtml_t *jxhtml, char *txt, char **rslt)
   len = strlen(txt);
   r = jxhtml->doc->r;
 
-  if (! spec) DBG(r,"spec is NULL");
+  if (! spec) DBG(r,"REQ[%X] spec is NULL",TO_ADDR(r));
 
   for (ee = jxhtml->conf->emoji;
        ee;
@@ -560,7 +559,7 @@ s_jxhtml_search_emoji(jxhtml_t *jxhtml, char *txt, char **rslt)
     unsigned char hex2byte;
 
     if (! ee->imode) { 
-      DBG(r,"emoji->imode is NULL");
+      DBG(r,"REQ[%X] emoji->imode is NULL",TO_ADDR(r));
       continue;
     }
 
@@ -609,7 +608,7 @@ chxj_jxhtml_emoji_only_converter(request_rec *r, device_table *spec, const char 
   jxhtml = &__jxhtml;
   doc    = &__doc;
 
-  DBG(r, "REQ[%X] start chxj_jxhtml_emoji_eonly_converter()", (unsigned int)(apr_size_t)r);
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
   memset(doc,    0, sizeof(Doc));
   memset(jxhtml, 0, sizeof(jxhtml_t));
 
@@ -650,7 +649,7 @@ chxj_jxhtml_emoji_only_converter(request_rec *r, device_table *spec, const char 
   }
   jxhtml->out = chxj_buffered_write_flush(jxhtml->out, &doc->buf);
 
-  DBG(r, "REQ[%X] end chxj_jxhtml_emoji_eonly_converter()", (unsigned int)(apr_size_t)r);
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return jxhtml->out;
 }
 
@@ -674,7 +673,7 @@ s_jxhtml_start_html_tag(void *pdoc, Node *UNUSED(node))
   jxhtml  = GET_JXHTML(pdoc);
   doc    = jxhtml->doc;
   r      = doc->r;
-  DBG(r, "REQ[%X] start s_jxhtml_start_html_tag()", TO_ADDR(r));
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
 
   W_L("<?xml version='1.0' encoding='Shift_JIS' ?>");
   W_NLCODE();
@@ -686,7 +685,7 @@ s_jxhtml_start_html_tag(void *pdoc, Node *UNUSED(node))
   /*--------------------------------------------------------------------------*/
   W_L("<html>");
 
-  DBG(r, "REQ[%X] end s_jxhtml_start_html_tag()", TO_ADDR(r));
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
 
   return jxhtml->out;
 }

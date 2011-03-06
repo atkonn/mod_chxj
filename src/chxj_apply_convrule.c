@@ -46,15 +46,18 @@ s_apply_rule(request_rec *r, chxjconvrule_entry *pp)
   int   rtn;
   ap_regmatch_t regmatch[AP_MAX_REG_MATCH];
 
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
+
   uri = r->uri;
 
-  DBG(r,"convert rule pattern=[%s] uri=[%s]", pp->pattern, uri);
+  DBG(r,"REQ[%X] convert rule pattern=[%s] uri=[%s]", TO_ADDR(r),pp->pattern, uri);
 
   rtn = ap_regexec((const ap_regex_t *)pp->regexp, uri, AP_MAX_REG_MATCH, (ap_regmatch_t *)regmatch, 0);
   if (rtn == 0) {
     /* Match */
     if (pp->flags & CONVRULE_FLAG_NOTMATCH) {
       /* not match */
+      DBG(r,"REQ[%X] end %s() (unmatch)",TO_ADDR(r),__func__);
       return 0;
     }
   }
@@ -62,11 +65,13 @@ s_apply_rule(request_rec *r, chxjconvrule_entry *pp)
     /* Unmatch */
     if (!(pp->flags & CONVRULE_FLAG_NOTMATCH)) {
       /* not match */
+      DBG(r,"REQ[%X] end %s() (unmatch)",TO_ADDR(r),__func__);
       return 0;
     }
   }
 
   /* Match */
+  DBG(r,"REQ[%X] end %s() (match)",TO_ADDR(r),__func__);
   return 1;
 }
 /*

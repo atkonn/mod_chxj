@@ -33,21 +33,21 @@ chxj_header_inf_set_content_type(request_rec *r, char *default_string)
   char *h_out     = NULL;
   char *err_h_out = NULL;
 
-  DBG(r,"REQ[%X] start chxj_header_inf_set_content_type()", (unsigned int)(apr_size_t)r);
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
 
   h_out     = (char *)apr_table_get(r->headers_out, HTTP_X_CHXJ_SET_CONTENT_TYPE);
   err_h_out = (char *)apr_table_get(r->err_headers_out, HTTP_X_CHXJ_SET_CONTENT_TYPE);
 
   if (err_h_out) {
-    DBG(r,"REQ[%X] end chxj_header_inf_set_content_type()", (unsigned int)(apr_size_t)r);
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return err_h_out;
   }
   if (h_out) {
-    DBG(r,"REQ[%X] end chxj_header_inf_set_content_type()", (unsigned int)(apr_size_t)r);
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return h_out;
   }
 
-  DBG(r,"REQ[%X] end chxj_header_inf_set_content_type()", (unsigned int)(apr_size_t)r);
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return default_string;
 }
 

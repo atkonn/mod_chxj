@@ -438,16 +438,17 @@ chxj_convert_jhtml(
 
   dst = NULL;
 
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
   /*--------------------------------------------------------------------------*/
   /* If qrcode xml                                                            */
   /*--------------------------------------------------------------------------*/
   *dstlen = srclen;
   dst = chxj_qr_code_blob_handler(r, src, (size_t*)dstlen);
   if (dst) {
-    DBG(r,"I found qrcode xml");
+    DBG(r,"REQ[%X] found qrcode xml",TO_ADDR(r));
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return dst;
   }
-  DBG(r,"not found qrcode xml");
 
   /*--------------------------------------------------------------------------*/
   /* The CHTML structure is initialized.                                      */
@@ -554,7 +555,7 @@ s_jhtml_search_emoji(jhtml_t *jhtml, char *txt, char **rslt)
   len = strlen(txt);
   r = jhtml->doc->r;
 
-  if (! spec) DBG(r,"spec is NULL");
+  if (! spec) DBG(r,"REQ[%X] spec is NULL",TO_ADDR(r));
 
   for (ee = jhtml->conf->emoji;
        ee;
@@ -564,7 +565,7 @@ s_jhtml_search_emoji(jhtml_t *jhtml, char *txt, char **rslt)
     unsigned char hex2byte;
 
     if (! ee->imode) { 
-      DBG(r,"emoji->imode is NULL");
+      DBG(r,"REQ[%X] emoji->imode is NULL",TO_ADDR(r));
       continue;
     }
 
@@ -613,7 +614,7 @@ chxj_jhtml_emoji_only_converter(request_rec *r, device_table *spec, const char *
   jhtml = &__jhtml;
   doc   = &__doc;
 
-  DBG(r, "REQ[%X] start chxj_jhtml_emoji_eonly_converter()", (unsigned int)(apr_size_t)r);
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
   memset(doc,   0, sizeof(Doc));
   memset(jhtml, 0, sizeof(jhtml_t));
 
@@ -654,7 +655,7 @@ chxj_jhtml_emoji_only_converter(request_rec *r, device_table *spec, const char *
   }
   jhtml->out = chxj_buffered_write_flush(jhtml->out, &doc->buf);
 
-  DBG(r, "REQ[%X] end chxj_jhtml_emoji_eonly_converter()", (unsigned int)(apr_size_t)r);
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return jhtml->out;
 }
 
@@ -678,14 +679,14 @@ s_jhtml_start_html_tag(void *pdoc, Node *UNUSED(node))
   jhtml  = GET_JHTML(pdoc);
   doc    = jhtml->doc;
   r      = doc->r;
-  DBG(r, "start s_jhtml_start_html_tag()");
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
 
   /*--------------------------------------------------------------------------*/
   /* start HTML tag                                                           */
   /*--------------------------------------------------------------------------*/
   W_L("<html>");
 
-  DBG(r, "end s_jhtml_start_html_tag()");
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
 
   return jhtml->out;
 }
@@ -2606,7 +2607,7 @@ s_jhtml_text_tag(void *pdoc, Node *child)
   jhtml = GET_JHTML(pdoc);
   doc   = jhtml->doc;
   r     = doc->r;
-  DBG(r, "start s_jhtml_text_tag()");
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
 
   textval = qs_get_node_value(doc,child);
   if (strlen(textval) == 0) {
@@ -2657,7 +2658,7 @@ s_jhtml_text_tag(void *pdoc, Node *child)
   tdst = chxj_conv_z2h(r, tdst, &z2h_input_len, jhtml->entryp);
 
   W_V(tdst);
-  DBG(r, "end s_jhtml_text_tag()");
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return jhtml->out;
 }
 
@@ -3482,7 +3483,7 @@ s_add_copyright_parameter(request_rec *r, char *value)
   char *content_type = NULL;
   apr_table_t *headers_out = NULL;
 
-  DBG(r, "REQ[%X] start s_add_copyright_parameter", TO_ADDR(r));
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
   apr_pool_create(&pool, r->pool);
 
   if (chxj_starts_with(value, "http:") || chxj_starts_with(value, "https:")) {
@@ -3490,7 +3491,8 @@ s_add_copyright_parameter(request_rec *r, char *value)
     int   response_code = 0;
     response = chxj_serf_head(r, pool, value, &response_code);
     if (response_code != HTTP_OK) {
-      DBG(r, "REQ[%X] end s_add_copyright_parameter (serf_req->status:[%d])", TO_ADDR(r), response_code);
+      DBG(r, "REQ[%X] (serf_req->status:[%d])", TO_ADDR(r), response_code);
+      DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
       return value;
     }
     content_type = (char *)apr_table_get(response, "Content-Type");
@@ -3500,8 +3502,9 @@ s_add_copyright_parameter(request_rec *r, char *value)
     //  sub_req = ap_sub_req_method_uri("GET", value, r, r->output_filters);
     sub_req = ap_sub_req_lookup_uri(value, r, r->output_filters);
     if (sub_req->status != HTTP_OK) {
-      DBG(r, "REQ[%X] end s_add_copyright_parameter (sub_req->status:[%d])", TO_ADDR(r), sub_req->status);
+      DBG(r, "REQ[%X] (sub_req->status:[%d])", TO_ADDR(r), sub_req->status);
       ap_destroy_sub_req(sub_req);
+      DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
       return value;
     }
     sub_req->header_only = 1;
@@ -3533,7 +3536,8 @@ s_add_copyright_parameter(request_rec *r, char *value)
   if (sub_req) {
     ap_destroy_sub_req(sub_req);
   }
-  DBG(r, "REQ[%X] end s_add_copyright_parameter(result:[%s]", TO_ADDR(r), value);
+  DBG(r, "REQ[%X] (result:[%s]", TO_ADDR(r), value);
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return value;
 }
 
