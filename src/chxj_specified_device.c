@@ -391,6 +391,15 @@ s_specified_device_from_tsv(request_rec *r,device_table *spec,const char *user_a
 }
 
 
+void
+chxj_specified_cleanup(request_rec *r)
+{
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
+  v_spec = NULL;
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
+}
+
+
 /*
  * vim:ts=2 et
  */

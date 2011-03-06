@@ -1123,6 +1123,7 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
     s_add_no_cache_headers(r, entryp);
     /* must not send body. */
     rv = pass_data_to_filter(f, "", 0);
+    chxj_specified_cleanup(r);
     DBG(f->r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
     return rv;
   }
@@ -1177,12 +1178,14 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
       s_add_no_cache_headers(r, entryp);
       ap_pass_brigade(f->next, bb);
       DBG(f->r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
+      chxj_specified_cleanup(r);
       return APR_SUCCESS;
     }
   }
   else {
     DBG(r, "REQ[%X] not convert content-type:[(null)]", TO_ADDR(r));
     ap_pass_brigade(f->next, bb);
+    chxj_specified_cleanup(r);
     DBG(f->r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
     return APR_SUCCESS;
   }
@@ -1301,6 +1304,7 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
             if (sts != OK) {
               ERR(r, "REQ[%X] qrcode create failed.", TO_ADDR(r));
               chxj_cookie_unlock(r, lock);
+              chxj_specified_cleanup(r);
               DBG(f->r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
               return sts;
             }
@@ -1372,6 +1376,7 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
                                    (const char *)ctx->buffer, 
                                    (apr_size_t)ctx->len);
         }
+        chxj_specified_cleanup(r);
         DBG(f->r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
         return rv;
       }
@@ -1418,13 +1423,15 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
         apr_table_setn(r->headers_out, "Content-Length", "0");
         s_add_no_cache_headers(r, entryp);
         rv = pass_data_to_filter(f, (const char *)"", (apr_size_t)0);
+        chxj_specified_cleanup(r);
         return rv;
       }
     }
   }
   apr_brigade_destroy(bb);
 
-  DBG(f->r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
+  chxj_specified_cleanup(r);
+  DB(f->r, "REQ[%X]nend %s()", TO_ADDR(r),__func__);
 
   return APR_SUCCESS;
 }
