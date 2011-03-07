@@ -129,6 +129,7 @@ extern const char *chxj_apache_run_http_scheme(request_rec *r);
 extern char * chxj_os_escape_path(apr_pool_t *p, const char *path, int partial);
 extern void chxj_set_content_type(request_rec *r, const char *ct);
 extern void * chxj_get_module_config(const ap_conf_vector_t *cv, const module *m);
+extern void chxj_set_module_config(const ap_conf_vector_t *cv, const module *m, void *val);
 extern char *chxj_ap_escape_html(apr_pool_t *p, const char *s);
 extern ap_regex_t *chxj_ap_pregcomp(apr_pool_t *p, const char *pattern, int cflags);
 extern void chxj_ap_pregfree(apr_pool_t *p, ap_regex_t *reg);

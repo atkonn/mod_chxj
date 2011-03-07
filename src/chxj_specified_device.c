@@ -62,7 +62,6 @@ static device_table  UNKNOWN_DEVICE      = {
   .output_encoding = "Shift_JIS",
 };
 /* spec cache */
-static __thread device_table *v_spec = NULL;
 static device_table *s_get_device_data(request_rec *r, const char *device_id, device_table_list *dtl);
 static device_table *s_specified_device_from_xml(request_rec *r, mod_chxj_config * conf, const char *user_agent);
 static device_table *s_specified_device_from_tsv(request_rec *r,device_table *spec,const char *user_agent);
@@ -101,19 +100,17 @@ chxj_specified_device(request_rec *r, const char *user_agent)
   device_table         *dt = &UNKNOWN_DEVICE;
   mod_chxj_config      *conf;
   char                 *spec_check = NULL;
+  mod_chxj_req_config  *request_conf;
   
   DBG(r, "REQ[%X] start %s()", TO_ADDR(r),__func__);
 
-  /*
-   * if I have spec cache, I will use it.
-   */
-  spec_check = (char *)apr_table_get(r->headers_in, "X-Chxj-Spec-Check");
-  if (spec_check && STRCASEEQ('d','D',"done",spec_check)) {
-    dt = v_spec;
+  request_conf = (mod_chxj_req_config *)chxj_get_module_config(r->request_config, &chxj_module);
+  if (request_conf && request_conf->spec) {
     DBG(r, "REQ[%x] Use spec cache.", TO_ADDR(r));
-    DBG(r, "REQ[%x] end %s() (Spec-Check-Done)", (unsigned int)(apr_size_t)r, __func__);
-    return dt;
+    DBG(r, "REQ[%x] end %s() (Exist spec cache)", (unsigned int)(apr_size_t)r, __func__);
+    return request_conf->spec;
   }
+  
   
   conf = chxj_get_module_config(r->per_dir_config, &chxj_module);
   if(! user_agent){
@@ -127,8 +124,7 @@ chxj_specified_device(request_rec *r, const char *user_agent)
     s_specified_device_from_tsv(r,dt,user_agent);
   }
   /* save to spec cache */
-  v_spec = dt;
-  apr_table_setn(r->headers_in, "X-Chxj-Spec-Check", "done");
+  request_conf->spec = dt;
   
   DBG(r, "REQ[%X] end %s() %d",TO_ADDR(r), __func__,conf->detect_device_type);
   return dt;
@@ -395,7 +391,6 @@ void
 chxj_specified_cleanup(request_rec *r)
 {
   DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
-  v_spec = NULL;
   DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
 }
 
