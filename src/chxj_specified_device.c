@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2009 Atsushi Konno All rights reserved.
+ * Copyright (C) 2005-2011 Atsushi Konno All rights reserved.
  * Copyright (C) 2005 QSDN,Inc. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -388,6 +388,15 @@ s_specified_device_from_tsv(request_rec *r,device_table *spec,const char *user_a
   
   DBG(r, "REQ[%X] end %s() [%d]",TO_ADDR(r),__func__,spec->provider);
   return spec;
+}
+
+
+void
+chxj_specified_cleanup(request_rec *r)
+{
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
+  v_spec = NULL;
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
 }
 
 

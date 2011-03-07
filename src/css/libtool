@@ -4,7 +4,7 @@
 # Generated automatically by  (GNU scss 1.0.0)
 # NOTE: Changes made to this file will be lost: look at ltmain.sh.
 #
-# Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001
+# Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008
 # Free Software Foundation, Inc.
 #
 # This file is part of GNU Libtool:
@@ -147,7 +147,7 @@ pic_flag=" -fPIC -DPIC"
 pic_mode=default
 
 # What is the maximum length of a command?
-max_cmd_len=32768
+max_cmd_len=98304
 
 # Does compiler simultaneously support -c and -o options?
 compiler_c_o="yes"
@@ -200,7 +200,7 @@ soname_spec="\${libname}\${release}\${shared_ext}\$major"
 
 # Commands used to build and install an old-style archive.
 RANLIB="ranlib"
-old_archive_cmds="\$AR \$AR_FLAGS \$oldlib\$oldobjs\$old_deplibs~\$RANLIB \$oldlib"
+old_archive_cmds="\$AR \$AR_FLAGS \$oldlib\$oldobjs~\$RANLIB \$oldlib"
 old_postinstall_cmds="chmod 644 \$oldlib~\$RANLIB \$oldlib"
 old_postuninstall_cmds=""
 
@@ -242,6 +242,10 @@ predeps=""
 # Dependencies to place after the objects being linked to create a
 # shared library.
 postdeps=""
+
+# The directories searched by this compiler when creating a shared
+# library
+compiler_lib_search_dirs=""
 
 # The library search path used internally by the compiler when linking
 # a shared library.
@@ -343,7 +347,7 @@ export_symbols_cmds="\$NM \$libobjs \$convenience | \$global_symbol_pipe | \$SED
 extract_expsyms_cmds=""
 
 # Symbols that should not be listed in the preloaded symbols.
-exclude_expsyms="_GLOBAL_OFFSET_TABLE_"
+exclude_expsyms="_GLOBAL_OFFSET_TABLE_|_GLOBAL__F[ID]_.*"
 
 # Symbols that must always be exported.
 include_expsyms=""
@@ -7326,7 +7330,7 @@ pic_flag=" -fPIC -DPIC"
 pic_mode=default
 
 # What is the maximum length of a command?
-max_cmd_len=32768
+max_cmd_len=98304
 
 # Does compiler simultaneously support -c and -o options?
 compiler_c_o="yes"
@@ -7379,7 +7383,7 @@ soname_spec="\${libname}\${release}\${shared_ext}\$major"
 
 # Commands used to build and install an old-style archive.
 RANLIB="ranlib"
-old_archive_cmds="\$AR \$AR_FLAGS \$oldlib\$oldobjs\$old_deplibs~\$RANLIB \$oldlib"
+old_archive_cmds="\$AR \$AR_FLAGS \$oldlib\$oldobjs~\$RANLIB \$oldlib"
 old_postinstall_cmds="chmod 644 \$oldlib~\$RANLIB \$oldlib"
 old_postuninstall_cmds=""
 
@@ -7418,6 +7422,10 @@ predeps=""
 # Dependencies to place after the objects being linked to create a
 # shared library.
 postdeps="-lstdc++ -lm -lgcc_s -lc -lgcc_s"
+
+# The directories searched by this compiler when creating a shared
+# library
+compiler_lib_search_dirs="/usr/lib/gcc/x86_64-linux-gnu/4.3.2 /usr/lib/gcc/x86_64-linux-gnu/4.3.2 /usr/lib/gcc/x86_64-linux-gnu/4.3.2/../../../../lib /lib/../lib /usr/lib/../lib /usr/lib/gcc/x86_64-linux-gnu/4.3.2/../../.."
 
 # The library search path used internally by the compiler when linking
 # a shared library.
@@ -7501,7 +7509,7 @@ variables_saved_for_relink="PATH LD_LIBRARY_PATH LD_RUN_PATH GCC_EXEC_PREFIX COM
 link_all_deplibs=no
 
 # Compile-time system search path for libraries
-sys_lib_search_path_spec=" /usr/lib/gcc/x86_64-linux-gnu/4.3.2/ /usr/lib/gcc/x86_64-linux-gnu/4.3.2/ /usr/lib/gcc/x86_64-linux-gnu/4.3.2/../../../../x86_64-linux-gnu/lib/x86_64-linux-gnu/4.3.2/ /usr/lib/gcc/x86_64-linux-gnu/4.3.2/../../../../x86_64-linux-gnu/lib/../lib/ /usr/lib/gcc/x86_64-linux-gnu/4.3.2/../../../x86_64-linux-gnu/4.3.2/ /usr/lib/gcc/x86_64-linux-gnu/4.3.2/../../../../lib/ /lib/x86_64-linux-gnu/4.3.2/ /lib/../lib/ /usr/lib/x86_64-linux-gnu/4.3.2/ /usr/lib/../lib/ /usr/lib/gcc/x86_64-linux-gnu/4.3.2/../../../../x86_64-linux-gnu/lib/ /usr/lib/gcc/x86_64-linux-gnu/4.3.2/../../../ /lib/ /usr/lib/"
+sys_lib_search_path_spec="/usr/lib/gcc/x86_64-linux-gnu/4.3.2 /usr/lib /lib"
 
 # Run-time system search path for libraries
 sys_lib_dlsearch_path_spec="/lib /usr/lib /usr/local/lib /lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu /usr/local/lib64 /usr/lib /var/lenny-386-chroot/lib /var/lenny-386-chroot/usr/lib /var/lenny-386-chroot/usr/X11R6/lib /var/lenny-386-chroot/usr/local/lib "
@@ -7519,7 +7527,7 @@ export_symbols_cmds="\$NM \$libobjs \$convenience | \$global_symbol_pipe | \$SED
 extract_expsyms_cmds=""
 
 # Symbols that should not be listed in the preloaded symbols.
-exclude_expsyms=""
+exclude_expsyms="_GLOBAL_OFFSET_TABLE_|_GLOBAL__F[ID]_.*"
 
 # Symbols that must always be exported.
 include_expsyms=""
