@@ -69,6 +69,14 @@ chxj_get_module_config(const ap_conf_vector_t *cv, const module *m)
 #endif
 }
 
+void
+chxj_set_module_config(const ap_conf_vector_t *cv, const module *m, void *val)
+{
+#if defined(CHXJ_TEST)
+#else
+  ap_set_module_config(cv,m,val);
+#endif
+}
 
 char *
 chxj_ap_escape_html(apr_pool_t *p, const char *s) 
