@@ -30,6 +30,9 @@
 
 #include <wand/magick_wand.h>
 
+/* @see htcacheclean */
+#define CACHEDATA_EXT "data"
+
 #if !defined(LONG_LONG_MAX) && defined(LLONG_MAX)
 #  define LONG_LONG_MAX LLONG_MAX
 #endif
@@ -1990,6 +1993,7 @@ s_create_workfile_name(
     if (fname[ii] == '/' 
     ||  fname[ii] == ' ' 
     ||  fname[ii] == '-' 
+    ||  fname[ii] == '.' 
     ||  fname[ii] == '(' 
     ||  fname[ii] == ')') {
       w[jj++] = '_';
@@ -1999,7 +2003,7 @@ s_create_workfile_name(
     }
   }
 
-  return apr_psprintf(r->pool, "%s/%s", conf->image_cache_dir,w);
+  return apr_psprintf(r->pool, "%s/%s.%s", conf->image_cache_dir,w,CACHEDATA_EXT);
 }
 
 
