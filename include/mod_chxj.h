@@ -282,6 +282,7 @@ typedef enum {
 } tag_type;
 
 typedef struct mod_chxj_config mod_chxj_config;
+typedef struct mod_chxj_req_config_t mod_chxj_req_config;
 
 #if defined(USE_MYSQL_COOKIE)
 #  include "chxj_mysql.h"
@@ -360,6 +361,10 @@ struct mod_chxj_config {
   chxj_new_line_type_t  new_line_type;
 
   char                  *post_log;              /* post log environment name. */
+};
+
+struct mod_chxj_req_config_t {
+  device_table *spec;
 };
 
 #define IS_COOKIE_STORE_DBM(X)      ((X) == COOKIE_STORE_TYPE_DBM)

@@ -172,6 +172,7 @@ static apr_status_t
 chxj_headers_fixup(request_rec *r)
 {
   mod_chxj_config*    dconf; 
+  mod_chxj_req_config*  request_conf; 
   chxjconvrule_entry* entryp;
   char*               user_agent;
   device_table*       spec;
@@ -188,6 +189,20 @@ chxj_headers_fixup(request_rec *r)
   dconf = chxj_get_module_config(r->per_dir_config, &chxj_module);
 
   user_agent = (char*)apr_table_get(r->headers_in, HTTP_USER_AGENT);
+
+  /*
+   * make space for the per request config
+   */
+  request_conf = (mod_chxj_req_config *)chxj_get_module_config(r->request_config, &chxj_module);
+  if (! request_conf) {
+    request_conf = apr_pcalloc(r->pool, sizeof(mod_chxj_req_config));
+    request_conf->spec = NULL;
+    chxj_set_module_config(r->request_config, &chxj_module, request_conf);
+  }
+
+  /*
+   * check and get mobile type.
+   */
   spec = chxj_specified_device(r, user_agent);
 
   contentType = (char *)apr_table_get(r->headers_in, "Content-Type");
