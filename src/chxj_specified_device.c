@@ -139,13 +139,6 @@ chxj_specified_device(request_rec *r, const char *user_agent)
   return &UNKNOWN_DEVICE;
 }
 
-void
-chxj_specified_cleanup(request_rec *r) 
-{
-  DBG(r,"REQ[%X] start %s()",TO_ADDR(r), __func__);
-  DBG(r,"REQ[%X] end %s()",TO_ADDR(r), __func__);
-}
-
 
 #include <stdlib.h>
 static int 

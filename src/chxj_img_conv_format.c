@@ -301,10 +301,10 @@ chxj_img_conv_format_handler(request_rec *r)
 
 
 
+  mod_chxj_req_config *request_conf = chxj_get_module_config(r->request_config, &chxj_module);
   if (qsp->ua_flag == UA_IGN)
     spec = &v_ignore_spec;
   else {
-    mod_chxj_req_config *request_conf = chxj_get_module_config(r->request_config, &chxj_module);
     if (request_conf->user_agent 
         && user_agent 
         && strcmp(request_conf->user_agent, user_agent) != 0) {
@@ -319,6 +319,10 @@ chxj_img_conv_format_handler(request_rec *r)
   DBG(r,"REQ[%X] User-Agent=[%s]", TO_ADDR(r), user_agent);
 
 
+  /* 
+   * Do not process output_filter
+   */
+  chxj_remove_filter(r);
   rtn = s_img_conv_format_from_file(r, conf, user_agent, qsp, spec);
   DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return rtn;

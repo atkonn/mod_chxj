@@ -131,5 +131,4 @@ extern device_table* chxj_specified_device(
   request_rec             *r, 
   const char              *user_agent);
 
-extern void chxj_specified_cleanup(request_rec *r);
 #endif
