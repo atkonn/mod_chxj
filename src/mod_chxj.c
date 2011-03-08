@@ -197,11 +197,13 @@ chxj_headers_fixup(request_rec *r)
   if (! request_conf) {
     request_conf = apr_pcalloc(r->pool, sizeof(mod_chxj_req_config));
     request_conf->spec = NULL;
+    request_conf->user_agent = NULL;
     chxj_set_module_config(r->request_config, &chxj_module, request_conf);
   }
 
   /*
    * check and get mobile type.
+   * and request_conf->user_agent , request_conf->spec is set.
    */
   spec = chxj_specified_device(r, user_agent);
 

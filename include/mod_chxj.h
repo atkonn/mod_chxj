@@ -364,6 +364,7 @@ struct mod_chxj_config {
 };
 
 struct mod_chxj_req_config_t {
+  char *user_agent;
   device_table *spec;
 };
 
