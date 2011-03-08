@@ -388,12 +388,14 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
   char                *tmp;
   cookie_t            *cookie;
   mod_chxj_config     *dconf; 
+  mod_chxj_req_config *request_conf; 
   chxjconvrule_entry  *entryp;
 
   DBG(r,"REQ[%X] start %s() input:[%.*s]", TO_ADDR(r), __func__, (int)*len, *src);
   dst  = apr_pstrcat(r->pool, (char *)*src, NULL);
 
   dconf = chxj_get_module_config(r->per_dir_config, &chxj_module);
+  request_conf = chxj_get_module_config(r->request_config, &chxj_module);
 
 
   entryp = chxj_apply_convrule(r, dconf->convrules);
@@ -426,6 +428,9 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
   if (ua && user_agent && strcasecmp(user_agent, ua) != 0) {
     /* again */
     spec = chxj_specified_device(r, user_agent);
+  }
+  else {
+    spec = request_conf->spec;
   }
 
   /*
@@ -1438,6 +1443,7 @@ static apr_status_t
 chxj_input_handler(request_rec *r)
 {
   mod_chxj_config     *dconf;
+  mod_chxj_req_config *request_conf;
   chxjconvrule_entry  *entryp = NULL;
   device_table        *spec   = NULL;
   char                *post_data = NULL;
@@ -1456,12 +1462,18 @@ chxj_input_handler(request_rec *r)
   apr_pool_create(&pool, r->pool);
 
   dconf      = chxj_get_module_config(r->per_dir_config, &chxj_module);
+  request_conf = chxj_get_module_config(r->request_config, &chxj_module);
   user_agent = (char*)apr_table_get(r->headers_in, CHXJ_HTTP_USER_AGENT);
   if (!user_agent) {
     user_agent = (char*)apr_table_get(r->headers_in, HTTP_USER_AGENT);
   }
-  spec       = chxj_specified_device(r, user_agent);
-  entryp     = chxj_apply_convrule(r, dconf->convrules);
+  if (user_agent && request_conf->user_agent && strcmp(user_agent, request_conf->user_agent)) {
+    spec = chxj_specified_device(r, user_agent);
+  }
+  else {
+    spec = request_conf->spec;
+  }
+  entryp = chxj_apply_convrule(r, dconf->convrules);
 
   post_data = apr_pstrdup(pool, "");
   if (ap_setup_client_block(r, REQUEST_CHUNKED_DECHUNK) == OK) {
@@ -1690,7 +1702,12 @@ chxj_insert_filter(request_rec *r)
     return;
   }
 
-  spec = chxj_specified_device(r, user_agent);
+  if (user_agent && req_conf->user_agent && strcmp(user_agent, req_conf->user_agent)) {
+    spec = chxj_specified_device(r, user_agent);
+  }
+  else {
+    spec = req_conf->spec;
+  }
   entryp = chxj_apply_convrule(r, dconf->convrules);
   if (!entryp) {
     DBG(r, "REQ[%X] end %s()", TO_ADDR(r),__func__);

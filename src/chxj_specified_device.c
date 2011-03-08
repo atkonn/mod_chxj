@@ -87,13 +87,12 @@ chxj_specified_device(request_rec *r, const char *user_agent)
    * Get per request config.
    */
   request_conf = (mod_chxj_req_config *)chxj_get_module_config(r->request_config, &chxj_module);
-  if (request_conf && request_conf->spec && request_conf->user_agent && strcmp(request_conf->user_agent, user_agent) == 0) {
-    DBG(r,"REQ[%x] Use spec cache.", (unsigned int)(apr_size_t)r);
-    returnType = request_conf->spec;
-    DBG(r,"REQ[%x] end %s() (Exist requestConf)", TO_ADDR(r),__func__);
-    return returnType;
+  if (user_agent) {
+    request_conf->user_agent = apr_pstrdup(r->pool, user_agent);
   }
-  request_conf->user_agent = user_agent;
+  else {
+    request_conf->user_agent = "";
+  }
 
   conf = chxj_get_module_config(r->per_dir_config, &chxj_module);
   if (! conf->devices) {
