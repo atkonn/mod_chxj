@@ -541,6 +541,45 @@ s_create_cache_file(request_rec          *r,
     /*------------------------------------------------------------------------*/
     /* 通常のイメージファイルの場合                                           */
     /*------------------------------------------------------------------------*/
+#if APR_HAS_MMAP
+    DBG(r, "REQ[%X] Use mmap to read original image.", TO_ADDR(r));
+    {
+      apr_finfo_t finfo;
+      apr_mmap_t *mmap = NULL;
+      rv = apr_file_open(&fin, 
+                         r->filename, 
+                         APR_FOPEN_READ | APR_FOPEN_SHARELOCK, 
+                         APR_OS_DEFAULT, 
+                         r->pool);
+      if (rv != APR_SUCCESS) {
+        char buf[256];
+        ERR(r,"REQ[%X] %s:%d apr_file_open failed. [%s]", TO_ADDR(r),__FILE__,__LINE__,apr_strerror(rv,buf,256));
+        ERR(r,"REQ[%X] %s:%d file open failed.[%s]", TO_ADDR(r),__FILE__,__LINE__,r->filename);
+        DBG(r,"REQ[%X] end %s",TO_ADDR(r), __func__);
+        return HTTP_NOT_FOUND;
+      }
+      rv = apr_file_info_get(&finfo, APR_FINFO_SIZE, fin);
+      if (rv != APR_SUCCESS) {
+        char buf[256];
+        apr_file_close(fin);
+        ERR(r,"REQ[%X] %s:%d apr_file_info_get failed. [%s]", TO_ADDR(r),__FILE__,__LINE__,apr_strerror(rv,buf,256));
+        DBG(r,"REQ[%X] end %s",TO_ADDR(r), __func__);
+        return HTTP_NOT_FOUND;
+      }
+      rv = apr_mmap_create(&mmap, fin, 0, finfo.size, APR_MMAP_READ, r->pool);
+      if (rv != APR_SUCCESS) {
+        char buf[256];
+        apr_file_close(fin);
+        ERR(r,"REQ[%X] %s:%d apr_file_info_get failed. [%s]", TO_ADDR(r),__FILE__,__LINE__,apr_strerror(rv,buf,256));
+        DBG(r,"REQ[%X] end %s",TO_ADDR(r), __func__);
+        return HTTP_NOT_FOUND;
+      }
+      readdata = apr_palloc(r->pool, st->size);
+      memcpy(readdata, mmap->mm, st->size);
+      //apr_mmap_delete(mmap);
+      apr_file_close(fin);
+    }
+#else
     rv = apr_file_open(&fin, 
                     r->filename, 
                     APR_FOPEN_READ | APR_FOPEN_BINARY | APR_FOPEN_BUFFERED | APR_FOPEN_SHARELOCK,
@@ -554,6 +593,7 @@ s_create_cache_file(request_rec          *r,
   
     readdata = apr_palloc(r->pool, st->size);
     rv = apr_file_read_full(fin, (void*)readdata, st->size, &readbyte);
+    apr_file_close(fin);
     if (rv != APR_SUCCESS || readbyte != st->size) {
       ERR(r,"REQ[%X] %s:%d file read failed.[%s]", TO_ADDR(r), __FILE__,__LINE__,r->filename);
       apr_file_close(fin);
@@ -561,6 +601,7 @@ s_create_cache_file(request_rec          *r,
       DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
       return HTTP_NOT_FOUND;
     }
+#endif
   }
   DBG(r,"REQ[%X] start img convert", TO_ADDR(r));
 
@@ -1806,6 +1847,41 @@ s_send_cache_file(
         apr_table_setn(r->headers_out, "x-jphone-copyright", "no-transfer");
       }
     }
+#if APR_HAS_MMAP
+    DBG(r, "REQ[%X] Use ap_send_mmap to send cache file", TO_ADDR(r));
+    {
+      apr_finfo_t finfo;
+      apr_mmap_t *mmap = NULL;
+      rv = apr_file_open(&fout, tmpfile, 
+        APR_FOPEN_READ, 
+        APR_OS_DEFAULT, r->pool);
+      if (rv != APR_SUCCESS) {
+        ERR(r,"REQ[%X] %s:%d tmpfile open failed[%s]", TO_ADDR(r),__FILE__,__LINE__,tmpfile);
+        DBG(r,"REQ[%X] end %s",TO_ADDR(r), __func__);
+        return HTTP_NOT_FOUND;
+      }
+      rv = apr_file_info_get(&finfo, APR_FINFO_SIZE, fout);
+      if (rv != APR_SUCCESS) {
+        char buf[256];
+        apr_file_close(fout);
+        ERR(r,"REQ[%X] %s:%d apr_file_info_get failed. [%s]", TO_ADDR(r),__FILE__,__LINE__,apr_strerror(rv,buf,256));
+        DBG(r,"REQ[%X] end %s",TO_ADDR(r), __func__);
+        return HTTP_NOT_FOUND;
+      }
+      rv = apr_mmap_create(&mmap, fout, 0, finfo.size, APR_MMAP_READ, r->pool);
+      if (rv != APR_SUCCESS) {
+        char buf[256];
+        apr_file_close(fout);
+        ERR(r,"REQ[%X] %s:%d apr_file_info_get failed. [%s]", TO_ADDR(r),__FILE__,__LINE__,apr_strerror(rv,buf,256));
+        DBG(r,"REQ[%X] end %s",TO_ADDR(r), __func__);
+        return HTTP_NOT_FOUND;
+      }
+      sendbyte = ap_send_mmap(mmap, r, 0, st.size);
+      //apr_mmap_delete(mmap);
+      apr_file_close(fout);
+    }
+    ap_rflush(r);
+#else
     rv = apr_file_open(&fout, tmpfile, 
       APR_FOPEN_READ | APR_FOPEN_BINARY | APR_FOPEN_BUFFERED | APR_FOPEN_SHARELOCK, 
       APR_OS_DEFAULT, r->pool);
@@ -1816,6 +1892,7 @@ s_send_cache_file(
     ap_send_fd(fout, r, 0, st.size, &sendbyte);
     apr_file_close(fout);
     ap_rflush(r);
+#endif
     DBG(r, "REQ[%X] send file data[%d]byte", TO_ADDR(r), (int)sendbyte);
   }
   else
@@ -1863,6 +1940,41 @@ s_send_cache_file(
   
       DBG(r, "REQ[%X] Content-Length:[%d]", TO_ADDR(r),(int)st.size);
 
+#if APR_HAS_MMAP
+      DBG(r, "REQ[%X] Use ap_send_mmap to send cache file", TO_ADDR(r));
+      {
+        apr_finfo_t finfo;
+        apr_mmap_t *mmap;
+        rv = apr_file_open(&fout, tmpfile, 
+          APR_FOPEN_READ | APR_FOPEN_BINARY, 
+          APR_OS_DEFAULT, r->pool);
+        if (rv != APR_SUCCESS) {
+          ERR(r,"REQ[%X] %s:%d tmpfile open failed[%s]", TO_ADDR(r),__FILE__,__LINE__,tmpfile);
+          DBG(r,"REQ[%X] end %s",TO_ADDR(r), __func__);
+          return HTTP_NOT_FOUND;
+        }
+        rv = apr_file_info_get(&finfo, APR_FINFO_SIZE, fout);
+        if (rv != APR_SUCCESS) {
+          char buf[256];
+          apr_file_close(fout);
+          ERR(r,"REQ[%X] %s:%d apr_file_info_get failed. [%s]", TO_ADDR(r),__FILE__,__LINE__,apr_strerror(rv,buf,256));
+          DBG(r,"REQ[%X] end %s",TO_ADDR(r), __func__);
+          return HTTP_NOT_FOUND;
+        }
+        rv = apr_mmap_create(&mmap, fout, 0, finfo.size, APR_MMAP_READ, r->pool);
+        if (rv != APR_SUCCESS) {
+          char buf[256];
+          apr_file_close(fout);
+          ERR(r,"REQ[%X] %s:%d apr_file_info_get failed. [%s]", TO_ADDR(r),__FILE__,__LINE__,apr_strerror(rv,buf,256));
+          DBG(r,"REQ[%X] end %s",TO_ADDR(r), __func__);
+          return HTTP_NOT_FOUND;
+        }
+        sendbyte = ap_send_mmap(mmap, r, query_string->offset, query_string->count);
+        // apr_mmap_delete(mmap);
+        apr_file_close(fout);
+      }
+      ap_rflush(r);
+#else
       rv = apr_file_open(&fout, tmpfile, 
         APR_FOPEN_READ | APR_FOPEN_BINARY | APR_FOPEN_BUFFERED | APR_FOPEN_SHARELOCK, 
         APR_OS_DEFAULT, r->pool);
@@ -1875,6 +1987,7 @@ s_send_cache_file(
       ap_send_fd(fout, r, query_string->offset, query_string->count, &sendbyte);
       apr_file_close(fout);
       ap_rflush(r);
+#endif
       DBG(r, "REQ[%X] send file data[%d]byte", TO_ADDR(r),(int)sendbyte);
     }
   }
@@ -1903,6 +2016,44 @@ s_send_original_file(request_rec *r, const char *originalfile)
     ap_set_last_modified(r);
   }
 
+#if APR_HAS_MMAP
+  DBG(r, "REQ[%X] Use ap_send_mmap to send original image file", TO_ADDR(r));
+  {
+    apr_finfo_t finfo;
+    apr_mmap_t *mmap = NULL;
+    rv = apr_file_open(&fout, 
+                       originalfile, 
+                       APR_FOPEN_READ | APR_FOPEN_SHARELOCK, 
+                       APR_OS_DEFAULT, r->pool);
+    if (rv != APR_SUCCESS) {
+      char buf[256];
+      ERR(r,"REQ[%X] %s:%d apr_file_open failed. [%s]", TO_ADDR(r),__FILE__,__LINE__,apr_strerror(rv,buf,256));
+      ERR(r,"REQ[%X] %s:%d original file open failed[%s]", TO_ADDR(r),__FILE__,__LINE__,originalfile);
+      DBG(r,"REQ[%X] end %s",TO_ADDR(r), __func__);
+      return HTTP_NOT_FOUND;
+    }
+    rv = apr_file_info_get(&finfo, APR_FINFO_SIZE, fout);
+    if (rv != APR_SUCCESS) {
+      char buf[256];
+      apr_file_close(fout);
+      ERR(r,"REQ[%X] %s:%d apr_file_info_get failed. [%s]", TO_ADDR(r),__FILE__,__LINE__,apr_strerror(rv,buf,256));
+      DBG(r,"REQ[%X] end %s",TO_ADDR(r), __func__);
+      return HTTP_NOT_FOUND;
+    }
+    rv = apr_mmap_create(&mmap, fout, 0, finfo.size, APR_MMAP_READ, r->pool);
+    if (rv != APR_SUCCESS) {
+      char buf[256];
+      apr_file_close(fout);
+      ERR(r,"REQ[%X] %s:%d apr_file_info_get failed. [%s]", TO_ADDR(r),__FILE__,__LINE__,apr_strerror(rv,buf,256));
+      DBG(r,"REQ[%X] end %s",TO_ADDR(r), __func__);
+      return HTTP_NOT_FOUND;
+    }
+    sendbyte = ap_send_mmap(mmap, r, 0, st.size);
+    //apr_mmap_delete(mmap);
+    apr_file_close(fout);
+  }
+  ap_rflush(r);
+#else
   rv = apr_file_open(&fout, originalfile, 
     APR_FOPEN_READ | APR_FOPEN_BINARY | APR_FOPEN_BUFFERED | APR_FOPEN_SHARELOCK, 
     APR_OS_DEFAULT, r->pool);
@@ -1914,6 +2065,7 @@ s_send_original_file(request_rec *r, const char *originalfile)
   ap_send_fd(fout, r, 0, st.size, &sendbyte);
   apr_file_close(fout);
   ap_rflush(r);
+#endif
   DBG(r, "REQ[%X] send file data[%d]byte", TO_ADDR(r),(int)sendbyte);
   
   return OK;
