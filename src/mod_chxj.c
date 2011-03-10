@@ -884,7 +884,7 @@ chxj_input_convert(
       if (strlen(result) != 0) 
         result = apr_pstrcat(pool, result, "&", NULL);
 
-      if (strcasecmp(entryp->encoding, "NONE") != 0) {
+      if (entryp && strcasecmp(entryp->encoding, "NONE") != 0) {
         apr_size_t dlen;
         char *dvalue;
         char *dname;
