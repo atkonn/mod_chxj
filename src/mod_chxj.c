@@ -230,43 +230,45 @@ chxj_headers_fixup(request_rec *r)
   case CHXJ_SPEC_Jhtml:
   case CHXJ_SPEC_Jxhtml:
     entryp = chxj_apply_convrule(r, dconf->convrules);
-    if (! entryp) {
-      DBG(r, "REQ[%X] end %s() (no pattern)", TO_ADDR(r), __func__);
-      return DECLINED;
+    if (dconf->image != CHXJ_IMG_ON) {
+      if (! entryp) {
+        DBG(r, "REQ[%X] end %s() (no pattern)", TO_ADDR(r), __func__);
+        return DECLINED;
+      }
+      if (!(entryp->action & CONVRULE_ENGINE_ON_BIT) && !(entryp->action & CONVRULE_COOKIE_ONLY_BIT)) {
+        DBG(r, "REQ[%X] end %s() (engine off)", TO_ADDR(r), __func__);
+        return DECLINED;
+      }
+      if (entryp->action & CONVRULE_EMOJI_ONLY_BIT) {
+        DBG(r, "REQ[%X] end %s() (emoji only)", TO_ADDR(r), __func__);
+        return DECLINED;
+      } 
     }
-    if (!(entryp->action & CONVRULE_ENGINE_ON_BIT) && !(entryp->action & CONVRULE_COOKIE_ONLY_BIT)) {
-      DBG(r, "REQ[%X] end %s() (engine off)", TO_ADDR(r), __func__);
-      return DECLINED;
-    }
-    if (entryp->action & CONVRULE_EMOJI_ONLY_BIT) {
-      DBG(r, "REQ[%X] end %s() (emoji only)", TO_ADDR(r), __func__);
-      return DECLINED;
-    } 
   
     apr_table_setn(r->headers_in, 
                    CHXJ_HTTP_USER_AGENT, 
                    user_agent);
   
-    if (entryp->user_agent)
+    if (entryp && entryp->user_agent)
       apr_table_setn(r->headers_in, 
                      HTTP_USER_AGENT, 
                      entryp->user_agent);
     /*
      * this clear process must do before chxj_convert_input_header function.
      */
-    if ((entryp->action & CONVRULE_COOKIE_ON_BIT) || (entryp->action & CONVRULE_COOKIE_ONLY_BIT)) {
-      if (r->method_number == M_POST) {
-        if (! apr_table_get(r->headers_in, "X-Chxj-Forward")) {
+    if (entryp) {
+      if ((entryp->action & CONVRULE_COOKIE_ON_BIT) || (entryp->action & CONVRULE_COOKIE_ONLY_BIT)) {
+        if (r->method_number == M_POST) {
+          if (! apr_table_get(r->headers_in, "X-Chxj-Forward")) {
+            s_clear_cookie_header(r, spec);
+          }
+        }
+        else {
           s_clear_cookie_header(r, spec);
         }
       }
-      else {
-        s_clear_cookie_header(r, spec);
-      }
     }
-
     chxj_convert_input_header(r,entryp, spec);
-
     break;
   
   default:
@@ -319,7 +321,7 @@ chxj_headers_fixup(request_rec *r)
         if (strcmp(addr, r->connection->remote_ip) == 0) {
           r->connection->remote_ip = apr_pstrdup(r->connection->pool, client_ip);
           /* For mod_cidr_lookup */
-          if (entryp->action & CONVRULE_OVERWRITE_X_CLIENT_TYPE_BIT) {
+          if (entryp && entryp->action & CONVRULE_OVERWRITE_X_CLIENT_TYPE_BIT) {
             char *client_type = (char *)apr_table_get(r->headers_in, CHXJ_HEADER_ORIG_CLIENT_TYPE);
             DBG(r, "REQ[%X] Overwrite X-Client-Type to [%s]", TO_ADDR(r), client_type);
             if (client_type) {
@@ -651,7 +653,7 @@ chxj_convert_input_header(request_rec *r,chxjconvrule_entry *entryp, device_tabl
       if (strlen(result) != 0) 
         result = apr_pstrcat(r->pool, result, "&", NULL);
 
-      if (strcasecmp(entryp->encoding, "NONE") != 0) {
+      if (entryp && strcasecmp(entryp->encoding, "NONE") != 0) {
         apr_size_t dlen;
         char *dvalue;
         char *dname;
@@ -843,7 +845,7 @@ chxj_input_convert(
       if (strlen(result) != 0) 
         result = apr_pstrcat(pool, result, "&", NULL);
 
-      if (strcasecmp(entryp->encoding, "NONE") != 0) {
+      if (entryp && strcasecmp(entryp->encoding, "NONE") != 0) {
         apr_size_t dlen;
         char *dvalue;
         char *dname;
@@ -1026,7 +1028,7 @@ pass_data_to_filter(ap_filter_t *f, const char *data,
 static void
 s_add_no_cache_headers(request_rec *r, chxjconvrule_entry  *entryp)
 {
-  if (entryp->action & CONVRULE_NOCACHE_ON_BIT) {
+  if (entryp && entryp->action & CONVRULE_NOCACHE_ON_BIT) {
     apr_table_unset(r->headers_out,     "Pragma");
     apr_table_unset(r->err_headers_out, "Pragma");
     apr_table_unset(r->headers_out,     "Expires");
@@ -1709,7 +1711,8 @@ chxj_insert_filter(request_rec *r)
     spec = req_conf->spec;
   }
   entryp = chxj_apply_convrule(r, dconf->convrules);
-  if (!entryp) {
+  if (!entryp && dconf->image != CHXJ_IMG_ON) {
+    DBG(r, "REQ[%X] entryp is NULL and ChxjImageEngine Off", TO_ADDR(r));
     DBG(r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
     return;
   }
@@ -1725,9 +1728,9 @@ chxj_insert_filter(request_rec *r)
   ctx->buffer = apr_palloc(ctx->pool, 1);
   ctx->buffer[0] = 0;
 
-  if (!entryp || (!(entryp->action & CONVRULE_ENGINE_ON_BIT) && !(entryp->action & CONVRULE_COOKIE_ONLY_BIT))) {
-    DBG(r,"REQ[%X] EngineOff", TO_ADDR(r));
-    DBG(r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
+  if (dconf->image != CHXJ_IMG_ON && (!entryp || (!(entryp->action & CONVRULE_ENGINE_ON_BIT) && !(entryp->action & CONVRULE_COOKIE_ONLY_BIT)))) {
+    DBG(r,"REQ[%X] EngineOff and ChxjImageEngine Off", TO_ADDR(r));
+    DBG(r,"REQ[%X] end %s()", TO_ADDR(r),__func__);
     return;
   }
 
