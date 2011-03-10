@@ -84,8 +84,8 @@ chxj_open_mysql_handle(request_rec *r, mod_chxj_config *m)
         &&  (m->mysql.username && strcmp(m->mysql.username, connection.username) == 0)) {
 
       if (m->mysql.database && strcmp(m->mysql.database, connection.database) == 0) {
-        DBG(r, "already connected");
-        DBG(r, "end chxj_open_mysql_handle()");
+        DBG(r,"REQ[%X] already connected",TO_ADDR(r));
+        DBG(r,"REQ[%X] end chxj_open_mysql_handle()",TO_ADDR(r));
         return 1;
       }
       else {
@@ -95,7 +95,7 @@ chxj_open_mysql_handle(request_rec *r, mod_chxj_config *m)
         }
         else {
           strcpy (connection.database, m->mysql.database);
-          DBG(r, "already connected. new database:[%s]", m->mysql.database);
+          DBG(r,"REQ[%X] already connected. new database:[%s]", TO_ADDR(r),m->mysql.database);
           return 1;
         }
       }
@@ -118,13 +118,15 @@ chxj_open_mysql_handle(request_rec *r, mod_chxj_config *m)
   connection.handle = mysql_real_connect(&mysql_conn,connection.host,m->mysql.username,
 		  		  m->mysql.password, NULL, m->mysql.port, m->mysql.socket_path, 0);
   if (!connection.handle) {
-    ERR(r, "MySQL ERROR: %s. host:[%s] username:[%s] password:[%s] port:[%d] socket_path:[%s]", mysql_error(&mysql_conn), 
+    ERR(r,"REQ[%X] MySQL ERROR: %s. host:[%s] username:[%s] password:[%s] port:[%d] socket_path:[%s]",
+       TO_ADDR(r),
+       mysql_error(&mysql_conn), 
        connection.host, 
        m->mysql.username,
        m->mysql.password,
        m->mysql.port,
        m->mysql.socket_path);
-    DBG(r, "end chxj_open_mysql_handle()");
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return 0;
   }
 
@@ -145,12 +147,12 @@ chxj_open_mysql_handle(request_rec *r, mod_chxj_config *m)
   if (m->mysql.charset) {
     apr_snprintf(query, sizeof(query)-1, "SET CHARACTER SET %s", m->mysql.charset);
     if (mysql_query(connection.handle, query) != 0) {
-      ERR(r, "%s:%d MySQL ERROR: %s: %s", APLOG_MARK, mysql_error(connection.handle), r->uri);
+      ERR(r, "REQ[%X] %s:%d MySQL ERROR: %s: %s", TO_ADDR(r),APLOG_MARK, mysql_error(connection.handle), r->uri);
       return 0;
     }
   }
 
-  DBG(r, "end chxj_open_mysql_handle()");
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return 1;
 }
 
@@ -163,8 +165,9 @@ chxj_mysql_exist_cookie_table(request_rec *r, mod_chxj_config *m)
   int retry_count = 0;
   apr_interval_time_t wait_time = CHXJ_MYSQL_RECONNECT_WAIT_TIME;
 
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
   apr_snprintf(query, sizeof(query)-1, "desc %s", m->mysql.tablename);
-  DBG(r, "start chxj_mysql_exist_cookie_table() query:[%s]", query);
+  DBG(r,"REQ[%X] query:[%s]", TO_ADDR(r),query);
   do { 
     if (!chxj_open_mysql_handle(r, m)) {
       ERR(r, "%s:%d failed chxj_open_mysql_handle() query:[%s]", APLOG_MARK, query);
@@ -191,7 +194,8 @@ chxj_mysql_exist_cookie_table(request_rec *r, mod_chxj_config *m)
   result = mysql_store_result(connection.handle);
   if (result) mysql_free_result(result);
   
-  DBG(r, "end chxj_mysql_exist_cookie_table() query:[%s]", query);
+  DBG(r,"REQ[%X] query:[%s]", TO_ADDR(r),query);
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
 
   return 1;
 }
@@ -205,9 +209,9 @@ chxj_mysql_exist_cookie_table_expire(request_rec *r, mod_chxj_config *m)
   int retry_count = 0;
   apr_interval_time_t wait_time = CHXJ_MYSQL_RECONNECT_WAIT_TIME;
 
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
   apr_snprintf(query, sizeof(query)-1, "desc %s_expire", m->mysql.tablename);
-
-  DBG(r, "start chxj_mysql_exist_cookie_table_expire() query:[%s]", query);
+  DBG(r,"REQ[%X] query:[%s]",TO_ADDR(r),query);
 
   do { 
     if (!chxj_open_mysql_handle(r, m)) {
@@ -234,7 +238,8 @@ chxj_mysql_exist_cookie_table_expire(request_rec *r, mod_chxj_config *m)
   result = mysql_store_result(connection.handle);
   if (result) mysql_free_result(result);
 
-  DBG(r, "end chxj_mysql_exist_cookie_table_expire() query:[%s]", query);
+  DBG(r,"REQ[%X] query:[%s]", TO_ADDR(r),query);
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
 
   return 1;
 }
@@ -248,10 +253,11 @@ chxj_mysql_create_cookie_table(request_rec *r, mod_chxj_config *m)
   int retry_count = 0;
   apr_interval_time_t wait_time = CHXJ_MYSQL_RECONNECT_WAIT_TIME;
 
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
   apr_snprintf(query, sizeof(query)-1, "CREATE TABLE %s  (cookie_id VARCHAR(%d) NOT NULL, data TEXT, PRIMARY KEY(cookie_id)) TYPE=InnoDB;",
     m->mysql.tablename,
     apr_base64_encode_len(APR_MD5_DIGESTSIZE) * 3);
-  DBG(r, "start chxj_mysql_create_cookie_table() query:[%s]", query);
+  DBG(r,"REQ[%X] query:[%s]", TO_ADDR(r),query);
   do {
     if (!chxj_open_mysql_handle(r, m)) {
       ERR(r, "%s:%d failed chxj_open_mysql_handle() query:[%s]", APLOG_MARK, query);
@@ -278,7 +284,8 @@ chxj_mysql_create_cookie_table(request_rec *r, mod_chxj_config *m)
   result = mysql_store_result(connection.handle);
   if (result) mysql_free_result(result);
   
-  DBG(r, "end chxj_mysql_create_cookie_table() query:[%s]", query);
+  DBG(r,"REQ[%X] query:[%s]", TO_ADDR(r),query);
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
 
   return 1;
 }
@@ -291,11 +298,12 @@ chxj_mysql_create_cookie_expire_table(request_rec *r, mod_chxj_config *m)
   int retry_count = 0;
   apr_interval_time_t wait_time = CHXJ_MYSQL_RECONNECT_WAIT_TIME;
 
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
   apr_snprintf(query, sizeof(query)-1, "CREATE TABLE %s_expire  (cookie_id VARCHAR(%d) NOT NULL, created_at DATETIME, PRIMARY KEY(cookie_id)) TYPE=InnoDB;",
     m->mysql.tablename,
     apr_base64_encode_len(APR_MD5_DIGESTSIZE) * 3);
 
-  DBG(r, "start chxj_mysql_create_cookie_expire_table() query:[%s]", query);
+  DBG(r,"REQ[%X] query:[%s]", TO_ADDR(r),query);
 
   do {
     if (!chxj_open_mysql_handle(r, m)) {
@@ -323,7 +331,8 @@ chxj_mysql_create_cookie_expire_table(request_rec *r, mod_chxj_config *m)
   result = mysql_store_result(connection.handle);
   if (result) mysql_free_result(result);
   
-  DBG(r, "end chxj_mysql_create_cookie_expire_table() query:[%s]", query);
+  DBG(r,"REQ[%X] query:[%s]", TO_ADDR(r),query);
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
 
   return 1;
 }
@@ -340,10 +349,11 @@ chxj_mysql_get_cookie_from_cookie_id(request_rec *r, mod_chxj_config *m, const c
   int retry_count = 0;
   apr_interval_time_t wait_time = CHXJ_MYSQL_RECONNECT_WAIT_TIME;
 
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
   mysql_escape_string(sql_safe_cookie_id,cookie_id,clen);
 
   apr_snprintf(query, sizeof(query)-1, "SELECT data, length(data) FROM %s WHERE cookie_id = '%s'", m->mysql.tablename, sql_safe_cookie_id);
-  DBG(r, "start chxj_mysql_get_cookie_from_cookie_id() query:[%s]", query);
+  DBG(r,"REQ[%X] query:[%s]",TO_ADDR(r),query);
   do {
     if (!chxj_open_mysql_handle(r, m)) {
       ERR(r, "%s:%d failed chxj_open_mysql_handle() query:[%s]", APLOG_MARK, query);
@@ -383,7 +393,8 @@ chxj_mysql_get_cookie_from_cookie_id(request_rec *r, mod_chxj_config *m, const c
   if (result) mysql_free_result(result);
 
   
-  DBG(r, "end chxj_mysql_get_cookie_from_cookie_id() query:[%s]", query);
+  DBG(r,"REQ[%X] query:[%s]", TO_ADDR(r),query);
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
 
   return retval;
 }
@@ -400,12 +411,13 @@ chxj_mysql_get_cookie_expire_from_cookie_id(request_rec *r, mod_chxj_config *m, 
   int retry_count = 0;
   apr_interval_time_t wait_time = CHXJ_MYSQL_RECONNECT_WAIT_TIME;
 
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
   mysql_escape_string(sql_safe_cookie_id,cookie_id,clen);
 
   apr_snprintf(query, sizeof(query)-1, "SELECT DATE_FORMAT(created_at, '%%Y%%m%%d%%H%%i%%s') FROM %s_expire WHERE cookie_id = '%s'", 
     m->mysql.tablename, sql_safe_cookie_id);
 
-  DBG(r, "start chxj_mysql_get_cookie_expire_from_cookie_id() query:[%s]", query);
+  DBG(r,"REQ[%X] query:[%s]", TO_ADDR(r),query);
 
   do {
     if (!chxj_open_mysql_handle(r, m)) {
@@ -444,7 +456,8 @@ chxj_mysql_get_cookie_expire_from_cookie_id(request_rec *r, mod_chxj_config *m, 
   }
   if (result) mysql_free_result(result);
   
-  DBG(r, "end chxj_mysql_get_cookie_expire_from_cookie_id() query:[%s] retval:[%s]", query, retval);
+  DBG(r,"REQ[%X] query:[%s] retval:[%s]", TO_ADDR(r),query, retval);
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
 
   return retval;
 }
@@ -460,7 +473,8 @@ chxj_mysql_insert_or_update_cookie(request_rec *r, mod_chxj_config *m, const cha
   int retry_count = 0;
   apr_interval_time_t wait_time = CHXJ_MYSQL_RECONNECT_WAIT_TIME;
 
-  DBG(r, "start chxj_mysql_insert_or_update_cookie() data:[%s]", data);
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
+  DBG(r,"REQ[%X] data:[%s]", TO_ADDR(r),data);
   do {
     if (!chxj_open_mysql_handle(r, m)) {
       ERR(r, "%s:%d failed chxj_open_mysql_handle()", APLOG_MARK);
@@ -487,7 +501,7 @@ chxj_mysql_insert_or_update_cookie(request_rec *r, mod_chxj_config *m, const cha
   while(0);
 
   apr_snprintf(query, sizeof(query)-1, "INSERT INTO %s (cookie_id, data) VALUES ('%s','%s');", m->mysql.tablename, cid, cdt);
-  DBG(r, "query:[%s]", query);
+  DBG(r,"REQ[%X] query:[%s]", TO_ADDR(r),query);
   if (mysql_query(connection.handle, query) != 0) {
     WRN(r, "MySQL WARN: %s: %s", mysql_error(connection.handle), r->uri);
     if (!chxj_mysql_get_cookie_from_cookie_id(r, m, cookie_id)) {
@@ -495,7 +509,7 @@ chxj_mysql_insert_or_update_cookie(request_rec *r, mod_chxj_config *m, const cha
       return 0;
     }
     apr_snprintf(query, sizeof(query)-1, "UPDATE %s set data = '%s' WHERE cookie_id = '%s';", m->mysql.tablename, cdt, cid);
-    DBG(r, "query:[%s]", query);
+    DBG(r,"REQ[%X] query:[%s]", TO_ADDR(r),query);
     if (mysql_query(connection.handle, query) != 0) {
       ERR(r, "%s:%d MySQL WARN: %s: %s", APLOG_MARK, mysql_error(connection.handle), r->uri);
       chxj_mysql_rollback(r, m);
@@ -504,7 +518,7 @@ chxj_mysql_insert_or_update_cookie(request_rec *r, mod_chxj_config *m, const cha
   }
 
   apr_snprintf(query, sizeof(query)-1, "COMMIT;");
-  DBG(r, "query:[%s]", query);
+  DBG(r,"REQ[%X] query:[%s]",TO_ADDR(r),query);
   if (mysql_query(connection.handle, query) != 0) {
     ERR(r, "%s:%d MySQL WARN: %s: %s", APLOG_MARK, mysql_error(connection.handle), r->uri);
     chxj_mysql_rollback(r, m);
@@ -514,7 +528,7 @@ chxj_mysql_insert_or_update_cookie(request_rec *r, mod_chxj_config *m, const cha
   result = mysql_store_result(connection.handle);
   if (result) mysql_free_result(result);
   
-  DBG(r, "end chxj_mysql_get_cookie_from_cookie_id()");
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
 
   return 1;
 }
@@ -529,7 +543,7 @@ chxj_mysql_insert_or_update_cookie_expire(request_rec *r, mod_chxj_config *m, co
   int retry_count = 0;
   apr_interval_time_t wait_time = CHXJ_MYSQL_RECONNECT_WAIT_TIME;
 
-  DBG(r, "start chxj_mysql_insert_or_update_cookie_expire()");
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
 
   do {
     if (!chxj_open_mysql_handle(r, m)) {
@@ -538,7 +552,7 @@ chxj_mysql_insert_or_update_cookie_expire(request_rec *r, mod_chxj_config *m, co
     }
     connection.reconnect = 0; 
     apr_snprintf(query, sizeof(query)-1, "BEGIN;");
-    DBG(r, "query:[%s]", query);
+    DBG(r,"REQ[%X] query:[%s]",TO_ADDR(r),query);
     if (mysql_query(connection.handle, query) != 0) {
       if (mysql_errno(connection.handle) == CR_SERVER_GONE_ERROR) {
         connection.reconnect = 1;
@@ -557,7 +571,7 @@ chxj_mysql_insert_or_update_cookie_expire(request_rec *r, mod_chxj_config *m, co
   while(0);
 
   apr_snprintf(query, sizeof(query)-1, "INSERT INTO %s_expire (cookie_id, created_at) VALUES ('%s',localtime);", m->mysql.tablename, cid);
-  DBG(r, "query:[%s]", query);
+  DBG(r,"REQ[%X] query:[%s]", TO_ADDR(r),query);
   if (mysql_query(connection.handle, query) != 0) {
     WRN(r, "MySQL WARN: %s: %s", mysql_error(connection.handle), r->uri);
     if (!chxj_mysql_get_cookie_from_cookie_id(r, m, cookie_id)) {
@@ -565,7 +579,7 @@ chxj_mysql_insert_or_update_cookie_expire(request_rec *r, mod_chxj_config *m, co
       return 0;
     }
     apr_snprintf(query, sizeof(query)-1, "UPDATE %s_expire set created_at = localtime WHERE cookie_id = '%s';", m->mysql.tablename, cid);
-    DBG(r, "query:[%s]", query);
+    DBG(r,"REQ[%X] query:[%s]",TO_ADDR(r),query);
     if (mysql_query(connection.handle, query) != 0) {
       ERR(r, "%s:%d MySQL WARN: %s: %s", APLOG_MARK, mysql_error(connection.handle), r->uri);
       chxj_mysql_rollback(r, m);
@@ -574,7 +588,7 @@ chxj_mysql_insert_or_update_cookie_expire(request_rec *r, mod_chxj_config *m, co
   }
 
   apr_snprintf(query, sizeof(query)-1, "COMMIT;");
-  DBG(r, "query:[%s]", query);
+  DBG(r,"REQ[%X] query:[%s]",TO_ADDR(r),query);
   if (mysql_query(connection.handle, query) != 0) {
     ERR(r, "%s:%d MySQL WARN: %s: %s", APLOG_MARK, mysql_error(connection.handle), r->uri);
     chxj_mysql_rollback(r, m);
@@ -584,7 +598,7 @@ chxj_mysql_insert_or_update_cookie_expire(request_rec *r, mod_chxj_config *m, co
   result = mysql_store_result(connection.handle);
   if (result) mysql_free_result(result);
   
-  DBG(r, "end chxj_mysql_insert_or_update_cookie_expire()");
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
 
   return 1;
 }
@@ -595,7 +609,7 @@ chxj_mysql_rollback(request_rec *r, mod_chxj_config *m)
 {
   char query[MAX_STRING_LEN];
 
-  DBG(r, "start chxj_mysql_rollback()");
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
 
   apr_snprintf(query, sizeof(query)-1, "ROLLBACK;");
 
@@ -607,7 +621,7 @@ chxj_mysql_rollback(request_rec *r, mod_chxj_config *m)
     ERR(r, "%s:%d MySQL ERROR: %s: %s", APLOG_MARK, mysql_error(connection.handle), r->uri);
     return 0; /* FALSE */
   }
-  DBG(r, "end chxj_mysql_rollback()");
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return 1;
 }
 
@@ -622,11 +636,12 @@ chxj_mysql_load_cookie(request_rec *r, mod_chxj_config *m, const char *cookie_id
   int retry_count = 0;
   apr_interval_time_t wait_time = CHXJ_MYSQL_RECONNECT_WAIT_TIME;
   
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
   mysql_escape_string(sql_safe_cookie_id,cookie_id,clen);
 
   apr_snprintf(query, sizeof(query)-1, "SELECT data, length(data) FROM %s WHERE cookie_id = '%s';", m->mysql.tablename, sql_safe_cookie_id);
 
-  DBG(r, "start chxj_mysql_load_cookie() query:[%s]", query);
+  DBG(r, "REQ[%X] query:[%s]", TO_ADDR(r),query);
 
   do {
     if (!chxj_open_mysql_handle(r, m)) {
@@ -667,7 +682,8 @@ chxj_mysql_load_cookie(request_rec *r, mod_chxj_config *m, const char *cookie_id
   }
   if (result) mysql_free_result(result);
   
-  DBG(r, "end chxj_load_mysql_cookie() query:[%s]", query);
+  DBG(r,"REQ[%X] query:[%s]", TO_ADDR(r),query);
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
 
   return retval;
 }
@@ -684,6 +700,7 @@ chxj_mysql_load_cookie_expire(request_rec *r, mod_chxj_config *m, const char *co
   int retry_count = 0;
   apr_interval_time_t wait_time = CHXJ_MYSQL_RECONNECT_WAIT_TIME;
 
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
   mysql_escape_string(sql_safe_cookie_id,cookie_id,clen);
 
   apr_snprintf(query, 
@@ -692,7 +709,7 @@ chxj_mysql_load_cookie_expire(request_rec *r, mod_chxj_config *m, const char *co
                m->mysql.tablename, 
                sql_safe_cookie_id);
 
-  DBG(r, "start chxj_mysql_load_cookie_expire() query:[%s]", query);
+  DBG(r,"REQ[%X] query:[%s]", TO_ADDR(r),query);
 
   do {
     if (!chxj_open_mysql_handle(r, m)) {
@@ -730,7 +747,8 @@ chxj_mysql_load_cookie_expire(request_rec *r, mod_chxj_config *m, const char *co
   }
   if (result) mysql_free_result(result);
   
-  DBG(r, "end chxj_mysql_load_cookie_expire() query:[%s]", query);
+  DBG(r,"REQ[%X] query:[%s]", TO_ADDR(r),query);
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
 
   return retval;
 }
@@ -745,7 +763,8 @@ chxj_mysql_delete_cookie(request_rec *r, mod_chxj_config *m, const char *cookie_
   int retry_count = 0;
   apr_interval_time_t wait_time = CHXJ_MYSQL_RECONNECT_WAIT_TIME;
 
-  DBG(r, "start chxj_mysql_delete_cookie() cookie_id:[%s]", cookie_id);
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
+  DBG(r,"REQ[%X] cookie_id:[%s]", TO_ADDR(r),cookie_id);
 
   do {
     if (!chxj_open_mysql_handle(r, m)) {
@@ -754,7 +773,7 @@ chxj_mysql_delete_cookie(request_rec *r, mod_chxj_config *m, const char *cookie_
     }
     connection.reconnect = 0;
     apr_snprintf(query, sizeof(query)-1, "BEGIN;");
-    DBG(r, "query:[%s]", query);
+    DBG(r,"REQ[%X] query:[%s]", TO_ADDR(r),query);
     if (mysql_query(connection.handle, query) != 0) {
       if (mysql_errno(connection.handle) == CR_SERVER_GONE_ERROR) {
         connection.reconnect = 1;
@@ -777,7 +796,7 @@ chxj_mysql_delete_cookie(request_rec *r, mod_chxj_config *m, const char *cookie_
     return 0;
   }
   apr_snprintf(query, sizeof(query)-1, "DELETE FROM %s WHERE cookie_id = '%s';", m->mysql.tablename, cid);
-  DBG(r, "query:[%s]", query);
+  DBG(r,"REQ[%X] query:[%s]", TO_ADDR(r),query);
   if (mysql_query(connection.handle, query) != 0) {
     ERR(r, "%s:%d MySQL WARN: %s: %s", APLOG_MARK, mysql_error(connection.handle), r->uri);
     chxj_mysql_rollback(r, m);
@@ -785,7 +804,7 @@ chxj_mysql_delete_cookie(request_rec *r, mod_chxj_config *m, const char *cookie_
   }
 
   apr_snprintf(query, sizeof(query)-1, "COMMIT;");
-  DBG(r, "query:[%s]", query);
+  DBG(r,"REQ[%X] query:[%s]",TO_ADDR(r),query);
   if (mysql_query(connection.handle, query) != 0) {
     ERR(r, "%s:%d MySQL WARN: %s: %s", APLOG_MARK, mysql_error(connection.handle), r->uri);
     chxj_mysql_rollback(r, m);
@@ -795,7 +814,7 @@ chxj_mysql_delete_cookie(request_rec *r, mod_chxj_config *m, const char *cookie_
   result = mysql_store_result(connection.handle);
   if (result) mysql_free_result(result);
   
-  DBG(r, "end chxj_mysql_delete_cookie()");
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
 
   return 1;
 }
@@ -810,7 +829,8 @@ chxj_mysql_delete_cookie_expire(request_rec *r, mod_chxj_config *m, const char *
   int retry_count = 0;
   apr_interval_time_t wait_time = CHXJ_MYSQL_RECONNECT_WAIT_TIME;
 
-  DBG(r, "start chxj_mysql_delete_cookie_expire() cookie_id:[%s]", cookie_id);
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
+  DBG(r,"REQ[%X] cookie_id:[%s]", TO_ADDR(r),cookie_id);
 
   do {
     if (!chxj_open_mysql_handle(r, m)) {
@@ -819,7 +839,7 @@ chxj_mysql_delete_cookie_expire(request_rec *r, mod_chxj_config *m, const char *
     }
     connection.reconnect = 0; 
     apr_snprintf(query, sizeof(query)-1, "BEGIN;");
-    DBG(r, "query:[%s]", query);
+    DBG(r,"REQ[%X] query:[%s]",TO_ADDR(r),query);
     if (mysql_query(connection.handle, query) != 0) {
       if (mysql_errno(connection.handle) == CR_SERVER_GONE_ERROR) {
         connection.reconnect = 1;
@@ -842,7 +862,7 @@ chxj_mysql_delete_cookie_expire(request_rec *r, mod_chxj_config *m, const char *
     return 0;
   }
   apr_snprintf(query, sizeof(query)-1, "DELETE FROM %s_expire WHERE cookie_id = '%s';", m->mysql.tablename, cid);
-  DBG(r, "query:[%s]", query);
+  DBG(r,"REQ[%X] query:[%s]",TO_ADDR(r),query);
   if (mysql_query(connection.handle, query) != 0) {
     ERR(r, "%s:%d MySQL WARN: %s: %s", APLOG_MARK,mysql_error(connection.handle), r->uri);
     chxj_mysql_rollback(r, m);
@@ -850,7 +870,7 @@ chxj_mysql_delete_cookie_expire(request_rec *r, mod_chxj_config *m, const char *
   }
 
   apr_snprintf(query, sizeof(query)-1, "COMMIT;");
-  DBG(r, "query:[%s]", query);
+  DBG(r,"REQ[%X] query:[%s]",TO_ADDR(r),query);
   if (mysql_query(connection.handle, query) != 0) {
     ERR(r, "%s:%d MySQL WARN: %s: %s", APLOG_MARK, mysql_error(connection.handle), r->uri);
     chxj_mysql_rollback(r, m);
@@ -860,7 +880,8 @@ chxj_mysql_delete_cookie_expire(request_rec *r, mod_chxj_config *m, const char *
   result = mysql_store_result(connection.handle);
   if (result) mysql_free_result(result);
   
-  DBG(r, "end chxj_mysql_delete_cookie_expire() cookie_id:[%s]", cookie_id);
+  DBG(r,"REQ[%X] cookie_id:[%s]",TO_ADDR(r),cookie_id);
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
 
   return 1;
 }
@@ -874,7 +895,7 @@ chxj_mysql_get_timeout_localtime(request_rec *r, mod_chxj_config *m)
   int retry_count = 0;
   apr_interval_time_t wait_time = CHXJ_MYSQL_RECONNECT_WAIT_TIME;
 
-  DBG(r, "start chxj_mysql_get_timeout_localtime()");
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
   do {
     if (!chxj_open_mysql_handle(r, m)) {
       ERR(r, "%s:%d failed chxj_open_mysql_handle()", APLOG_MARK);
@@ -883,7 +904,7 @@ chxj_mysql_get_timeout_localtime(request_rec *r, mod_chxj_config *m)
     connection.reconnect = 0;
     apr_snprintf(query, sizeof(query)-1, "SELECT DATE_SUB(localtime, interval %ld second);",
       (m->cookie_timeout == 0) ? DEFAULT_COOKIE_TIMEOUT : m->cookie_timeout);
-    DBG(r, "query:[%s]", query);
+    DBG(r,"REQ[%X] query:[%s]",TO_ADDR(r),query);
     if (mysql_query(connection.handle, query) != 0) {
       if (mysql_errno(connection.handle) == CR_SERVER_GONE_ERROR) {
         connection.reconnect = 1;
@@ -914,7 +935,7 @@ chxj_mysql_get_timeout_localtime(request_rec *r, mod_chxj_config *m)
   }
   if (result) mysql_free_result(result);
    
-  DBG(r, "end chxj_mysql_get_timeout_localtime()");
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
 
   return retval;
 }
@@ -928,7 +949,7 @@ chxj_mysql_delete_expired_cookie(request_rec *r, mod_chxj_config *m)
   int retry_count = 0;
   apr_interval_time_t wait_time = CHXJ_MYSQL_RECONNECT_WAIT_TIME;
 
-  DBG(r, "start chxj_mysql_delete_expired_cookie()");
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
 
   do {
     if (!chxj_open_mysql_handle(r, m)) {
@@ -937,7 +958,7 @@ chxj_mysql_delete_expired_cookie(request_rec *r, mod_chxj_config *m)
     }
     connection.reconnect = 0;
     apr_snprintf(query, sizeof(query)-1, "BEGIN;");
-    DBG(r, "query:[%s]", query);
+    DBG(r,"REQ[%X] query:[%s]", TO_ADDR(r),query);
     if (mysql_query(connection.handle, query) != 0) {
       if (mysql_errno(connection.handle) == CR_SERVER_GONE_ERROR) {
         connection.reconnect = 1;
@@ -962,7 +983,7 @@ chxj_mysql_delete_expired_cookie(request_rec *r, mod_chxj_config *m)
   }
 
   apr_snprintf(query, sizeof(query)-1, "SELECT * FROM %s_expire WHERE created_at <= '%s'", m->mysql.tablename, timeout);
-  DBG(r, "query:[%s]", query);
+  DBG(r,"REQ[%X] query:[%s]",TO_ADDR(r),query);
   if (mysql_query(connection.handle, query) != 0) {
     ERR(r, "%s:%d MySQL WARN: %s: %s", APLOG_MARK,mysql_error(connection.handle), r->uri);
     chxj_mysql_rollback(r, m);
@@ -981,7 +1002,7 @@ chxj_mysql_delete_expired_cookie(request_rec *r, mod_chxj_config *m)
      timeout,
      m->mysql.tablename,
      m->mysql.tablename);
-  DBG(r, "query:[%s]", query);
+  DBG(r,"REQ[%X] query:[%s]",TO_ADDR(r),query);
   if (mysql_query(connection.handle, query) != 0) {
     ERR(r, "%s:%d MySQL ERROR: %s: %s", APLOG_MARK, mysql_error(connection.handle), r->uri);
     chxj_mysql_rollback(r, m);
@@ -997,7 +1018,7 @@ chxj_mysql_delete_expired_cookie(request_rec *r, mod_chxj_config *m)
      m->mysql.tablename,
      m->mysql.tablename,
      timeout);
-  DBG(r, "query:[%s]", query);
+  DBG(r,"REQ[%X] query:[%s]",TO_ADDR(r),query);
   if (mysql_query(connection.handle, query) != 0) {
     ERR(r, "%s:%d MySQL ERROR: %s: %s", APLOG_MARK, mysql_error(connection.handle), r->uri);
     chxj_mysql_rollback(r, m);
@@ -1008,7 +1029,7 @@ chxj_mysql_delete_expired_cookie(request_rec *r, mod_chxj_config *m)
   result = NULL;
 
   apr_snprintf(query, sizeof(query)-1, "COMMIT;");
-  DBG(r, "query:[%s]", query);
+  DBG(r,"REQ[%X] query:[%s]",TO_ADDR(r),query);
   if (mysql_query(connection.handle, query) != 0) {
     ERR(r, "%s:%d MySQL WARN: %s: %s", APLOG_MARK, mysql_error(connection.handle), r->uri);
     chxj_mysql_rollback(r, m);
@@ -1018,7 +1039,7 @@ chxj_mysql_delete_expired_cookie(request_rec *r, mod_chxj_config *m)
   result = mysql_store_result(connection.handle);
   if (result) mysql_free_result(result);
 
-  DBG(r, "end chxj_mysql_delete_expired_cookie()");
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return 1;
 }
 
@@ -1035,59 +1056,64 @@ chxj_mysql_delete_expired_cookie(request_rec *r, mod_chxj_config *m)
 int
 chxj_save_cookie_mysql(request_rec *r, mod_chxj_config *m, const char *cookie_id, const char *store_string)
 {
-  DBG(r, "start chxj_save_cookie_mysql()");
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
   if (! chxj_open_mysql_handle(r, m)) {
     ERR(r, "Cannot open mysql connection");
-    DBG(r, "end chxj_save_cookie_mysql()");
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return CHXJ_FALSE;
   }
 
   if (!chxj_mysql_exist_cookie_table(r, m)) {
-    DBG(r, "not found cookie table:[%s]", m->mysql.tablename);
+    DBG(r,"REQ[%X] not found cookie table:[%s]", TO_ADDR(r),m->mysql.tablename);
     if (!chxj_mysql_create_cookie_table(r, m)) {
       ERR(r, "cannot create cookie table:[%s]", m->mysql.tablename);
-      DBG(r, "end chxj_save_cookie_mysql()");
+      DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
       return CHXJ_FALSE;
     }
   }
   if (! chxj_mysql_insert_or_update_cookie(r, m, cookie_id, store_string)) {
     ERR(r, "cannot store to cookie table:[%s]", m->mysql.tablename);
-    DBG(r, "end chxj_save_cookie_mysql()");
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return CHXJ_FALSE;
   }
 
   /* *NEED NOT* close database. */
-  DBG(r, "end chxj_save_cookie_mysql()");
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return CHXJ_TRUE;
 }
 
 int
 chxj_update_cookie_mysql(request_rec *r, mod_chxj_config *m, const char *cookie_id, const char *store_string)
 {
-  DBG(r, "start chxj_update_cookie_mysql() cookie_id:[%s]", cookie_id);
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
+  DBG(r,"REQ[%X] cookie_id:[%s]", TO_ADDR(r),cookie_id);
   if (! chxj_open_mysql_handle(r, m)) {
     ERR(r, "Cannot open mysql connection");
-    DBG(r, "end chxj_update_cookie_mysql() cookie_id:[%s]", cookie_id);
+    DBG(r,"REQ[%X] cookie_id:[%s]", TO_ADDR(r),cookie_id);
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return CHXJ_FALSE;
   }
 
   if (!chxj_mysql_exist_cookie_table(r, m)) {
-    DBG(r, "not found cookie table:[%s]", m->mysql.tablename);
+    DBG(r,"REQ[%X] not found cookie table:[%s]",TO_ADDR(r),m->mysql.tablename);
     if (!chxj_mysql_create_cookie_table(r, m)) {
       ERR(r, "cannot create cookie table:[%s]", m->mysql.tablename);
-      DBG(r, "end chxj_update_cookie_mysql() cookie_id:[%s]", cookie_id);
+      DBG(r,"REQ[%X] cookie_id:[%s]", TO_ADDR(r),cookie_id);
+      DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
       return CHXJ_FALSE;
     }
   }
   if (! chxj_mysql_insert_or_update_cookie(r, m, cookie_id, store_string)) {
     ERR(r, "cannot create cookie table:[%s]", m->mysql.tablename);
-    DBG(r, "end chxj_update_cookie_mysql() cookie_id:[%s]", cookie_id);
+    DBG(r,"REQ[%X] cookie_id:[%s]", TO_ADDR(r),cookie_id);
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return CHXJ_FALSE;
   }
 
   /* *NEED NOT* close database. */
   /* chxj_close_mysql_handle(); */
-  DBG(r, "end chxj_update_cookie_mysql() cookie_id:[%s]", cookie_id);
+  DBG(r,"REQ[%X] cookie_id:[%s]", TO_ADDR(r),cookie_id);
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return CHXJ_TRUE;
 }
 
@@ -1097,30 +1123,35 @@ chxj_load_cookie_mysql(request_rec *r, mod_chxj_config *m, const char *cookie_id
 {
   char *load_string;
 
-  DBG(r, "start chxj_load_cookie_mysql() cookie_id:[%s]", cookie_id);
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
+  DBG(r,"REQ[%X] cookie_id:[%s]", TO_ADDR(r),cookie_id);
   if (! chxj_open_mysql_handle(r, m)) {
     ERR(r, "Cannot open mysql connection");
-    DBG(r, "end   chxj_load_cookie_mysql() cookie_id:[%s]", cookie_id);
+    DBG(r,"REQ[%X] cookie_id:[%s]", TO_ADDR(r),cookie_id);
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return NULL;
   }
 
   if (!chxj_mysql_exist_cookie_table(r, m)) {
-    DBG(r, "not found cookie table:[%s]", m->mysql.tablename);
+    DBG(r,"REQ[%X] not found cookie table:[%s]", TO_ADDR(r),m->mysql.tablename);
     if (!chxj_mysql_create_cookie_table(r, m)) {
       ERR(r, "cannot create cookie table:[%s]", m->mysql.tablename);
-      DBG(r, "end   chxj_load_cookie_mysql() cookie_id:[%s]", cookie_id);
+      DBG(r,"REQ[%X] cookie_id:[%s]", TO_ADDR(r),cookie_id);
+      DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
       return NULL;
     }
   }
   if (!(load_string = chxj_mysql_load_cookie(r, m, cookie_id))) {
     ERR(r, "%s:%d not found cookie. cookie_id:[%s]", APLOG_MARK, cookie_id);
-    DBG(r, "end   chxj_load_cookie_mysql() cookie_id:[%s]", cookie_id);
+    DBG(r,"REQ[%X] cookie_id:[%s]", TO_ADDR(r),cookie_id);
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return NULL;
   }
 
   /* *NEED NOT* close database. */
   /* chxj_close_mysql_handle(); */
-  DBG(r, "end   chxj_load_cookie_mysql() cookie_id:[%s]", cookie_id);
+  DBG(r,"REQ[%X] cookie_id:[%s]", TO_ADDR(r),cookie_id);
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return load_string;
 }
 
@@ -1128,13 +1159,14 @@ chxj_load_cookie_mysql(request_rec *r, mod_chxj_config *m, const char *cookie_id
 int
 chxj_delete_cookie_mysql(request_rec *r, mod_chxj_config *m, const char *cookie_id)
 {
-  DBG(r, "start chxj_delete_cookie_mysql() cookie_id=[%s]", cookie_id);
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
+  DBG(r,"REQ[%X] cookie_id=[%s]", TO_ADDR(r),cookie_id);
   if (! chxj_open_mysql_handle(r, m)) {
     ERR(r, "%s:%d Cannot open mysql connection cookie_id=[%s]", APLOG_MARK, cookie_id);
     return CHXJ_FALSE;
   }
   if (!chxj_mysql_exist_cookie_table(r, m)) {
-    DBG(r, "not found cookie table:[%s]", m->mysql.tablename);
+    DBG(r,"REQ[%X] not found cookie table:[%s]", TO_ADDR(r),m->mysql.tablename);
     if (!chxj_mysql_create_cookie_table(r, m)) {
       ERR(r, "%s:%d cannot create cookie table:[%s]", APLOG_MARK, m->mysql.tablename);
       return CHXJ_FALSE;
@@ -1146,7 +1178,8 @@ chxj_delete_cookie_mysql(request_rec *r, mod_chxj_config *m, const char *cookie_
       return CHXJ_FALSE;
     }
   }
-  DBG(r, "end chxj_delete_cookie_mysql() cookie_id=[%s]", cookie_id);
+  DBG(r,"REQ[%X] cookie_id=[%s]", TO_ADDR(r),cookie_id);
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return CHXJ_TRUE;
 }
 
@@ -1154,14 +1187,15 @@ chxj_delete_cookie_mysql(request_rec *r, mod_chxj_config *m, const char *cookie_
 int
 chxj_save_cookie_expire_mysql(request_rec *r, mod_chxj_config *m, const char *cookie_id)
 {
-  DBG(r, "start chxj_save_cookie_expire_mysql() cookie_id:[%s]", cookie_id);
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
+  DBG(r,"REQ[%X] cookie_id:[%s]", TO_ADDR(r),cookie_id);
   if (! chxj_open_mysql_handle(r, m)) {
     ERR(r, "%s:%d Cannot open mysql connection cookie_id=[%s]",APLOG_MARK, cookie_id);
     return CHXJ_FALSE;
   }
 
   if (!chxj_mysql_exist_cookie_table_expire(r, m)) {
-    DBG(r, "not found cookie table:[%s_expire]", m->mysql.tablename);
+    DBG(r,"REQ[%X] not found cookie table:[%s_expire]", TO_ADDR(r),m->mysql.tablename);
     if (!chxj_mysql_create_cookie_expire_table(r, m)) {
       ERR(r, "%s:%d cannot create cookie table:[%s_expire] cookie_id:[%s]", APLOG_MARK, m->mysql.tablename, cookie_id);
       return CHXJ_FALSE;
@@ -1175,7 +1209,8 @@ chxj_save_cookie_expire_mysql(request_rec *r, mod_chxj_config *m, const char *co
   /* *NEED NOT* close database. */
   /* chxj_close_mysql_handle(); */
 
-  DBG(r, "end   chxj_save_cookie_expire_mysql() cookie_id:[%s]", cookie_id);
+  DBG(r,"REQ[%X] cookie_id:[%s]", TO_ADDR(r),cookie_id);
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return CHXJ_TRUE;
 }
 
@@ -1183,14 +1218,15 @@ chxj_save_cookie_expire_mysql(request_rec *r, mod_chxj_config *m, const char *co
 int
 chxj_delete_cookie_expire_mysql(request_rec *r, mod_chxj_config *m, const char *cookie_id)
 {
-  DBG(r, "start chxj_delete_cookie_expire_mysql() cookie_id:[%s]", cookie_id);
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
+  DBG(r,"REQ[%X] cookie_id:[%s]", TO_ADDR(r),cookie_id);
   if (! chxj_open_mysql_handle(r, m)) {
     ERR(r, "%s:%d Cannot open mysql connection", APLOG_MARK);
     return CHXJ_FALSE;
   }
 
   if (!chxj_mysql_exist_cookie_table_expire(r, m)) {
-    DBG(r, "not found cookie table:[%s_expire]", m->mysql.tablename);
+    DBG(r,"REQ[%X] not found cookie table:[%s_expire]", TO_ADDR(r),m->mysql.tablename);
     if (!chxj_mysql_create_cookie_expire_table(r, m)) {
       ERR(r, "%s:%d cannot create cookie table:[%s_expire] cookie_id:[%s]", APLOG_MARK, m->mysql.tablename, cookie_id);
       return CHXJ_FALSE;
@@ -1201,7 +1237,8 @@ chxj_delete_cookie_expire_mysql(request_rec *r, mod_chxj_config *m, const char *
       return CHXJ_FALSE;
     }
   }
-  DBG(r, "end   chxj_delete_cookie_expire_mysql() cookie_id:[%s]", cookie_id);
+  DBG(r,"REQ[%X] cookie_id:[%s]", TO_ADDR(r),cookie_id);
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return CHXJ_TRUE;
 }
 
@@ -1209,14 +1246,14 @@ chxj_delete_cookie_expire_mysql(request_rec *r, mod_chxj_config *m, const char *
 int
 chxj_cookie_expire_gc_mysql(request_rec *r, mod_chxj_config *m)
 {
-  DBG(r, "start chxj_cookie_expire_gc_mysql()");
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
   if (! chxj_open_mysql_handle(r, m)) {
     ERR(r, "Cannot open mysql connection");
-    DBG(r, "end chxj_cookie_expire_gc_mysql()");
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return CHXJ_FALSE;
   }
   if (!chxj_mysql_exist_cookie_table_expire(r, m)) {
-    DBG(r, "not found cookie table:[%s_expire]", m->mysql.tablename);
+    DBG(r,"REQ[%X] not found cookie table:[%s_expire]", TO_ADDR(r),m->mysql.tablename);
     if (!chxj_mysql_create_cookie_expire_table(r, m)) {
       ERR(r, "%s:%d cannot create cookie table:[%s_expire]", APLOG_MARK, m->mysql.tablename);
       return CHXJ_FALSE;
@@ -1227,7 +1264,7 @@ chxj_cookie_expire_gc_mysql(request_rec *r, mod_chxj_config *m)
       return CHXJ_FALSE;
     }
   }
-  DBG(r, "end   chxj_cookie_expire_gc_mysql()");
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return CHXJ_TRUE;
 }
 
@@ -1237,22 +1274,22 @@ chxj_cookie_lock_mysql(request_rec *r, mod_chxj_config *m)
 {
   MYSQL_RES *result;
   char query[MAX_STRING_LEN];
-  DBG(r, "start chxj_cookie_lock_mysql()");
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
   if (! chxj_open_mysql_handle(r, m)) {
     ERR(r, "Cannot open mysql connection");
-    DBG(r, "end   chxj_save_cookie_expire_mysql()");
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return CHXJ_FALSE;
   }
   if (!chxj_mysql_exist_cookie_table_expire(r, m)) {
-    DBG(r, "not found cookie table:[%s_expire]", m->mysql.tablename);
+    DBG(r,"REQ[%X] not found cookie table:[%s_expire]", TO_ADDR(r),m->mysql.tablename);
     if (!chxj_mysql_create_cookie_expire_table(r, m)) {
       ERR(r, "cannot create cookie table:[%s_expire]", m->mysql.tablename);
-      DBG(r, "end chxj_cookie_expire_gc_mysql()");
+      DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
       return CHXJ_FALSE;
     }
   }
   apr_snprintf(query, sizeof(query)-1, "LOCK TABLES %s WRITE", m->mysql.tablename);
-  DBG(r, "query:[%s]", query);
+  DBG(r,"REQ[%X] query:[%s]", TO_ADDR(r),query);
   if (mysql_query(connection.handle, query) != 0) {
     chxj_mysql_rollback(r, m);
     ERR(r, "MySQL WARN: %s: %s", mysql_error(connection.handle), r->uri);
@@ -1262,7 +1299,7 @@ chxj_cookie_lock_mysql(request_rec *r, mod_chxj_config *m)
   result = mysql_store_result(connection.handle);
   if (result) mysql_free_result(result);
   
-  DBG(r, "end chxj_cookie_lock_mysql()");
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return CHXJ_TRUE;
 }
 
@@ -1271,16 +1308,16 @@ int
 chxj_cookie_unlock_mysql(request_rec *r, mod_chxj_config *UNUSED(m))
 {
   char query[MAX_STRING_LEN];
-  if (r) DBG(r, "start chxj_cookie_unlock_mysql()");
+  if (r) DBG(r, "REQ[%X] start %s()",TO_ADDR(r),__func__);
   apr_snprintf(query, sizeof(query)-1, "UNLOCK TABLES");
   if (mysql_query(connection.handle, query) != 0) {
      if (r) {
        ERR(r, "MySQL WARN: %s: %s", mysql_error(connection.handle), r->uri);
-       DBG(r, "end chxj_cookie_unlock_mysql()");
+       DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
      }
     return CHXJ_FALSE;
   }
-  if (r) DBG(r, "end chxj_cookie_unlock_mysql()");
+  if (r) DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return CHXJ_TRUE;
 }
 #endif

@@ -481,10 +481,9 @@ chxj_convert_jxhtml(
   *dstlen = srclen;
   dst = chxj_qr_code_blob_handler(r, src, (size_t*)dstlen);
   if (dst) {
-    DBG(r,"I found qrcode xml");
+    DBG(r,"REQ[%X] I found qrcode xml",TO_ADDR(r));
     return dst;
   }
-  DBG(r,"not found qrcode xml");
 
   /*--------------------------------------------------------------------------*/
   /* The CHTML structure is initialized.                                      */
@@ -596,7 +595,7 @@ s_jxhtml_search_emoji(jxhtml_t *jxhtml, char *txt, char **rslt)
   len = strlen(txt);
   r = jxhtml->doc->r;
 
-  if (! spec) DBG(r,"spec is NULL");
+  if (! spec) DBG(r,"REQ[%X] spec is NULL",TO_ADDR(r));
 
   for (ee = jxhtml->conf->emoji;
        ee;
@@ -606,7 +605,7 @@ s_jxhtml_search_emoji(jxhtml_t *jxhtml, char *txt, char **rslt)
     unsigned char hex2byte;
 
     if (! ee->imode) { 
-      DBG(r,"emoji->imode is NULL");
+      DBG(r,"REQ[%X] emoji->imode is NULL",TO_ADDR(r));
       continue;
     }
 
@@ -655,7 +654,7 @@ chxj_jxhtml_emoji_only_converter(request_rec *r, device_table *spec, const char 
   jxhtml = &__jxhtml;
   doc    = &__doc;
 
-  DBG(r, "REQ[%X] start chxj_jxhtml_emoji_eonly_converter()", (unsigned int)(apr_size_t)r);
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
   memset(doc,    0, sizeof(Doc));
   memset(jxhtml, 0, sizeof(jxhtml_t));
 
@@ -696,7 +695,7 @@ chxj_jxhtml_emoji_only_converter(request_rec *r, device_table *spec, const char 
   }
   jxhtml->out = chxj_buffered_write_flush(jxhtml->out, &doc->buf);
 
-  DBG(r, "REQ[%X] end chxj_jxhtml_emoji_eonly_converter()", (unsigned int)(apr_size_t)r);
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return jxhtml->out;
 }
 
@@ -720,7 +719,7 @@ s_jxhtml_start_html_tag(void *pdoc, Node *UNUSED(node))
   jxhtml  = GET_JXHTML(pdoc);
   doc    = jxhtml->doc;
   r      = doc->r;
-  DBG(r, "REQ[%X] start s_jxhtml_start_html_tag()", TO_ADDR(r));
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
 
   W_L("<?xml version=\"1.0\" encoding=\"");
   W_V(jxhtml->spec->output_encoding);
@@ -736,7 +735,7 @@ s_jxhtml_start_html_tag(void *pdoc, Node *UNUSED(node))
 
   jxhtml->start_html_flag = 1;
 
-  DBG(r, "REQ[%X] end s_jxhtml_start_html_tag()", TO_ADDR(r));
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
 
   return jxhtml->out;
 }
@@ -6344,9 +6343,9 @@ s_jxhtml_link_tag(void *pdoc, Node *node)
   }
 
   if (rel && href && type) {
-    DBG(doc->r, "start load CSS. url:[%s]", href);
+    DBG(doc->r,"REQ[%X] start load CSS. url:[%s]", TO_ADDR(doc->r),href);
     jxhtml->style = chxj_css_parse_from_uri(doc->r, doc->pool, jxhtml->style, href);
-    DBG(doc->r, "end load CSS. url:[%s]", href);
+    DBG(doc->r,"REQ[%X] end load CSS. url:[%s]", TO_ADDR(doc->r),href);
   }
 
   return jxhtml->out;
@@ -6651,9 +6650,9 @@ s_jxhtml_style_tag(void *pdoc, Node *node)
     char *name  = qs_get_node_name(doc, child);
     if (STRCASEEQ('t','T',"text", name)) {
       char *value = qs_get_node_value(doc, child);
-      DBG(doc->r, "start load CSS. buf:[%s]", value);
+      DBG(doc->r,"REQ[%X] start load CSS. buf:[%s]", TO_ADDR(doc->r),value);
       jxhtml->style = chxj_css_parse_style_value(doc, jxhtml->style, value);
-      DBG(doc->r, "end load CSS. value:[%s]", value);
+      DBG(doc->r,"REQ[%X] end load CSS. value:[%s]", TO_ADDR(doc->r),value);
     }
   }
   return jxhtml->out;

@@ -23,16 +23,16 @@ void
 chxj_dump_string(request_rec *r, const char *filename, int line, const char *title, const char *str, apr_size_t len)
 {
   apr_size_t ii;
-  chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] +-------------------------------------------------------------------+", (unsigned int)(apr_size_t)r);
-  chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] |                                                                   |", (unsigned int)(apr_size_t)r);
-  chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] | %-*.*s |", (unsigned int)(apr_size_t)r, 64, 64, title);
-  chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] |                                                                   |", (unsigned int)(apr_size_t)r);
-  chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] +-------------------------------------------------------------------+", (unsigned int)(apr_size_t)r);
+  chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] +-------------------------------------------------------------------+", TO_ADDR(r));
+  chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] |                                                                   |", TO_ADDR(r));
+  chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] | %-*.*s |", TO_ADDR(r), 64, 64, title);
+  chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] |                                                                   |", TO_ADDR(r));
+  chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] +-------------------------------------------------------------------+", TO_ADDR(r));
   for (ii=0; ii<len/64; ii++) {
-    chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] | [%-*.*s] |", (unsigned int)(apr_size_t)r, 64, 64, &str[ii * 64]);
+    chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] | [%-*.*s] |", TO_ADDR(r), 64, 64, &str[ii * 64]);
   }
   if (len % 64) {
-    chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] | [%-*.*s] |", (unsigned int)(apr_size_t)r, 64, 64, &str[ii * 64]);
+    chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] | [%-*.*s] |", TO_ADDR(r), 64, 64, &str[ii * 64]);
   }
-  chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] +-------------------------------------------------------------------+", (unsigned int)(apr_size_t)r);
+  chxj_log_rerror(filename, line, APLOG_DEBUG,0,r, "REQ[%X] +-------------------------------------------------------------------+", TO_ADDR(r));
 }

@@ -31,16 +31,16 @@ chxj_conv_z2h_num(request_rec *r, const char *src, apr_size_t *len, chxjconvrule
   char                *obuf;
   apr_size_t          olen;
 
-  DBG(r,"REQ[%X] start chxj_conv_z2h_num()", (unsigned int)(apr_size_t)r);
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
 
   if (entryp->action & CONVRULE_Z2H_NUM_OFF_BIT) {
-    DBG(r,"REQ[%X] Detect Z2hNumOff", (unsigned int)(apr_size_t)r);
-    DBG(r,"REQ[%X] end chxj_conv_z2h_num()", (unsigned int)(apr_size_t)r);
+    DBG(r,"REQ[%X] Detect Z2hNumOff", TO_ADDR(r));
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return (char *)src;
   }
   if (! (entryp->action & CONVRULE_Z2H_NUM_ON_BIT)) {
-    DBG(r,"REQ[%X] Detect Z2hNumOff", (unsigned int)(apr_size_t)r);
-    DBG(r,"REQ[%X] end chxj_conv_z2h_num()", (unsigned int)(apr_size_t)r);
+    DBG(r,"REQ[%X] Detect Z2hNumOff", TO_ADDR(r));
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return (char *)src;
   }
 
@@ -83,7 +83,7 @@ chxj_conv_z2h_num(request_rec *r, const char *src, apr_size_t *len, chxjconvrule
   }
   *len = olen;
 
-  DBG(r,"REQ[%X] end chxj_conv_z2h_num()", (unsigned int)(apr_size_t)r);
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return obuf;
 }
 /*

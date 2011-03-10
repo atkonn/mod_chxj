@@ -529,7 +529,7 @@ chxj_convert_chtml30(
   chtml30_t chtml30;
   Doc       doc;
 
-  DBG(r, "start chxj_convert_chtml30()");
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
 
   /*--------------------------------------------------------------------------*/
   /* If qrcode xml                                                            */
@@ -537,8 +537,8 @@ chxj_convert_chtml30(
   *dstlen = srclen;
   dst = chxj_qr_code_blob_handler(r, src, (size_t*)dstlen);
   if (dst) {
-    DBG(r,"i found qrcode xml");
-    DBG(r, "end chxj_convert_chtml30()");
+    DBG(r,"REQ[%X] found qrcode xml",TO_ADDR(r));
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return dst;
   }
   DBG(r,"not found qrcode xml");
@@ -598,7 +598,7 @@ chxj_convert_chtml30(
   chxj_dump_out("[src] CHTML -> CHTML3.0", dst, *dstlen);
 #endif
 
-  DBG(r, "end chxj_convert_chtml30()");
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return dst;
 }
 
@@ -654,14 +654,14 @@ s_chtml30_search_emoji(chtml30_t *chtml30, char *txt, char **rslt, Node *node)
   r   = chtml30->doc->r;
 
   if (!spec) {
-    DBG(r,"spec is NULL");
+    DBG(r,"REQ[%X] spec is NULL", TO_ADDR(r));
   }
 
   for (ee = chtml30->conf->emoji;
        ee;
        ee = ee->next) {
     if (ee->imode == NULL) {
-      DBG(r, "emoji->imode is NULL");
+      DBG(r, "REQ[%X] emoji->imode is NULL", TO_ADDR(r));
       continue;
     }
 
@@ -716,7 +716,7 @@ chxj_chtml30_emoji_only_converter(request_rec *r, device_table *spec, const char
   chtml30 = &__chtml30;
   doc     = &__doc;
 
-  DBG(r, "REQ[%X] start chxj_chtml30_emoji_eonly_converter()", (unsigned int)(apr_size_t)r);
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
   memset(doc,     0, sizeof(Doc));
   memset(chtml30, 0, sizeof(chtml30_t));
 
@@ -757,7 +757,7 @@ chxj_chtml30_emoji_only_converter(request_rec *r, device_table *spec, const char
   }
   chtml30->out = chxj_buffered_write_flush(chtml30->out, &doc->buf);
 
-  DBG(r, "REQ[%X] end chxj_chtml30_emoji_eonly_converter()", (unsigned int)(apr_size_t)r);
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return chtml30->out;
 }
 
@@ -4594,9 +4594,9 @@ s_chtml30_link_tag(void *pdoc, Node *node)
   }
 
   if (rel && href && type) {
-    DBG(doc->r, "start load CSS. url:[%s]", href);
+    DBG(doc->r, "REQ[%X] start load CSS. url:[%s]", TO_ADDR(doc->r),href);
     chtml30->style = chxj_css_parse_from_uri(doc->r, doc->pool, chtml30->style, href);
-    DBG(doc->r, "end load CSS. url:[%s]", href);
+    DBG(doc->r, "REQ[%X] end load CSS. url:[%s]", TO_ADDR(doc->r),href);
   }
 
   return chtml30->out;
@@ -4888,9 +4888,9 @@ s_chtml30_style_tag(void *pdoc, Node *node)
     char *name  = qs_get_node_name(doc, child);
     if (STRCASEEQ('t','T',"text", name)) {
       char *value = qs_get_node_value(doc, child);
-      DBG(doc->r, "start load CSS. buf:[%s]", value);
+      DBG(doc->r, "REQ[%X] start load CSS. buf:[%s]", TO_ADDR(doc->r),value);
       chtml30->style = chxj_css_parse_style_value(doc, chtml30->style, value);
-      DBG(doc->r, "end load CSS. value:[%s]", value);
+      DBG(doc->r, "REQ[%X] end load CSS. value:[%s]", TO_ADDR(doc->r),value);
     }
   }
   return chtml30->out;

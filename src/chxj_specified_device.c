@@ -99,7 +99,6 @@ chxj_specified_device(request_rec *r, const char *user_agent)
 {
   device_table         *dt = &UNKNOWN_DEVICE;
   mod_chxj_config      *conf;
-  char                 *spec_check = NULL;
   mod_chxj_req_config  *request_conf;
   
   DBG(r, "REQ[%X] start %s()", TO_ADDR(r),__func__);
@@ -107,7 +106,7 @@ chxj_specified_device(request_rec *r, const char *user_agent)
   request_conf = (mod_chxj_req_config *)chxj_get_module_config(r->request_config, &chxj_module);
   if (request_conf && request_conf->spec) {
     DBG(r, "REQ[%x] Use spec cache.", TO_ADDR(r));
-    DBG(r, "REQ[%x] end %s() (Exist spec cache)", (unsigned int)(apr_size_t)r, __func__);
+    DBG(r, "REQ[%x] end %s() (Exist spec cache)", TO_ADDR(r), __func__);
     return request_conf->spec;
   }
   
@@ -261,7 +260,7 @@ s_specified_device_from_tsv(request_rec *r,device_table *spec,const char *user_a
       if(val == NULL){
         continue;
       }
-      DBG(r, "start chxj_specified_device_from_tsv() [%s] = [%s]:[%s]",spec->device_id,k,val);
+      DBG(r, "REQ[%X] start chxj_specified_device_from_tsv() [%s] = [%s]:[%s]",TO_ADDR(r),spec->device_id,k,val);
       if (STRCASEEQ('d','D',"device_name",k)){
         spec->device_name = apr_pstrdup(r->pool,val);
       }
@@ -385,16 +384,6 @@ s_specified_device_from_tsv(request_rec *r,device_table *spec,const char *user_a
   DBG(r, "REQ[%X] end %s() [%d]",TO_ADDR(r),__func__,spec->provider);
   return spec;
 }
-
-
-void
-chxj_specified_cleanup(request_rec *r)
-{
-  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
-  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
-}
-
-
 /*
  * vim:ts=2 et
  */

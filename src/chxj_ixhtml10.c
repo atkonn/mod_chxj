@@ -485,10 +485,9 @@ chxj_convert_ixhtml10(
   *dstlen = srclen;
   dst = chxj_qr_code_blob_handler(r, src, (size_t*)dstlen);
   if (dst) {
-    DBG(r,"I found qrcode xml");
+    DBG(r,"REQ[%X] found qrcode xml",TO_ADDR(r));
     return dst;
   }
-  DBG(r,"not found qrcode xml");
 
   /*--------------------------------------------------------------------------*/
   /* The CHTML structure is initialized.                                      */
@@ -607,7 +606,7 @@ s_ixhtml10_search_emoji(ixhtml10_t *ixhtml10, char *txt, char **rslt, Node *node
   r   = ixhtml10->doc->r;
 
   if (!spec) {
-    DBG(r,"spec is NULL");
+    DBG(r,"REQ[%X] spec is NULL",TO_ADDR(r));
   }
   
   
@@ -615,7 +614,7 @@ s_ixhtml10_search_emoji(ixhtml10_t *ixhtml10, char *txt, char **rslt, Node *node
        ee;
        ee = ee->next) {
     if (ee->imode == NULL) {
-      DBG(r, "emoji->imode is NULL");
+      DBG(r,"REQ[%X] emoji->imode is NULL",TO_ADDR(r));
       continue;
     }
 
@@ -671,7 +670,7 @@ s_ixhtml10_start_html_tag(void *pdoc, Node *UNUSED(node))
   ixhtml10  = GET_IXHTML10(pdoc);
   doc    = ixhtml10->doc;
   r      = doc->r;
-  DBG(r, "REQ[%X] start s_ixhtml10_start_html_tag()", (unsigned int)(apr_size_t)r);
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
 
   W_L("<?xml version=\"1.0\" encoding=\"");
   W_V(ixhtml10->spec->output_encoding);
@@ -685,7 +684,7 @@ s_ixhtml10_start_html_tag(void *pdoc, Node *UNUSED(node))
   /*--------------------------------------------------------------------------*/
   W_L("<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"ja\" xml:lang=\"ja\">");
 
-  DBG(r, "REQ[%X] end s_ixhtml10_start_html_tag()", (unsigned int)(apr_size_t)r);
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
 
   ixhtml10->start_html_flag = 1;
   return ixhtml10->out;
@@ -3775,7 +3774,7 @@ s_ixhtml10_start_img_tag(void *pdoc, Node *node)
   if (attr_src) {
     W_L(" src=\"");
     W_V(attr_src);
-    DBG(r,"mode is %d -> %s",ixhtml10->conf->image_rewrite_mode, attr_src);
+    DBG(r,"REQ[%X] mode is %d -> %s",TO_ADDR(r),ixhtml10->conf->image_rewrite_mode, attr_src);
     W_L("\"");
   }
   if (attr_align || attr_hspace || attr_vspace || css_float || css_margin_left || css_margin_right || css_margin_top || css_margin_bottom || css_valign ) {
@@ -6350,9 +6349,9 @@ s_ixhtml10_link_tag(void *pdoc, Node *node)
   }
 
   if (rel && href && type) {
-    DBG(doc->r, "start load CSS. url:[%s]", href);
+    DBG(doc->r,"REQ[%X] start load CSS. url:[%s]", TO_ADDR(doc->r),href);
     ixhtml10->style = chxj_css_parse_from_uri(doc->r, doc->pool, ixhtml10->style, href);
-    DBG(doc->r, "end load CSS. url:[%s]", href);
+    DBG(doc->r,"REQ[%X] end load CSS. url:[%s]", TO_ADDR(doc->r),href);
   }
 
   return ixhtml10->out;
@@ -6659,9 +6658,9 @@ s_ixhtml10_style_tag(void *pdoc, Node *node)
     char *name  = qs_get_node_name(doc, child);
     if (STRCASEEQ('t','T',"text", name)) {
       char *value = qs_get_node_value(doc, child);
-      DBG(doc->r, "start load CSS. buf:[%s]", value);
+      DBG(doc->r,"REQ[%X] start load CSS. buf:[%s]", TO_ADDR(doc->r),value);
       ixhtml10->style = chxj_css_parse_style_value(doc, ixhtml10->style, value);
-      DBG(doc->r, "end load CSS. value:[%s]", value);
+      DBG(doc->r,"REQ[%X] end load CSS. value:[%s]", TO_ADDR(doc->r),value);
     }
   }
   return ixhtml10->out;

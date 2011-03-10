@@ -452,7 +452,7 @@ chxj_convert_chtml50(
   chtml50_t chtml50;
   Doc       doc;
 
-  DBG(r, "start chxj_convert_chtml50()");
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
 
   /*--------------------------------------------------------------------------*/
   /* If qrcode xml                                                            */
@@ -460,11 +460,10 @@ chxj_convert_chtml50(
   *dstlen = srclen;
   dst = chxj_qr_code_blob_handler(r, src, (size_t*)dstlen);
   if (dst) {
-    DBG(r,"i found qrcode xml");
-    DBG(r, "end chxj_convert_chtml50()");
+    DBG(r,"REQ[%X] i found qrcode xml",TO_ADDR(r));
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return dst;
   }
-  DBG(r,"not found qrcode xml");
 
   /*--------------------------------------------------------------------------*/
   /* The CHTML structure is initialized.                                      */
@@ -521,7 +520,7 @@ chxj_convert_chtml50(
   chxj_dump_out("[src] CHTML -> CHTML4.0", dst, *dstlen);
 #endif
 
-  DBG(r, "end chxj_convert_chtml50()");
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return dst;
 }
 
@@ -577,14 +576,14 @@ s_chtml50_search_emoji(chtml50_t *chtml50, char *txt, char **rslt, Node *node)
   r   = chtml50->doc->r;
 
   if (!spec) {
-    DBG(r,"spec is NULL");
+    DBG(r,"REQ[%X] spec is NULL",TO_ADDR(r));
   }
 
   for (ee = chtml50->conf->emoji;
        ee;
        ee = ee->next) {
     if (ee->imode == NULL) {
-      DBG(r, "emoji->imode is NULL");
+      DBG(r,"REQ[%X] emoji->imode is NULL",TO_ADDR(r));
       continue;
     }
 
@@ -637,7 +636,7 @@ chxj_chtml50_emoji_only_converter(request_rec *r, device_table *spec, const char
   chtml50 = &__chtml50;
   doc     = &__doc;
 
-  DBG(r, "REQ[%X] start chxj_chtml50_emoji_eonly_converter()", (unsigned int)(apr_size_t)r);
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
   memset(doc,     0, sizeof(Doc));
   memset(chtml50, 0, sizeof(chtml50_t));
 
@@ -678,7 +677,7 @@ chxj_chtml50_emoji_only_converter(request_rec *r, device_table *spec, const char
   }
   chtml50->out = chxj_buffered_write_flush(chtml50->out, &doc->buf);
 
-  DBG(r, "REQ[%X] end chxj_chtml50_emoji_eonly_converter()", (unsigned int)(apr_size_t)r);
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return chtml50->out;
 }
 
@@ -5286,9 +5285,9 @@ s_chtml50_link_tag(void *pdoc, Node *node)
   }
 
   if (rel && href && type) {
-    DBG(doc->r, "start load CSS. url:[%s]", href);
+    DBG(doc->r,"REQ[%X] start load CSS. url:[%s]", TO_ADDR(doc->r),href);
     chtml50->style = chxj_css_parse_from_uri(doc->r, doc->pool, chtml50->style, href);
-    DBG(doc->r, "end load CSS. url:[%s]", href);
+    DBG(doc->r,"REQ[%X] end load CSS. url:[%s]", TO_ADDR(doc->r),href);
   }
 
   return chtml50->out;
@@ -5615,9 +5614,9 @@ s_chtml50_style_tag(void *pdoc, Node *node)
     char *name  = qs_get_node_name(doc, child);
     if (STRCASEEQ('t','T',"text", name)) {
       char *value = qs_get_node_value(doc, child);
-      DBG(doc->r, "start load CSS. buf:[%s]", value);
+      DBG(doc->r,"REQ[%X] start load CSS. buf:[%s]",TO_ADDR(doc->r), value);
       chtml50->style = chxj_css_parse_style_value(doc, chtml50->style, value);
-      DBG(doc->r, "end load CSS. value:[%s]", value);
+      DBG(doc->r,"REQ[%X] end load CSS. value:[%s]",TO_ADDR(doc->r), value);
     }
   }
   return chtml50->out;
