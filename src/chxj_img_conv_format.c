@@ -304,8 +304,17 @@ chxj_img_conv_format_handler(request_rec *r)
 
   if (qsp->ua_flag == UA_IGN)
     spec = &v_ignore_spec;
-  else
-    spec = chxj_specified_device(r, user_agent);
+  else {
+    mod_chxj_req_config *request_conf = chxj_get_module_config(r->request_config, &chxj_module);
+    if (request_conf->user_agent 
+        && user_agent 
+        && strcmp(request_conf->user_agent, user_agent) != 0) {
+      spec = chxj_specified_device(r, user_agent);
+    }
+    else {
+      spec = request_conf->spec;
+    }
+  }
 
   DBG(r,"REQ[%X] found device_name=[%s]", TO_ADDR(r), spec->device_name);
   DBG(r,"REQ[%X] User-Agent=[%s]", TO_ADDR(r), user_agent);
@@ -371,8 +380,17 @@ chxj_convert_image(request_rec *r, const char **src, apr_size_t *len)
 
   if (qsp->ua_flag == UA_IGN)
     spec = &v_ignore_spec;
-  else
-    spec = chxj_specified_device(r, user_agent);
+  else {
+    mod_chxj_req_config *request_conf = chxj_get_module_config(r->request_config, &chxj_module);
+    if (request_conf->user_agent
+        && user_agent
+        && strcmp(request_conf->user_agent, user_agent) != 0) {
+      spec = chxj_specified_device(r, user_agent);
+    }
+    else {
+      spec = request_conf->spec;
+    }
+  }
 
   DBG(r,"REQ[%X] found device_name=[%s]",TO_ADDR(r),spec->device_name);
   DBG(r,"REQ[%X] User-Agent=[%s]",TO_ADDR(r),user_agent);
