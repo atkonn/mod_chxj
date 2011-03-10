@@ -26,11 +26,14 @@ chxj_apply_convrule(request_rec *r, apr_array_header_t *convrules)
   chxjconvrule_entry *pp;
   int                ii;
 
+
+  if (r->main) 
+    return NULL;
+
   entries = (chxjconvrule_entry *)convrules->elts;
   for (ii = 0; ii < convrules->nelts; ii++) {
     pp = &entries[ii];
 
-    if (r->main) continue;
 
     /* Match */
     if (s_apply_rule(r, pp)) 

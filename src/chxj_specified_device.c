@@ -104,15 +104,16 @@ chxj_specified_device(request_rec *r, const char *user_agent)
   DBG(r, "REQ[%X] start %s()", TO_ADDR(r),__func__);
 
   request_conf = (mod_chxj_req_config *)chxj_get_module_config(r->request_config, &chxj_module);
-  if (request_conf && request_conf->spec) {
+  if (request_conf && request_conf->spec && request_conf->user_agent && strcmp(request_conf->user_agent, user_agent) == 0) {
     DBG(r, "REQ[%x] Use spec cache.", TO_ADDR(r));
     DBG(r, "REQ[%x] end %s() (Exist spec cache)", TO_ADDR(r), __func__);
     return request_conf->spec;
   }
-  
+  request_conf->user_agent = user_agent; 
   
   conf = chxj_get_module_config(r->per_dir_config, &chxj_module);
   if(! user_agent){
+    request_conf->spec = dt;
     DBG(r, "REQ[%X] end %s() %d", TO_ADDR(r), __func__,conf->detect_device_type);
     return dt;
   }
