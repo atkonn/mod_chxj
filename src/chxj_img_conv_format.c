@@ -320,6 +320,10 @@ chxj_img_conv_format_handler(request_rec *r)
   DBG(r,"REQ[%X] User-Agent=[%s]", TO_ADDR(r), user_agent);
 
 
+  /*-------------------------------------------------------------------------*/
+  /* Do not process output_filter                                            */
+  /*-------------------------------------------------------------------------*/
+  chxj_remove_filter(r);
   rtn = s_img_conv_format_from_file(r, conf, user_agent, qsp, spec);
   DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return rtn;

@@ -382,6 +382,7 @@ struct mod_chxj_config {
 struct mod_chxj_req_config_t {
   char         *user_agent;
   device_table *spec;
+  ap_filter_t  *f;
 };
 
 #define IS_COOKIE_STORE_DBM(X)      ((X) == COOKIE_STORE_TYPE_DBM)
@@ -536,6 +537,7 @@ extern char *chxj_node_convert_chxjif_only(
   const char   *src,
   apr_size_t   *len
 );
+extern void chxj_remove_filter(request_rec *r);
 
 #define IMAGE_CACHE_LIMIT_FMT_LEN  (20)
 

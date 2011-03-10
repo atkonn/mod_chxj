@@ -194,6 +194,7 @@ chxj_headers_fixup(request_rec *r)
     request_conf = apr_palloc(r->pool, sizeof(mod_chxj_req_config));
     request_conf->spec = NULL;
     request_conf->user_agent = NULL;
+    request_conf->f = NULL;
     chxj_set_module_config(r->request_config, &chxj_module, request_conf);
   }
   dconf = chxj_get_module_config(r->per_dir_config, &chxj_module);
@@ -1718,6 +1719,7 @@ chxj_insert_filter(request_rec *r)
   char                *user_agent;
   device_table        *spec;
   mod_chxj_config     *dconf;
+  mod_chxj_req_config *req_conf;
   chxjconvrule_entry  *entryp;
   mod_chxj_ctx        *ctx;
   apr_status_t        rv;
@@ -1726,6 +1728,7 @@ chxj_insert_filter(request_rec *r)
   DBG(r, "REQ[%X] start %s()", TO_ADDR(r),__func__);
 
   dconf = chxj_get_module_config(r->per_dir_config, &chxj_module);
+  req_conf = chxj_get_module_config(r->request_config, &chxj_module);
 
   /* we get User-Agent from CHXJ_HTTP_USER_AGENT header if any */
   user_agent = (char *)apr_table_get(r->headers_in, CHXJ_HTTP_USER_AGENT);
@@ -1786,10 +1789,25 @@ chxj_insert_filter(request_rec *r)
 
 
   if (! apr_table_get(r->headers_in, "X-Chxj-Forward")) {
-    ap_add_output_filter("chxj_output_filter", ctx, r, r->connection);
+    req_conf->f = ap_add_output_filter("chxj_output_filter", ctx, r, r->connection);
     DBG(r, "REQ[%X] added Output Filter", TO_ADDR(r));
   }
 
+  DBG(r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
+}
+
+
+void 
+chxj_remove_filter(request_rec *r)
+{
+  mod_chxj_req_config *req_conf;
+
+  DBG(r, "REQ[%X] start %s()", TO_ADDR(r),__func__);
+  req_conf = chxj_get_module_config(r->request_config, &chxj_module);
+  if (req_conf && req_conf->f) {
+    ap_remove_output_filter(req_conf->f);
+    DBG(r, "REQ[%X] REMOVE Output Filter", TO_ADDR(r));
+  }
   DBG(r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
 }
 
