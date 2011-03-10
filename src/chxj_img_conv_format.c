@@ -545,7 +545,7 @@ s_create_cache_file(request_rec          *r,
     /*------------------------------------------------------------------------*/
     rv = apr_file_open(&fin, 
                     r->filename, 
-                    APR_FOPEN_READ | APR_FOPEN_BINARY | APR_FOPEN_BUFFERED | APR_FOPEN_SHARELOCK | APR_FOPEN_SENDFILE_ENABLED,
+                    APR_FOPEN_READ | APR_FOPEN_BINARY | APR_FOPEN_BUFFERED | APR_FOPEN_SHARELOCK,
                     APR_OS_DEFAULT, 
                     r->pool);
     if (rv != APR_SUCCESS) {
@@ -1715,7 +1715,7 @@ s_send_cache_file(
       }
     }
     rv = apr_file_open(&fout, tmpfile, 
-      APR_FOPEN_READ | APR_FOPEN_BINARY | APR_FOPEN_BUFFERED | APR_FOPEN_SHARELOCK | APR_FOPEN_SENDFILE_ENABLED, 
+      APR_FOPEN_READ | APR_FOPEN_BINARY | APR_FOPEN_BUFFERED | APR_FOPEN_SHARELOCK, 
       APR_OS_DEFAULT, r->pool);
     if (rv != APR_SUCCESS) {
       DBG(r,"REQ[%X] cache file open failed[%s]", TO_ADDR(r),tmpfile);
@@ -1772,7 +1772,7 @@ s_send_cache_file(
       DBG(r,"REQ[%X] Content-Length:[%d]", TO_ADDR(r),(int)st.size);
 
       rv = apr_file_open(&fout, tmpfile, 
-        APR_FOPEN_READ | APR_FOPEN_BINARY | APR_FOPEN_BUFFERED | APR_FOPEN_SHARELOCK | APR_FOPEN_SENDFILE_ENABLED, 
+        APR_FOPEN_READ | APR_FOPEN_BINARY | APR_FOPEN_BUFFERED | APR_FOPEN_SHARELOCK, 
         APR_OS_DEFAULT, r->pool);
 
       if (rv != APR_SUCCESS) {
@@ -1812,7 +1812,7 @@ s_send_original_file(request_rec *r, const char *originalfile)
   }
 
   rv = apr_file_open(&fout, originalfile, 
-    APR_FOPEN_READ | APR_FOPEN_BINARY | APR_FOPEN_BUFFERED | APR_FOPEN_SHARELOCK | APR_FOPEN_SENDFILE_ENABLED,
+    APR_FOPEN_READ | APR_FOPEN_BINARY | APR_FOPEN_BUFFERED | APR_FOPEN_SHARELOCK,
     APR_OS_DEFAULT, r->pool);
   if (rv != APR_SUCCESS) {
     DBG(r,"REQ[%X] originalfile open failed[%s]", TO_ADDR(r),originalfile);
