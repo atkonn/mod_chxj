@@ -200,7 +200,7 @@ chxj_conv_z2h(request_rec *r, const char *src, apr_size_t *len, chxjconvrule_ent
   int                 z2h_alpha_flag = 0;
   int                 z2h_num_flag = 0;
 
-  DBG(r,"REQ[%X] start chxj_conv_z2h()", (unsigned int)(apr_size_t)r);
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
 
   if (entryp->action & CONVRULE_Z2H_ON_BIT) {
     z2h_kana_flag = 1;
@@ -221,8 +221,8 @@ chxj_conv_z2h(request_rec *r, const char *src, apr_size_t *len, chxjconvrule_ent
     z2h_num_flag = 0;
   }
   if (z2h_kana_flag == 0 && z2h_alpha_flag == 0 &&  z2h_num_flag == 0) {
-    DBG(r, "REQ[%X] No Z2h flag.", (unsigned int)(apr_size_t)r);
-    DBG(r,"REQ[%X] end chxj_conv_z2h()", (unsigned int)(apr_size_t)r);
+    DBG(r,"REQ[%X] No Z2h flag.", TO_ADDR(r));
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return (char *)src;
   }
 
@@ -234,7 +234,7 @@ chxj_conv_z2h(request_rec *r, const char *src, apr_size_t *len, chxjconvrule_ent
   obuf = apr_palloc(pool, ilen + 1);
   if (! obuf) {
     ERR(r,"%s:%d REQ[%X] memory allocation error", __FILE__,__LINE__,(unsigned int)(apr_size_t)r);
-    DBG(r,"REQ[%X] end chxj_conv_z2h()", (unsigned int)(apr_size_t)r);
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return (char*)src;
   }
 
@@ -358,7 +358,7 @@ chxj_conv_z2h(request_rec *r, const char *src, apr_size_t *len, chxjconvrule_ent
   }
   *len = olen;
 
-  DBG(r,"REQ[%X] end chxj_conv_z2h_kana()", (unsigned int)(apr_size_t)r);
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return obuf;
 }
 /*

@@ -26,11 +26,14 @@ chxj_apply_convrule(request_rec *r, apr_array_header_t *convrules)
   chxjconvrule_entry *pp;
   int                ii;
 
+
+  if (r->main) 
+    return NULL;
+
   entries = (chxjconvrule_entry *)convrules->elts;
   for (ii = 0; ii < convrules->nelts; ii++) {
     pp = &entries[ii];
 
-    if (r->main) continue;
 
     /* Match */
     if (s_apply_rule(r, pp)) 
@@ -48,7 +51,7 @@ s_apply_rule(request_rec *r, chxjconvrule_entry *pp)
 
   uri = r->uri;
 
-  DBG(r,"convert rule pattern=[%s] uri=[%s]", pp->pattern, uri);
+  DBG(r,"REQ[%X] convert rule pattern=[%s] uri=[%s]", TO_ADDR(r), pp->pattern, uri);
 
   rtn = ap_regexec((const ap_regex_t *)pp->regexp, uri, AP_MAX_REG_MATCH, (ap_regmatch_t *)regmatch, 0);
   if (rtn == 0) {

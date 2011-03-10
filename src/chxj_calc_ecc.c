@@ -947,7 +947,7 @@ chxj_calc_ecc(qr_code_t     *qrcode,
   int exist_flag = 0;
   unsigned char** rs_block;
 #ifdef QR_CODE_DEBUG
-  DBG(r,"start chxj_calc_ecc()");
+  DBG(r,"REQ[%X] start %s()", TO_ADDR(r),__func__);
 #endif
 
   rs_total_block_count = v_ecc_spec_table[qrcode->version*4+qrcode->level].rs[0].rs_block_count +
@@ -977,7 +977,7 @@ chxj_calc_ecc(qr_code_t     *qrcode,
       ecc_count = v_ecc_spec_table[qrcode->version*4+qrcode->level].rs[rs_pos].total_code_count - data_count;
 
 #ifdef QR_CODE_DEBUG
-      DBG(r,"data_count[%d] ecc_count[%d]", data_count, ecc_count);
+      DBG(r,"REQ[%X] data_count[%d] ecc_count[%d]", TO_ADDR(r),data_count, ecc_count);
 #endif
 
       rs_block[now_rs_num] = (unsigned char*)apr_palloc(qrcode->r->pool, data_count + ecc_count + 1);
@@ -987,14 +987,14 @@ chxj_calc_ecc(qr_code_t     *qrcode,
       rs_block_ecc_size[now_rs_num] = ecc_count;
 
 #ifdef QR_CODE_DEBUG
-      DBG(r,"apr_palloc() tmp");
+      DBG(r,"REQ[%X] apr_palloc() tmp", TO_ADDR(r));
 #endif
 
       memset(tmp, 0, data_count + ecc_count + 1);
       memset(rs_block[now_rs_num], 0, data_count + ecc_count + 1);
 
 #ifdef QR_CODE_DEBUG
-      DBG(r,"memset end");
+      DBG(r,"REQ[%X] memset end", TO_ADDR(r));
 #endif
 
       /* 元データをコピー */
@@ -1016,7 +1016,7 @@ chxj_calc_ecc(qr_code_t     *qrcode,
         for (jj=ecc_count + data_count - 1; jj>=0; jj--)
           debug_rows = apr_pstrcat(r->pool, debug_rows, apr_psprintf(r->pool, "[%d]", tmp[jj]), NULL);
 
-        DBG(r,"rows [%s]", debug_rows);
+        DBG(r,"REQ[%X] rows [%s]", TO_ADDR(r), debug_rows);
       } while(0);
       /* for DEBUG END */
 #endif
@@ -1027,7 +1027,7 @@ chxj_calc_ecc(qr_code_t     *qrcode,
         int tgt = tmp[ii--];
         int shisu = v_galois_int_to_log[tgt];
 #ifdef QR_CODE_DEBUG
-        DBG(r,"tgt[%d] shisu[%d]", tgt, shisu);
+        DBG(r,"REQ[%X] tgt[%d] shisu[%d]", TO_ADDR(r),tgt, shisu);
 #endif
         if (tgt == 0)
           continue;
@@ -1046,7 +1046,7 @@ chxj_calc_ecc(qr_code_t     *qrcode,
           for (jj=ecc_count + data_count - 1; jj>=0; jj--)
             debug_rows = apr_pstrcat(r->pool, debug_rows, apr_psprintf(r->pool, "[%d]", tmp[jj]), NULL);
 
-          DBG(r,"rows [%s]", debug_rows);
+          DBG(r,"REQ[%X] rows [%s]", TO_ADDR(r), debug_rows);
         } while(0);
         /* for DEBUG END */
 #endif
@@ -1062,13 +1062,13 @@ chxj_calc_ecc(qr_code_t     *qrcode,
 #ifdef QR_CODE_DEBUG
   /* for DEBUG */
   do {
-    DBG(r,"######### RS BLOCK DUMP ###############");
+    DBG(r,"REQ[%X] ######### RS BLOCK DUMP ###############", TO_ADDR(r));
     for (jj=0; jj<rs_total_block_count; jj++) {
        char *rows = apr_psprintf(r->pool, "%02d size:[%d] rest:[%d]",jj, rs_block_size[jj], rs_block_rest[jj]);
        for (ii=0; ii<rs_block_size[jj]; ii++) {
          rows = apr_pstrcat(r->pool, rows, apr_psprintf(r->pool, "[%d]", rs_block[jj][ii]), NULL);
        }
-       DBG(r,"%s", rows);
+       DBG(r,"REQ[%X] %s", TO_ADDR(r),rows);
     }
   } while(0);
 #endif
@@ -1107,9 +1107,9 @@ chxj_calc_ecc(qr_code_t     *qrcode,
 #ifdef QR_CODE_DEBUG
   /* for DEBUG */
   do {
-    DBG(r,"######### AFTER BLOCK DUMP ###############");
+    DBG(r,"REQ[%X] ######### AFTER BLOCK DUMP ###############",TO_ADDR(r));
     for (ii=0; ii<rslt_pos; ii++) {
-      DBG(r,"[%d]", dst[ii]);
+      DBG(r,"REQ[%X] [%d]", TO_ADDR(r),dst[ii]);
     }
   } while(0);
 #endif

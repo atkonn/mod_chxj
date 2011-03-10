@@ -122,7 +122,7 @@ chxj_css_find_selector(Doc *doc, css_stylesheet_t *stylesheet, Node *node)
   char *tag_name   = NULL;
   char *class_name = NULL;
   char *id         = NULL;
-  DBG(r, "start chxj_css_find_selector()");
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
 
   if (! stylesheet) {
     /* NOT FOUND */
@@ -131,7 +131,7 @@ chxj_css_find_selector(Doc *doc, css_stylesheet_t *stylesheet, Node *node)
   s_get_tag_and_class_and_id(doc, node, &tag_name, &class_name, &id);
   
   if (! tag_name || strcasecmp("ROOT", tag_name) == 0) {
-    ERR(r, "%s:%d tag_name is null", APLOG_MARK);
+    ERR(r,"REQ[%X] %s:%d tag_name is null", TO_ADDR(r),APLOG_MARK);
     return NULL;
   }
   char *pattern_str1 = NULL;
@@ -157,7 +157,7 @@ chxj_css_find_selector(Doc *doc, css_stylesheet_t *stylesheet, Node *node)
                                 id);
     sel = s_search_selector_regexp(doc, r, pool, stylesheet, pattern_str1, pattern_str2, node);
     if (sel) {
-      DBG(r, "end chxj_css_find_selector()");
+      DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
       return sel;
     }
   }
@@ -176,7 +176,7 @@ chxj_css_find_selector(Doc *doc, css_stylesheet_t *stylesheet, Node *node)
                                 id);
     sel = s_search_selector_regexp(doc, r, pool, stylesheet, pattern_str1, pattern_str2, node);
     if (sel) {
-      DBG(r, "end chxj_css_find_selector()");
+      DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
       return sel;
     }
   }
@@ -195,27 +195,27 @@ chxj_css_find_selector(Doc *doc, css_stylesheet_t *stylesheet, Node *node)
                                 class_name);
     sel = s_search_selector_regexp(doc, r, pool, stylesheet, pattern_str1, pattern_str2, node);
     if (sel) {
-      DBG(r, "end chxj_css_find_selector()");
+      DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
       return sel;
     }
   }
   else {
-    DBG(r, " ");
     pattern_str1 = apr_psprintf(pool, 
                                 "^(%s|\\*)$",
                                 tag_name);
     pattern_str2 = apr_psprintf(pool,
                                 ".*([ >+])(%s|\\*)$",
                                 tag_name);
-    DBG(r, " ");
     sel = s_search_selector_regexp(doc, r, pool, stylesheet, pattern_str1, pattern_str2, node);
     if (sel) {
-      DBG(r, "end chxj_css_find_selector() (FOUND)");
+      DBG(r,"REQ[%X] (FOUND)",TO_ADDR(r));
+      DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
       return sel;
     }
   }
 
-  DBG(r, "end chxj_css_find_selector() (Not FOUND)");
+  DBG(r,"REQ[%X] (Not FOUND)",TO_ADDR(r));
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return sel;
 }
 
@@ -231,8 +231,6 @@ s_search_selector_regexp(Doc *doc, request_rec *r, apr_pool_t *pool, css_stylesh
   css_selector_t *ret_sel = NULL;
   css_selector_t *tail;
   css_selector_t *cur;
-  DBG(r, "pattern1:[%s]", pattern_str1);
-  DBG(r, "pattern2:[%s]", pattern_str2);
   ap_regex_t *pattern1 = chxj_ap_pregcomp(pool, pattern_str1, AP_REG_EXTENDED|AP_REG_ICASE);
   ap_regex_t *pattern2 = chxj_ap_pregcomp(pool, pattern_str2, AP_REG_EXTENDED|AP_REG_ICASE);
   ap_regex_t *pattern3 = chxj_ap_pregcomp(pool, "^.*([>+ ])([^>+ ]+?)$", AP_REG_EXTENDED|AP_REG_ICASE);
@@ -244,7 +242,6 @@ s_search_selector_regexp(Doc *doc, request_rec *r, apr_pool_t *pool, css_stylesh
        cur = (css_selector_t *)((apr_size_t)cur->ref - (apr_size_t)APR_OFFSETOF(css_selector_t, next))) {
     ap_regmatch_t match[256];
     if (chxj_ap_regexec(pattern1, cur->name, pattern1->re_nsub + 1, match, 0) == 0) {
-      DBG(r, "match(independent of)");
       ret_sel = cur;
       goto end_of_search;
     }
@@ -262,10 +259,7 @@ s_search_selector_regexp(Doc *doc, request_rec *r, apr_pool_t *pool, css_stylesh
 
             char *ret = s_cmp_now_node_vs_current_style(doc, r, pool, strrchr(src, *one)+1, pattern4, node->parent);
             if (ret) {
-              DBG(r, "continue do while");
               node = node->parent;
-              DBG(r, "new node:[%x]", (unsigned int)(apr_size_t)node);
-              DBG(r, "new node->prev:[%x]", (unsigned int)(apr_size_t)node->prev);
               loop = 1;
             }
           }
@@ -364,21 +358,24 @@ s_chxj_css_parse_from_uri(request_rec *r, apr_pool_t *pool, struct css_already_i
   apr_size_t   css_len;
   
 
-  DBG(r, "start chxj_css_parse_from_uri() uri:[%s]", uri);
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
+  DBG(r,"REQ[%X] uri:[%s]", TO_ADDR(r),uri);
 
   base_url = s_uri_to_base_url(&r->parsed_uri, pool);
   full_url = s_path_to_fullurl(pool, base_url, r->parsed_uri.path, uri);
 
   /* check already import */
   if (imported_stack && s_is_already_imported(imported_stack, full_url)) {
-    DBG(r, "end chxj_css_parse_from_uri(): already imported:[%s]", full_url); 
+    DBG(r,"REQ[%X] already imported:[%s]", TO_ADDR(r),full_url); 
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return NULL;
   }
 
   /* GET request */
   css = chxj_serf_get(r, pool, full_url, 0, &css_len);
   if (css == NULL) {
-    ERR(r, "%s:%d end chxj_css_parse_from_uri(): serf_get failed: url:[%s]", APLOG_MARK, uri);
+    ERR(r,"REQ[%X] %s:%d end chxj_css_parse_from_uri(): serf_get failed: url:[%s]", TO_ADDR(r),APLOG_MARK, uri);
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return NULL;
   }
   srclen = strlen(css);
@@ -386,14 +383,14 @@ s_chxj_css_parse_from_uri(request_rec *r, apr_pool_t *pool, struct css_already_i
   /* create parser */
   parser = scss_parser_new_from_buf(pool, css, "");
   if (!parser) {
-    ERR(r, "%s:%d end chxj_css_parse_from_uri(): cr_parser_new_from_buf() failed", APLOG_MARK);
+    ERR(r,"REQ[%X] %s:%d end chxj_css_parse_from_uri(): cr_parser_new_from_buf() failed", TO_ADDR(r),APLOG_MARK);
     return NULL;
   }
 
   /* create handler */
   handler = scss_doc_handler_new(parser);
   if (!handler) {
-    ERR(r, "%s:%d end chxj_css_parse_from_uri(): cr_doc_handler_new() failed", APLOG_MARK);
+    ERR(r, "REQ[%X] %s:%d end chxj_css_parse_from_uri(): cr_doc_handler_new() failed", TO_ADDR(r),APLOG_MARK);
     return NULL;
   }
 
@@ -431,7 +428,8 @@ s_chxj_css_parse_from_uri(request_rec *r, apr_pool_t *pool, struct css_already_i
   handler->import        = s_css_parser_from_uri_import_style;
 
   scss_parse_stylesheet(parser);
-  DBG(r, "end chxj_css_parse_from_uri() url:[%s]", uri);
+  DBG(r,"REQ[%X] url:[%s]", TO_ADDR(r),uri);
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
 
   return s_merge_stylesheet(pool, old_stylesheet, app_data.stylesheet);
 }
@@ -446,18 +444,19 @@ s_chxj_css_parse_from_buf(request_rec *r, apr_pool_t *pool, struct css_already_i
   struct css_app_data app_data;
   struct css_already_import_stack *new_stack;
 
-  DBG(r, "end chxj_css_parse_from_buf() css:[%s]", css);
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
+  DBG(r,"REQ[%X] css:[%s]", TO_ADDR(r),css);
   srclen = strlen(css);
   
   /* create parser */
   parser = scss_parser_new_from_buf(pool, css, "");
   if (!parser) {
-    ERR(r, "%s:%d end chxj_css_parse_from_uri(): scss_parser_new_from_buf() failed", APLOG_MARK);
+    ERR(r,"REQ[%X] %s:%d end chxj_css_parse_from_uri(): scss_parser_new_from_buf() failed", TO_ADDR(r),APLOG_MARK);
     return NULL;
   }
   handler = scss_doc_handler_new(parser);
   if (!handler) {
-    ERR(r, "%s:%d end chxj_css_parse_from_uri(): scss_doc_handler_new() failed", APLOG_MARK);
+    ERR(r,"REQ[%X] %s:%d end chxj_css_parse_from_uri(): scss_doc_handler_new() failed", TO_ADDR(r),APLOG_MARK);
     return NULL;
   }
 
@@ -496,7 +495,8 @@ s_chxj_css_parse_from_buf(request_rec *r, apr_pool_t *pool, struct css_already_i
   handler->import        = s_css_parser_from_uri_import_style;
 
   scss_parse_stylesheet(parser);
-  DBG(r, "end chxj_css_parse_from_buf() css:[%s]", css);
+  DBG(r,"REQ[%X] css:[%s]", TO_ADDR(r),css);
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return s_merge_stylesheet(pool, old_stylesheet, app_data.stylesheet);
 }
 
@@ -528,7 +528,7 @@ s_css_parser_from_uri_start_selector(SCSSParserPtr_t parser, SCSSNodePtr_t selec
 
   app_data->selector_list = apr_palloc(app_data->pool, sizeof(char *) * app_data->selector_count);
   if (! app_data->selector_list) {
-    ERR(app_data->r, "%s:%d Out of memory", APLOG_MARK);
+    ERR(app_data->r, "REQ[%X] %s:%d Out of memory", TO_ADDR(app_data->r),APLOG_MARK);
     app_data->error_occured = 1;
     return;
   }
@@ -854,14 +854,13 @@ static char *
 s_cmp_now_node_vs_current_style(Doc *doc, request_rec *r, apr_pool_t *pool, char *src, ap_regex_t *pattern4, Node *node)
 {
   ap_regmatch_t match[256];
-  DBG(r, "src:[%s]", src);
   if (chxj_ap_regexec(pattern4, src, pattern4->re_nsub + 1, match, 0) == 0) {
     char *tag_name   = chxj_ap_pregsub(pool, "$1", src, pattern4->re_nsub + 1, match);
     char *class_name = chxj_ap_pregsub(pool, "$2", src, pattern4->re_nsub + 1, match);
     char *id_name    = chxj_ap_pregsub(pool, "$3", src, pattern4->re_nsub + 1, match);
-    DBG(r, "tag:[%s] class:[%s] id:[%s]", tag_name, class_name, id_name);
+    DBG(r, "REQ[%X] tag:[%s] class:[%s] id:[%s]", TO_ADDR(r),tag_name, class_name, id_name);
     if (!node) {
-      DBG(r, "unmatch(parent is null)");
+      DBG(r, "REQ[%X] unmatch(parent is null)",TO_ADDR(r));
       return NULL;
     }
     char *node_tag_name   = NULL;
@@ -871,28 +870,28 @@ s_cmp_now_node_vs_current_style(Doc *doc, request_rec *r, apr_pool_t *pool, char
     if (*tag_name == 0 || strcasecmp(node_tag_name, tag_name) == 0 || strcmp("*", tag_name) == 0) {
       if (class_name && *class_name != 0) {
         if (!node_class_name) {
-          DBG(r, "unmatch (class) node:[NULL]");
+          DBG(r, "REQ[%X] unmatch (class) node:[NULL]",TO_ADDR(r));
           return NULL;
         }
         if (strcasecmp(node_class_name, &class_name[1]) != 0) {
-          DBG(r, "unmatch (class) node:[%s] style:[%s]", node_class_name, &class_name[1]);
+          DBG(r,"REQ[%X] unmatch (class) node:[%s] style:[%s]", TO_ADDR(r),node_class_name, &class_name[1]);
           return NULL;
         }
       }
       if (id_name && *id_name != 0) {
         if (!node_id_name) {
-          DBG(r, "unmatch (id) node:[NULL]");
+          DBG(r,"REQ[%X] unmatch (id) node:[NULL]",TO_ADDR(r));
           return NULL;
         }
         if (strcasecmp(node_id_name, &id_name[1]) != 0) {
-          DBG(r, "unmatch (id)");
+          DBG(r,"REQ[%X] unmatch (id)",TO_ADDR(r));
           return NULL;
         }
       }
-      DBG(r, "match");
+      DBG(r,"REQ[%X] match",TO_ADDR(r));
       return src;
     }
-    DBG(r, "unmatch(tag) tag:[%s] vs [%s]", tag_name, node_tag_name);
+    DBG(r,"REQ[%X] unmatch(tag) tag:[%s] vs [%s]", TO_ADDR(r),tag_name, node_tag_name);
   }
   return NULL;
 }
@@ -912,7 +911,7 @@ chxj_find_pseudo_selectors(Doc *doc, css_stylesheet_t *stylesheet)
 
   result = apr_palloc(doc->pool, sizeof(*result));
   if (! result) {
-    ERR(doc->r, "%s:%d Out of Memory", APLOG_MARK);
+    ERR(doc->r,"REQ[%X] %s:%d Out of Memory", TO_ADDR(doc->r),APLOG_MARK);
     return NULL;
   }
   memset(result, 0, sizeof(*result));
@@ -949,7 +948,8 @@ chxj_css_parse_style_attr(Doc *doc, css_stylesheet_t *old_stylesheet, char *tag_
   char *attr_value;
   char *class_name_sel = NULL;
   char *id_name_sel    = NULL;
-  DBG(doc->r, "start chxj_css_parse_style_attr()");
+
+  DBG(doc->r,"REQ[%X] start %s()",TO_ADDR(doc->r),__func__);
 
   if (class_name) {
     class_name_sel = apr_psprintf(doc->pool, ".%s", class_name);
@@ -970,7 +970,7 @@ chxj_css_parse_style_attr(Doc *doc, css_stylesheet_t *old_stylesheet, char *tag_
   }
   new_stylesheet = s_chxj_css_parse_from_buf(doc->r, doc->pool, NULL, dup_stylesheet, attr_value);
 
-  DBG(doc->r, "end   chxj_css_parse_style_attr()");
+  DBG(doc->r,"REQ[%X] end %s()",TO_ADDR(doc->r),__func__);
   return new_stylesheet;
 }
 
@@ -983,7 +983,7 @@ s_dup_stylesheet(Doc *doc, css_stylesheet_t *stylesheet)
 
   result = apr_palloc(doc->pool, sizeof(*result));
   if (! result) {
-    ERR(doc->r, "%s:%d Out of Memory", APLOG_MARK);
+    ERR(doc->r, "REQ[%X] %s:%d Out of Memory", TO_ADDR(doc->r),APLOG_MARK);
     return NULL;
   }
   memset(result, 0, sizeof(*result));
@@ -1014,14 +1014,14 @@ chxj_css_parse_style_value(Doc *doc, css_stylesheet_t *old_stylesheet, char *sty
   css_stylesheet_t *new_stylesheet;
   css_stylesheet_t *dup_stylesheet = NULL;
 
-  DBG(doc->r, "start chxj_css_parse_style_value()");
+  DBG(doc->r,"REQ[%X] start %s()",TO_ADDR(doc->r),__func__);
 
   if (old_stylesheet) {
     dup_stylesheet = s_dup_stylesheet(doc, old_stylesheet);
   }
   new_stylesheet = s_chxj_css_parse_from_buf(doc->r, doc->pool, NULL, dup_stylesheet, style_attr_value);
 
-  DBG(doc->r, "end   chxj_css_parse_style_value()");
+  DBG(doc->r,"REQ[%X] end %s()",TO_ADDR(doc->r),__func__);
   return new_stylesheet;
 }
 
@@ -1034,7 +1034,7 @@ chxj_new_prop_list_stack(Doc *doc)
 {
   css_prop_list_stack_t *new_stack = apr_palloc(doc->pool, sizeof(css_prop_list_stack_t));
   if (! new_stack) {
-    ERR(doc->r, "%s:%d Out of memory.", APLOG_MARK);
+    ERR(doc->r,"REQ[%X] %s:%d Out of memory.",TO_ADDR(doc->r),APLOG_MARK);
     return NULL;
   }
   new_stack->head.next = &new_stack->head;
@@ -1048,7 +1048,7 @@ chxj_css_create_prop_list(Doc *doc, css_selector_t *sel)
   css_prop_list_t *prop_list;
   prop_list = apr_palloc(doc->pool, sizeof(*prop_list));
   if (! prop_list) {
-    ERR(doc->r, "%s:%d Out of memory.", APLOG_MARK);
+    ERR(doc->r,"REQ[%X] %s:%d Out of memory.",TO_ADDR(doc->r),APLOG_MARK);
     return NULL;
   }
   prop_list->head.next = &prop_list->head;
@@ -1111,7 +1111,7 @@ chxj_dup_css_prop_list(Doc *doc, css_prop_list_t *old)
 
   new_prop_list = chxj_css_create_prop_list(doc, NULL);
   if (! new_prop_list) {
-    ERR(doc->r, "%s:%d Out of memory.", APLOG_MARK);
+    ERR(doc->r,"REQ[%X] %s:%d Out of memory.",TO_ADDR(doc->r),APLOG_MARK);
     return NULL;
   }
   if (old) {

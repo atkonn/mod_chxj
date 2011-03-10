@@ -427,10 +427,9 @@ chxj_convert_hdml(
   *dstlen = srclen;
   dst = chxj_qr_code_blob_handler(r, src, (size_t*)dstlen);
   if (dst) {
-    DBG(r,"i found qrcode xml");
+    DBG(r,"REQ[%X] found qrcode xml",TO_ADDR(r));
     return dst;
   }
-  DBG(r,"not found qrcode xml");
 
   /*--------------------------------------------------------------------------*/
   /* initialize hdml structure                                                */
@@ -457,7 +456,7 @@ chxj_convert_hdml(
     /* The Location header generates tag in an initial HDML machine for the   */
     /* uncorrespon dence.                                                     */
     /*------------------------------------------------------------------------*/
-    DBG(r, "Location is not null[Location:%s]", buf);
+    DBG(r,"REQ[%X] Location is not null[Location:%s]", TO_ADDR(r),buf);
     s_output_to_hdml_out(&hdml, 
         "<HDML VERSION=3.0 MARKABLE=TRUE PUBLIC=TRUE>\r\n"
         "<NODISPLAY MARKABLE=TRUE PUBLIC=TRUE TITLE=\" \">\r\n"
@@ -479,8 +478,8 @@ chxj_convert_hdml(
     memset(ss, 0, srclen + 1);
     memcpy(ss, src, srclen);
     
-    DBG(r, "input strlen(src)=[%d]", (int)srclen);
-    DBG(r, "[[[[%s]]]", src);
+    DBG(r,"REQ[%X] input strlen(src)=[%d]", TO_ADDR(r),(int)srclen);
+    DBG(r,"REQ[%X] [[[[%s]]]", TO_ADDR(r),src);
 
     qs_init_malloc(&doc); 
     qs_init_root_node(&doc);
@@ -495,7 +494,7 @@ chxj_convert_hdml(
     chxj_node_convert(spec,r,(void*)&hdml, &doc, qs_get_root(&doc), 0);
     dst = hdml.out;
 
-    DBG(r,"tmp=[%s]", dst);
+    DBG(r,"REQ[%X] tmp=[%s]", TO_ADDR(r),dst);
     qs_all_free(&doc,QX_LOGMARK);
   }
 
@@ -592,7 +591,7 @@ s_hdml_search_emoji(hdml_t *hdml, char *txt, char **rslt)
   r = hdml->doc->r;
 
   if (!spec) {
-    DBG(r,"spec is NULL");
+    DBG(r,"REQ[%X] spec is NULL",TO_ADDR(r));
   }
 
   for (ee = hdml->conf->emoji;
@@ -601,7 +600,7 @@ s_hdml_search_emoji(hdml_t *hdml, char *txt, char **rslt)
     unsigned char hex1byte;
     unsigned char hex2byte;
     if (! ee->imode) {
-      DBG(r, "emoji->imode is NULL");
+      DBG(r,"REQ[%X] emoji->imode is NULL",TO_ADDR(r));
       continue;
     }
 
@@ -1509,7 +1508,7 @@ s_hdml_do_input_text_tag(hdml_t *hdml, Node *tag)
   val  = qs_get_value_attr      (doc, tag, r->pool);
 
   fmt  = qs_conv_istyle_to_format(r->pool, is);
-  DBG(r,"qs_conv_istyle_to_format end");
+  DBG(r,"REQ[%X] qs_conv_istyle_to_format end",TO_ADDR(r));
         
   if (fmt) {
     if (mlen) {
@@ -1791,7 +1790,7 @@ s_hdml_do_input_radio_tag(hdml_t *hdml, Node *tag)
   for (ii=0; ii<MAX_RADIO_COUNT; ii++) {
     if (! hdml->radio_name_list[ii]) {
       /* @todo Oops..  */
-      DBG(r, "Oops... radio list is null[%d]", ii);
+      DBG(r,"REQ[%X] Oops... radio list is null[%d]",TO_ADDR(r),ii);
       /*----------------------------------------------------------------------*/
       /* Processing is ended because it doesn't happen off the fly.           */
       /*----------------------------------------------------------------------*/
@@ -1803,7 +1802,7 @@ s_hdml_do_input_radio_tag(hdml_t *hdml, Node *tag)
   }
   if (ii == MAX_RADIO_COUNT) {
     /* @todo Oops.. */
-    DBG(r,"Oops... The same name was not in the list. ");
+    DBG(r,"REQ[%X] Oops... The same name was not in the list. ",TO_ADDR(r));
     /*------------------------------------------------------------------------*/
     /* Processing is ended because it doesn't happen off the fly.             */
     /*------------------------------------------------------------------------*/
@@ -1898,7 +1897,8 @@ s_hdml_do_input_radio_tag(hdml_t *hdml, Node *tag)
     }
 
     if (hdml->radio_checked_value[ii]) {
-      DBG(r,"radio button is checked. checked value is [%s]", 
+      DBG(r,"REQ[%x] radio button is checked. checked value is [%s]", 
+        TO_ADDR(r),
         hdml->radio_checked_value[ii]);
       s_output_to_init_vars(hdml, 
                     apr_psprintf(r->pool, 
@@ -1907,7 +1907,7 @@ s_hdml_do_input_radio_tag(hdml_t *hdml, Node *tag)
                             hdml->radio_checked_value[ii]));
     }
     else {
-      DBG(r,"radio button is not checked. checked value is []");
+      DBG(r,"REQ[%X] radio button is not checked. checked value is []",TO_ADDR(r));
       s_output_to_init_vars(hdml, 
                     apr_psprintf(r->pool, 
                             "%s=", 
@@ -1950,7 +1950,7 @@ s_hdml_do_input_checkbox_tag(hdml_t *hdml, Node *tag)
                                              "RETVALS=\"_chk;;_\" >\r\n"
                     "</NODISPLAY>\r\n"
                     );
-    DBG(r, "wrote checkbox hdml card.");
+    DBG(r,"REQ[%X] wrote checkbox hdml card.",TO_ADDR(r));
   }
         
   /*--------------------------------------------------------------------------*/
@@ -2402,17 +2402,17 @@ s_hdml_start_select_tag(void *pdoc, Node *node)
                               hdml->var_cnt[hdml->pure_form_cnt]));
       selval = qs_get_selected_value(doc, node, r->pool);
       if (! selval) {
-        DBG(r, "selected value not found");
+        DBG(r,"REQ[%X] selected value not found",TO_ADDR(r));
         selval = qs_alloc_zero_byte_string(r->pool);
       }
       else {
-        DBG(r, "selected value found[%s]" , selval);
+        DBG(r,"REQ[%X] selected value found[%s]" , TO_ADDR(r),selval);
       }
       selvaltxt = qs_get_selected_value_text(doc, node, r->pool);
       if (!selvaltxt)
         selvaltxt = qs_alloc_zero_byte_string(r->pool);
 
-      DBG(r, "selvaltxt:[%s]" ,selvaltxt);
+      DBG(r,"REQ[%X] selvaltxt:[%s]",TO_ADDR(r),selvaltxt);
 
       s_output_to_init_vars(hdml, 
                       apr_psprintf(r->pool, 
@@ -2492,7 +2492,7 @@ s_hdml_start_option_tag(void *pdoc, Node *node)
     txtval = qs_get_node_value(doc, child);
   }
 
-  DBG(r, "txtval:[%s]" , txtval);
+  DBG(r,"REQ[%X] txtval:[%s]" , TO_ADDR(r),txtval);
 
   if (val && txtval) {
     s_output_to_hdml_card(hdml, 
@@ -2697,7 +2697,7 @@ s_hdml_count_radio_tag(hdml_t *hdml, Node *node)
       continue;
     }
 
-    DBG(r,"found input tag");
+    DBG(r,"REQ[%X] found input tag",TO_ADDR(r));
 
     type = qs_get_type_attr(doc, child, r->pool);
     if (!type) {
@@ -2708,7 +2708,7 @@ s_hdml_count_radio_tag(hdml_t *hdml, Node *node)
     if (strcasecmp(type, "radio") != 0) 
       continue;
 
-    DBG(r, "found type=radio");
+    DBG(r, "REQ[%X] found type=radio",TO_ADDR(r));
 
     rname  = qs_get_name_attr (doc, child, r->pool);
     rvalue = qs_get_value_attr(doc, child, r->pool);
@@ -2717,11 +2717,11 @@ s_hdml_count_radio_tag(hdml_t *hdml, Node *node)
       /*----------------------------------------------------------------------*/
       /* Oops!. The input tag without the name attribute has been found.      */
       /*----------------------------------------------------------------------*/
-      DBG(r, "Oops!. The input tag without the name attribute has been found. Please give a name.");
+      DBG(r,"REQ[%X] Oops!. The input tag without the name attribute has been found. Please give a name.",TO_ADDR(r));
       continue;
     }
 
-    DBG(r, "found name attribute");
+    DBG(r,"REQ[%X] found name attribute",TO_ADDR(r));
 
     /*------------------------------------------------------------------------*/
     /* It scans in radio_name_list. When the same value exists, the           */
@@ -2730,11 +2730,11 @@ s_hdml_count_radio_tag(hdml_t *hdml, Node *node)
     /*------------------------------------------------------------------------*/
     for (ii=0; ii<MAX_RADIO_COUNT; ii++) {
       if (! hdml->radio_name_list[ii]) {
-        DBG(r, "new name:[%s]", rname);
+        DBG(r,"REQ[%X] new name:[%s]", TO_ADDR(r),rname);
         break;
       }
       if (strcasecmp(hdml->radio_name_list[ii], rname) == 0) {
-        DBG(r, "already registered name:[%s]", rname);
+        DBG(r,"REQ[%X] already registered name:[%s]", TO_ADDR(r),rname);
         break;
       }
     }
@@ -2747,7 +2747,7 @@ s_hdml_count_radio_tag(hdml_t *hdml, Node *node)
       continue;
     }
 
-    DBG(r,"add radio name:[%s]" ,rname);
+    DBG(r,"REQ[%X] add radio name:[%s]" ,TO_ADDR(r),rname);
 
     hdml->radio_name_list[ii] = apr_pstrdup(r->pool, rname);
 
@@ -2846,7 +2846,7 @@ s_output_to_postdata(hdml_t *hdml, char *s)
                           qs_trim_string(r->pool, s),
                           NULL);
 
-  DBG(r, "POSTDATA:[%s]", hdml->postdata[hdml->pure_form_cnt] );
+  DBG(r, "REQ[%X] POSTDATA:[%s]", TO_ADDR(r),hdml->postdata[hdml->pure_form_cnt] );
 }
 
 
@@ -2903,7 +2903,7 @@ s_output_to_init_vars(hdml_t *hdml, char *s)
 
   hdml->init_vars = apr_pstrcat(r->pool, hdml->init_vars, qs_trim_string(r->pool,s), NULL);
 
-  DBG(r, "INIT_VARS:[%s]", hdml->init_vars);
+  DBG(r,"REQ[%X] INIT_VARS:[%s]",TO_ADDR(r),hdml->init_vars);
 }
 
 

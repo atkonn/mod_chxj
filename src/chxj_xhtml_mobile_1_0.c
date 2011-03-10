@@ -467,14 +467,14 @@ chxj_convert_xhtml_mobile_1_0(
   xhtml_t   xhtml;
   Doc       doc;
 
-  DBG(r,"start chxj_convert_xhtml_mobile_1_0()");
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
   /*--------------------------------------------------------------------------*/
   /* If qrcode xml                                                            */
   /*--------------------------------------------------------------------------*/
   *dstlen = srclen;
   dst = chxj_qr_code_blob_handler(r, src, (size_t*)dstlen);
   if (dst != NULL) {
-    DBG(r,"end chxj_convert_xhtml_mobile_1_0() (found qrcode.xml)");
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return dst;
   }
 
@@ -534,7 +534,7 @@ chxj_convert_xhtml_mobile_1_0(
   chxj_dump_out("[dst] CHTML->XHTML", dst, *dstlen);
 #endif
 
-  DBG(r,"end chxj_convert_xhtml_mobile_1_0()");
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return dst;
 }
 
@@ -589,7 +589,7 @@ s_xhtml_search_emoji(xhtml_t *xhtml, char *txt, char **rslt)
   r = xhtml->doc->r;
 
   if (spec == NULL) {
-    DBG(r,"spec is NULL");
+    DBG(r,"REQ[%X] spec is NULL",TO_ADDR(r));
   }
 
   for (ee = xhtml->conf->emoji;
@@ -598,7 +598,7 @@ s_xhtml_search_emoji(xhtml_t *xhtml, char *txt, char **rslt)
     unsigned char hex1byte;
     unsigned char hex2byte;
     if (!ee->imode) {
-      DBG(r,"emoji->imode is NULL");
+      DBG(r,"REQ[%X] emoji->imode is NULL",TO_ADDR(r));
       continue;
     }
 
@@ -714,7 +714,7 @@ chxj_xhtml_emoji_only_converter(request_rec *r, device_table *spec, const char *
   xhtml = &__xhtml;
   doc   = &__doc;
 
-  DBG(r, "REQ[%X] start chxj_xhtml_emoji_eonly_converter()", (unsigned int)(apr_size_t)r);
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
   memset(doc,     0, sizeof(Doc));
   memset(xhtml, 0, sizeof(xhtml_t));
 
@@ -755,7 +755,7 @@ chxj_xhtml_emoji_only_converter(request_rec *r, device_table *spec, const char *
   }
   xhtml->out = chxj_buffered_write_flush(xhtml->out, &doc->buf);
 
-  DBG(r, "REQ[%X] end chxj_xhtml_emoji_eonly_converter()", (unsigned int)(apr_size_t)r);
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return xhtml->out;
 }
 
@@ -4883,7 +4883,7 @@ s_xhtml_1_0_text_tag(void *pdoc, Node *child)
     char *out;
     int rtn = s_xhtml_search_emoji(xhtml, &textval[ii], &out);
     if (rtn != 0) {
-      DBG(r,"[%s][%d]", out, rtn);
+      DBG(r,"REQ[%X] [%s][%d]", TO_ADDR(r),out, rtn);
       tdst = qs_out_apr_pstrcat(r, tdst, out, &tdst_len);
       ii+=(rtn - 1);
       continue;
@@ -5998,9 +5998,9 @@ s_xhtml_1_0_link_tag(void *pdoc, Node *node)
   }
 
   if (rel && href && type) {
-    DBG(doc->r, "start load CSS. url:[%s]", href);
+    DBG(doc->r,"REQ[%X] start load CSS. url:[%s]", TO_ADDR(doc->r),href);
     xhtml->style = chxj_css_parse_from_uri(doc->r, doc->pool, xhtml->style, href);
-    DBG(doc->r, "end load CSS. url:[%s]", href);
+    DBG(doc->r,"REQ[%X] end load CSS. url:[%s]", TO_ADDR(doc->r),href);
   }
 
   return xhtml->out;
@@ -6302,9 +6302,9 @@ s_xhtml_1_0_style_tag(void *pdoc, Node *node)
     char *name  = qs_get_node_name(doc, child);
     if (STRCASEEQ('t','T',"text", name)) {
       char *value = qs_get_node_value(doc, child);
-      DBG(doc->r, "start load CSS. buf:[%s]", value);
+      DBG(doc->r,"REQ[%X] start load CSS. buf:[%s]", TO_ADDR(doc->r),value);
       xhtml->style = chxj_css_parse_style_value(doc, xhtml->style, value);
-      DBG(doc->r, "end load CSS. value:[%s]", value);
+      DBG(doc->r,"REQ[%X] end load CSS. value:[%s]", TO_ADDR(doc->r),value);
     }
   }
   return xhtml->out;

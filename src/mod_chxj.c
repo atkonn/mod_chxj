@@ -193,11 +193,18 @@ chxj_headers_fixup(request_rec *r)
   if (!request_conf) {
     request_conf = apr_palloc(r->pool, sizeof(mod_chxj_req_config));
     request_conf->spec = NULL;
+    request_conf->user_agent = NULL;
+    request_conf->f = NULL;
     chxj_set_module_config(r->request_config, &chxj_module, request_conf);
   }
   dconf = chxj_get_module_config(r->per_dir_config, &chxj_module);
 
   user_agent = (char*)apr_table_get(r->headers_in, HTTP_USER_AGENT);
+
+  /*
+   * check and get mobile type.
+   * and request_conf->user_agent , request_conf->spec is set.
+   */
   spec = chxj_specified_device(r, user_agent);
 
   contentType = (char *)apr_table_get(r->headers_in, "Content-Type");
@@ -278,9 +285,9 @@ chxj_headers_fixup(request_rec *r)
 
   if (r->method_number == M_POST) {
     if (! apr_table_get(r->headers_in, "X-Chxj-Forward")) {
-        DBG(r, "REQ[%X] set Input handler old:[%s] proxyreq:[%d] uri:[%s] filename:[%s]", TO_ADDR(r), r->handler, r->proxyreq, r->uri, r->filename);
-        r->proxyreq = PROXYREQ_NONE;
-        r->handler = apr_psprintf(r->pool, "chxj-input-handler");
+      DBG(r, "REQ[%X] set Input handler old:[%s] proxyreq:[%d] uri:[%s] filename:[%s]", TO_ADDR(r), r->handler, r->proxyreq, r->uri, r->filename);
+      r->proxyreq = PROXYREQ_NONE;
+      r->handler = apr_psprintf(r->pool, "chxj-input-handler");
     }
     else {
       char *client_ip = (char *)apr_table_get(r->headers_in, CHXJ_HEADER_ORIG_CLIENT_IP);
@@ -422,6 +429,7 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
   char                *tmp;
   cookie_t            *cookie;
   mod_chxj_config     *dconf; 
+  mod_chxj_req_config *request_conf; 
   chxjconvrule_entry  *entryp;
 
   DBG(r,"REQ[%X] start %s()", TO_ADDR(r),__func__);
@@ -431,6 +439,7 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
   dst  = apr_pstrcat(r->pool, (char *)*src, NULL);
 
   dconf = chxj_get_module_config(r->per_dir_config, &chxj_module);
+  request_conf = chxj_get_module_config(r->request_config, &chxj_module);
 
 
   entryp = chxj_apply_convrule(r, dconf->convrules);
@@ -463,6 +472,9 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
   if (ua && user_agent && strcasecmp(user_agent, ua) != 0) {
     /* again */
     spec = chxj_specified_device(r, user_agent);
+  }
+  else {
+    spec = request_conf->spec;
   }
 
   /*
@@ -1130,7 +1142,6 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
     s_add_no_cache_headers(r, entryp);
     /* must not send body. */
     rv = pass_data_to_filter(f, "", 0);
-    chxj_specified_cleanup(r);
     DBG(f->r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
     return rv;
   }
@@ -1185,15 +1196,13 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
       s_add_no_cache_headers(r, entryp);
       ap_pass_brigade(f->next, bb);
       DBG(f->r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
-      chxj_specified_cleanup(r);
       return APR_SUCCESS;
     }
   }
   else {
     DBG(r, "REQ[%X] not convert content-type:[(null)]", TO_ADDR(r));
     ap_pass_brigade(f->next, bb);
-    chxj_specified_cleanup(r);
-    DBG(f->r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
+    DBG(f->r, "REQ[%X] end %s()", TO_ADDR(f->r),__func__);
     return APR_SUCCESS;
   }
 
@@ -1311,7 +1320,6 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
             if (sts != OK) {
               ERR(r, "REQ[%X] qrcode create failed.", TO_ADDR(r));
               chxj_cookie_unlock(r, lock);
-              chxj_specified_cleanup(r);
               DBG(f->r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
               return sts;
             }
@@ -1383,7 +1391,6 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
                                    (const char *)ctx->buffer, 
                                    (apr_size_t)ctx->len);
         }
-        chxj_specified_cleanup(r);
         DBG(f->r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
         return rv;
       }
@@ -1430,14 +1437,12 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
         apr_table_setn(r->headers_out, "Content-Length", "0");
         s_add_no_cache_headers(r, entryp);
         rv = pass_data_to_filter(f, (const char *)"", (apr_size_t)0);
-        chxj_specified_cleanup(r);
         return rv;
       }
     }
   }
   apr_brigade_destroy(bb);
 
-  chxj_specified_cleanup(r);
   DBG(r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
 
   return APR_SUCCESS;
@@ -1477,6 +1482,7 @@ static apr_status_t
 chxj_input_handler(request_rec *r)
 {
   mod_chxj_config     *dconf;
+  mod_chxj_req_config *request_conf;
   chxjconvrule_entry  *entryp = NULL;
   device_table        *spec   = NULL;
   char                *post_data = NULL;
@@ -1495,12 +1501,18 @@ chxj_input_handler(request_rec *r)
   apr_pool_create(&pool, r->pool);
 
   dconf      = chxj_get_module_config(r->per_dir_config, &chxj_module);
+  request_conf = chxj_get_module_config(r->request_config, &chxj_module);
   user_agent = (char*)apr_table_get(r->headers_in, CHXJ_HTTP_USER_AGENT);
   if (!user_agent) {
     user_agent = (char*)apr_table_get(r->headers_in, HTTP_USER_AGENT);
   }
-  spec       = chxj_specified_device(r, user_agent);
-  entryp     = chxj_apply_convrule(r, dconf->convrules);
+  if (user_agent && request_conf->user_agent && strcmp(user_agent, request_conf->user_agent)) {
+    spec = chxj_specified_device(r, user_agent);
+  }
+  else {
+    spec = request_conf->spec;
+  }
+  entryp = chxj_apply_convrule(r, dconf->convrules);
 
   post_data = apr_pstrdup(pool, "");
   if (ap_setup_client_block(r, REQUEST_CHUNKED_DECHUNK) == OK) {
@@ -1552,14 +1564,6 @@ chxj_input_handler(request_rec *r)
   apr_table_unset(r->headers_in, "Content-Length");
   apr_table_setn(r->headers_in, "Content-Length", apr_psprintf(pool, "%" APR_SIZE_T_FMT, post_data_len));
   response = chxj_serf_post(r, pool, url_path, post_data, post_data_len, 1, &res_len, &response_code);
-#if 0
-  DBG(r, "REQ[%X] -------------------------------------------------------", TO_ADDR(r));
-  DBG(r, "REQ[%X] response length:[%" APR_SIZE_T_FMT "]", (unsigned int)(apr_size_t)r, res_len);
-  for (ii=0; ii<res_len/64; ii++) {
-    DBG(r, "REQ[%X] response:[%.*s]", TO_ADDR(r), 64, &response[ii*64]);
-  }
-  DBG(r, "REQ[%X] -------------------------------------------------------", TO_ADDR(r));
-#endif
 
   char *chunked;
   if ((chunked = (char *)apr_table_get(r->headers_out, "Transfer-Encoding")) != NULL) {
@@ -1727,6 +1731,7 @@ chxj_insert_filter(request_rec *r)
   char                *user_agent;
   device_table        *spec;
   mod_chxj_config     *dconf;
+  mod_chxj_req_config *req_conf;
   chxjconvrule_entry  *entryp;
   mod_chxj_ctx        *ctx;
   apr_status_t        rv;
@@ -1735,6 +1740,7 @@ chxj_insert_filter(request_rec *r)
   DBG(r, "REQ[%X] start %s()", TO_ADDR(r),__func__);
 
   dconf = chxj_get_module_config(r->per_dir_config, &chxj_module);
+  req_conf = chxj_get_module_config(r->request_config, &chxj_module);
 
   /* we get User-Agent from CHXJ_HTTP_USER_AGENT header if any */
   user_agent = (char *)apr_table_get(r->headers_in, CHXJ_HTTP_USER_AGENT);
@@ -1750,7 +1756,12 @@ chxj_insert_filter(request_rec *r)
     return;
   }
 
-  spec = chxj_specified_device(r, user_agent);
+  if (user_agent && req_conf->user_agent && strcmp(user_agent, req_conf->user_agent)) {
+    spec = chxj_specified_device(r, user_agent);
+  }
+  else {
+    spec = req_conf->spec;
+  }
   entryp = chxj_apply_convrule(r, dconf->convrules);
   if (!entryp) {
     DBG(r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
@@ -1795,10 +1806,25 @@ chxj_insert_filter(request_rec *r)
 
 
   if (! apr_table_get(r->headers_in, "X-Chxj-Forward")) {
-    ap_add_output_filter("chxj_output_filter", ctx, r, r->connection);
+    req_conf->f = ap_add_output_filter("chxj_output_filter", ctx, r, r->connection);
     DBG(r, "REQ[%X] added Output Filter", TO_ADDR(r));
   }
 
+  DBG(r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
+}
+
+
+void 
+chxj_remove_filter(request_rec *r)
+{
+  mod_chxj_req_config *req_conf;
+
+  DBG(r, "REQ[%X] start %s()", TO_ADDR(r),__func__);
+  req_conf = chxj_get_module_config(r->request_config, &chxj_module);
+  if (req_conf && req_conf->f) {
+    ap_remove_output_filter(req_conf->f);
+    DBG(r, "REQ[%X] REMOVE Output Filter", TO_ADDR(r));
+  }
   DBG(r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
 }
 

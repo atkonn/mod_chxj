@@ -468,7 +468,7 @@ chxj_chxjif_is_mine(device_table *spec, Doc *doc, Node *tag)
     char *value = qs_get_attr_value(doc,attr);
     if ((*name == 'l' || *name == 'L') && strcasecmp(name, "lang") == 0) {
 
-      DBG(r, "lang found [%s] spec [%d]", value, spec->html_spec_type);
+      DBG(r,"REQ[%X] lang found [%s] spec [%d]", TO_ADDR(r),value, spec->html_spec_type);
       if (STRCASEEQ('a','A',"all",value)) {
         return 1;
       }
@@ -717,13 +717,14 @@ chxj_delete_chxj_cc_param(
   char        *s;
   int         xmlFlag = 0;
 
-  DBG(r, "REQ[%X] start chxj_delete_chxj_cc_param() str:[%s]", TO_ADDR(r),str);
+  DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
+  DBG(r,"REQ[%X] str:[%s]", TO_ADDR(r),str);
 
   apr_pool_create(&pool, r->pool);
   s = apr_pstrdup(pool, str);
-
   if (!s) {
-    DBG(r, "REQ[%X] end chxj_delete_chxj_cc_param() Memory Allocation Error", TO_ADDR(r));
+    ERR(r,"REQ[%X] Memory Allocation Error", TO_ADDR(r));
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return NULL;
   }
   char *result = NULL;
@@ -754,7 +755,7 @@ chxj_delete_chxj_cc_param(
     }
   }
   DBG(r, "REQ[%X] result:[%s]", TO_ADDR(r), result);
-  DBG(r, "REQ[%X] end chxj_delete_chxj_cc_param() ", TO_ADDR(r));
+  DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return result;
 }
 /*
