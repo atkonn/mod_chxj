@@ -543,7 +543,7 @@ s_create_cache_file(request_rec          *r,
     /*------------------------------------------------------------------------*/
     /* 通常のイメージファイルの場合                                           */
     /*------------------------------------------------------------------------*/
-+#if APR_HAS_MMAP
+#if APR_HAS_MMAP
     DBG(r, "REQ[%X] Use mmap to read original image.", TO_ADDR(r));
     {
       apr_finfo_t finfo;
