@@ -447,7 +447,11 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
 
   entryp = chxj_apply_convrule(r, dconf->convrules);
 
-  if (!entryp || (!(entryp->action & CONVRULE_ENGINE_ON_BIT) && !(entryp->action & CONVRULE_COOKIE_ONLY_BIT))) {
+  if (!entryp 
+      || (     !(entryp->action & CONVRULE_ENGINE_ON_BIT) 
+            && !(entryp->action & CONVRULE_COOKIE_ONLY_BIT)
+            && !(entryp->action & CONVRULE_EMOJI_ONLY_BIT)
+         )) {
     DBG(r,"REQ[%X] end %s()", TO_ADDR(r),__func__);
     return (char *)*src;
   }
@@ -514,6 +518,27 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
       }
       else {
         /* ignore */
+      }
+    }
+    else if (!(entryp->action & CONVRULE_ENGINE_ON_BIT) && (entryp->action & CONVRULE_EMOJI_ONLY_BIT)) {
+      /*---------------------------------------------------------------------*/
+      /* force emoji only mode                                               */
+      /*---------------------------------------------------------------------*/
+      tmp = NULL;
+      if (convert_routine[spec->html_spec_type].encoder)
+        tmp = convert_routine[spec->html_spec_type].encoder(r, 
+                                                            *src, 
+                                                            (apr_size_t *)len);
+      if (convert_routine[spec->html_spec_type].emoji_only_converter) {
+        dst = convert_routine[spec->html_spec_type].emoji_only_converter(r,spec, tmp,*len);
+        if (dst != NULL) {
+          *len = strlen(dst);
+        }
+        else {
+          dst = apr_palloc(r->pool, 1);
+          *dst = 0;
+          *len = 0;
+        }
       }
     }
     else {
@@ -1783,8 +1808,13 @@ chxj_insert_filter(request_rec *r)
   ctx->buffer = apr_palloc(ctx->pool, 1);
   ctx->buffer[0] = 0;
 
-  if (dconf->image != CHXJ_IMG_ON && (!entryp || (!(entryp->action & CONVRULE_ENGINE_ON_BIT) && !(entryp->action & CONVRULE_COOKIE_ONLY_BIT)))) {
-    DBG(r,"REQ[%X] EngineOff and ChxjImageEngine Off", TO_ADDR(r));
+  if (dconf->image != CHXJ_IMG_ON 
+      && (    !entryp 
+          || (   !(entryp->action & CONVRULE_ENGINE_ON_BIT) 
+              && !(entryp->action & CONVRULE_COOKIE_ONLY_BIT) 
+              && !(entryp->action & CONVRULE_EMOJI_ONLY_BIT)
+             ))) {
+    DBG(r,"REQ[%X] EngineOff and ChxjImageEngine Off and No EmojiOnly", TO_ADDR(r));
     DBG(r,"REQ[%X] end %s()", TO_ADDR(r),__func__);
     return;
   }
