@@ -192,9 +192,10 @@ chxj_headers_fixup(request_rec *r)
   request_conf = (mod_chxj_req_config *)chxj_get_module_config(r->request_config, &chxj_module);
   if (!request_conf) {
     request_conf = apr_palloc(r->pool, sizeof(mod_chxj_req_config));
-    request_conf->spec = NULL;
+    request_conf->spec       = NULL;
     request_conf->user_agent = NULL;
-    request_conf->f = NULL;
+    request_conf->f          = NULL;
+    request_conf->entryp     = NULL;
     chxj_set_module_config(r->request_config, &chxj_module, request_conf);
   }
   dconf = chxj_get_module_config(r->per_dir_config, &chxj_module);
@@ -228,7 +229,7 @@ chxj_headers_fixup(request_rec *r)
   case CHXJ_SPEC_Hdml:
   case CHXJ_SPEC_Jhtml:
   case CHXJ_SPEC_Jxhtml:
-    entryp = chxj_apply_convrule(r, dconf->convrules);
+    request_conf->entryp = entryp = chxj_apply_convrule(r, dconf->convrules);
     if (dconf->image != CHXJ_IMG_ON) {
       if (! entryp) {
         DBG(r, "REQ[%X] end %s() (no pattern)", TO_ADDR(r), __func__);
@@ -445,7 +446,15 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
   request_conf = chxj_get_module_config(r->request_config, &chxj_module);
 
 
-  entryp = chxj_apply_convrule(r, dconf->convrules);
+  /*-------------------------------------------------------------------------*/
+  /* already setup entryp if request_conf->user_agent is not null            */
+  /*-------------------------------------------------------------------------*/
+  if (request_conf->user_agent) {
+    entryp = request_conf->entryp;
+  }
+  else {
+    entryp = chxj_apply_convrule(r, dconf->convrules);
+  }
 
   if (!entryp 
       || (     !(entryp->action & CONVRULE_ENGINE_ON_BIT) 
@@ -1540,7 +1549,16 @@ chxj_input_handler(request_rec *r)
   else {
     spec = request_conf->spec;
   }
-  entryp = chxj_apply_convrule(r, dconf->convrules);
+
+  /*-------------------------------------------------------------------------*/
+  /* already setup entryp if request_conf->user_agent is not null            */
+  /*-------------------------------------------------------------------------*/
+  if (request_conf->user_agent) {
+    entryp = request_conf->entryp;
+  }
+  else {
+    entryp = chxj_apply_convrule(r, dconf->convrules);
+  }
 
   post_data = apr_pstrdup(pool, "");
   if (ap_setup_client_block(r, REQUEST_CHUNKED_DECHUNK) == OK) {
@@ -1790,7 +1808,16 @@ chxj_insert_filter(request_rec *r)
   else {
     spec = req_conf->spec;
   }
-  entryp = chxj_apply_convrule(r, dconf->convrules);
+  req_conf = chxj_get_module_config(r->request_config, &chxj_module);
+  /*-------------------------------------------------------------------------*/
+  /* already setup entryp if request_conf->user_agent is not null            */
+  /*-------------------------------------------------------------------------*/
+  if (req_conf->user_agent) {
+    entryp = req_conf->entryp;
+  }
+  else {
+    entryp = chxj_apply_convrule(r, dconf->convrules);
+  }
   if (!entryp && dconf->image != CHXJ_IMG_ON) {
     DBG(r, "REQ[%X] entryp is NULL and ChxjImageEngine Off", TO_ADDR(r));
     DBG(r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
