@@ -364,9 +364,10 @@ struct mod_chxj_config {
 };
 
 struct mod_chxj_req_config_t {
-  char *user_agent;
-  device_table *spec;
-  ap_filter_t     *f;
+  char               *user_agent;
+  device_table       *spec;
+  ap_filter_t        *f;
+  chxjconvrule_entry *entryp;
 };
 
 #define IS_COOKIE_STORE_DBM(X)      ((X) == COOKIE_STORE_TYPE_DBM)

@@ -115,6 +115,7 @@ chxj_save_cookie(request_rec *r)
   char                *old_cookie_id;
   char                *store_string;
   mod_chxj_config     *dconf;
+  mod_chxj_req_config *req_conf;
   chxjconvrule_entry  *entryp;
   apr_table_t         *new_cookie_table;
   int                 has_cookie = 0;
@@ -137,7 +138,17 @@ chxj_save_cookie(request_rec *r)
   has_refer = 0;
 
   dconf = chxj_get_module_config(r->per_dir_config, &chxj_module);
-  entryp = chxj_apply_convrule(r, dconf->convrules);
+  req_conf = chxj_get_module_config(r->request_config, &chxj_module);
+
+  /*-------------------------------------------------------------------------*/
+  /* already setup entryp if request_conf->user_agent is not null            */
+  /*-------------------------------------------------------------------------*/
+  if (req_conf->user_agent) {
+    entryp = req_conf->entryp;
+  }
+  else {
+    entryp = chxj_apply_convrule(r, dconf->convrules);
+  }
   if (! entryp) {
     DBG(r, "REQ[%X] end %s() (no pattern)",TO_ADDR(r),__func__);
     return NULL;
@@ -351,6 +362,7 @@ chxj_update_cookie(request_rec *r, cookie_t *old_cookie)
   apr_table_entry_t   *hentryp;
   char                *store_string;
   mod_chxj_config     *dconf;
+  mod_chxj_req_config *req_conf;
   chxjconvrule_entry  *entryp;
   cookie_t            *cookie;
 
@@ -365,7 +377,16 @@ chxj_update_cookie(request_rec *r, cookie_t *old_cookie)
   cookie->cookie_id = NULL;
 
   dconf = chxj_get_module_config(r->per_dir_config, &chxj_module);
-  entryp = chxj_apply_convrule(r, dconf->convrules);
+  req_conf = chxj_get_module_config(r->request_config, &chxj_module);
+  /*-------------------------------------------------------------------------*/
+  /* already setup entryp if request_conf->user_agent is not null            */
+  /*-------------------------------------------------------------------------*/
+  if (req_conf->user_agent) {
+    entryp = req_conf->entryp;
+  }
+  else {
+    entryp = chxj_apply_convrule(r, dconf->convrules);
+  }
   if (! entryp) {
     DBG(r, "REQ[%X] end %s() (no pattern)",TO_ADDR(r),__func__);
     return NULL;
@@ -458,6 +479,7 @@ cookie_t *
 chxj_load_cookie(request_rec *r, char *cookie_id)
 {
   mod_chxj_config         *dconf;
+  mod_chxj_req_config     *req_conf;
   chxjconvrule_entry      *entryp;
   cookie_t                *cookie;
   apr_table_t             *load_cookie_table;
@@ -478,7 +500,17 @@ chxj_load_cookie(request_rec *r, char *cookie_id)
 
 
   dconf = chxj_get_module_config(r->per_dir_config, &chxj_module);
-  entryp = chxj_apply_convrule(r, dconf->convrules);
+  req_conf = chxj_get_module_config(r->request_config, &chxj_module);
+
+  /*-------------------------------------------------------------------------*/
+  /* already setup entryp if request_conf->user_agent is not null            */
+  /*-------------------------------------------------------------------------*/
+  if (req_conf->user_agent) {
+    entryp = req_conf->entryp;
+  }
+  else {
+    entryp = chxj_apply_convrule(r, dconf->convrules);
+  }
   if (! entryp) {
     DBG(r, "REQ[%X] end %s() (no pattern)", TO_ADDR(r),__func__);
     goto on_error0;

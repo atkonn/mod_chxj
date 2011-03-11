@@ -34,6 +34,7 @@ chxj_encoding(request_rec *r, const char *src, apr_size_t *len)
   apr_size_t          ilen;
   apr_size_t          olen;
   mod_chxj_config     *dconf;
+  mod_chxj_req_config *req_conf;
   chxjconvrule_entry  *entryp;
   apr_pool_t          *pool;
 
@@ -53,7 +54,16 @@ chxj_encoding(request_rec *r, const char *src, apr_size_t *len)
     return (char *)apr_pstrdup(r->pool, "");
   }
 
-  entryp = chxj_apply_convrule(r, dconf->convrules);
+  req_conf = chxj_get_module_config(r->request_config, &chxj_module);
+  /*-------------------------------------------------------------------------*/
+  /* already setup entryp if request_conf->user_agent is not null            */
+  /*-------------------------------------------------------------------------*/
+  if (req_conf->user_agent) {
+    entryp = req_conf->entryp;
+  }
+  else {
+    entryp = chxj_apply_convrule(r, dconf->convrules);
+  }
   if (entryp->encoding == NULL) {
     DBG(r,"REQ[%X] none encoding.",TO_ADDR(r));
     DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
@@ -250,6 +260,7 @@ chxj_rencoding(request_rec *r, const char *src, apr_size_t *len)
   apr_size_t          ilen;
   apr_size_t          olen;
   mod_chxj_config     *dconf;
+  mod_chxj_req_config *req_conf;
   chxjconvrule_entry  *entryp;
 
   DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
@@ -267,7 +278,16 @@ chxj_rencoding(request_rec *r, const char *src, apr_size_t *len)
     return (char*)src;
   }
 
-  entryp = chxj_apply_convrule(r, dconf->convrules);
+  req_conf = chxj_get_module_config(r->request_config, &chxj_module);
+  /*-------------------------------------------------------------------------*/
+  /* already setup entryp if request_conf->user_agent is not null            */
+  /*-------------------------------------------------------------------------*/
+  if (req_conf->user_agent) {
+    entryp = req_conf->entryp;
+  }
+  else {
+    entryp = chxj_apply_convrule(r, dconf->convrules);
+  }
   if (! entryp->encoding) {
     DBG(r,"REQ[%X] none encoding.",TO_ADDR(r));
     DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);

@@ -248,6 +248,7 @@ int
 chxj_img_conv_format_handler(request_rec *r)
 {
   mod_chxj_config       *conf;
+  mod_chxj_req_config   *req_conf;
   query_string_param_t  *qsp;
   char                  *user_agent;
   device_table          *spec;
@@ -290,7 +291,16 @@ chxj_img_conv_format_handler(request_rec *r)
     user_agent = apr_pstrdup(r->pool, qsp->user_agent);
   }
   else {
-    entryp = chxj_apply_convrule(r, conf->convrules);
+    req_conf = chxj_get_module_config(r->request_config, &chxj_module);
+    /*-----------------------------------------------------------------------*/
+    /* already setup entryp if request_conf->user_agent is not null          */
+    /*-----------------------------------------------------------------------*/
+    if (req_conf->user_agent) {
+      entryp = req_conf->entryp;
+    }
+    else {
+      entryp = chxj_apply_convrule(r, conf->convrules);
+    }
     if (entryp && entryp->user_agent) {
       user_agent = (char*)apr_table_get(r->headers_in, CHXJ_HTTP_USER_AGENT);
     }
@@ -341,6 +351,7 @@ char *
 chxj_convert_image(request_rec *r, const char **src, apr_size_t *len)
 {
   mod_chxj_config       *conf;
+  mod_chxj_req_config   *req_conf;
   query_string_param_t  *qsp;
   char                  *user_agent;
   device_table          *spec;
@@ -371,7 +382,16 @@ chxj_convert_image(request_rec *r, const char **src, apr_size_t *len)
     user_agent = apr_pstrdup(r->pool, qsp->user_agent);
   }
   else {
-    entryp = chxj_apply_convrule(r, conf->convrules);
+    req_conf = chxj_get_module_config(r->request_config, &chxj_module);
+    /*-----------------------------------------------------------------------*/
+    /* already setup entryp if request_conf->user_agent is not null          */
+    /*-----------------------------------------------------------------------*/
+    if (req_conf->user_agent) {
+      entryp = req_conf->entryp;
+    }
+    else {
+      entryp = chxj_apply_convrule(r, conf->convrules);
+    }
     if (entryp && entryp->user_agent) {
       user_agent = (char*)apr_table_get(r->headers_in, CHXJ_HTTP_USER_AGENT);
     }
