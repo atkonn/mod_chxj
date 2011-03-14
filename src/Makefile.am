@@ -48,10 +48,28 @@ libmod_chxj_la_SOURCES = mod_chxj.c \
     chxj_header_inf.c \
     chxj_jreserved_tag.c
 
+SERF_OBJECTS = serf/buckets/aggregate_buckets.o \
+          serf/buckets/request_buckets.o \
+          serf/context.o \
+          serf/buckets/buckets.o \
+          serf/buckets/simple_buckets.o \
+          serf/buckets/file_buckets.o \
+          serf/buckets/mmap_buckets.o \
+          serf/buckets/socket_buckets.o \
+          serf/buckets/response_buckets.o \
+          serf/buckets/headers_buckets.o \
+          serf/buckets/allocator.o \
+          serf/buckets/dechunk_buckets.o \
+          serf/buckets/deflate_buckets.o \
+          serf/buckets/limit_buckets.o \
+          serf/buckets/ssl_buckets.o \
+          serf/buckets/barrier_buckets.o \
+          serf/buckets/chunk_buckets.o
+
 
 libmod_chxj_la_CFLAGS = -O2 -prefer-pic @QDEFS@ @DDEFS@ -I. -I../include -I@with_apache_header@  -I./serf -I./css/include
 AM_CFLAGS = @CFLAGS@ -O2 -prefer-pic @QDEFS@ @DDEFS@ -I. -I../include -I@with_apache_header@
-libmod_chxj_la_LIBADD = serf/.libs/libserf-0.a css/src/.libs/libscss.a
+libmod_chxj_la_LIBADD = serf/.libs/libserf-0.a css/src/.libs/libscss.a $(SERF_OBJECTS)
 lib_LTLIBRARIES = libmod_chxj.la
 
 make_so:
