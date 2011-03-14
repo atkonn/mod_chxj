@@ -30,10 +30,10 @@
 # the same distribution terms that you use for the rest of that program.
 
 # A sed program that does not truncate output.
-SED="/bin/sed"
+SED="/usr/bin/sed"
 
 # Sed that helps us avoid accidentally triggering echo(1) options like -n.
-Xsed="/bin/sed -e 1s/^X//"
+Xsed="/usr/bin/sed -e 1s/^X//"
 
 # The HP-UX ksh and POSIX shell print the target directory to stdout
 # if CDPATH is set.
@@ -44,7 +44,7 @@ available_tags=" CXX"
 
 # ### BEGIN LIBTOOL CONFIG
 
-# Libtool was configured on host debian64:
+# Libtool was configured on host freebsd.qsdn.co.jp:
 
 # Shell to use when invoking shell scripts.
 SHELL="/bin/sh"
@@ -62,17 +62,17 @@ build_libtool_need_lc=no
 allow_libtool_libs_with_static_runtimes=no
 
 # Whether or not to optimize for fast installation.
-fast_install=yes
+fast_install=needless
 
 # The host system.
 host_alias=
-host=x86_64-unknown-linux-gnu
-host_os=linux-gnu
+host=i386-unknown-freebsd8.2
+host_os=freebsd8.2
 
 # The build system.
 build_alias=
-build=x86_64-unknown-linux-gnu
-build_os=linux-gnu
+build=i386-unknown-freebsd8.2
+build_os=freebsd8.2
 
 # An echo program that does not interpret backslashes.
 echo="echo"
@@ -94,10 +94,10 @@ CC="gcc"
 with_gcc=yes
 
 # An ERE matcher.
-EGREP="/bin/grep -E"
+EGREP="/usr/bin/grep -E"
 
 # The linker used to build libraries.
-LD="/usr/bin/ld -m elf_x86_64"
+LD="/usr/bin/ld"
 
 # Whether we need hard or soft links.
 LN_S="ln -s"
@@ -147,7 +147,7 @@ pic_flag=" -fPIC -DPIC"
 pic_mode=default
 
 # What is the maximum length of a command?
-max_cmd_len=98304
+max_cmd_len=196608
 
 # Does compiler simultaneously support -c and -o options?
 compiler_c_o="yes"
@@ -186,17 +186,17 @@ whole_archive_flag_spec="\${wl}--whole-archive\$convenience \${wl}--no-whole-arc
 thread_safe_flag_spec=""
 
 # Library versioning type.
-version_type=linux
+version_type=freebsd-elf
 
 # Format of library name prefix.
 libname_spec="lib\$name"
 
 # List of archive names.  First name is the real one, the rest are links.
 # The last name is the one that the linker finds with -lNAME.
-library_names_spec="\${libname}\${release}\${shared_ext}\$versuffix \${libname}\${release}\${shared_ext}\$major \$libname\${shared_ext}"
+library_names_spec="\${libname}\${release}\${shared_ext}\$versuffix \${libname}\${release}\${shared_ext} \$libname\${shared_ext}"
 
 # The coded name of the library, if different from the real name.
-soname_spec="\${libname}\${release}\${shared_ext}\$major"
+soname_spec=""
 
 # Commands used to build and install an old-style archive.
 RANLIB="ranlib"
@@ -212,10 +212,7 @@ old_archive_from_expsyms_cmds=""
 
 # Commands used to build and install a shared archive.
 archive_cmds="\$CC -shared \$libobjs \$deplibs \$compiler_flags \${wl}-soname \$wl\$soname -o \$lib"
-archive_expsym_cmds="\$echo \\\"{ global:\\\" > \$output_objdir/\$libname.ver~
-  cat \$export_symbols | sed -e \\\"s/\\\\(.*\\\\)/\\\\1;/\\\" >> \$output_objdir/\$libname.ver~
-  \$echo \\\"local: *; };\\\" >> \$output_objdir/\$libname.ver~
-	  \$CC -shared \$libobjs \$deplibs \$compiler_flags \${wl}-soname \$wl\$soname \${wl}-version-script \${wl}\$output_objdir/\$libname.ver -o \$lib"
+archive_expsym_cmds="\$CC -shared \$libobjs \$deplibs \$compiler_flags \${wl}-soname \$wl\$soname \${wl}-retain-symbols-file \$wl\$export_symbols -o \$lib"
 postinstall_cmds=""
 postuninstall_cmds=""
 
@@ -264,7 +261,7 @@ allow_undefined_flag=""
 no_undefined_flag=""
 
 # Commands used to finish a libtool library installation in a directory.
-finish_cmds="PATH=\\\"\\\$PATH:/sbin\\\" ldconfig -n \$libdir"
+finish_cmds=""
 
 # Same as above, but a single script fragment to be evaled but not shown.
 finish_eval=""
@@ -285,7 +282,7 @@ runpath_var=LD_RUN_PATH
 shlibpath_var=LD_LIBRARY_PATH
 
 # Is shlibpath searched before the hard-coded library search path?
-shlibpath_overrides_runpath=no
+shlibpath_overrides_runpath=yes
 
 # How to hardcode a shared library path into an executable.
 hardcode_action=immediate
@@ -326,13 +323,13 @@ hardcode_automatic=no
 variables_saved_for_relink="PATH LD_LIBRARY_PATH LD_RUN_PATH GCC_EXEC_PREFIX COMPILER_PATH LIBRARY_PATH"
 
 # Whether libtool must link a program against all its dependency libraries.
-link_all_deplibs=no
+link_all_deplibs=unknown
 
 # Compile-time system search path for libraries
-sys_lib_search_path_spec=" /usr/lib/gcc/x86_64-linux-gnu/4.1.3/ /usr/lib/gcc/x86_64-linux-gnu/4.1.3/ /usr/lib/gcc/x86_64-linux-gnu/4.1.3/../../../../x86_64-linux-gnu/lib/x86_64-linux-gnu/4.1.3/ /usr/lib/gcc/x86_64-linux-gnu/4.1.3/../../../../x86_64-linux-gnu/lib/ /usr/lib/gcc/x86_64-linux-gnu/4.1.3/../../../x86_64-linux-gnu/4.1.3/ /usr/lib/gcc/x86_64-linux-gnu/4.1.3/../../../ /lib/x86_64-linux-gnu/4.1.3/ /lib/ /usr/lib/x86_64-linux-gnu/4.1.3/ /usr/lib/"
+sys_lib_search_path_spec="/usr/lib"
 
 # Run-time system search path for libraries
-sys_lib_dlsearch_path_spec="/lib /usr/lib /usr/local/lib /lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu /usr/local/lib64 /usr/lib /var/lenny-386-chroot/lib /var/lenny-386-chroot/usr/lib /var/lenny-386-chroot/usr/X11R6/lib /var/lenny-386-chroot/usr/local/lib "
+sys_lib_dlsearch_path_spec="/lib /usr/lib"
 
 # Fix the shell variable $srcfile for the compiler.
 fix_srcfile_path=""
@@ -7227,7 +7224,7 @@ disable_libs=static
 # End:
 # ### BEGIN LIBTOOL TAG CONFIG: CXX
 
-# Libtool was configured on host debian64:
+# Libtool was configured on host freebsd.qsdn.co.jp:
 
 # Shell to use when invoking shell scripts.
 SHELL="/bin/sh"
@@ -7245,17 +7242,17 @@ build_libtool_need_lc=no
 allow_libtool_libs_with_static_runtimes=no
 
 # Whether or not to optimize for fast installation.
-fast_install=yes
+fast_install=needless
 
 # The host system.
 host_alias=
-host=x86_64-unknown-linux-gnu
-host_os=linux-gnu
+host=i386-unknown-freebsd8.2
+host_os=freebsd8.2
 
 # The build system.
 build_alias=
-build=x86_64-unknown-linux-gnu
-build_os=linux-gnu
+build=i386-unknown-freebsd8.2
+build_os=freebsd8.2
 
 # An echo program that does not interpret backslashes.
 echo="echo"
@@ -7277,10 +7274,10 @@ CC="g++"
 with_gcc=yes
 
 # An ERE matcher.
-EGREP="/bin/grep -E"
+EGREP="/usr/bin/grep -E"
 
 # The linker used to build libraries.
-LD="/usr/bin/ld -m elf_x86_64"
+LD="/usr/bin/ld"
 
 # Whether we need hard or soft links.
 LN_S="ln -s"
@@ -7330,7 +7327,7 @@ pic_flag=" -fPIC -DPIC"
 pic_mode=default
 
 # What is the maximum length of a command?
-max_cmd_len=98304
+max_cmd_len=196608
 
 # Does compiler simultaneously support -c and -o options?
 compiler_c_o="yes"
@@ -7369,17 +7366,17 @@ whole_archive_flag_spec="\${wl}--whole-archive\$convenience \${wl}--no-whole-arc
 thread_safe_flag_spec=""
 
 # Library versioning type.
-version_type=linux
+version_type=freebsd-elf
 
 # Format of library name prefix.
 libname_spec="lib\$name"
 
 # List of archive names.  First name is the real one, the rest are links.
 # The last name is the one that the linker finds with -lNAME.
-library_names_spec="\${libname}\${release}\${shared_ext}\$versuffix \${libname}\${release}\${shared_ext}\$major \$libname\${shared_ext}"
+library_names_spec="\${libname}\${release}\${shared_ext}\$versuffix \${libname}\${release}\${shared_ext} \$libname\${shared_ext}"
 
 # The coded name of the library, if different from the real name.
-soname_spec="\${libname}\${release}\${shared_ext}\$major"
+soname_spec=""
 
 # Commands used to build and install an old-style archive.
 RANLIB="ranlib"
@@ -7409,11 +7406,11 @@ striplib="strip --strip-unneeded"
 
 # Dependencies to place before the objects being linked to create a
 # shared library.
-predep_objects="/usr/lib/gcc/x86_64-linux-gnu/4.3.2/../../../../lib/crti.o /usr/lib/gcc/x86_64-linux-gnu/4.3.2/crtbeginS.o"
+predep_objects="/usr/lib/crti.o /usr/lib/crtbeginS.o"
 
 # Dependencies to place after the objects being linked to create a
 # shared library.
-postdep_objects="/usr/lib/gcc/x86_64-linux-gnu/4.3.2/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/4.3.2/../../../../lib/crtn.o"
+postdep_objects="/usr/lib/crtendS.o /usr/lib/crtn.o"
 
 # Dependencies to place before the objects being linked to create a
 # shared library.
@@ -7425,11 +7422,11 @@ postdeps="-lstdc++ -lm -lgcc_s -lc -lgcc_s"
 
 # The directories searched by this compiler when creating a shared
 # library
-compiler_lib_search_dirs="/usr/lib/gcc/x86_64-linux-gnu/4.3.2 /usr/lib/gcc/x86_64-linux-gnu/4.3.2 /usr/lib/gcc/x86_64-linux-gnu/4.3.2/../../../../lib /lib/../lib /usr/lib/../lib /usr/lib/gcc/x86_64-linux-gnu/4.3.2/../../.."
+compiler_lib_search_dirs="/usr/lib /usr/lib"
 
 # The library search path used internally by the compiler when linking
 # a shared library.
-compiler_lib_search_path="-L/usr/lib/gcc/x86_64-linux-gnu/4.3.2 -L/usr/lib/gcc/x86_64-linux-gnu/4.3.2 -L/usr/lib/gcc/x86_64-linux-gnu/4.3.2/../../../../lib -L/lib/../lib -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/4.3.2/../../.."
+compiler_lib_search_path="-L/usr/lib -L/usr/lib"
 
 # Method to check whether dependent libraries are shared objects.
 deplibs_check_method="pass_all"
@@ -7444,7 +7441,7 @@ allow_undefined_flag=""
 no_undefined_flag=""
 
 # Commands used to finish a libtool library installation in a directory.
-finish_cmds="PATH=\\\"\\\$PATH:/sbin\\\" ldconfig -n \$libdir"
+finish_cmds=""
 
 # Same as above, but a single script fragment to be evaled but not shown.
 finish_eval=""
@@ -7465,7 +7462,7 @@ runpath_var=LD_RUN_PATH
 shlibpath_var=LD_LIBRARY_PATH
 
 # Is shlibpath searched before the hard-coded library search path?
-shlibpath_overrides_runpath=no
+shlibpath_overrides_runpath=yes
 
 # How to hardcode a shared library path into an executable.
 hardcode_action=immediate
@@ -7506,13 +7503,13 @@ hardcode_automatic=no
 variables_saved_for_relink="PATH LD_LIBRARY_PATH LD_RUN_PATH GCC_EXEC_PREFIX COMPILER_PATH LIBRARY_PATH"
 
 # Whether libtool must link a program against all its dependency libraries.
-link_all_deplibs=no
+link_all_deplibs=unknown
 
 # Compile-time system search path for libraries
-sys_lib_search_path_spec="/usr/lib/gcc/x86_64-linux-gnu/4.3.2 /usr/lib /lib"
+sys_lib_search_path_spec="/usr/lib"
 
 # Run-time system search path for libraries
-sys_lib_dlsearch_path_spec="/lib /usr/lib /usr/local/lib /lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu /usr/local/lib64 /usr/lib /var/lenny-386-chroot/lib /var/lenny-386-chroot/usr/lib /var/lenny-386-chroot/usr/X11R6/lib /var/lenny-386-chroot/usr/local/lib "
+sys_lib_dlsearch_path_spec="/lib /usr/lib"
 
 # Fix the shell variable $srcfile for the compiler.
 fix_srcfile_path=""
