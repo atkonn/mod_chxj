@@ -261,6 +261,7 @@ if test "x$with_apu_config" != "x" ; then
 fi
 
 
+CFLAGS="${CFLAGS} -DLIBICONV_PLUG "
 case $host_os in
   freebsd*)
     CFLAGS="${CFLAGS} -I/usr/local/include "
@@ -270,6 +271,13 @@ esac
 if test "x${with_apache_header}" = "x" ; then
   with_apache_header=`${APXS} -q includedir`
 fi
+
+# Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+
+# Checks for library functions.
+AC_FUNC_MALLOC
+AC_CHECK_FUNCS([open mmap close memset memcpy strcasecmp strncasecmp strstr])
 
 LIBS="${LIBS} `${WAND_CONFIG} --ldflags` `${WAND_CONFIG} --libs | sed -e s/-ldpstk//` "
 LIBS="${LIBS} `${APR_CONFIG} --ldflags` `${APR_CONFIG} --libs` "
@@ -331,12 +339,6 @@ else
   AC_DEFINE([HAVE_AP_REGEX_H], [1], [Define to 1 if you have the <ap_regex.h> header file.])
 fi
 
-# Checks for typedefs, structures, and compiler characteristics.
-AC_C_CONST
-
-# Checks for library functions.
-AC_FUNC_MALLOC
-AC_CHECK_FUNCS([open mmap close memset memcpy strcasecmp strncasecmp strstr])
 
 AC_SUBST(with_apache_header)
 AC_SUBST(CC)
