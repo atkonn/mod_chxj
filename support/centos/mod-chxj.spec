@@ -1,4 +1,4 @@
-%define version 0.12.39rc6
+%define version 0.12.39rc7
 
 Summary: CHTML to HDML,XHTML,JHTML convert module for Apache HTTPD.
 Name:  mod_chxj
