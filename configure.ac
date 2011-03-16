@@ -1,6 +1,6 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
-AC_INIT([mod_chxj],[0.12.39],[konn@users.sourceforge.jp])
+AC_INIT([mod_chxj],[0.12.40rc1],[konn@users.sourceforge.jp])
 AC_PREREQ(2.59)
 AC_CONFIG_SRCDIR([src/mod_chxj.c])
 AC_CANONICAL_TARGET
@@ -349,5 +349,5 @@ AC_SUBST(CFLAGS)
 AC_SUBST(OPENSSL_PATH)
 
 
-AC_CONFIG_FILES([Makefile src/Makefile support/centos/mod-chxj.spec])
+AC_CONFIG_FILES([Makefile src/Makefile support/centos/mod-chxj.spec support/freebsd/Makefile])
 AC_OUTPUT
