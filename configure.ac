@@ -354,5 +354,5 @@ AC_SUBST(APU_CONFIG)
 AC_SUBST(OPENSSL_PATH)
 
 
-AC_CONFIG_FILES([Makefile src/Makefile support/centos/mod-chxj.spec])
+AC_CONFIG_FILES([Makefile src/Makefile support/centos/mod-chxj.spec support/freebsd/Makefile])
 AC_OUTPUT
