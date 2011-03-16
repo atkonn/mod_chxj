@@ -20163,6 +20163,7 @@ if test "x$with_apu_config" != "x" ; then
   APU_CONFIG=$with_apu_config
 fi
 
+<<<<<<< HEAD:src/css/configure
 CFLAGS="${CFLAGS} -DLIBICONV_PLUG -I/usr/local/include"
 LIBS="${LIBS} `${APR_CONFIG} --ldflags` `${APR_CONFIG} --libs` "
 LIBS="${LIBS} `${APU_CONFIG} --ldflags` `${APU_CONFIG} --libs` "
@@ -20170,6 +20171,8 @@ CFLAGS="${CFLAGS} `${APR_CONFIG} --includes` `${APR_CONFIG} --cflags` `${APR_CON
 CFLAGS="${CFLAGS} `${APU_CONFIG} --includes`"
 
 
+=======
+>>>>>>> branch_0.13.0:src/css/configure
 # Checks for typedefs, structures, and compiler characteristics.
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for an ANSI C-conforming const" >&5
 $as_echo_n "checking for an ANSI C-conforming const... " >&6; }
@@ -20264,6 +20267,14 @@ _ACEOF
 
 fi
 done
+
+
+CFLAGS="${CFLAGS} -DLIBICONV_PLUG "
+LIBS="${LIBS} `${APR_CONFIG} --ldflags` `${APR_CONFIG} --libs` "
+LIBS="${LIBS} `${APU_CONFIG} --ldflags` `${APU_CONFIG} --libs` "
+CFLAGS="${CFLAGS} `${APR_CONFIG} --includes` `${APR_CONFIG} --cflags` `${APR_CONFIG} --cppflags`"
+CFLAGS="${CFLAGS} `${APU_CONFIG} --includes`"
+
 
 
 

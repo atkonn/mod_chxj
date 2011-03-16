@@ -23,3 +23,5 @@ automake -a -c
 autoconf
 rm -rf autom4te.cache
 
+(cd ./src/css; ./buildconf.sh)
+

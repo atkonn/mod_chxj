@@ -1,3 +1,31 @@
+libapache2-mod-chxj (0.13.1-1) unstable; urgency=low
+
+  * Internal improvement
+    - Image converter
+      + To use mmap as much as possible.
+      + Changed to one time to expect it by two cash file reading in
+        turn.
+      + To delete it with htcacheclean, the extension in the cache file is
+        changed to ". data".
+      + When the image is converted, it changes to delete output_filter.
+    - Model informational specific function
+      + It changes to use the judgment result when judged once.
+      + Fixed bug that ua parameter is not effective in image conversion
+        processing
+    - Optimization
+      + It is changed that apply_convrules is uselessly called two or more
+        times.
+  * Fixed Bug.
+    - The bug to which the dynamic image conversion is not done is changed if
+      it has and [kan] is not divided and it is not assumed ChxjConvRule
+      EngineOn though it is ChxjImageEngine On.
+    - ''-DLIBICONV_PLUG'' is added to the compiler option.
+    - Static link compulsion of libserf.
+  * Added New Features.
+    - Addition of EngineOn unnecessary version EmojiOnly mode
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Tue, 15 Mar 2011 19:20:17 +0900
+
 libapache2-mod-chxj (0.13.0-1) unstable; urgency=low
 
   * Added Features.

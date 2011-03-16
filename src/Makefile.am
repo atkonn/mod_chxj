@@ -69,7 +69,7 @@ SERF_OBJECTS = serf/buckets/aggregate_buckets.o \
 
 libmod_chxj_la_CFLAGS = -O2 -prefer-pic @QDEFS@ @DDEFS@ -I. -I../include -I@with_apache_header@  -I./serf -I./css/include
 AM_CFLAGS = @CFLAGS@ -O2 -prefer-pic @QDEFS@ @DDEFS@ -I. -I../include -I@with_apache_header@
-libmod_chxj_la_LIBADD = serf/.libs/libserf-0.a $(SERF_OBJECTS) css/src/.libs/libscss.a
+libmod_chxj_la_LIBADD = serf/.libs/libserf-0.a css/src/.libs/libscss.a $(SERF_OBJECTS)
 lib_LTLIBRARIES = libmod_chxj.la
 
 make_so:
