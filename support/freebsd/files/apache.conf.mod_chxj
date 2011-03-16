@@ -1,0 +1,38 @@
+
+# sample 
+
+LoadModule chxj_module         libexec/apache22/mod_chxj.so
+AddModule mod_chxj.c
+
+<IfModule mod_chxj.c>
+  ChxjLoadDeviceData  etc/apache22/chxj/device_data.xml
+  ChxjLoadEmojiData   etc/apache22/chxj/emoji.xml
+  ChxjImageCacheDir   /tmp
+  ChxjImageCacheLimit 10000000
+
+
+  ChxjCookieLazyMode        true
+  ChxjCookieStoreType       "dbm"
+  ChxjCookieDir             /tmp
+  ChxjCookieTimeout         3600
+#  ChxjCookieMysqlHost       localhost
+#  ChxjCookieMysqlPort       3306
+#  ChxjCookieMysqlDatabase   cookie_db
+#  ChxjCookieMysqlUsername   cookie_user
+#  ChxjCookieMysqlPassword   cookie_pass
+#  ChxjCookieMysqlSocketPath /var/lib/mysql/mysql.sock
+#  ChxjCookieMysqlCharset    utf8
+#  ChxjCookieMysqlTablename  cookie
+
+
+ ChxjConvertRule "^/.*$"     "EngineOn,CookieOn,OverwriteXClientType"  "UTF8"
+
+
+ <Location /images>
+   ChxjImageEngine On
+   ChxjImageCopyright "-"
+   ChxjImageCacheDir /tmp
+   ChxjImageCacheLimit 10485760
+ </Location>
+</IfModule>
+
