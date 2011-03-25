@@ -87,6 +87,14 @@ chxj_specified_device(request_rec *r, const char *user_agent)
    * Get per request config.
    */
   request_conf = (mod_chxj_req_config *)chxj_get_module_config(r->request_config, &chxj_module);
+  if (!request_conf) {
+    request_conf = apr_pcalloc(r->pool, sizeof(mod_chxj_req_config));
+    request_conf->spec = NULL;
+    request_conf->user_agent = NULL;
+    request_conf->f = NULL;
+    request_conf->entryp = NULL;
+    chxj_set_module_config(r->request_config, &chxj_module, request_conf);
+  }
   if (user_agent) {
     request_conf->user_agent = apr_pstrdup(r->pool, user_agent);
   }
