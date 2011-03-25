@@ -6,13 +6,13 @@
 #
 
 PORTNAME=       mod_chxj
-PORTVERSION=    0.12.40rc1
+PORTVERSION=    0.12.40
 PORTREVISION=   1
 PORTEPOCH=      1
 CATEGORIES=     www
 MASTER_SITES=   ${MASTER_SITE_SOURCEFORGE_JP:=modchxj/51283/}
 PKGNAMEPREFIX=  ${APACHE_PKGNAMEPREFIX}
-DISTNAME=       mod-chxj_0.12.40rc1
+DISTNAME=       mod-chxj_0.12.40
 EXTRACT_SUFX=   .src.tar.gz
 
 MAINTAINER=     konno@qsdn.co.jp

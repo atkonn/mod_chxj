@@ -1727,7 +1727,6 @@ chxj_insert_filter(request_rec *r)
 
   DBG(r, "REQ[%X] start %s()", TO_ADDR(r),__func__);
 
-  dconf = chxj_get_module_config(r->per_dir_config, &chxj_module);
   req_conf = chxj_get_module_config(r->request_config, &chxj_module);
 
   /* we get User-Agent from CHXJ_HTTP_USER_AGENT header if any */
@@ -1743,10 +1742,12 @@ chxj_insert_filter(request_rec *r)
     DBG(r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
     return;
   }
+  dconf = chxj_get_module_config(r->per_dir_config, &chxj_module);
 
   if (user_agent 
-      && (    (req_conf->user_agent && strcmp(user_agent, req_conf->user_agent))
-            ||(!req_conf->user_agent))) {
+      && (    (req_conf && req_conf->user_agent && strcmp(user_agent, req_conf->user_agent))
+            ||(!req_conf)
+            ||(req_conf && !req_conf->user_agent))) {
     spec = chxj_specified_device(r, user_agent);
   }
   else {
