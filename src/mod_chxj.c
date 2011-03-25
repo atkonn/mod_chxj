@@ -1744,7 +1744,9 @@ chxj_insert_filter(request_rec *r)
     return;
   }
 
-  if (user_agent && req_conf->user_agent && strcmp(user_agent, req_conf->user_agent)) {
+  if (user_agent 
+      && (    (req_conf->user_agent && strcmp(user_agent, req_conf->user_agent))
+            ||(!req_conf->user_agent))) {
     spec = chxj_specified_device(r, user_agent);
   }
   else {
