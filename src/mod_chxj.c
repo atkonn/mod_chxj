@@ -180,14 +180,6 @@ chxj_headers_fixup(request_rec *r)
   char                *contentLength;
 
   DBG(r, "REQ[%X] start %s()", TO_ADDR(r),__func__);
-  if (r->main) {
-    DBG(r, "REQ[%X] detect internal redirect.", TO_ADDR(r));
-    DBG(r, "REQ[%X] end %s()",  TO_ADDR(r),__func__);
-    return DECLINED;
-  }
-
-  dconf = chxj_get_module_config(r->per_dir_config, &chxj_module);
-
   user_agent = (char*)apr_table_get(r->headers_in, HTTP_USER_AGENT);
 
   /*
@@ -202,6 +194,12 @@ chxj_headers_fixup(request_rec *r)
     request_conf->entryp = NULL;
     chxj_set_module_config(r->request_config, &chxj_module, request_conf);
   }
+  if (r->main) {
+    DBG(r, "REQ[%X] detect internal redirect.", TO_ADDR(r));
+    DBG(r, "REQ[%X] end %s()",  TO_ADDR(r),__func__);
+    return DECLINED;
+  }
+  dconf = chxj_get_module_config(r->per_dir_config, &chxj_module);
 
   /*
    * check and get mobile type.
