@@ -54,7 +54,7 @@ chxj_encoding(request_rec *r, const char *src, apr_size_t *len)
     return (char *)apr_pstrdup(r->pool, "");
   }
 
-  req_conf = chxj_get_module_config(r->request_config, &chxj_module);
+  req_conf = chxj_get_req_config(r);
   /*-------------------------------------------------------------------------*/
   /* already setup entryp if request_conf->user_agent is not null            */
   /*-------------------------------------------------------------------------*/
@@ -278,7 +278,7 @@ chxj_rencoding(request_rec *r, const char *src, apr_size_t *len)
     return (char*)src;
   }
 
-  req_conf = chxj_get_module_config(r->request_config, &chxj_module);
+  req_conf = chxj_get_req_config(r);
   /*-------------------------------------------------------------------------*/
   /* already setup entryp if request_conf->user_agent is not null            */
   /*-------------------------------------------------------------------------*/

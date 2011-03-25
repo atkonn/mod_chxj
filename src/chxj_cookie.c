@@ -138,7 +138,7 @@ chxj_save_cookie(request_rec *r)
   has_refer = 0;
 
   dconf = chxj_get_module_config(r->per_dir_config, &chxj_module);
-  req_conf = chxj_get_module_config(r->request_config, &chxj_module);
+  req_conf = chxj_get_req_config(r);
 
   /*-------------------------------------------------------------------------*/
   /* already setup entryp if request_conf->user_agent is not null            */
@@ -377,7 +377,7 @@ chxj_update_cookie(request_rec *r, cookie_t *old_cookie)
   cookie->cookie_id = NULL;
 
   dconf = chxj_get_module_config(r->per_dir_config, &chxj_module);
-  req_conf = chxj_get_module_config(r->request_config, &chxj_module);
+  req_conf = chxj_get_req_config(r);
   /*-------------------------------------------------------------------------*/
   /* already setup entryp if request_conf->user_agent is not null            */
   /*-------------------------------------------------------------------------*/
@@ -500,7 +500,7 @@ chxj_load_cookie(request_rec *r, char *cookie_id)
 
 
   dconf = chxj_get_module_config(r->per_dir_config, &chxj_module);
-  req_conf = chxj_get_module_config(r->request_config, &chxj_module);
+  req_conf = chxj_get_req_config(r);
 
   /*-------------------------------------------------------------------------*/
   /* already setup entryp if request_conf->user_agent is not null            */

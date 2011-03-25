@@ -287,11 +287,11 @@ chxj_img_conv_format_handler(request_rec *r)
   /*--------------------------------------------------------------------------*/
   /* User-Agent to spec                                                       */
   /*--------------------------------------------------------------------------*/
+  req_conf = chxj_get_req_config(r);
   if (qsp->user_agent) {
     user_agent = apr_pstrdup(r->pool, qsp->user_agent);
   }
   else {
-    req_conf = chxj_get_module_config(r->request_config, &chxj_module);
     /*-----------------------------------------------------------------------*/
     /* already setup entryp if request_conf->user_agent is not null          */
     /*-----------------------------------------------------------------------*/
@@ -311,17 +311,16 @@ chxj_img_conv_format_handler(request_rec *r)
 
 
 
-  mod_chxj_req_config *request_conf = chxj_get_module_config(r->request_config, &chxj_module);
   if (qsp->ua_flag == UA_IGN)
     spec = &v_ignore_spec;
   else {
-    if (request_conf->user_agent 
+    if (req_conf->user_agent 
         && user_agent 
-        && strcmp(request_conf->user_agent, user_agent) != 0) {
+        && strcmp(req_conf->user_agent, user_agent) != 0) {
       spec = chxj_specified_device(r, user_agent);
     }
     else {
-      spec = request_conf->spec;
+      spec = req_conf->spec;
     }
   }
 
@@ -378,11 +377,11 @@ chxj_convert_image(request_rec *r, const char **src, apr_size_t *len)
   /*--------------------------------------------------------------------------*/
   /* User-Agent to spec                                                       */
   /*--------------------------------------------------------------------------*/
+  req_conf = chxj_get_req_config(r);
   if (qsp->user_agent) {
     user_agent = apr_pstrdup(r->pool, qsp->user_agent);
   }
   else {
-    req_conf = chxj_get_module_config(r->request_config, &chxj_module);
     /*-----------------------------------------------------------------------*/
     /* already setup entryp if request_conf->user_agent is not null          */
     /*-----------------------------------------------------------------------*/
@@ -403,14 +402,13 @@ chxj_convert_image(request_rec *r, const char **src, apr_size_t *len)
   if (qsp->ua_flag == UA_IGN)
     spec = &v_ignore_spec;
   else {
-    mod_chxj_req_config *request_conf = chxj_get_module_config(r->request_config, &chxj_module);
-    if (request_conf->user_agent
+    if (req_conf->user_agent
         && user_agent
-        && strcmp(request_conf->user_agent, user_agent) != 0) {
+        && strcmp(req_conf->user_agent, user_agent) != 0) {
       spec = chxj_specified_device(r, user_agent);
     }
     else {
-      spec = request_conf->spec;
+      spec = req_conf->spec;
     }
   }
 
