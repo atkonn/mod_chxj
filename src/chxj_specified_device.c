@@ -103,7 +103,7 @@ chxj_specified_device(request_rec *r, const char *user_agent)
   
   DBG(r, "REQ[%X] start %s()", TO_ADDR(r),__func__);
 
-  request_conf = (mod_chxj_req_config *)chxj_get_module_config(r->request_config, &chxj_module);
+  request_conf = chxj_get_req_config(r);
   if (user_agent) {
     request_conf->user_agent = apr_pstrdup(r->pool, user_agent);
   }
