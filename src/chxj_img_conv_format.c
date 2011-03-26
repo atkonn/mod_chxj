@@ -270,7 +270,7 @@ chxj_img_conv_format_handler(request_rec *r)
 
   qsp = s_get_query_string_param(r);
   conf = chxj_get_module_config(r->per_dir_config, &chxj_module);
-  req_conf = chxj_get_module_config(r->request_config, &chxj_module);
+  req_conf = chxj_get_req_config(r);
   if (conf == NULL) {
     DBG(r,"REQ[%X] conf is null",TO_ADDR(r));
     DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
@@ -315,13 +315,16 @@ chxj_img_conv_format_handler(request_rec *r)
   if (qsp->ua_flag == UA_IGN)
     spec = &v_ignore_spec;
   else {
-    if (req_conf->user_agent 
-        && user_agent 
-        && strcmp(req_conf->user_agent, user_agent) != 0) {
-      spec = chxj_specified_device(r, user_agent);
-    }
-    else {
-      spec = req_conf->spec;
+    if (user_agent) {
+      if (!req_conf->spec || !req_conf->user_agent) {
+        spec = chxj_specified_device(r, user_agent);
+      }
+      else if (req_conf->user_agent && strcmp(req_conf->user_agent, user_agent) != 0) {
+        spec = chxj_specified_device(r, user_agent);
+      }
+      else {
+        spec = req_conf->spec;
+      }
     }
   }
 
@@ -375,7 +378,7 @@ chxj_convert_image(request_rec *r, const char **src, apr_size_t *len)
     return NULL;
   }
 
-  mod_chxj_req_config *req_conf = chxj_get_module_config(r->request_config, &chxj_module);
+  mod_chxj_req_config *req_conf = chxj_get_req_config(r);
   /*--------------------------------------------------------------------------*/
   /* User-Agent to spec                                                       */
   /*--------------------------------------------------------------------------*/
@@ -403,13 +406,16 @@ chxj_convert_image(request_rec *r, const char **src, apr_size_t *len)
   if (qsp->ua_flag == UA_IGN)
     spec = &v_ignore_spec;
   else {
-    if (req_conf->user_agent
-        && user_agent
-        && strcmp(req_conf->user_agent, user_agent) != 0) {
-      spec = chxj_specified_device(r, user_agent);
-    }
-    else {
-      spec = req_conf->spec;
+    if (user_agent) {
+      if (!req_conf->spec || !req_conf->user_agent) {
+        spec = chxj_specified_device(r, user_agent);
+      }
+      else if (req_conf->user_agent && strcmp(req_conf->user_agent, user_agent) != 0) {
+        spec = chxj_specified_device(r, user_agent);
+      }
+      else {
+        spec = req_conf->spec;
+      }
     }
   }
 

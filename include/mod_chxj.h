@@ -539,6 +539,7 @@ extern char *chxj_node_convert_chxjif_only(
   apr_size_t   *len
 );
 extern void chxj_remove_filter(request_rec *r);
+extern mod_chxj_req_config *chxj_get_req_config(request_rec *r);
 
 #define IMAGE_CACHE_LIMIT_FMT_LEN  (20)
 

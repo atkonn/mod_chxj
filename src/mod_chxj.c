@@ -166,6 +166,22 @@ static void s_add_cookie_id_if_has_location_header(request_rec *r, cookie_t *coo
 static void s_clear_cookie_header(request_rec *r, device_table *spec);
 static void s_add_no_cache_headers(request_rec *r, chxjconvrule_entry  *entryp);
 
+mod_chxj_req_config *
+chxj_get_req_config(request_rec *r)
+{
+  mod_chxj_req_config *request_conf; 
+  request_conf = (mod_chxj_req_config *)chxj_get_module_config(r->request_config, &chxj_module);
+  if (! request_conf) {
+    request_conf = apr_pcalloc(r->pool, sizeof(mod_chxj_req_config));
+    request_conf->spec = NULL;
+    request_conf->user_agent = NULL;
+    request_conf->f = NULL;
+    request_conf->entryp = NULL;
+    chxj_set_module_config(r->request_config, &chxj_module, request_conf);
+  }
+  return request_conf;
+}
+
 /**
  * Only when User-Agent is specified, the User-Agent header is camouflaged. 
  *
@@ -183,20 +199,12 @@ chxj_headers_fixup(request_rec *r)
   char                *contentLength;
 
   DBG(r, "REQ[%X] start %s()", TO_ADDR(r), __func__);
+
+  request_conf = chxj_get_req_config(r);
   if (r->main) {
     DBG(r, "REQ[%X] detect internal redirect.", TO_ADDR(r));
     DBG(r, "REQ[%X] end %s()",  TO_ADDR(r),__func__);
     return DECLINED;
-  }
-
-  request_conf = (mod_chxj_req_config *)chxj_get_module_config(r->request_config, &chxj_module);
-  if (!request_conf) {
-    request_conf = apr_palloc(r->pool, sizeof(mod_chxj_req_config));
-    request_conf->spec       = NULL;
-    request_conf->user_agent = NULL;
-    request_conf->f          = NULL;
-    request_conf->entryp     = NULL;
-    chxj_set_module_config(r->request_config, &chxj_module, request_conf);
   }
   dconf = chxj_get_module_config(r->per_dir_config, &chxj_module);
 
@@ -443,7 +451,7 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
   dst  = apr_pstrcat(r->pool, (char *)*src, NULL);
 
   dconf = chxj_get_module_config(r->per_dir_config, &chxj_module);
-  request_conf = chxj_get_module_config(r->request_config, &chxj_module);
+  request_conf = chxj_get_req_config(r);
 
 
   /*-------------------------------------------------------------------------*/
@@ -1538,16 +1546,21 @@ chxj_input_handler(request_rec *r)
   apr_pool_create(&pool, r->pool);
 
   dconf      = chxj_get_module_config(r->per_dir_config, &chxj_module);
-  request_conf = chxj_get_module_config(r->request_config, &chxj_module);
+  request_conf = chxj_get_req_config(r);
   user_agent = (char*)apr_table_get(r->headers_in, CHXJ_HTTP_USER_AGENT);
   if (!user_agent) {
     user_agent = (char*)apr_table_get(r->headers_in, HTTP_USER_AGENT);
   }
-  if (user_agent && request_conf->user_agent && strcmp(user_agent, request_conf->user_agent)) {
-    spec = chxj_specified_device(r, user_agent);
-  }
-  else {
-    spec = request_conf->spec;
+  if (user_agent) {
+    if (!request_conf->spec || !request_conf->user_agent) {
+      spec = chxj_specified_device(r, user_agent);
+    }
+    else if (request_conf->user_agent && strcmp(user_agent, request_conf->user_agent)) {
+      spec = chxj_specified_device(r, user_agent);
+    }
+    else {
+      spec = request_conf->spec;
+    }
   }
 
   /*-------------------------------------------------------------------------*/
@@ -1786,7 +1799,7 @@ chxj_insert_filter(request_rec *r)
   DBG(r, "REQ[%X] start %s()", TO_ADDR(r),__func__);
 
   dconf = chxj_get_module_config(r->per_dir_config, &chxj_module);
-  req_conf = chxj_get_module_config(r->request_config, &chxj_module);
+  req_conf = chxj_get_req_config(r);
 
   /* we get User-Agent from CHXJ_HTTP_USER_AGENT header if any */
   user_agent = (char *)apr_table_get(r->headers_in, CHXJ_HTTP_USER_AGENT);
@@ -1802,13 +1815,18 @@ chxj_insert_filter(request_rec *r)
     return;
   }
 
-  if (user_agent && req_conf->user_agent && strcmp(user_agent, req_conf->user_agent)) {
-    spec = chxj_specified_device(r, user_agent);
+  if (user_agent) {
+    if (!req_conf->spec || !req_conf->user_agent) {
+      spec = chxj_specified_device(r, user_agent);
+    }
+    else if (req_conf->user_agent && strcmp(user_agent, req_conf->user_agent)) {
+      spec = chxj_specified_device(r, user_agent);
+    }
+    else {
+      spec = req_conf->spec;
+    }
   }
-  else {
-    spec = req_conf->spec;
-  }
-  req_conf = chxj_get_module_config(r->request_config, &chxj_module);
+  req_conf = chxj_get_req_config(r);
   /*-------------------------------------------------------------------------*/
   /* already setup entryp if request_conf->user_agent is not null            */
   /*-------------------------------------------------------------------------*/
@@ -1880,7 +1898,7 @@ chxj_remove_filter(request_rec *r)
   mod_chxj_req_config *req_conf;
 
   DBG(r, "REQ[%X] start %s()", TO_ADDR(r),__func__);
-  req_conf = chxj_get_module_config(r->request_config, &chxj_module);
+  req_conf = chxj_get_req_config(r);
   if (req_conf && req_conf->f) {
     ap_remove_output_filter(req_conf->f);
     DBG(r, "REQ[%X] REMOVE Output Filter", TO_ADDR(r));
