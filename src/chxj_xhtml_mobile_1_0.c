@@ -591,6 +591,7 @@ s_xhtml_search_emoji(xhtml_t *xhtml, char *txt, char **rslt)
   if (spec == NULL) {
     DBG(r,"REQ[%X] spec is NULL",TO_ADDR(r));
   }
+  DBG(r,"REQ[%X] conf[%X] is NULL",TO_ADDR(r),TO_ADDR(xhtml->conf));
 
   for (ee = xhtml->conf->emoji;
        ee;
@@ -606,43 +607,115 @@ s_xhtml_search_emoji(xhtml_t *xhtml, char *txt, char **rslt)
     &&  strlen(ee->imode->string) > 0
     &&  strncasecmp(ee->imode->string, txt, strlen(ee->imode->string)) == 0) {
       if (spec == NULL || spec->emoji_type == NULL) {
-        *rslt = apr_psprintf(r->pool,
-                        "<img localsrc=%s>",
-                        ee->ezweb->typeA);
+        if (ee->ezweb != NULL && ee->ezweb->typeA != NULL) {
+          if (xhtml->conf->use_emoji_image 
+              && xhtml->conf->emoji_image_url 
+              && strcasecmp(ee->ezweb->typeA,"image") == 0) {
+            *rslt = apr_psprintf(r->pool, "<img src=\"%s/%d\" />",xhtml->conf->emoji_image_url, ee->no);
+          }
+          else if (strncasecmp(ee->ezweb->typeA,"raw:",4) == 0) {
+            *rslt = apr_psprintf(r->pool,"%s",&(ee->ezweb->typeA[4]));
+          }
+          else {
+            *rslt = apr_psprintf(r->pool,
+                            "<img localsrc=%s>",
+                            ee->ezweb->typeA);
+          } 
+        }
         return strlen(ee->imode->string);
       }
 
       if (strcasecmp(xhtml->spec->emoji_type, "a") == 0) {
-        *rslt = apr_psprintf(r->pool,
-                        "<img localsrc=%s>",
-                        ee->ezweb->typeA);
+        if (ee->ezweb != NULL && ee->ezweb->typeA != NULL) {
+          if (xhtml->conf->use_emoji_image 
+              && xhtml->conf->emoji_image_url 
+              && strcasecmp(ee->ezweb->typeA,"image") == 0) {
+            *rslt = apr_psprintf(r->pool, "<img src=\"%s/%d\" />",xhtml->conf->emoji_image_url, ee->no);
+          }
+          else if (strncasecmp(ee->ezweb->typeA,"raw:",4) == 0) {
+            *rslt = apr_psprintf(r->pool,"%s",&(ee->ezweb->typeA[4]));
+          }
+          else {
+            *rslt = apr_psprintf(r->pool,
+                            "<img localsrc=%s>",
+                            ee->ezweb->typeA);
+          }
+        }
         return strlen(ee->imode->string);
       } 
       else
       if (strcasecmp(xhtml->spec->emoji_type, "b") == 0) {
-        *rslt = apr_psprintf(r->pool,
-                        "<img localsrc=%s>",
-                        ee->ezweb->typeB);
+        if (ee->ezweb != NULL && ee->ezweb->typeB != NULL) {
+          if (xhtml->conf->use_emoji_image
+              && xhtml->conf->emoji_image_url
+              && strcasecmp(ee->ezweb->typeB,"image") == 0) {
+            *rslt = apr_psprintf(r->pool, "<img src=\"%s/%d\" />",xhtml->conf->emoji_image_url, ee->no);
+          }
+          else if (strncasecmp(ee->ezweb->typeB,"raw:",4) == 0) {
+            *rslt = apr_psprintf(r->pool,"%s",&(ee->ezweb->typeB[4]));
+          }
+          else {
+            *rslt = apr_psprintf(r->pool,
+                            "<img localsrc=%s>",
+                            ee->ezweb->typeB);
+          }
+        }
         return strlen(ee->imode->string);
       }
       else
       if (strcasecmp(xhtml->spec->emoji_type, "c") == 0) {
-        *rslt = apr_psprintf(r->pool,
-                        "<img localsrc=%s>",
-                        ee->ezweb->typeC);
+        if (ee->ezweb != NULL && ee->ezweb->typeC != NULL) {
+          if (xhtml->conf->use_emoji_image
+              && xhtml->conf->emoji_image_url
+              && strcasecmp(ee->ezweb->typeC,"image") == 0) {
+            *rslt = apr_psprintf(r->pool, "<img src=\"%s/%d\" />",xhtml->conf->emoji_image_url, ee->no);
+          }
+          else if (strncasecmp(ee->ezweb->typeC,"raw:",4) == 0) {
+            *rslt = apr_psprintf(r->pool,"%s",&(ee->ezweb->typeC[4]));
+          }
+          else {
+            *rslt = apr_psprintf(r->pool,
+                            "<img localsrc=%s>",
+                            ee->ezweb->typeC);
+          }
+        }
         return strlen(ee->imode->string);
       }
       else
       if (strcasecmp(xhtml->spec->emoji_type, "d") == 0) {
-        *rslt = apr_psprintf(r->pool,
-                        "<img localsrc=%s>",
-                        ee->ezweb->typeD);
+        if (ee->ezweb != NULL && ee->ezweb->typeD != NULL) {
+          if (xhtml->conf->use_emoji_image
+              && xhtml->conf->emoji_image_url
+              && strcasecmp(ee->ezweb->typeD,"image") == 0) {
+            *rslt = apr_psprintf(r->pool, "<img src=\"%s/%d\" />",xhtml->conf->emoji_image_url, ee->no);
+          }
+          else if (strncasecmp(ee->ezweb->typeD,"raw:",4) == 0) {
+            *rslt = apr_psprintf(r->pool,"%s",&(ee->ezweb->typeD[4]));
+          }
+          else {
+            *rslt = apr_psprintf(r->pool,
+                            "<img localsrc=%s>",
+                            ee->ezweb->typeD);
+          }
+        }
         return strlen(ee->imode->string);
       }
       else {
-        *rslt = apr_psprintf(r->pool,
-                        "<img localsrc=%s>",
-                        ee->ezweb->typeA);
+        if (ee->ezweb != NULL && ee->ezweb->typeA != NULL) {
+          if (xhtml->conf->use_emoji_image
+              && xhtml->conf->emoji_image_url
+              && strcasecmp(ee->ezweb->typeA,"image") == 0) {
+            *rslt = apr_psprintf(r->pool, "<img src=\"%s/%d\" />",xhtml->conf->emoji_image_url, ee->no);
+          }
+          else if (strncasecmp(ee->ezweb->typeA,"raw:",4) == 0) {
+            *rslt = apr_psprintf(r->pool,"%s",&(ee->ezweb->typeA[4]));
+          }
+          else {
+            *rslt = apr_psprintf(r->pool,
+                            "<img localsrc=%s>",
+                            ee->ezweb->typeA);
+          }
+        }
         return strlen(ee->imode->string);
       }
       return 0;
@@ -653,43 +726,115 @@ s_xhtml_search_emoji(xhtml_t *xhtml, char *txt, char **rslt)
     && ((unsigned char)txt[0] & 0xff) == ((unsigned char)hex1byte)
     && ((unsigned char)txt[1] & 0xff) == ((unsigned char)hex2byte)) {
       if (spec == NULL || spec->emoji_type == NULL) {
-        *rslt = apr_psprintf(r->pool,
-                        "<img localsrc=\"%s\">",
-                        ee->ezweb->typeA);
+        if (ee->ezweb != NULL && ee->ezweb->typeA != NULL) {
+          if (xhtml->conf->use_emoji_image
+              && xhtml->conf->emoji_image_url
+              && strcasecmp(ee->ezweb->typeA,"image") == 0) {
+            *rslt = apr_psprintf(r->pool, "<img src=\"%s/%d\" />",xhtml->conf->emoji_image_url, ee->no);
+          }
+          else if (strncasecmp(ee->ezweb->typeA,"raw:",4) == 0) {
+            *rslt = apr_psprintf(r->pool,"%s",&(ee->ezweb->typeA[4]));
+          }
+          else {
+            *rslt = apr_psprintf(r->pool,
+                            "<img localsrc=\"%s\">",
+                            ee->ezweb->typeA);
+          }
+        }
         return 2;
       }
 
       if (strcasecmp(xhtml->spec->emoji_type, "a") == 0) {
-        *rslt = apr_psprintf(r->pool,
-                        "<img localsrc=\"%s\">",
-                        ee->ezweb->typeA);
+        if (ee->ezweb != NULL && ee->ezweb->typeA != NULL) {
+          if (xhtml->conf->use_emoji_image
+              && xhtml->conf->emoji_image_url
+              && strcasecmp(ee->ezweb->typeA,"image") == 0) {
+            *rslt = apr_psprintf(r->pool, "<img src=\"%s/%d\" />",xhtml->conf->emoji_image_url, ee->no);
+          }
+          else if (strncasecmp(ee->ezweb->typeA,"raw:",4) == 0) {
+            *rslt = apr_psprintf(r->pool,"%s",&(ee->ezweb->typeA[4]));
+          }
+          else {
+            *rslt = apr_psprintf(r->pool,
+                            "<img localsrc=\"%s\">",
+                            ee->ezweb->typeA);
+          }
+        }
         return 2;
       } 
       else
       if (strcasecmp(xhtml->spec->emoji_type, "b") == 0) {
-        *rslt = apr_psprintf(r->pool,
-                        "<img localsrc=\"%s\">",
-                        ee->ezweb->typeB);
+        if (ee->ezweb != NULL && ee->ezweb->typeB != NULL) {
+          if (xhtml->conf->use_emoji_image
+              && xhtml->conf->emoji_image_url
+              && strcasecmp(ee->ezweb->typeB,"image") == 0) {
+            *rslt = apr_psprintf(r->pool, "<img src=\"%s/%d\" />",xhtml->conf->emoji_image_url, ee->no);
+          }
+          else if (strncasecmp(ee->ezweb->typeB,"raw:",4) == 0) {
+            *rslt = apr_psprintf(r->pool,"%s",&(ee->ezweb->typeB[4]));
+          }
+          else {
+            *rslt = apr_psprintf(r->pool,
+                            "<img localsrc=\"%s\">",
+                            ee->ezweb->typeB);
+          }
+        }
         return 2;
       }
       else
       if (strcasecmp(xhtml->spec->emoji_type, "c") == 0) {
-        *rslt = apr_psprintf(r->pool,
-                        "<img localsrc=\"%s\">",
-                        ee->ezweb->typeC);
+        if (ee->ezweb != NULL && ee->ezweb->typeC != NULL) {
+          if (xhtml->conf->use_emoji_image
+              && xhtml->conf->emoji_image_url
+              && strcasecmp(ee->ezweb->typeC,"image") == 0) {
+            *rslt = apr_psprintf(r->pool, "<img src=\"%s/%d\" />",xhtml->conf->emoji_image_url, ee->no);
+          }
+          else if (strncasecmp(ee->ezweb->typeC,"raw:",4) == 0) {
+            *rslt = apr_psprintf(r->pool,"%s",&(ee->ezweb->typeC[4]));
+          }
+          else {
+            *rslt = apr_psprintf(r->pool,
+                            "<img localsrc=\"%s\">",
+                            ee->ezweb->typeC);
+          }
+        }
         return 2;
       }
       else
       if (strcasecmp(xhtml->spec->emoji_type, "d") == 0) {
-        *rslt = apr_psprintf(r->pool,
-                        "<img localsrc=\"%s\">",
-                        ee->ezweb->typeD);
+        if (ee->ezweb != NULL && ee->ezweb->typeD != NULL) {
+          if (xhtml->conf->use_emoji_image
+              && xhtml->conf->emoji_image_url
+              && strcasecmp(ee->ezweb->typeD,"image") == 0) {
+            *rslt = apr_psprintf(r->pool, "<img src=\"%s/%d\" />",xhtml->conf->emoji_image_url, ee->no);
+          }
+          else if (strncasecmp(ee->ezweb->typeD,"raw:",4) == 0) {
+            *rslt = apr_psprintf(r->pool,"%s",&(ee->ezweb->typeD[4]));
+          }
+          else {
+            *rslt = apr_psprintf(r->pool,
+                            "<img localsrc=\"%s\">",
+                            ee->ezweb->typeD);
+          }
+        }
         return 2;
       }
       else {
-        *rslt = apr_psprintf(r->pool,
-                        "<img localsrc=\"%s\">",
-                        ee->ezweb->typeD);
+        if (ee->ezweb != NULL && ee->ezweb->typeA != NULL) {
+          if (xhtml->conf->use_emoji_image
+              && xhtml->conf->emoji_image_url
+              && strcasecmp(ee->ezweb->typeA,"image") == 0) {
+            *rslt = apr_psprintf(r->pool, "<img src=\"%s/%d\" />",xhtml->conf->emoji_image_url, ee->no);
+          }
+          else if (strncasecmp(ee->ezweb->typeA,"raw:",4) == 0) {
+            *rslt = apr_psprintf(r->pool,"%s",&(ee->ezweb->typeA[4]));
+          }
+          else {
+            *rslt = apr_psprintf(r->pool,
+                            "<img localsrc=\"%s\">",
+                            ee->ezweb->typeA);
+          }
+        }
         return 2;
       }
       return 0;
@@ -6277,6 +6422,9 @@ s_xhtml_1_0_style_tag(void *pdoc, Node *node)
   Doc           *doc;
   Attr          *attr;
   char          *type = NULL;
+  Node          *child   = NULL;
+  char          *style;
+
 
   xhtml = GET_XHTML(pdoc);
   doc     = xhtml->doc;
@@ -6297,14 +6445,23 @@ s_xhtml_1_0_style_tag(void *pdoc, Node *node)
     }
   }
 
-  Node *child = qs_get_child_node(doc, node);
-  if (type && child) {
-    char *name  = qs_get_node_name(doc, child);
-    if (STRCASEEQ('t','T',"text", name)) {
-      char *value = qs_get_node_value(doc, child);
-      DBG(doc->r,"REQ[%X] start load CSS. buf:[%s]", TO_ADDR(doc->r),value);
-      xhtml->style = chxj_css_parse_style_value(doc, xhtml->style, value);
-      DBG(doc->r,"REQ[%X] end load CSS. value:[%s]", TO_ADDR(doc->r),value);
+  if (type) {
+    style = "";
+    for (child = qs_get_child_node(doc, node);
+         child;
+         child = qs_get_next_node(doc, child)) {
+      char *name = qs_get_node_name(doc, child);
+      if (STRCASEEQ('t','T',"text", name)) {
+        char *value = qs_get_node_value(doc, child);
+        if (value && *value) {
+          style = apr_pstrcat(doc->r->pool, style, value, NULL);
+        }
+      }
+    }
+    if (strlen(style) > 0) {
+      DBG(doc->r,"REQ[%X] start load CSS. buf:[%s]", TO_ADDR(doc->r),style);
+      xhtml->style = chxj_css_parse_style_value(doc, xhtml->style, style);
+      DBG(doc->r,"REQ[%X] end load CSS. value:[%s]", TO_ADDR(doc->r),style);
     }
   }
   return xhtml->out;

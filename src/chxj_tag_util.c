@@ -496,6 +496,32 @@ chxj_chxjif_is_mine(device_table *spec, Doc *doc, Node *tag)
           return 1;
         }
       }
+      else if (STRCASEEQ('i','I',"iphone2",value)) {
+        if (spec->html_spec_type == CHXJ_SPEC_iPhone2) {
+          /* Yes , it is mine */
+          return 1;
+        }
+      }
+      else if (STRCASEEQ('i','I',"iphone3",value)) {
+        if (spec->html_spec_type == CHXJ_SPEC_iPhone3) {
+          /* Yes , it is mine */
+          return 1;
+        }
+      }
+      else if (STRCASEEQ('i','I',"iphone4",value)) {
+        if (spec->html_spec_type == CHXJ_SPEC_iPhone4) {
+          /* Yes , it is mine */
+          return 1;
+        }
+      }
+      else if (STRCASEEQ('i','I',"iphone",value)) {
+        if (spec->html_spec_type == CHXJ_SPEC_iPhone2
+            || spec->html_spec_type == CHXJ_SPEC_iPhone3
+            || spec->html_spec_type == CHXJ_SPEC_iPhone4) {
+          /* Yes , it is mine */
+          return 1;
+        }
+      }
       else if (STRCASEEQ('c','C',"chtml",value)) {
         switch (spec->html_spec_type) {
         case CHXJ_SPEC_Chtml_1_0:

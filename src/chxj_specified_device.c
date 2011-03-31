@@ -375,6 +375,15 @@ s_specified_device_from_tsv(request_rec *r,device_table *spec,const char *user_a
         else if (STRCASEEQ('j','J',"jxhtml",val)) {
           spec->html_spec_type = CHXJ_SPEC_Jxhtml;
         }
+        else if (STRCASEEQ('i','I',"iphone2",val)) {
+          spec->html_spec_type = CHXJ_SPEC_iPhone2;
+        }
+        else if (STRCASEEQ('i','I',"iphone3",val)) {
+          spec->html_spec_type = CHXJ_SPEC_iPhone3;
+        }
+        else if (STRCASEEQ('i','I',"iphone4",val)) {
+          spec->html_spec_type = CHXJ_SPEC_iPhone4;
+        }
       }
       else if (STRCASEEQ('o','O',"output_encoding",k)){
           spec->output_encoding = apr_pstrdup(r->pool,val);

@@ -189,6 +189,12 @@ struct jphone_emoji_t {
   char* string;
 };
 
+typedef struct iphone_emoji_t iphone_emoji_t;
+
+struct iphone_emoji_t {
+  char* string;
+};
+
 typedef struct emoji_t emoji_t;
 
 struct emoji_t {
@@ -197,6 +203,7 @@ struct emoji_t {
   imode_emoji_t*   imode;
   ezweb_emoji_t*   ezweb;
   jphone_emoji_t*  jphone;
+  iphone_emoji_t*  iphone;
 };
 
 typedef struct chxjconvrule_entry chxjconvrule_entry;
@@ -377,6 +384,9 @@ struct mod_chxj_config {
   int                   image_rewrite;
   char                  *image_rewrite_url;
   int                   image_rewrite_mode;
+
+  int                   use_emoji_image;
+  char                  *emoji_image_url;
 };
 
 struct mod_chxj_req_config_t {
@@ -523,6 +533,7 @@ extern tag_handler  xhtml_handler[];
 extern tag_handler  hdml_handler[];
 extern tag_handler  jhtml_handler[];
 extern tag_handler  jxhtml_handler[];
+extern tag_handler  iphone_handler[];
 
 extern char* chxj_node_convert( 
   device_table *spec,

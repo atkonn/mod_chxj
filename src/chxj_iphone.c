@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include "chxj_jxhtml.h"
+#include "chxj_iphone.h"
 #include "chxj_hdml.h"
 #include "chxj_dump.h"
 #include "chxj_img_conv.h"
@@ -27,243 +27,264 @@
 #include "chxj_conv_z2h.h"
 
 
-#define GET_JXHTML(X) ((jxhtml_t *)(X))
+#define GET_IPHONE(X) ((iphone_t *)(X))
 #undef W_L
 #undef W_V
-#define W_L(X)          do { jxhtml->out = BUFFERED_WRITE_LITERAL(jxhtml->out, &doc->buf, (X)); } while(0)
-#define W_V(X)          do { jxhtml->out = (X) ? BUFFERED_WRITE_VALUE(jxhtml->out, &doc->buf, (X))  \
-                                               : BUFFERED_WRITE_LITERAL(jxhtml->out, &doc->buf, ""); } while(0)
+#define W_L(X)          do { iphone->out = BUFFERED_WRITE_LITERAL(iphone->out, &doc->buf, (X)); } while(0)
+#define W_V(X)          do { iphone->out = (X) ? BUFFERED_WRITE_VALUE(iphone->out, &doc->buf, (X))  \
+                                               : BUFFERED_WRITE_LITERAL(iphone->out, &doc->buf, ""); } while(0)
 #undef W_NLCODE
-#define W_NLCODE()     do { char *nlcode = TO_NLCODE(jxhtml->conf); W_V(nlcode); } while (0)
+#define W_NLCODE()     do { char *nlcode = TO_NLCODE(iphone->conf); W_V(nlcode); } while (0)
 
-static char *s_jxhtml_start_html_tag     (void *pdoc, Node *node);
-static char *s_jxhtml_end_html_tag       (void *pdoc, Node *node);
-static char *s_jxhtml_start_meta_tag     (void *pdoc, Node *node);
-static char *s_jxhtml_end_meta_tag       (void *pdoc, Node *node);
-static char *s_jxhtml_start_head_tag     (void *pdoc, Node *node);
-static char *s_jxhtml_end_head_tag       (void *pdoc, Node *node);
-static char *s_jxhtml_start_title_tag    (void *pdoc, Node *node);
-static char *s_jxhtml_end_title_tag      (void *pdoc, Node *node);
-static char *s_jxhtml_start_base_tag     (void *pdoc, Node *node);
-static char *s_jxhtml_end_base_tag       (void *pdoc, Node *node);
-static char *s_jxhtml_start_body_tag     (void *pdoc, Node *node);
-static char *s_jxhtml_end_body_tag       (void *pdoc, Node *node);
-static char *s_jxhtml_start_a_tag        (void *pdoc, Node *node);
-static char *s_jxhtml_end_a_tag          (void *pdoc, Node *node);
-static char *s_jxhtml_start_pre_tag      (void *pdoc, Node *node);
-static char *s_jxhtml_end_pre_tag        (void *pdoc, Node *node);
-static char *s_jxhtml_start_p_tag        (void *pdoc, Node *node);
-static char *s_jxhtml_end_p_tag          (void *pdoc, Node *node);
-static char *s_jxhtml_start_ul_tag       (void *pdoc, Node *node);
-static char *s_jxhtml_end_ul_tag         (void *pdoc, Node *node);
-static char *s_jxhtml_start_ol_tag       (void *pdoc, Node *node);
-static char *s_jxhtml_end_ol_tag         (void *pdoc, Node *node);
-static char *s_jxhtml_start_li_tag       (void *pdoc, Node *node);
-static char *s_jxhtml_end_li_tag         (void *pdoc, Node *node);
-static char *s_jxhtml_start_br_tag       (void *pdoc, Node *node);
-static char *s_jxhtml_end_br_tag         (void *pdoc, Node *node);
+#define BLINK_KEYFRAME \
+"@-webkit-keyframes blink {" \
+" 0% {" \
+"   opacity: 1.0;" \
+" }" \
+" 100% {" \
+"   opacity: 0.0;" \
+" }" \
+"}" 
 
-static char *s_jxhtml_start_table_tag    (void *pdoc, Node *node);
-static char *s_jxhtml_end_table_tag      (void *pdoc, Node *node);
-static char *s_jxhtml_start_tr_tag       (void *pdoc, Node *node);
-static char *s_jxhtml_end_tr_tag         (void *pdoc, Node *node);
-static char *s_jxhtml_start_td_or_th_tag       (void *pdoc, Node *node,char *tagName);
-static char *s_jxhtml_end_td_or_th_tag         (void *pdoc, Node *node,char *tagName);
-static char *s_jxhtml_start_td_tag       (void *pdoc, Node *node);
-static char *s_jxhtml_end_td_tag         (void *pdoc, Node *node);
-static char *s_jxhtml_start_th_tag       (void *pdoc, Node *node);
-static char *s_jxhtml_end_th_tag         (void *pdoc, Node *node);
-
-static char *s_jxhtml_start_font_tag     (void *pdoc, Node *node);
-static char *s_jxhtml_end_font_tag       (void *pdoc, Node *node);
-static char *s_jxhtml_start_form_tag     (void *pdoc, Node *node);
-static char *s_jxhtml_end_form_tag       (void *pdoc, Node *node);
-static char *s_jxhtml_start_input_tag    (void *pdoc, Node *node);
-static char *s_jxhtml_end_input_tag      (void *pdoc, Node *node);
-static char *s_jxhtml_start_center_tag   (void *pdoc, Node *node);
-static char *s_jxhtml_end_center_tag     (void *pdoc, Node *node);
-static char *s_jxhtml_start_hr_tag       (void *pdoc, Node *node);
-static char *s_jxhtml_end_hr_tag         (void *pdoc, Node *node);
-static char *s_jxhtml_start_img_tag      (void *pdoc, Node *node);
-static char *s_jxhtml_end_img_tag        (void *pdoc, Node *node);
-static char *s_jxhtml_start_select_tag   (void *pdoc, Node *node);
-static char *s_jxhtml_end_select_tag     (void *pdoc, Node *node);
-static char *s_jxhtml_start_option_tag   (void *pdoc, Node *node);
-static char *s_jxhtml_end_option_tag     (void *pdoc, Node *node);
-static char *s_jxhtml_start_div_tag      (void *pdoc, Node *node);
-static char *s_jxhtml_end_div_tag        (void *pdoc, Node *node);
-static char *s_jxhtml_start_textarea_tag (void *pdoc, Node *node);
-static char *s_jxhtml_end_textarea_tag   (void *pdoc, Node *node);
-static char *s_jxhtml_start_b_tag        (void *pdoc, Node *node);
-static char *s_jxhtml_end_b_tag          (void *pdoc, Node *node);
-static char *s_jxhtml_chxjif_tag         (void *pdoc, Node *node); 
-static char *s_jxhtml_text_tag           (void *pdoc, Node *node);
-static char *s_jxhtml_start_blockquote_tag (void *pdoc, Node *node);
-static char *s_jxhtml_end_blockquote_tag  (void *pdoc, Node *node);
-static char *s_jxhtml_start_dir_tag      (void *pdoc, Node *node);
-static char *s_jxhtml_end_dir_tag        (void *pdoc, Node *node);
-static char *s_jxhtml_start_dl_tag       (void *pdoc, Node *node);
-static char *s_jxhtml_end_dl_tag         (void *pdoc, Node *node);
-static char *s_jxhtml_start_dt_tag       (void *pdoc, Node *node);
-static char *s_jxhtml_end_dt_tag         (void *pdoc, Node *node);
-static char *s_jxhtml_start_dd_tag       (void *pdoc, Node *node);
-static char *s_jxhtml_end_dd_tag         (void *pdoc, Node *node);
-static char *s_jxhtml_start_h1_tag       (void *pdoc, Node *node);
-static char *s_jxhtml_end_h1_tag         (void *pdoc, Node *node);
-static char *s_jxhtml_start_h2_tag       (void *pdoc, Node *node);
-static char *s_jxhtml_end_h2_tag         (void *pdoc, Node *node);
-static char *s_jxhtml_start_h3_tag       (void *pdoc, Node *node);
-static char *s_jxhtml_end_h3_tag         (void *pdoc, Node *node);
-static char *s_jxhtml_start_h4_tag       (void *pdoc, Node *node);
-static char *s_jxhtml_end_h4_tag         (void *pdoc, Node *node);
-static char *s_jxhtml_start_h5_tag       (void *pdoc, Node *node);
-static char *s_jxhtml_end_h5_tag         (void *pdoc, Node *node);
-static char *s_jxhtml_start_h6_tag       (void *pdoc, Node *node);
-static char *s_jxhtml_end_h6_tag         (void *pdoc, Node *node);
-static char *s_jxhtml_start_menu_tag     (void *pdoc, Node *node);
-static char *s_jxhtml_end_menu_tag       (void *pdoc, Node *node);
-static char *s_jxhtml_start_plaintext_tag       (void *pdoc, Node *node);
-static char *s_jxhtml_start_plaintext_tag_inner (void *pdoc, Node *node);
-static char *s_jxhtml_end_plaintext_tag         (void *pdoc, Node *node);
-static char *s_jxhtml_start_blink_tag  (void *pdoc, Node *node);
-static char *s_jxhtml_end_blink_tag    (void *pdoc, Node *node);
-static char *s_jxhtml_start_marquee_tag (void *pdoc, Node *node);
-static char *s_jxhtml_end_marquee_tag  (void *pdoc, Node *node);
-static char *s_jxhtml_newline_mark       (void *pdoc, Node *node);
-static char *s_jxhtml_link_tag           (void *pdoc, Node *node);
-static char *s_jxhtml_start_span_tag     (void *pdoc, Node *node);
-static char *s_jxhtml_end_span_tag       (void *pdoc, Node *node);
-static char *s_jxhtml_style_tag       (void *pdoc, Node *node);
-static char *s_jxhtml_start_object_tag     (void *pdoc, Node *node);
-static char *s_jxhtml_end_object_tag       (void *pdoc, Node *node);
-static char *s_jxhtml_start_param_tag     (void *pdoc, Node *node);
-static char *s_jxhtml_start_caption_tag     (void *pdoc, Node *node);
-static char *s_jxhtml_end_caption_tag       (void *pdoc, Node *node);
-
-static void  s_init_jxhtml(jxhtml_t *jxhtml, Doc *doc, request_rec *r, device_table *spec);
-
-static int   s_jxhtml_search_emoji(jxhtml_t *jxhtml, char *txt, char **rslt);
-
-static css_prop_list_t *s_jxhtml_nopush_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value);
-static css_prop_list_t *s_jxhtml_push_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value);
+#define STYLE_BLINK \
+"-webkit-animation-name: blink;" \
+"-webkit-animation-duration: 0.6s;" \
+"-webkit-animation-iteration-count:infinite;" \
+"-webkit-animation-timing-function:ease-in-out;" \
+"-webkit-animation-direction: alternate;" \
+"-webkit-animation-delay: 0s;"
 
 
 
-tag_handler jxhtml_handler[] = {
+static char *s_iphone_start_html_tag     (void *pdoc, Node *node);
+static char *s_iphone_end_html_tag       (void *pdoc, Node *node);
+static char *s_iphone_start_meta_tag     (void *pdoc, Node *node);
+static char *s_iphone_end_meta_tag       (void *pdoc, Node *node);
+static char *s_iphone_start_head_tag     (void *pdoc, Node *node);
+static char *s_iphone_end_head_tag       (void *pdoc, Node *node);
+static char *s_iphone_start_title_tag    (void *pdoc, Node *node);
+static char *s_iphone_end_title_tag      (void *pdoc, Node *node);
+static char *s_iphone_start_base_tag     (void *pdoc, Node *node);
+static char *s_iphone_end_base_tag       (void *pdoc, Node *node);
+static char *s_iphone_start_body_tag     (void *pdoc, Node *node);
+static char *s_iphone_end_body_tag       (void *pdoc, Node *node);
+static char *s_iphone_start_a_tag        (void *pdoc, Node *node);
+static char *s_iphone_end_a_tag          (void *pdoc, Node *node);
+static char *s_iphone_start_pre_tag      (void *pdoc, Node *node);
+static char *s_iphone_end_pre_tag        (void *pdoc, Node *node);
+static char *s_iphone_start_p_tag        (void *pdoc, Node *node);
+static char *s_iphone_end_p_tag          (void *pdoc, Node *node);
+static char *s_iphone_start_ul_tag       (void *pdoc, Node *node);
+static char *s_iphone_end_ul_tag         (void *pdoc, Node *node);
+static char *s_iphone_start_ol_tag       (void *pdoc, Node *node);
+static char *s_iphone_end_ol_tag         (void *pdoc, Node *node);
+static char *s_iphone_start_li_tag       (void *pdoc, Node *node);
+static char *s_iphone_end_li_tag         (void *pdoc, Node *node);
+static char *s_iphone_start_br_tag       (void *pdoc, Node *node);
+static char *s_iphone_end_br_tag         (void *pdoc, Node *node);
+
+static char *s_iphone_start_table_tag    (void *pdoc, Node *node);
+static char *s_iphone_end_table_tag      (void *pdoc, Node *node);
+static char *s_iphone_start_tr_tag       (void *pdoc, Node *node);
+static char *s_iphone_end_tr_tag         (void *pdoc, Node *node);
+static char *s_iphone_start_td_or_th_tag       (void *pdoc, Node *node,char *tagName);
+static char *s_iphone_end_td_or_th_tag         (void *pdoc, Node *node,char *tagName);
+static char *s_iphone_start_td_tag       (void *pdoc, Node *node);
+static char *s_iphone_end_td_tag         (void *pdoc, Node *node);
+static char *s_iphone_start_th_tag       (void *pdoc, Node *node);
+static char *s_iphone_end_th_tag         (void *pdoc, Node *node);
+
+static char *s_iphone_start_font_tag     (void *pdoc, Node *node);
+static char *s_iphone_end_font_tag       (void *pdoc, Node *node);
+static char *s_iphone_start_form_tag     (void *pdoc, Node *node);
+static char *s_iphone_end_form_tag       (void *pdoc, Node *node);
+static char *s_iphone_start_input_tag    (void *pdoc, Node *node);
+static char *s_iphone_end_input_tag      (void *pdoc, Node *node);
+static char *s_iphone_start_center_tag   (void *pdoc, Node *node);
+static char *s_iphone_end_center_tag     (void *pdoc, Node *node);
+static char *s_iphone_start_hr_tag       (void *pdoc, Node *node);
+static char *s_iphone_end_hr_tag         (void *pdoc, Node *node);
+static char *s_iphone_start_img_tag      (void *pdoc, Node *node);
+static char *s_iphone_end_img_tag        (void *pdoc, Node *node);
+static char *s_iphone_start_select_tag   (void *pdoc, Node *node);
+static char *s_iphone_end_select_tag     (void *pdoc, Node *node);
+static char *s_iphone_start_option_tag   (void *pdoc, Node *node);
+static char *s_iphone_end_option_tag     (void *pdoc, Node *node);
+static char *s_iphone_start_div_tag      (void *pdoc, Node *node);
+static char *s_iphone_end_div_tag        (void *pdoc, Node *node);
+static char *s_iphone_start_textarea_tag (void *pdoc, Node *node);
+static char *s_iphone_end_textarea_tag   (void *pdoc, Node *node);
+static char *s_iphone_start_b_tag        (void *pdoc, Node *node);
+static char *s_iphone_end_b_tag          (void *pdoc, Node *node);
+static char *s_iphone_chxjif_tag         (void *pdoc, Node *node); 
+static char *s_iphone_text_tag           (void *pdoc, Node *node);
+static char *s_iphone_start_blockquote_tag (void *pdoc, Node *node);
+static char *s_iphone_end_blockquote_tag  (void *pdoc, Node *node);
+static char *s_iphone_start_dir_tag      (void *pdoc, Node *node);
+static char *s_iphone_end_dir_tag        (void *pdoc, Node *node);
+static char *s_iphone_start_dl_tag       (void *pdoc, Node *node);
+static char *s_iphone_end_dl_tag         (void *pdoc, Node *node);
+static char *s_iphone_start_dt_tag       (void *pdoc, Node *node);
+static char *s_iphone_end_dt_tag         (void *pdoc, Node *node);
+static char *s_iphone_start_dd_tag       (void *pdoc, Node *node);
+static char *s_iphone_end_dd_tag         (void *pdoc, Node *node);
+static char *s_iphone_start_h1_tag       (void *pdoc, Node *node);
+static char *s_iphone_end_h1_tag         (void *pdoc, Node *node);
+static char *s_iphone_start_h2_tag       (void *pdoc, Node *node);
+static char *s_iphone_end_h2_tag         (void *pdoc, Node *node);
+static char *s_iphone_start_h3_tag       (void *pdoc, Node *node);
+static char *s_iphone_end_h3_tag         (void *pdoc, Node *node);
+static char *s_iphone_start_h4_tag       (void *pdoc, Node *node);
+static char *s_iphone_end_h4_tag         (void *pdoc, Node *node);
+static char *s_iphone_start_h5_tag       (void *pdoc, Node *node);
+static char *s_iphone_end_h5_tag         (void *pdoc, Node *node);
+static char *s_iphone_start_h6_tag       (void *pdoc, Node *node);
+static char *s_iphone_end_h6_tag         (void *pdoc, Node *node);
+static char *s_iphone_start_menu_tag     (void *pdoc, Node *node);
+static char *s_iphone_end_menu_tag       (void *pdoc, Node *node);
+static char *s_iphone_start_plaintext_tag       (void *pdoc, Node *node);
+static char *s_iphone_start_plaintext_tag_inner (void *pdoc, Node *node);
+static char *s_iphone_end_plaintext_tag         (void *pdoc, Node *node);
+static char *s_iphone_start_blink_tag  (void *pdoc, Node *node);
+static char *s_iphone_end_blink_tag    (void *pdoc, Node *node);
+static char *s_iphone_start_marquee_tag (void *pdoc, Node *node);
+static char *s_iphone_end_marquee_tag  (void *pdoc, Node *node);
+static char *s_iphone_newline_mark       (void *pdoc, Node *node);
+static char *s_iphone_link_tag           (void *pdoc, Node *node);
+static char *s_iphone_start_span_tag     (void *pdoc, Node *node);
+static char *s_iphone_end_span_tag       (void *pdoc, Node *node);
+static char *s_iphone_style_tag       (void *pdoc, Node *node);
+static char *s_iphone_start_object_tag     (void *pdoc, Node *node);
+static char *s_iphone_end_object_tag       (void *pdoc, Node *node);
+static char *s_iphone_start_param_tag     (void *pdoc, Node *node);
+static char *s_iphone_start_caption_tag     (void *pdoc, Node *node);
+static char *s_iphone_end_caption_tag       (void *pdoc, Node *node);
+
+static void  s_init_iphone(iphone_t *iphone, Doc *doc, request_rec *r, device_table *spec);
+
+static int   s_iphone_search_emoji(iphone_t *iphone, char *txt, char **rslt);
+
+static css_prop_list_t *s_iphone_nopush_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value);
+static css_prop_list_t *s_iphone_push_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value);
+static char *s_iphone_create_style_data(apr_pool_t *pool, const char *style_data);
+
+
+
+tag_handler iphone_handler[] = {
   /* tagHTML */
   {
-    s_jxhtml_start_html_tag,
-    s_jxhtml_end_html_tag,
+    s_iphone_start_html_tag,
+    s_iphone_end_html_tag,
   },
   /* tagMETA */
   {
-    s_jxhtml_start_meta_tag,
-    s_jxhtml_end_meta_tag,
+    s_iphone_start_meta_tag,
+    s_iphone_end_meta_tag,
   },
   /* tagTEXTAREA */
   {
-    s_jxhtml_start_textarea_tag,
-    s_jxhtml_end_textarea_tag,
+    s_iphone_start_textarea_tag,
+    s_iphone_end_textarea_tag,
   },
   /* tagP */
   {
-    s_jxhtml_start_p_tag,
-    s_jxhtml_end_p_tag,
+    s_iphone_start_p_tag,
+    s_iphone_end_p_tag,
   },
   /* tagPRE */
   {
-    s_jxhtml_start_pre_tag,
-    s_jxhtml_end_pre_tag,
+    s_iphone_start_pre_tag,
+    s_iphone_end_pre_tag,
   },
   /* tagUL */
   {
-    s_jxhtml_start_ul_tag,
-    s_jxhtml_end_ul_tag,
+    s_iphone_start_ul_tag,
+    s_iphone_end_ul_tag,
   },
   /* tagLI */
   {
-    s_jxhtml_start_li_tag,
-    s_jxhtml_end_li_tag,
+    s_iphone_start_li_tag,
+    s_iphone_end_li_tag,
   },
   /* tagOL */
   {
-    s_jxhtml_start_ol_tag,
-    s_jxhtml_end_ol_tag,
+    s_iphone_start_ol_tag,
+    s_iphone_end_ol_tag,
   },
   /* tagH1 */
   {
-    s_jxhtml_start_h1_tag,
-    s_jxhtml_end_h1_tag,
+    s_iphone_start_h1_tag,
+    s_iphone_end_h1_tag,
   },
   /* tagH2 */
   {
-    s_jxhtml_start_h2_tag,
-    s_jxhtml_end_h2_tag,
+    s_iphone_start_h2_tag,
+    s_iphone_end_h2_tag,
   },
   /* tagH3 */
   {
-    s_jxhtml_start_h3_tag,
-    s_jxhtml_end_h3_tag,
+    s_iphone_start_h3_tag,
+    s_iphone_end_h3_tag,
   },
   /* tagH4 */
   {
-    s_jxhtml_start_h4_tag,
-    s_jxhtml_end_h4_tag,
+    s_iphone_start_h4_tag,
+    s_iphone_end_h4_tag,
   },
   /* tagH5 */
   {
-    s_jxhtml_start_h5_tag,
-    s_jxhtml_end_h5_tag,
+    s_iphone_start_h5_tag,
+    s_iphone_end_h5_tag,
   },
   /* tagH6 */
   {
-    s_jxhtml_start_h6_tag,
-    s_jxhtml_end_h6_tag,
+    s_iphone_start_h6_tag,
+    s_iphone_end_h6_tag,
   },
   /* tagHEAD */
   {
-    s_jxhtml_start_head_tag,
-    s_jxhtml_end_head_tag,
+    s_iphone_start_head_tag,
+    s_iphone_end_head_tag,
   },
   /* tagTITLE */
   {
-    s_jxhtml_start_title_tag,
-    s_jxhtml_end_title_tag,
+    s_iphone_start_title_tag,
+    s_iphone_end_title_tag,
   },
   /* tagBASE */
   {
-    s_jxhtml_start_base_tag,
-    s_jxhtml_end_base_tag,
+    s_iphone_start_base_tag,
+    s_iphone_end_base_tag,
   },
   /* tagBODY */
   {
-    s_jxhtml_start_body_tag,
-    s_jxhtml_end_body_tag,
+    s_iphone_start_body_tag,
+    s_iphone_end_body_tag,
   },
   /* tagA */
   {
-    s_jxhtml_start_a_tag,
-    s_jxhtml_end_a_tag,
+    s_iphone_start_a_tag,
+    s_iphone_end_a_tag,
   },
   /* tagBR */
   {
-    s_jxhtml_start_br_tag,
-    s_jxhtml_end_br_tag,
+    s_iphone_start_br_tag,
+    s_iphone_end_br_tag,
   },
   /* tagTABLE */
   {
-    s_jxhtml_start_table_tag,
-    s_jxhtml_end_table_tag,
+    s_iphone_start_table_tag,
+    s_iphone_end_table_tag,
   },
   /* tagTR */
   {
-    s_jxhtml_start_tr_tag,
-    s_jxhtml_end_tr_tag,
+    s_iphone_start_tr_tag,
+    s_iphone_end_tr_tag,
   },
   /* tagTD */
   {
-    s_jxhtml_start_td_tag,
-    s_jxhtml_end_td_tag,
+    s_iphone_start_td_tag,
+    s_iphone_end_td_tag,
   },
   /* tagTBODY */
   {
@@ -272,57 +293,57 @@ tag_handler jxhtml_handler[] = {
   },
   /* tagFONT */
   {
-    s_jxhtml_start_font_tag,
-    s_jxhtml_end_font_tag,
+    s_iphone_start_font_tag,
+    s_iphone_end_font_tag,
   },
   /* tagFORM */
   {
-    s_jxhtml_start_form_tag,
-    s_jxhtml_end_form_tag,
+    s_iphone_start_form_tag,
+    s_iphone_end_form_tag,
   },
   /* tagINPUT */
   {
-    s_jxhtml_start_input_tag,
-    s_jxhtml_end_input_tag,
+    s_iphone_start_input_tag,
+    s_iphone_end_input_tag,
   },
   /* tagCENTER */
   {
-    s_jxhtml_start_center_tag,
-    s_jxhtml_end_center_tag,
+    s_iphone_start_center_tag,
+    s_iphone_end_center_tag,
   },
   /* tagHR */
   {
-    s_jxhtml_start_hr_tag,
-    s_jxhtml_end_hr_tag,
+    s_iphone_start_hr_tag,
+    s_iphone_end_hr_tag,
   },
   /* tagIMG */
   {
-    s_jxhtml_start_img_tag,
-    s_jxhtml_end_img_tag,
+    s_iphone_start_img_tag,
+    s_iphone_end_img_tag,
   },
   /* tagSELECT */
   {
-    s_jxhtml_start_select_tag,
-    s_jxhtml_end_select_tag,
+    s_iphone_start_select_tag,
+    s_iphone_end_select_tag,
   },
   /* tagOPTION */
   {
-    s_jxhtml_start_option_tag,
-    s_jxhtml_end_option_tag,
+    s_iphone_start_option_tag,
+    s_iphone_end_option_tag,
   },
   /* tagDIV */
   {
-    s_jxhtml_start_div_tag,
-    s_jxhtml_end_div_tag,
+    s_iphone_start_div_tag,
+    s_iphone_end_div_tag,
   },
   /* tagCHXJIF */
   {
-    s_jxhtml_chxjif_tag,
+    s_iphone_chxjif_tag,
     NULL,
   },
   /* tagCHXJRAW */
   {
-    s_jxhtml_chxjif_tag,
+    s_iphone_chxjif_tag,
     NULL,
   },
   /* tagNOBR */
@@ -337,28 +358,28 @@ tag_handler jxhtml_handler[] = {
   },
   /* tagSTYLE */
   {
-    s_jxhtml_style_tag,
+    s_iphone_style_tag,
     NULL,
   },
   /* tagSPAN */
   {
-    s_jxhtml_start_span_tag,
-    s_jxhtml_end_span_tag,
+    s_iphone_start_span_tag,
+    s_iphone_end_span_tag,
   },
   /* tagTEXT */
   {
-    s_jxhtml_text_tag,
+    s_iphone_text_tag,
     NULL,
   },
   /* tagTH */
   {
-    s_jxhtml_start_th_tag,
-    s_jxhtml_end_th_tag,
+    s_iphone_start_th_tag,
+    s_iphone_end_th_tag,
   },
   /* tagB */
   {
-    s_jxhtml_start_b_tag,
-    s_jxhtml_end_b_tag,
+    s_iphone_start_b_tag,
+    s_iphone_end_b_tag,
   },
   /* tagFIELDSET */
   {
@@ -367,8 +388,8 @@ tag_handler jxhtml_handler[] = {
   },
   /* tagDT */
   {
-    s_jxhtml_start_dt_tag,
-    s_jxhtml_end_dt_tag,
+    s_iphone_start_dt_tag,
+    s_iphone_end_dt_tag,
   },
   /* tagLEGEND */
   {
@@ -382,74 +403,74 @@ tag_handler jxhtml_handler[] = {
   },
   /* tagBLOCKQUOTE */
   {
-    s_jxhtml_start_blockquote_tag,
-    s_jxhtml_end_blockquote_tag,
+    s_iphone_start_blockquote_tag,
+    s_iphone_end_blockquote_tag,
   },
   /* tagDIR */
   {
-    s_jxhtml_start_dir_tag,
-    s_jxhtml_end_dir_tag,
+    s_iphone_start_dir_tag,
+    s_iphone_end_dir_tag,
   },
   /* tagDL */
   {
-    s_jxhtml_start_dl_tag,
-    s_jxhtml_end_dl_tag,
+    s_iphone_start_dl_tag,
+    s_iphone_end_dl_tag,
   },
   /* tagDD */
   {
-    s_jxhtml_start_dd_tag,
-    s_jxhtml_end_dd_tag,
+    s_iphone_start_dd_tag,
+    s_iphone_end_dd_tag,
   },
   /* tagMENU */
   {
-    s_jxhtml_start_menu_tag,
-    s_jxhtml_end_menu_tag,
+    s_iphone_start_menu_tag,
+    s_iphone_end_menu_tag,
   },
   /* tagPLAINTEXT */
   {
-    s_jxhtml_start_plaintext_tag,
-    s_jxhtml_end_plaintext_tag,
+    s_iphone_start_plaintext_tag,
+    s_iphone_end_plaintext_tag,
   },
   /* tagBLINK */
   {
-    s_jxhtml_start_blink_tag,
-    s_jxhtml_end_blink_tag,
+    s_iphone_start_blink_tag,
+    s_iphone_end_blink_tag,
   },
   /* tagMARQUEE */
   {
-    s_jxhtml_start_marquee_tag,
-    s_jxhtml_end_marquee_tag,
+    s_iphone_start_marquee_tag,
+    s_iphone_end_marquee_tag,
   },
   /* tagLINK */
   {
-    s_jxhtml_link_tag,
+    s_iphone_link_tag,
     NULL,
   },
   /* tagNLMARK */
   {
-    s_jxhtml_newline_mark,
+    s_iphone_newline_mark,
     NULL,
   },
   /* tagObject */
   {
-    s_jxhtml_start_object_tag,
-    s_jxhtml_end_object_tag,
+    s_iphone_start_object_tag,
+    s_iphone_end_object_tag,
   },
   /* tagParam */
   {
-    s_jxhtml_start_param_tag,
+    s_iphone_start_param_tag,
     NULL,
   },
   /* tagCAPTION */
   {
-    s_jxhtml_start_caption_tag,
-    s_jxhtml_end_caption_tag,
+    s_iphone_start_caption_tag,
+    s_iphone_end_caption_tag,
   },
 };
 
 
 /**
- * converts from CHTML5.0 to JXHTML.
+ * converts from CHTML5.0 to IPHONE.
  *
  * @param r     [i]   Requet_rec is appointed.
  * @param spec  [i]   The result of the device specification processing which 
@@ -458,7 +479,7 @@ tag_handler jxhtml_handler[] = {
  * @return The character string after the converting is returned.
  */
 char *
-chxj_convert_jxhtml(
+chxj_convert_iphone(
   request_rec         *r,
   device_table        *spec,
   const char          *src,
@@ -470,7 +491,7 @@ chxj_convert_jxhtml(
 {
   char      *dst;
   char      *ss;
-  jxhtml_t   jxhtml;
+  iphone_t   iphone;
   Doc       doc;
 
   dst = NULL;
@@ -488,10 +509,11 @@ chxj_convert_jxhtml(
   /*--------------------------------------------------------------------------*/
   /* The CHTML structure is initialized.                                      */
   /*--------------------------------------------------------------------------*/
-  s_init_jxhtml(&jxhtml, &doc, r, spec);
+  s_init_iphone(&iphone, &doc, r, spec);
 
-  jxhtml.entryp = entryp;
-  jxhtml.cookie = cookie;
+  iphone.entryp = entryp;
+  iphone.cookie = cookie;
+  iphone.head_tag_out = 0;
   if (strcasecmp(spec->output_encoding,"UTF-8") == 0 ){
     apr_table_setn(r->headers_out,HTTP_X_CHXJ_SET_CONTENT_TYPE,"application/xhtml+xml; charset=UTF-8");
   }
@@ -508,23 +530,25 @@ chxj_convert_jxhtml(
   memset(ss,   0, srclen + 1);
   memcpy(ss, src, srclen);
 
-  if (IS_CSS_ON(jxhtml.entryp)) {
+  if (IS_CSS_ON(iphone.entryp)) {
     /* current property list */
-    jxhtml.css_prop_stack = chxj_new_prop_list_stack(&doc);
+    iphone.css_prop_stack = chxj_new_prop_list_stack(&doc);
   }
 #ifdef DUMP_LOG
-  chxj_dump_out("[src] CHTML -> JXHTML", ss, srclen);
+  chxj_dump_out("[src] CHTML -> IPHONE", ss, srclen);
 #endif
 
   qs_parse_string(&doc,ss,strlen(ss));
 
   chxj_buffered_write_init(r->pool, &doc.buf);
   /*--------------------------------------------------------------------------*/
-  /* It converts it from CHTML to JXHTML.                                     */
+  /* It converts it from CHTML to IPHONE.                                     */
   /*--------------------------------------------------------------------------*/
-  chxj_node_convert(spec,r,(void*)&jxhtml, &doc, qs_get_root(&doc), 0);
-  jxhtml.out = chxj_buffered_write_flush(jxhtml.out, &doc.buf);
-  dst = apr_pstrdup(r->pool, jxhtml.out);
+  chxj_node_convert(spec,r,(void*)&iphone, &doc, qs_get_root(&doc), 0);
+  iphone.out = chxj_buffered_write_flush(iphone.out, &doc.buf);
+  dst = apr_pstrcat(r->pool, (! iphone.prev_style_data) ? "" : iphone.prev_style_data,
+                             s_iphone_create_style_data(doc.pool, iphone.style_data),
+                             iphone.out, NULL);
   chxj_buffered_write_terminate(&doc.buf);
 
 
@@ -539,7 +563,7 @@ chxj_convert_jxhtml(
   *dstlen = strlen(dst);
 
 #ifdef DUMP_LOG
-  chxj_dump_out("[dst] CHTML -> JXHTML", dst, *dstlen);
+  chxj_dump_out("[dst] CHTML -> IPHONE", dst, *dstlen);
 #endif
 
   return dst;
@@ -547,27 +571,30 @@ chxj_convert_jxhtml(
 
 
 /**
- * The JXHTML structure is initialized.
+ * The IPHONE structure is initialized.
  *
- * @param jxhtml [i/o] The pointer to the JXHTML structure that wants to be
+ * @param iphone [i/o] The pointer to the IPHONE structure that wants to be
  *                   initialized is specified.
  * @param doc   [i]   The Doc structure that should be set to the initialized
- *                   JXHTML structure is specified.
+ *                   IPHONE structure is specified.
  * @param r     [i]   To use POOL, the pointer to request_rec is specified.
  * @param spec  [i]   The pointer to the device_table
  */
 static void
-s_init_jxhtml(jxhtml_t *jxhtml, Doc *doc, request_rec *r, device_table *spec)
+s_init_iphone(iphone_t *iphone, Doc *doc, request_rec *r, device_table *spec)
 {
   memset(doc,   0, sizeof(Doc));
-  memset(jxhtml, 0, sizeof(jxhtml_t));
+  memset(iphone, 0, sizeof(iphone_t));
 
   doc->r      = r;
-  jxhtml->doc  = doc;
-  jxhtml->spec = spec;
-  jxhtml->out  = qs_alloc_zero_byte_string(r->pool);
-  jxhtml->conf = chxj_get_module_config(r->per_dir_config, &chxj_module);
-  jxhtml->doc->parse_mode = PARSE_MODE_CHTML;
+  iphone->doc  = doc;
+  iphone->spec = spec;
+  iphone->out  = qs_alloc_zero_byte_string(r->pool);
+  iphone->conf = chxj_get_module_config(r->per_dir_config, &chxj_module);
+  iphone->doc->parse_mode = PARSE_MODE_CHTML;
+  iphone->prev_style_data = NULL;
+  iphone->style_data = NULL;
+  iphone->blink_keyframe_out = 0;
 }
 
 
@@ -575,7 +602,7 @@ s_init_jxhtml(jxhtml_t *jxhtml, Doc *doc, request_rec *r, device_table *spec)
  * Corresponding EMOJI to a current character-code is retrieved. 
  * The substitution character string is stored in the rslt pointer if agreeing.
  *
- * @param jxhtml   [i]   The pointer to the JXHTML structure is specified. 
+ * @param iphone   [i]   The pointer to the IPHONE structure is specified. 
  * @param txt     [i]   The character string to want to examine whether it is 
  *                      EMOJI is specified. 
  * @param rslt    [o]   The pointer to the pointer that stores the result is 
@@ -583,21 +610,21 @@ s_init_jxhtml(jxhtml_t *jxhtml, Doc *doc, request_rec *r, device_table *spec)
  * @return When corresponding EMOJI exists, it returns it excluding 0. 
  */
 static int
-s_jxhtml_search_emoji(jxhtml_t *jxhtml, char *txt, char **rslt)
+s_iphone_search_emoji(iphone_t *iphone, char *txt, char **rslt)
 {
   emoji_t       *ee;
   request_rec   *r;
   device_table  *spec;
   int           len;
 
-  spec = jxhtml->spec;
+  spec = iphone->spec;
 
   len = strlen(txt);
-  r = jxhtml->doc->r;
+  r = iphone->doc->r;
 
   if (! spec) DBG(r,"REQ[%X] spec is NULL",TO_ADDR(r));
 
-  for (ee = jxhtml->conf->emoji;
+  for (ee = iphone->conf->emoji;
        ee;
        ee = ee->next) {
 
@@ -616,22 +643,22 @@ s_jxhtml_search_emoji(jxhtml_t *jxhtml, char *txt, char **rslt)
     &&  strlen(ee->imode->string) > 0
     &&  strncasecmp(ee->imode->string, txt, strlen(ee->imode->string)) == 0) {
       if (spec == NULL || spec->emoji_type == NULL) {
-        if (ee->jphone != NULL && ee->jphone->string != NULL) {
-          if (jxhtml->conf->use_emoji_image
-              && jxhtml->conf->emoji_image_url
-              && strcasecmp(ee->jphone->string,"image") == 0) {
-            *rslt = apr_psprintf(r->pool, "<img src=\"%s/%d\" />",jxhtml->conf->emoji_image_url, ee->no);
+        if (ee->iphone != NULL && ee->iphone->string != NULL) {
+          if (iphone->conf->use_emoji_image
+              && iphone->conf->emoji_image_url
+              && (spec->html_spec_type == CHXJ_SPEC_iPhone2
+                || strcasecmp(ee->iphone->string,"image") == 0)) {
+            *rslt = apr_psprintf(r->pool, "<img src=\"%s/%d\" />",iphone->conf->emoji_image_url, ee->no);
           }
-          else if (strncasecmp(ee->jphone->string, "raw:",4) == 0) {
-            *rslt = apr_psprintf(r->pool,"%s", &(ee->jphone->string[4]));
+          else if (strncasecmp(ee->iphone->string, "raw:", 4) == 0) {
+            *rslt = apr_psprintf(r->pool,"%s", &(ee->iphone->string[4]));
           }
           else {
-            *rslt = apr_psprintf(r->pool,"%s", ee->jphone->string);
+            *rslt = apr_psprintf(r->pool,"%s;", ee->iphone->string);
           }
         }
         return strlen(ee->imode->string);
       }
-
       return 0;
     }
 
@@ -639,17 +666,18 @@ s_jxhtml_search_emoji(jxhtml_t *jxhtml, char *txt, char **rslt)
     && ((unsigned char)txt[0] & 0xff) == ((unsigned char)hex1byte)
     && ((unsigned char)txt[1] & 0xff) == ((unsigned char)hex2byte)) {
       if (spec == NULL || spec->emoji_type == NULL) {
-        if (ee->jphone != NULL && ee->jphone->string != NULL) {
-          if (jxhtml->conf->use_emoji_image
-              && jxhtml->conf->emoji_image_url
-              && strcasecmp(ee->jphone->string,"image") == 0) {
-            *rslt = apr_psprintf(r->pool, "<img src=\"%s/%d\" />",jxhtml->conf->emoji_image_url, ee->no);
+        if (ee->iphone != NULL && ee->iphone->string != NULL) {
+          if (iphone->conf->use_emoji_image
+              && iphone->conf->emoji_image_url
+              && (spec->html_spec_type == CHXJ_SPEC_iPhone2
+                || strcasecmp(ee->iphone->string,"image") == 0)) {
+            *rslt = apr_psprintf(r->pool, "<img src=\"%s/%d\" />",iphone->conf->emoji_image_url, ee->no);
           }
-          else if (strncasecmp(ee->jphone->string, "raw:",4) == 0) {
-            *rslt = apr_psprintf(r->pool,"%s", &(ee->jphone->string[4]));
+          else if (strncasecmp(ee->iphone->string, "raw:", 4) == 0) {
+            *rslt = apr_psprintf(r->pool,"%s", &(ee->iphone->string[4]));
           }
           else {
-            *rslt = apr_psprintf(r->pool,"%s", ee->jphone->string);
+            *rslt = apr_psprintf(r->pool,"%s;", ee->iphone->string);
           }
         }
         return 2;
@@ -664,30 +692,30 @@ s_jxhtml_search_emoji(jxhtml_t *jxhtml, char *txt, char **rslt)
 
 
 char *
-chxj_jxhtml_emoji_only_converter(request_rec *r, device_table *spec, const char *src, apr_size_t len)
+chxj_iphone_emoji_only_converter(request_rec *r, device_table *spec, const char *src, apr_size_t len)
 {
   apr_size_t ii;
   Doc __doc;
   Doc *doc;
-  jxhtml_t __jxhtml;
-  jxhtml_t *jxhtml;
+  iphone_t __iphone;
+  iphone_t *iphone;
   char one_byte[2];
   char two_byte[3];
   apr_pool_t *pool;
 
-  jxhtml = &__jxhtml;
+  iphone = &__iphone;
   doc    = &__doc;
 
   DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
   memset(doc,    0, sizeof(Doc));
-  memset(jxhtml, 0, sizeof(jxhtml_t));
+  memset(iphone, 0, sizeof(iphone_t));
 
   doc->r       = r;
-  jxhtml->doc  = doc;
-  jxhtml->spec = spec;
-  jxhtml->out  = qs_alloc_zero_byte_string(r->pool);
-  jxhtml->conf = chxj_get_module_config(r->per_dir_config, &chxj_module);
-  jxhtml->doc->parse_mode = PARSE_MODE_CHTML;
+  iphone->doc  = doc;
+  iphone->spec = spec;
+  iphone->out  = qs_alloc_zero_byte_string(r->pool);
+  iphone->conf = chxj_get_module_config(r->per_dir_config, &chxj_module);
+  iphone->doc->parse_mode = PARSE_MODE_CHTML;
 
   apr_pool_create(&pool, r->pool);
 
@@ -697,7 +725,7 @@ chxj_jxhtml_emoji_only_converter(request_rec *r, device_table *spec, const char 
     char *out;
     int   rtn;
 
-    rtn = s_jxhtml_search_emoji(jxhtml, (char *)&src[ii], &out);
+    rtn = s_iphone_search_emoji(iphone, (char *)&src[ii], &out);
     if (rtn) {
       W_V(out);
       ii+=(rtn - 1);
@@ -717,94 +745,95 @@ chxj_jxhtml_emoji_only_converter(request_rec *r, device_table *spec, const char 
       W_V(one_byte);
     }
   }
-  jxhtml->out = chxj_buffered_write_flush(jxhtml->out, &doc->buf);
+  iphone->out = chxj_buffered_write_flush(iphone->out, &doc->buf);
 
   DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the HTML tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The HTML tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_html_tag(void *pdoc, Node *UNUSED(node)) 
+s_iphone_start_html_tag(void *pdoc, Node *UNUSED(node)) 
 {
-  jxhtml_t       *jxhtml;
+  iphone_t       *iphone;
   Doc           *doc;
   request_rec   *r;
 
 
-  jxhtml  = GET_JXHTML(pdoc);
-  doc    = jxhtml->doc;
+  iphone  = GET_IPHONE(pdoc);
+  doc    = iphone->doc;
   r      = doc->r;
   DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
 
   W_L("<?xml version=\"1.0\" encoding=\"");
-  W_V(jxhtml->spec->output_encoding);
+  W_V(iphone->spec->output_encoding);
   W_L("\" ?>");
   W_NLCODE();
-  W_L("<!DOCTYPE html PUBLIC \"-//J-PHONE//DTD XHTML Basic 1.0 Plus//EN\" \"xhtml-basic10-plus.dtd\">");
+  W_L("<!DOCTYPE html PUBLIC \"-//WAPFORUM//DTD XHTML Mobile 1.1//EN\" \"http://www.openmobilealliance.org/tech/DTD/xhtml-mobile11.dtd\">");
   W_NLCODE();
+
 
   /*--------------------------------------------------------------------------*/
   /* start HTML tag                                                           */
   /*--------------------------------------------------------------------------*/
   W_L("<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"ja\" xml:lang=\"ja\">");
 
-  jxhtml->start_html_flag = 1;
+  iphone->start_html_flag = 1;
 
   DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
 
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the HTML tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The HTML tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_html_tag(void *pdoc, Node *UNUSED(child)) 
+s_iphone_end_html_tag(void *pdoc, Node *UNUSED(child)) 
 {
-  jxhtml_t      *jxhtml = GET_JXHTML(pdoc);
-  Doc           *doc = jxhtml->doc;
+  iphone_t      *iphone = GET_IPHONE(pdoc);
+  Doc           *doc = iphone->doc;
 
   W_L("</html>");
 
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the META tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The META tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_meta_tag(void *pdoc, Node *node) 
+s_iphone_start_meta_tag(void *pdoc, Node *node) 
 {
-  jxhtml_t     *jxhtml;
+  iphone_t     *iphone;
   Doc          *doc;
   request_rec  *r;
   Attr         *attr;
   int          content_type_flag;
   int          refresh_flag;
 
-  jxhtml             = GET_JXHTML(pdoc);
-  doc               = jxhtml->doc;
+  iphone             = GET_IPHONE(pdoc);
+  doc               = iphone->doc;
   r                 = doc->r;
   refresh_flag      = 0;
   content_type_flag = 0;
@@ -895,141 +924,200 @@ s_jxhtml_start_meta_tag(void *pdoc, Node *node)
     }
   }
   W_L(" />");
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the META tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The META tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_meta_tag(void *pdoc, Node *UNUSED(child)) 
+s_iphone_end_meta_tag(void *pdoc, Node *UNUSED(child)) 
 {
-  jxhtml_t *jxhtml = GET_JXHTML(pdoc);
+  iphone_t *iphone = GET_IPHONE(pdoc);
 
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the HEAD tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The HEAD tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_head_tag(void *pdoc, Node *UNUSED(node)) 
+s_iphone_start_head_tag(void *pdoc, Node *node) 
 {
-  jxhtml_t      *jxhtml;
+  iphone_t      *iphone;
+  Attr          *attr;
   Doc           *doc;
+  Node          *child;
   request_rec   *r;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc   = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc   = iphone->doc;
   r     = doc->r;
+  iphone->head_tag_out = 1;
 
   W_L("<head>");
-  return jxhtml->out;
+
+  /* search <meta name="viewport"> */
+  int found_viewport = 0;
+  for (child = qs_get_child_node(doc,node);
+       child;
+       child = qs_get_next_node(doc,child)) {
+    char *name = qs_get_node_name(doc,child);
+    switch(*name) {
+    case 'm':
+    case 'M':
+      if (strcasecmp("meta",name) == 0) {
+        for (attr = qs_get_attr(doc,child);
+             attr;
+             attr = qs_get_next_attr(doc,attr)) {
+          char *aname  = qs_get_attr_name(doc,attr);
+          char *avalue = qs_get_attr_value(doc,attr);
+          if (STRCASEEQ('n','N',"name",aname)) {
+            if (STRCASEEQ('v','V',"viewport",avalue)) {
+              found_viewport = 1;
+              DBG(r, "REQ[%X] viewport Found!!",TO_ADDR(r));
+              break;
+            }
+          }
+        }
+      }
+      break;
+
+    default: 
+      break;
+    }
+    if (found_viewport) {
+      break;
+    }
+  }
+
+  if (!found_viewport) {
+    W_L("<meta ");
+    W_L("name=\"viewport\" ");
+    W_L("id=\"iphone-viewport\" ");
+    W_L("content=\"width=");
+    char *ww = apr_psprintf(r->pool, "%d", (int)((double)iphone->spec->width * (double)1.5));
+    W_V(ww);
+    W_L(",user-scalable=no,maximum-scale=0.6667\" />");
+    W_L("<meta name=\"format-detection\" content=\"telephone=no\" />");
+  }
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the HEAD tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The HEAD tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_head_tag(void *pdoc, Node *UNUSED(child)) 
+s_iphone_end_head_tag(void *pdoc, Node *UNUSED(child)) 
 {
-  jxhtml_t       *jxhtml;
+  iphone_t       *iphone;
   Doc           *doc;
   request_rec   *r;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc   = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc   = iphone->doc;
   r     = doc->r;
 
+#if 0
+  W_L("<style>");
+  W_NLCODE();
+  W_L(BLINK_KEYFRAME);
+  W_NLCODE();
+  W_L("</style>");
+#endif
+  iphone->out = chxj_buffered_write_flush(iphone->out, &doc->buf);
+  iphone->prev_style_data = apr_pstrdup(doc->pool, iphone->out);
+  iphone->out = qs_alloc_zero_byte_string(r->pool);
+
   W_L("</head>");
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the TITLE tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The TITLE tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_title_tag(void *pdoc, Node *UNUSED(node)) 
+s_iphone_start_title_tag(void *pdoc, Node *UNUSED(node)) 
 {
-  jxhtml_t      *jxhtml;
+  iphone_t      *iphone;
   Doc          *doc;
   request_rec  *r;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc   = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc   = iphone->doc;
   r     = doc->r;
 
   W_L("<title>");
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the TITLE tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The TITLE tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_title_tag(void *pdoc, Node *UNUSED(child)) 
+s_iphone_end_title_tag(void *pdoc, Node *UNUSED(child)) 
 {
-  jxhtml_t      *jxhtml;
+  iphone_t      *iphone;
   Doc           *doc;
   request_rec   *r;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc   = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc   = iphone->doc;
   r     = doc->r;
 
   W_L("</title>");
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the BASE tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The BASE tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_base_tag(void *pdoc, Node *node) 
+s_iphone_start_base_tag(void *pdoc, Node *node) 
 {
-  jxhtml_t      *jxhtml;
+  iphone_t      *iphone;
   Attr          *attr;
   Doc           *doc;
   request_rec   *r;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc   = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc   = iphone->doc;
   r     = doc->r;
 
   W_L("<base");
@@ -1048,38 +1136,38 @@ s_jxhtml_start_base_tag(void *pdoc, Node *node)
     }
   }
   W_L(" />");
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the BASE tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The BASE tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_base_tag(void *pdoc, Node *UNUSED(child)) 
+s_iphone_end_base_tag(void *pdoc, Node *UNUSED(child)) 
 {
-  jxhtml_t *jxhtml = GET_JXHTML(pdoc);
-  return jxhtml->out;
+  iphone_t *iphone = GET_IPHONE(pdoc);
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the BODY tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The BODY tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_body_tag(void *pdoc, Node *node) 
+s_iphone_start_body_tag(void *pdoc, Node *node) 
 {
-  jxhtml_t    *jxhtml;
+  iphone_t    *iphone;
   Doc         *doc;
   request_rec *r;
   Attr        *attr;
@@ -1087,12 +1175,15 @@ s_jxhtml_start_body_tag(void *pdoc, Node *node)
   char        *attr_text    = NULL;
   char        *attr_link    = NULL;
   char        *attr_vlink   = NULL;
+  char        *attr_alink   = NULL;
   char        *attr_style   = NULL;
   char        *attr_background   = NULL;
+  char        *style_data   = NULL;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc   = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc   = iphone->doc;
   r     = doc->r;
+
 
   /*--------------------------------------------------------------------------*/
   /* Get Attributes                                                           */
@@ -1124,7 +1215,7 @@ s_jxhtml_start_body_tag(void *pdoc, Node *node)
       /*----------------------------------------------------------------------*/
       /* CHTML 4.0                                                            */
       /*----------------------------------------------------------------------*/
-      /* ignore */
+      attr_alink = value;
     }
     else if (STRCASEEQ('v','V',"vlink",name)) {
       /*----------------------------------------------------------------------*/
@@ -1143,8 +1234,8 @@ s_jxhtml_start_body_tag(void *pdoc, Node *node)
     }
   }
 
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+  if (IS_CSS_ON(iphone->entryp)) {
+    css_prop_list_t *style = s_iphone_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *color_prop      = chxj_css_get_property_value(doc, style, "color");
       css_property_t *bgcolor_prop    = chxj_css_get_property_value(doc, style, "background-color");
@@ -1173,8 +1264,8 @@ s_jxhtml_start_body_tag(void *pdoc, Node *node)
         }
       }
     }
-    if (jxhtml->style) {
-      css_stylesheet_t *pseudos = chxj_find_pseudo_selectors(doc, jxhtml->style);
+    if (iphone->style) {
+      css_stylesheet_t *pseudos = chxj_find_pseudo_selectors(doc, iphone->style);
       css_selector_t *cur_sel;
       for (cur_sel = pseudos->selector_head.next; cur_sel != &pseudos->selector_head; cur_sel = cur_sel->next) {
         if (cur_sel->name && strcasecmp(cur_sel->name, "a:link") == 0) {
@@ -1227,63 +1318,74 @@ s_jxhtml_start_body_tag(void *pdoc, Node *node)
     W_V(attr_vlink);
     W_L("\"");
   }
+  if (attr_alink) {
+    attr_alink = chxj_css_rgb_func_to_value(doc->pool, attr_alink);
+    style_data = apr_pstrcat(doc->pool, (style_data) ? style_data : "",
+                                        apr_psprintf(doc->pool, "a:focus { color:%s; }", attr_alink), NULL);
+  }
   if (attr_background) {
     W_L(" background=\"");
     W_V(attr_background);
     W_L("\"");
   }
+  if (style_data) {
+    iphone->style_data = apr_pstrcat(doc->pool, (iphone->style_data) ? iphone->style_data : "",
+                                                style_data,
+                                                NULL);
+  }
   W_L("><div>");
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the BODY tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The BODY tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_body_tag(void *pdoc, Node *UNUSED(child)) 
+s_iphone_end_body_tag(void *pdoc, Node *UNUSED(child)) 
 {
-  jxhtml_t       *jxhtml;
+  iphone_t       *iphone;
   Doc           *doc;
   request_rec   *r;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc   = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc   = iphone->doc;
   r     = doc->r;
 
   W_L("</div></body>");
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    chxj_css_pop_prop_list(jxhtml->css_prop_stack);
+  if (IS_CSS_ON(iphone->entryp)) {
+    chxj_css_pop_prop_list(iphone->css_prop_stack);
   }
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the A tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The A tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_a_tag(void *pdoc, Node *node) 
+s_iphone_start_a_tag(void *pdoc, Node *node) 
 {
-  jxhtml_t    *jxhtml;
+  iphone_t    *iphone;
   Doc         *doc;
   request_rec *r;
   Attr        *attr;
   char        *attr_style = NULL;
   char        *attr_id    = NULL;
+  char        *attr_name  = NULL;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc   = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc   = iphone->doc;
   r     = doc->r;
 
   W_L("<a");
@@ -1296,10 +1398,10 @@ s_jxhtml_start_a_tag(void *pdoc, Node *node)
     char *name  = qs_get_attr_name(doc,attr);
     char *value = qs_get_attr_value(doc,attr);
     if (STRCASEEQ('i','I',"id",name)){
-      attr_id = chxj_jreserved_to_safe_tag(r, value, jxhtml->entryp);
+      attr_id = chxj_jreserved_to_safe_tag(r, value, iphone->entryp);
     }
     else if (STRCASEEQ('n','N',"name",name)) {
-      attr_id = chxj_jreserved_to_safe_tag(r, value, jxhtml->entryp);
+      attr_name = chxj_jreserved_to_safe_tag(r, value, iphone->entryp);
     }
     else if (STRCASEEQ('h','H',"href",name)) {
       /*----------------------------------------------------------------------*/
@@ -1307,7 +1409,7 @@ s_jxhtml_start_a_tag(void *pdoc, Node *node)
       /*----------------------------------------------------------------------*/
       value = chxj_encoding_parameter(r, value, 1);
       if (! chxj_starts_with(value, "mailto:") && ! chxj_starts_with(value, "tel:")) {
-        value = chxj_jreserved_tag_to_safe_for_query_string(r, value, jxhtml->entryp, 1);
+        value = chxj_jreserved_tag_to_safe_for_query_string(r, value, iphone->entryp, 1);
       }
       W_L(" href=\"");
       W_V(value);
@@ -1317,17 +1419,13 @@ s_jxhtml_start_a_tag(void *pdoc, Node *node)
       /*----------------------------------------------------------------------*/
       /* CHTML1.0                                                             */
       /*----------------------------------------------------------------------*/
-      W_L(" accesskey=\"");
-      W_V(value);
-      W_L("\"");
+      /* not need */
     }
     else if (STRCASEEQ('c','C',"cti",name)) {
       /*----------------------------------------------------------------------*/
       /* CHTML 2.0                                                            */
       /*----------------------------------------------------------------------*/
-      W_L(" cti=\"");
-      W_V(value);
-      W_L("\"");
+      /* ignore */
     }
     else if (STRCASEEQ('i','I',"ijam",name)) {
       /*----------------------------------------------------------------------*/
@@ -1340,7 +1438,7 @@ s_jxhtml_start_a_tag(void *pdoc, Node *node)
       /* CHTML 3.0                                                            */
       /* It is special only for CHTML.                                        */
       /*----------------------------------------------------------------------*/
-      W_L(" utn ");
+      /* ignore */
     }
     else if (STRCASEEQ('t','T',"telbook",name)) {
       /*----------------------------------------------------------------------*/
@@ -1392,67 +1490,72 @@ s_jxhtml_start_a_tag(void *pdoc, Node *node)
     }
   }
   if(attr_id){
-    W_L(" name=\"");
+    W_L(" id=\"");
     W_V(attr_id);
+    W_L("\"");
+  }
+  if (attr_name) {
+    W_L(" name=\"");
+    W_V(attr_name);
     W_L("\"");
   }
   W_L(">");
 
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+  if (IS_CSS_ON(iphone->entryp)) {
+    s_iphone_nopush_and_get_now_style(pdoc, node, attr_style);
   }
 
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the A tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The A tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_a_tag(void *pdoc, Node *UNUSED(child)) 
+s_iphone_end_a_tag(void *pdoc, Node *UNUSED(child)) 
 {
-  jxhtml_t      *jxhtml;
+  iphone_t      *iphone;
   Doc          *doc;
   request_rec  *r;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc   = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc   = iphone->doc;
   r     = doc->r;
 
   W_L("</a>");
 
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    chxj_css_pop_prop_list(jxhtml->css_prop_stack);
+  if (IS_CSS_ON(iphone->entryp)) {
+    chxj_css_pop_prop_list(iphone->css_prop_stack);
   }
 
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the BR tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The BR tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_br_tag(void *pdoc, Node *node)
+s_iphone_start_br_tag(void *pdoc, Node *node)
 {
-  jxhtml_t     *jxhtml;
+  iphone_t     *iphone;
   Doc          *doc;
   request_rec  *r;
   Attr         *attr;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc   = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc   = iphone->doc;
   r     = doc->r;
   
   char         *attr_style = NULL;
@@ -1475,8 +1578,8 @@ s_jxhtml_start_br_tag(void *pdoc, Node *node)
       attr_style = apr_pstrdup(doc->buf.pool, value);
     }
   }
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+  if (IS_CSS_ON(iphone->entryp)) {
+    css_prop_list_t *style = s_iphone_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *clear_prop = chxj_css_get_property_value(doc, style, "clear");
       css_property_t *cur;
@@ -1500,37 +1603,37 @@ s_jxhtml_start_br_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   W_L(" />");
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the BR tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The BR tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_br_tag(void *pdoc, Node *UNUSED(child)) 
+s_iphone_end_br_tag(void *pdoc, Node *UNUSED(child)) 
 {
-  jxhtml_t *jxhtml = GET_JXHTML(pdoc);
-  return jxhtml->out;
+  iphone_t *iphone = GET_IPHONE(pdoc);
+  return iphone->out;
 }
 
 /**
  * It is a handler who processes the TABLE tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The TR tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_table_tag(void *pdoc, Node *node) 
+s_iphone_start_table_tag(void *pdoc, Node *node) 
 {
-  jxhtml_t     *jxhtml;
+  iphone_t     *iphone;
   Doc          *doc;
   request_rec  *r;
   Attr         *attr;
@@ -1543,8 +1646,8 @@ s_jxhtml_start_table_tag(void *pdoc, Node *node)
   char         *attr_border_width  = NULL;
   char         *attr_border_color  = NULL;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc   = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc   = iphone->doc;
   r     = doc->r;
   
   /*--------------------------------------------------------------------------*/
@@ -1582,8 +1685,8 @@ s_jxhtml_start_table_tag(void *pdoc, Node *node)
     }
   }
   
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+  if (IS_CSS_ON(iphone->entryp)) {
+    css_prop_list_t *style = s_iphone_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *width_prop             = chxj_css_get_property_value(doc, style, "width");
       css_property_t *height_prop            = chxj_css_get_property_value(doc, style, "height");
@@ -1681,45 +1784,45 @@ s_jxhtml_start_table_tag(void *pdoc, Node *node)
   }
   W_L(">");
   
-  return jxhtml->out;
+  return iphone->out;
 }
 
 /**
  * It is a handler who processes the TABLE tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The TR tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_table_tag(void *pdoc, Node *UNUSED(node)) 
+s_iphone_end_table_tag(void *pdoc, Node *UNUSED(node)) 
 {
-  jxhtml_t      *jxhtml;
+  iphone_t      *iphone;
   request_rec  *r;
   Doc          *doc;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc   = jxhtml->doc;
-  r     = jxhtml->doc->r;
+  iphone = GET_IPHONE(pdoc);
+  doc   = iphone->doc;
+  r     = iphone->doc->r;
   
   W_L("</table>");
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the TR tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The TR tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_tr_tag(void *pdoc, Node *node) 
+s_iphone_start_tr_tag(void *pdoc, Node *node) 
 {
-  jxhtml_t      *jxhtml;
+  iphone_t      *iphone;
   Doc          *doc;
   request_rec  *r;
   
@@ -1730,8 +1833,8 @@ s_jxhtml_start_tr_tag(void *pdoc, Node *node)
   char         *attr_valign = NULL;
   char         *attr_bgcolor = NULL;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc   = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc   = iphone->doc;
   r     = doc->r;
   
   /*--------------------------------------------------------------------------*/
@@ -1761,8 +1864,8 @@ s_jxhtml_start_tr_tag(void *pdoc, Node *node)
     }
   }
   
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+  if (IS_CSS_ON(iphone->entryp)) {
+    css_prop_list_t *style = s_iphone_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *align_prop             = chxj_css_get_property_value(doc, style, "text-align");
       css_property_t *valign_prop            = chxj_css_get_property_value(doc, style, "vertical-align");
@@ -1803,45 +1906,45 @@ s_jxhtml_start_tr_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   W_L(">");
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the TR tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The TR tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_tr_tag(void *pdoc, Node *UNUSED(child)) 
+s_iphone_end_tr_tag(void *pdoc, Node *UNUSED(child)) 
 {
-  jxhtml_t      *jxhtml;
+  iphone_t      *iphone;
   request_rec  *r;
   Doc          *doc;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc   = jxhtml->doc;
-  r     = jxhtml->doc->r;
+  iphone = GET_IPHONE(pdoc);
+  doc   = iphone->doc;
+  r     = iphone->doc->r;
   
   W_L("</tr>");
-  return jxhtml->out;
+  return iphone->out;
 }
 
 /**
  * It is a handler who processes the TD tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The TR tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_td_or_th_tag(void *pdoc, Node *node,char *tagName) 
+s_iphone_start_td_or_th_tag(void *pdoc, Node *node,char *tagName) 
 {
-  jxhtml_t      *jxhtml;
+  iphone_t      *iphone;
   Doc          *doc;
   request_rec  *r;
 
@@ -1856,8 +1959,8 @@ s_jxhtml_start_td_or_th_tag(void *pdoc, Node *node,char *tagName)
   char         *attr_width   = NULL;
   char         *attr_height  = NULL;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc   = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc   = iphone->doc;
   r     = doc->r;
   
   /*--------------------------------------------------------------------------*/
@@ -1911,8 +2014,8 @@ s_jxhtml_start_td_or_th_tag(void *pdoc, Node *node,char *tagName)
     }
   }
   
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+  if (IS_CSS_ON(iphone->entryp)) {
+    css_prop_list_t *style = s_iphone_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *align_prop             = chxj_css_get_property_value(doc, style, "text-align");
       css_property_t *valign_prop            = chxj_css_get_property_value(doc, style, "vertical-align");
@@ -1986,101 +2089,101 @@ s_jxhtml_start_td_or_th_tag(void *pdoc, Node *node,char *tagName)
     W_L("\"");
   }
   W_L(">");
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the TD tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The TR tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_td_or_th_tag(void *pdoc, Node *UNUSED(child),char *tagName) 
+s_iphone_end_td_or_th_tag(void *pdoc, Node *UNUSED(child),char *tagName) 
 {
-  jxhtml_t      *jxhtml;
+  iphone_t      *iphone;
   request_rec  *r;
   Doc          *doc;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc   = jxhtml->doc;
-  r     = jxhtml->doc->r;
+  iphone = GET_IPHONE(pdoc);
+  doc   = iphone->doc;
+  r     = iphone->doc->r;
   
   W_L("</");
   W_V(tagName);
   W_L(">");
-  return jxhtml->out;
+  return iphone->out;
 }
 
 /**
  * It is a handler who processes the TD tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The TD tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_td_tag(void *pdoc, Node *node) 
+s_iphone_start_td_tag(void *pdoc, Node *node) 
 {
-  return s_jxhtml_start_td_or_th_tag(pdoc,node,"td");
+  return s_iphone_start_td_or_th_tag(pdoc,node,"td");
 }
 /**
  * It is a handler who processes the TD tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The TD tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_td_tag(void *pdoc, Node *node) 
+s_iphone_end_td_tag(void *pdoc, Node *node) 
 {
-  return s_jxhtml_end_td_or_th_tag(pdoc,node,"td");
+  return s_iphone_end_td_or_th_tag(pdoc,node,"td");
 }
 
 /**
  * It is a handler who processes the TD tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The TD tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_th_tag(void *pdoc, Node *node) 
+s_iphone_start_th_tag(void *pdoc, Node *node) 
 {
-  return s_jxhtml_start_td_or_th_tag(pdoc,node,"th");
+  return s_iphone_start_td_or_th_tag(pdoc,node,"th");
 }
 /**
  * It is a handler who processes the TD tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The TD tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_th_tag(void *pdoc, Node *node) 
+s_iphone_end_th_tag(void *pdoc, Node *node) 
 {
-  return s_jxhtml_end_td_or_th_tag(pdoc,node,"th");
+  return s_iphone_end_td_or_th_tag(pdoc,node,"th");
 }
 
 /**
  * It is a handler who processes the FONT tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The FONT tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_font_tag(void *pdoc, Node *node) 
+s_iphone_start_font_tag(void *pdoc, Node *node) 
 {
-  jxhtml_t      *jxhtml;
+  iphone_t      *iphone;
   Doc           *doc;
   request_rec   *r;
   Attr          *attr;
@@ -2088,8 +2191,8 @@ s_jxhtml_start_font_tag(void *pdoc, Node *node)
   char          *attr_size  = NULL;
   char          *attr_style = NULL;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc   = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc   = iphone->doc;
   r     = doc->r;
 
   /*--------------------------------------------------------------------------*/
@@ -2113,8 +2216,8 @@ s_jxhtml_start_font_tag(void *pdoc, Node *node)
       attr_style = apr_pstrdup(doc->buf.pool, value);
     }
   }
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+  if (IS_CSS_ON(iphone->entryp)) {
+    css_prop_list_t *style = s_iphone_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *color_prop = chxj_css_get_property_value(doc, style, "color");
       css_property_t *size_prop  = chxj_css_get_property_value(doc, style, "font-size");
@@ -2152,7 +2255,7 @@ s_jxhtml_start_font_tag(void *pdoc, Node *node)
       }
     }
   }
-  jxhtml_flags_t *flg = (jxhtml_flags_t *)apr_palloc(doc->pool, sizeof(*flg));
+  iphone_flags_t *flg = (iphone_flags_t *)apr_palloc(doc->pool, sizeof(*flg));
   memset(flg, 0, sizeof(*flg));
   if (attr_color) {
     attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
@@ -2209,56 +2312,56 @@ s_jxhtml_start_font_tag(void *pdoc, Node *node)
     }
   }
   node->userData = flg;
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the FONT tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The FONT tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_font_tag(void *pdoc, Node *node)
+s_iphone_end_font_tag(void *pdoc, Node *node)
 {
-  jxhtml_t      *jxhtml;
+  iphone_t      *iphone;
   request_rec  *r;
   Doc          *doc;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc   = jxhtml->doc;
-  r     = jxhtml->doc->r;
+  iphone = GET_IPHONE(pdoc);
+  doc   = iphone->doc;
+  r     = iphone->doc->r;
 
-  jxhtml_flags_t *flg = (jxhtml_flags_t *)node->userData;
+  iphone_flags_t *flg = (iphone_flags_t *)node->userData;
   if (flg && flg->font_size_flag) {
     W_L("</span>");
   }
   if (flg && flg->font_color_flag) {
     W_L("</font>");
   }
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    chxj_css_pop_prop_list(jxhtml->css_prop_stack);
+  if (IS_CSS_ON(iphone->entryp)) {
+    chxj_css_pop_prop_list(iphone->css_prop_stack);
   }
 
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the FORM tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The FORM tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_form_tag(void *pdoc, Node *node) 
+s_iphone_start_form_tag(void *pdoc, Node *node) 
 {
-  jxhtml_t    *jxhtml;
+  iphone_t    *iphone;
   Doc         *doc;
   request_rec *r;
   Attr        *attr;
@@ -2271,8 +2374,8 @@ s_jxhtml_start_form_tag(void *pdoc, Node *node)
   char        *css_clear   = NULL;
   char        *new_hidden_tag = NULL;
 
-  jxhtml  = GET_JXHTML(pdoc);
-  doc     = jxhtml->doc;
+  iphone  = GET_IPHONE(pdoc);
+  doc     = iphone->doc;
   r       = doc->r;
 
   /*--------------------------------------------------------------------------*/
@@ -2325,8 +2428,8 @@ s_jxhtml_start_form_tag(void *pdoc, Node *node)
       break;
     }
   }
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+  if (IS_CSS_ON(iphone->entryp)) {
+    css_prop_list_t *style = s_iphone_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *text_align_prop = chxj_css_get_property_value(doc, style, "text-align");
       css_property_t *color_prop      = chxj_css_get_property_value(doc, style, "color");
@@ -2357,12 +2460,12 @@ s_jxhtml_start_form_tag(void *pdoc, Node *node)
   W_L("<form");
   if (attr_action) {
     attr_action = chxj_encoding_parameter(r, attr_action, 1);
-    attr_action = chxj_add_cookie_parameter(r, attr_action, jxhtml->cookie);
+    attr_action = chxj_add_cookie_parameter(r, attr_action, iphone->cookie);
     char *q;
     char *old_qs = NULL;
     q = strchr(attr_action, '?');
     if (q) {
-      new_hidden_tag = chxj_form_action_to_hidden_tag(r, doc->pool, attr_action, 1, post_flag, &old_qs, CHXJ_FALSE, CHXJ_TRUE, jxhtml->entryp);
+      new_hidden_tag = chxj_form_action_to_hidden_tag(r, doc->pool, attr_action, 1, post_flag, &old_qs, CHXJ_FALSE, CHXJ_TRUE, iphone->entryp);
       if (new_hidden_tag || old_qs) {
         *q = 0;
       }
@@ -2393,7 +2496,7 @@ s_jxhtml_start_form_tag(void *pdoc, Node *node)
   }
   W_L(">");
 
-  jxhtml_flags_t *flg = (jxhtml_flags_t *)apr_palloc(doc->pool, sizeof(jxhtml_flags_t));
+  iphone_flags_t *flg = (iphone_flags_t *)apr_palloc(doc->pool, sizeof(iphone_flags_t));
   memset(flg, 0, sizeof(*flg));
   if (attr_color) {
     attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
@@ -2412,25 +2515,25 @@ s_jxhtml_start_form_tag(void *pdoc, Node *node)
   if (new_hidden_tag) {
     W_V(new_hidden_tag);
   }
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the FORM tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The FORM tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_form_tag(void *pdoc, Node *node)
+s_iphone_end_form_tag(void *pdoc, Node *node)
 {
-  jxhtml_t *jxhtml = GET_JXHTML(pdoc);
-  Doc      *doc    = jxhtml->doc;
+  iphone_t *iphone = GET_IPHONE(pdoc);
+  Doc      *doc    = iphone->doc;
 
-  jxhtml_flags_t *flg = (jxhtml_flags_t *)node->userData;
+  iphone_flags_t *flg = (iphone_flags_t *)node->userData;
   if (flg && flg->with_div_flag) {
     W_L("</div>");
   }
@@ -2438,15 +2541,15 @@ s_jxhtml_end_form_tag(void *pdoc, Node *node)
     W_L("</font>");
   }
   W_L("</form>");
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    chxj_css_pop_prop_list(jxhtml->css_prop_stack);
+  if (IS_CSS_ON(iphone->entryp)) {
+    chxj_css_pop_prop_list(iphone->css_prop_stack);
   }
 
-  return jxhtml->out;
+  return iphone->out;
 }
 
 static char *
-s_jxhtml_istyle_to_wap_input_format(apr_pool_t *p, const char *s)
+s_iphone_istyle_to_wap_input_format(apr_pool_t *p, const char *s)
 {
   if (s) {
     switch (s[0]) {
@@ -2466,15 +2569,15 @@ s_jxhtml_istyle_to_wap_input_format(apr_pool_t *p, const char *s)
 /**
  * It is a handler who processes the INPUT tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The INPUT tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_input_tag(void *pdoc, Node *node) 
+s_iphone_start_input_tag(void *pdoc, Node *node) 
 {
-  jxhtml_t    *jxhtml;
+  iphone_t    *iphone;
   Doc         *doc;
   request_rec *r;
   Attr        *attr;
@@ -2488,8 +2591,8 @@ s_jxhtml_start_input_tag(void *pdoc, Node *node)
   char        *attr_checked    = NULL;
   char        *attr_style      = NULL;
 
-  jxhtml  = GET_JXHTML(pdoc);
-  doc     = jxhtml->doc;
+  iphone  = GET_IPHONE(pdoc);
+  doc     = iphone->doc;
   r       = doc->r;
 
   /*--------------------------------------------------------------------------*/
@@ -2538,8 +2641,8 @@ s_jxhtml_start_input_tag(void *pdoc, Node *node)
     }
   }
 
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+  if (IS_CSS_ON(iphone->entryp)) {
+    css_prop_list_t *style = s_iphone_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *wap_input_format = chxj_css_get_property_value(doc, style, "-wap-input-format");
       css_property_t *cur;
@@ -2561,11 +2664,6 @@ s_jxhtml_start_input_tag(void *pdoc, Node *node)
   }
 
   W_L("<input");
-  if (attr_type) {
-    W_L(" type=\"");
-    W_V(attr_type);
-    W_L("\"");
-  }
   if (attr_size) {
     W_L(" size=\"");
     W_V(attr_size);
@@ -2573,7 +2671,7 @@ s_jxhtml_start_input_tag(void *pdoc, Node *node)
   }
   if (attr_name) {
     W_L(" name=\"");
-    W_V(chxj_jreserved_to_safe_tag(r, attr_name, jxhtml->entryp));
+    W_V(chxj_jreserved_to_safe_tag(r, attr_name, iphone->entryp));
     W_L("\"");
   }
   if (attr_value) {
@@ -2581,31 +2679,20 @@ s_jxhtml_start_input_tag(void *pdoc, Node *node)
     W_V(chxj_add_slash_to_doublequote(doc->pool, attr_value));
     W_L("\"");
   }
-  if (attr_accesskey) {
-    W_L(" accesskey=\"");
-    W_V(attr_accesskey);
-    W_L("\"");
-  }
   if (attr_istyle && (*attr_istyle == '1' || *attr_istyle == '2' || *attr_istyle == '3' || *attr_istyle == '4')) {
-    W_L(" istyle=\"");
-    W_V(attr_istyle);
-    W_L("\"");
-
-    char *vv = s_jxhtml_istyle_to_wap_input_format(doc->buf.pool,attr_istyle);
-    W_L(" style=\"");
-    W_L("-wap-input-format:");
-    W_V(vv);
-    W_L(";");
-    W_L("\"");
+    if (attr_type && STRCASEEQ('t','T',"text",attr_type)) {
+      /* 1 => ignore */ 
+      /* 2 => ignore */
+      /* 3 => ignore */
+      /* 4 => number */
+      if (*attr_istyle == '4') {
+        attr_type = apr_pstrdup(r->pool, "number");
+      }
+    }
   }
-  else if(attr_type && STRCASEEQ('p','P',"password",attr_type)) {
-    W_L(" istyle=\"4\"");
-
-    char *vv = s_jxhtml_istyle_to_wap_input_format(doc->buf.pool,"4");
-    W_L(" style=\"");
-    W_L("-wap-input-format:");
-    W_V(vv);
-    W_L(";");
+  if (attr_type) {
+    W_L(" type=\"");
+    W_V(attr_type);
     W_L("\"");
   }
   /*--------------------------------------------------------------------------*/
@@ -2622,157 +2709,46 @@ s_jxhtml_start_input_tag(void *pdoc, Node *node)
     W_L(" checked=\"checked\"");
   }
   W_L(" />");
-#if 0
-  jxhtml_t       *jxhtml;
-  Doc           *doc;
-  request_rec   *r;
-  char          *max_length;
-  char          *type;
-  char          *name;
-  char          *value;
-  char          *istyle;
-  char          *size;
-  char          *checked;
-  char          *accesskey;
-
-  jxhtml       = GET_JXHTML(pdoc);
-  doc         = jxhtml->doc;
-  r           = doc->r;
-  max_length  = NULL;
-  type        = NULL;
-  name        = NULL;
-  value       = NULL;
-  istyle      = NULL;
-  size        = NULL;
-  checked     = NULL;
-  accesskey   = NULL;
-
-  W_L("<input");
-  /*--------------------------------------------------------------------------*/
-  /* Get Attributes                                                           */
-  /*--------------------------------------------------------------------------*/
-  type       = qs_get_type_attr(doc, node, doc->buf.pool);
-  name       = qs_get_name_attr(doc, node, doc->buf.pool);
-  value      = qs_get_value_attr(doc,node, doc->buf.pool);
-  istyle     = qs_get_istyle_attr(doc,node,doc->buf.pool);
-  max_length = qs_get_maxlength_attr(doc,node,doc->buf.pool);
-  checked    = qs_get_checked_attr(doc,node,doc->buf.pool);
-  accesskey  = qs_get_accesskey_attr(doc, node, doc->buf.pool);
-  size       = qs_get_size_attr(doc, node, doc->buf.pool);
-
-  if (type) {
-    if (type && (STRCASEEQ('t','T',"text",    type) ||
-                 STRCASEEQ('p','P',"password",type) ||
-                 STRCASEEQ('c','C',"checkbox",type) ||
-                 STRCASEEQ('r','R',"radio",   type) ||
-                 STRCASEEQ('h','H',"hidden",  type) ||
-                 STRCASEEQ('s','S',"submit",  type) ||
-                 STRCASEEQ('r','R',"reset",   type))) {
-      W_L(" type=\"");
-      W_V(type);
-      W_L("\"");
-    }
-  }
-  if (size && *size) {
-    W_L(" size=\"");
-    W_V(size);
-    W_L("\"");
-  }
-  if (name && *name) {
-    W_L(" name=\"");
-    W_V(chxj_jreserved_to_safe_tag(r, name, jxhtml->entryp));
-    W_L("\"");
-  }
-  if (value && *value) {
-    if (type && (STRCASEEQ('s','S',"submit",type) || STRCASEEQ('r','R',"reset",type))) {
-      apr_size_t value_len = strlen(value);
-      value = chxj_conv_z2h(r, value, &value_len, jxhtml->entryp);
-    }
-
-    W_L(" value=\"");
-    W_V(chxj_add_slash_to_doublequote(doc->pool, value));
-    W_L("\"");
-  }
-  if (accesskey && *accesskey) {
-    W_L(" accesskey=\"");
-    W_V(accesskey);
-    W_L("\"");
-  }
-  if (istyle && (*istyle == '1' || *istyle == '2' || *istyle == '3' || *istyle == '4')) {
-    /*------------------------------------------------------------------------*/
-    /* CHTML 2.0                                                              */
-    /*------------------------------------------------------------------------*/
-    if (type && STRCASEEQ('p','P',"password", type) && ! jxhtml->entryp->pc_flag ) {
-      W_L(" style=\"-wap-input-format: &quot;*&lt;ja:n&gt;&quot;;\"");
-    }
-    else {
-      char *vv = qs_conv_istyle_to_format(doc->buf.pool, istyle);
-      W_L(" style=\"");
-      W_L("-wap-input-format:'*");
-      W_V(vv);
-      W_L("';");
-      W_L("\"");
-    }
-  }
-  else if (type && STRCASEEQ('p','P',"password",type)) {
-    W_L(" style=\"-wap-input-format: &quot;*&lt;ja:n&gt;&quot;;\"");
-  }
-  /*--------------------------------------------------------------------------*/
-  /* The figure is default for the password.                                  */
-  /*--------------------------------------------------------------------------*/
-  if (max_length && *max_length) {
-    if (chxj_chk_numeric(max_length) == 0) {
-      W_L(" maxlength=\"");
-      W_V(max_length);
-      W_L("\"");
-    }
-  }
-
-  if (checked) {
-    W_L(" checked=\"checked\"");
-  }
-  W_L(" />");
-#endif
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the INPUT tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The INPUT tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_input_tag(void *pdoc, Node *UNUSED(child)) 
+s_iphone_end_input_tag(void *pdoc, Node *UNUSED(child)) 
 {
-  jxhtml_t *jxhtml = GET_JXHTML(pdoc);
-  return jxhtml->out;
+  iphone_t *iphone = GET_IPHONE(pdoc);
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the CENTER tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The CENTER tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_center_tag(void *pdoc, Node *node)
+s_iphone_start_center_tag(void *pdoc, Node *node)
 {
-  jxhtml_t *jxhtml;
+  iphone_t *iphone;
   Doc       *doc;
   Attr      *attr;
   char      *attr_style = NULL;
   char      *attr_color = NULL;
   char      *attr_size  = NULL;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc    = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc    = iphone->doc;
 
   for (attr = qs_get_attr(doc,node);
        attr;
@@ -2783,8 +2759,8 @@ s_jxhtml_start_center_tag(void *pdoc, Node *node)
       attr_style = value;
     }
   }
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+  if (IS_CSS_ON(iphone->entryp)) {
+    css_prop_list_t *style = s_iphone_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *color_prop      = chxj_css_get_property_value(doc, style, "color");
       css_property_t *size_prop       = chxj_css_get_property_value(doc, style, "font-size");
@@ -2820,49 +2796,49 @@ s_jxhtml_start_center_tag(void *pdoc, Node *node)
   }
   W_L(">");
   
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the CENTER tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The CENTER tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_center_tag(void *pdoc, Node *UNUSED(node))
+s_iphone_end_center_tag(void *pdoc, Node *UNUSED(node))
 {
-  jxhtml_t    *jxhtml;
+  iphone_t    *iphone;
   Doc         *doc;
   request_rec *r;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc    = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc    = iphone->doc;
   r      = doc->r;
 
   W_L("</center>");
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    chxj_css_pop_prop_list(jxhtml->css_prop_stack);
+  if (IS_CSS_ON(iphone->entryp)) {
+    chxj_css_pop_prop_list(iphone->css_prop_stack);
   }
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the li tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The li tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_li_tag(void *pdoc, Node *node)
+s_iphone_start_li_tag(void *pdoc, Node *node)
 {
-  jxhtml_t    *jxhtml;
+  iphone_t    *iphone;
   Doc         *doc;
   request_rec *r;
   Attr        *attr;
@@ -2870,8 +2846,8 @@ s_jxhtml_start_li_tag(void *pdoc, Node *node)
   char        *attr_value = NULL;
   char        *attr_style = NULL;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc   = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc   = iphone->doc;
   r     = doc->r;
 
   for (attr = qs_get_attr(doc,node);
@@ -2902,8 +2878,8 @@ s_jxhtml_start_li_tag(void *pdoc, Node *node)
       attr_style = value;
     }
   }
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+  if (IS_CSS_ON(iphone->entryp)) {
+    css_prop_list_t *style = s_iphone_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *list_style_type_prop = chxj_css_get_property_value(doc, style, "list-style-type");
       css_property_t *cur;
@@ -2945,49 +2921,49 @@ s_jxhtml_start_li_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   W_L(">");
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the li tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The li tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_li_tag(void *pdoc, Node *UNUSED(child)) 
+s_iphone_end_li_tag(void *pdoc, Node *UNUSED(child)) 
 {
-  jxhtml_t     *jxhtml;
+  iphone_t     *iphone;
   Doc         *doc;
   request_rec *r;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc   = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc   = iphone->doc;
   r     = doc->r;
 
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    chxj_css_pop_prop_list(jxhtml->css_prop_stack);
+  if (IS_CSS_ON(iphone->entryp)) {
+    chxj_css_pop_prop_list(iphone->css_prop_stack);
   }
   W_L("</li>");
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the OL tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The OL tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_ol_tag(void *pdoc, Node *node)
+s_iphone_start_ol_tag(void *pdoc, Node *node)
 {
-  jxhtml_t    *jxhtml;
+  iphone_t    *iphone;
   Doc         *doc;
   request_rec *r;
   Attr        *attr;
@@ -2996,8 +2972,8 @@ s_jxhtml_start_ol_tag(void *pdoc, Node *node)
   char        *attr_type  = NULL;
   char        *css_clear  = NULL;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc   = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc   = iphone->doc;
   r     = doc->r;
 
   /*--------------------------------------------------------------------------*/
@@ -3026,8 +3002,8 @@ s_jxhtml_start_ol_tag(void *pdoc, Node *node)
       attr_style = value;
     }
   }
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+  if (IS_CSS_ON(iphone->entryp)) {
+    css_prop_list_t *style = s_iphone_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *list_style_type_prop = chxj_css_get_property_value(doc, style, "list-style-type");
       css_property_t *clear_prop           = chxj_css_get_property_value(doc, style, "clear");
@@ -3071,49 +3047,49 @@ s_jxhtml_start_ol_tag(void *pdoc, Node *node)
   }
   W_L(">");
 
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the OL tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The OL tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_ol_tag(void *pdoc, Node *UNUSED(child)) 
+s_iphone_end_ol_tag(void *pdoc, Node *UNUSED(child)) 
 {
-  jxhtml_t     *jxhtml;
+  iphone_t     *iphone;
   Doc         *doc;
   request_rec *r;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc   = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc   = iphone->doc;
   r     = doc->r;
 
   W_L("</ol>");
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    chxj_css_pop_prop_list(jxhtml->css_prop_stack);
+  if (IS_CSS_ON(iphone->entryp)) {
+    chxj_css_pop_prop_list(iphone->css_prop_stack);
   }
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the P tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The P tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_p_tag(void *pdoc, Node *node)
+s_iphone_start_p_tag(void *pdoc, Node *node)
 {
-  jxhtml_t    *jxhtml;
+  iphone_t    *iphone;
   Doc         *doc;
   request_rec *r;
   Attr        *attr;
@@ -3123,8 +3099,8 @@ s_jxhtml_start_p_tag(void *pdoc, Node *node)
   char        *attr_blink = NULL;
   char        *css_clear  = NULL;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc   = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc   = iphone->doc;
   r     = doc->r;
 
   for (attr = qs_get_attr(doc,node);
@@ -3145,8 +3121,8 @@ s_jxhtml_start_p_tag(void *pdoc, Node *node)
       attr_style = apr_pstrdup(doc->buf.pool, val);
     }
   }
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+  if (IS_CSS_ON(iphone->entryp)) {
+    css_prop_list_t *style = s_iphone_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *text_align_prop = chxj_css_get_property_value(doc, style, "text-align");
       css_property_t *color_prop      = chxj_css_get_property_value(doc, style, "color");
@@ -3206,45 +3182,45 @@ s_jxhtml_start_p_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   W_L(">");
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the P tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The P tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_p_tag(void *pdoc, Node *UNUSED(child)) 
+s_iphone_end_p_tag(void *pdoc, Node *UNUSED(child)) 
 {
-  jxhtml_t  *jxhtml = GET_JXHTML(pdoc);
-  Doc       *doc    = jxhtml->doc;
+  iphone_t  *iphone = GET_IPHONE(pdoc);
+  Doc       *doc    = iphone->doc;
 
   W_L("</p>");
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    chxj_css_pop_prop_list(jxhtml->css_prop_stack);
+  if (IS_CSS_ON(iphone->entryp)) {
+    chxj_css_pop_prop_list(iphone->css_prop_stack);
   }
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the PRE tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The PRE tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_pre_tag(void *pdoc, Node *node)
+s_iphone_start_pre_tag(void *pdoc, Node *node)
 {
-  jxhtml_t  *jxhtml = GET_JXHTML(pdoc);
-  Doc       *doc   = jxhtml->doc;
+  iphone_t  *iphone = GET_IPHONE(pdoc);
+  Doc       *doc   = iphone->doc;
   Attr      *attr;
   char      *attr_style = NULL;
   char      *css_clear  = NULL;
@@ -3259,8 +3235,8 @@ s_jxhtml_start_pre_tag(void *pdoc, Node *node)
     }
   }
 
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+  if (IS_CSS_ON(iphone->entryp)) {
+    css_prop_list_t *style = s_iphone_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *clear_prop           = chxj_css_get_property_value(doc, style, "clear");
       
@@ -3271,7 +3247,7 @@ s_jxhtml_start_pre_tag(void *pdoc, Node *node)
     }
   }
 
-  jxhtml->pre_flag++;
+  iphone->pre_flag++;
   W_L("<pre");
   if (css_clear) {
     W_L(" style=\"");
@@ -3281,47 +3257,47 @@ s_jxhtml_start_pre_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   W_L(">");
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the PRE tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The PRE tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_pre_tag(void *pdoc, Node *UNUSED(child)) 
+s_iphone_end_pre_tag(void *pdoc, Node *UNUSED(child)) 
 {
-  jxhtml_t *jxhtml = GET_JXHTML(pdoc);
-  Doc     *doc   = jxhtml->doc;
+  iphone_t *iphone = GET_IPHONE(pdoc);
+  Doc     *doc   = iphone->doc;
 
   W_L("</pre>");
-  jxhtml->pre_flag--;
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    chxj_css_pop_prop_list(jxhtml->css_prop_stack);
+  iphone->pre_flag--;
+  if (IS_CSS_ON(iphone->entryp)) {
+    chxj_css_pop_prop_list(iphone->css_prop_stack);
   }
 
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the UL tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The UL tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_ul_tag(void *pdoc, Node *node)
+s_iphone_start_ul_tag(void *pdoc, Node *node)
 {
-  jxhtml_t *jxhtml = GET_JXHTML(pdoc);
-  Doc      *doc    = jxhtml->doc;
+  iphone_t *iphone = GET_IPHONE(pdoc);
+  Doc      *doc    = iphone->doc;
   Attr     *attr;
   char     *attr_type = NULL;
   char     *attr_style = NULL;
@@ -3344,8 +3320,8 @@ s_jxhtml_start_ul_tag(void *pdoc, Node *node)
       attr_style = value;
     }
   }
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+  if (IS_CSS_ON(iphone->entryp)) {
+    css_prop_list_t *style = s_iphone_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *list_style_type_prop = chxj_css_get_property_value(doc, style, "list-style-type");
       css_property_t *clear_prop           = chxj_css_get_property_value(doc, style, "clear");
@@ -3383,45 +3359,45 @@ s_jxhtml_start_ul_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   W_L(">");
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the UL tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The UL tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_ul_tag(void *pdoc, Node *UNUSED(child)) 
+s_iphone_end_ul_tag(void *pdoc, Node *UNUSED(child)) 
 {
-  jxhtml_t *jxhtml = GET_JXHTML(pdoc);
-  Doc     *doc   = jxhtml->doc;
+  iphone_t *iphone = GET_IPHONE(pdoc);
+  Doc     *doc   = iphone->doc;
 
   W_L("</ul>");
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    chxj_css_pop_prop_list(jxhtml->css_prop_stack);
+  if (IS_CSS_ON(iphone->entryp)) {
+    chxj_css_pop_prop_list(iphone->css_prop_stack);
   }
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the HR tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The HR tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_hr_tag(void *pdoc, Node *node) 
+s_iphone_start_hr_tag(void *pdoc, Node *node) 
 {
   Attr        *attr;
-  jxhtml_t     *jxhtml;
+  iphone_t     *iphone;
   Doc         *doc;
   request_rec *r;
   char        *attr_align   = NULL;
@@ -3430,13 +3406,13 @@ s_jxhtml_start_hr_tag(void *pdoc, Node *node)
   char        *attr_noshade = NULL;
   char        *attr_style   = NULL;
   char        *attr_color   = NULL;
+  char        *attr_bgcolor = NULL;
   
-  char        *style_float  = NULL;
   char        *style_border_color = NULL;
   char        *css_clear          = NULL;
 
-  jxhtml   = GET_JXHTML(pdoc);
-  doc     = jxhtml->doc;
+  iphone   = GET_IPHONE(pdoc);
+  doc     = iphone->doc;
   r       = doc->r;
 
   for (attr = qs_get_attr(doc,node);
@@ -3452,7 +3428,12 @@ s_jxhtml_start_hr_tag(void *pdoc, Node *node)
         /* CHTML 1.0                                                          */
         /*--------------------------------------------------------------------*/
         if (value && (STRCASEEQ('l','L',"left",value) || STRCASEEQ('r','R',"right",value) || STRCASEEQ('c','C',"center",value))) {
-          attr_align = value;
+          if (value[0] == 'c' || value[0] == 'C') {
+            attr_align = apr_pstrdup(doc->pool, "none");
+          }
+          else {
+            attr_align = value;
+          }
         }
       }
       break;
@@ -3510,8 +3491,8 @@ s_jxhtml_start_hr_tag(void *pdoc, Node *node)
       break;
     }
   }
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+  if (IS_CSS_ON(iphone->entryp)) {
+    css_prop_list_t *style = s_iphone_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *border_style_prop = chxj_css_get_property_value(doc, style, "border-style");
       css_property_t *height_prop       = chxj_css_get_property_value(doc, style, "height");
@@ -3531,20 +3512,12 @@ s_jxhtml_start_hr_tag(void *pdoc, Node *node)
       for (cur = height_prop->next; cur != height_prop; cur = cur->next) {
         attr_size = apr_pstrdup(doc->pool, cur->value);
       }
-      if(!attr_color){
-          for(cur = bgcolor_prop->next; cur != bgcolor_prop; cur = cur->next){
-          char *tmp   = apr_pstrdup(doc->pool,cur->value);
-          attr_color  = apr_pstrdup(doc->pool,tmp);
-        }
+      for (cur = bgcolor_prop->next; cur != bgcolor_prop; cur = cur->next) {
+        attr_bgcolor = apr_pstrdup(doc->pool, cur->value);
       }
-      for (cur = float_prop->next; cur != float_prop; cur = cur->next) {
-        char *tmp = apr_pstrdup(doc->pool, cur->value);
-        char *tmpp = strstr(tmp,"none");
-        if(tmpp){
-          style_float = "center";
-        }
-        else{
-          style_float = apr_pstrdup(doc->pool,tmp);
+      if (!attr_align) {
+        for (cur = float_prop->next; cur != float_prop; cur = cur->next) {
+          attr_align = apr_pstrdup(doc->pool,cur->value);
         }
       }
       
@@ -3575,20 +3548,13 @@ s_jxhtml_start_hr_tag(void *pdoc, Node *node)
     }
   }
   W_L("<hr");
-  if (attr_align) {
-    W_L(" align=\"");
-    W_V(attr_align);
-    W_L("\"");
-  }
-  else{
-    if(style_float){
-      W_L(" align=\"");
-      W_V(style_float);
-      W_L("\"");
-    }
-  }
-  if (attr_size || attr_width || attr_noshade || style_border_color || css_clear) {
+  if (attr_align || attr_size || attr_width || attr_noshade || style_border_color || css_clear || attr_bgcolor) {
     W_L(" style=\"");
+    if (attr_align) {
+      W_L("float:");
+      W_V(attr_align);
+      W_L(";");
+    }
     if (attr_size) {
       W_L("height:");
       W_V(attr_size);
@@ -3611,7 +3577,12 @@ s_jxhtml_start_hr_tag(void *pdoc, Node *node)
     if(style_border_color){
       W_L("border-color:");
       W_V(style_border_color);
-      W_V(";");
+      W_L(";");
+    }
+    if (attr_bgcolor) {
+      W_L("background-color:");
+      W_V(attr_bgcolor);
+      W_L(";");
     }
     if (css_clear){
       W_L("clear:");
@@ -3628,39 +3599,39 @@ s_jxhtml_start_hr_tag(void *pdoc, Node *node)
   
   W_L(" />");
 
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the HR tag.
  *
- * @param jxhtml  [i/o] The pointer to the JXHTML structure at the output
+ * @param iphone  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The HR tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_hr_tag(void *pdoc, Node *UNUSED(child)) 
+s_iphone_end_hr_tag(void *pdoc, Node *UNUSED(child)) 
 {
-  jxhtml_t *jxhtml = GET_JXHTML(pdoc);
-  return jxhtml->out;
+  iphone_t *iphone = GET_IPHONE(pdoc);
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the IMG tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The IMG tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_img_tag(void *pdoc, Node *node) 
+s_iphone_start_img_tag(void *pdoc, Node *node) 
 {
-  jxhtml_t    *jxhtml = GET_JXHTML(pdoc);
-  Doc         *doc   = jxhtml->doc;
+  iphone_t    *iphone = GET_IPHONE(pdoc);
+  Doc         *doc   = iphone->doc;
   request_rec *r     = doc->r;
   Attr        *attr;
   char        *attr_src    = NULL;
@@ -3680,7 +3651,7 @@ s_jxhtml_start_img_tag(void *pdoc, Node *node)
   char        *css_valign         = NULL;
   
 #ifndef IMG_NOT_CONVERT_FILENAME
-  device_table  *spec = jxhtml->spec;
+  device_table  *spec = iphone->spec;
 #endif
 
   /*--------------------------------------------------------------------------*/
@@ -3697,16 +3668,16 @@ s_jxhtml_start_img_tag(void *pdoc, Node *node)
       /*----------------------------------------------------------------------*/
 #ifdef IMG_NOT_CONVERT_FILENAME
       value = chxj_encoding_parameter(r, value, 1);
-      value = chxj_jreserved_tag_to_safe_for_query_string(r, value, jxhtml->entryp, 1);
+      value = chxj_jreserved_tag_to_safe_for_query_string(r, value, iphone->entryp, 1);
       value = chxj_add_cookie_no_update_parameter(r, value);
-      value = chxj_img_rewrite_parameter(r,jxhtml->conf,value);
+      value = chxj_img_rewrite_parameter(r,iphone->conf,value);
       attr_src = value;
 #else
       value = chxj_img_conv(r, spec, value);
       value = chxj_encoding_parameter(r, value, 1);
-      value = chxj_jreserved_tag_to_safe_for_query_string(r, value, jxhtml->entryp, 1);
+      value = chxj_jreserved_tag_to_safe_for_query_string(r, value, iphone->entryp, 1);
       value = chxj_add_cookie_no_update_parameter(r, value);
-      value = chxj_img_rewrite_parameter(r,jxhtml->conf,value);
+      value = chxj_img_rewrite_parameter(r,iphone->conf,value);
       attr_src = value;
 #endif
     }
@@ -3765,8 +3736,8 @@ s_jxhtml_start_img_tag(void *pdoc, Node *node)
     }
   }
 
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+  if (IS_CSS_ON(iphone->entryp)) {
+    css_prop_list_t *style = s_iphone_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *height_prop = chxj_css_get_property_value(doc, style, "height");
       css_property_t *width_prop  = chxj_css_get_property_value(doc, style, "width");
@@ -3906,39 +3877,39 @@ s_jxhtml_start_img_tag(void *pdoc, Node *node)
     W_L(" alt=\"\"");
   }
   W_L(" />");
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the IMG tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The IMG tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_img_tag(void *pdoc, Node *UNUSED(child)) 
+s_iphone_end_img_tag(void *pdoc, Node *UNUSED(child)) 
 {
-  jxhtml_t *jxhtml = GET_JXHTML(pdoc);
-  return jxhtml->out;
+  iphone_t *iphone = GET_IPHONE(pdoc);
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the SELECT tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The SELECT tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_select_tag(void *pdoc, Node *node)
+s_iphone_start_select_tag(void *pdoc, Node *node)
 {
-  jxhtml_t *jxhtml    = GET_JXHTML(pdoc);
-  Doc     *doc      = jxhtml->doc;
+  iphone_t *iphone    = GET_IPHONE(pdoc);
+  Doc     *doc      = iphone->doc;
   Attr    *attr;
   char    *size     = NULL;
   char    *name     = NULL;
@@ -3987,53 +3958,53 @@ s_jxhtml_start_select_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   if (multiple) {
-    W_L(" multiple");
+    W_L(" multiple=\"multiple\"");
   }
   W_L(">");
 
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+  if (IS_CSS_ON(iphone->entryp)) {
+    s_iphone_nopush_and_get_now_style(pdoc, node, attr_style);
   }
 
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the SELECT tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The SELECT tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_select_tag(void *pdoc, Node *UNUSED(child))
+s_iphone_end_select_tag(void *pdoc, Node *UNUSED(child))
 {
-  jxhtml_t *jxhtml = GET_JXHTML(pdoc);
-  Doc     *doc   = jxhtml->doc;
+  iphone_t *iphone = GET_IPHONE(pdoc);
+  Doc     *doc   = iphone->doc;
 
   W_L("</select>");
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    chxj_css_pop_prop_list(jxhtml->css_prop_stack);
+  if (IS_CSS_ON(iphone->entryp)) {
+    chxj_css_pop_prop_list(iphone->css_prop_stack);
   }
 
-  return jxhtml->out;
+  return iphone->out;
 }
 
 /**
  * It is a handler who processes the OPTION tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The OPTION tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_option_tag(void *pdoc, Node *node)
+s_iphone_start_option_tag(void *pdoc, Node *node)
 {
-  jxhtml_t *jxhtml = GET_JXHTML(pdoc);
-  Doc     *doc   = jxhtml->doc;
+  iphone_t *iphone = GET_IPHONE(pdoc);
+  Doc     *doc   = iphone->doc;
   Attr    *attr;
 
   char *selected   = NULL;
@@ -4071,53 +4042,53 @@ s_jxhtml_start_option_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   if (selected) {
-    W_L(" selected");
+    W_L(" selected=\"selected\"");
   }
   W_L(">");
 
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+  if (IS_CSS_ON(iphone->entryp)) {
+    s_iphone_nopush_and_get_now_style(pdoc, node, attr_style);
   }
 
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the OPTION tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The OPTION tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_option_tag(void *pdoc, Node *UNUSED(child))
+s_iphone_end_option_tag(void *pdoc, Node *UNUSED(child))
 {
-  jxhtml_t *jxhtml = GET_JXHTML(pdoc);
-  Doc      *doc = jxhtml->doc;
+  iphone_t *iphone = GET_IPHONE(pdoc);
+  Doc      *doc = iphone->doc;
 
   W_L("</option>");
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    chxj_css_pop_prop_list(jxhtml->css_prop_stack);
+  if (IS_CSS_ON(iphone->entryp)) {
+    chxj_css_pop_prop_list(iphone->css_prop_stack);
   }
 
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the DIV tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The DIV tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_div_tag(void *pdoc, Node *node)
+s_iphone_start_div_tag(void *pdoc, Node *node)
 {
-  jxhtml_t    *jxhtml;
+  iphone_t    *iphone;
   Doc         *doc;
   request_rec *r;
   Attr        *attr;
@@ -4128,13 +4099,14 @@ s_jxhtml_start_div_tag(void *pdoc, Node *node)
   char        *attr_wap_marquee_style = NULL;
   char        *attr_wap_marquee_dir   = NULL;
   char        *attr_wap_marquee_loop  = NULL;
+  char        *attr_wap_marquee_speed = NULL;
   char        *attr_color             = NULL;
   char        *attr_bgcolor           = NULL;
   char        *attr_font_size         = NULL;
   char        *css_clear              = NULL;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc   = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc   = iphone->doc;
   r     = doc->r;
 
   for (attr = qs_get_attr(doc,node);
@@ -4155,8 +4127,8 @@ s_jxhtml_start_div_tag(void *pdoc, Node *node)
     }
   }
 
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+  if (IS_CSS_ON(iphone->entryp)) {
+    css_prop_list_t *style = s_iphone_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *display_prop           = chxj_css_get_property_value(doc, style, "display");
       css_property_t *text_decoration_prop   = chxj_css_get_property_value(doc, style, "text-decoration");
@@ -4213,6 +4185,7 @@ s_jxhtml_start_div_tag(void *pdoc, Node *node)
         css_property_t *wap_marquee_style_prop = chxj_css_get_property_value(doc, style, "-wap-marquee-style");
         css_property_t *wap_marquee_dir_prop   = chxj_css_get_property_value(doc, style, "-wap-marquee-dir");
         css_property_t *wap_marquee_loop_prop  = chxj_css_get_property_value(doc, style, "-wap-marquee-loop");
+        css_property_t *wap_marquee_speed_prop = chxj_css_get_property_value(doc, style, "-wap-marquee-speed");
         for (cur = wap_marquee_style_prop->next; cur != wap_marquee_style_prop; cur = cur->next) {
           if (STRCASEEQ('s','S',"scroll", cur->value) || STRCASEEQ('s','S',"slide",cur->value) || STRCASEEQ('a','A',"alternate",cur->value)) {
             attr_wap_marquee_style = apr_pstrdup(doc->pool, cur->value);
@@ -4234,6 +4207,9 @@ s_jxhtml_start_div_tag(void *pdoc, Node *node)
             attr_wap_marquee_loop = apr_pstrdup(doc->pool, cur->value);
           }
         }
+        for (cur = wap_marquee_speed_prop->next; cur != wap_marquee_speed_prop; cur = cur->next) {
+          attr_wap_marquee_speed = apr_pstrdup(doc->pool, cur->value);
+        }
       }
       for (cur = clear_prop->next; cur != clear_prop; cur = cur->next) {
         css_clear = apr_pstrdup(doc->pool, cur->value);
@@ -4247,6 +4223,7 @@ s_jxhtml_start_div_tag(void *pdoc, Node *node)
       || attr_wap_marquee_style
       || attr_wap_marquee_dir
       || attr_wap_marquee_loop
+      || attr_wap_marquee_speed
       || attr_color
       || attr_bgcolor
       || attr_font_size
@@ -4258,28 +4235,48 @@ s_jxhtml_start_div_tag(void *pdoc, Node *node)
       W_L(";");
     }
     if (attr_display) {
-      W_L("display:");
-      W_V(attr_display);
-      W_L(";");
+      /* only marquee */
+      W_L("overflow:-webkit-marquee;");
     }
     if (attr_decoration) {
-      W_L("text-decoration:");
-      W_V(attr_decoration);
-      W_L(";");
+      if (STRCASEEQ('b','B',"blink",attr_decoration)) {
+        W_L(STYLE_BLINK);
+        if (iphone->blink_keyframe_out == 0) {
+          iphone->style_data = apr_pstrcat(doc->pool, (iphone->style_data) ? iphone->style_data : "",
+                                                      BLINK_KEYFRAME,
+                                                      NULL);
+          iphone->blink_keyframe_out = 1;
+        }
+      }
+      else {
+        W_L("text-decoration:");
+        W_V(attr_decoration);
+        W_L(";");
+      }
     }
     if (attr_wap_marquee_style) {
-      W_L("-wap-marquee-style:");
+      W_L("-webkit-marquee-style:");
       W_V(attr_wap_marquee_style);
       W_L(";");
     }
     if (attr_wap_marquee_dir) {
-      W_L("-wap-marquee-dir:");
-      W_V(attr_wap_marquee_dir);
+      W_L("-webkit-marquee-direction:");
+      if (STRCASEEQ('r','R',"rtl",attr_wap_marquee_dir)) {
+        W_L("left");
+      }
+      else if (STRCASEEQ('l','L',"ltr",attr_wap_marquee_dir)) {
+        W_L("right");
+      }
       W_L(";");
     }
     if (attr_wap_marquee_loop) {
-      W_L("-wap-marquee-loop:");
+      W_L("-webkit-marquee-repetition:");
       W_V(attr_wap_marquee_loop);
+      W_L(";");
+    }
+    if (attr_wap_marquee_speed) {
+      W_L("-webkit-marquee-speed:");
+      W_V(attr_wap_marquee_speed);
       W_L(";");
     }
     if (attr_color) {
@@ -4305,54 +4302,54 @@ s_jxhtml_start_div_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   W_L(">");
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the DIV tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The DIV tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_div_tag(void *pdoc, Node *UNUSED(child))
+s_iphone_end_div_tag(void *pdoc, Node *UNUSED(child))
 {
-  jxhtml_t      *jxhtml;
+  iphone_t      *iphone;
   Doc          *doc;
   request_rec  *r;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc   = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc   = iphone->doc;
   r     = doc->r;
 
   W_L("</div>");
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    chxj_css_pop_prop_list(jxhtml->css_prop_stack);
+  if (IS_CSS_ON(iphone->entryp)) {
+    chxj_css_pop_prop_list(iphone->css_prop_stack);
   }
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 static char *
-s_jxhtml_chxjif_tag(void *pdoc, Node *node)
+s_iphone_chxjif_tag(void *pdoc, Node *node)
 {
-  jxhtml_t *jxhtml;
+  iphone_t *iphone;
   Doc     *doc;
   Node    *child;
   request_rec *r;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc   = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc   = iphone->doc;
   r     = doc->r;
 
   for (child = qs_get_child_node(doc, node);
        child;
        child = qs_get_next_node(doc, child)) {
     W_V(child->otext);
-    s_jxhtml_chxjif_tag(jxhtml, child);
+    s_iphone_chxjif_tag(iphone, child);
   }
   return NULL;
 }
@@ -4361,15 +4358,15 @@ s_jxhtml_chxjif_tag(void *pdoc, Node *node)
 /**
  * It is a handler who processes the TEXTARE tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The TEXTAREA tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_textarea_tag(void *pdoc, Node *node) 
+s_iphone_start_textarea_tag(void *pdoc, Node *node) 
 {
-  jxhtml_t      *jxhtml;
+  iphone_t      *iphone;
   Doc           *doc;
   request_rec   *r;
   Attr          *attr;
@@ -4381,11 +4378,11 @@ s_jxhtml_start_textarea_tag(void *pdoc, Node *node)
   char          *attr_style     = NULL;
 
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc   = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc   = iphone->doc;
   r     = doc->r;
 
-  jxhtml->textarea_flag++;
+  iphone->textarea_flag++;
   for (attr = qs_get_attr(doc,node);
        attr;
        attr = qs_get_next_attr(doc,attr)) {
@@ -4410,8 +4407,8 @@ s_jxhtml_start_textarea_tag(void *pdoc, Node *node)
       attr_style = value;
     }
   }
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+  if (IS_CSS_ON(iphone->entryp)) {
+    css_prop_list_t *style = s_iphone_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *wap_input_format = chxj_css_get_property_value(doc, style, "-wap-input-format");
       css_property_t *cur;
@@ -4432,11 +4429,6 @@ s_jxhtml_start_textarea_tag(void *pdoc, Node *node)
     }
   }
   W_L("<textarea");
-  if (attr_accesskey) {
-    W_L(" accesskey=\"");
-    W_V(attr_accesskey);
-    W_L("\"");
-  }
   if (attr_name) {
     W_L(" name=\"");
     W_V(attr_name);
@@ -4452,96 +4444,83 @@ s_jxhtml_start_textarea_tag(void *pdoc, Node *node)
     W_V(attr_cols);
     W_L("\"");
   }
-  if (attr_istyle) {
-    W_L(" istyle=\"");
-    W_V(attr_istyle);
-    W_L("\"");
-
-    char *vv = s_jxhtml_istyle_to_wap_input_format(doc->buf.pool,attr_istyle);
-        W_L(" style=\"");
-        W_L("-wap-input-format:");
-        W_V(vv);
-        W_L(";");
-        W_L("\"");
-
-  }
   W_L(">");
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the TEXTAREA tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The TEXTAREA tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_textarea_tag(void *pdoc, Node *UNUSED(child)) 
+s_iphone_end_textarea_tag(void *pdoc, Node *UNUSED(child)) 
 {
-  jxhtml_t       *jxhtml;
+  iphone_t       *iphone;
   Doc           *doc;
   request_rec   *r;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc   = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc   = iphone->doc;
   r     = doc->r;
 
   W_L("</textarea>");
-  jxhtml->textarea_flag--;
+  iphone->textarea_flag--;
 
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the B tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The B tag node is specified.
  * @return The conversion result is returned.
  */
 static char*
-s_jxhtml_start_b_tag(void* pdoc, Node* UNUSED(node)) 
+s_iphone_start_b_tag(void* pdoc, Node* UNUSED(node)) 
 {
-  jxhtml_t*      jxhtml;
+  iphone_t*      iphone;
   Doc*          doc;
   request_rec*  r;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc   = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc   = iphone->doc;
   r     = doc->r;
 
   W_L("<b>");
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the B tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The B tag node is specified.
  * @return The conversion result is returned.
  */
 static char*
-s_jxhtml_end_b_tag(void* pdoc, Node* UNUSED(child)) 
+s_iphone_end_b_tag(void* pdoc, Node* UNUSED(child)) 
 {
-  jxhtml_t*      jxhtml = GET_JXHTML(pdoc);
-  Doc*          doc   = jxhtml->doc;
+  iphone_t*      iphone = GET_IPHONE(pdoc);
+  Doc*          doc   = iphone->doc;
 
   W_L("</b>");
-  return jxhtml->out;
+  return iphone->out;
 }
 
 static char*
-s_jxhtml_text_tag(void* pdoc, Node* child)
+s_iphone_text_tag(void* pdoc, Node* child)
 {
-  jxhtml_t*     jxhtml;
+  iphone_t*     iphone;
   Doc*         doc;
   char*        textval;
   char*        tmp;
@@ -4552,13 +4531,13 @@ s_jxhtml_text_tag(void* pdoc, Node* child)
   request_rec* r;
   apr_size_t   z2h_input_len;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc   = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc   = iphone->doc;
   r     = doc->r;
 
   textval = qs_get_node_value(doc,child);
   if (strlen(textval) == 0) {
-    return jxhtml->out;
+    return iphone->out;
   }
 
   tmp = apr_palloc(r->pool, qs_get_node_size(doc,child)+1);
@@ -4570,7 +4549,7 @@ s_jxhtml_text_tag(void* pdoc, Node* child)
 
   for (ii=0; ii<qs_get_node_size(doc,child); ii++) {
     char* out;
-    int rtn = s_jxhtml_search_emoji(jxhtml, &textval[ii], &out);
+    int rtn = s_iphone_search_emoji(iphone, &textval[ii], &out);
     if (rtn) {
       tdst = qs_out_apr_pstrcat(r, tdst, out, &tdst_len);
       ii+=(rtn - 1);
@@ -4585,12 +4564,12 @@ s_jxhtml_text_tag(void* pdoc, Node* child)
       ii++;
     }
     else 
-    if (jxhtml->pre_flag) {
+    if (iphone->pre_flag) {
       one_byte[0] = textval[ii+0];
       tdst = qs_out_apr_pstrcat(r, tdst, one_byte, &tdst_len);
     }
     else
-    if (jxhtml->textarea_flag) {
+    if (iphone->textarea_flag) {
       one_byte[0] = textval[ii+0];
       tdst = qs_out_apr_pstrcat(r, tdst, one_byte, &tdst_len);
     }
@@ -4602,25 +4581,25 @@ s_jxhtml_text_tag(void* pdoc, Node* child)
     }
   }
   z2h_input_len = strlen(tdst);
-  tdst = chxj_conv_z2h(r, tdst, &z2h_input_len, jxhtml->entryp);
+  tdst = chxj_conv_z2h(r, tdst, &z2h_input_len, iphone->entryp);
 
   W_V(tdst);
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the BLOCKQUOTE tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The BLOCKQUOTE tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_blockquote_tag(void *pdoc, Node *node)
+s_iphone_start_blockquote_tag(void *pdoc, Node *node)
 {
-  jxhtml_t *jxhtml;
+  iphone_t *iphone;
   Doc      *doc;
   Attr     *attr;
   char     *attr_style = NULL;
@@ -4628,8 +4607,8 @@ s_jxhtml_start_blockquote_tag(void *pdoc, Node *node)
   char     *attr_size  = NULL;
   char     *css_clear  = NULL;
 
-  jxhtml  = GET_JXHTML(pdoc);
-  doc     = jxhtml->doc;
+  iphone  = GET_IPHONE(pdoc);
+  doc     = iphone->doc;
   for (attr = qs_get_attr(doc,node);
        attr;
        attr = qs_get_next_attr(doc,attr)) {
@@ -4639,8 +4618,8 @@ s_jxhtml_start_blockquote_tag(void *pdoc, Node *node)
       attr_style = val;
     }
   }
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+  if (IS_CSS_ON(iphone->entryp)) {
+    css_prop_list_t *style = s_iphone_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *color_prop = chxj_css_get_property_value(doc, style, "color");
       css_property_t *font_size_prop = chxj_css_get_property_value(doc, style, "font-size");
@@ -4704,44 +4683,44 @@ s_jxhtml_start_blockquote_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   W_L(">");
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the BLOCKQUOTE tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The BLOCKQUOTE tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_blockquote_tag(void *pdoc, Node *UNUSED(child))
+s_iphone_end_blockquote_tag(void *pdoc, Node *UNUSED(child))
 {
-  jxhtml_t *jxhtml = GET_JXHTML(pdoc);
-  Doc     *doc   = jxhtml->doc;
+  iphone_t *iphone = GET_IPHONE(pdoc);
+  Doc     *doc   = iphone->doc;
   W_L("</blockquote>");
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    chxj_css_pop_prop_list(jxhtml->css_prop_stack);
+  if (IS_CSS_ON(iphone->entryp)) {
+    chxj_css_pop_prop_list(iphone->css_prop_stack);
   }
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the DIR tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The DIR tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_dir_tag(void *pdoc, Node *node)
+s_iphone_start_dir_tag(void *pdoc, Node *node)
 {
-  jxhtml_t *jxhtml      = GET_JXHTML(pdoc);
-  Doc       *doc        = jxhtml->doc;
+  iphone_t *iphone      = GET_IPHONE(pdoc);
+  Doc       *doc        = iphone->doc;
   Attr      *attr;
   char      *attr_style = NULL;
   char      *attr_color = NULL;
@@ -4761,8 +4740,8 @@ s_jxhtml_start_dir_tag(void *pdoc, Node *node)
       attr_style = value;
     }
   }
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+  if (IS_CSS_ON(iphone->entryp)) {
+    css_prop_list_t *style = s_iphone_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *color_prop           = chxj_css_get_property_value(doc, style, "color");
       css_property_t *size_prop            = chxj_css_get_property_value(doc, style, "font-size");
@@ -4827,44 +4806,44 @@ s_jxhtml_start_dir_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   W_L(">");
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the DIR tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The DIR tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_dir_tag(void *pdoc, Node *UNUSED(child))
+s_iphone_end_dir_tag(void *pdoc, Node *UNUSED(child))
 {
-  jxhtml_t *jxhtml = GET_JXHTML(pdoc);
-  Doc *doc = jxhtml->doc;
+  iphone_t *iphone = GET_IPHONE(pdoc);
+  Doc *doc = iphone->doc;
   W_L("</dir>");
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    chxj_css_pop_prop_list(jxhtml->css_prop_stack);
+  if (IS_CSS_ON(iphone->entryp)) {
+    chxj_css_pop_prop_list(iphone->css_prop_stack);
   }
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the DL tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The DL tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_dl_tag(void *pdoc, Node *node)
+s_iphone_start_dl_tag(void *pdoc, Node *node)
 {
-  jxhtml_t *jxhtml      = GET_JXHTML(pdoc);
-  Doc       *doc        = jxhtml->doc;
+  iphone_t *iphone      = GET_IPHONE(pdoc);
+  Doc       *doc        = iphone->doc;
   Attr      *attr;
   char      *attr_style = NULL;
   char      *attr_color = NULL;
@@ -4880,8 +4859,8 @@ s_jxhtml_start_dl_tag(void *pdoc, Node *node)
       attr_style = value;
     }
   }
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+  if (IS_CSS_ON(iphone->entryp)) {
+    css_prop_list_t *style = s_iphone_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *color_prop           = chxj_css_get_property_value(doc, style, "color");
       css_property_t *size_prop            = chxj_css_get_property_value(doc, style, "font-size");
@@ -4945,44 +4924,44 @@ s_jxhtml_start_dl_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   W_L(">");
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the DL tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The DL tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_dl_tag(void *pdoc, Node *UNUSED(child))
+s_iphone_end_dl_tag(void *pdoc, Node *UNUSED(child))
 {
-  jxhtml_t *jxhtml = GET_JXHTML(pdoc);
-  Doc *doc = jxhtml->doc;
+  iphone_t *iphone = GET_IPHONE(pdoc);
+  Doc *doc = iphone->doc;
   W_L("</dl>");
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    chxj_css_pop_prop_list(jxhtml->css_prop_stack);
+  if (IS_CSS_ON(iphone->entryp)) {
+    chxj_css_pop_prop_list(iphone->css_prop_stack);
   }
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the DT tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The DT tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_dt_tag(void *pdoc, Node *node)
+s_iphone_start_dt_tag(void *pdoc, Node *node)
 {
-  jxhtml_t *jxhtml      = GET_JXHTML(pdoc);
-  Doc       *doc        = jxhtml->doc;
+  iphone_t *iphone      = GET_IPHONE(pdoc);
+  Doc       *doc        = iphone->doc;
   Attr      *attr;
   char      *attr_style = NULL;
   char      *attr_color = NULL;
@@ -4996,8 +4975,8 @@ s_jxhtml_start_dt_tag(void *pdoc, Node *node)
       attr_style = value;
     }
   }
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+  if (IS_CSS_ON(iphone->entryp)) {
+    css_prop_list_t *style = s_iphone_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *color_prop           = chxj_css_get_property_value(doc, style, "color");
       css_property_t *size_prop            = chxj_css_get_property_value(doc, style, "font-size");
@@ -5051,44 +5030,44 @@ s_jxhtml_start_dt_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   W_L(">");
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the DT tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The DT tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_dt_tag(void *pdoc, Node *UNUSED(child))
+s_iphone_end_dt_tag(void *pdoc, Node *UNUSED(child))
 {
-  jxhtml_t *jxhtml = GET_JXHTML(pdoc);
-  Doc      *doc    = jxhtml->doc;
+  iphone_t *iphone = GET_IPHONE(pdoc);
+  Doc      *doc    = iphone->doc;
   W_L("</dt>");
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    chxj_css_pop_prop_list(jxhtml->css_prop_stack);
+  if (IS_CSS_ON(iphone->entryp)) {
+    chxj_css_pop_prop_list(iphone->css_prop_stack);
   }
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the DD tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The DD tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_dd_tag(void *pdoc, Node *node)
+s_iphone_start_dd_tag(void *pdoc, Node *node)
 {
-  jxhtml_t *jxhtml      = GET_JXHTML(pdoc);
-  Doc       *doc        = jxhtml->doc;
+  iphone_t *iphone      = GET_IPHONE(pdoc);
+  Doc       *doc        = iphone->doc;
   Attr      *attr;
   char      *attr_style = NULL;
   char      *attr_color = NULL;
@@ -5102,8 +5081,8 @@ s_jxhtml_start_dd_tag(void *pdoc, Node *node)
       attr_style = value;
     }
   }
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+  if (IS_CSS_ON(iphone->entryp)) {
+    css_prop_list_t *style = s_iphone_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *color_prop           = chxj_css_get_property_value(doc, style, "color");
       css_property_t *size_prop            = chxj_css_get_property_value(doc, style, "font-size");
@@ -5157,43 +5136,43 @@ s_jxhtml_start_dd_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   W_L(">");
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the DD tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The DD tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_dd_tag(void *pdoc, Node *UNUSED(child))
+s_iphone_end_dd_tag(void *pdoc, Node *UNUSED(child))
 {
-  jxhtml_t *jxhtml = GET_JXHTML(pdoc);
-  Doc      *doc = jxhtml->doc;
+  iphone_t *iphone = GET_IPHONE(pdoc);
+  Doc      *doc = iphone->doc;
   W_L("</dd>");
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    chxj_css_pop_prop_list(jxhtml->css_prop_stack);
+  if (IS_CSS_ON(iphone->entryp)) {
+    chxj_css_pop_prop_list(iphone->css_prop_stack);
   }
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the H1 tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The H1 tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_h1_tag(void *pdoc, Node *node)
+s_iphone_start_h1_tag(void *pdoc, Node *node)
 {
-  jxhtml_t    *jxhtml;
+  iphone_t    *iphone;
   Doc         *doc;
   request_rec *r;
   Attr        *attr;
@@ -5201,8 +5180,8 @@ s_jxhtml_start_h1_tag(void *pdoc, Node *node)
   char        *attr_align = NULL;
   char        *css_clear  = NULL;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc    = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc    = iphone->doc;
   r      = doc->r;
 
   for (attr = qs_get_attr(doc,node);
@@ -5219,8 +5198,8 @@ s_jxhtml_start_h1_tag(void *pdoc, Node *node)
       attr_style = value;
     }
   }
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+  if (IS_CSS_ON(iphone->entryp)) {
+    css_prop_list_t *style = s_iphone_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *list_style_type_prop = chxj_css_get_property_value(doc, style, "text-align");
       css_property_t *clear_prop           = chxj_css_get_property_value(doc, style, "clear");
@@ -5266,50 +5245,50 @@ s_jxhtml_start_h1_tag(void *pdoc, Node *node)
   }
   W_L(">");
 
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the H1 tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The H1 tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_h1_tag(void *pdoc, Node *UNUSED(child)) 
+s_iphone_end_h1_tag(void *pdoc, Node *UNUSED(child)) 
 {
-  jxhtml_t*    jxhtml;
+  iphone_t*    iphone;
   Doc*          doc;
   request_rec*  r;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc     = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc     = iphone->doc;
   r       = doc->r;
   
   W_L("</h1>");
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    chxj_css_pop_prop_list(jxhtml->css_prop_stack);
+  if (IS_CSS_ON(iphone->entryp)) {
+    chxj_css_pop_prop_list(iphone->css_prop_stack);
   }
 
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the H2 tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The H1 tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_h2_tag(void *pdoc, Node *node)
+s_iphone_start_h2_tag(void *pdoc, Node *node)
 {
-  jxhtml_t    *jxhtml;
+  iphone_t    *iphone;
   Doc         *doc;
   request_rec *r;
   Attr        *attr;
@@ -5317,8 +5296,8 @@ s_jxhtml_start_h2_tag(void *pdoc, Node *node)
   char        *attr_align = NULL;
   char        *css_clear  = NULL;
 
-  jxhtml   = GET_JXHTML(pdoc);
-  doc     = jxhtml->doc;
+  iphone   = GET_IPHONE(pdoc);
+  doc     = iphone->doc;
   r       = doc->r;
 
   for (attr = qs_get_attr(doc,node);
@@ -5335,8 +5314,8 @@ s_jxhtml_start_h2_tag(void *pdoc, Node *node)
       attr_style = value;
     }
   }
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+  if (IS_CSS_ON(iphone->entryp)) {
+    css_prop_list_t *style = s_iphone_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *list_style_type_prop = chxj_css_get_property_value(doc, style, "text-align");
       css_property_t *clear_prop           = chxj_css_get_property_value(doc, style, "clear");
@@ -5382,49 +5361,49 @@ s_jxhtml_start_h2_tag(void *pdoc, Node *node)
   }
   W_L(">");
 
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the H2 tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The H1 tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_h2_tag(void *pdoc, Node *UNUSED(child)) 
+s_iphone_end_h2_tag(void *pdoc, Node *UNUSED(child)) 
 {
-  jxhtml_t*    jxhtml;
+  iphone_t*    iphone;
   Doc*          doc;
   request_rec*  r;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc     = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc     = iphone->doc;
   r       = doc->r;
   
   W_L("</h2>");
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    chxj_css_pop_prop_list(jxhtml->css_prop_stack);
+  if (IS_CSS_ON(iphone->entryp)) {
+    chxj_css_pop_prop_list(iphone->css_prop_stack);
   }
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the H3 tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The H1 tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_h3_tag(void *pdoc, Node *node)
+s_iphone_start_h3_tag(void *pdoc, Node *node)
 {
-  jxhtml_t    *jxhtml;
+  iphone_t    *iphone;
   Doc         *doc;
   request_rec *r;
   Attr        *attr;
@@ -5432,8 +5411,8 @@ s_jxhtml_start_h3_tag(void *pdoc, Node *node)
   char        *attr_align = NULL;
   char        *css_clear  = NULL;
 
-  jxhtml   = GET_JXHTML(pdoc);
-  doc     = jxhtml->doc;
+  iphone   = GET_IPHONE(pdoc);
+  doc     = iphone->doc;
   r       = doc->r;
 
   for (attr = qs_get_attr(doc,node);
@@ -5450,8 +5429,8 @@ s_jxhtml_start_h3_tag(void *pdoc, Node *node)
       attr_style = value;
     }
   }
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+  if (IS_CSS_ON(iphone->entryp)) {
+    css_prop_list_t *style = s_iphone_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *list_style_type_prop = chxj_css_get_property_value(doc, style, "text-align");
       css_property_t *clear_prop           = chxj_css_get_property_value(doc, style, "clear");
@@ -5497,49 +5476,49 @@ s_jxhtml_start_h3_tag(void *pdoc, Node *node)
   }
   W_L(">");
 
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the H3 tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The H1 tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_h3_tag(void *pdoc, Node *UNUSED(child)) 
+s_iphone_end_h3_tag(void *pdoc, Node *UNUSED(child)) 
 {
-  jxhtml_t*    jxhtml;
+  iphone_t*    iphone;
   Doc*          doc;
   request_rec*  r;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc     = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc     = iphone->doc;
   r       = doc->r;
 
   W_L("</h3>");
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    chxj_css_pop_prop_list(jxhtml->css_prop_stack);
+  if (IS_CSS_ON(iphone->entryp)) {
+    chxj_css_pop_prop_list(iphone->css_prop_stack);
   }
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the H4 tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The H1 tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_h4_tag(void *pdoc, Node *node)
+s_iphone_start_h4_tag(void *pdoc, Node *node)
 {
-  jxhtml_t    *jxhtml;
+  iphone_t    *iphone;
   Doc         *doc;
   request_rec *r;
   Attr        *attr;
@@ -5547,8 +5526,8 @@ s_jxhtml_start_h4_tag(void *pdoc, Node *node)
   char        *attr_align = NULL;
   char        *css_clear  = NULL;
 
-  jxhtml   = GET_JXHTML(pdoc);
-  doc     = jxhtml->doc;
+  iphone   = GET_IPHONE(pdoc);
+  doc     = iphone->doc;
   r       = doc->r;
 
   for (attr = qs_get_attr(doc,node);
@@ -5565,8 +5544,8 @@ s_jxhtml_start_h4_tag(void *pdoc, Node *node)
       attr_style = value;
     }
   }
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+  if (IS_CSS_ON(iphone->entryp)) {
+    css_prop_list_t *style = s_iphone_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *list_style_type_prop = chxj_css_get_property_value(doc, style, "text-align");
       css_property_t *clear_prop           = chxj_css_get_property_value(doc, style, "clear");
@@ -5612,50 +5591,50 @@ s_jxhtml_start_h4_tag(void *pdoc, Node *node)
   }
   W_L(">");
 
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the H4 tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The H1 tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_h4_tag(void *pdoc, Node *UNUSED(child)) 
+s_iphone_end_h4_tag(void *pdoc, Node *UNUSED(child)) 
 {
-  jxhtml_t      *jxhtml;
+  iphone_t      *iphone;
   Doc           *doc;
   request_rec   *r;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc     = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc     = iphone->doc;
   r       = doc->r;
   
   W_L("</h4>");
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    chxj_css_pop_prop_list(jxhtml->css_prop_stack);
+  if (IS_CSS_ON(iphone->entryp)) {
+    chxj_css_pop_prop_list(iphone->css_prop_stack);
   }
 
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the H5 tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The H1 tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_h5_tag(void *pdoc, Node *node)
+s_iphone_start_h5_tag(void *pdoc, Node *node)
 {
-  jxhtml_t    *jxhtml;
+  iphone_t    *iphone;
   Doc         *doc;
   request_rec *r;
   Attr        *attr;
@@ -5663,8 +5642,8 @@ s_jxhtml_start_h5_tag(void *pdoc, Node *node)
   char        *attr_align = NULL;
   char        *css_clear  = NULL;
 
-  jxhtml   = GET_JXHTML(pdoc);
-  doc     = jxhtml->doc;
+  iphone   = GET_IPHONE(pdoc);
+  doc     = iphone->doc;
   r       = doc->r;
 
   for (attr = qs_get_attr(doc,node);
@@ -5681,8 +5660,8 @@ s_jxhtml_start_h5_tag(void *pdoc, Node *node)
       attr_style = value;
     }
   }
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+  if (IS_CSS_ON(iphone->entryp)) {
+    css_prop_list_t *style = s_iphone_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *list_style_type_prop = chxj_css_get_property_value(doc, style, "text-align");
       css_property_t *clear_prop           = chxj_css_get_property_value(doc, style, "clear");
@@ -5728,50 +5707,50 @@ s_jxhtml_start_h5_tag(void *pdoc, Node *node)
   }
   W_L(">");
 
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the H5 tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The H1 tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_h5_tag(void *pdoc, Node *UNUSED(child)) 
+s_iphone_end_h5_tag(void *pdoc, Node *UNUSED(child)) 
 {
-  jxhtml_t    *jxhtml;
+  iphone_t    *iphone;
   Doc         *doc;
   request_rec *r;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc     = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc     = iphone->doc;
   r       = doc->r;
   
   W_L("</h5>");
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    chxj_css_pop_prop_list(jxhtml->css_prop_stack);
+  if (IS_CSS_ON(iphone->entryp)) {
+    chxj_css_pop_prop_list(iphone->css_prop_stack);
   }
 
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the H6 tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The H1 tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_h6_tag(void *pdoc, Node *node)
+s_iphone_start_h6_tag(void *pdoc, Node *node)
 {
-  jxhtml_t    *jxhtml;
+  iphone_t    *iphone;
   Doc         *doc;
   request_rec *r;
   Attr        *attr;
@@ -5779,8 +5758,8 @@ s_jxhtml_start_h6_tag(void *pdoc, Node *node)
   char        *attr_align = NULL;
   char        *css_clear  = NULL;
 
-  jxhtml   = GET_JXHTML(pdoc);
-  doc     = jxhtml->doc;
+  iphone   = GET_IPHONE(pdoc);
+  doc     = iphone->doc;
   r       = doc->r;
 
   for (attr = qs_get_attr(doc,node);
@@ -5797,8 +5776,8 @@ s_jxhtml_start_h6_tag(void *pdoc, Node *node)
       attr_style = value;
     }
   }
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+  if (IS_CSS_ON(iphone->entryp)) {
+    css_prop_list_t *style = s_iphone_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *list_style_type_prop = chxj_css_get_property_value(doc, style, "text-align");
       css_property_t *clear_prop           = chxj_css_get_property_value(doc, style, "clear");
@@ -5844,51 +5823,51 @@ s_jxhtml_start_h6_tag(void *pdoc, Node *node)
   }
   W_L(">");
 
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the H6 tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The H1 tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_h6_tag(void *pdoc, Node *UNUSED(child)) 
+s_iphone_end_h6_tag(void *pdoc, Node *UNUSED(child)) 
 {
-  jxhtml_t    *jxhtml;
+  iphone_t    *iphone;
   Doc         *doc;
   request_rec *r;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc     = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc     = iphone->doc;
   r       = doc->r;
   
   W_L("</h6>");
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    chxj_css_pop_prop_list(jxhtml->css_prop_stack);
+  if (IS_CSS_ON(iphone->entryp)) {
+    chxj_css_pop_prop_list(iphone->css_prop_stack);
   }
 
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the MENU tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The MENU tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_menu_tag(void *pdoc, Node *node)
+s_iphone_start_menu_tag(void *pdoc, Node *node)
 {
-  jxhtml_t *jxhtml      = GET_JXHTML(pdoc);
-  Doc       *doc        = jxhtml->doc;
+  iphone_t *iphone      = GET_IPHONE(pdoc);
+  Doc       *doc        = iphone->doc;
   Attr      *attr;
   char      *attr_style = NULL;
   char      *attr_color = NULL;
@@ -5908,8 +5887,8 @@ s_jxhtml_start_menu_tag(void *pdoc, Node *node)
       attr_style = value;
     }
   }
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+  if (IS_CSS_ON(iphone->entryp)) {
+    css_prop_list_t *style = s_iphone_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *color_prop           = chxj_css_get_property_value(doc, style, "color");
       css_property_t *size_prop            = chxj_css_get_property_value(doc, style, "font-size");
@@ -5974,99 +5953,99 @@ s_jxhtml_start_menu_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   W_L(">");
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the MENU tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The MENU tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_menu_tag(void *pdoc, Node *UNUSED(child))
+s_iphone_end_menu_tag(void *pdoc, Node *UNUSED(child))
 {
-  jxhtml_t *jxhtml = GET_JXHTML(pdoc);
-  Doc *doc = jxhtml->doc;
+  iphone_t *iphone = GET_IPHONE(pdoc);
+  Doc *doc = iphone->doc;
   W_L("</menu>");
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    chxj_css_pop_prop_list(jxhtml->css_prop_stack);
+  if (IS_CSS_ON(iphone->entryp)) {
+    chxj_css_pop_prop_list(iphone->css_prop_stack);
   }
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the PLAINTEXT tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The PLAINTEXT tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_plaintext_tag(void *pdoc, Node *node)
+s_iphone_start_plaintext_tag(void *pdoc, Node *node)
 {
-  jxhtml_t *jxhtml;
+  iphone_t *iphone;
   Doc *doc;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc     = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc     = iphone->doc;
   W_L("<plaintext>");
-  s_jxhtml_start_plaintext_tag_inner(pdoc,node);
-  return jxhtml->out;
+  s_iphone_start_plaintext_tag_inner(pdoc,node);
+  return iphone->out;
 }
 
 static char *
-s_jxhtml_start_plaintext_tag_inner(void *pdoc, Node *node)
+s_iphone_start_plaintext_tag_inner(void *pdoc, Node *node)
 {
-  jxhtml_t *jxhtml;
+  iphone_t *iphone;
   Doc *doc;
   Node *child;
-  jxhtml = GET_JXHTML(pdoc);
-  doc     = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc     = iphone->doc;
   for (child = qs_get_child_node(doc, node);
        child;
        child = qs_get_next_node(doc, child)) {
     W_V(child->otext);
-    s_jxhtml_start_plaintext_tag_inner(pdoc, child);
+    s_iphone_start_plaintext_tag_inner(pdoc, child);
   }
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the PLAINTEXT tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The PLAINTEXT tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_plaintext_tag(void *pdoc, Node *UNUSED(child))
+s_iphone_end_plaintext_tag(void *pdoc, Node *UNUSED(child))
 {
-  jxhtml_t *jxhtml = GET_JXHTML(pdoc);
-  return jxhtml->out;
+  iphone_t *iphone = GET_IPHONE(pdoc);
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the BLINK tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The BLINK tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_blink_tag(void *pdoc, Node *node)
+s_iphone_start_blink_tag(void *pdoc, Node *node)
 {
-  jxhtml_t *jxhtml      = GET_JXHTML(pdoc);
-  Doc       *doc        = jxhtml->doc;
+  iphone_t *iphone      = GET_IPHONE(pdoc);
+  Doc       *doc        = iphone->doc;
   Attr      *attr;
   char      *attr_style = NULL;
   char      *attr_color = NULL;
@@ -6080,8 +6059,8 @@ s_jxhtml_start_blink_tag(void *pdoc, Node *node)
       attr_style = value;
     }
   }
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+  if (IS_CSS_ON(iphone->entryp)) {
+    css_prop_list_t *style = s_iphone_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *color_prop           = chxj_css_get_property_value(doc, style, "color");
       css_property_t *size_prop            = chxj_css_get_property_value(doc, style, "font-size");
@@ -6118,66 +6097,76 @@ s_jxhtml_start_blink_tag(void *pdoc, Node *node)
       }
     }
   }
-  W_L("<blink");
-  if (attr_color || attr_size) {
-    W_L(" style=\"");
-    if (attr_color) {
-      attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
-      W_L("color:");
-      W_V(attr_color);
-      W_L(";");
-    }
-    if (attr_size) {
-      W_L("font-size:");
-      W_V(attr_size);
-      W_L(";");
-    }
-    W_L("\"");
+
+  W_L("<span");
+  W_L(" style=\"");
+  W_L(STYLE_BLINK);
+  if (iphone->blink_keyframe_out == 0) {
+    iphone->style_data = apr_pstrcat(doc->pool, (iphone->style_data) ? iphone->style_data : "",
+                                                BLINK_KEYFRAME,
+                                                NULL);
+    iphone->blink_keyframe_out = 1;
   }
+  if (attr_color) {
+    attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
+    W_L("color:");
+    W_V(attr_color);
+    W_L(";");
+  }
+  if (attr_size) {
+    W_L("font-size:");
+    W_V(attr_size);
+    W_L(";");
+  }
+  W_L("\"");
   W_L(">");
-  return jxhtml->out;
+  
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the BLINK tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The BLINK tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_blink_tag(void *pdoc, Node *UNUSED(child))
+s_iphone_end_blink_tag(void *pdoc, Node *UNUSED(child))
 {
-  jxhtml_t *jxhtml = GET_JXHTML(pdoc);
-  Doc      *doc = jxhtml->doc;
-  W_L("</blink>");
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    chxj_css_pop_prop_list(jxhtml->css_prop_stack);
+  iphone_t *iphone = GET_IPHONE(pdoc);
+  Doc      *doc = iphone->doc;
+  W_L("</span>");
+  if (IS_CSS_ON(iphone->entryp)) {
+    chxj_css_pop_prop_list(iphone->css_prop_stack);
   }
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the MARQUEE tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The MARQUEE tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_marquee_tag(void *pdoc, Node *node)
+s_iphone_start_marquee_tag(void *pdoc, Node *node)
 {
-  jxhtml_t *jxhtml = GET_JXHTML(pdoc);
-  Doc       *doc = jxhtml->doc;
+  iphone_t *iphone = GET_IPHONE(pdoc);
+  Doc       *doc = iphone->doc;
   Attr      *attr;
-  char      *attr_direction = NULL;
   char      *attr_style     = NULL;
   char      *attr_color     = NULL;
   char      *attr_size      = NULL;
+  char      *attr_wap_marquee_loop  = NULL;
+  char      *attr_wap_marquee_style = NULL;
+  char      *attr_wap_marquee_dir   = NULL;
+  char      *attr_wap_marquee_speed = NULL;
   char      *attr_bgcolor   = NULL;
   /*--------------------------------------------------------------------------*/
   /* Get Attributes                                                           */
@@ -6190,18 +6179,27 @@ s_jxhtml_start_marquee_tag(void *pdoc, Node *node)
     if (STRCASEEQ('d','D',"direction", name)) {
       if (value) {
         if (STRCASEEQ('l','L',"left",value)) {
-          attr_direction = "rtl";
+          attr_wap_marquee_dir = "rtl";
         }
         else if (STRCASEEQ('r','R',"right",value)) {
-          attr_direction = "ltr";
+          attr_wap_marquee_dir = "ltr";
         }
       }
     }
     else if (STRCASEEQ('b','B',"behavior",name)) {
-      /* ignore */
+      if (value && *value) {
+        attr_wap_marquee_style = value;
+      }
     }
     else if (STRCASEEQ('l','L',"loop",name)) {
-      /* ignore */
+      if (value && *value) {
+        if(strcmp(value,"0") == 0 || strcmp(value,"-1") == 0){
+          attr_wap_marquee_loop = "infinite";
+        }
+        else{
+          attr_wap_marquee_loop = value;
+        }
+      }
     }
     else if (STRCASEEQ('b','B',"bgcolor",name)) {
       if (value && *value) {
@@ -6212,14 +6210,49 @@ s_jxhtml_start_marquee_tag(void *pdoc, Node *node)
       attr_style = value;
     }
   }
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+  if (IS_CSS_ON(iphone->entryp)) {
+    css_prop_list_t *style = s_iphone_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *color_prop = chxj_css_get_property_value(doc, style, "color");
       css_property_t *size_prop  = chxj_css_get_property_value(doc, style, "font-size");
       css_property_t *bgcolor_prop  = chxj_css_get_property_value(doc, style, "background-color");
-      css_property_t *direction_prop  = chxj_css_get_property_value(doc, style, "-wap-marquee-dir");
+      css_property_t *wap_marquee_style_prop = chxj_css_get_property_value(doc, style, "-wap-marquee-style");
+      css_property_t *wap_marquee_dir_prop   = chxj_css_get_property_value(doc, style, "-wap-marquee-dir");
+      css_property_t *wap_marquee_loop_prop  = chxj_css_get_property_value(doc, style, "-wap-marquee-loop");
+      css_property_t *wap_marquee_speed_prop = chxj_css_get_property_value(doc, style, "-wap-marquee-speed");
       css_property_t *cur;
+      if (!attr_wap_marquee_style) {
+        for (cur = wap_marquee_style_prop->next; cur != wap_marquee_style_prop; cur = cur->next) {
+          if (STRCASEEQ('s','S',"scroll", cur->value) || STRCASEEQ('s','S',"slide",cur->value) || STRCASEEQ('a','A',"alternate",cur->value)) {
+            attr_wap_marquee_style = apr_pstrdup(doc->pool, cur->value);
+          }
+        }
+      }
+      if (!attr_wap_marquee_dir) {
+        for (cur = wap_marquee_dir_prop->next; cur != wap_marquee_dir_prop; cur = cur->next) {
+          if (STRCASEEQ('l','L',"ltr",cur->value)) {
+            attr_wap_marquee_dir = apr_pstrdup(doc->pool, cur->value);
+          }
+          else if (STRCASEEQ('r','R',"rtl",cur->value)) {
+            attr_wap_marquee_dir = apr_pstrdup(doc->pool, cur->value);
+          }
+        }
+      }
+      if (!attr_wap_marquee_loop) {
+        for (cur = wap_marquee_loop_prop->next; cur != wap_marquee_loop_prop; cur = cur->next) {
+          if(strcmp(cur->value,"0") == 0 || strcmp(cur->value,"-1") == 0){
+            attr_wap_marquee_loop = "infinite";
+          }
+          else{
+            attr_wap_marquee_loop = apr_pstrdup(doc->pool, cur->value);
+          }
+        }
+      }
+      if (!attr_wap_marquee_speed) {
+        for (cur = wap_marquee_speed_prop->next; cur != wap_marquee_speed_prop; cur = cur->next) {
+          attr_wap_marquee_speed = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
       for (cur = color_prop->next; cur != color_prop; cur = cur->next) {
         if (cur->value && *cur->value) {
           attr_color = apr_pstrdup(doc->pool, cur->value);
@@ -6228,11 +6261,6 @@ s_jxhtml_start_marquee_tag(void *pdoc, Node *node)
       for (cur = bgcolor_prop->next; cur != bgcolor_prop; cur = cur->next) {
         if (cur->value && *cur->value) {
           attr_bgcolor = apr_pstrdup(doc->pool, cur->value);
-        }
-      }
-      for (cur = direction_prop->next; cur != direction_prop; cur = cur->next) {
-        if (cur->value && *cur->value) {
-          attr_direction = apr_pstrdup(doc->pool, cur->value);
         }
       }
       for (cur = size_prop->next; cur != size_prop; cur = cur->next) {
@@ -6250,57 +6278,76 @@ s_jxhtml_start_marquee_tag(void *pdoc, Node *node)
       }
     }
   }
-  W_L("<marquee");
-  if (attr_color || attr_size || attr_direction || attr_bgcolor) {
-    W_L(" style=\"");
-    if (attr_direction) {
-      W_L("-wap-marquee-dir:");
-      W_V(attr_direction);
-      W_L(";");
+
+  W_L("<div style=\"");
+  W_L("overflow:-webkit-marquee;");
+  if (attr_wap_marquee_dir) {
+    W_L("-webkit-marquee-direction:");
+    if (STRCASEEQ('r','R',"rtl",attr_wap_marquee_dir)) {
+      W_L("left");
     }
-    if (attr_bgcolor) {
-      attr_bgcolor = chxj_css_rgb_func_to_value(doc->pool, attr_bgcolor);
-      W_L("background-color:");
-      W_V(attr_bgcolor);
-      W_L(";");
+    else if (STRCASEEQ('l','L',"ltr",attr_wap_marquee_dir)) {
+      W_L("right");
     }
-    if (attr_color) {
-      attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
-      W_L("color:");
-      W_V(attr_color);
-      W_L(";");
-    }
-    if (attr_size) {
-      W_L("font-size:");
-      W_V(attr_size);
-      W_L(";");
-    }
-    W_L("\"");
+    W_L(";");
   }
+  if (attr_wap_marquee_style) {
+    W_L("-webkit-marquee-style:");
+    W_V(attr_wap_marquee_style);
+    W_L(";");
+  }
+  if (attr_wap_marquee_loop) {
+    W_L("-webkit-marquee-repetition:");
+    W_V(attr_wap_marquee_loop);
+    W_L(";");
+  }
+  if (attr_wap_marquee_speed) {
+    W_L("-webkit-marquee-speed:");
+    W_V(attr_wap_marquee_speed);
+    W_L(";");
+  }
+  if (attr_bgcolor) {
+    attr_bgcolor = chxj_css_rgb_func_to_value(doc->pool, attr_bgcolor);
+    W_L("background-color:");
+    W_V(attr_bgcolor);
+    W_L(";");
+  }
+  if (attr_color) {
+    attr_color = chxj_css_rgb_func_to_value(doc->pool, attr_color);
+    W_L("color:");
+    W_V(attr_color);
+    W_L(";");
+  }
+  if (attr_size) {
+    W_L("font-size:");
+    W_V(attr_size);
+    W_L(";");
+  }
+  W_L("\"");
   W_L(">");
 
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the MARQUEE tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The MARQUEE tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_marquee_tag(void *pdoc, Node *UNUSED(node))
+s_iphone_end_marquee_tag(void *pdoc, Node *UNUSED(node))
 {
-  jxhtml_t *jxhtml = GET_JXHTML(pdoc);
-  Doc      *doc     = jxhtml->doc;
-  W_L("</marquee>");
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    chxj_css_pop_prop_list(jxhtml->css_prop_stack);
+  iphone_t *iphone = GET_IPHONE(pdoc);
+  Doc      *doc     = iphone->doc;
+  W_L("</div>");
+  if (IS_CSS_ON(iphone->entryp)) {
+    chxj_css_pop_prop_list(iphone->css_prop_stack);
   }
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
@@ -6308,40 +6355,40 @@ s_jxhtml_end_marquee_tag(void *pdoc, Node *UNUSED(node))
  * It is handler who processes the New Line Code.
  */
 static char *
-s_jxhtml_newline_mark(void *pdoc, Node *UNUSED(node))
+s_iphone_newline_mark(void *pdoc, Node *UNUSED(node))
 {
-  jxhtml_t *jxhtml = GET_JXHTML(pdoc);
-  if (jxhtml->start_html_flag) {
-    Doc *doc = jxhtml->doc;
+  iphone_t *iphone = GET_IPHONE(pdoc);
+  if (iphone->start_html_flag) {
+    Doc *doc = iphone->doc;
     W_NLCODE();
   }
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the LINK tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The LINK tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_link_tag(void *pdoc, Node *node)
+s_iphone_link_tag(void *pdoc, Node *node)
 {
-  jxhtml_t      *jxhtml;
+  iphone_t      *iphone;
   Doc           *doc;
   Attr          *attr;
   char          *rel  = NULL;
   char          *href = NULL;
   char          *type = NULL;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc    = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc    = iphone->doc;
 
-  if (! IS_CSS_ON(jxhtml->entryp)) {
-    return jxhtml->out;
+  if (! IS_CSS_ON(iphone->entryp)) {
+    return iphone->out;
   }
 
   for (attr = qs_get_attr(doc,node);
@@ -6368,32 +6415,32 @@ s_jxhtml_link_tag(void *pdoc, Node *node)
 
   if (rel && href && type) {
     DBG(doc->r,"REQ[%X] start load CSS. url:[%s]", TO_ADDR(doc->r),href);
-    jxhtml->style = chxj_css_parse_from_uri(doc->r, doc->pool, jxhtml->style, href);
+    iphone->style = chxj_css_parse_from_uri(doc->r, doc->pool, iphone->style, href);
     DBG(doc->r,"REQ[%X] end load CSS. url:[%s]", TO_ADDR(doc->r),href);
   }
 
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 static css_prop_list_t *
-s_jxhtml_push_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value)
+s_iphone_push_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value)
 {
-  jxhtml_t *jxhtml = GET_JXHTML(pdoc);
-  Doc *doc = jxhtml->doc;
+  iphone_t *iphone = GET_IPHONE(pdoc);
+  Doc *doc = iphone->doc;
   css_prop_list_t *last_css = NULL;
-  if (IS_CSS_ON(jxhtml->entryp)) {
+  if (IS_CSS_ON(iphone->entryp)) {
     css_prop_list_t *dup_css;
     css_selector_t  *selector;
 
-    last_css = chxj_css_get_last_prop_list(jxhtml->css_prop_stack);
+    last_css = chxj_css_get_last_prop_list(iphone->css_prop_stack);
     dup_css  = chxj_dup_css_prop_list(doc, last_css);
-    selector = chxj_css_find_selector(doc, jxhtml->style, node);
+    selector = chxj_css_find_selector(doc, iphone->style, node);
     if (selector) {
       chxj_css_prop_list_merge_property(doc, dup_css, selector);
     }
-    chxj_css_push_prop_list(jxhtml->css_prop_stack, dup_css);
-    last_css = chxj_css_get_last_prop_list(jxhtml->css_prop_stack);
+    chxj_css_push_prop_list(iphone->css_prop_stack, dup_css);
+    last_css = chxj_css_get_last_prop_list(iphone->css_prop_stack);
 
     if (style_attr_value) {
       css_stylesheet_t *ssheet = chxj_css_parse_style_attr(doc, NULL, apr_pstrdup(doc->pool, node->name), NULL, NULL, apr_pstrdup(doc->pool, style_attr_value));
@@ -6407,18 +6454,18 @@ s_jxhtml_push_and_get_now_style(void *pdoc, Node *node, const char *style_attr_v
 
 
 static css_prop_list_t *
-s_jxhtml_nopush_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value)
+s_iphone_nopush_and_get_now_style(void *pdoc, Node *node, const char *style_attr_value)
 {
-  jxhtml_t *jxhtml = GET_JXHTML(pdoc);
-  Doc *doc = jxhtml->doc;
+  iphone_t *iphone = GET_IPHONE(pdoc);
+  Doc *doc = iphone->doc;
   css_prop_list_t *last_css = NULL;
-  if (IS_CSS_ON(jxhtml->entryp)) {
+  if (IS_CSS_ON(iphone->entryp)) {
     css_prop_list_t *dup_css;
     css_selector_t  *selector;
 
-    last_css = chxj_css_get_last_prop_list(jxhtml->css_prop_stack);
+    last_css = chxj_css_get_last_prop_list(iphone->css_prop_stack);
     dup_css  = chxj_dup_css_prop_list(doc, last_css);
-    selector = chxj_css_find_selector(doc, jxhtml->style, node);
+    selector = chxj_css_find_selector(doc, iphone->style, node);
     if (selector) {
       chxj_css_prop_list_merge_property(doc, dup_css, selector);
     }
@@ -6444,9 +6491,9 @@ s_jxhtml_nopush_and_get_now_style(void *pdoc, Node *node, const char *style_attr
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_span_tag(void *pdoc, Node *node)
+s_iphone_start_span_tag(void *pdoc, Node *node)
 {
-  jxhtml_t *jxhtml;
+  iphone_t *iphone;
   Doc *doc;
   Attr *attr;
   char *attr_style = NULL;
@@ -6458,10 +6505,11 @@ s_jxhtml_start_span_tag(void *pdoc, Node *node)
   char *attr_marquee_dir = NULL;
   char *attr_marquee_style = NULL;
   char *attr_marquee_loop = NULL;
+  char *attr_marquee_speed = NULL;
   char *css_bgcolor        = NULL;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc     = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc     = iphone->doc;
 
   for (attr = qs_get_attr(doc,node);
        attr;
@@ -6472,8 +6520,8 @@ s_jxhtml_start_span_tag(void *pdoc, Node *node)
       attr_style = val;
     }
   }
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    css_prop_list_t *style = s_jxhtml_nopush_and_get_now_style(pdoc, node, attr_style);
+  if (IS_CSS_ON(iphone->entryp)) {
+    css_prop_list_t *style = s_iphone_nopush_and_get_now_style(pdoc, node, attr_style);
     if (style) {
       css_property_t *color_prop = chxj_css_get_property_value(doc, style, "color");
       css_property_t *size_prop = chxj_css_get_property_value(doc, style, "font-size");
@@ -6483,6 +6531,7 @@ s_jxhtml_start_span_tag(void *pdoc, Node *node)
       css_property_t *marquee_dir_prop = chxj_css_get_property_value(doc, style, "-wap-marquee-dir");
       css_property_t *marquee_style_prop = chxj_css_get_property_value(doc, style, "-wap-marquee-style");
       css_property_t *marquee_loop_prop = chxj_css_get_property_value(doc, style, "-wap-marquee-loop");
+      css_property_t *marquee_speed_prop = chxj_css_get_property_value(doc, style, "-wap-marquee-speed");
       css_property_t *bgcolor_prop = chxj_css_get_property_value(doc, style, "background-color");
       
       css_property_t *cur;
@@ -6539,6 +6588,11 @@ s_jxhtml_start_span_tag(void *pdoc, Node *node)
           }
         }
       }
+      for (cur = marquee_speed_prop->next; cur != marquee_speed_prop; cur = cur->next) {
+        if (cur->value && *cur->value) {
+          attr_marquee_speed = apr_pstrdup(doc->pool, cur->value);
+        }
+      }
       for (cur = text_align_prop->next; cur != text_align_prop; cur = cur->next) {
         if (STRCASEEQ('l','L',"left", cur->value)) {
           attr_align = apr_pstrdup(doc->pool, "left");
@@ -6558,6 +6612,38 @@ s_jxhtml_start_span_tag(void *pdoc, Node *node)
     }
   }
 
+  W_L("<div");
+  if (attr_marquee) {
+    W_L(" style=\"");
+    W_L("overflow:-webkit-marquee;");
+    if (attr_marquee_style) {
+      W_L("-webkit-marquee-style:");
+      W_V(attr_marquee_style);
+      W_L(";");
+    }
+    if (attr_marquee_dir) {
+      W_L("-webkit-marquee-direction:");
+      if (STRCASEEQ('r','R',"rtl",attr_marquee_dir)) {
+        W_L("left");
+      }
+      else if (STRCASEEQ('l','L',"ltr",attr_marquee_dir)) {
+        W_L("right");
+      }
+      W_L(";");
+    }
+    if (attr_marquee_loop) {
+      W_L("-webkit-marquee-repetition:");
+      W_V(attr_marquee_loop);
+      W_L(";");
+    }
+    if (attr_marquee_speed) {
+      W_L("-webkit-marquee-speed:");
+      W_V(attr_marquee_speed);
+      W_L(";");
+    }
+    W_L("\"");
+  }
+  W_L(">");
   W_L("<span");
   if (attr_color || attr_size || attr_align || attr_blink || attr_marquee || css_bgcolor) {
     W_L(" style=\"");
@@ -6578,26 +6664,12 @@ s_jxhtml_start_span_tag(void *pdoc, Node *node)
       W_L(";");
     }
     if (attr_blink) {
-      W_L("text-decoration:");
-      W_V("blink");
-      W_L(";");
-    }
-    if (attr_marquee) {
-      W_L("display:-wap-marquee;");
-      if (attr_marquee_dir) {
-        W_L("-wap-marquee-dir:");
-        W_V(attr_marquee_dir);
-        W_L(";");
-      }
-      if (attr_marquee_style) {
-        W_L("-wap-marquee-style:");
-        W_V(attr_marquee_style);
-        W_L(";");
-      }
-      if (attr_marquee_loop) {
-        W_L("-wap-marquee-loop:");
-        W_V(attr_marquee_loop);
-        W_L(";");
+      W_L(STYLE_BLINK);
+      if (iphone->blink_keyframe_out == 0) {
+        iphone->style_data = apr_pstrcat(doc->pool, (iphone->style_data) ? iphone->style_data : "",
+                                                    BLINK_KEYFRAME,
+                                                    NULL);
+        iphone->blink_keyframe_out = 1;
       }
     }
     if(css_bgcolor){
@@ -6608,7 +6680,7 @@ s_jxhtml_start_span_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   W_L(">");
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
@@ -6621,16 +6693,17 @@ s_jxhtml_start_span_tag(void *pdoc, Node *node)
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_span_tag(void *pdoc, Node *UNUSED(node))
+s_iphone_end_span_tag(void *pdoc, Node *UNUSED(node))
 {
-  jxhtml_t *jxhtml = GET_JXHTML(pdoc);
-  Doc *doc = jxhtml->doc;
+  iphone_t *iphone = GET_IPHONE(pdoc);
+  Doc *doc = iphone->doc;
 
   W_L("</span>");
-  if (IS_CSS_ON(jxhtml->entryp)) {
-    chxj_css_pop_prop_list(jxhtml->css_prop_stack);
+  W_L("</div>");
+  if (IS_CSS_ON(iphone->entryp)) {
+    chxj_css_pop_prop_list(iphone->css_prop_stack);
   }
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
@@ -6643,21 +6716,20 @@ s_jxhtml_end_span_tag(void *pdoc, Node *UNUSED(node))
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_style_tag(void *pdoc, Node *node)
+s_iphone_style_tag(void *pdoc, Node *node)
 {
-  jxhtml_t     *jxhtml;
+  iphone_t     *iphone;
   Doc           *doc;
   Attr          *attr;
   char          *type = NULL;
   Node          *child   = NULL;
   char          *style;
 
+  iphone = GET_IPHONE(pdoc);
+  doc     = iphone->doc;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc     = jxhtml->doc;
-
-  if (! IS_CSS_ON(jxhtml->entryp)) {
-    return jxhtml->out;
+  if (! IS_CSS_ON(iphone->entryp)) {
+    return iphone->out;
   }
 
   for (attr = qs_get_attr(doc,node);
@@ -6686,12 +6758,23 @@ s_jxhtml_style_tag(void *pdoc, Node *node)
     }
     if (strlen(style) > 0) {
       DBG(doc->r,"REQ[%X] start load CSS. buf:[%s]", TO_ADDR(doc->r),style);
-      jxhtml->style = chxj_css_parse_style_value(doc, jxhtml->style, style);
+      iphone->style = chxj_css_parse_style_value(doc, iphone->style, style);
       DBG(doc->r,"REQ[%X] end load CSS. value:[%s]", TO_ADDR(doc->r),style);
     }
   }
-  return jxhtml->out;
+  return iphone->out;
 }
+
+
+static char *
+s_iphone_create_style_data(apr_pool_t *pool, const char *style_data)
+{
+  if (! style_data) {
+    return "";
+  }
+  return apr_pstrcat(pool, "<style type=\"text/css\"><![CDATA[",style_data, "]]></style>", NULL);
+}
+
 /**
  * It is a handler who processes the OBJECT tag.
  *
@@ -6701,10 +6784,10 @@ s_jxhtml_style_tag(void *pdoc, Node *node)
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_object_tag(void *pdoc, Node *node)
+s_iphone_start_object_tag(void *pdoc, Node *node)
 {
-  jxhtml_t *jxhtml = GET_JXHTML(pdoc);
-  Doc *doc = jxhtml->doc;
+  iphone_t *iphone = GET_IPHONE(pdoc);
+  Doc *doc = iphone->doc;
   Attr *attr;
   
   char *attr_id            = NULL;
@@ -6792,7 +6875,7 @@ s_jxhtml_start_object_tag(void *pdoc, Node *node)
   }
   
   W_L(">");
-  return jxhtml->out;
+  return iphone->out;
 }
 /**
  * It is a handler who processes the OBJECT tag.
@@ -6803,13 +6886,13 @@ s_jxhtml_start_object_tag(void *pdoc, Node *node)
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_object_tag(void *pdoc, Node *UNUSED(node))
+s_iphone_end_object_tag(void *pdoc, Node *UNUSED(node))
 {
-  jxhtml_t *jxhtml = GET_JXHTML(pdoc);
-  Doc *doc = jxhtml->doc;
+  iphone_t *iphone = GET_IPHONE(pdoc);
+  Doc *doc = iphone->doc;
 
   W_L("</object>");
-  return jxhtml->out;
+  return iphone->out;
 }
 /**
  * It is a handler who processes the OBJECT tag.
@@ -6820,10 +6903,10 @@ s_jxhtml_end_object_tag(void *pdoc, Node *UNUSED(node))
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_param_tag(void *pdoc, Node *node)
+s_iphone_start_param_tag(void *pdoc, Node *node)
 {
-  jxhtml_t *jxhtml = GET_JXHTML(pdoc);
-  Doc *doc = jxhtml->doc;
+  iphone_t *iphone = GET_IPHONE(pdoc);
+  Doc *doc = iphone->doc;
 
   Attr *attr;
   char *attr_name          = NULL;
@@ -6866,28 +6949,28 @@ s_jxhtml_start_param_tag(void *pdoc, Node *node)
     W_L("\"");
   }
   W_L(" />");
-  return jxhtml->out;
+  return iphone->out;
 }
 /**
  * It is a handler who processes the CAPTION tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The CAPTION tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_caption_tag(void *pdoc, Node *node)
+s_iphone_start_caption_tag(void *pdoc, Node *node)
 {
-  jxhtml_t    *jxhtml;
+  iphone_t    *iphone;
   Doc         *doc;
   request_rec *r;
   Attr        *attr;
   char        *attr_style = NULL;
   char        *attr_align = NULL;
 
-  jxhtml = GET_JXHTML(pdoc);
-  doc    = jxhtml->doc;
+  iphone = GET_IPHONE(pdoc);
+  doc    = iphone->doc;
   r      = doc->r;
 
   for (attr = qs_get_attr(doc,node);
@@ -6918,27 +7001,27 @@ s_jxhtml_start_caption_tag(void *pdoc, Node *node)
   }
   W_L(">");
 
-  return jxhtml->out;
+  return iphone->out;
 }
 
 
 /**
  * It is a handler who processes the CAPTION tag.
  *
- * @param pdoc  [i/o] The pointer to the JXHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the IPHONE structure at the output
  *                     destination is specified.
  * @param node   [i]   The CAPTION tag node is specified.
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_end_caption_tag(void *pdoc, Node *UNUSED(child)) 
+s_iphone_end_caption_tag(void *pdoc, Node *UNUSED(child)) 
 {
-  jxhtml_t*    jxhtml = GET_JXHTML(pdoc);
-  Doc*          doc   = jxhtml->doc;
+  iphone_t*    iphone = GET_IPHONE(pdoc);
+  Doc*          doc   = iphone->doc;
   
   W_L("</caption>");
   
-  return jxhtml->out;
+  return iphone->out;
 }
 
 

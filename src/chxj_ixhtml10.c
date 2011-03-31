@@ -6633,6 +6633,8 @@ s_ixhtml10_style_tag(void *pdoc, Node *node)
   Doc           *doc;
   Attr          *attr;
   char          *type = NULL;
+  Node          *child   = NULL;
+  char          *style;
 
   ixhtml10 = GET_IXHTML10(pdoc);
   doc     = ixhtml10->doc;
@@ -6653,14 +6655,23 @@ s_ixhtml10_style_tag(void *pdoc, Node *node)
     }
   }
 
-  Node *child = qs_get_child_node(doc, node);
-  if (type && child) {
-    char *name  = qs_get_node_name(doc, child);
-    if (STRCASEEQ('t','T',"text", name)) {
-      char *value = qs_get_node_value(doc, child);
-      DBG(doc->r,"REQ[%X] start load CSS. buf:[%s]", TO_ADDR(doc->r),value);
-      ixhtml10->style = chxj_css_parse_style_value(doc, ixhtml10->style, value);
-      DBG(doc->r,"REQ[%X] end load CSS. value:[%s]", TO_ADDR(doc->r),value);
+  if (type) {
+    style = "";
+    for (child = qs_get_child_node(doc, node);
+         child;
+         child = qs_get_next_node(doc, child)) {
+      char *name = qs_get_node_name(doc, child);
+      if (STRCASEEQ('t','T',"text", name)) {
+        char *value = qs_get_node_value(doc, child);
+        if (value && *value) {
+          style = apr_pstrcat(doc->r->pool, style, value, NULL);
+        }
+      }
+    }
+    if (strlen(style) > 0) {
+      DBG(doc->r,"REQ[%X] start load CSS. buf:[%s]", TO_ADDR(doc->r),style);
+      ixhtml10->style = chxj_css_parse_style_value(doc, ixhtml10->style, style);
+      DBG(doc->r,"REQ[%X] end load CSS. value:[%s]", TO_ADDR(doc->r),style);
     }
   }
   return ixhtml10->out;

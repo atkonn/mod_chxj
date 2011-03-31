@@ -58,6 +58,7 @@
 #include "chxj_ixhtml10.h"
 #include "chxj_jhtml.h"
 #include "chxj_jxhtml.h"
+#include "chxj_iphone.h"
 #include "chxj_img_conv_format.h"
 #include "chxj_qr_code.h"
 #include "chxj_encoding.h"
@@ -153,6 +154,24 @@ converter_t convert_routine[] = {
     .emoji_only_converter = chxj_jxhtml_emoji_only_converter,
   },
   {
+    /* CHXJ_SPEC_iPhone2          */
+    .converter            = chxj_convert_iphone,
+    .encoder              = chxj_encoding,
+    .emoji_only_converter = chxj_iphone_emoji_only_converter,
+  },
+  {
+    /* CHXJ_SPEC_iPhone3          */
+    .converter            = chxj_convert_iphone,
+    .encoder              = chxj_encoding,
+    .emoji_only_converter = chxj_iphone_emoji_only_converter,
+  },
+  {
+    /* CHXJ_SPEC_iPhone4          */
+    .converter            = chxj_convert_iphone,
+    .encoder              = chxj_encoding,
+    .emoji_only_converter = chxj_iphone_emoji_only_converter,
+  },
+  {
     /* CHXJ_SPEC_HTML             */
     .converter = NULL,
     .encoder  = NULL,
@@ -237,6 +256,9 @@ chxj_headers_fixup(request_rec *r)
   case CHXJ_SPEC_Hdml:
   case CHXJ_SPEC_Jhtml:
   case CHXJ_SPEC_Jxhtml:
+  case CHXJ_SPEC_iPhone2:
+  case CHXJ_SPEC_iPhone3:
+  case CHXJ_SPEC_iPhone4:
     request_conf->entryp = entryp = chxj_apply_convrule(r, dconf->convrules);
     if (dconf->image != CHXJ_IMG_ON) {
       if (! entryp) {
@@ -419,6 +441,9 @@ s_clear_cookie_header(request_rec *r, device_table *spec)
   case CHXJ_SPEC_Jxhtml:
     apr_table_unset(r->headers_in, "Cookie");
     break;
+  case CHXJ_SPEC_iPhone2:
+  case CHXJ_SPEC_iPhone3:
+  case CHXJ_SPEC_iPhone4:
   default:
     break;
   }
@@ -522,6 +547,9 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
     case CHXJ_SPEC_Jxhtml:
       cookie = chxj_save_cookie(r);
       break;
+    case CHXJ_SPEC_iPhone2:
+    case CHXJ_SPEC_iPhone3:
+    case CHXJ_SPEC_iPhone4:
     default:
       break;
     }
@@ -1177,6 +1205,9 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
         s_add_cookie_id_if_has_location_header(r, cookie);
         chxj_cookie_unlock(r, lock);
         break;
+      case CHXJ_SPEC_iPhone2:
+      case CHXJ_SPEC_iPhone3:
+      case CHXJ_SPEC_iPhone4:
       default:
         break;
       }
@@ -1229,6 +1260,9 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
           s_add_cookie_id_if_has_location_header(r, cookie);
           chxj_cookie_unlock(r, lock);
           break;
+        case CHXJ_SPEC_iPhone2:
+        case CHXJ_SPEC_iPhone3:
+        case CHXJ_SPEC_iPhone4:
         default:
           break;
         }
@@ -1470,6 +1504,9 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
             apr_table_unset(r->err_headers_out, "Set-Cookie");
             break;
 
+          case CHXJ_SPEC_iPhone2:
+          case CHXJ_SPEC_iPhone3:
+          case CHXJ_SPEC_iPhone4:
           default:
             break;
           }
@@ -1875,6 +1912,9 @@ chxj_insert_filter(request_rec *r)
   case CHXJ_SPEC_Hdml:
   case CHXJ_SPEC_Jhtml:
   case CHXJ_SPEC_Jxhtml:
+  case CHXJ_SPEC_iPhone2:
+  case CHXJ_SPEC_iPhone3:
+  case CHXJ_SPEC_iPhone4:
     break;
 
   default:
@@ -2002,6 +2042,9 @@ chxj_create_per_dir_config(apr_pool_t *p, char *arg)
   conf->image_rewrite = CHXJ_IMG_REWRITE_NONE;
   conf->image_rewrite_mode = CHXJ_IMG_REWRITE_MODE_NONE;
   conf->image_rewrite_url = NULL;
+
+  conf->use_emoji_image = 0;
+  conf->emoji_image_url = NULL;
 
   return conf;
 }
@@ -2325,6 +2368,20 @@ chxj_merge_per_dir_config(apr_pool_t *p, void *basev, void *addv)
   }
   else{
     mrg->image_rewrite_mode = add->image_rewrite_mode;
+  }
+
+  if (add->use_emoji_image != 1){
+    mrg->use_emoji_image = base->use_emoji_image;
+  }
+  else{
+    mrg->use_emoji_image = add->use_emoji_image;
+  }
+
+  if (add->emoji_image_url){
+    mrg->emoji_image_url = add->emoji_image_url;
+  }
+  else{
+    mrg->emoji_image_url = base->emoji_image_url;
   }
 
   return mrg;
@@ -3357,6 +3414,31 @@ cmd_image_rewrite_mode(cmd_parms *parms, void *mconfig, const char *arg)
   return NULL;
 }
 
+
+static const char *
+cmd_use_emoji_image(cmd_parms *parms, void *mconfig, const char *arg)
+{
+  mod_chxj_config *conf;
+  conf = (mod_chxj_config *)mconfig;
+  if (strcasecmp("on", arg) == 0) {
+    conf->use_emoji_image = 1;
+  }
+  return NULL;
+}
+
+
+static const char *
+cmd_emoji_image_url(cmd_parms *parms, void *mconfig, const char *arg)
+{
+  mod_chxj_config *conf;
+  if (strlen(arg) > 256){
+    return "mod_chxj: set ChxjEmojiImageUrl is too long.";
+  }
+  conf = (mod_chxj_config *)mconfig;
+  conf->emoji_image_url = apr_pstrdup(parms->pool, arg);
+  return NULL;
+}
+
 static const command_rec cmds[] = {
   AP_INIT_TAKE1(
     "ChxjLoadDeviceData",
@@ -3556,6 +3638,20 @@ static const command_rec cmds[] = {
     NULL,
     OR_ALL,
     "Set rewrite Image rewrite url mode"
+   ),
+  AP_INIT_TAKE1(
+    "ChxjUseEmojiImage",
+    cmd_use_emoji_image,
+    NULL,
+    OR_ALL,
+    "It is specified whether to use image for emoji. (Default:off)"
+   ),
+  AP_INIT_TAKE1(
+    "ChxjEmojiImageUrl",
+    cmd_emoji_image_url,
+    NULL,
+    OR_ALL,
+    "When image is used for emoji, url with the emoji image is specified. "
    ),
   {NULL,{NULL},NULL,0,0,NULL},
 };

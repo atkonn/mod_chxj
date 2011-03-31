@@ -666,8 +666,14 @@ s_create_cache_file(request_rec          *r,
     int oldw = MagickGetImageWidth(magick_wand);
     int oldh = MagickGetImageHeight(magick_wand);
     int done_fixup_size = 0;
+    int ww = spec->width;
+    int hh = spec->heigh;
+    if (IS_IPHONE(spec->html_spec_type)) {
+      ww = (int)((double)ww * (double)1.5);
+      hh = (int)((double)hh * (double)1.5);
+    }
     if ((qsp->mode == IMG_CONV_MODE_WALLPAPER && spec->wp_width < oldw && spec->wp_heigh < oldh)
-      || (qsp->mode != IMG_CONV_MODE_WALLPAPER && spec->width < oldw && spec->heigh < oldh)) {
+      || (qsp->mode != IMG_CONV_MODE_WALLPAPER && ww < oldw && hh < oldh)) {
       /*
        * The size of the image is changed.
        */
@@ -1106,8 +1112,14 @@ s_create_blob_data(request_rec          *r,
     int oldw = MagickGetImageWidth(magick_wand);
     int oldh = MagickGetImageHeight(magick_wand);
     int done_fixup_size = 0;
+    int ww = spec->width;
+    int hh = spec->heigh;
+    if (IS_IPHONE(spec->html_spec_type)) {
+      ww = (int)((double)ww * (double)1.5);
+      hh = (int)((double)hh * (double)1.5);
+    }
     if ((qsp->mode == IMG_CONV_MODE_WALLPAPER && spec->wp_width < oldw && spec->wp_heigh < oldh)
-      || (qsp->mode != IMG_CONV_MODE_WALLPAPER && spec->width < oldw && spec->heigh < oldh)) {
+      || (qsp->mode != IMG_CONV_MODE_WALLPAPER && ww < oldw && hh < oldh)) {
       /*
        * The size of the image is changed.
        */
@@ -1275,6 +1287,13 @@ s_fixup_size(MagickWand           *magick_wand,
 
   c_width = spec->width;
   c_heigh = spec->heigh;
+
+  if (IS_IPHONE(spec->html_spec_type)) {
+    c_width = (int)((double)c_width * (double)1.5);
+    c_heigh = (int)((double)c_heigh * (double)1.5);
+    DBG(r,"REQ[%X] detect iphone width=[%d]", TO_ADDR(r),c_width);
+    DBG(r,"REQ[%X] detect iphone heigh=[%d]", TO_ADDR(r),c_heigh);
+  }
 
   switch(mode) {
   case IMG_CONV_MODE_THUMBNAIL:

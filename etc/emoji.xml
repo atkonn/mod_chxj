@@ -19,6 +19,9 @@
     <jphone>
       <string>$Gj</string>
     </jphone>
+    <iphone>
+      <string>&#xE04A</string>
+    </iphone>
   </set>
   <set>
     <no>2</no>
@@ -38,6 +41,9 @@
     <jphone>
       <string>$Gi</string>
     </jphone>
+    <iphone>
+      <string>&#xE049</string>
+    </iphone>
   </set>
   <set>
     <no>3</no>
@@ -57,6 +63,9 @@
     <jphone>
       <string>$Gk</string>
     </jphone>
+    <iphone>
+      <string>&#xE04B</string>
+    </iphone>
   </set>
   <set>
     <no>4</no>
@@ -76,6 +85,9 @@
     <jphone>
       <string>$Gh</string>
     </jphone>
+    <iphone>
+      <string>&#xE048</string>
+    </iphone>
   </set>
   <set>
     <no>5</no>
@@ -95,6 +107,9 @@
     <jphone>
       <string>$GU</string>
     </jphone>
+    <iphone>
+      <string>&#xE13D</string>
+    </iphone>
   </set>
   <set>
     <no>6</no>
@@ -114,6 +129,9 @@
     <jphone>
       <string>$Pc</string>
     </jphone>
+    <iphone>
+      <string>&#xE443</string>
+    </iphone>
   </set>
   <set>
     <no>7</no>
@@ -133,6 +151,9 @@
     <jphone>
       <string>$Gi</string>
     </jphone>
+    <iphone>
+      <string>&#xE049</string>
+    </iphone>
   </set>
   <set>
     <no>8</no>
@@ -152,6 +173,9 @@
     <jphone>
       <string>$Gk</string>
     </jphone>
+    <iphone>
+      <string>&#xE43C</string>
+    </iphone>
   </set>
   <set>
     <no>9</no>
@@ -171,6 +195,9 @@
     <jphone>
       <string>$F_</string>
     </jphone>
+    <iphone>
+      <string>&#xE23F</string>
+    </iphone>
   </set>
   <set>
     <no>10</no>
@@ -190,6 +217,9 @@
     <jphone>
       <string>$F`</string>
     </jphone>
+    <iphone>
+      <string>&#xE240</string>
+    </iphone>
   </set>
   <set>
     <no>11</no>
@@ -209,6 +239,9 @@
     <jphone>
       <string>$Fa</string>
     </jphone>
+    <iphone>
+      <string>&#xE241</string>
+    </iphone>
   </set>
   <set>
     <no>12</no>
@@ -228,6 +261,9 @@
     <jphone>
       <string>$Fb</string>
     </jphone>
+    <iphone>
+      <string>&#xE242</string>
+    </iphone>
   </set>
   <set>
     <no>13</no>
@@ -247,6 +283,9 @@
     <jphone>
       <string>$Fc</string>
     </jphone>
+    <iphone>
+      <string>&#xE243</string>
+    </iphone>
   </set>
   <set>
     <no>14</no>
@@ -266,6 +305,9 @@
     <jphone>
       <string>$Fd</string>
     </jphone>
+    <iphone>
+      <string>&#xE244</string>
+    </iphone>
   </set>
   <set>
     <no>15</no>
@@ -285,6 +327,9 @@
     <jphone>
       <string>$Fe</string>
     </jphone>
+    <iphone>
+      <string>&#xE245</string>
+    </iphone>
   </set>
   <set>
     <no>16</no>
@@ -304,6 +349,9 @@
     <jphone>
       <string>$Ff</string>
     </jphone>
+    <iphone>
+      <string>&#xE246</string>
+    </iphone>
   </set>
   <set>
     <no>17</no>
@@ -323,6 +371,9 @@
     <jphone>
       <string>$Fg</string>
     </jphone>
+    <iphone>
+      <string>&#xE247</string>
+    </iphone>
   </set>
   <set>
     <no>18</no>
@@ -342,6 +393,9 @@
     <jphone>
       <string>$Fh</string>
     </jphone>
+    <iphone>
+      <string>&#xE248</string>
+    </iphone>
   </set>
   <set>
     <no>19</no>
@@ -361,6 +415,9 @@
     <jphone>
       <string>$Fi</string>
     </jphone>
+    <iphone>
+      <string>&#xE249</string>
+    </iphone>
   </set>
   <set>
     <no>20</no>
@@ -380,6 +437,9 @@
     <jphone>
       <string>$Fj</string>
     </jphone>
+    <iphone>
+      <string>&#xE24A</string>
+    </iphone>
   </set>
   <set>
     <no>21</no>
@@ -399,6 +459,9 @@
     <jphone>
       <string>$E5</string>
     </jphone>
+    <iphone>
+      <string>&#xE015</string>
+    </iphone>
   </set>
   <set>
     <no>22</no>
@@ -418,6 +481,9 @@
     <jphone>
       <string>$G6</string>
     </jphone>
+    <iphone>
+      <string>&#xE016</string>
+    </iphone>
   </set>
   <set>
     <no>23</no>
@@ -437,6 +503,9 @@
     <jphone>
       <string>$G4</string>
     </jphone>
+    <iphone>
+      <string>&#xE014</string>
+    </iphone>
   </set>
   <set>
     <no>24</no>
@@ -456,6 +525,9 @@
     <jphone>
       <string>$G5</string>
     </jphone>
+    <iphone>
+      <string>&#xE015</string>
+    </iphone>
   </set>
   <set>
     <no>25</no>
@@ -475,6 +547,9 @@
     <jphone>
       <string>$G8</string>
     </jphone>
+    <iphone>
+      <string>&#xE018</string>
+    </iphone>
   </set>
   <set>
     <no>26</no>
@@ -494,6 +569,9 @@
     <jphone>
       <string>$G3</string>
     </jphone>
+    <iphone>
+      <string>&#xE013</string>
+    </iphone>
   </set>
   <set>
     <no>27</no>
@@ -513,6 +591,9 @@
     <jphone>
       <string>$PJ</string>
     </jphone>
+    <iphone>
+      <string>&#xE42A</string>
+    </iphone>
   </set>
   <set>
     <no>28</no>
@@ -532,6 +613,9 @@
     <jphone>
       <string>$ER</string>
     </jphone>
+    <iphone>
+      <string>&#xE132</string>
+    </iphone>
   </set>
   <set>
     <no>29</no>
@@ -549,8 +633,11 @@
       <D>308</D>
     </ezweb>
     <jphone>
-      <string></string>
+      <string>raw:[ŒﬂπÕﬁŸ]</string>
     </jphone>
+    <iphone>
+      <string>raw:[ŒﬂπÕﬁŸ]</string>
+    </iphone>
   </set>
   <set>
     <no>30</no>
@@ -570,6 +657,9 @@
     <jphone>
       <string>$G&gt;</string>
     </jphone>
+    <iphone>
+      <string>&#xE01E</string>
+    </iphone>
   </set>
   <set>
     <no>31</no>
@@ -589,6 +679,9 @@
     <jphone>
       <string>$PT</string>
     </jphone>
+    <iphone>
+      <string>&#xE434</string>
+    </iphone>
   </set>
   <set>
     <no>32</no>
@@ -608,6 +701,9 @@
     <jphone>
       <string>$G?</string>
     </jphone>
+    <iphone>
+      <string>&#xE435</string>
+    </iphone>
   </set>
   <set>
     <no>33</no>
@@ -627,6 +723,9 @@
     <jphone>
       <string>$Ez</string>
     </jphone>
+    <iphone>
+      <string>&#xE01B</string>
+    </iphone>
   </set>
   <set>
     <no>34</no>
@@ -646,6 +745,9 @@
     <jphone>
       <string>$Ez</string>
     </jphone>
+    <iphone>
+      <string>&#xE42E</string>
+    </iphone>
   </set>
   <set>
     <no>35</no>
@@ -665,6 +767,9 @@
     <jphone>
       <string>$Ey</string>
     </jphone>
+    <iphone>
+      <string>&#xE159</string>
+    </iphone>
   </set>
   <set>
     <no>36</no>
@@ -682,8 +787,11 @@
       <D>169</D>
     </ezweb>
     <jphone>
-      <string></string>
+      <string>raw:[Ç”ÇÀ]</string>
     </jphone>
+    <iphone>
+      <string>&#xE202</string>
+    </iphone>
   </set>
   <set>
     <no>37</no>
@@ -703,6 +811,9 @@
     <jphone>
       <string>$G=</string>
     </jphone>
+    <iphone>
+      <string>&#xE01D</string>
+    </iphone>
   </set>
   <set>
     <no>38</no>
@@ -722,6 +833,9 @@
     <jphone>
       <string>$GV</string>
     </jphone>
+    <iphone>
+      <string>&#xE036</string>
+    </iphone>
   </set>
   <set>
     <no>39</no>
@@ -741,6 +855,9 @@
     <jphone>
       <string>$GX</string>
     </jphone>
+    <iphone>
+      <string>&#xE038</string>
+    </iphone>
   </set>
   <set>
     <no>40</no>
@@ -760,6 +877,9 @@
     <jphone>
       <string>$Es</string>
     </jphone>
+    <iphone>
+      <string>&#xE153</string>
+    </iphone>
   </set>
   <set>
     <no>41</no>
@@ -779,6 +899,9 @@
     <jphone>
       <string>$Eu</string>
     </jphone>
+    <iphone>
+      <string>&#xE155</string>
+    </iphone>
   </set>
   <set>
     <no>42</no>
@@ -798,6 +921,9 @@
     <jphone>
       <string>$Em</string>
     </jphone>
+    <iphone>
+      <string>&#xE14D</string>
+    </iphone>
   </set>
   <set>
     <no>43</no>
@@ -817,6 +943,9 @@
     <jphone>
       <string>$Et</string>
     </jphone>
+    <iphone>
+      <string>&#xE154</string>
+    </iphone>
   </set>
   <set>
     <no>44</no>
@@ -836,6 +965,9 @@
     <jphone>
       <string>$Ex</string>
     </jphone>
+    <iphone>
+      <string>&#xE158</string>
+    </iphone>
   </set>
   <set>
     <no>45</no>
@@ -855,6 +987,9 @@
     <jphone>
       <string>$Ev</string>
     </jphone>
+    <iphone>
+      <string>&#xE156</string>
+    </iphone>
   </set>
   <set>
     <no>46</no>
@@ -874,6 +1009,9 @@
     <jphone>
       <string>$GZ</string>
     </jphone>
+    <iphone>
+      <string>&#xE03A</string>
+    </iphone>
   </set>
   <set>
     <no>47</no>
@@ -893,6 +1031,9 @@
     <jphone>
       <string>$Eo</string>
     </jphone>
+    <iphone>
+      <string>&#xE14F</string>
+    </iphone>
   </set>
   <set>
     <no>48</no>
@@ -912,6 +1053,9 @@
     <jphone>
       <string>$En</string>
     </jphone>
+    <iphone>
+      <string>&#xE14E</string>
+    </iphone>
   </set>
   <set>
     <no>49</no>
@@ -931,6 +1075,9 @@
     <jphone>
       <string>$Eq</string>
     </jphone>
+    <iphone>
+      <string>&#xE151</string>
+    </iphone>
   </set>
   <set>
     <no>50</no>
@@ -950,6 +1097,9 @@
     <jphone>
       <string>$Gc</string>
     </jphone>
+    <iphone>
+      <string>&#xE043</string>
+    </iphone>
   </set>
   <set>
     <no>51</no>
@@ -969,6 +1119,9 @@
     <jphone>
       <string>$Ge</string>
     </jphone>
+    <iphone>
+      <string>&#xE045</string>
+    </iphone>
   </set>
   <set>
     <no>52</no>
@@ -988,6 +1141,9 @@
     <jphone>
       <string>$Gd</string>
     </jphone>
+    <iphone>
+      <string>&#xE044</string>
+    </iphone>
   </set>
   <set>
     <no>53</no>
@@ -1007,6 +1163,9 @@
     <jphone>
       <string>$Gg</string>
     </jphone>
+    <iphone>
+      <string>&#xE047</string>
+    </iphone>
   </set>
   <set>
     <no>54</no>
@@ -1026,6 +1185,9 @@
     <jphone>
       <string>$E@</string>
     </jphone>
+    <iphone>
+      <string>&#xE120</string>
+    </iphone>
   </set>
   <set>
     <no>55</no>
@@ -1045,6 +1207,9 @@
     <jphone>
       <string>$E^</string>
     </jphone>
+    <iphone>
+      <string>&#xE13E</string>
+    </iphone>
   </set>
   <set>
     <no>56</no>
@@ -1064,6 +1229,9 @@
     <jphone>
       <string>$O3</string>
     </jphone>
+    <iphone>
+      <string>&#xE313</string>
+    </iphone>
   </set>
   <set>
     <no>57</no>
@@ -1083,6 +1251,9 @@
     <jphone>
       <string>$G\</string>
     </jphone>
+    <iphone>
+      <string>&#xE03C</string>
+    </iphone>
   </set>
   <set>
     <no>58</no>
@@ -1102,6 +1273,9 @@
     <jphone>
       <string>$G]</string>
     </jphone>
+    <iphone>
+      <string>&#xE03D</string>
+    </iphone>
   </set>
   <set>
     <no>59</no>
@@ -1121,6 +1295,9 @@
     <jphone>
       <string>$FV</string>
     </jphone>
+    <iphone>
+      <string>&#xE236</string>
+    </iphone>
   </set>
   <set>
     <no>60</no>
@@ -1140,6 +1317,9 @@
     <jphone>
       <string>$ED</string>
     </jphone>
+    <iphone>
+      <string>&#xE433</string>
+    </iphone>
   </set>
   <set>
     <no>61</no>
@@ -1159,6 +1339,9 @@
     <jphone>
       <string>$G^</string>
     </jphone>
+    <iphone>
+      <string>&#xE30A</string>
+    </iphone>
   </set>
   <set>
     <no>62</no>
@@ -1178,6 +1361,9 @@
     <jphone>
       <string>$Q"</string>
     </jphone>
+    <iphone>
+      <string>&#xE502</string>
+    </iphone>
   </set>
   <set>
     <no>63</no>
@@ -1197,6 +1383,9 @@
     <jphone>
       <string>$Q#</string>
     </jphone>
+    <iphone>
+      <string>&#xE503</string>
+    </iphone>
   </set>
   <set>
     <no>64</no>
@@ -1216,6 +1405,9 @@
     <jphone>
       <string>$Ec</string>
     </jphone>
+    <iphone>
+      <string>&#xE437</string>
+    </iphone>
   </set>
   <set>
     <no>65</no>
@@ -1235,6 +1427,9 @@
     <jphone>
       <string>$EE</string>
     </jphone>
+    <iphone>
+      <string>&#xE125</string>
+    </iphone>
   </set>
   <set>
     <no>66</no>
@@ -1254,6 +1449,9 @@
     <jphone>
       <string>$O.</string>
     </jphone>
+    <iphone>
+      <string>&#xE30E</string>
+    </iphone>
   </set>
   <set>
     <no>67</no>
@@ -1273,6 +1471,9 @@
     <jphone>
       <string>$F(</string>
     </jphone>
+    <iphone>
+      <string>&#xE208</string>
+    </iphone>
   </set>
   <set>
     <no>68</no>
@@ -1292,6 +1493,9 @@
     <jphone>
       <string>$G(</string>
     </jphone>
+    <iphone>
+      <string>&#xE008</string>
+    </iphone>
   </set>
   <set>
     <no>69</no>
@@ -1311,6 +1515,9 @@
     <jphone>
       <string>$E&gt;</string>
     </jphone>
+    <iphone>
+      <string>&#xE11E</string>
+    </iphone>
   </set>
   <set>
     <no>70</no>
@@ -1330,6 +1537,9 @@
     <jphone>
       <string>$Eh</string>
     </jphone>
+    <iphone>
+      <string>&#xE148</string>
+    </iphone>
   </set>
   <set>
     <no>71</no>
@@ -1349,6 +1559,9 @@
     <jphone>
       <string>$O4</string>
     </jphone>
+    <iphone>
+      <string>&#xE314</string>
+    </iphone>
   </set>
   <set>
     <no>72</no>
@@ -1368,6 +1581,9 @@
     <jphone>
       <string>$E2</string>
     </jphone>
+    <iphone>
+      <string>&#xE112</string>
+    </iphone>
   </set>
   <set>
     <no>73</no>
@@ -1387,6 +1603,9 @@
     <jphone>
       <string>$Ok</string>
     </jphone>
+    <iphone>
+      <string>&#xE34B</string>
+    </iphone>
   </set>
   <set>
     <no>74</no>
@@ -1406,6 +1625,9 @@
     <jphone>
       <string>$G)</string>
     </jphone>
+    <iphone>
+      <string>&#xE009</string>
+    </iphone>
   </set>
   <set>
     <no>75</no>
@@ -1425,6 +1647,9 @@
     <jphone>
       <string>$G*</string>
     </jphone>
+    <iphone>
+      <string>&#xE00A</string>
+    </iphone>
   </set>
   <set>
     <no>76</no>
@@ -1444,6 +1669,9 @@
     <jphone>
       <string>$O!</string>
     </jphone>
+    <iphone>
+      <string>&#xE301</string>
+    </iphone>
   </set>
   <set>
     <no>77</no>
@@ -1463,6 +1691,9 @@
     <jphone>
       <string>$EJ</string>
     </jphone>
+    <iphone>
+      <string>&#xE12A</string>
+    </iphone>
   </set>
   <set>
     <no>78</no>
@@ -1482,6 +1713,9 @@
     <jphone>
       <string>$EK</string>
     </jphone>
+    <iphone>
+      <string>raw:[πﬁ∞—]</string>
+    </iphone>
   </set>
   <set>
     <no>79</no>
@@ -1501,6 +1735,9 @@
     <jphone>
       <string>$EF</string>
     </jphone>
+    <iphone>
+      <string>&#xE126</string>
+    </iphone>
   </set>
   <set>
     <no>80</no>
@@ -1520,6 +1757,9 @@
     <jphone>
       <string>$GB</string>
     </jphone>
+    <iphone>
+      <string>&#xE20C</string>
+    </iphone>
   </set>
   <set>
     <no>81</no>
@@ -1539,6 +1779,9 @@
     <jphone>
       <string>$F.</string>
     </jphone>
+    <iphone>
+      <string>&#xE20E</string>
+    </iphone>
   </set>
   <set>
     <no>82</no>
@@ -1558,6 +1801,9 @@
     <jphone>
       <string>$F-</string>
     </jphone>
+    <iphone>
+      <string>&#xE20D</string>
+    </iphone>
   </set>
   <set>
     <no>83</no>
@@ -1577,6 +1823,9 @@
     <jphone>
       <string>$F/</string>
     </jphone>
+    <iphone>
+      <string>&#xE20F</string>
+    </iphone>
   </set>
   <set>
     <no>84</no>
@@ -1596,6 +1845,9 @@
     <jphone>
       <string>$P9</string>
     </jphone>
+    <iphone>
+      <string>&#xE419</string>
+    </iphone>
   </set>
   <set>
     <no>85</no>
@@ -1615,6 +1867,9 @@
     <jphone>
       <string>$P;</string>
     </jphone>
+    <iphone>
+      <string>&#xE41B</string>
+    </iphone>
   </set>
   <set>
     <no>86</no>
@@ -1634,6 +1889,9 @@
     <jphone>
       <string>$G-</string>
     </jphone>
+    <iphone>
+      <string>&#xE010</string>
+    </iphone>
   </set>
   <set>
     <no>87</no>
@@ -1653,6 +1911,9 @@
     <jphone>
       <string>$G1</string>
     </jphone>
+    <iphone>
+      <string>&#xE011</string>
+    </iphone>
   </set>
   <set>
     <no>88</no>
@@ -1672,6 +1933,9 @@
     <jphone>
       <string>$G2</string>
     </jphone>
+    <iphone>
+      <string>&#xE012</string>
+    </iphone>
   </set>
   <set>
     <no>89</no>
@@ -1691,6 +1955,9 @@
     <jphone>
       <string>$FX</string>
     </jphone>
+    <iphone>
+      <string>&#xE238</string>
+    </iphone>
   </set>
   <set>
     <no>90</no>
@@ -1710,6 +1977,9 @@
     <jphone>
       <string>$FW</string>
     </jphone>
+    <iphone>
+      <string>&#xE237</string>
+    </iphone>
   </set>
   <set>
     <no>91</no>
@@ -1729,6 +1999,9 @@
     <jphone>
       <string>$QV</string>
     </jphone>
+    <iphone>
+      <string>&#xE536</string>
+    </iphone>
   </set>
   <set>
     <no>92</no>
@@ -1748,6 +2021,9 @@
     <jphone>
       <string>$G'</string>
     </jphone>
+    <iphone>
+      <string>&#xE007</string>
+    </iphone>
   </set>
   <set>
     <no>93</no>
@@ -1767,6 +2043,9 @@
     <jphone>
       <string>$F1</string>
     </jphone>
+    <iphone>
+      <string>raw:[“∂ﬁ»]</string>
+    </iphone>
   </set>
   <set>
     <no>94</no>
@@ -1786,6 +2065,9 @@
     <jphone>
       <string>$F*</string>
     </jphone>
+    <iphone>
+      <string>&#xE20A</string>
+    </iphone>
   </set>
   <set>
     <no>95</no>
@@ -1805,6 +2087,9 @@
     <jphone>
       <string>$Gl</string>
     </jphone>
+    <iphone>
+      <string>raw:Åú</string>
+    </iphone>
   </set>
   <set>
     <no>96</no>
@@ -1824,6 +2109,9 @@
     <jphone>
       <string>$Gl</string>
     </jphone>
+    <iphone>
+      <string>&#xE04C</string>
+    </iphone>
   </set>
   <set>
     <no>97</no>
@@ -1843,6 +2131,9 @@
     <jphone>
       <string>$Gl</string>
     </jphone>
+    <iphone>
+      <string>&#xE04C</string>
+    </iphone>
   </set>
   <set>
     <no>98</no>
@@ -1862,6 +2153,9 @@
     <jphone>
       <string>$Gl</string>
     </jphone>
+    <iphone>
+      <string>&#xE04C</string>
+    </iphone>
   </set>
   <set>
     <no>99</no>
@@ -1881,6 +2175,9 @@
     <jphone>
       <string>$Gl</string>
     </jphone>
+    <iphone>
+      <string>raw:Åõ</string>
+    </iphone>
   </set>
   <set>
     <no>100</no>
@@ -1900,6 +2197,9 @@
     <jphone>
       <string>$Gr</string>
     </jphone>
+    <iphone>
+      <string>&#xE052</string>
+    </iphone>
   </set>
   <set>
     <no>101</no>
@@ -1919,6 +2219,9 @@
     <jphone>
       <string>$Go</string>
     </jphone>
+    <iphone>
+      <string>&#xE051</string>
+    </iphone>
   </set>
   <set>
     <no>102</no>
@@ -1938,6 +2241,9 @@
     <jphone>
       <string>$G&lt;</string>
     </jphone>
+    <iphone>
+      <string>&#xE01C</string>
+    </iphone>
   </set>
   <set>
     <no>103</no>
@@ -1957,6 +2263,9 @@
     <jphone>
       <string>$GS</string>
     </jphone>
+    <iphone>
+      <string>&#xE033</string>
+    </iphone>
   </set>
   <set>
     <no>104</no>
@@ -1976,6 +2285,9 @@
     <jphone>
       <string>$FY</string>
     </jphone>
+    <iphone>
+      <string>&#xE239</string>
+    </iphone>
   </set>
   <set>
     <no>105</no>
@@ -1995,6 +2307,9 @@
     <jphone>
       <string>$E$</string>
     </jphone>
+    <iphone>
+      <string>&#xE104</string>
+    </iphone>
   </set>
   <set>
     <no>106</no>
@@ -2014,6 +2329,9 @@
     <jphone>
       <string>$E#</string>
     </jphone>
+    <iphone>
+      <string>&#xE103</string>
+    </iphone>
   </set>
   <set>
     <no>107</no>
@@ -2033,6 +2351,9 @@
     <jphone>
       <string>$G+</string>
     </jphone>
+    <iphone>
+      <string>&#xE00B</string>
+    </iphone>
   </set>
   <set>
     <no>108</no>
@@ -2052,6 +2373,9 @@
     <jphone>
       <string>$Fu</string>
     </jphone>
+    <iphone>
+      <string>raw:[i”∞ƒﬁ]</string>
+    </iphone>
   </set>
   <set>
     <no>109</no>
@@ -2071,6 +2395,9 @@
     <jphone>
       <string>$Fu</string>
     </jphone>
+    <iphone>
+      <string>raw:[i”∞ƒﬁ]</string>
+    </iphone>
   </set>
   <set>
     <no>110</no>
@@ -2090,6 +2417,9 @@
     <jphone>
       <string>$E#</string>
     </jphone>
+    <iphone>
+      <string>&#xE103</string>
+    </iphone>
   </set>
   <set>
     <no>111</no>
@@ -2109,6 +2439,9 @@
     <jphone>
       <string>$Fu</string>
     </jphone>
+    <iphone>
+      <string>raw:[ƒﬁ∫”]</string>
+    </iphone>
   </set>
   <set>
     <no>112</no>
@@ -2128,6 +2461,9 @@
     <jphone>
       <string>$Fu</string>
     </jphone>
+    <iphone>
+      <string>raw:[ƒﬁ∫”]</string>
+    </iphone>
   </set>
   <set>
     <no>113</no>
@@ -2147,6 +2483,9 @@
     <jphone>
       <string>$F5</string>
     </jphone>
+    <iphone>
+      <string>raw:Åè</string>
+    </iphone>
   </set>
   <set>
     <no>114</no>
@@ -2166,6 +2505,9 @@
     <jphone>
       <string>$F6</string>
     </jphone>
+    <iphone>
+      <string>raw:[FREE]</string>
+    </iphone>
   </set>
   <set>
     <no>115</no>
@@ -2185,6 +2527,9 @@
     <jphone>
       <string>$FI</string>
     </jphone>
+    <iphone>
+      <string>&#xE229</string>
+    </iphone>
   </set>
   <set>
     <no>116</no>
@@ -2204,6 +2549,9 @@
     <jphone>
       <string>$G_</string>
     </jphone>
+    <iphone>
+      <string>&#xE03F</string>
+    </iphone>
   </set>
   <set>
     <no>117</no>
@@ -2223,6 +2571,9 @@
     <jphone>
       <string>$FZ</string>
     </jphone>
+    <iphone>
+      <string>&#xE23A</string>
+    </iphone>
   </set>
   <set>
     <no>118</no>
@@ -2242,6 +2593,9 @@
     <jphone>
       <string>$Gz</string>
     </jphone>
+    <iphone>
+      <string>raw:[CL]</string>
+    </iphone>
   </set>
   <set>
     <no>119</no>
@@ -2261,6 +2615,9 @@
     <jphone>
       <string>$E4</string>
     </jphone>
+    <iphone>
+      <string>&#xE114</string>
+    </iphone>
   </set>
   <set>
     <no>120</no>
@@ -2280,6 +2637,9 @@
     <jphone>
       <string>$F2</string>
     </jphone>
+    <iphone>
+      <string>&#xE212</string>
+    </iphone>
   </set>
   <set>
     <no>121</no>
@@ -2299,6 +2659,9 @@
     <jphone>
       <string>$Ek</string>
     </jphone>
+    <iphone>
+      <string>&#xE203</string>
+    </iphone>
   </set>
   <set>
     <no>122</no>
@@ -2318,6 +2681,9 @@
     <jphone>
       <string>$F1</string>
     </jphone>
+    <iphone>
+      <string>&#xE211</string>
+    </iphone>
   </set>
   <set>
     <no>123</no>
@@ -2337,6 +2703,9 @@
     <jphone>
       <string>$F0</string>
     </jphone>
+    <iphone>
+      <string>&#xE210</string>
+    </iphone>
   </set>
   <set>
     <no>124</no>
@@ -2356,6 +2725,9 @@
     <jphone>
       <string>$Ft</string>
     </jphone>
+    <iphone>
+      <string>raw:[Q]</string>
+    </iphone>
   </set>
   <set>
     <no>125</no>
@@ -2375,6 +2747,9 @@
     <jphone>
       <string>$F&lt;</string>
     </jphone>
+    <iphone>
+      <string>&#xE21C</string>
+    </iphone>
   </set>
   <set>
     <no>126</no>
@@ -2394,6 +2769,9 @@
     <jphone>
       <string>$F=</string>
     </jphone>
+    <iphone>
+      <string>&#xE21D</string>
+    </iphone>
   </set>
   <set>
     <no>127</no>
@@ -2413,6 +2791,9 @@
     <jphone>
       <string>$F&gt;</string>
     </jphone>
+    <iphone>
+      <string>&#xE21E</string>
+    </iphone>
   </set>
   <set>
     <no>128</no>
@@ -2432,6 +2813,9 @@
     <jphone>
       <string>$F?</string>
     </jphone>
+    <iphone>
+      <string>&#xE21F</string>
+    </iphone>
   </set>
   <set>
     <no>129</no>
@@ -2451,6 +2835,9 @@
     <jphone>
       <string>$F@</string>
     </jphone>
+    <iphone>
+      <string>&#xE220</string>
+    </iphone>
   </set>
   <set>
     <no>130</no>
@@ -2470,6 +2857,9 @@
     <jphone>
       <string>$FA</string>
     </jphone>
+    <iphone>
+      <string>&#xE221</string>
+    </iphone>
   </set>
   <set>
     <no>131</no>
@@ -2489,6 +2879,9 @@
     <jphone>
       <string>$FB</string>
     </jphone>
+    <iphone>
+      <string>&#xE222</string>
+    </iphone>
   </set>
   <set>
     <no>132</no>
@@ -2508,6 +2901,9 @@
     <jphone>
       <string>$FC</string>
     </jphone>
+    <iphone>
+      <string>&#xE223</string>
+    </iphone>
   </set>
   <set>
     <no>133</no>
@@ -2527,6 +2923,9 @@
     <jphone>
       <string>$FD</string>
     </jphone>
+    <iphone>
+      <string>&#xE224</string>
+    </iphone>
   </set>
   <set>
     <no>134</no>
@@ -2546,6 +2945,9 @@
     <jphone>
       <string>$FE</string>
     </jphone>
+    <iphone>
+      <string>&#xE225</string>
+    </iphone>
   </set>
   <set>
     <no>135</no>
@@ -2565,6 +2967,9 @@
     <jphone>
       <string>$Fm</string>
     </jphone>
+    <iphone>
+      <string>&#xE24D</string>
+    </iphone>
   </set>
   <set>
     <no>136</no>
@@ -2584,6 +2989,9 @@
     <jphone>
       <string>$GB</string>
     </jphone>
+    <iphone>
+      <string>&#xE022</string>
+    </iphone>
   </set>
   <set>
     <no>137</no>
@@ -2603,6 +3011,9 @@
     <jphone>
       <string>$GB</string>
     </jphone>
+    <iphone>
+      <string>&#xE328</string>
+    </iphone>
   </set>
   <set>
     <no>138</no>
@@ -2622,6 +3033,9 @@
     <jphone>
       <string>$GC</string>
     </jphone>
+    <iphone>
+      <string>&#xE023</string>
+    </iphone>
   </set>
   <set>
     <no>139</no>
@@ -2641,6 +3055,9 @@
     <jphone>
       <string>$GB</string>
     </jphone>
+    <iphone>
+      <string>&#xE328</string>
+    </iphone>
   </set>
   <set>
     <no>140</no>
@@ -2660,6 +3077,9 @@
     <jphone>
       <string>$Gw</string>
     </jphone>
+    <iphone>
+      <string>&#xE415</string>
+    </iphone>
   </set>
   <set>
     <no>141</no>
@@ -2679,6 +3099,9 @@
     <jphone>
       <string>$Gy</string>
     </jphone>
+    <iphone>
+      <string>&#xE416</string>
+    </iphone>
   </set>
   <set>
     <no>142</no>
@@ -2698,6 +3121,9 @@
     <jphone>
       <string>$Gx</string>
     </jphone>
+    <iphone>
+      <string>&#xE401</string>
+    </iphone>
   </set>
   <set>
     <no>143</no>
@@ -2717,6 +3143,9 @@
     <jphone>
       <string>$E'</string>
     </jphone>
+    <iphone>
+      <string>&#xE407</string>
+    </iphone>
   </set>
   <set>
     <no>144</no>
@@ -2736,6 +3165,9 @@
     <jphone>
       <string>$E(</string>
     </jphone>
+    <iphone>
+      <string>&#xE40B</string>
+    </iphone>
   </set>
   <set>
     <no>145</no>
@@ -2755,6 +3187,9 @@
     <jphone>
       <string>$FR</string>
     </jphone>
+    <iphone>
+      <string>&#xE236</string>
+    </iphone>
   </set>
   <set>
     <no>146</no>
@@ -2774,6 +3209,9 @@
     <jphone>
       <string>$G^</string>
     </jphone>
+    <iphone>
+      <string>&#xE326</string>
+    </iphone>
   </set>
   <set>
     <no>147</no>
@@ -2793,6 +3231,9 @@
     <jphone>
       <string>$EC</string>
     </jphone>
+    <iphone>
+      <string>&#xE123</string>
+    </iphone>
   </set>
   <set>
     <no>148</no>
@@ -2812,6 +3253,9 @@
     <jphone>
       <string>$GB</string>
     </jphone>
+    <iphone>
+      <string>&#xE204</string>
+    </iphone>
   </set>
   <set>
     <no>149</no>
@@ -2831,6 +3275,9 @@
     <jphone>
       <string>$G#</string>
     </jphone>
+    <iphone>
+      <string>&#xE003</string>
+    </iphone>
   </set>
   <set>
     <no>150</no>
@@ -2850,6 +3297,9 @@
     <jphone>
       <string>$GU</string>
     </jphone>
+    <iphone>
+      <string>&#xE32E</string>
+    </iphone>
   </set>
   <set>
     <no>151</no>
@@ -2869,6 +3319,9 @@
     <jphone>
       <string>$E/</string>
     </jphone>
+    <iphone>
+      <string>&#xE10F</string>
+    </iphone>
   </set>
   <set>
     <no>152</no>
@@ -2888,6 +3341,9 @@
     <jphone>
       <string>$Gy</string>
     </jphone>
+    <iphone>
+      <string>&#xE334</string>
+    </iphone>
   </set>
   <set>
     <no>153</no>
@@ -2907,6 +3363,9 @@
     <jphone>
       <string>$G-</string>
     </jphone>
+    <iphone>
+      <string>&#xE00D</string>
+    </iphone>
   </set>
   <set>
     <no>154</no>
@@ -2926,6 +3385,9 @@
     <jphone>
       <string>$O1</string>
     </jphone>
+    <iphone>
+      <string>&#xE311</string>
+    </iphone>
   </set>
   <set>
     <no>155</no>
@@ -2945,6 +3407,9 @@
     <jphone>
       <string>$G^</string>
     </jphone>
+    <iphone>
+      <string>&#xE326</string>
+    </iphone>
   </set>
   <set>
     <no>156</no>
@@ -2964,6 +3429,9 @@
     <jphone>
       <string>$FS</string>
     </jphone>
+    <iphone>
+      <string>&#xE238</string>
+    </iphone>
   </set>
   <set>
     <no>157</no>
@@ -2983,6 +3451,9 @@
     <jphone>
       <string>$E\</string>
     </jphone>
+    <iphone>
+      <string>&#xE13C</string>
+    </iphone>
   </set>
   <set>
     <no>158</no>
@@ -3002,6 +3473,9 @@
     <jphone>
       <string>$GA</string>
     </jphone>
+    <iphone>
+      <string>&#xE021</string>
+    </iphone>
   </set>
   <set>
     <no>159</no>
@@ -3021,6 +3495,9 @@
     <jphone>
       <string>$G@</string>
     </jphone>
+    <iphone>
+      <string>raw:!?</string>
+    </iphone>
   </set>
   <set>
     <no>160</no>
@@ -3040,6 +3517,9 @@
     <jphone>
       <string>$GA</string>
     </jphone>
+    <iphone>
+      <string>raw:!!</string>
+    </iphone>
   </set>
   <set>
     <no>161</no>
@@ -3059,6 +3539,9 @@
     <jphone>
       <string>$Ft</string>
     </jphone>
+    <iphone>
+      <string>raw:É∞</string>
+    </iphone>
   </set>
   <set>
     <no>162</no>
@@ -3078,6 +3561,9 @@
     <jphone>
       <string>$E(</string>
     </jphone>
+    <iphone>
+      <string>&#xE331</string>
+    </iphone>
   </set>
   <set>
     <no>163</no>
@@ -3097,6 +3583,9 @@
     <jphone>
       <string>$E(</string>
     </jphone>
+    <iphone>
+      <string>&#xE331</string>
+    </iphone>
   </set>
   <set>
     <no>164</no>
@@ -3116,6 +3605,9 @@
     <jphone>
       <string>$E5</string>
     </jphone>
+    <iphone>
+      <string>&#xE330</string>
+    </iphone>
   </set>
   <set>
     <no>165</no>
@@ -3133,8 +3625,11 @@
       <D>0</D>
     </ezweb>
     <jphone>
-      <string></string>
+      <string>raw:Å`</string>
     </jphone>
+    <iphone>
+      <string>raw:Å`</string>
+    </iphone>
   </set>
   <set>
     <no>166</no>
@@ -3152,8 +3647,11 @@
       <D>0</D>
     </ezweb>
     <jphone>
-      <string></string>
+      <string>raw:Å`</string>
     </jphone>
+    <iphone>
+      <string>raw:Å`</string>
+    </iphone>
   </set>
   <set>
     <no>167</no>
@@ -3173,6 +3671,9 @@
     <jphone>
       <string>$OD</string>
     </jphone>
+    <iphone>
+      <string>&#xE324</string>
+    </iphone>
   </set>
   <set>
     <no>168</no>
@@ -3192,6 +3693,9 @@
     <jphone>
       <string>$EO</string>
     </jphone>
+    <iphone>
+      <string>raw:[Ç”Ç≠ÇÎ]</string>
+    </iphone>
   </set>
   <set>
     <no>169</no>
@@ -3211,6 +3715,9 @@
     <jphone>
       <string>$O!</string>
     </jphone>
+    <iphone>
+      <string>raw:[ÉyÉì]</string>
+    </iphone>
   </set>
   <set>
     <no>170</no>
@@ -3228,8 +3735,11 @@
       <D>236</D>
     </ezweb>
     <jphone>
-      <string></string>
+      <string>raw:[êlâe]</string>
     </jphone>
+    <iphone>
+      <string>raw:[êlâe]</string>
+    </iphone>
   </set>
   <set>
     <no>171</no>
@@ -3249,6 +3759,9 @@
     <jphone>
       <string>$E?</string>
     </jphone>
+    <iphone>
+      <string>&#xE11F</string>
+    </iphone>
   </set>
   <set>
     <no>172</no>
@@ -3268,6 +3781,9 @@
     <jphone>
       <string>$Gl</string>
     </jphone>
+    <iphone>
+      <string>&#xE44B</string>
+    </iphone>
   </set>
   <set>
     <no>173</no>
@@ -3285,8 +3801,11 @@
       <D>105</D>
     </ezweb>
     <jphone>
-      <string></string>
+      <string>raw:[soon]</string>
     </jphone>
+    <iphone>
+      <string>raw:[soon]</string>
+    </iphone>
   </set>
   <set>
     <no>174</no>
@@ -3304,8 +3823,11 @@
       <D>0</D>
     </ezweb>
     <jphone>
-      <string></string>
+      <string>raw:[soon]</string>
     </jphone>
+    <iphone>
+      <string>raw:[on]</string>
+    </iphone>
   </set>
   <set>
     <no>175</no>
@@ -3323,8 +3845,11 @@
       <D>0</D>
     </ezweb>
     <jphone>
-      <string></string>
+      <string>raw:[end]</string>
     </jphone>
+    <iphone>
+      <string>raw:[end]</string>
+    </iphone>
   </set>
   <set>
     <no>176</no>
@@ -3344,6 +3869,9 @@
     <jphone>
       <string>$GD</string>
     </jphone>
+    <iphone>
+      <string>&#xE02D</string>
+    </iphone>
   </set>
 
   <!-- ägí£äGï∂éö -->
@@ -3366,6 +3894,9 @@
     <jphone>
       <string>$QX</string>
     </jphone>
+    <iphone>
+      <string>raw:[i±Ãﬂÿ]</string>
+    </iphone>
   </set>
   <!-- äg2 -->
   <set>
@@ -3386,6 +3917,9 @@
     <jphone>
       <string>$QX</string>
     </jphone>
+    <iphone>
+      <string>raw:[i±Ãﬂÿ]</string>
+    </iphone>
   </set>
   <!-- äg3 -->
   <set>
@@ -3406,6 +3940,9 @@
     <jphone>
       <string>$G&</string>
     </jphone>
+    <iphone>
+      <string>&#xE006</string>
+    </iphone>
   </set>
   <!-- äg4 -->
   <set>
@@ -3426,6 +3963,9 @@
     <jphone>
       <string>$OC</string><!-- ó«Ç¢Ç‡ÇÃÇ™ñ≥Ç¢ÇÃÇ≈ÉuÉâÉìÉhÉoÉbÉN -->
     </jphone>
+    <iphone>
+      <string>&#xE323</string>
+    </iphone>
   </set>
   <!-- äg5 -->
   <set>
@@ -3446,6 +3986,9 @@
     <jphone>
       <string>$O&lt;</string><!-- å˚çg -->
     </jphone>
+    <iphone>
+      <string>&#xE31C</string>
+    </iphone>
   </set>
   <!-- äg6 -->
   <set>
@@ -3466,6 +4009,9 @@
     <jphone>
       <string>$G&</string><!-- ó«Ç¢Ç‡ÇÃÇ™ñ≥Ç¢ÇÃÇ≈ómïû -->
     </jphone>
+    <iphone>
+      <string>&#xE006</string>
+    </iphone>
   </set>
   <!-- äg7 -->
   <set>
@@ -3486,6 +4032,9 @@
     <jphone>
       <string>$G3</string><!-- ó«Ç¢Ç‡ÇÃÇ™ñ≥Ç¢ÇÃÇ≈ÉXÉLÅ[ -->
     </jphone>
+    <iphone>
+      <string>&#xE013</string>
+    </iphone>
   </set>
   <!-- äg8 -->
   <set>
@@ -3506,6 +4055,9 @@
     <jphone>
       <string>$OE</string><!-- Ç∑Ç∏ -->
     </jphone>
+    <iphone>
+      <string>&#xE037</string><!-- ã≥âÔ -->
+    </iphone>
   </set>
   <!-- äg9 -->
   <set>
@@ -3526,6 +4078,9 @@
     <jphone>
       <string>$GV</string><!-- â∆ -->
     </jphone>
+    <iphone>
+      <string>&#xE036</string><!-- â∆ -->
+    </iphone>
   </set>
   <!-- äg10 -->
   <set>
@@ -3546,6 +4101,9 @@
     <jphone>
       <string>$EO</string><!-- è‹ã‡ -->
     </jphone>
+    <iphone>
+      <string>&#xE12F</string><!-- è‹ã‡ -->
+    </iphone>
   </set>
   <!-- äg11 -->
   <set>
@@ -3566,6 +4124,9 @@
     <jphone>
       <string>$G,</string><!-- ÉpÉ\ÉRÉì -->
     </jphone>
+    <iphone>
+      <string>&#xE00C</string><!-- ÉpÉ\ÉRÉì -->
+    </iphone>
   </set>
   <!-- äg12 -->
   <set>
@@ -3586,6 +4147,9 @@
     <jphone>
       <string>$E#</string><!-- ÉÅÅ[Éãà∂êÊ -->
     </jphone>
+    <iphone>
+      <string>&#xE103</string><!-- ÉÅÅ[Éãto -->
+    </iphone>
   </set>
   <!-- äg13 -->
   <set>
@@ -3604,8 +4168,11 @@
       <D>152</D><!-- ÉåÉìÉ` -->
     </ezweb>
     <jphone>
-      <string>$QX</string><!-- ó«Ç¢Ç‡ÇÃÇ™Ç»Ç¢ÇÃÇ≈JsÉ}Å[ÉN -->
+      <string>raw:[ÉåÉìÉ`]</string><!-- ó«Ç¢Ç‡ÇÃÇ™Ç»Ç¢ÇÃÇ≈JsÉ}Å[ÉN -->
     </jphone>
+    <iphone>
+      <string>raw:[ÉåÉìÉ`]</string>
+    </iphone>
   </set>
   <!-- äg14 -->
   <set>
@@ -3626,6 +4193,9 @@
     <jphone>
       <string>$O!</string><!-- ó«Ç¢Ç‡ÇÃÇ™Ç»Ç¢ÇÃÇ≈ÉÅÉÇ -->
     </jphone>
+    <iphone>
+      <string>&#xE301</string>
+    </iphone>
   </set>
   <!-- äg15 -->
   <set>
@@ -3646,6 +4216,9 @@
     <jphone>
       <string>$E.</string><!-- â§ä• -->
     </jphone>
+    <iphone>
+      <string>&#xE10E</string>
+    </iphone>
   </set>
   <!-- äg16 -->
   <set>
@@ -3666,6 +4239,9 @@
     <jphone>
       <string>$GT</string><!-- éwó÷ -->
     </jphone>
+    <iphone>
+      <string>&#xE034</string>
+    </iphone>
   </set>
   <!-- äg17 -->
   <set>
@@ -3686,6 +4262,9 @@
     <jphone>
       <string>$GF</string><!-- ó«Ç¢Ç‡ÇÃÇ™Ç»Ç¢ÇÃÇ≈éûåv -->
     </jphone>
+    <iphone>
+      <string>&#xE02D</string><!-- éûåv -->
+    </iphone>
   </set>
   <!-- äg18 -->
   <set>
@@ -3706,6 +4285,9 @@
     <jphone>
       <string>$EV</string><!-- ó«Ç¢Ç‡ÇÃÇ™Ç»Ç¢ÇÃÇ≈ã£ó÷ -->
     </jphone>
+    <iphone>
+      <string>&#xE136</string><!-- é©ì]é‘ -->
+    </iphone>
   </set>
   <!-- äg19 -->
   <set>
@@ -3726,6 +4308,9 @@
     <jphone>
       <string>$Ge</string><!-- ÉRÅ[ÉqÅ[ -->
     </jphone>
+    <iphone>
+      <string>&#xE045</string><!-- ÉRÅ[ÉqÅ[ -->
+    </iphone>
   </set>
   <!-- äg20 -->
   <set>
@@ -3746,6 +4331,9 @@
     <jphone>
       <string>$GF</string><!-- éûåv -->
     </jphone>
+    <iphone>
+      <string>&#xE02D</string><!-- éûåv -->
+    </iphone>
   </set>
   <!-- äg21 -->
   <set>
@@ -3766,6 +4354,9 @@
     <jphone>
       <string>$E(</string><!-- ó«Ç¢Ç‡ÇÃÇ™Ç»Ç¢ÇÃÇ≈ÅAÉ^ÉâÅ[ -->
     </jphone>
+    <iphone>
+      <string>&#xE406</string>
+    </iphone>
   </set>
   <!-- äg22 -->
   <set>
@@ -3786,6 +4377,9 @@
     <jphone>
       <string>$E(</string><!-- ó«Ç¢Ç‡ÇÃÇ™Ç»Ç¢ÇÃÇ≈ÅAÉ^ÉâÅ[ -->
     </jphone>
+    <iphone>
+      <string>&#xE401</string>
+    </iphone>
   </set>
   <!-- äg23 -->
   <set>
@@ -3806,6 +4400,9 @@
     <jphone>
       <string>$E(</string><!-- ó«Ç¢Ç‡ÇÃÇ™Ç»Ç¢ÇÃÇ≈ÅAÉ^ÉâÅ[ -->
     </jphone>
+    <iphone>
+      <string>&#xE401</string>
+    </iphone>
   </set>
   <!-- äg24 -->
   <set>
@@ -3826,6 +4423,9 @@
     <jphone>
       <string>$P/</string><!-- ó‚äæ -->
     </jphone>
+    <iphone>
+      <string>&#xE40F</string>
+    </iphone>
   </set>
   <!-- äg25 -->
   <set>
@@ -3846,6 +4446,9 @@
     <jphone>
       <string>$Gy</string><!-- ó«Ç¢Ç‡ÇÃÇ™Ç»Ç¢ÇÃÇ≈ÅAì{ -->
     </jphone>
+    <iphone>
+      <string>&#xE416</string>
+    </iphone>
   </set>
   <!-- äg26 -->
   <set>
@@ -3866,6 +4469,9 @@
     <jphone>
       <string>$P.</string><!-- ó«Ç¢Ç‡ÇÃÇ™Ç»Ç¢ÇÃÇ≈ÅAÇµÇÁÇØäÁ -->
     </jphone>
+    <iphone>
+      <string>&#xE40E</string>
+    </iphone>
   </set>
   <!-- äg27 -->
   <set>
@@ -3886,6 +4492,9 @@
     <jphone>
       <string>$E&</string><!-- ÉâÉuÉâÉu -->
     </jphone>
+    <iphone>
+      <string>&#xE106</string>
+    </iphone>
   </set>
   <!-- äg28 -->
   <set>
@@ -3906,6 +4515,9 @@
     <jphone>
       <string>$G.</string><!-- GOOD! -->
     </jphone>
+    <iphone>
+      <string>&#xE00E</string>
+    </iphone>
   </set>
   <!-- äg29 -->
   <set>
@@ -3926,6 +4538,9 @@
     <jphone>
       <string>$P)</string><!-- Ç†Ç¡Ç©ÇÒÇ◊Ç¶ -->
     </jphone>
+    <iphone>
+      <string>&#xE105</string>
+    </iphone>
   </set>
   <!-- äg30 -->
   <set>
@@ -3946,6 +4561,9 @@
     <jphone>
       <string>$P8</string><!-- ìäÇ∞ÉLÉbÉX -->
     </jphone>
+    <iphone>
+      <string>&#xE418</string>
+    </iphone>
   </set>
   <!-- äg31 -->
   <set>
@@ -3966,6 +4584,9 @@
     <jphone>
       <string>$Gw</string><!-- äÏ -->
     </jphone>
+    <iphone>
+      <string>&#xE057</string>
+    </iphone>
   </set>
   <!-- äg32 -->
   <set>
@@ -3986,6 +4607,9 @@
     <jphone>
       <string>$P6</string><!-- ó«Ç¢Ç‡ÇÃÇ™Ç»Ç¢ÇÃÇ≈ÅAÇﬂÇøÇ·ÇﬂÇøÇ·ì{Ç¡ÇƒÇ¢ÇÈ -->
     </jphone>
+    <iphone>
+      <string>&#xE059</string>
+    </iphone>
   </set>
   <!-- äg33 -->
   <set>
@@ -4006,6 +4630,9 @@
     <jphone>
       <string>$Go</string><!-- ÇÀÇ± -->
     </jphone>
+    <iphone>
+      <string>&#xE051</string>
+    </iphone>
   </set>
   <!-- äg34 -->
   <set>
@@ -4026,6 +4653,9 @@
     <jphone>
       <string>$P1</string><!-- ãÉÇ´ -->
     </jphone>
+    <iphone>
+      <string>&#xE411</string>
+    </iphone>
   </set>
   <!-- äg35 -->
   <set>
@@ -4046,6 +4676,9 @@
     <jphone>
       <string>$P1</string><!-- ãÉÇ´ -->
     </jphone>
+    <iphone>
+      <string>&#xE411</string>
+    </iphone>
   </set>
   <!-- äg36 -->
   <set>
@@ -4066,6 +4699,9 @@
     <jphone>
       <string>$OS</string><!-- Å~ -->
     </jphone>
+    <iphone>
+      <string>&#xE333</string>
+    </iphone>
   </set>
   <!-- äg37 -->
   <set>
@@ -4086,6 +4722,9 @@
     <jphone>
       <string>$O!</string><!-- ó«Ç¢Ç‡ÇÃÇ™Ç»Ç¢ÇÃÇ≈ÅAÉÅÉÇ -->
     </jphone>
+    <iphone>
+      <string>&#xE301</string>
+    </iphone>
   </set>
   <!-- äg38 -->
   <set>
@@ -4106,6 +4745,9 @@
     <jphone>
       <string>$Fn</string><!-- íòçÏå† -->
     </jphone>
+    <iphone>
+      <string>&#xE24E</string>
+    </iphone>
   </set>
   <!-- äg39 -->
   <set>
@@ -4126,6 +4768,9 @@
     <jphone>
       <string>$QW</string><!-- TM -->
     </jphone>
+    <iphone>
+      <string>&#xE537</string>
+    </iphone>
   </set>
   <!-- äg40 -->
   <set>
@@ -4146,6 +4791,9 @@
     <jphone>
       <string>$E5</string><!-- ó§è„ -->
     </jphone>
+    <iphone>
+      <string>&#xE115</string>
+    </iphone>
   </set>
   <!-- äg41 -->
   <set>
@@ -4166,6 +4814,9 @@
     <jphone>
       <string>$O5</string><!-- É}ÉãîÈ -->
     </jphone>
+    <iphone>
+      <string>&#xE315</string>
+    </iphone>
   </set>
   <!-- äg42 -->
   <set>
@@ -4186,6 +4837,9 @@
     <jphone>
       <string>$OK</string><!-- ó«Ç¢Ç‡ÇÃÇ™Ç»Ç¢ÇÃÇ≈ÅAÉnÅ[ÉgóŒ -->
     </jphone>
+    <iphone>
+      <string>&#xE32B</string>
+    </iphone>
   </set>
   <!-- äg43 -->
   <set>
@@ -4206,6 +4860,9 @@
     <jphone>
       <string>$Fo</string><!-- è§ïWìoò^ -->
     </jphone>
+    <iphone>
+      <string>&#xE24F</string>
+    </iphone>
   </set>
   <!-- äg44 -->
   <set>
@@ -4226,6 +4883,9 @@
     <jphone>
       <string>$Fr</string><!-- Ç≤íçà” -->
     </jphone>
+    <iphone>
+      <string>&#xE252</string>
+    </iphone>
   </set>
   <!-- äg45 -->
   <set>
@@ -4246,6 +4906,9 @@
     <jphone>
       <string>$OS</string><!-- ó«Ç¢Ç‡ÇÃÇ™Ç»Ç¢ÇÃÇ≈ÅAÅ~ -->
     </jphone>
+    <iphone>
+      <string>&#xE333</string>
+    </iphone>
   </set>
   <!-- äg46 -->
   <set>
@@ -4266,6 +4929,9 @@
     <jphone>
       <string>$FK</string><!-- ãÛê» -->
     </jphone>
+    <iphone>
+      <string>&#xE22B</string>
+    </iphone>
   </set>
   <!-- äg47 -->
   <set>
@@ -4286,6 +4952,9 @@
     <jphone>
       <string>$O-</string><!-- ó«Ç¢Ç‡ÇÃÇ™Ç»Ç¢ÇÃÇ≈ÅAèj -->
     </jphone>
+    <iphone>
+      <string>&#xE30D</string>
+    </iphone>
   </set>
   <!-- äg48 -->
   <set>
@@ -4306,6 +4975,9 @@
     <jphone>
       <string>$FJ</string><!-- ñûê» -->
     </jphone>
+    <iphone>
+      <string>&#xE22A</string>
+    </iphone>
   </set>
   <!-- äg49 -->
   <set>
@@ -4324,8 +4996,11 @@
       <D>808</D><!-- ç∂âEóºï˚å¸ñÓàÛ -->
     </ezweb>
     <jphone>
-      <string>$QX</string><!-- ó«Ç¢Ç‡ÇÃÇ™Ç»Ç¢ÇÃÇ≈ÅAJsÉ}Å[ÉN -->
+      <string>raw:[ç∂âE]</string><!-- ó«Ç¢Ç‡ÇÃÇ™Ç»Ç¢ÇÃÇ≈ÅAJsÉ}Å[ÉN -->
     </jphone>
+    <iphone>
+      <string>raw:[ç∂âE]</string>
+    </iphone>
   </set>
   <!-- äg50 -->
   <set>
@@ -4344,8 +5019,11 @@
       <D>809</D><!-- è„â∫óºï˚å¸ñÓàÛ -->
     </ezweb>
     <jphone>
-      <string>$QX</string><!-- ó«Ç¢Ç‡ÇÃÇ™Ç»Ç¢ÇÃÇ≈ÅAJsÉ}Å[ÉN -->
+      <string>raw:[è„â∫]</string><!-- ó«Ç¢Ç‡ÇÃÇ™Ç»Ç¢ÇÃÇ≈ÅAJsÉ}Å[ÉN -->
     </jphone>
+    <iphone>
+      <string>raw:[è„â∫]</string>
+    </iphone>
   </set>
   <!-- äg51 -->
   <set>
@@ -4366,6 +5044,9 @@
     <jphone>
       <string>$Ew</string><!-- äwçZ -->
     </jphone>
+    <iphone>
+      <string>&#xE157</string>
+    </iphone>
   </set>
   <!-- äg52 -->
   <set>
@@ -4386,6 +5067,9 @@
     <jphone>
       <string>$P^</string><!-- îgÇ™ÉUÅ[Éì -->
     </jphone>
+    <iphone>
+      <string>&#xE43E</string>
+    </iphone>
   </set>
   <!-- äg53 -->
   <set>
@@ -4406,6 +5090,9 @@
     <jphone>
       <string>$G[</string><!-- éR -->
     </jphone>
+    <iphone>
+      <string>&#xE03B</string>
+    </iphone>
   </set>
   <!-- äg54 -->
   <set>
@@ -4426,6 +5113,9 @@
     <jphone>
       <string>$E0</string><!-- ÇÊÇ¬ÇŒ -->
     </jphone>
+    <iphone>
+      <string>&#xE110</string>
+    </iphone>
   </set>
   <!-- äg55 -->
   <set>
@@ -4446,6 +5136,9 @@
     <jphone>
       <string>$Oe</string><!-- ó«Ç¢Ç‡ÇÃÇ™Ç»Ç¢ÇÃÇ≈ÅAÇËÇÒÇ≤ -->
     </jphone>
+    <iphone>
+      <string>&#xE345</string>
+    </iphone>
   </set>
   <!-- äg56 -->
   <set>
@@ -4466,6 +5159,9 @@
     <jphone>
       <string>$O$</string><!-- É`ÉÖÅ[ÉäÉbÉv -->
     </jphone>
+    <iphone>
+      <string>&#xE304</string>
+    </iphone>
   </set>
   <!-- äg57 -->
   <set>
@@ -4486,6 +5182,9 @@
     <jphone>
       <string>$Oh</string><!-- ó«Ç¢Ç‡ÇÃÇ™Ç»Ç¢ÇÃÇ≈ÅAÉXÉCÉJ -->
     </jphone>
+    <iphone>
+      <string>&#xE348</string>
+    </iphone>
   </set>
   <!-- äg58 -->
   <set>
@@ -4506,6 +5205,9 @@
     <jphone>
       <string>$Oe</string><!-- ÇËÇÒÇ≤ -->
     </jphone>
+    <iphone>
+      <string>&#xE345</string>
+    </iphone>
   </set>
   <!-- äg59 -->
   <set>
@@ -4526,6 +5228,9 @@
     <jphone>
       <string>$E0</string><!-- ó«Ç¢Ç‡ÇÃÇ™Ç»Ç¢ÇÃÇ≈ÅAÇÊÇ¬ÇŒ -->
     </jphone>
+    <iphone>
+      <string>&#xE110</string>
+    </iphone>
   </set>
   <!-- äg60 -->
   <set>
@@ -4546,6 +5251,9 @@
     <jphone>
       <string>$E8</string><!-- Ç‡Ç›Ç∂ -->
     </jphone>
+    <iphone>
+      <string>&#xE118</string>
+    </iphone>
   </set>
   <!-- äg61 -->
   <set>
@@ -4566,6 +5274,9 @@
     <jphone>
       <string>$GP</string><!-- Ç®â‘å© -->
     </jphone>
+    <iphone>
+      <string>&#xE030</string>
+    </iphone>
   </set>
   <!-- äg62 -->
   <set>
@@ -4586,6 +5297,9 @@
     <jphone>
       <string>$Ob</string><!-- Ç®Ç…Ç¨ÇË -->
     </jphone>
+    <iphone>
+      <string>&#xE342</string>
+    </iphone>
   </set>
   <!-- äg63 -->
   <set>
@@ -4606,6 +5320,9 @@
     <jphone>
       <string>$Gf</string><!-- ÉPÅ[ÉL -->
     </jphone>
+    <iphone>
+      <string>&#xE046</string>
+    </iphone>
   </set>
   <!-- äg64 -->
   <set>
@@ -4626,6 +5343,9 @@
     <jphone>
       <string>$O+</string><!-- î”éﬁ -->
     </jphone>
+    <iphone>
+      <string>&#xE30B</string>
+    </iphone>
   </set>
   <!-- äg65 -->
   <set>
@@ -4646,6 +5366,9 @@
     <jphone>
       <string>$O`</string><!-- ó«Ç¢Ç‡ÇÃÇ™Ç»Ç¢ÇÃÇ≈ÅAÉâÅ[ÉÅÉì -->
     </jphone>
+    <iphone>
+      <string>&#xE340</string>
+    </iphone>
   </set>
   <!-- äg66 -->
   <set>
@@ -4666,6 +5389,9 @@
     <jphone>
       <string>$OY</string><!-- ÉpÉì -->
     </jphone>
+    <iphone>
+      <string>&#xE339</string>
+    </iphone>
   </set>
   <!-- äg67 -->
   <set>
@@ -4684,8 +5410,11 @@
       <D>812</D><!-- Ç©ÇΩÇ¬ÇﬁÇË -->
     </ezweb>
     <jphone>
-      <string>$QX</string><!-- ó«Ç¢Ç‡ÇÃÇ™Ç»Ç¢ÇÃÇ≈ÅAJsÉ}Å[ÉN -->
+      <string>raw:[Ç©ÇΩÇ¬ÇﬁÇË]</string><!-- ó«Ç¢Ç‡ÇÃÇ™Ç»Ç¢ÇÃÇ≈ÅAJsÉ}Å[ÉN -->
     </jphone>
+    <iphone>
+      <string>raw:[Ç©ÇΩÇ¬ÇﬁÇË]</string>
+    </iphone>
   </set>
   <!-- äg68 -->
   <set>
@@ -4706,6 +5435,9 @@
     <jphone>
       <string>$QC</string><!-- Ç–ÇÊÇ± -->
     </jphone>
+    <iphone>
+      <string>&#xE523</string>
+    </iphone>
   </set>
   <!-- äg69 -->
   <set>
@@ -4726,6 +5458,9 @@
     <jphone>
       <string>$Gu</string><!-- ÉyÉìÉMÉì -->
     </jphone>
+    <iphone>
+      <string>&#xE055</string>
+    </iphone>
   </set>
   <!-- äg70 -->
   <set>
@@ -4746,6 +5481,9 @@
     <jphone>
       <string>$G9</string><!-- ãõ -->
     </jphone>
+    <iphone>
+      <string>&#xE019</string>
+    </iphone>
   </set>
   <!-- äg71 -->
   <set>
@@ -4766,6 +5504,9 @@
     <jphone>
       <string>$Gw</string><!-- ó«Ç¢Ç‡ÇÃÇ™Ç»Ç¢ÇÃÇ≈ÅAäÏ -->
     </jphone>
+    <iphone>
+      <string>&#xE056</string>
+    </iphone>
   </set>
   <!-- äg72 -->
   <set>
@@ -4786,6 +5527,9 @@
     <jphone>
       <string>$E%</string><!-- ó«Ç¢Ç‡ÇÃÇ™Ç»Ç¢ÇÃÇ≈ÅAÉAÉJÉìÉxÅ[ -->
     </jphone>
+    <iphone>
+      <string>&#xE409</string>
+    </iphone>
   </set>
   <!-- äg73 -->
   <set>
@@ -4806,6 +5550,9 @@
     <jphone>
       <string>$G:</string><!-- Ç§Ç‹ -->
     </jphone>
+    <iphone>
+      <string>&#xE01A</string>
+    </iphone>
   </set>
   <!-- äg74 -->
   <set>
@@ -4826,6 +5573,9 @@
     <jphone>
       <string>$E+</string><!-- Ç‘ÇΩ -->
     </jphone>
+    <iphone>
+      <string>&#xE10B</string>
+    </iphone>
   </set>
   <!-- äg75 -->
   <set>
@@ -4846,6 +5596,9 @@
     <jphone>
       <string>$Gd</string><!-- ÉJÉNÉeÉã -->
     </jphone>
+    <iphone>
+      <string>&#xE044</string>
+    </iphone>
   </set>
   <!-- äg76 -->
   <set>
@@ -4866,5 +5619,8 @@
     <jphone>
       <string>$P+</string><!-- ó«Ç¢Ç‡ÇÃÇ™Ç»Ç¢ÇÃÇ≈ÅAÇ∞ÇÎÇ∞ÇÎ -->
     </jphone>
+    <iphone>
+      <string>&#xE40B</string>
+    </iphone>
   </set>
 </emoji>

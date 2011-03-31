@@ -30,11 +30,16 @@ typedef enum {
   CHXJ_SPEC_Hdml,
   CHXJ_SPEC_Jhtml,
   CHXJ_SPEC_Jxhtml,    /* use XHTML */
+  CHXJ_SPEC_iPhone2,   /* use XHTML */
+  CHXJ_SPEC_iPhone3,   /* use XHTML */
+  CHXJ_SPEC_iPhone4,   /* use XHTML */
   CHXJ_SPEC_HTML,
 } spec_type;
 
 #define CHXJ_PIC_OK                (0x01)
 #define CHXJ_PIC_NG                (0x00)
+
+#define IS_IPHONE(X) (((X) == CHXJ_SPEC_iPhone2) || ((X) == CHXJ_SPEC_iPhone3) || ((X) == CHXJ_SPEC_iPhone4))
 
 #include "mod_chxj.h"
 #include "chxj_cookie.h"

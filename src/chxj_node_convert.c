@@ -66,6 +66,18 @@ tag_handlers chxj_tag_handlers[] = {
     .handler = jxhtml_handler,
   },
   {
+    .type    = CHXJ_SPEC_iPhone2,
+    .handler = iphone_handler,
+  },
+  {
+    .type    = CHXJ_SPEC_iPhone3,
+    .handler = iphone_handler,
+  },
+  {
+    .type    = CHXJ_SPEC_iPhone4,
+    .handler = iphone_handler,
+  },
+  {
     .type    = CHXJ_SPEC_HTML,
     .handler = NULL,
   },

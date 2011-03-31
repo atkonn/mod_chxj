@@ -268,6 +268,18 @@ s_set_device_data(Doc *doc, apr_pool_t *p, device_table_list *dtl, Node *node)
             dt->html_spec_type = CHXJ_SPEC_Jxhtml;
             dt->provider       = CHXJ_PROVIDER_SOFTBANK;
           }
+          else if (STRCASEEQ('i','I',"iphone2",vv)) {
+            dt->html_spec_type = CHXJ_SPEC_iPhone2;
+            dt->provider       = CHXJ_PROVIDER_SOFTBANK;
+          }
+          else if (STRCASEEQ('i','I',"iphone3",vv)) {
+            dt->html_spec_type = CHXJ_SPEC_iPhone3;
+            dt->provider       = CHXJ_PROVIDER_SOFTBANK;
+          }
+          else if (STRCASEEQ('i','I',"iphone4",vv)) {
+            dt->html_spec_type = CHXJ_SPEC_iPhone4;
+            dt->provider       = CHXJ_PROVIDER_SOFTBANK;
+          }
         }
       }
       else 

@@ -22,6 +22,7 @@ libmod_chxj_la_SOURCES = mod_chxj.c \
     chxj_ixhtml10.c \
     chxj_jhtml.c \
     chxj_jxhtml.c \
+    chxj_iphone.c \
     chxj_str_util.c  \
     chxj_img_conv.c  \
     chxj_dump.c \

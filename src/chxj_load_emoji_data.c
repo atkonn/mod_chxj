@@ -52,6 +52,8 @@ static char* s_load_emoji_ezweb_tag( Doc* doc, apr_pool_t* p, emoji_t* em, Node*
 
 static char* s_load_emoji_jphone_tag( Doc* doc, apr_pool_t* p, emoji_t* em, Node* node);
 
+static char* s_load_emoji_iphone_tag( Doc* doc, apr_pool_t* p, emoji_t* em, Node* node);
+
 static char  s_hexstring_to_byte(char* s);
 
 
@@ -143,6 +145,9 @@ s_load_emoji_set_tag(
   em->imode  = apr_palloc(p, sizeof(imode_emoji_t));
   em->ezweb  = apr_palloc(p, sizeof(ezweb_emoji_t));
   em->jphone = apr_palloc(p, sizeof(jphone_emoji_t));
+  em->iphone = apr_palloc(p, sizeof(iphone_emoji_t));
+  em->jphone->string = NULL;
+  em->iphone->string = NULL;
   
   for (child = qs_get_child_node(doc, node);
        child;
@@ -163,6 +168,10 @@ s_load_emoji_set_tag(
     case 'I':
       if (strcasecmp(name, "imode") == 0) {
         if ((rtn = s_load_emoji_imode_tag(doc, p, em, child)) != NULL)
+          return rtn;
+      }
+      else if (strcasecmp(name, "iphone") == 0) {
+        if ((rtn = s_load_emoji_iphone_tag(doc, p, em, child)) != NULL)
           return rtn;
       }
       break;
@@ -498,6 +507,71 @@ s_load_emoji_jphone_tag(
       else {
         em->jphone->string    = apr_palloc(p, 1);
         em->jphone->string[0] = 0;
+      }
+    }
+  }
+
+  return NULL;
+}
+
+static char*
+s_load_emoji_iphone_tag(
+  Doc*        doc,
+  apr_pool_t* p,
+  emoji_t*    em,
+  Node*       node)
+{
+  Node* child;
+
+
+  em->iphone->string = NULL;
+
+  for (child = qs_get_child_node(doc, node);
+       child ;
+       child = qs_get_next_node(doc, child)) {
+
+    char* name  = qs_get_node_name(doc, child);
+
+    if ((*name == 's' || *name == 'S') && strcasecmp(name, "string") == 0) {
+
+      Node* stringnode = qs_get_child_node(doc, child);
+
+      if (stringnode) {
+
+        char* cname  = qs_get_node_name(doc, stringnode);
+        char* cvalue = qs_get_node_value(doc, stringnode);
+
+        if ((*cname == 't' || *cname == 'T') && strcasecmp(cname, "text") == 0) {
+          unsigned int   ii;
+          int   jj;
+          char* tmp;
+ 
+          tmp = apr_palloc(p, strlen(cvalue)+1);
+          memset(tmp, 0, strlen(cvalue)+1);
+
+          for (jj=0,ii=0; ii< strlen(cvalue); ii++) {
+            if (strncasecmp(&cvalue[ii] , ESCAPE_CHAR_LT, strlen(ESCAPE_CHAR_LT)) == 0) {
+              tmp[jj] = '<';
+              jj++;
+              ii += (strlen(ESCAPE_CHAR_LT) - 1);
+            }
+            else
+            if (strncasecmp(&cvalue[ii] , ESCAPE_CHAR_GT, strlen(ESCAPE_CHAR_GT)) == 0) {
+              tmp[jj] = '>';
+              jj++;
+              ii += (strlen(ESCAPE_CHAR_GT) - 1);
+            }
+            else {
+              tmp[jj] = cvalue[ii];
+              jj++;
+            }
+          }
+          em->iphone->string = apr_pstrdup(p,tmp);
+        }
+      }
+      else {
+        em->iphone->string    = apr_palloc(p, 1);
+        em->iphone->string[0] = 0;
       }
     }
   }

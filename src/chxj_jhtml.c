@@ -604,7 +604,19 @@ s_jhtml_search_emoji(jhtml_t *jhtml, char *txt, char **rslt)
     &&  strlen(ee->imode->string) > 0
     &&  strncasecmp(ee->imode->string, txt, strlen(ee->imode->string)) == 0) {
       if (spec == NULL || spec->emoji_type == NULL) {
-        *rslt = apr_psprintf(r->pool,"%s", ee->jphone->string);
+        if (ee->jphone != NULL && ee->jphone->string != NULL) {
+          if (jhtml->conf->use_emoji_image
+              && jhtml->conf->emoji_image_url
+              && strcasecmp(ee->jphone->string,"image") == 0) {
+            *rslt = apr_psprintf(r->pool, "<img src=\"%s/%d\" />",jhtml->conf->emoji_image_url, ee->no);
+          }
+          else if (strncasecmp(ee->jphone->string,"raw:",4) == 0) {
+            *rslt = apr_psprintf(r->pool,"%s", &(ee->jphone->string[4]));
+          }
+          else {
+            *rslt = apr_psprintf(r->pool,"%s", ee->jphone->string);
+          }
+        }
         return strlen(ee->imode->string);
       }
 
@@ -615,7 +627,19 @@ s_jhtml_search_emoji(jhtml_t *jhtml, char *txt, char **rslt)
     && ((unsigned char)txt[0] & 0xff) == ((unsigned char)hex1byte)
     && ((unsigned char)txt[1] & 0xff) == ((unsigned char)hex2byte)) {
       if (spec == NULL || spec->emoji_type == NULL) {
-        *rslt = apr_psprintf(r->pool,"%s", ee->jphone->string);
+        if (ee->jphone != NULL && ee->jphone->string != NULL) {
+          if (jhtml->conf->use_emoji_image
+              && jhtml->conf->emoji_image_url
+              && strcasecmp(ee->jphone->string,"image") == 0) {
+            *rslt = apr_psprintf(r->pool, "<img src=\"%s/%d\" />",jhtml->conf->emoji_image_url, ee->no);
+          }
+          else if (strncasecmp(ee->jphone->string,"raw:",4) == 0) {
+            *rslt = apr_psprintf(r->pool,"%s", &(ee->jphone->string[4]));
+          }
+          else {
+            *rslt = apr_psprintf(r->pool,"%s", ee->jphone->string);
+          }
+        }
         return 2;
       }
 

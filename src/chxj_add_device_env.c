@@ -40,6 +40,9 @@ chxj_add_device_env(request_rec *r, device_table *spec)
     break;
   case CHXJ_SPEC_Jhtml:
   case CHXJ_SPEC_Jxhtml:
+  case CHXJ_SPEC_iPhone2:
+  case CHXJ_SPEC_iPhone3:
+  case CHXJ_SPEC_iPhone4:
     apr_table_setn(r->headers_in, HTTP_X_CHXJ_PROVIDER, "3");
     apr_table_setn(r->headers_in, HTTP_X_CHXJ_PROVIDER_STRING, "SoftBank");
     break;
@@ -64,6 +67,9 @@ chxj_add_device_env(request_rec *r, device_table *spec)
   case CHXJ_SPEC_Hdml:             apr_table_setn(r->headers_in, HTTP_X_CHXJ_HTMLSPECTYPE, "HDML");     break;
   case CHXJ_SPEC_Jhtml:            apr_table_setn(r->headers_in, HTTP_X_CHXJ_HTMLSPECTYPE, "JHTML");    break;
   case CHXJ_SPEC_Jxhtml:           apr_table_setn(r->headers_in, HTTP_X_CHXJ_HTMLSPECTYPE, "JXHTML");   break;
+  case CHXJ_SPEC_iPhone2:          apr_table_setn(r->headers_in, HTTP_X_CHXJ_HTMLSPECTYPE, "iPhone2");  break;
+  case CHXJ_SPEC_iPhone3:          apr_table_setn(r->headers_in, HTTP_X_CHXJ_HTMLSPECTYPE, "iPhone3");  break;
+  case CHXJ_SPEC_iPhone4:          apr_table_setn(r->headers_in, HTTP_X_CHXJ_HTMLSPECTYPE, "iPhone4");  break;
   default:                         apr_table_setn(r->headers_in, HTTP_X_CHXJ_HTMLSPECTYPE, "UNKNOWN");  break;
   }
 
@@ -154,6 +160,15 @@ chxj_get_device_env(request_rec *r)
   }
   else if (STRCASEEQ('j','j', "JXHTML", tmp)) {
     spec->html_spec_type = CHXJ_SPEC_Jxhtml;
+  }
+  else if (STRCASEEQ('j','j', "iPhone2", tmp)) {
+    spec->html_spec_type = CHXJ_SPEC_iPhone2;
+  }
+  else if (STRCASEEQ('j','j', "iPhone3", tmp)) {
+    spec->html_spec_type = CHXJ_SPEC_iPhone3;
+  }
+  else if (STRCASEEQ('j','j', "iPhone4", tmp)) {
+    spec->html_spec_type = CHXJ_SPEC_iPhone4;
   }
   else {
     spec->html_spec_type = CHXJ_SPEC_UNKNOWN;

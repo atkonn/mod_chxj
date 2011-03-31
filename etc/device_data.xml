@@ -21475,6 +21475,125 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <dpi_heigh>96</dpi_heigh>
     </device>
   </user_agent>
+  <!--=======================================================================-->
+  <!-- iPhone/iPod                                                           -->
+  <!--=======================================================================-->
+  <!--
+    old iPhone/iPod
+  -->
+  <user_agent pattern="^Mozilla/5.0 \(([^;]+); U; CPU like Mac OS X;.+$">
+    <device>
+      <device_id>iPhone</device_id>
+      <device_name>iPhone(old)</device_name>
+      <html_spec_type>iPhone2</html_spec_type>
+      <width>320</width>
+      <heigh>480</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>true</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+
+      <wp_width>320</wp_width>
+      <wp_heigh>480</wp_heigh>
+      <cache>300000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+      <output_encoding>UTF-8</output_encoding>
+    </device>
+    <device>
+      <device_id>iPod</device_id>
+      <device_name>iPod(old)</device_name>
+      <html_spec_type>iPhone2</html_spec_type>
+      <width>320</width>
+      <heigh>480</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>true</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+
+      <wp_width>320</wp_width>
+      <wp_heigh>480</wp_heigh>
+      <cache>300000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+      <output_encoding>UTF-8</output_encoding>
+    </device>
+  </user_agent>
+  <!--
+       Mozilla/5.0 (iPhone; U; CPU iPhone OS 2_0 like Mac OS X; en-us) AppleWebKit/525.18.1 (KHTML, like Gecko) Version/3.1.1 Mobile/5A345 Safari/525.20
+       iPhone 2.0-2.2.1
+  -->
+  <user_agent pattern="^Mozilla/5.0 \(iPhone; U; CPU (iPhone OS [^ _]+)_[^ ]+ like Mac OS X;.+$">
+    <device>
+      <device_id>iPhone OS 2</device_id>
+      <device_name>iPhone 2</device_name>
+      <html_spec_type>iPhone2</html_spec_type>
+      <width>320</width>
+      <heigh>480</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+
+      <wp_width>320</wp_width>
+      <wp_heigh>480</wp_heigh>
+      <cache>300000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+      <output_encoding>UTF-8</output_encoding>
+    </device>
+    <device>
+      <device_id>iPhone OS 3</device_id>
+      <device_name>iPhone 3</device_name>
+      <html_spec_type>iPhone3</html_spec_type>
+      <width>320</width>
+      <heigh>480</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+
+      <wp_width>320</wp_width>
+      <wp_heigh>480</wp_heigh>
+      <cache>300000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+      <output_encoding>UTF-8</output_encoding>
+    </device>
+    <device>
+      <device_id>iPhone OS 4</device_id>
+      <device_name>iPhone 4</device_name>
+      <html_spec_type>iPhone4</html_spec_type>
+      <width>320</width>
+      <heigh>480</heigh>
+      <gif>true</gif>
+      <jpeg>true</jpeg>
+      <png>true</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+
+      <wp_width>640</wp_width>
+      <wp_heigh>960</wp_heigh>
+      <cache>300000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+      <output_encoding>UTF-8</output_encoding>
+    </device>
+  </user_agent>
 
 </devices>
 <!--
