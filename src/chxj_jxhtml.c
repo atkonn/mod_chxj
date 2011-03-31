@@ -2569,7 +2569,7 @@ s_jxhtml_start_input_tag(void *pdoc, Node *node)
 
     char *vv = s_jxhtml_istyle_to_wap_input_format(doc->buf.pool,attr_istyle);
     W_L(" style=\"");
-    W_L("-wrap-input-format:");
+    W_L("-wap-input-format:");
     W_V(vv);
     W_L(";");
     W_L("\"");
@@ -2579,7 +2579,7 @@ s_jxhtml_start_input_tag(void *pdoc, Node *node)
 
     char *vv = s_jxhtml_istyle_to_wap_input_format(doc->buf.pool,"4");
     W_L(" style=\"");
-    W_L("-wrap-input-format:");
+    W_L("-wap-input-format:");
     W_V(vv);
     W_L(";");
     W_L("\"");
