@@ -1,3 +1,26 @@
+libapache2-mod-chxj (0.14.0-1) unstable; urgency=low
+
+  * Added New Feature.
+    - iPhone can be recognized.
+    - "raw:" can be specified in jphone, iphone, and the part ezweb of the emoji
+  definition.
+      ex) <string>raw:[OK]</string>
+    - Added ChxjUseEmojiImage directive.
+    - Added ChxjEmojiImageUrl directive.
+    - "image" can be specified in iphone of the pictograph definition, jphone,
+  and the part ezweb.
+       When URL is set to ChxjEmojiImageUrl with On, ChxjUseEmojiImage.
+       the emoji is converted int <img> tag with follow case:
+       1) "Image" is specified by the pictograph definition.
+       2) For iphone2
+    - Added CSS converter for iphone
+  
+  * Fixed Bug
+    - wrap-input-format --> wap-input-format
+    - When CrLf is contained in the style tag, it is not read correctly.
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Fri, 01 Apr 2011 01:59:02 +0900
+
 libapache2-mod-chxj (0.13.2-1) unstable; urgency=low
 
   * Fixed Bug
