@@ -1,6 +1,6 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
-AC_INIT([mod_chxj],[0.13.3rc1],[konn@users.sourceforge.jp])
+AC_INIT([mod_chxj],[0.13.3],[konn@users.sourceforge.jp])
 AC_PREREQ(2.59)
 AC_CONFIG_SRCDIR([src/mod_chxj.c])
 AC_CANONICAL_TARGET
