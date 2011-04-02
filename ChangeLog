@@ -1,3 +1,11 @@
+libapache2-mod-chxj (0.13.3-1) unstable; urgency=low
+
+  * Fixed Bug
+    - wrap-input-format --> wap-input-format
+    - When CrLf is contained in the style tag, it is not read correctly.
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Sat, 02 Apr 2011 17:35:24 +0900
+
 libapache2-mod-chxj (0.13.2-1) unstable; urgency=low
 
   * Fixed Bug
