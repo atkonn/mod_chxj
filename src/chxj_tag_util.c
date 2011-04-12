@@ -545,6 +545,33 @@ chxj_chxjif_is_mine(device_table *spec, Doc *doc, Node *tag)
           break;
         }
       }
+      else if (STRCASEEQ('a','A',"android_s",value)) {
+        if (spec->html_spec_type == CHXJ_SPEC_softbank_android) {
+          /* Yes , it is mine */
+          return 1;
+        }
+      }
+      else if (STRCASEEQ('a','A',"android_a",value)) {
+        if (spec->html_spec_type == CHXJ_SPEC_au_android) {
+          /* Yes , it is mine */
+          return 1;
+        }
+      }
+      else if (STRCASEEQ('a','A',"android_d",value)) {
+        if (spec->html_spec_type == CHXJ_SPEC_docomo_android) {
+          /* Yes , it is mine */
+          return 1;
+        }
+      }
+      else if (STRCASEEQ('a','A',"android",value)) {
+        if (spec->html_spec_type == CHXJ_SPEC_softbank_android
+            || spec->html_spec_type == CHXJ_SPEC_au_android
+            || spec->html_spec_type == CHXJ_SPEC_docomo_android
+            || spec->html_spec_type == CHXJ_SPEC_android) {
+          /* Yes , it is mine */
+          return 1;
+        }
+      }
     }
   }
 

@@ -280,6 +280,22 @@ s_set_device_data(Doc *doc, apr_pool_t *p, device_table_list *dtl, Node *node)
             dt->html_spec_type = CHXJ_SPEC_iPhone4;
             dt->provider       = CHXJ_PROVIDER_SOFTBANK;
           }
+          else if (STRCASEEQ('a','A',"android_s",vv)) {
+            dt->html_spec_type = CHXJ_SPEC_softbank_android;
+            dt->provider       = CHXJ_PROVIDER_SOFTBANK;
+          }
+          else if (STRCASEEQ('a','A',"android_a",vv)) {
+            dt->html_spec_type = CHXJ_SPEC_au_android;
+            dt->provider       = CHXJ_PROVIDER_AU;
+          }
+          else if (STRCASEEQ('a','A',"android_d",vv)) {
+            dt->html_spec_type = CHXJ_SPEC_docomo_android;
+            dt->provider       = CHXJ_PROVIDER_DOCOMO;
+          }
+          else if (STRCASEEQ('a','A',"android",vv)) {
+            dt->html_spec_type = CHXJ_SPEC_android;
+            dt->provider       = CHXJ_PROVIDER_UNKNOWN;
+          }
         }
       }
       else 

@@ -33,6 +33,10 @@ typedef enum {
   CHXJ_SPEC_iPhone2,   /* use XHTML */
   CHXJ_SPEC_iPhone3,   /* use XHTML */
   CHXJ_SPEC_iPhone4,   /* use XHTML */
+  CHXJ_SPEC_softbank_android, /* use XHTML (SoftBank) */
+  CHXJ_SPEC_au_android, /* use XHTML (au KDDI)  */
+  CHXJ_SPEC_docomo_android, /* use XHTML (docomo)   */
+  CHXJ_SPEC_android,        /* use XHTML */
   CHXJ_SPEC_HTML,
 } spec_type;
 

@@ -30,11 +30,13 @@ chxj_add_device_env(request_rec *r, device_table *spec)
   case CHXJ_SPEC_Chtml_5_0:
   case CHXJ_SPEC_Chtml_6_0:
   case CHXJ_SPEC_Chtml_7_0:
+  case CHXJ_SPEC_docomo_android:
     apr_table_setn(r->headers_in, HTTP_X_CHXJ_PROVIDER, "1");
     apr_table_setn(r->headers_in, HTTP_X_CHXJ_PROVIDER_STRING, "docomo");
     break;
   case CHXJ_SPEC_XHtml_Mobile_1_0:
   case CHXJ_SPEC_Hdml:
+  case CHXJ_SPEC_au_android:
     apr_table_setn(r->headers_in, HTTP_X_CHXJ_PROVIDER, "2");
     apr_table_setn(r->headers_in, HTTP_X_CHXJ_PROVIDER_STRING, "au");
     break;
@@ -43,9 +45,11 @@ chxj_add_device_env(request_rec *r, device_table *spec)
   case CHXJ_SPEC_iPhone2:
   case CHXJ_SPEC_iPhone3:
   case CHXJ_SPEC_iPhone4:
+  case CHXJ_SPEC_softbank_android:
     apr_table_setn(r->headers_in, HTTP_X_CHXJ_PROVIDER, "3");
     apr_table_setn(r->headers_in, HTTP_X_CHXJ_PROVIDER_STRING, "SoftBank");
     break;
+  case CHXJ_SPEC_android:
   default:
     apr_table_setn(r->headers_in, HTTP_X_CHXJ_PROVIDER, "0");
     apr_table_setn(r->headers_in, HTTP_X_CHXJ_PROVIDER_STRING, "unknown");
@@ -70,6 +74,10 @@ chxj_add_device_env(request_rec *r, device_table *spec)
   case CHXJ_SPEC_iPhone2:          apr_table_setn(r->headers_in, HTTP_X_CHXJ_HTMLSPECTYPE, "iPhone2");  break;
   case CHXJ_SPEC_iPhone3:          apr_table_setn(r->headers_in, HTTP_X_CHXJ_HTMLSPECTYPE, "iPhone3");  break;
   case CHXJ_SPEC_iPhone4:          apr_table_setn(r->headers_in, HTTP_X_CHXJ_HTMLSPECTYPE, "iPhone4");  break;
+  case CHXJ_SPEC_softbank_android: apr_table_setn(r->headers_in, HTTP_X_CHXJ_HTMLSPECTYPE, "android");  break;
+  case CHXJ_SPEC_au_android:       apr_table_setn(r->headers_in, HTTP_X_CHXJ_HTMLSPECTYPE, "android");  break;
+  case CHXJ_SPEC_docomo_android:   apr_table_setn(r->headers_in, HTTP_X_CHXJ_HTMLSPECTYPE, "android");  break;
+  case CHXJ_SPEC_android:          apr_table_setn(r->headers_in, HTTP_X_CHXJ_HTMLSPECTYPE, "android");  break;
   default:                         apr_table_setn(r->headers_in, HTTP_X_CHXJ_HTMLSPECTYPE, "UNKNOWN");  break;
   }
 
@@ -169,6 +177,21 @@ chxj_get_device_env(request_rec *r)
   }
   else if (STRCASEEQ('j','j', "iPhone4", tmp)) {
     spec->html_spec_type = CHXJ_SPEC_iPhone4;
+  }
+  else if (STRCASEEQ('a','A', "android", tmp)) {
+    char *prov = (char *)apr_table_get(r->headers_in, HTTP_X_CHXJ_PROVIDER);
+    if (prov && *prov == '1') {
+      spec->html_spec_type = CHXJ_SPEC_docomo_android;
+    }
+    else if (prov && *prov == '2') {
+      spec->html_spec_type = CHXJ_SPEC_au_android;
+    }
+    else if (prov && *prov == '3') {
+      spec->html_spec_type = CHXJ_SPEC_softbank_android;
+    }
+    else {
+      spec->html_spec_type = CHXJ_SPEC_android;
+    }
   }
   else {
     spec->html_spec_type = CHXJ_SPEC_UNKNOWN;

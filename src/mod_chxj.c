@@ -59,6 +59,7 @@
 #include "chxj_jhtml.h"
 #include "chxj_jxhtml.h"
 #include "chxj_iphone.h"
+#include "chxj_android.h"
 #include "chxj_img_conv_format.h"
 #include "chxj_qr_code.h"
 #include "chxj_encoding.h"
@@ -172,6 +173,30 @@ converter_t convert_routine[] = {
     .emoji_only_converter = chxj_iphone_emoji_only_converter,
   },
   {
+    /* CHXJ_SPEC_softbank_android          */
+    .converter            = chxj_convert_android,
+    .encoder              = chxj_encoding,
+    .emoji_only_converter = chxj_android_emoji_only_converter,
+  },
+  {
+    /* CHXJ_SPEC_au_android          */
+    .converter            = chxj_convert_android,
+    .encoder              = chxj_encoding,
+    .emoji_only_converter = chxj_android_emoji_only_converter,
+  },
+  {
+    /* CHXJ_SPEC_docomo_android          */
+    .converter            = chxj_convert_android,
+    .encoder              = chxj_encoding,
+    .emoji_only_converter = chxj_android_emoji_only_converter,
+  },
+  {
+    /* CHXJ_SPEC_android          */
+    .converter            = chxj_convert_android,
+    .encoder              = chxj_encoding,
+    .emoji_only_converter = chxj_android_emoji_only_converter,
+  },
+  {
     /* CHXJ_SPEC_HTML             */
     .converter = NULL,
     .encoder  = NULL,
@@ -259,6 +284,10 @@ chxj_headers_fixup(request_rec *r)
   case CHXJ_SPEC_iPhone2:
   case CHXJ_SPEC_iPhone3:
   case CHXJ_SPEC_iPhone4:
+  case CHXJ_SPEC_softbank_android:
+  case CHXJ_SPEC_au_android:
+  case CHXJ_SPEC_docomo_android:
+  case CHXJ_SPEC_android:
     request_conf->entryp = entryp = chxj_apply_convrule(r, dconf->convrules);
     if (dconf->image != CHXJ_IMG_ON) {
       if (! entryp) {
@@ -444,6 +473,10 @@ s_clear_cookie_header(request_rec *r, device_table *spec)
   case CHXJ_SPEC_iPhone2:
   case CHXJ_SPEC_iPhone3:
   case CHXJ_SPEC_iPhone4:
+  case CHXJ_SPEC_softbank_android:
+  case CHXJ_SPEC_au_android:
+  case CHXJ_SPEC_docomo_android:
+  case CHXJ_SPEC_android:
   default:
     break;
   }
@@ -550,6 +583,10 @@ chxj_convert(request_rec *r, const char **src, apr_size_t *len, device_table *sp
     case CHXJ_SPEC_iPhone2:
     case CHXJ_SPEC_iPhone3:
     case CHXJ_SPEC_iPhone4:
+    case CHXJ_SPEC_softbank_android:
+    case CHXJ_SPEC_au_android:
+    case CHXJ_SPEC_docomo_android:
+    case CHXJ_SPEC_android:
     default:
       break;
     }
@@ -1208,6 +1245,10 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
       case CHXJ_SPEC_iPhone2:
       case CHXJ_SPEC_iPhone3:
       case CHXJ_SPEC_iPhone4:
+      case CHXJ_SPEC_softbank_android:
+      case CHXJ_SPEC_au_android:
+      case CHXJ_SPEC_docomo_android:
+      case CHXJ_SPEC_android:
       default:
         break;
       }
@@ -1263,6 +1304,10 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
         case CHXJ_SPEC_iPhone2:
         case CHXJ_SPEC_iPhone3:
         case CHXJ_SPEC_iPhone4:
+        case CHXJ_SPEC_softbank_android:
+        case CHXJ_SPEC_au_android:
+        case CHXJ_SPEC_docomo_android:
+        case CHXJ_SPEC_android:
         default:
           break;
         }
@@ -1507,6 +1552,10 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
           case CHXJ_SPEC_iPhone2:
           case CHXJ_SPEC_iPhone3:
           case CHXJ_SPEC_iPhone4:
+          case CHXJ_SPEC_softbank_android:
+          case CHXJ_SPEC_au_android:
+          case CHXJ_SPEC_docomo_android:
+          case CHXJ_SPEC_android:
           default:
             break;
           }
@@ -1915,6 +1964,10 @@ chxj_insert_filter(request_rec *r)
   case CHXJ_SPEC_iPhone2:
   case CHXJ_SPEC_iPhone3:
   case CHXJ_SPEC_iPhone4:
+  case CHXJ_SPEC_softbank_android:
+  case CHXJ_SPEC_au_android:
+  case CHXJ_SPEC_docomo_android:
+  case CHXJ_SPEC_android:
     break;
 
   default:

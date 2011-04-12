@@ -78,6 +78,22 @@ tag_handlers chxj_tag_handlers[] = {
     .handler = iphone_handler,
   },
   {
+    .type    = CHXJ_SPEC_softbank_android,
+    .handler = android_handler,
+  },
+  {
+    .type    = CHXJ_SPEC_au_android,
+    .handler = android_handler,
+  },
+  {
+    .type    = CHXJ_SPEC_docomo_android,
+    .handler = android_handler,
+  },
+  {
+    .type    = CHXJ_SPEC_android,
+    .handler = android_handler,
+  },
+  {
     .type    = CHXJ_SPEC_HTML,
     .handler = NULL,
   },

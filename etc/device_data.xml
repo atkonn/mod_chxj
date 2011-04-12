@@ -19355,6 +19355,7 @@
     </device>
 
     <!--
+
     -->
     <device>
       <device_id>707SC</device_id>
@@ -21594,6 +21595,622 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <output_encoding>UTF-8</output_encoding>
     </device>
   </user_agent>
+  <!--=======================================================================-->
+  <!-- android                                                               -->
+  <!--=======================================================================-->
+  <user_agent pattern="^Mozilla/5.0 \(Linux; U; Android [^;]+; [^;]+;[ ]*([^ ]+) Build/[^)]+\) AppleWebKit/[^ ]+ .*$">
+    <!--
+    /*=======================================================================*/
+    /* au Android                                                            */
+    /*=======================================================================*/
+    -->
+    <!--
+      au IS01
+      Mozilla/5.0 (Linux; U; Android 1.6; ja-jp;IS01 Build/version) AppleWebKit/528.5+ (KHTML, like Gecko) Version/3.1.2 MobileSafari/ 525.20.1
+    -->
+    <device>
+      <device_id>IS01</device_id>
+      <device_name>au Android IS01</device_name>
+      <html_spec_type>android</html_spec_type>
+      <width>960</width>
+      <heigh>480</heigh>
+      <gif>false</gif>
+      <jpeg>true</jpeg><!-- recomended -->
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+
+      <wp_width>960</wp_width>
+      <wp_heigh>480</wp_heigh>
+      <cache>300000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+      <output_encoding>UTF-8</output_encoding>
+    </device>
+    <!--
+      au IS03
+      Mozilla/5.0 (Linux; U; Android 2.1-update1; ja-jp; IS03 Build/version) AppleWebKit/530.17 (KHTML, like Gecko) Version/4.0 Mobile Safari/530.17
+    -->
+    <device>
+      <device_id>IS03</device_id>
+      <device_name>au Android IS03</device_name>
+      <html_spec_type>android</html_spec_type>
+      <width>960</width>
+      <heigh>640</heigh>
+      <gif>false</gif>
+      <jpeg>true</jpeg><!-- recomended -->
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+
+      <wp_width>960</wp_width>
+      <wp_heigh>640</wp_heigh>
+      <cache>300000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+      <output_encoding>UTF-8</output_encoding>
+    </device>
+    <!--
+      au IS04
+      Mozilla/5.0 (Linux; U; Android 2.1-update1; ja-jp; IS04 Build/version ) AppleWebKit/530.17 (KHTML, like Gecko) Version/4.0 Mobile Safari/530.17
+    -->
+    <device>
+      <device_id>IS04</device_id>
+      <device_name>au Android IS04</device_name>
+      <html_spec_type>android</html_spec_type>
+      <width>854</width>
+      <heigh>480</heigh>
+      <gif>false</gif>
+      <jpeg>true</jpeg><!-- recomended -->
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+
+      <wp_width>854</wp_width>
+      <wp_heigh>480</wp_heigh>
+      <cache>300000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+      <output_encoding>UTF-8</output_encoding>
+    </device>
+    <!--
+      au IS05
+      Mozilla/5.0 (Linux; U; Android 2.2.1; ja-jp; IS05 Build/version AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1
+    -->
+    <device>
+      <device_id>IS05</device_id>
+      <device_name>au Android IS05</device_name>
+      <html_spec_type>android</html_spec_type>
+      <width>854</width>
+      <heigh>480</heigh>
+      <gif>false</gif>
+      <jpeg>true</jpeg><!-- recomended -->
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+
+      <wp_width>854</wp_width>
+      <wp_heigh>480</wp_heigh>
+      <cache>300000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+      <output_encoding>UTF-8</output_encoding>
+    </device>
+    <!--
+      au IS06
+      Mozilla/5.0 (Linux; U; Android 2.2-update1; ja-jp; PANTECH IS06 Build/version) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1
+    -->
+    <device>
+      <device_id>IS06</device_id>
+      <device_name>au Android IS06</device_name>
+      <html_spec_type>android</html_spec_type>
+      <width>800</width>
+      <heigh>480</heigh>
+      <gif>false</gif>
+      <jpeg>true</jpeg><!-- recomended -->
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+
+      <wp_width>800</wp_width>
+      <wp_heigh>480</wp_heigh>
+      <cache>300000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+      <output_encoding>UTF-8</output_encoding>
+    </device>
+
+    <!--
+    /*=======================================================================*/
+    /* docomo Android                                                        */
+    /*=======================================================================*/
+    -->
+    <!--
+      HT-03A
+      Mozilla/5.0 (Linux; U; Android 1.5; ja-jp; HT-03A Build/CDB72) AppleWebKit/528.5+ (KHTML, like Gecko) Version/3.1.2 Mobile Safari/525.20.1
+      Mozilla/5.0 (Linux; U; Android 1.6; ja-jp; Docomo HT-03A Build/DRD08) AppleWebKit/528.5+(KHTML, like Gecko) Version/3.1.2 Mobile Safari/ 525.20.1
+    -->
+    <device>
+      <device_id>HT-03A</device_id>
+      <device_name>docomo Android HT-03A</device_name>
+      <html_spec_type>android</html_spec_type>
+      <width>320</width>
+      <heigh>480</heigh>
+      <gif>false</gif>
+      <jpeg>true</jpeg><!-- recomended -->
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+
+      <wp_width>320</wp_width>
+      <wp_heigh>480</wp_heigh>
+      <cache>300000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+      <output_encoding>UTF-8</output_encoding>
+    </device>
+    <!--
+      Xperia SO-01B  
+      Mozilla/5.0 (Linux; U; Android 1.6; ja-jp; SonyEricssonSO-01B Build/R1EA018) AppleWebKit/528.5+ (KHTML, like Gecko) Version/3.1.2 Mobile Safari/525.20.1
+      Mozilla/5.0 (Linux; U; Android 1.6; ja-jp; SonyEricssonSO-01B Build/R1EA025) AppleWebKit/528.5+ (KHTML, like Gecko) Version/3.1.2 Mobile Safari/525.20.1
+      Mozilla/5.0 (Linux; U; Android 1.6; ja-jp; SonyEricssonSO-01B Build/R1EA029) AppleWebKit/528.5+ (KHTML, like Gecko) Version/3.1.2 Mobile Safari/525.20.1
+      Mozilla/5.0 (Linux; U; Android 2.1-update1; ja-jp; SonyEricssonSO-01B Build/2.0.B.0.138) AppleWebKit/530.17 (KHTML, like Gecko) Version/4.0 Mobile Safari/530.17
+      Mozilla/5.0 (Linux; U; Android 2.1-update1; ja-jp; SonyEricssonSO-01B Build/2.0.1.B.0.19) AppleWebKit/530.17 (KHTML, like Gecko) Version/4.0 Mobile Safari/530.17
+    -->
+    <device>
+      <device_id>SonyEricssonSO-01B</device_id>
+      <device_name>docomo Android Xperia SO-01B</device_name>
+      <html_spec_type>android</html_spec_type>
+      <width>480</width>
+      <heigh>854</heigh>
+      <gif>false</gif>
+      <jpeg>true</jpeg><!-- recomended -->
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>300000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+      <output_encoding>UTF-8</output_encoding>
+    </device>
+    <!--
+      LYNX SH-10B  
+      Mozilla/5.0 (Linux; U; Android 1.6; ja-jp; SH-10B Build/S7023) AppleWebKit/528.5+ (KHTML, like Gecko) Version/3.1.2 Mobile Safari/525.20.1
+    -->
+    <device>
+      <device_id>SH-10B</device_id>
+      <device_name>docomo Android LYNX SH-10B</device_name>
+      <html_spec_type>android</html_spec_type>
+      <width>960</width>
+      <heigh>480</heigh>
+      <gif>false</gif>
+      <jpeg>true</jpeg><!-- recomended -->
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+
+      <wp_width>960</wp_width>
+      <wp_heigh>480</wp_heigh>
+      <cache>300000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+      <output_encoding>UTF-8</output_encoding>
+    </device>
+    <!--
+      GALAXY S SC-02B
+      Mozilla/5.0 (Linux; U; Android 2.2; ja-jp; SC-02B Build/FROYO) AppleWebKit/533.1(KHTML, like Gecko) Version/4.0 Mobile Safari/533.1
+    -->
+    <device>
+      <device_id>SC-02B</device_id>
+      <device_name>docomo Android GALAXY S SC-02B</device_name>
+      <html_spec_type>android</html_spec_type>
+      <width>480</width>
+      <heigh>800</heigh>
+      <gif>false</gif>
+      <jpeg>true</jpeg><!-- recomended -->
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+
+      <wp_width>480</wp_width>
+      <wp_heigh>800</wp_heigh>
+      <cache>300000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+      <output_encoding>UTF-8</output_encoding>
+    </device>
+    <!--
+      GALAXY Tab SC-01C
+      Mozilla/5.0 (Linux; U; Android 2.2; ja-jp; SC-01C Build/FROYO) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1
+    -->
+    <device>
+      <device_id>SC-01C</device_id>
+      <device_name>docomo Android GALAXY Tab SC-01C</device_name>
+      <html_spec_type>android</html_spec_type>
+      <width>600</width>
+      <heigh>1024</heigh>
+      <gif>false</gif>
+      <jpeg>true</jpeg><!-- recomended -->
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+
+      <wp_width>600</wp_width>
+      <wp_heigh>1024</wp_heigh>
+      <cache>300000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+      <output_encoding>UTF-8</output_encoding>
+    </device>
+    <!--
+      LYNX 3D SH-03C
+      Mozilla/5.0 (Linux; U; Android 2.1-update1; ja-jp; SH-03C Build/SB110) AppleWebKit/530.17 (KHTML, like Gecko) Version/4.0 Mobile Safari/530.17
+    -->
+    <device>
+      <device_id>SH-03C</device_id>
+      <device_name>docomo Android LYNX 3D SH-03C</device_name>
+      <html_spec_type>android</html_spec_type>
+      <width>480</width>
+      <heigh>800</heigh>
+      <gif>false</gif>
+      <jpeg>true</jpeg><!-- recomended -->
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+
+      <wp_width>480</wp_width>
+      <wp_heigh>800</wp_heigh>
+      <cache>300000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+      <output_encoding>UTF-8</output_encoding>
+    </device>
+    <!--
+      REGZA Phone T-01C
+      Mozilla/5.0 (Linux; U; Android 2.1- update1; ja-jp; T-01C Build/TER018) AppleWebKit/530.17 (KHTML, like Gecko) Version/4.0 Mobile Safari/530.17
+    -->
+    <device>
+      <device_id>T-01C</device_id>
+      <device_name>docomo Android REGZA Phone T-01C</device_name>
+      <html_spec_type>android</html_spec_type>
+      <width>480</width>
+      <heigh>854</heigh>
+      <gif>false</gif>
+      <jpeg>true</jpeg><!-- recomended -->
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>300000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+      <output_encoding>UTF-8</output_encoding>
+    </device>
+    <!--
+      Optimus chat L-04C
+      Mozilla/5.0 (Linux; U; Android 2.2; ja-jp; L-04C Build/FRF91) AppleWebKit/533.1 (KHTML,like Gecko) Version/4.0 Mobile Safari/533.1
+    -->
+    <device>
+      <device_id>L-04C</device_id>
+      <device_name>docomo Android Optimus chat L-04C</device_name>
+      <html_spec_type>android</html_spec_type>
+      <width>320</width>
+      <heigh>480</heigh>
+      <gif>false</gif>
+      <jpeg>true</jpeg><!-- recomended -->
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+
+      <wp_width>320</wp_width>
+      <wp_heigh>480</wp_heigh>
+      <cache>300000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+      <output_encoding>UTF-8</output_encoding>
+    </device>
+    <!--
+      MEDIAS N-04C
+      Mozilla/5.0 (Linux; U; Android 2.2.1; ja-jp; N-04C Build/A1010101) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1
+      Mozilla/5.0 (Linux; U; Android 2.2.1; ja-jp; N-04C Build/A1010601) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1
+    -->
+    <device>
+      <device_id>N-04C</device_id>
+      <device_name>docomo Android MEDIAS N-04C</device_name>
+      <html_spec_type>android</html_spec_type>
+      <width>480</width>
+      <heigh>854</heigh>
+      <gif>false</gif>
+      <jpeg>true</jpeg><!-- recomended -->
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>300000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+      <output_encoding>UTF-8</output_encoding>
+    </device>
+    <!--
+      Xperia arc SO-01C
+      Mozilla/5.0 (Linux; U; Android 2.3.2; ja-jp; SonyEricssonSO-01C Build/3.0.D.2.79) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1
+    -->
+    <device>
+      <device_id>SonyEricssonSO-01C</device_id>
+      <device_name>docomo Android Xperia arc SO-01C</device_name>
+      <html_spec_type>android</html_spec_type>
+      <width>480</width>
+      <heigh>854</heigh>
+      <gif>false</gif>
+      <jpeg>true</jpeg><!-- recomended -->
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+
+      <wp_width>480</wp_width>
+      <wp_heigh>854</wp_heigh>
+      <cache>300000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+      <output_encoding>UTF-8</output_encoding>
+    </device>
+    <!--
+      Optimus Pad L-06C
+      Mozilla/5.0 (Linux; U; Android 3.0.1; ja-jp; L-06C Build/HRI66) AppleWebKit/534.13 (KHTML, like Gecko) Version/4.0 Safari/534.13
+    -->
+    <device>
+      <device_id>L-06C</device_id>
+      <device_name>docomo Android Optimus Pad L-06C</device_name>
+      <html_spec_type>android</html_spec_type>
+      <width>1280</width>
+      <heigh>768</heigh>
+      <gif>false</gif>
+      <jpeg>true</jpeg><!-- recomended -->
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+
+      <wp_width>1280</wp_width>
+      <wp_heigh>768</wp_heigh>
+      <cache>300000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+      <output_encoding>UTF-8</output_encoding>
+    </device>
+    <!--
+    /*=======================================================================*/
+    /* SoftBank Android                                                      */
+    /*=======================================================================*/
+    -->
+    <!--
+      005SH
+      Mozilla/5.0 (Linux; U; Android 2.2.1; ja-jp; SBM005SH Build/buildID) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1
+    -->
+    <device>
+      <device_id>SBM005SH</device_id>
+      <device_name>docomo Android 005SH</device_name>
+      <!--
+      <html_spec_type>android_s</html_spec_type>
+      -->
+      <html_spec_type>android</html_spec_type>
+      <width>800</width>
+      <heigh>480</heigh>
+      <gif>false</gif>
+      <jpeg>true</jpeg><!-- recomended -->
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+
+      <wp_width>800</wp_width>
+      <wp_heigh>480</wp_heigh>
+      <cache>300000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+      <output_encoding>UTF-8</output_encoding>
+    </device>
+    <!--
+      003SH
+      Mozilla/5.0 (Linux; U; Android 2.2; ja-jp; SBM003SH Build/buildID) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1
+    -->
+    <device>
+      <device_id>SBM003SH</device_id>
+      <device_name>docomo Android 003SH</device_name>
+      <!--
+      <html_spec_type>android_s</html_spec_type>
+      -->
+      <html_spec_type>android</html_spec_type>
+      <width>800</width>
+      <heigh>480</heigh>
+      <gif>false</gif>
+      <jpeg>true</jpeg><!-- recomended -->
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+
+      <wp_width>800</wp_width>
+      <wp_heigh>480</wp_heigh>
+      <cache>300000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+      <output_encoding>UTF-8</output_encoding>
+    </device>
+    <!--
+      001DL
+      Mozilla/5.0 (Linux; U; Android 2.2; ja-jp; 001DL Build/buildID) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1
+    -->
+    <device>
+      <device_id>001DL</device_id>
+      <device_name>docomo Android 001DL</device_name>
+      <!--
+      <html_spec_type>android_s</html_spec_type>
+      -->
+      <html_spec_type>android</html_spec_type>
+      <width>800</width>
+      <heigh>480</heigh>
+      <gif>false</gif>
+      <jpeg>true</jpeg><!-- recomended -->
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+
+      <wp_width>800</wp_width>
+      <wp_heigh>480</wp_heigh>
+      <cache>300000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+      <output_encoding>UTF-8</output_encoding>
+    </device>
+    <!--
+      001HT
+      Mozilla/5.0 (Linux; U; Android 2.2; ja-jp; 001HT Build/buildID) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1
+    -->
+    <device>
+      <device_id>001HT</device_id>
+      <device_name>docomo Android 001HT</device_name>
+      <!--
+      <html_spec_type>android_s</html_spec_type>
+      --->
+      <html_spec_type>android</html_spec_type>
+      <width>800</width>
+      <heigh>480</heigh>
+      <gif>false</gif>
+      <jpeg>true</jpeg><!-- recomended -->
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+
+      <wp_width>800</wp_width>
+      <wp_heigh>480</wp_heigh>
+      <cache>300000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+      <output_encoding>UTF-8</output_encoding>
+    </device>
+    <!--
+      DM009SH
+      Mozilla/5.0 (Linux; U; Android 2.2.1; ja-jp; DM009SH Build/buildID) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1
+    -->
+    <device>
+      <device_id>DM009SH</device_id>
+      <device_name>docomo Android DM009SH</device_name>
+      <!--
+      <html_spec_type>android_s</html_spec_type>
+      -->
+      <html_spec_type>android</html_spec_type>
+      <width>800</width>
+      <heigh>480</heigh>
+      <gif>false</gif>
+      <jpeg>true</jpeg><!-- recomended -->
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+
+      <wp_width>800</wp_width>
+      <wp_heigh>480</wp_heigh>
+      <cache>300000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+      <output_encoding>UTF-8</output_encoding>
+    </device>
+    <!--
+      other
+      Mozilla/5.0 (Linux; U; Android 2.3.1; ja-jp; EDK Build/GRH78) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1
+    -->
+    <device>
+      <device_id>EDK</device_id>
+      <device_name>Android SDK EDK(Sony Ericsson Mobile)</device_name>
+      <html_spec_type>android</html_spec_type>
+      <width>800</width>
+      <heigh>480</heigh>
+      <gif>false</gif>
+      <jpeg>true</jpeg><!-- recomended -->
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+
+      <wp_width>800</wp_width>
+      <wp_heigh>480</wp_heigh>
+      <cache>300000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+      <output_encoding>UTF-8</output_encoding>
+    </device>
+    <device>
+      <device_id>google.sdk</device_id>
+      <device_name>Android SDK Sharp</device_name>
+      <html_spec_type>android</html_spec_type>
+      <width>800</width>
+      <heigh>480</heigh>
+      <gif>false</gif>
+      <jpeg>true</jpeg><!-- recomended -->
+      <png>false</png>
+      <bmp2>false</bmp2>
+      <bmp4>false</bmp4>
+      <color>262144</color>
+      <emoji_type></emoji_type>
+
+      <wp_width>800</wp_width>
+      <wp_heigh>480</wp_heigh>
+      <cache>300000</cache>
+      <dpi_width>96</dpi_width>
+      <dpi_heigh>96</dpi_heigh>
+      <output_encoding>UTF-8</output_encoding>
+    </device>
+
+
+  </user_agent>
+  
 
 </devices>
 <!--
