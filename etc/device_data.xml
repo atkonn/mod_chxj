@@ -21558,9 +21558,9 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <html_spec_type>iPhone3</html_spec_type>
       <width>320</width>
       <heigh>480</heigh>
-      <gif>false</gif>
+      <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
-      <png>false</png>
+      <png>true</png>
       <bmp2>false</bmp2>
       <bmp4>false</bmp4>
       <color>262144</color>
@@ -21579,9 +21579,9 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <html_spec_type>iPhone4</html_spec_type>
       <width>320</width>
       <heigh>480</heigh>
-      <gif>false</gif>
+      <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
-      <png>false</png>
+      <png>true</png>
       <bmp2>false</bmp2>
       <bmp4>false</bmp4>
       <color>262144</color>
@@ -21614,9 +21614,9 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <html_spec_type>android</html_spec_type>
       <width>960</width>
       <heigh>480</heigh>
-      <gif>false</gif>
+      <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
-      <png>false</png>
+      <png>true</png>
       <bmp2>false</bmp2>
       <bmp4>false</bmp4>
       <color>262144</color>
@@ -21639,9 +21639,9 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <html_spec_type>android</html_spec_type>
       <width>960</width>
       <heigh>640</heigh>
-      <gif>false</gif>
+      <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
-      <png>false</png>
+      <png>true</png>
       <bmp2>false</bmp2>
       <bmp4>false</bmp4>
       <color>262144</color>
@@ -21664,9 +21664,9 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <html_spec_type>android</html_spec_type>
       <width>854</width>
       <heigh>480</heigh>
-      <gif>false</gif>
+      <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
-      <png>false</png>
+      <png>true</png>
       <bmp2>false</bmp2>
       <bmp4>false</bmp4>
       <color>262144</color>
@@ -21689,9 +21689,9 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <html_spec_type>android</html_spec_type>
       <width>854</width>
       <heigh>480</heigh>
-      <gif>false</gif>
+      <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
-      <png>false</png>
+      <png>true</png>
       <bmp2>false</bmp2>
       <bmp4>false</bmp4>
       <color>262144</color>
@@ -21714,9 +21714,9 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <html_spec_type>android</html_spec_type>
       <width>800</width>
       <heigh>480</heigh>
-      <gif>false</gif>
+      <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
-      <png>false</png>
+      <png>true</png>
       <bmp2>false</bmp2>
       <bmp4>false</bmp4>
       <color>262144</color>
@@ -21746,9 +21746,9 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <html_spec_type>android</html_spec_type>
       <width>320</width>
       <heigh>480</heigh>
-      <gif>false</gif>
+      <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
-      <png>false</png>
+      <png>true</png>
       <bmp2>false</bmp2>
       <bmp4>false</bmp4>
       <color>262144</color>
@@ -21775,9 +21775,9 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <html_spec_type>android</html_spec_type>
       <width>480</width>
       <heigh>854</heigh>
-      <gif>false</gif>
+      <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
-      <png>false</png>
+      <png>true</png>
       <bmp2>false</bmp2>
       <bmp4>false</bmp4>
       <color>262144</color>
@@ -21800,9 +21800,9 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <html_spec_type>android</html_spec_type>
       <width>960</width>
       <heigh>480</heigh>
-      <gif>false</gif>
+      <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
-      <png>false</png>
+      <png>true</png>
       <bmp2>false</bmp2>
       <bmp4>false</bmp4>
       <color>262144</color>
@@ -21825,9 +21825,9 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <html_spec_type>android</html_spec_type>
       <width>480</width>
       <heigh>800</heigh>
-      <gif>false</gif>
+      <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
-      <png>false</png>
+      <png>true</png>
       <bmp2>false</bmp2>
       <bmp4>false</bmp4>
       <color>262144</color>
@@ -21850,9 +21850,9 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <html_spec_type>android</html_spec_type>
       <width>600</width>
       <heigh>1024</heigh>
-      <gif>false</gif>
+      <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
-      <png>false</png>
+      <png>true</png>
       <bmp2>false</bmp2>
       <bmp4>false</bmp4>
       <color>262144</color>
@@ -21875,9 +21875,9 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <html_spec_type>android</html_spec_type>
       <width>480</width>
       <heigh>800</heigh>
-      <gif>false</gif>
+      <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
-      <png>false</png>
+      <png>true</png>
       <bmp2>false</bmp2>
       <bmp4>false</bmp4>
       <color>262144</color>
@@ -21900,9 +21900,9 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <html_spec_type>android</html_spec_type>
       <width>480</width>
       <heigh>854</heigh>
-      <gif>false</gif>
+      <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
-      <png>false</png>
+      <png>true</png>
       <bmp2>false</bmp2>
       <bmp4>false</bmp4>
       <color>262144</color>
@@ -21925,9 +21925,9 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <html_spec_type>android</html_spec_type>
       <width>320</width>
       <heigh>480</heigh>
-      <gif>false</gif>
+      <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
-      <png>false</png>
+      <png>true</png>
       <bmp2>false</bmp2>
       <bmp4>false</bmp4>
       <color>262144</color>
@@ -21951,9 +21951,9 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <html_spec_type>android</html_spec_type>
       <width>480</width>
       <heigh>854</heigh>
-      <gif>false</gif>
+      <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
-      <png>false</png>
+      <png>true</png>
       <bmp2>false</bmp2>
       <bmp4>false</bmp4>
       <color>262144</color>
@@ -21976,9 +21976,9 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <html_spec_type>android</html_spec_type>
       <width>480</width>
       <heigh>854</heigh>
-      <gif>false</gif>
+      <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
-      <png>false</png>
+      <png>true</png>
       <bmp2>false</bmp2>
       <bmp4>false</bmp4>
       <color>262144</color>
@@ -22001,9 +22001,9 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <html_spec_type>android</html_spec_type>
       <width>1280</width>
       <heigh>768</heigh>
-      <gif>false</gif>
+      <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
-      <png>false</png>
+      <png>true</png>
       <bmp2>false</bmp2>
       <bmp4>false</bmp4>
       <color>262144</color>
@@ -22034,9 +22034,9 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <html_spec_type>android</html_spec_type>
       <width>800</width>
       <heigh>480</heigh>
-      <gif>false</gif>
+      <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
-      <png>false</png>
+      <png>true</png>
       <bmp2>false</bmp2>
       <bmp4>false</bmp4>
       <color>262144</color>
@@ -22062,9 +22062,9 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <html_spec_type>android</html_spec_type>
       <width>800</width>
       <heigh>480</heigh>
-      <gif>false</gif>
+      <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
-      <png>false</png>
+      <png>true</png>
       <bmp2>false</bmp2>
       <bmp4>false</bmp4>
       <color>262144</color>
@@ -22090,9 +22090,9 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <html_spec_type>android</html_spec_type>
       <width>800</width>
       <heigh>480</heigh>
-      <gif>false</gif>
+      <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
-      <png>false</png>
+      <png>true</png>
       <bmp2>false</bmp2>
       <bmp4>false</bmp4>
       <color>262144</color>
@@ -22118,9 +22118,9 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <html_spec_type>android</html_spec_type>
       <width>800</width>
       <heigh>480</heigh>
-      <gif>false</gif>
+      <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
-      <png>false</png>
+      <png>true</png>
       <bmp2>false</bmp2>
       <bmp4>false</bmp4>
       <color>262144</color>
@@ -22146,9 +22146,9 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <html_spec_type>android</html_spec_type>
       <width>800</width>
       <heigh>480</heigh>
-      <gif>false</gif>
+      <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
-      <png>false</png>
+      <png>true</png>
       <bmp2>false</bmp2>
       <bmp4>false</bmp4>
       <color>262144</color>
@@ -22171,9 +22171,9 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <html_spec_type>android</html_spec_type>
       <width>800</width>
       <heigh>480</heigh>
-      <gif>false</gif>
+      <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
-      <png>false</png>
+      <png>true</png>
       <bmp2>false</bmp2>
       <bmp4>false</bmp4>
       <color>262144</color>
@@ -22192,9 +22192,9 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <html_spec_type>android</html_spec_type>
       <width>800</width>
       <heigh>480</heigh>
-      <gif>false</gif>
+      <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
-      <png>false</png>
+      <png>true</png>
       <bmp2>false</bmp2>
       <bmp4>false</bmp4>
       <color>262144</color>

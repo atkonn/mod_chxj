@@ -15,6 +15,7 @@
       <B>44</B>
       <C>44</C>
       <D>44</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Gj</string>
@@ -34,12 +35,14 @@
       <string>&#63648;</string>
       <color>#0000FF</color>
       <description>曇り 青</description>
+      <unicode>&#xE488</unicode>
     </imode>
     <ezweb>
       <A>107</A>
       <B>107</B>
       <C>107</C>
       <D>107</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Gi</string>
@@ -65,6 +68,7 @@
       <B>95</B>
       <C>95</C>
       <D>95</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Gk</string>
@@ -90,6 +94,7 @@
       <B>60</B>
       <C>60</C>
       <D>60</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Gh</string>
@@ -115,6 +120,7 @@
       <B>60</B>
       <C>60</C>
       <D>60</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$GU</string>
@@ -140,6 +146,7 @@
       <B>190</B>
       <C>190</C>
       <D>190</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Pc</string>
@@ -165,6 +172,7 @@
       <B>305</B>
       <C>305</C>
       <D>305</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Gi</string>
@@ -190,6 +198,7 @@
       <B>305</B>
       <C>305</C>
       <D>305</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Gk</string>
@@ -215,6 +224,7 @@
       <B>192</B>
       <C>192</C>
       <D>192</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$F_</string>
@@ -240,6 +250,7 @@
       <B>193</B>
       <C>193</C>
       <D>193</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$F`</string>
@@ -265,6 +276,7 @@
       <B>194</B>
       <C>194</C>
       <D>194</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Fa</string>
@@ -290,6 +302,7 @@
       <B>195</B>
       <C>195</C>
       <D>195</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Fb</string>
@@ -315,6 +328,7 @@
       <B>196</B>
       <C>196</C>
       <D>196</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Fc</string>
@@ -340,6 +354,7 @@
       <B>197</B>
       <C>197</C>
       <D>197</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Fd</string>
@@ -365,6 +380,7 @@
       <B>198</B>
       <C>198</C>
       <D>198</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Fe</string>
@@ -390,6 +406,7 @@
       <B>199</B>
       <C>199</C>
       <D>199</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Ff</string>
@@ -415,6 +432,7 @@
       <B>200</B>
       <C>200</C>
       <D>200</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Fg</string>
@@ -440,6 +458,7 @@
       <B>201</B>
       <C>201</C>
       <D>201</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Fh</string>
@@ -465,6 +484,7 @@
       <B>202</B>
       <C>202</C>
       <D>202</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Fi</string>
@@ -490,6 +510,7 @@
       <B>203</B>
       <C>203</C>
       <D>203</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Fj</string>
@@ -515,6 +536,7 @@
       <B>219</B>
       <C>219</C>
       <D>219</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$E5</string>
@@ -540,6 +562,7 @@
       <B>45</B>
       <C>45</C>
       <D>45</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$G6</string>
@@ -565,6 +588,7 @@
       <B>306</B>
       <C>306</C>
       <D>306</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$G4</string>
@@ -590,6 +614,7 @@
       <B>220</B>
       <C>220</C>
       <D>220</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$G5</string>
@@ -615,6 +640,7 @@
       <B>219</B>
       <C>219</C>
       <D>219</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$G8</string>
@@ -640,6 +666,7 @@
       <B>221</B>
       <C>221</C>
       <D>221</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$G3</string>
@@ -665,6 +692,7 @@
       <B>307</B>
       <C>307</C>
       <D>307</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$PJ</string>
@@ -690,6 +718,7 @@
       <B>222</B>
       <C>222</C>
       <D>222</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$ER</string>
@@ -715,6 +744,7 @@
       <B>308</B>
       <C>308</C>
       <D>308</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>raw:[ﾎﾟｹﾍﾞﾙ]</string>
@@ -740,6 +770,7 @@
       <B>172</B>
       <C>172</C>
       <D>172</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$G&gt;</string>
@@ -765,6 +796,7 @@
       <B>172</B>
       <C>172</C>
       <D>172</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$PT</string>
@@ -790,6 +822,7 @@
       <B>217</B>
       <C>217</C>
       <D>217</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$G?</string>
@@ -815,6 +848,7 @@
       <B>125</B>
       <C>125</C>
       <D>125</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Ez</string>
@@ -840,6 +874,7 @@
       <B>125</B>
       <C>125</C>
       <D>125</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Ez</string>
@@ -865,6 +900,7 @@
       <B>216</B>
       <C>216</C>
       <D>216</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Ey</string>
@@ -890,6 +926,7 @@
       <B>169</B>
       <C>169</C>
       <D>169</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>raw:[ふね]</string>
@@ -915,6 +952,7 @@
       <B>168</B>
       <C>168</C>
       <D>168</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$G=</string>
@@ -940,6 +978,7 @@
       <B>112</B>
       <C>112</C>
       <D>112</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$GV</string>
@@ -965,6 +1004,7 @@
       <B>156</B>
       <C>156</C>
       <D>156</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$GX</string>
@@ -990,6 +1030,7 @@
       <B>108</B>
       <C>108</C>
       <D>108</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Es</string>
@@ -1015,6 +1056,7 @@
       <B>304</B>
       <C>304</C>
       <D>304</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Eu</string>
@@ -1040,6 +1082,7 @@
       <B>212</B>
       <C>212</C>
       <D>212</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Em</string>
@@ -1065,6 +1108,7 @@
       <B>205</B>
       <C>205</C>
       <D>205</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Et</string>
@@ -1090,6 +1134,7 @@
       <B>224</B>
       <C>224</C>
       <D>224</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Ex</string>
@@ -1115,6 +1160,7 @@
       <B>206</B>
       <C>206</C>
       <D>206</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Ev</string>
@@ -1140,6 +1186,7 @@
       <B>213</B>
       <C>213</C>
       <D>213</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$GZ</string>
@@ -1165,6 +1212,7 @@
       <B>208</B>
       <C>208</C>
       <D>208</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Eo</string>
@@ -1190,6 +1238,7 @@
       <B>99</B>
       <C>99</C>
       <D>99</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$En</string>
@@ -1215,6 +1264,7 @@
       <B>207</B>
       <C>207</C>
       <D>207</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Eq</string>
@@ -1240,6 +1290,7 @@
       <B>146</B>
       <C>146</C>
       <D>146</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Gc</string>
@@ -1265,6 +1316,7 @@
       <B>93</B>
       <C>93</C>
       <D>93</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Ge</string>
@@ -1290,6 +1342,7 @@
       <B>12</B>
       <C>12</C>
       <D>12</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Gd</string>
@@ -1315,6 +1368,7 @@
       <B>225</B>
       <C>225</C>
       <D>225</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Gg</string>
@@ -1340,6 +1394,7 @@
       <B>245</B>
       <C>245</C>
       <D>245</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$E@</string>
@@ -1365,6 +1420,7 @@
       <B>124</B>
       <C>124</C>
       <D>124</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$E^</string>
@@ -1390,6 +1446,7 @@
       <B>104</B>
       <C>104</C>
       <D>104</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$O3</string>
@@ -1415,6 +1472,7 @@
       <B>289</B>
       <C>289</C>
       <D>289</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$G\</string>
@@ -1440,6 +1498,7 @@
       <B>226</B>
       <C>226</C>
       <D>226</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$G]</string>
@@ -1465,6 +1524,7 @@
       <B>70</B>
       <C>70</C>
       <D>70</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$FV</string>
@@ -1490,6 +1550,7 @@
       <B>223</B>
       <C>223</C>
       <D>223</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$ED</string>
@@ -1515,6 +1576,7 @@
       <B>291</B>
       <C>291</C>
       <D>291</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$G^</string>
@@ -1540,6 +1602,7 @@
       <B>309</B>
       <C>309</C>
       <D>309</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Q"</string>
@@ -1565,6 +1628,7 @@
       <B>311</B>
       <C>311</C>
       <D>311</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Q#</string>
@@ -1590,6 +1654,7 @@
       <B>311</B>
       <C>311</C>
       <D>311</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Ec</string>
@@ -1615,6 +1680,7 @@
       <B>106</B>
       <C>106</C>
       <D>106</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$EE</string>
@@ -1640,6 +1706,7 @@
       <B>176</B>
       <C>176</C>
       <D>176</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$O.</string>
@@ -1665,6 +1732,7 @@
       <B>177</B>
       <C>177</C>
       <D>177</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$F(</string>
@@ -1690,6 +1758,7 @@
       <B>94</B>
       <C>94</C>
       <D>94</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$G(</string>
@@ -1715,6 +1784,7 @@
       <B>83</B>
       <C>83</C>
       <D>83</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$E&gt;</string>
@@ -1740,6 +1810,7 @@
       <B>101</B>
       <C>101</C>
       <D>101</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Eh</string>
@@ -1765,6 +1836,7 @@
       <B>312</B>
       <C>312</C>
       <D>312</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$O4</string>
@@ -1790,6 +1862,7 @@
       <B>144</B>
       <C>144</C>
       <D>144</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$E2</string>
@@ -1815,6 +1888,7 @@
       <B>313</B>
       <C>313</C>
       <D>313</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Ok</string>
@@ -1840,6 +1914,7 @@
       <B>155</B>
       <C>155</C>
       <D>155</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$G)</string>
@@ -1865,6 +1940,7 @@
       <B>161</B>
       <C>161</C>
       <D>161</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$G*</string>
@@ -1890,6 +1966,7 @@
       <B>149</B>
       <C>149</C>
       <D>149</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$O!</string>
@@ -1915,6 +1992,7 @@
       <B>288</B>
       <C>288</C>
       <D>288</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$EJ</string>
@@ -1940,6 +2018,7 @@
       <B>232</B>
       <C>232</C>
       <D>232</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$EK</string>
@@ -1965,6 +2044,7 @@
       <B>300</B>
       <C>300</C>
       <D>300</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$EF</string>
@@ -1990,6 +2070,7 @@
       <B>51</B>
       <C>51</C>
       <D>51</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$GB</string>
@@ -2015,6 +2096,7 @@
       <B>314</B>
       <C>314</C>
       <D>314</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$F.</string>
@@ -2040,6 +2122,7 @@
       <B>315</B>
       <C>315</C>
       <D>315</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$F-</string>
@@ -2065,6 +2148,7 @@
       <B>316</B>
       <C>316</C>
       <D>316</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$F/</string>
@@ -2090,6 +2174,7 @@
       <B>317</B>
       <C>317</C>
       <D>317</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$P9</string>
@@ -2115,6 +2200,7 @@
       <B>318</B>
       <C>318</C>
       <D>318</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$P;</string>
@@ -2140,6 +2226,7 @@
       <B>281</B>
       <C>281</C>
       <D>281</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$G-</string>
@@ -2165,6 +2252,7 @@
       <B>319</B>
       <C>319</C>
       <D>319</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$G1</string>
@@ -2190,6 +2278,7 @@
       <B>320</B>
       <C>320</C>
       <D>320</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$G2</string>
@@ -2215,6 +2304,7 @@
       <B>43</B>
       <C>43</C>
       <D>43</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$FX</string>
@@ -2240,6 +2330,7 @@
       <B>42</B>
       <C>42</C>
       <D>42</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$FW</string>
@@ -2265,6 +2356,7 @@
       <B>124</B>
       <C>276</C>
       <D>276</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$QV</string>
@@ -2290,6 +2382,7 @@
       <B>124</B>
       <C>124</C>
       <D>124</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$G'</string>
@@ -2315,6 +2408,7 @@
       <B>116</B>
       <C>116</C>
       <D>116</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$F1</string>
@@ -2340,6 +2434,7 @@
       <B>178</B>
       <C>178</C>
       <D>178</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$F*</string>
@@ -2365,6 +2460,7 @@
       <B>15</B>
       <C>321</C>
       <D>321</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Gl</string>
@@ -2390,6 +2486,7 @@
       <B>15</B>
       <C>322</C>
       <D>322</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Gl</string>
@@ -2415,6 +2512,7 @@
       <B>15</B>
       <C>323</C>
       <D>323</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Gl</string>
@@ -2440,6 +2538,7 @@
       <B>15</B>
       <C>15</C>
       <D>15</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Gl</string>
@@ -2465,6 +2564,7 @@
       <B>15</B>
       <C>15</C>
       <D>15</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Gl</string>
@@ -2490,6 +2590,7 @@
       <B>134</B>
       <C>134</C>
       <D>134</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Gr</string>
@@ -2515,6 +2616,7 @@
       <B>251</B>
       <C>251</C>
       <D>251</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Go</string>
@@ -2540,6 +2642,7 @@
       <B>169</B>
       <C>169</C>
       <D>169</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$G&lt;</string>
@@ -2565,6 +2668,7 @@
       <B>234</B>
       <C>234</C>
       <D>234</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$GS</string>
@@ -2590,6 +2694,7 @@
       <B>71</B>
       <C>71</C>
       <D>71</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$FY</string>
@@ -2615,6 +2720,7 @@
       <B>161</B>
       <C>161</C>
       <D>161</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$E$</string>
@@ -2640,6 +2746,7 @@
       <B>151</B>
       <C>151</C>
       <D>151</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$E#</string>
@@ -2665,6 +2772,7 @@
       <B>166</B>
       <C>166</C>
       <D>166</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$G+</string>
@@ -2690,6 +2798,7 @@
       <B>298</B>
       <C>298</C>
       <D>298</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Fu</string>
@@ -2715,6 +2824,7 @@
       <B>298</B>
       <C>298</C>
       <D>298</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Fu</string>
@@ -2740,6 +2850,7 @@
       <B>108</B>
       <C>108</C>
       <D>108</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$E#</string>
@@ -2765,6 +2876,7 @@
       <B>298</B>
       <C>298</C>
       <D>298</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Fu</string>
@@ -2790,6 +2902,7 @@
       <B>298</B>
       <C>298</C>
       <D>298</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Fu</string>
@@ -2815,6 +2928,7 @@
       <B>109</B>
       <C>109</C>
       <D>109</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$F5</string>
@@ -2840,6 +2954,7 @@
       <B>299</B>
       <C>299</C>
       <D>299</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$F6</string>
@@ -2865,6 +2980,7 @@
       <B>138</B>
       <C>138</C>
       <D>138</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$FI</string>
@@ -2890,6 +3006,7 @@
       <B>120</B>
       <C>120</C>
       <D>120</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$G_</string>
@@ -2915,6 +3032,7 @@
       <B>118</B>
       <C>118</C>
       <D>118</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$FZ</string>
@@ -2940,6 +3058,7 @@
       <B>324</B>
       <C>324</C>
       <D>324</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Gz</string>
@@ -2965,6 +3084,7 @@
       <B>119</B>
       <C>119</C>
       <D>119</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$E4</string>
@@ -2990,6 +3110,7 @@
       <B>334</B>
       <C>334</C>
       <D>334</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$F2</string>
@@ -3015,6 +3136,7 @@
       <B>210</B>
       <C>210</C>
       <D>210</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Ek</string>
@@ -3040,6 +3162,7 @@
       <B>155</B>
       <C>155</C>
       <D>155</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$F1</string>
@@ -3065,6 +3188,7 @@
       <B>155</B>
       <C>155</C>
       <D>155</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$F0</string>
@@ -3090,6 +3214,7 @@
       <B>155</B>
       <C>155</C>
       <D>155</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Ft</string>
@@ -3115,6 +3240,7 @@
       <B>180</B>
       <C>180</C>
       <D>180</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$F&lt;</string>
@@ -3140,6 +3266,7 @@
       <B>181</B>
       <C>181</C>
       <D>181</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$F=</string>
@@ -3165,6 +3292,7 @@
       <B>182</B>
       <C>182</C>
       <D>182</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$F&gt;</string>
@@ -3190,6 +3318,7 @@
       <B>183</B>
       <C>183</C>
       <D>183</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$F?</string>
@@ -3215,6 +3344,7 @@
       <B>184</B>
       <C>184</C>
       <D>184</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$F@</string>
@@ -3240,6 +3370,7 @@
       <B>185</B>
       <C>185</C>
       <D>185</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$FA</string>
@@ -3265,6 +3396,7 @@
       <B>186</B>
       <C>186</C>
       <D>186</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$FB</string>
@@ -3290,6 +3422,7 @@
       <B>187</B>
       <C>187</C>
       <D>187</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$FC</string>
@@ -3315,6 +3448,7 @@
       <B>188</B>
       <C>188</C>
       <D>188</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$FD</string>
@@ -3340,6 +3474,7 @@
       <B>325</B>
       <C>325</C>
       <D>325</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$FE</string>
@@ -3365,6 +3500,7 @@
       <B>326</B>
       <C>326</C>
       <D>326</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Fm</string>
@@ -3390,6 +3526,7 @@
       <B>51</B>
       <C>51</C>
       <D>51</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$GB</string>
@@ -3415,6 +3552,7 @@
       <B>51</B>
       <C>328</C>
       <D>328</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$GB</string>
@@ -3440,6 +3578,7 @@
       <B>265</B>
       <C>265</C>
       <D>265</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$GC</string>
@@ -3465,6 +3604,7 @@
       <B>15</B>
       <C>266</C>
       <D>266</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$GB</string>
@@ -3490,6 +3630,7 @@
       <B>257</B>
       <C>257</C>
       <D>257</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Gw</string>
@@ -3515,6 +3656,7 @@
       <B>258</B>
       <C>258</C>
       <D>258</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Gy</string>
@@ -3540,6 +3682,7 @@
       <B>260</B>
       <C>260</C>
       <D>260</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Gx</string>
@@ -3565,6 +3708,7 @@
       <B>259</B>
       <C>259</C>
       <D>259</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$E'</string>
@@ -3590,6 +3734,7 @@
       <B>327</B>
       <C>327</C>
       <D>327</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$E(</string>
@@ -3615,6 +3760,7 @@
       <B>29</B>
       <C>29</C>
       <D>29</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$FR</string>
@@ -3640,6 +3786,7 @@
       <B>291</B>
       <C>291</C>
       <D>291</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$G^</string>
@@ -3665,6 +3812,7 @@
       <B>224</B>
       <C>224</C>
       <D>224</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$EC</string>
@@ -3690,6 +3838,7 @@
       <B>51</B>
       <C>51</C>
       <D>51</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$GB</string>
@@ -3715,6 +3864,7 @@
       <B>273</B>
       <C>273</C>
       <D>273</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$G#</string>
@@ -3740,6 +3890,7 @@
       <B>20</B>
       <C>267</C>
       <D>267</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$GU</string>
@@ -3765,6 +3916,7 @@
       <B>77</B>
       <C>77</C>
       <D>77</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$E/</string>
@@ -3790,6 +3942,7 @@
       <B>262</B>
       <C>262</C>
       <D>262</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Gy</string>
@@ -3815,6 +3968,7 @@
       <B>281</B>
       <C>281</C>
       <D>281</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$G-</string>
@@ -3840,6 +3994,7 @@
       <B>268</B>
       <C>268</C>
       <D>268</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$O1</string>
@@ -3865,6 +4020,7 @@
       <B>291</B>
       <C>291</C>
       <D>291</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$G^</string>
@@ -3890,6 +4046,7 @@
       <B>30</B>
       <C>30</C>
       <D>30</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$FS</string>
@@ -3915,6 +4072,7 @@
       <B>261</B>
       <C>261</C>
       <D>261</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$E\</string>
@@ -3940,6 +4098,7 @@
       <B>2</B>
       <C>2</C>
       <D>2</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$GA</string>
@@ -3965,6 +4124,7 @@
       <B>3</B>
       <C>3</C>
       <D>3</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$G@</string>
@@ -3990,6 +4150,7 @@
       <B>2</B>
       <C>2</C>
       <D>2</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$GA</string>
@@ -4015,6 +4176,7 @@
       <B>329</B>
       <C>329</C>
       <D>329</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Ft</string>
@@ -4040,6 +4202,7 @@
       <B>330</B>
       <C>330</C>
       <D>330</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$E(</string>
@@ -4065,6 +4228,7 @@
       <B>263</B>
       <C>263</C>
       <D>263</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$E(</string>
@@ -4090,6 +4254,7 @@
       <B>282</B>
       <C>282</C>
       <D>282</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$E5</string>
@@ -4115,6 +4280,7 @@
       <B>0</B>
       <C>0</C>
       <D>0</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>raw:～</string>
@@ -4140,6 +4306,7 @@
       <B>0</B>
       <C>0</C>
       <D>0</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>raw:～</string>
@@ -4165,6 +4332,7 @@
       <B>226</B>
       <C>226</C>
       <D>226</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$OD</string>
@@ -4190,6 +4358,7 @@
       <B>233</B>
       <C>233</C>
       <D>233</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$EO</string>
@@ -4215,6 +4384,7 @@
       <B>149</B>
       <C>149</C>
       <D>149</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$O!</string>
@@ -4240,6 +4410,7 @@
       <B>236</B>
       <C>236</C>
       <D>236</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>raw:[人影]</string>
@@ -4265,6 +4436,7 @@
       <B>0</B>
       <C>0</C>
       <D>0</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$E?</string>
@@ -4290,6 +4462,7 @@
       <B>47</B>
       <C>47</C>
       <D>47</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Gl</string>
@@ -4315,6 +4488,7 @@
       <B>105</B>
       <C>105</C>
       <D>105</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>raw:[soon]</string>
@@ -4340,6 +4514,7 @@
       <B>0</B>
       <C>0</C>
       <D>0</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>raw:[soon]</string>
@@ -4365,6 +4540,7 @@
       <B>0</B>
       <C>0</C>
       <D>0</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>raw:[end]</string>
@@ -4390,6 +4566,7 @@
       <B>46</B>
       <C>46</C>
       <D>46</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$GD</string>
@@ -4418,6 +4595,7 @@
       <B>1</B>
       <C>298</C>
       <D>298</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$QX</string>
@@ -4444,6 +4622,7 @@
       <B>1</B>
       <C>298</C>
       <D>298</D>
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$QX</string>
@@ -4470,6 +4649,7 @@
       <B>1</B>
       <C>301</C><!-- 婦人服 -->
       <D>335</D><!-- 紳士服 -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$G&</string>
@@ -4496,6 +4676,7 @@
       <B>1</B>
       <C>290</C><!-- 財布 -->
       <D>290</D><!-- 財布 -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$OC</string><!-- 良いものが無いのでブランドバック -->
@@ -4522,6 +4703,7 @@
       <B>1</B>
       <C>295</C><!-- 口紅 -->
       <D>295</D><!-- 口紅 -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$O&lt;</string><!-- 口紅 -->
@@ -4548,6 +4730,7 @@
       <B>1</B>
       <C>301</C><!-- 良いものがないので婦人服 -->
       <D>805</D><!-- ジーンズ -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$G&</string><!-- 良いものが無いので洋服 -->
@@ -4574,6 +4757,7 @@
       <B>1</B>
       <C>221</C><!-- スノーボード-->
       <D>221</D><!-- スノーボード -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$G3</string><!-- 良いものが無いのでスキー -->
@@ -4600,6 +4784,7 @@
       <B>1</B>
       <C>48</C><!-- ベル -->
       <D>340</D><!-- チャペル -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$OE</string><!-- すず -->
@@ -4626,6 +4811,7 @@
       <B>1</B>
       <C>112</C><!-- 家 -->
       <D>112</D><!-- 家 -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$GV</string><!-- 家 -->
@@ -4652,6 +4838,7 @@
       <B>1</B>
       <C>233</C><!-- 賞金 -->
       <D>233</D><!-- 賞金 -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$EO</string><!-- 賞金 -->
@@ -4678,6 +4865,7 @@
       <B>1</B>
       <C>288</C><!-- 良いものがないので、テレビ -->
       <D>337</D><!-- パソコン -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$G,</string><!-- パソコン -->
@@ -4704,6 +4892,7 @@
       <B>1</B>
       <C>108</C><!-- 封筒 -->
       <D>806</D><!-- ハートつきメール -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$E#</string><!-- メール宛先 -->
@@ -4730,6 +4919,7 @@
       <B>1</B>
       <C>152</C><!-- レンチ -->
       <D>152</D><!-- レンチ -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>raw:[レンチ]</string><!-- 良いものがないのでJsマーク -->
@@ -4756,6 +4946,7 @@
       <B>1</B>
       <C>149</C><!-- 鉛筆 -->
       <D>149</D><!-- 鉛筆 -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$O!</string><!-- 良いものがないのでメモ -->
@@ -4782,6 +4973,7 @@
       <B>1</B>
       <C>267</C><!-- 良いものがないのでスパーク -->
       <D>354</D><!-- 王冠 -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$E.</string><!-- 王冠 -->
@@ -4808,6 +5000,7 @@
       <B>1</B>
       <C>72</C><!-- ジュエリー -->
       <D>72</D><!-- ジュエリー -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$GT</string><!-- 指輪 -->
@@ -4834,6 +5027,7 @@
       <B>1</B>
       <C>58</C><!-- 砂時計２ -->
       <D>58</D><!-- 砂時計２ -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$GF</string><!-- 良いものがないので時計 -->
@@ -4860,6 +5054,7 @@
       <B>1</B>
       <C>215</C><!-- 自転車 -->
       <D>215</D><!-- 自転車 -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$EV</string><!-- 良いものがないので競輪 -->
@@ -4886,6 +5081,7 @@
       <B>1</B>
       <C>93</C><!-- カップ -->
       <D>423</D><!-- 日本茶 -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Ge</string><!-- コーヒー -->
@@ -4912,6 +5108,7 @@
       <B>1</B>
       <C>25</C><!-- 腕時計 -->
       <D>25</D><!-- 腕時計 -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$GF</string><!-- 時計 -->
@@ -4938,6 +5135,7 @@
       <B>1</B>
       <C>260</C><!-- 良いものがないので、顔４（つかれたカオ） -->
       <D>444</D><!-- わからん -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$E(</string><!-- 良いものがないので、タラー -->
@@ -4964,6 +5162,7 @@
       <B>1</B>
       <C>260</C><!-- 良いものがないので、顔４（つかれたカオ） -->
       <D>260</D><!-- 良いものがないので、顔４（つかれたカオ） -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$E(</string><!-- 良いものがないので、タラー -->
@@ -4990,6 +5189,7 @@
       <B>1</B>
       <C>263</C><!-- 良いものがないので、雫（涙・汗） -->
       <D>351</D><!-- 困り -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$E(</string><!-- 良いものがないので、タラー -->
@@ -5016,6 +5216,7 @@
       <B>1</B>
       <C>263</C><!-- 良いものがないので、雫（涙・汗） -->
       <D>452</D><!-- あせり -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$P/</string><!-- 冷汗 -->
@@ -5042,6 +5243,7 @@
       <B>1</B>
       <C>258</C><!-- 良いものがないので、顔２（おこったカオ） -->
       <D>779</D><!-- ぷー -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Gy</string><!-- 良いものがないので、怒 -->
@@ -5068,6 +5270,7 @@
       <B>1</B>
       <C>297</C><!-- 良いものがないので、エステ -->
       <D>450</D><!-- 良いものがないので、横目 -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$P.</string><!-- 良いものがないので、しらけ顔 -->
@@ -5094,6 +5297,7 @@
       <B>1</B>
       <C>266</C><!-- 良いものがないので、ハート３（大きい＆小さい） -->
       <D>349</D><!-- 目がハート -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$E&</string><!-- ラブラブ -->
@@ -5120,6 +5324,7 @@
       <B>1</B>
       <C>287</C><!-- おやゆびサイン -->
       <D>287</D><!-- おやゆびサイン -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$G.</string><!-- GOOD! -->
@@ -5146,6 +5351,7 @@
       <B>1</B>
       <C>264</C><!-- からかう（あっかんべえ） -->
       <D>264</D><!-- からかう（あっかんべえ）-->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$P)</string><!-- あっかんべえ -->
@@ -5172,6 +5378,7 @@
       <B>1</B>
       <C>267</C><!-- 良いものがないので、スパーク２（キラリマーク） -->
       <D>348</D><!-- ウィンク -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$P8</string><!-- 投げキッス -->
@@ -5198,6 +5405,7 @@
       <B>1</B>
       <C>257</C><!-- 顔１（うれしいカオ）-->
       <D>257</D><!-- 顔１（うれしいカオ）-->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Gw</string><!-- 喜 -->
@@ -5224,6 +5432,7 @@
       <B>1</B>
       <C>258</C><!-- 良いものがないので、顔２（おこったカオ）-->
       <D>258</D><!-- 良いものがないので、顔２（おこったカオ）-->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$P6</string><!-- 良いものがないので、めちゃめちゃ怒っている -->
@@ -5250,6 +5459,7 @@
       <B>1</B>
       <C>251</C><!-- 猫 -->
       <D>251</D><!-- 猫 -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Go</string><!-- ねこ -->
@@ -5276,6 +5486,7 @@
       <B>1</B>
       <C>259</C><!-- 顔３（かなしいカオ） -->
       <D>259</D><!-- 顔３（かなしいカオ） -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$P1</string><!-- 泣き -->
@@ -5302,6 +5513,7 @@
       <B>1</B>
       <C>263</C><!-- 雫（涙・汗） -->
       <D>263</D><!-- 雫（涙・汗） -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$P1</string><!-- 泣き -->
@@ -5328,6 +5540,7 @@
       <B>1</B>
       <C>61</C><!-- バツ１ -->
       <D>464</D><!-- NG -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$OS</string><!-- × -->
@@ -5354,6 +5567,7 @@
       <B>1</B>
       <C>143</C><!-- クリップ -->
       <D>143</D><!-- クリップ -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$O!</string><!-- 良いものがないので、メモ -->
@@ -5380,6 +5594,7 @@
       <B>1</B>
       <C>81</C><!-- コピーライトマーク -->
       <D>81</D><!-- コピーライトマーク -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Fn</string><!-- 著作権 -->
@@ -5406,6 +5621,7 @@
       <B>1</B>
       <C>54</C><!-- トレードマーク -->
       <D>54</D><!-- トレードマーク -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$QW</string><!-- TM -->
@@ -5432,6 +5648,7 @@
       <B>1</B>
       <C>218</C><!-- マラソン -->
       <D>218</D><!-- マラソン -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$E5</string><!-- 陸上 -->
@@ -5458,6 +5675,7 @@
       <B>1</B>
       <C>279</C><!-- 丸秘 -->
       <D>279</D><!-- 丸秘 -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$O5</string><!-- マル秘 -->
@@ -5484,6 +5702,7 @@
       <B>1</B>
       <C>332</C><!-- 良いものがないので、地球 -->
       <D>807</D><!-- 循環矢印 -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$OK</string><!-- 良いものがないので、ハート緑 -->
@@ -5510,6 +5729,7 @@
       <B>1</B>
       <C>82</C><!-- レジスタードマーク -->
       <D>82</D><!-- レジスタードマーク -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Fo</string><!-- 商標登録 -->
@@ -5536,6 +5756,7 @@
       <B>1</B>
       <C>1</C><!-- ! -->
       <D>1</D><!-- ! -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Fr</string><!-- ご注意 -->
@@ -5562,6 +5783,7 @@
       <B>1</B>
       <C>98</C><!-- 立ち入り禁止 -->
       <D>98</D><!-- 立ち入り禁止 -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$OS</string><!-- 良いものがないので、× -->
@@ -5588,6 +5810,7 @@
       <B>1</B>
       <C>298</C><!-- 良いものがないので、EZマーク -->
       <D>387</D><!-- 空マーク -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$FK</string><!-- 空席 -->
@@ -5614,6 +5837,7 @@
       <B>1</B>
       <C>278</C><!-- 良いものがないので、花丸 -->
       <D>278</D><!-- 良いものがないので、花丸 -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$O-</string><!-- 良いものがないので、祝 -->
@@ -5640,6 +5864,7 @@
       <B>1</B>
       <C>298</C><!-- 良いものがないので、Ezマーク -->
       <D>386</D><!-- 満席 -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$FJ</string><!-- 満席 -->
@@ -5666,6 +5891,7 @@
       <B>1</B>
       <C>298</C><!-- 良いものがないので、Ezマーク -->
       <D>808</D><!-- 左右両方向矢印 -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>raw:[左右]</string><!-- 良いものがないので、Jsマーク -->
@@ -5692,6 +5918,7 @@
       <B>1</B>
       <C>298</C><!-- 良いものがないので、Ezマーク -->
       <D>809</D><!-- 上下両方向矢印 -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>raw:[上下]</string><!-- 良いものがないので、Jsマーク -->
@@ -5718,6 +5945,7 @@
       <B>1</B>
       <C>156</C><!-- 良いものがないので、工場・建物 -->
       <D>377</D><!-- 学校 -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Ew</string><!-- 学校 -->
@@ -5744,6 +5972,7 @@
       <B>1</B>
       <C>190</C><!-- 良いものがないので、台風 -->
       <D>810</D><!-- 波 -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$P^</string><!-- 波がザーン -->
@@ -5770,6 +5999,7 @@
       <B>1</B>
       <C>33</C><!-- 良いものがないので、上三角１ -->
       <D>342</D><!-- 富士山 -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$G[</string><!-- 山 -->
@@ -5796,6 +6026,7 @@
       <B>1</B>
       <C>53</C><!-- 四つ葉 -->
       <D>53</D><!-- 四つ葉 -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$E0</string><!-- よつば -->
@@ -5822,6 +6053,7 @@
       <B>1</B>
       <C>241</C><!-- さくらんぼ -->
       <D>241</D><!-- さくらんぼ -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Oe</string><!-- 良いものがないので、りんご -->
@@ -5848,6 +6080,7 @@
       <B>1</B>
       <C>113</C><!-- 花 -->
       <D>113</D><!-- 花 -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$O$</string><!-- チューリップ -->
@@ -5874,6 +6107,7 @@
       <B>1</B>
       <C>238</C><!-- 良いものがないので、スイカ -->
       <D>739</D><!-- バナナ -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Oh</string><!-- 良いものがないので、スイカ -->
@@ -5900,6 +6134,7 @@
       <B>1</B>
       <C>241</C><!-- 良いものがないので、さくらんぼ -->
       <D>434</D><!-- りんご -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Oe</string><!-- りんご -->
@@ -5926,6 +6161,7 @@
       <B>1</B>
       <C>53</C><!-- 良いものがないので、四つ葉 -->
       <D>811</D><!-- 双葉 -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$E0</string><!-- 良いものがないので、よつば -->
@@ -5952,6 +6188,7 @@
       <B>1</B>
       <C>133</C><!-- はっぱ -->
       <D>133</D><!-- はっぱ -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$E8</string><!-- もみじ -->
@@ -5978,6 +6215,7 @@
       <B>1</B>
       <C>235</C><!-- 花見(さくら） -->
       <D>235</D><!-- 花見(さくら） -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$GP</string><!-- お花見 -->
@@ -6004,6 +6242,7 @@
       <B>1</B>
       <C>244</C><!-- おにぎり -->
       <D>244</D><!-- おにぎり -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Ob</string><!-- おにぎり -->
@@ -6030,6 +6269,7 @@
       <B>1</B>
       <C>239</C><!-- ケーキ -->
       <D>239</D><!-- ケーキ -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Gf</string><!-- ケーキ -->
@@ -6056,6 +6296,7 @@
       <B>1</B>
       <C>225</C><!-- 良いものがないので、居酒屋（赤ちょうちん） -->
       <D>400</D><!-- お銚子＆杯 -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$O+</string><!-- 晩酌 -->
@@ -6082,6 +6323,7 @@
       <B>1</B>
       <C>333</C><!-- 良いものがないので、ラーメン -->
       <D>333</D><!-- 良いものがないので、ラーメン -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$O`</string><!-- 良いものがないので、ラーメン -->
@@ -6108,6 +6350,7 @@
       <B>1</B>
       <C>245</C><!-- 良いものがないので、ハンバーガー（ファーストフード） -->
       <D>424</D><!-- 食パン -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$OY</string><!-- パン -->
@@ -6134,6 +6377,7 @@
       <B>1</B>
       <C>298</C><!-- 良いものがないので、Ezマーク -->
       <D>812</D><!-- かたつむり -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>raw:[かたつむり]</string><!-- 良いものがないので、Jsマーク -->
@@ -6160,6 +6404,7 @@
       <B>1</B>
       <C>298</C><!-- 良いものがないので、Ezマーク -->
       <D>804</D><!-- 正面向きのひよこ -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$QC</string><!-- ひよこ -->
@@ -6186,6 +6431,7 @@
       <B>1</B>
       <C>252</C><!-- ペンギン -->
       <D>252</D><!-- ペンギン -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Gu</string><!-- ペンギン -->
@@ -6212,6 +6458,7 @@
       <B>1</B>
       <C>242</C><!-- ふぐ -->
       <D>715</D><!-- 熱帯魚 -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$G9</string><!-- 魚 -->
@@ -6238,6 +6485,7 @@
       <B>1</B>
       <C>257</C><!-- 良いものがないので、顔１（うれしいカオ） -->
       <D>257</D><!-- 良いものがないので、顔１（うれしいカオ） -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Gw</string><!-- 良いものがないので、喜 -->
@@ -6264,6 +6512,7 @@
       <B>1</B>
       <C>264</C><!-- 良いものがないので、からかう（あっかんべえ） -->
       <D>814</D><!-- うっしっし -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$E%</string><!-- 良いものがないので、アカンベー -->
@@ -6290,6 +6539,7 @@
       <B>1</B>
       <C>248</C><!-- うま -->
       <D>248</D><!-- うま -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$G:</string><!-- うま -->
@@ -6316,6 +6566,7 @@
       <B>1</B>
       <C>254</C><!-- ぶた -->
       <D>254</D><!-- ぶた -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$E+</string><!-- ぶた -->
@@ -6342,6 +6593,7 @@
       <B>1</B>
       <C>12</C><!-- ワイングラス -->
       <D>12</D><!-- ワイングラス -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$Gd</string><!-- カクテル -->
@@ -6368,6 +6620,7 @@
       <B>1</B>
       <C>327</C><!-- 良いものがないので、ふらふら -->
       <D>350</D><!-- ショッキング -->
+      <unicode>&#xE488</unicode>
     </ezweb>
     <jphone>
       <string>$P+</string><!-- 良いものがないので、げろげろ -->
