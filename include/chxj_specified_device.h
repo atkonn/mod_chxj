@@ -43,7 +43,13 @@ typedef enum {
 #define CHXJ_PIC_OK                (0x01)
 #define CHXJ_PIC_NG                (0x00)
 
-#define IS_IPHONE(X) (((X) == CHXJ_SPEC_iPhone2) || ((X) == CHXJ_SPEC_iPhone3) || ((X) == CHXJ_SPEC_iPhone4))
+#define IS_IPHONE(X) (((X)->html_spec_type == CHXJ_SPEC_iPhone2) \
+                     || ((X)->html_spec_type == CHXJ_SPEC_iPhone3) \
+                     || ((X)->html_spec_type == CHXJ_SPEC_iPhone4))
+#define IS_ANDROID(X) (  ((X)->html_spec_type == CHXJ_SPEC_softbank_android) \
+                      || ((X)->html_spec_type == CHXJ_SPEC_au_android)  \
+                      || ((X)->html_spec_type == CHXJ_SPEC_docomo_android) \
+                      || ((X)->html_spec_type == CHXJ_SPEC_android))
 
 #include "mod_chxj.h"
 #include "chxj_cookie.h"

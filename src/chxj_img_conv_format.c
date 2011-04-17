@@ -668,7 +668,7 @@ s_create_cache_file(request_rec          *r,
     int done_fixup_size = 0;
     int ww = spec->width;
     int hh = spec->heigh;
-    if (IS_IPHONE(spec->html_spec_type)) {
+    if (IS_IPHONE(spec) || IS_ANDROID(spec)) {
       ww = (int)((double)ww * (double)1.5);
       hh = (int)((double)hh * (double)1.5);
     }
@@ -1114,7 +1114,7 @@ s_create_blob_data(request_rec          *r,
     int done_fixup_size = 0;
     int ww = spec->width;
     int hh = spec->heigh;
-    if (IS_IPHONE(spec->html_spec_type)) {
+    if (IS_IPHONE(spec) || IS_ANDROID(spec)) {
       ww = (int)((double)ww * (double)1.5);
       hh = (int)((double)hh * (double)1.5);
     }
@@ -1288,11 +1288,11 @@ s_fixup_size(MagickWand           *magick_wand,
   c_width = spec->width;
   c_heigh = spec->heigh;
 
-  if (IS_IPHONE(spec->html_spec_type)) {
+  if (IS_IPHONE(spec) || IS_ANDROID(spec)) {
     c_width = (int)((double)c_width * (double)1.5);
     c_heigh = (int)((double)c_heigh * (double)1.5);
-    DBG(r,"REQ[%X] detect iphone width=[%d]", TO_ADDR(r),c_width);
-    DBG(r,"REQ[%X] detect iphone heigh=[%d]", TO_ADDR(r),c_heigh);
+    DBG(r,"REQ[%X] detect iphone/android width=[%d]", TO_ADDR(r),c_width);
+    DBG(r,"REQ[%X] detect iphone/android heigh=[%d]", TO_ADDR(r),c_heigh);
   }
 
   switch(mode) {

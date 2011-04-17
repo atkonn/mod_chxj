@@ -21612,7 +21612,7 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <device_id>IS01</device_id>
       <device_name>au Android IS01</device_name>
       <html_spec_type>android</html_spec_type>
-      <width>960</width>
+      <width>240</width>
       <heigh>480</heigh>
       <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
@@ -21637,8 +21637,8 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <device_id>IS03</device_id>
       <device_name>au Android IS03</device_name>
       <html_spec_type>android</html_spec_type>
-      <width>960</width>
-      <heigh>640</heigh>
+      <width>240</width>
+      <heigh>480</heigh>
       <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
       <png>true</png>
@@ -21662,7 +21662,7 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <device_id>IS04</device_id>
       <device_name>au Android IS04</device_name>
       <html_spec_type>android</html_spec_type>
-      <width>854</width>
+      <width>240</width>
       <heigh>480</heigh>
       <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
@@ -21687,7 +21687,7 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <device_id>IS05</device_id>
       <device_name>au Android IS05</device_name>
       <html_spec_type>android</html_spec_type>
-      <width>854</width>
+      <width>240</width>
       <heigh>480</heigh>
       <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
@@ -21697,8 +21697,8 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <color>262144</color>
       <emoji_type></emoji_type>
 
-      <wp_width>854</wp_width>
-      <wp_heigh>480</wp_heigh>
+      <wp_width>960</wp_width>
+      <wp_heigh>854</wp_heigh>
       <cache>300000</cache>
       <dpi_width>96</dpi_width>
       <dpi_heigh>96</dpi_heigh>
@@ -21712,7 +21712,7 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <device_id>IS06</device_id>
       <device_name>au Android IS06</device_name>
       <html_spec_type>android</html_spec_type>
-      <width>800</width>
+      <width>240</width>
       <heigh>480</heigh>
       <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
@@ -21744,7 +21744,7 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <device_id>HT-03A</device_id>
       <device_name>docomo Android HT-03A</device_name>
       <html_spec_type>android</html_spec_type>
-      <width>320</width>
+      <width>240</width>
       <heigh>480</heigh>
       <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
@@ -21773,8 +21773,8 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <device_id>SonyEricssonSO-01B</device_id>
       <device_name>docomo Android Xperia SO-01B</device_name>
       <html_spec_type>android</html_spec_type>
-      <width>480</width>
-      <heigh>854</heigh>
+      <width>240</width>
+      <heigh>480</heigh>
       <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
       <png>true</png>
@@ -21798,7 +21798,7 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <device_id>SH-10B</device_id>
       <device_name>docomo Android LYNX SH-10B</device_name>
       <html_spec_type>android</html_spec_type>
-      <width>960</width>
+      <width>240</width>
       <heigh>480</heigh>
       <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
@@ -21823,8 +21823,8 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <device_id>SC-02B</device_id>
       <device_name>docomo Android GALAXY S SC-02B</device_name>
       <html_spec_type>android</html_spec_type>
-      <width>480</width>
-      <heigh>800</heigh>
+      <width>240</width>
+      <heigh>480</heigh>
       <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
       <png>true</png>
@@ -21848,8 +21848,8 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <device_id>SC-01C</device_id>
       <device_name>docomo Android GALAXY Tab SC-01C</device_name>
       <html_spec_type>android</html_spec_type>
-      <width>600</width>
-      <heigh>1024</heigh>
+      <width>240</width>
+      <heigh>480</heigh>
       <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
       <png>true</png>
@@ -21873,8 +21873,8 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <device_id>SH-03C</device_id>
       <device_name>docomo Android LYNX 3D SH-03C</device_name>
       <html_spec_type>android</html_spec_type>
-      <width>480</width>
-      <heigh>800</heigh>
+      <width>240</width>
+      <heigh>480</heigh>
       <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
       <png>true</png>
@@ -21898,8 +21898,8 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <device_id>T-01C</device_id>
       <device_name>docomo Android REGZA Phone T-01C</device_name>
       <html_spec_type>android</html_spec_type>
-      <width>480</width>
-      <heigh>854</heigh>
+      <width>240</width>
+      <heigh>480</heigh>
       <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
       <png>true</png>
@@ -21923,7 +21923,7 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <device_id>L-04C</device_id>
       <device_name>docomo Android Optimus chat L-04C</device_name>
       <html_spec_type>android</html_spec_type>
-      <width>320</width>
+      <width>240</width>
       <heigh>480</heigh>
       <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
@@ -21949,8 +21949,8 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <device_id>N-04C</device_id>
       <device_name>docomo Android MEDIAS N-04C</device_name>
       <html_spec_type>android</html_spec_type>
-      <width>480</width>
-      <heigh>854</heigh>
+      <width>240</width>
+      <heigh>480</heigh>
       <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
       <png>true</png>
@@ -21974,8 +21974,8 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <device_id>SonyEricssonSO-01C</device_id>
       <device_name>docomo Android Xperia arc SO-01C</device_name>
       <html_spec_type>android</html_spec_type>
-      <width>480</width>
-      <heigh>854</heigh>
+      <width>240</width>
+      <heigh>480</heigh>
       <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
       <png>true</png>
@@ -21999,8 +21999,8 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <device_id>L-06C</device_id>
       <device_name>docomo Android Optimus Pad L-06C</device_name>
       <html_spec_type>android</html_spec_type>
-      <width>1280</width>
-      <heigh>768</heigh>
+      <width>240</width>
+      <heigh>480</heigh>
       <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
       <png>true</png>
@@ -22032,7 +22032,7 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <html_spec_type>android_s</html_spec_type>
       -->
       <html_spec_type>android</html_spec_type>
-      <width>800</width>
+      <width>240</width>
       <heigh>480</heigh>
       <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
@@ -22060,7 +22060,7 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <html_spec_type>android_s</html_spec_type>
       -->
       <html_spec_type>android</html_spec_type>
-      <width>800</width>
+      <width>240</width>
       <heigh>480</heigh>
       <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
@@ -22088,7 +22088,7 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <html_spec_type>android_s</html_spec_type>
       -->
       <html_spec_type>android</html_spec_type>
-      <width>800</width>
+      <width>240</width>
       <heigh>480</heigh>
       <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
@@ -22116,7 +22116,7 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <html_spec_type>android_s</html_spec_type>
       -->
       <html_spec_type>android</html_spec_type>
-      <width>800</width>
+      <width>240</width>
       <heigh>480</heigh>
       <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
@@ -22144,7 +22144,7 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <html_spec_type>android_s</html_spec_type>
       -->
       <html_spec_type>android</html_spec_type>
-      <width>800</width>
+      <width>240</width>
       <heigh>480</heigh>
       <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
@@ -22169,7 +22169,7 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <device_id>EDK</device_id>
       <device_name>Android SDK EDK(Sony Ericsson Mobile)</device_name>
       <html_spec_type>android</html_spec_type>
-      <width>800</width>
+      <width>240</width>
       <heigh>480</heigh>
       <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
@@ -22190,7 +22190,7 @@ Mozilla/4.0 (compatible; MSIE 6.0; KYOCERA/AH-K3001V/1.4.1.67.000000/0.1) Opera 
       <device_id>google.sdk</device_id>
       <device_name>Android SDK Sharp</device_name>
       <html_spec_type>android</html_spec_type>
-      <width>800</width>
+      <width>240</width>
       <heigh>480</heigh>
       <gif>true</gif>
       <jpeg>true</jpeg><!-- recomended -->
