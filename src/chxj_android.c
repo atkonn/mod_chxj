@@ -1363,7 +1363,7 @@ s_android_start_head_tag(void *pdoc, Node *node)
     W_L("name=\"viewport\" ");
     W_L("id=\"android-viewport\" ");
     W_L("content=\"width=");
-    char *ww = apr_psprintf(r->pool, "%d", (int)((double)android->spec->width * (double)1.5));
+    char *ww = apr_psprintf(r->pool, "%d", (int)((double)android->spec->width * (double)1.5) - ADJUST_WIDTH_FOR_ANDROID);
     W_V(ww);
     W_L(",user-scalable=no,maximum-scale=0.6667\" />");
     W_L("<meta name=\"format-detection\" content=\"telephone=no\" />");
@@ -7063,7 +7063,7 @@ s_android_end_span_tag(void *pdoc, Node *UNUSED(node))
 /**
  * It is a handler who processes the STYLE tag.
  *
- * @param pdoc  [i/o] The pointer to the SoftBank XHTML structure at the output
+ * @param pdoc  [i/o] The pointer to the XHTML structure at the output
  *                     destination is specified.
  * @param node   [i]   The STYLE tag node is specified.
  * @return The conversion result is returned.

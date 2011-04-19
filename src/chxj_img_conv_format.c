@@ -671,6 +671,9 @@ s_create_cache_file(request_rec          *r,
     if (IS_IPHONE(spec) || IS_ANDROID(spec)) {
       ww = (int)((double)ww * (double)1.5);
       hh = (int)((double)hh * (double)1.5);
+      if (IS_ANDROID(spec)) {
+        ww = ww - ADJUST_WIDTH_FOR_ANDROID;
+      }
     }
     if ((qsp->mode == IMG_CONV_MODE_WALLPAPER && spec->wp_width < oldw && spec->wp_heigh < oldh)
       || (qsp->mode != IMG_CONV_MODE_WALLPAPER && ww < oldw && hh < oldh)) {
@@ -1117,6 +1120,9 @@ s_create_blob_data(request_rec          *r,
     if (IS_IPHONE(spec) || IS_ANDROID(spec)) {
       ww = (int)((double)ww * (double)1.5);
       hh = (int)((double)hh * (double)1.5);
+      if (IS_ANDROID(spec)) {
+        ww = ww - ADJUST_WIDTH_FOR_ANDROID;
+      }
     }
     if ((qsp->mode == IMG_CONV_MODE_WALLPAPER && spec->wp_width < oldw && spec->wp_heigh < oldh)
       || (qsp->mode != IMG_CONV_MODE_WALLPAPER && ww < oldw && hh < oldh)) {
@@ -1291,6 +1297,9 @@ s_fixup_size(MagickWand           *magick_wand,
   if (IS_IPHONE(spec) || IS_ANDROID(spec)) {
     c_width = (int)((double)c_width * (double)1.5);
     c_heigh = (int)((double)c_heigh * (double)1.5);
+    if (IS_ANDROID(spec)) {
+      c_width = c_width - ADJUST_WIDTH_FOR_ANDROID;
+    }
     DBG(r,"REQ[%X] detect iphone/android width=[%d]", TO_ADDR(r),c_width);
     DBG(r,"REQ[%X] detect iphone/android heigh=[%d]", TO_ADDR(r),c_heigh);
   }

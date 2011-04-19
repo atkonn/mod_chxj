@@ -569,6 +569,7 @@ extern void *rpl_malloc(size_t n);
 
 
 #define TO_ADDR(X) ((unsigned int)(apr_size_t)(X))
+#define ADJUST_WIDTH_FOR_ANDROID (40)
 #endif
 /*
  * vim:ts=2 et
