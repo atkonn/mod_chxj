@@ -53,6 +53,8 @@ struct ixhtml10_t {
   css_stylesheet_t    *style;
   css_prop_list_stack_t *css_prop_stack;
   int                 start_html_flag;
+
+  char                *pagetitle;
 };
 
 typedef struct _ixhtml10_flags_t ixhtml10_flags_t;

@@ -975,12 +975,23 @@ s_chtml30_end_head_tag(void *pdoc, Node *UNUSED(node))
  * @return The conversion result is returned.
  */
 static char *
-s_chtml30_start_title_tag(void *pdoc, Node *UNUSED(node)) 
+s_chtml30_start_title_tag(void *pdoc, Node *node) 
 {
   chtml30_t     *chtml30 = GET_CHTML30(pdoc);
   Doc           *doc     = chtml30->doc;
 
   W_L("<title>");
+
+  if (chtml30->conf->use_google_analytics) {
+    chtml30->pagetitle = "";
+    Node         *child;
+    for (child = qs_get_child_node(doc,node);
+         child;
+         child = qs_get_next_node(doc,child)) {
+      char *textval = qs_get_node_value(doc,child);
+      chtml30->pagetitle = apr_pstrcat(doc->r->pool, chtml30->pagetitle, textval, NULL);
+    }
+  }
 
   return chtml30->out;
 }
@@ -1232,7 +1243,7 @@ s_chtml30_end_body_tag(void *pdoc, Node *UNUSED(child))
   doc     = chtml30->doc;
 
   if (chtml30->conf->use_google_analytics) {
-    char *src = chxj_google_analytics_get_image_url(doc->r);
+    char *src = chxj_google_analytics_get_image_url(doc->r, chtml30->pagetitle);
     W_L("<img src=\"");
     W_V(src);
     W_L("\" />");
@@ -2297,14 +2308,14 @@ s_chtml30_start_img_tag(void *pdoc, Node *node)
 #ifdef IMG_NOT_CONVERT_FILENAME
       value = chxj_encoding_parameter(r, value, 0);
       value = chxj_add_cookie_parameter(r, value, chtml30->cookie);
-      value = chxj_add_cookie_no_update_parameter(r, value);
+      value = chxj_add_cookie_no_update_parameter(r, value, 0);
       value = chxj_img_rewrite_parameter(r,chtml30->conf,value);
       attr_src = value;
 #else
       value = chxj_img_conv(r,spec,value);
       value = chxj_encoding_parameter(r, value, 0);
       value = chxj_add_cookie_parameter(r, value, chtml30->cookie);
-      value = chxj_add_cookie_no_update_parameter(r, value);
+      value = chxj_add_cookie_no_update_parameter(r, value, 0);
       value = chxj_img_rewrite_parameter(r,chtml30->conf,value);
       attr_src = value;
 #endif

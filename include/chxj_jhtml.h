@@ -48,6 +48,8 @@ struct jhtml_t {
   cookie_t            *cookie;
   css_stylesheet_t    *style;
   css_prop_list_stack_t *css_prop_stack;
+
+  char                *pagetitle;
 };
 
 typedef struct _jhtml_flags_t jhtml_flags_t;

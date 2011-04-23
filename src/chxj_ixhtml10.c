@@ -904,7 +904,7 @@ s_ixhtml10_end_head_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_ixhtml10_start_title_tag(void *pdoc, Node *UNUSED(node))
+s_ixhtml10_start_title_tag(void *pdoc, Node *node)
 {
   ixhtml10_t      *ixhtml10;
   Doc          *doc;
@@ -915,6 +915,18 @@ s_ixhtml10_start_title_tag(void *pdoc, Node *UNUSED(node))
   r     = doc->r;
 
   W_L("<title>");
+
+  if (ixhtml10->conf->use_google_analytics) {
+    ixhtml10->pagetitle = "";
+    Node         *child;
+    for (child = qs_get_child_node(doc,node);
+         child;
+         child = qs_get_next_node(doc,child)) {
+      char *textval = qs_get_node_value(doc,child);
+      ixhtml10->pagetitle = apr_pstrcat(doc->r->pool, ixhtml10->pagetitle, textval, NULL);
+    }
+  }
+
   return ixhtml10->out;
 }
 
@@ -1205,7 +1217,7 @@ s_ixhtml10_end_body_tag(void *pdoc, Node *UNUSED(child))
   r     = doc->r;
 
   if (ixhtml10->conf->use_google_analytics) {
-    char *src = chxj_google_analytics_get_image_url(r);
+    char *src = chxj_google_analytics_get_image_url(r, ixhtml10->pagetitle);
     W_L("<img src=\"");
     W_V(src);
     W_L("\" />");
@@ -3654,14 +3666,14 @@ s_ixhtml10_start_img_tag(void *pdoc, Node *node)
 #ifdef IMG_NOT_CONVERT_FILENAME
       value = chxj_encoding_parameter(r, value, 1);
       value = chxj_add_cookie_parameter(r, value, ixhtml10->cookie);
-      value = chxj_add_cookie_no_update_parameter(r, value);
+      value = chxj_add_cookie_no_update_parameter(r, value, 1);
       value = chxj_img_rewrite_parameter(r,ixhtml10->conf,value);
       attr_src = value;
 #else
       value = chxj_img_conv(r, spec, value);
       value = chxj_encoding_parameter(r, value, 1);
       value = chxj_add_cookie_parameter(r, value, ixhtml10->cookie);
-      value = chxj_add_cookie_no_update_parameter(r, value);
+      value = chxj_add_cookie_no_update_parameter(r, value, 1);
       value = chxj_img_rewrite_parameter(r,ixhtml10->conf,value);
       attr_src = value;
 #endif

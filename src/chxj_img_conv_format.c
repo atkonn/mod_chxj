@@ -1837,27 +1837,67 @@ s_send_cache_file(
     }
     char *nowFormat = MagickGetImageFormat(magick_wand);
     DestroyMagickWand(magick_wand);
+    char *fname = apr_pstrdup(r->pool, r->filename);
+    char *ext = strrchr(fname, '.');
     if (nowFormat) {
       if (STRCASEEQ('j','J',"jpeg",nowFormat) || STRCASEEQ('j','J',"jpg",nowFormat)) {
         DBG(r,"REQ[%X] detect cache file => jpg.",TO_ADDR(r));
         ap_set_content_type(r, "image/jpeg");
+
+        if (!ext) {
+          fname = apr_pstrcat(r->pool, fname, ".jpg");
+        }
+        else if (ext && strcasecmp(".jpeg", ext) != 0 && strcasecmp(".jpg", ext) != 0) {
+          *ext = 0;
+          fname = apr_pstrcat(r->pool, fname, ".jpg");
+        }
       }
       else if (STRCASEEQ('p','P',"png", nowFormat)) {
         DBG(r,"REQ[%X] detect cache file => png.",TO_ADDR(r));
         ap_set_content_type(r, "image/png");
+
+        if (!ext) {
+          fname = apr_pstrcat(r->pool, fname, ".png");
+        }
+        else if (ext && strcasecmp(".png", ext) != 0) {
+          *ext = 0;
+          fname = apr_pstrcat(r->pool, fname, ".png");
+        }
+
       }
       else if (STRCASEEQ('g','G',"gif", nowFormat)) {
         DBG(r,"REQ[%X] detect cache file => gif.",TO_ADDR(r));
         ap_set_content_type(r, "image/gif");
+
+        if (!ext) {
+          fname = apr_pstrcat(r->pool, fname, ".gif");
+        }
+        else if (ext && strcasecmp(".gif", ext) != 0) {
+          *ext = 0;
+          fname = apr_pstrcat(r->pool, fname, ".gif");
+        }
       }
       else if (STRCASEEQ('b','B',"bmp", nowFormat)) {
         DBG(r,"REQ[%X] detect cache file => bmp.",TO_ADDR(r));
         ap_set_content_type(r, "image/bmp");
+
+        if (!ext) {
+          fname = apr_pstrcat(r->pool, fname, ".bmp");
+        }
+        else if (ext && strcasecmp(".bmp", ext) != 0) {
+          *ext = 0;
+          fname = apr_pstrcat(r->pool, fname, ".bmp");
+        }
       }
       else {
         ERR(r,"REQ[%X] detect unknown file",TO_ADDR(r));
         return HTTP_NOT_FOUND;
       }
+    }
+    if (query_string->mode == IMG_CONV_MODE_WALLPAPER && (IS_IPHONE(spec)||IS_ANDROID(spec))) {
+      ap_set_content_type(r, "application/octet-stream");
+      apr_table_setn(r->headers_out, "Content-Disposition", apr_psprintf(r->pool, "attachment; filename=%s", fname));
+      DBG(r,"REQ[%X] detect cache file => iphone/android",TO_ADDR(r));
     }
     if (conf->image_copyright) {
       DBG(r,"REQ[%X] Add COPYRIGHT Header for SoftBank [%s]", TO_ADDR(r), conf->image_copyright);

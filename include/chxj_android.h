@@ -56,6 +56,8 @@ struct android_t {
   int head_tag_out; /* 1 if <head> out */
   int charset_out; /* 1 if <meta charset> out */
   int blink_keyframe_out; 
+
+  char                *pagetitle;
 };
 
 typedef struct _android_flags_t android_flags_t;

@@ -984,7 +984,7 @@ s_chtml20_end_head_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_chtml20_start_title_tag(void *pdoc, Node *UNUSED(node)) 
+s_chtml20_start_title_tag(void *pdoc, Node *node) 
 {
   chtml20_t   *chtml20;
   Doc         *doc;
@@ -995,6 +995,17 @@ s_chtml20_start_title_tag(void *pdoc, Node *UNUSED(node))
   r       = doc->r;
 
   W_L("<title>");
+
+  if (chtml20->conf->use_google_analytics) {
+    chtml20->pagetitle = "";
+    Node         *child;
+    for (child = qs_get_child_node(doc,node);
+         child;
+         child = qs_get_next_node(doc,child)) {
+      char *textval = qs_get_node_value(doc,child);
+      chtml20->pagetitle = apr_pstrcat(doc->r->pool, chtml20->pagetitle, textval, NULL);
+    }
+  }
 
   return chtml20->out;
 }
@@ -1260,7 +1271,7 @@ s_chtml20_end_body_tag(void *pdoc, Node *UNUSED(child))
   r       = doc->r;
 
   if (chtml20->conf->use_google_analytics) {
-    char *src = chxj_google_analytics_get_image_url(r);
+    char *src = chxj_google_analytics_get_image_url(r, chtml20->pagetitle);
     W_L("<img src=\"");
     W_V(src);
     W_L("\" />");
@@ -2673,7 +2684,7 @@ s_chtml20_start_img_tag(void *pdoc, Node *node)
 #ifdef IMG_NOT_CONVERT_FILENAME
         value = chxj_encoding_parameter(r, value, 0);
         value = chxj_add_cookie_parameter(r, value, chtml20->cookie);
-        value = chxj_add_cookie_no_update_parameter(r, value);
+        value = chxj_add_cookie_no_update_parameter(r, value, 0);
         value = chxj_img_rewrite_parameter(r,chtml20->conf,value);
         attr_src = value;
 #else

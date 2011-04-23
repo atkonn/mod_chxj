@@ -42,6 +42,8 @@ struct chtml40_t {
   cookie_t            *cookie;
   css_stylesheet_t    *style;
   css_prop_list_stack_t *css_prop_stack;
+
+  char                *pagetitle;
 };
 
 typedef struct _chtml40_flags_t chtml40_flags_t;

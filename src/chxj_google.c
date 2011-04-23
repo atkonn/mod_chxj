@@ -18,21 +18,24 @@
 #include "chxj_preg_replace.h"
 #include "chxj_serf.h"
 #include "chxj_url_encode.h"
+#include "chxj_encoding.h"
 
 #include "apr_uuid.h"
 #include "apr_md5.h"
 
 
 char *
-chxj_google_analytics_get_image_url(request_rec *r)
+chxj_google_analytics_get_image_url(request_rec *r, const char *pagetitle)
 {
   char *url;
   char *referer;
   char *query;
   char *path;
+  char *ptitle;
   mod_chxj_config *conf;
   int rdm;
   apr_pool_t *pool;
+  apr_size_t plen;
 
   
   DBG(r, "REQ[%X] start %s()", TO_ADDR(r),__func__);
@@ -49,10 +52,22 @@ chxj_google_analytics_get_image_url(request_rec *r)
   rdm = rand();
   apr_pool_create(&pool, r->pool);
 
+  
+
+  plen = 0;
+  ptitle = "";
+  if (pagetitle) {
+    plen = strlen(pagetitle);
+    ptitle = chxj_iconv(r,pool,apr_pstrdup(pool, pagetitle),&plen,"CP932","UTF-8");
+  }
+  else {
+    ptitle = "(no name)";
+  }
   url = apr_pstrdup(pool, conf->google_analytics_target);
   url = apr_pstrcat(pool, url, "?", NULL);
   url = apr_pstrcat(pool, url, "utmac=", conf->google_analytics_account, NULL);
   url = apr_pstrcat(pool, url, "&utmn=", apr_psprintf(pool, "%d",rdm), NULL);
+  url = apr_pstrcat(pool, url, "&utmdt=", chxj_url_encode(pool, ptitle), NULL);
 
   referer = (char *)apr_table_get(r->headers_in, "Referer");
   DBG(r, "REQ[%X] referer:[%s]", TO_ADDR(r), referer);

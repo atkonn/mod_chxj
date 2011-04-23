@@ -23,7 +23,7 @@
 /*----------------------------------------------------------------------------*/
 /* Prototype                                                                  */
 /*----------------------------------------------------------------------------*/
-extern char *chxj_google_analytics_get_image_url(request_rec *r);
+extern char *chxj_google_analytics_get_image_url(request_rec *r, const char *pagetitle);
 extern int chxj_google_analytics_handler(request_rec *r);
 
 

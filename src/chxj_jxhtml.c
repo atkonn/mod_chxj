@@ -974,7 +974,7 @@ s_jxhtml_end_head_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_jxhtml_start_title_tag(void *pdoc, Node *UNUSED(node)) 
+s_jxhtml_start_title_tag(void *pdoc, Node *node) 
 {
   jxhtml_t      *jxhtml;
   Doc          *doc;
@@ -985,6 +985,17 @@ s_jxhtml_start_title_tag(void *pdoc, Node *UNUSED(node))
   r     = doc->r;
 
   W_L("<title>");
+
+  if (jxhtml->conf->use_google_analytics) {
+    jxhtml->pagetitle = "";
+    Node         *child;
+    for (child = qs_get_child_node(doc,node);
+         child;
+         child = qs_get_next_node(doc,child)) {
+      char *textval = qs_get_node_value(doc,child);
+      jxhtml->pagetitle = apr_pstrcat(doc->r->pool, jxhtml->pagetitle, textval, NULL);
+    }
+  }
   return jxhtml->out;
 }
 
@@ -1258,7 +1269,7 @@ s_jxhtml_end_body_tag(void *pdoc, Node *UNUSED(child))
   r     = doc->r;
 
   if (jxhtml->conf->use_google_analytics) {
-    char *src = chxj_google_analytics_get_image_url(r);
+    char *src = chxj_google_analytics_get_image_url(r, jxhtml->pagetitle);
     W_L("<img src=\"");
     W_V(src);
     W_L("\" />");
@@ -3706,14 +3717,14 @@ s_jxhtml_start_img_tag(void *pdoc, Node *node)
 #ifdef IMG_NOT_CONVERT_FILENAME
       value = chxj_encoding_parameter(r, value, 1);
       value = chxj_jreserved_tag_to_safe_for_query_string(r, value, jxhtml->entryp, 1);
-      value = chxj_add_cookie_no_update_parameter(r, value);
+      value = chxj_add_cookie_no_update_parameter(r, value, 1);
       value = chxj_img_rewrite_parameter(r,jxhtml->conf,value);
       attr_src = value;
 #else
       value = chxj_img_conv(r, spec, value);
       value = chxj_encoding_parameter(r, value, 1);
       value = chxj_jreserved_tag_to_safe_for_query_string(r, value, jxhtml->entryp, 1);
-      value = chxj_add_cookie_no_update_parameter(r, value);
+      value = chxj_add_cookie_no_update_parameter(r, value, 1);
       value = chxj_img_rewrite_parameter(r,jxhtml->conf,value);
       attr_src = value;
 #endif

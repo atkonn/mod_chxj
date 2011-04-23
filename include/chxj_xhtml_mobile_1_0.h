@@ -42,6 +42,8 @@ struct xhtml_t {
   css_prop_list_stack_t *css_prop_stack;
 
   int                 start_html_flag;
+
+  char                *pagetitle;
 };
 
 typedef struct _xhtml_flags_t xhtml_flags_t;

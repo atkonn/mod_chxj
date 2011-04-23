@@ -127,7 +127,7 @@ extern apr_time_t chxj_parse_cookie_expires(const char *s);
 extern cookie_lock_t *__chxj_cookie_lock(request_rec *r, const char *filename, int line);
 extern int __chxj_cookie_unlock(request_rec *r, cookie_lock_t *lock, const char *filename, int line);
 
-extern char *chxj_add_cookie_no_update_parameter(request_rec *r, char *value);
+extern char *chxj_add_cookie_no_update_parameter(request_rec *r, char *value, int xmlflag);
 extern char *chxj_cookie_only_mode(request_rec *r, const char *src, apr_size_t *len, cookie_t *cookie);
 char * chxj_uniq_id(request_rec *r);
 

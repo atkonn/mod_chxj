@@ -947,7 +947,7 @@ s_jhtml_end_head_tag(void *pdoc, Node *UNUSED(child))
  * @return The conversion result is returned.
  */
 static char *
-s_jhtml_start_title_tag(void *pdoc, Node *UNUSED(node)) 
+s_jhtml_start_title_tag(void *pdoc, Node *node)
 {
   jhtml_t      *jhtml;
   Doc          *doc;
@@ -958,6 +958,17 @@ s_jhtml_start_title_tag(void *pdoc, Node *UNUSED(node))
   r     = doc->r;
 
   W_L("<title>");
+
+  if (jhtml->conf->use_google_analytics) {
+    jhtml->pagetitle = "";
+    Node         *child;
+    for (child = qs_get_child_node(doc,node);
+         child;
+         child = qs_get_next_node(doc,child)) {
+      char *textval = qs_get_node_value(doc,child);
+      jhtml->pagetitle = apr_pstrcat(doc->r->pool, jhtml->pagetitle, textval, NULL);
+    }
+  }
   return jhtml->out;
 }
 
@@ -1205,7 +1216,7 @@ s_jhtml_end_body_tag(void *pdoc, Node *UNUSED(child))
   r     = doc->r;
 
   if (jhtml->conf->use_google_analytics) {
-    char *src = chxj_google_analytics_get_image_url(r);
+    char *src = chxj_google_analytics_get_image_url(r, jhtml->pagetitle);
     W_L("<img src=\"");
     W_V(src);
     W_L("\" />");
@@ -2731,7 +2742,7 @@ s_jhtml_start_img_tag(void *pdoc, Node *node)
       value = chxj_encoding_parameter(r, value, 0);
       value = chxj_jreserved_tag_to_safe_for_query_string(r, value, jhtml->entryp, 0);
       value = chxj_add_cookie_parameter(r, value, jhtml->cookie);
-      value = chxj_add_cookie_no_update_parameter(r, value);
+      value = chxj_add_cookie_no_update_parameter(r, value, 0);
       value = chxj_img_rewrite_parameter(r,jhtml->conf,value);
       value = s_add_copyright_parameter(r, value);
       attr_src = value;
@@ -2740,7 +2751,7 @@ s_jhtml_start_img_tag(void *pdoc, Node *node)
       value = chxj_encoding_parameter(r, value, 0);
       value = chxj_jreserved_tag_to_safe_for_query_string(r, value, jhtml->entryp, 0);
       value = chxj_add_cookie_parameter(r, value, jhtml->cookie);
-      value = chxj_add_cookie_no_update_parameter(r, value);
+      value = chxj_add_cookie_no_update_parameter(r, value, 0);
       value = chxj_img_rewrite_parameter(r,jhtml->conf,value);
       value = s_add_copyright_parameter(r, value);
       attr_src = value;

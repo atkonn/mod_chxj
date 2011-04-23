@@ -929,7 +929,7 @@ on_error:
 
 
 char *
-chxj_add_cookie_no_update_parameter(request_rec *r, char *value)
+chxj_add_cookie_no_update_parameter(request_rec *r, char *value, int xmlflag)
 {
   char *qs;
   char *dst;
@@ -956,7 +956,11 @@ chxj_add_cookie_no_update_parameter(request_rec *r, char *value)
     name = apr_pstrdup(r->pool, qs);
     *qs = 0;
   }
-  dst = apr_psprintf(r->pool, "%s%c%s=true%s", dst, (strchr(dst,'?')) ? '&' : '?',CHXJ_COOKIE_NOUPDATE_PARAM, name);
+  char *amp = "&";
+  if (xmlflag) {
+    amp = "&amp;";
+  }
+  dst = apr_psprintf(r->pool, "%s%s%s=true%s", dst, (strchr(dst,'?')) ? amp : "?",CHXJ_COOKIE_NOUPDATE_PARAM, name);
   DBG(r,"REQ[%X] dst=[%s]", TO_ADDR(r), dst);
   DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
   return dst;
