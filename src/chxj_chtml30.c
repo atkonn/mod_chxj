@@ -24,6 +24,7 @@
 #include "chxj_encoding.h"
 #include "chxj_header_inf.h"
 #include "chxj_conv_z2h.h"
+#include "chxj_google.h"
 
 #define GET_CHTML30(X) ((chtml30_t *)(X))
 #undef W_L
@@ -1229,6 +1230,13 @@ s_chtml30_end_body_tag(void *pdoc, Node *UNUSED(child))
 
   chtml30 = GET_CHTML30(pdoc);
   doc     = chtml30->doc;
+
+  if (chtml30->conf->use_google_analytics) {
+    char *src = chxj_google_analytics_get_image_url(doc->r);
+    W_L("<img src=\"");
+    W_V(src);
+    W_L("\" />");
+  }
 
   W_L("</body>");
   if (IS_CSS_ON(chtml30->entryp)) {

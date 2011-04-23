@@ -75,6 +75,7 @@
 #include "chxj_add_device_env.h"
 #include "chxj_header_inf.h"
 #include "chxj_jreserved_tag.h"
+#include "chxj_google.h"
 
 
 #define CHXJ_VERSION_PREFIX PACKAGE_NAME "/"
@@ -266,6 +267,23 @@ chxj_headers_fixup(request_rec *r)
     DBG(r, "REQ[%X] detect multipart/form-data ==> no target", TO_ADDR(r));
     DBG(r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
     return DECLINED;
+  }
+  if (dconf->use_google_analytics) {
+    if (!dconf->google_analytics_target) {
+      ERR(r, "Please set ChxjGoogleAnalyticsTarget.");
+    }
+    else if (!dconf->google_analytics_account) {
+      ERR(r, "Please set ChxjGoogleAnalyticsAccount.");
+    }
+    else if (r->uri && dconf->google_analytics_target && strcasecmp(r->uri, dconf->google_analytics_target) == 0) {
+      r->proxyreq = PROXYREQ_NONE;
+      r->handler = apr_psprintf(r->pool, "chxj-google-analytics-handler");
+  
+      DBG(r, "REQ[%X] detect google analytics handler", TO_ADDR(r));
+      DBG(r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
+  
+      return OK;
+    }
   }
 
 
@@ -2028,6 +2046,8 @@ chxj_register_hooks(apr_pool_t *UNUSED(p))
 
   ap_hook_handler(chxj_image_redirect_handler, NULL, NULL, APR_HOOK_MIDDLE);
 
+  ap_hook_handler(chxj_google_analytics_handler, NULL, NULL, APR_HOOK_MIDDLE);
+
   ap_hook_translate_name(chxj_translate_name, NULL, NULL, APR_HOOK_MIDDLE);
   ap_hook_fixups(chxj_headers_fixup, NULL, NULL, APR_HOOK_FIRST);
 
@@ -2098,6 +2118,10 @@ chxj_create_per_dir_config(apr_pool_t *p, char *arg)
 
   conf->use_emoji_image = 0;
   conf->emoji_image_url = NULL;
+
+  conf->use_google_analytics = 0;
+  conf->google_analytics_account = NULL;
+  conf->google_analytics_target = NULL;
 
   return conf;
 }
@@ -2435,6 +2459,27 @@ chxj_merge_per_dir_config(apr_pool_t *p, void *basev, void *addv)
   }
   else{
     mrg->emoji_image_url = base->emoji_image_url;
+  }
+
+  if (add->use_google_analytics != 1){
+    mrg->use_google_analytics = base->use_google_analytics;
+  }
+  else{
+    mrg->use_google_analytics = add->use_google_analytics;
+  }
+
+  if (add->google_analytics_account){
+    mrg->google_analytics_account = add->google_analytics_account;
+  }
+  else{
+    mrg->google_analytics_account = base->google_analytics_account;
+  }
+
+  if (add->google_analytics_target){
+    mrg->google_analytics_target = add->google_analytics_target;
+  }
+  else{
+    mrg->google_analytics_target = base->google_analytics_target;
   }
 
   return mrg;
@@ -3492,6 +3537,41 @@ cmd_emoji_image_url(cmd_parms *parms, void *mconfig, const char *arg)
   return NULL;
 }
 
+
+static const char *
+cmd_google_analytics(cmd_parms *parms, void *mconfig, const char *arg)
+{
+  mod_chxj_config *conf;
+  conf = (mod_chxj_config *)mconfig;
+  if (strcasecmp("on", arg) == 0) {
+    conf->use_google_analytics = 1;
+  }
+  return NULL;
+}
+static const char *
+cmd_google_analytics_account(cmd_parms *parms, void *mconfig, const char *arg)
+{
+  mod_chxj_config *conf;
+  if (strlen(arg) > 256){
+    return "mod_chxj: set ChxjGoogleAnalyticsAccount is too long.";
+  }
+  conf = (mod_chxj_config *)mconfig;
+  conf->google_analytics_account = apr_pstrdup(parms->pool, arg);
+  return NULL;
+}
+static const char *
+cmd_google_analytics_target(cmd_parms *parms, void *mconfig, const char *arg)
+{
+  mod_chxj_config *conf;
+  if (strlen(arg) > 256){
+    return "mod_chxj: set ChxjGoogleAnalyticsTarget is too long.";
+  }
+  conf = (mod_chxj_config *)mconfig;
+  conf->google_analytics_target = apr_pstrdup(parms->pool, arg);
+  return NULL;
+}
+
+
 static const command_rec cmds[] = {
   AP_INIT_TAKE1(
     "ChxjLoadDeviceData",
@@ -3705,6 +3785,27 @@ static const command_rec cmds[] = {
     NULL,
     OR_ALL,
     "When image is used for emoji, url with the emoji image is specified. "
+   ),
+  AP_INIT_TAKE1(
+    "ChxjGoogleAnalytics",
+    cmd_google_analytics,
+    NULL,
+    OR_ALL,
+    "Set 'On' or 'Off' (Default:off) When you use google analytics."
+   ),
+  AP_INIT_TAKE1(
+    "ChxjGoogleAnalyticsAccount",
+    cmd_google_analytics_account,
+    NULL,
+    OR_ALL,
+    "Set Google Analytics Account ID for mobile."
+   ),
+  AP_INIT_TAKE1(
+    "ChxjGoogleAnalyticsTarget",
+    cmd_google_analytics_target,
+    NULL,
+    OR_ALL,
+    "Set img target for Google Analytics. i.e. `/ga.pl'"
    ),
   {NULL,{NULL},NULL,0,0,NULL},
 };

@@ -24,6 +24,7 @@
 #include "chxj_str_util.h"
 #include "chxj_conv_z2h.h"
 #include "chxj_header_inf.h"
+#include "chxj_google.h"
 
 
 #define GET_IXHTML10(X) ((ixhtml10_t *)(X))
@@ -1202,6 +1203,14 @@ s_ixhtml10_end_body_tag(void *pdoc, Node *UNUSED(child))
   ixhtml10 = GET_IXHTML10(pdoc);
   doc   = ixhtml10->doc;
   r     = doc->r;
+
+  if (ixhtml10->conf->use_google_analytics) {
+    char *src = chxj_google_analytics_get_image_url(r);
+    W_L("<img src=\"");
+    W_V(src);
+    W_L("\" />");
+  }
+ 
 
   W_L("</body>");
   if (IS_CSS_ON(ixhtml10->entryp)) {

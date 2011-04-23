@@ -25,6 +25,7 @@
 #include "chxj_str_util.h"
 #include "chxj_header_inf.h"
 #include "chxj_conv_z2h.h"
+#include "chxj_google.h"
 
 #define GET_XHTML(X) ((xhtml_t*)(X))
 #undef W_L
@@ -1333,6 +1334,14 @@ s_xhtml_1_0_end_body_tag(void *pdoc, Node *UNUSED(child))
 {
   xhtml_t       *xhtml = GET_XHTML(pdoc);
   Doc           *doc   = xhtml->doc;
+
+
+  if (xhtml->conf->use_google_analytics) {
+    char *src = chxj_google_analytics_get_image_url(xhtml->doc->r);
+    W_L("<img src=\"");
+    W_V(src);
+    W_L("\" />");
+  }
 
   W_L("</body>");
   /*

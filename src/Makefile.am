@@ -48,7 +48,8 @@ libmod_chxj_la_SOURCES = mod_chxj.c \
     chxj_conv_z2h.c \
     chxj_conv_z2h_num.c \
     chxj_header_inf.c \
-    chxj_jreserved_tag.c
+    chxj_jreserved_tag.c \
+    chxj_google.c
 
 SERF_OBJECTS = serf/buckets/aggregate_buckets.o \
           serf/buckets/request_buckets.o \

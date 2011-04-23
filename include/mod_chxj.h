@@ -394,6 +394,11 @@ struct mod_chxj_config {
 
   int                   use_emoji_image;
   char                  *emoji_image_url;
+
+
+  int                   use_google_analytics;
+  char                  *google_analytics_account;
+  char                  *google_analytics_target;   /* i.e. /ga.pl */
 };
 
 struct mod_chxj_req_config_t {

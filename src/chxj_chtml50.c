@@ -24,6 +24,7 @@
 #include "chxj_encoding.h"
 #include "chxj_header_inf.h"
 #include "chxj_conv_z2h.h"
+#include "chxj_google.h"
 
 #define GET_CHTML50(X) ((chtml50_t *)(X))
 #undef W_L
@@ -1156,6 +1157,12 @@ s_chtml50_end_body_tag(void *pdoc, Node *UNUSED(child))
   chtml50 = GET_CHTML50(pdoc);
   doc     = chtml50->doc;
 
+  if (chtml50->conf->use_google_analytics) {
+    char *src = chxj_google_analytics_get_image_url(doc->r);
+    W_L("<img src=\"");
+    W_V(src);
+    W_L("\" />");
+  }
   W_L("</body>");
   if (IS_CSS_ON(chtml50->entryp)) {
     chxj_css_pop_prop_list(chtml50->css_prop_stack);

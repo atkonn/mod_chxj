@@ -375,7 +375,14 @@ default_chxj_serf_get(request_rec *r, apr_pool_t *ppool, const char *url_path, i
   }
 
   serf_connection_close(connection);
-  ret = apr_pstrdup(ppool, handler_ctx.response);
+  if (handler_ctx.response) {
+    ret = apr_palloc(ppool, handler_ctx.response_len + 1);
+    memset(ret, 0, handler_ctx.response_len + 1);
+    memcpy(ret, handler_ctx.response, handler_ctx.response_len);
+  }
+  else {
+    ret = apr_pstrdup(ppool, "");
+  }
   if (set_headers_flag) {
     r->headers_out = apr_table_copy(pool, handler_ctx.headers_out);
     *response_len = handler_ctx.response_len;

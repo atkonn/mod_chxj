@@ -25,6 +25,7 @@
 #include "chxj_css.h"
 #include "chxj_header_inf.h"
 #include "chxj_conv_z2h.h"
+#include "chxj_google.h"
 
 
 #define GET_CHTML20(X) ((chtml20_t*)(X))
@@ -1257,6 +1258,13 @@ s_chtml20_end_body_tag(void *pdoc, Node *UNUSED(child))
   chtml20 = GET_CHTML20(pdoc);
   doc     = chtml20->doc;
   r       = doc->r;
+
+  if (chtml20->conf->use_google_analytics) {
+    char *src = chxj_google_analytics_get_image_url(r);
+    W_L("<img src=\"");
+    W_V(src);
+    W_L("\" />");
+  }
 
   W_L("</body>");
   if (IS_CSS_ON(chtml20->entryp)) {

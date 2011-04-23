@@ -25,6 +25,7 @@
 #include "chxj_str_util.h"
 #include "chxj_header_inf.h"
 #include "chxj_conv_z2h.h"
+#include "chxj_google.h"
 
 #define GET_CHTML10(X) ((chtml10_t *)(X))
 #undef W_L
@@ -1804,6 +1805,13 @@ s_chtml10_end_body_tag(void *pdoc, Node *UNUSED(child))
 
   chtml10 = GET_CHTML10(pdoc);
   doc     = chtml10->doc;
+
+  if (chtml10->conf->use_google_analytics) {
+    char *src = chxj_google_analytics_get_image_url(doc->r);
+    W_L("<img src=\"");
+    W_V(src);
+    W_L("\" />");
+  }
 
   W_L("</body>");
   if (IS_CSS_ON(chtml10->entryp)) {

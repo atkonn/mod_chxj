@@ -122,16 +122,19 @@ chxj_css_find_selector(Doc *doc, css_stylesheet_t *stylesheet, Node *node)
   char *tag_name   = NULL;
   char *class_name = NULL;
   char *id         = NULL;
+
   DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
 
   if (! stylesheet) {
     /* NOT FOUND */
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return NULL;
   }
   s_get_tag_and_class_and_id(doc, node, &tag_name, &class_name, &id);
   
   if (! tag_name || strcasecmp("ROOT", tag_name) == 0) {
     ERR(r,"REQ[%X] %s:%d tag_name is null", TO_ADDR(r),APLOG_MARK);
+    DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
     return NULL;
   }
   char *pattern_str1 = NULL;

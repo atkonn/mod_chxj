@@ -25,6 +25,7 @@
 #include "chxj_header_inf.h"
 #include "chxj_jreserved_tag.h"
 #include "chxj_conv_z2h.h"
+#include "chxj_google.h"
 
 
 #define GET_ANDROID(X) ((android_t *)(X))
@@ -1005,8 +1006,11 @@ s_android_search_emoji(android_t *android, char *txt, char **rslt)
             else if (strncasecmp(ee->android->string, "raw:", 4) == 0) {
               *rslt = apr_psprintf(r->pool,"%s", &(ee->android->string[4]));
             }
-            else {
+            else if (strcasecmp(ee->android->string, "image") != 0) {
               *rslt = apr_psprintf(r->pool,"%s;", ee->android->string);
+            }
+            else {
+              ERR(r, "Please set ChxjUseEmojiImage and ChxjEmojiImageUrl directives.");
             }
           }
           return strlen(ee->imode->string);
@@ -1710,6 +1714,12 @@ s_android_end_body_tag(void *pdoc, Node *UNUSED(child))
   doc   = android->doc;
   r     = doc->r;
 
+  if (android->conf->use_google_analytics) {
+    char *src = chxj_google_analytics_get_image_url(r);
+    W_L("<img src=\"");
+    W_V(src);
+    W_L("\" />");
+  }
   W_L("</div></body>");
   if (IS_CSS_ON(android->entryp)) {
     chxj_css_pop_prop_list(android->css_prop_stack);

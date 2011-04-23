@@ -26,6 +26,7 @@
 #include "chxj_jreserved_tag.h"
 #include "chxj_serf.h"
 #include "chxj_conv_z2h.h"
+#include "chxj_google.h"
 
 
 #define GET_JHTML(X) ((jhtml_t *)(X))
@@ -1202,6 +1203,13 @@ s_jhtml_end_body_tag(void *pdoc, Node *UNUSED(child))
   jhtml = GET_JHTML(pdoc);
   doc   = jhtml->doc;
   r     = doc->r;
+
+  if (jhtml->conf->use_google_analytics) {
+    char *src = chxj_google_analytics_get_image_url(r);
+    W_L("<img src=\"");
+    W_V(src);
+    W_L("\" />");
+  }
 
   W_L("</body>");
   if (IS_CSS_ON(jhtml->entryp)) {
