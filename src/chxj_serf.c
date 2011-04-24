@@ -383,6 +383,7 @@ default_chxj_serf_get(request_rec *r, apr_pool_t *ppool, const char *url_path, i
   else {
     ret = apr_pstrdup(ppool, "");
   }
+  *response_len = handler_ctx.response_len;
   if (set_headers_flag) {
     r->headers_out = apr_table_copy(pool, handler_ctx.headers_out);
     *response_len = handler_ctx.response_len;

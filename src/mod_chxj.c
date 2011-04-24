@@ -2122,6 +2122,7 @@ chxj_create_per_dir_config(apr_pool_t *p, char *arg)
   conf->use_google_analytics = 0;
   conf->google_analytics_account = NULL;
   conf->google_analytics_target = NULL;
+  conf->google_analytics_debug = NULL;
 
   return conf;
 }
@@ -2480,6 +2481,12 @@ chxj_merge_per_dir_config(apr_pool_t *p, void *basev, void *addv)
   }
   else{
     mrg->google_analytics_target = base->google_analytics_target;
+  }
+  if (add->google_analytics_debug){
+    mrg->google_analytics_debug = add->google_analytics_debug;
+  }
+  else{
+    mrg->google_analytics_debug = base->google_analytics_debug;
   }
 
   return mrg;
@@ -3570,6 +3577,17 @@ cmd_google_analytics_target(cmd_parms *parms, void *mconfig, const char *arg)
   conf->google_analytics_target = apr_pstrdup(parms->pool, arg);
   return NULL;
 }
+static const char *
+cmd_google_analytics_debug(cmd_parms *parms, void *mconfig, const char *arg)
+{
+  mod_chxj_config *conf;
+  if (strlen(arg) > 256){
+    return "mod_chxj: set ChxjGoogleAnalyticsDebug is too long.";
+  }
+  conf = (mod_chxj_config *)mconfig;
+  conf->google_analytics_debug = apr_pstrdup(parms->pool, arg);
+  return NULL;
+}
 
 
 static const command_rec cmds[] = {
@@ -3806,6 +3824,13 @@ static const command_rec cmds[] = {
     NULL,
     OR_ALL,
     "Set img target for Google Analytics. i.e. `/ga.pl'"
+   ),
+  AP_INIT_TAKE1(
+    "ChxjGoogleAnalyticsDebug",
+    cmd_google_analytics_debug,
+    NULL,
+    OR_ALL,
+    "Set filename which is outputed response from google analytics."
    ),
   {NULL,{NULL},NULL,0,0,NULL},
 };

@@ -399,6 +399,7 @@ struct mod_chxj_config {
   int                   use_google_analytics;
   char                  *google_analytics_account;
   char                  *google_analytics_target;   /* i.e. /ga.pl */
+  char                  *google_analytics_debug;    /* debug filename */
 };
 
 struct mod_chxj_req_config_t {

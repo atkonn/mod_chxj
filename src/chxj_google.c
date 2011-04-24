@@ -22,6 +22,7 @@
 
 #include "apr_uuid.h"
 #include "apr_md5.h"
+#include "apr_tables.h"
 
 
 char *
@@ -119,6 +120,7 @@ chxj_google_analytics_get_image_url(request_rec *r, const char *pagetitle)
 #define DL_COOKIE_PATH "/"
 #define DL_COOKIE_USER_PERSISTENCE (63072000)
 #define DL_UTM_GIF_LOCATION "http://www.google-analytics.com/__utm.gif"
+#define DL_GOOGLE_HOST "www.google-analytics.com"
 
 
 // 1x1 transparent GIF
@@ -242,12 +244,33 @@ s_send_request_to_google_analytics(request_rec *r, const char *utm_url)
   apr_pool_t *ppool;
   apr_size_t response_len;
   char *data;
+  int ii;
+  request_rec *get_r;
+  mod_chxj_config *conf;
 
   DBG(r, "REQ[%X] start %s()", TO_ADDR(r),__func__);
   apr_pool_create(&ppool, r->pool);
+  get_r = apr_palloc(ppool, sizeof(request_rec));
+  memset(get_r, 0, sizeof(request_rec));
+  get_r->pool = ppool;
+  get_r->headers_in = apr_table_make(ppool, 4);
+  get_r->headers_out = apr_table_make(ppool, 4);
   
+  apr_table_setn(get_r->headers_in, "User-Agent",apr_table_get(r->headers_in, "User-Agent"));
+  apr_table_setn(get_r->headers_in, "Host", DL_GOOGLE_HOST);
+
   // ichiou data ni totte oku. tsukawanai kedo.
-  data = chxj_serf_get(r, ppool, utm_url, 0, &response_len);
+  data = chxj_serf_get(get_r, ppool, utm_url, 0, &response_len);
+  DBG(r, "REQ[%X] response from google:[%s]", TO_ADDR(r), data);
+  conf = chxj_get_module_config(r->per_dir_config, &chxj_module);
+  if (conf->google_analytics_debug && *conf->google_analytics_debug) {
+    FILE *fp;
+    if ((fp = fopen(conf->google_analytics_debug, "w")) != NULL) {
+      fwrite(data, response_len, 1, fp);
+      fclose(fp);
+    }
+  }
+  
   DBG(r, "REQ[%X] end %s()", TO_ADDR(r),__func__);
 }
 
