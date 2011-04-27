@@ -14,6 +14,7 @@ libapache2-mod-chxj (0.14.0-1) unstable; urgency=low
        1) "Image" is specified by the pictograph definition.
        2) For iphone2
     - Added CSS converter for iphone
+    - Added Google Analytiscs handler.
   
   * Fixed Bug
     - wrap-input-format --> wap-input-format
