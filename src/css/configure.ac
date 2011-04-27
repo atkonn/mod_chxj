@@ -68,7 +68,7 @@ fi
 if test "x$with_apu_config" = "x" ; then
   AC_PATH_PROG(APU_CONFIG, apu-config, no, /usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin)
   if test "x$APU_CONFIG" = "xno" ; then
-    AC_PATH_PROG(APU_1_CONFIG, apu-1-config, no, /usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin)
+        AC_PATH_PROG(APU_1_CONFIG, apu-1-config, no, /usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin)
     if test "x$APU_1_CONFIG" = "xno" ; then
       AC_MSG_ERROR([apu-config and apu-1-config not found.])
     else
@@ -91,11 +91,13 @@ AC_C_CONST
 # Checks for library functions.
 AC_CHECK_FUNCS([memset strcasecmp strncasecmp])
 
+CFLAGS=""
+LIBS=""
 CFLAGS="${CFLAGS} -DLIBICONV_PLUG -I/usr/local/include "
 LIBS="${LIBS} `${APR_CONFIG} --ldflags` `${APR_CONFIG} --libs` "
 LIBS="${LIBS} `${APU_CONFIG} --ldflags` `${APU_CONFIG} --libs` "
 CFLAGS="${CFLAGS} `${APR_CONFIG} --includes` `${APR_CONFIG} --cflags` `${APR_CONFIG} --cppflags`"
-CFLAGS="${CFLAGS} `${APU_CONFIG} --includes`"
+CFLAGS="${CFLAGS} `${APU_CONFIG} --includes` "
 
 
 AC_SUBST(APR_CONFIG)
