@@ -91,7 +91,7 @@ AC_C_CONST
 # Checks for library functions.
 AC_CHECK_FUNCS([memset strcasecmp strncasecmp])
 
-CFLAGS="${CFLAGS} -DLIBICONV_PLUG -l/usr/local/include "
+CFLAGS="${CFLAGS} -DLIBICONV_PLUG -I/usr/local/include "
 LIBS="${LIBS} `${APR_CONFIG} --ldflags` `${APR_CONFIG} --libs` "
 LIBS="${LIBS} `${APU_CONFIG} --ldflags` `${APU_CONFIG} --libs` "
 CFLAGS="${CFLAGS} `${APR_CONFIG} --includes` `${APR_CONFIG} --cflags` `${APR_CONFIG} --cppflags`"
