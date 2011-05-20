@@ -474,6 +474,7 @@ chxj_image_redirect_handler(request_rec *r)
 static void
 s_clear_cookie_header(request_rec *r, device_table *spec)
 {
+  char *sv;
   DBG(r, "REQ[%X] start %s()", TO_ADDR(r),__func__);
   switch(spec->html_spec_type) {
   case CHXJ_SPEC_Chtml_1_0:
@@ -486,6 +487,10 @@ s_clear_cookie_header(request_rec *r, device_table *spec)
   case CHXJ_SPEC_XHtml_Mobile_1_0:
   case CHXJ_SPEC_Jhtml:
   case CHXJ_SPEC_Jxhtml:
+    sv = apr_table_get(r->headers_in, "Cookie");
+    if (sv) {
+      apr_table_setn(r->headers_in, "X-Chxj-Org-Cookie", sv);
+    }
     apr_table_unset(r->headers_in, "Cookie");
     break;
   case CHXJ_SPEC_iPhone2:
@@ -891,7 +896,7 @@ chxj_convert_input_header(request_rec *r,chxjconvrule_entry *entryp, device_tabl
     else
     if (strcasecmp(name, CHXJ_COOKIE_PARAM) == 0 || strcasecmp(name, "%5Fchxj%5Fcc") == 0) {
       if (! cookie) {
-        apr_table_unset(r->headers_in, "Cookie");
+        s_clear_cookie_header(r, spec);
         DBG(r, "REQ[%X] found cookie parameter[%s]", TO_ADDR(r), value);
         cookie_lock_t *lock = chxj_cookie_lock(r);
         cookie = chxj_load_cookie(r, value);
@@ -1072,7 +1077,7 @@ chxj_input_convert(
     else
     if (strcasecmp(name, CHXJ_COOKIE_PARAM) == 0 || strcasecmp(name, "%5Fchxj%5Fcc") == 0) {
       if (! cookie) {
-        apr_table_unset(r->headers_in, "Cookie");
+        s_clear_cookie_header(r, spec);
         DBG(r, "REQ[%X] found cookie parameter[%s]",    TO_ADDR(r), value);
         cookie_lock_t *lock = chxj_cookie_lock(r);
         cookie = chxj_load_cookie(r, value);
@@ -1563,8 +1568,10 @@ chxj_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
              */
             s_add_cookie_id_if_has_location_header(r, cookie);
             chxj_cookie_unlock(r, lock);
+#if 0
             apr_table_unset(r->headers_out, "Set-Cookie");
             apr_table_unset(r->err_headers_out, "Set-Cookie");
+#endif
             break;
 
           case CHXJ_SPEC_iPhone2:

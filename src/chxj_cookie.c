@@ -212,8 +212,10 @@ chxj_save_cookie(request_rec *r)
       }
     }
   }
+#if 0
   apr_table_unset(r->headers_out, "Set-Cookie");
   apr_table_unset(r->err_headers_out, "Set-Cookie");
+#endif
 
   if (! has_refer) {
     apr_uri_parse(pool,r->uri, &parsed_uri);
@@ -337,8 +339,10 @@ chxj_save_cookie(request_rec *r)
       }
     }
   }
+#if 0
   apr_table_unset(r->headers_out, "Set-Cookie");
   apr_table_unset(r->err_headers_out, "Set-Cookie");
+#endif
 
   if (cookie) {
     chxj_save_cookie_expire(r, cookie);
