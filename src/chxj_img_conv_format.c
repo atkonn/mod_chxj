@@ -600,6 +600,7 @@ s_create_cache_file(request_rec          *r,
         return HTTP_NOT_FOUND;
       }
       readdata = apr_palloc(r->pool, st->size);
+      readbyte = st->size;
       memcpy(readdata, mmap->mm, st->size);
       //apr_mmap_delete(mmap);
       apr_file_close(fin);
