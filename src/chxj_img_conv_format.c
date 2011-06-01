@@ -616,6 +616,7 @@ s_create_cache_file(request_rec          *r,
     }
   
     readdata = apr_palloc(r->pool, st->size);
+    readbyte = st->size;
     rv = apr_file_read_full(fin, (void*)readdata, st->size, &readbyte);
     apr_file_close(fin);
     if (rv != APR_SUCCESS || readbyte != st->size) {
