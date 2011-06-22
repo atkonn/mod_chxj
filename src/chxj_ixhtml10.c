@@ -4056,7 +4056,7 @@ s_ixhtml10_start_option_tag(void *pdoc, Node *node)
     }
   }
   W_L("<option");
-  if (value && *value) {
+  if (value) {
     W_L(" value=\"");
     W_V(value);
     W_L("\"");
