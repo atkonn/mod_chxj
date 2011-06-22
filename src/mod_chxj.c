@@ -487,7 +487,7 @@ s_clear_cookie_header(request_rec *r, device_table *spec)
   case CHXJ_SPEC_XHtml_Mobile_1_0:
   case CHXJ_SPEC_Jhtml:
   case CHXJ_SPEC_Jxhtml:
-    sv = apr_table_get(r->headers_in, "Cookie");
+    sv = (char *)apr_table_get(r->headers_in, "Cookie");
     if (sv) {
       apr_table_setn(r->headers_in, "X-Chxj-Org-Cookie", sv);
     }

@@ -917,7 +917,13 @@ chxj_add_cookie_parameter(request_rec *r, char *value, cookie_t *cookie)
     dst = apr_psprintf(r->pool, "%s&%s=%s%s", dst, CHXJ_COOKIE_PARAM, cookie->cookie_id, name);
   }
   else {
-    dst = apr_psprintf(r->pool, "%s?%s=%s%s", dst, CHXJ_COOKIE_PARAM, cookie->cookie_id, name);
+    if (dst[0] == '\0') {
+      /* No adding cookie parameter if flagment only. 2011.06.22 */
+      dst = apr_psprintf(r->pool, "%s", name);
+    }
+    else {
+      dst = apr_psprintf(r->pool, "%s?%s=%s%s", dst, CHXJ_COOKIE_PARAM, cookie->cookie_id, name);
+    }
   }
 
   DBG(r,"REQ[%X] dst=[%s]", TO_ADDR(r), dst);
