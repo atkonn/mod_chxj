@@ -5,6 +5,7 @@ libapache2-mod-chxj (0.14.1) unstable; urgency=high
       output.
     - No adding cookie parameter if flagment only.
     - SEGV occurs in ImageMagick when mmap is used.
+	- It is not possible to compile with RHEL4/CentOS4. see git log.
   * Added Features
     - for KANTAN LOGIN with Cookie
 
