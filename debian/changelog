@@ -1,3 +1,15 @@
+libapache2-mod-chxj (0.14.1) unstable; urgency=high
+
+  * Fixed Bug
+    - If the value attribute is empty, the value attribute is not
+      output.
+    - No adding cookie parameter if flagment only.
+    - SEGV occurs in ImageMagick when mmap is used.
+  * Added Features
+    - for KANTAN LOGIN with Cookie
+
+ -- Atsush Konno <konn@users.sourceforge.jp>  Mon, 04 Jul 2011 20:38:40 +0900
+
 libapache2-mod-chxj (0.14.0-1) unstable; urgency=low
 
   * Added New Feature.

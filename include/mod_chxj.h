@@ -576,6 +576,25 @@ extern void *rpl_malloc(size_t n);
 
 #define TO_ADDR(X) ((unsigned int)(apr_size_t)(X))
 #define ADJUST_WIDTH_FOR_ANDROID (40)
+
+#if APR_MAJOR_VERSION < 1
+  #ifndef APR_FOPEN_READ
+    #define APR_FOPEN_READ APR_READ
+  #endif
+  #ifndef APR_FOPEN_BUFFERED
+    #define APR_FOPEN_BUFFERED APR_BUFFERED
+  #endif
+  #ifndef APR_FOPEN_BINARY
+    #define APR_FOPEN_BINARY APR_BINARY
+  #endif
+  #ifndef APR_FOPEN_CREATE
+    #define APR_FOPEN_CREATE APR_CREATE
+  #endif
+  #ifndef APR_FOPEN_WRITE
+    #define APR_FOPEN_WRITE APR_WRITE
+  #endif
+#endif
+
 #endif
 /*
  * vim:ts=2 et
