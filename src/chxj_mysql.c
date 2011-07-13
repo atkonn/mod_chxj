@@ -32,6 +32,7 @@
 
 /* for MySQL */
 #include <mysql.h>
+#include <mysql_version.h>
 #include <errmsg.h>
 
 
@@ -254,9 +255,16 @@ chxj_mysql_create_cookie_table(request_rec *r, mod_chxj_config *m)
   apr_interval_time_t wait_time = CHXJ_MYSQL_RECONNECT_WAIT_TIME;
 
   DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
+#if MYSQL_VERSION_ID > 50500
+  apr_snprintf(query, sizeof(query)-1, "CREATE TABLE %s  (cookie_id VARCHAR(%d) NOT NULL, data TEXT, PRIMARY KEY(cookie_id)) ENGINE=InnoDB;",
+    m->mysql.tablename,
+    apr_base64_encode_len(APR_MD5_DIGESTSIZE) * 3);
+
+#else
   apr_snprintf(query, sizeof(query)-1, "CREATE TABLE %s  (cookie_id VARCHAR(%d) NOT NULL, data TEXT, PRIMARY KEY(cookie_id)) TYPE=InnoDB;",
     m->mysql.tablename,
     apr_base64_encode_len(APR_MD5_DIGESTSIZE) * 3);
+#endif
   DBG(r,"REQ[%X] query:[%s]", TO_ADDR(r),query);
   do {
     if (!chxj_open_mysql_handle(r, m)) {
@@ -299,9 +307,16 @@ chxj_mysql_create_cookie_expire_table(request_rec *r, mod_chxj_config *m)
   apr_interval_time_t wait_time = CHXJ_MYSQL_RECONNECT_WAIT_TIME;
 
   DBG(r,"REQ[%X] start %s()",TO_ADDR(r),__func__);
+#if MYSQL_VERSION_ID > 50500
+  apr_snprintf(query, sizeof(query)-1, "CREATE TABLE %s_expire  (cookie_id VARCHAR(%d) NOT NULL, created_at DATETIME, PRIMARY KEY(cookie_id)) ENGINE=InnoDB;",
+    m->mysql.tablename,
+    apr_base64_encode_len(APR_MD5_DIGESTSIZE) * 3);
+
+#else
   apr_snprintf(query, sizeof(query)-1, "CREATE TABLE %s_expire  (cookie_id VARCHAR(%d) NOT NULL, created_at DATETIME, PRIMARY KEY(cookie_id)) TYPE=InnoDB;",
     m->mysql.tablename,
     apr_base64_encode_len(APR_MD5_DIGESTSIZE) * 3);
+#endif
 
   DBG(r,"REQ[%X] query:[%s]", TO_ADDR(r),query);
 
