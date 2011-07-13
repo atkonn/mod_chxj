@@ -1,3 +1,11 @@
+libapache2-mod-chxj (0.14.2-1) unstable; urgency=low
+
+  * Fixed Bug
+    - if you use MySQL5.5, use ENGINE=innodb
+      thanks Mr.osanai!
+
+ -- konno <konn@users.sourceforge.jp>  Thu, 14 Jul 2011 02:19:23 +0900
+
 libapache2-mod-chxj (0.14.1-1) unstable; urgency=high
 
   * Fixed Bug
