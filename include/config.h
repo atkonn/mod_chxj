@@ -29,7 +29,7 @@
 #define HAVE_INTTYPES_H 1
 
 /* Define to 1 if you have the `apr-1' library (-lapr-1). */
-/* #undef HAVE_LIBAPR_1 */
+#define HAVE_LIBAPR_1 1
 
 /* Define to 1 if you have the <libgen.h> header file. */
 #define HAVE_LIBGEN_H 1
