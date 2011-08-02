@@ -1456,7 +1456,7 @@ s_fixup_color(MagickWand *magick_wand, request_rec *r, device_table *spec, img_c
     if (MagickQuantizeImage(magick_wand,
                            spec->color,
                            RGBColorspace,
-                           0,
+                           4,   /* tree depth of 4 */
                            1,
                            0) == MagickFalse) {
       EXIT_MAGICK_ERROR();
@@ -1874,7 +1874,8 @@ s_send_cache_file(
           fname = apr_pstrcat(r->pool, fname, ".gif");
         }
         else if (ext && strcasecmp(".gif", ext) != 0) {
-          *ext = 0;
+DBG(r, "REQ[%X]", TO_ADDR(r));
+          *ext = '\0';
           fname = apr_pstrcat(r->pool, fname, ".gif");
         }
       }
