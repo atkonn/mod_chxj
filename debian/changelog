@@ -1,10 +1,13 @@
 libapache2-mod-chxj (0.14.2-1) unstable; urgency=low
 
-  * Fixed Bug 
+  * Fixed Bug.
     - if you use MySQL5.5, use ENGINE=innodb
       thanks Mr.osanai!
+    - Using a small tree-depth of 4.
+      Because MagickQuantizeImage() was very slow.
+      (Reported and Patched by hogenull. Thanks!)
 
- -- konno <konn@users.sourceforge.jp>  Thu, 14 Jul 2011 02:19:23 +0900
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Thu, 14 Jul 2011 02:19:23 +0900
 
 libapache2-mod-chxj (0.14.1) unstable; urgency=high
 
