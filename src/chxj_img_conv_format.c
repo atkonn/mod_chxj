@@ -1849,6 +1849,7 @@ s_send_cache_file(
           fname = apr_pstrcat(r->pool, fname, ".jpg");
         }
         else if (ext && strcasecmp(".jpeg", ext) != 0 && strcasecmp(".jpg", ext) != 0) {
+          DBG(r, "REQ[%X]", TO_ADDR(r));
           *ext = 0;
           fname = apr_pstrcat(r->pool, fname, ".jpg");
         }
@@ -1861,6 +1862,7 @@ s_send_cache_file(
           fname = apr_pstrcat(r->pool, fname, ".png");
         }
         else if (ext && strcasecmp(".png", ext) != 0) {
+          DBG(r, "REQ[%X]", TO_ADDR(r));
           *ext = 0;
           fname = apr_pstrcat(r->pool, fname, ".png");
         }
@@ -1874,8 +1876,8 @@ s_send_cache_file(
           fname = apr_pstrcat(r->pool, fname, ".gif");
         }
         else if (ext && strcasecmp(".gif", ext) != 0) {
-DBG(r, "REQ[%X]", TO_ADDR(r));
-          *ext = '\0';
+          DBG(r, "REQ[%X]", TO_ADDR(r));
+          *ext = 0;
           fname = apr_pstrcat(r->pool, fname, ".gif");
         }
       }
@@ -1887,6 +1889,7 @@ DBG(r, "REQ[%X]", TO_ADDR(r));
           fname = apr_pstrcat(r->pool, fname, ".bmp");
         }
         else if (ext && strcasecmp(".bmp", ext) != 0) {
+          DBG(r, "REQ[%X]", TO_ADDR(r));
           *ext = 0;
           fname = apr_pstrcat(r->pool, fname, ".bmp");
         }
