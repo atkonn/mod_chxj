@@ -11,6 +11,7 @@ Credits
 
 *   anonymous coder - [Fixed bug](http://sourceforge.jp/forum/forum.php?thread_id=21197&forum_id=6550)
 
+
 ### Runtime dependencies
 
 The distributed mod_chxj binary contains software from the following projects:
