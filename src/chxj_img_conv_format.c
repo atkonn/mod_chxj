@@ -1482,6 +1482,13 @@ s_fixup_color(MagickWand *magick_wand, request_rec *r, device_table *spec, img_c
     DBG(r,"REQ[%X] call end MagickQuantizeImage() spec->color=[%d]",TO_ADDR(r),spec->color);
   }
 
+  {
+    if (r->server != NULL && r->server->loglevel == APLOG_DEBUG) {
+      colors = MagickGetImageColors(magick_wand);
+      DBG(r, "REQ[%X] fixup_color result colors:[%u]",TO_ADDR(r), colors);
+    }
+  }
+
 
   DBG(r,"REQ[%X] end %s()",TO_ADDR(r),__func__);
 
