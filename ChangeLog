@@ -8,6 +8,10 @@ libapache2-mod-chxj (0.14.2-1) unstable; urgency=low
       (Reported and Patched by hogenull. Thanks!)
     - Not need url_decode in jreserved_tag
       (Reported by Mr.Osanai thanks!)
+  * Changed features.
+    - Use Cookie if Softbank XHTML terminal.
+      Because Softbank Cookie is very small size.
+      (Requested by Mr.Osanai thanks!)
 
  -- Atsushi Konno <konn@users.sourceforge.jp>  Thu, 14 Jul 2011 02:19:23 +0900
 
