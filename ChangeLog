@@ -1,3 +1,15 @@
+libapache2-mod-chxj (0.12.42-1) unstable; urgency=low
+
+  * Fixed Bug.
+    - Using a small tree-depth of 4.
+      Because MagickQuantizeImage() was very slow.
+      http://sourceforge.jp/ticket/browse.php?group_id=1608&tid=25892
+    - Deleted no need url_decode function in jreserved_tag.
+  * Changed Features.
+    - SoftBank XHTML uses Cookie sim.
+
+ -- konno <konn@users.sourceforge.jp>  Fri, 05 Aug 2011 23:13:21 +0900
+
 libapache2-mod-chxj (0.12.41-1) unstable; urgency=high
 
   * Fixed Bug.
