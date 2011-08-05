@@ -6,6 +6,8 @@ libapache2-mod-chxj (0.14.2-1) unstable; urgency=low
     - Using a small tree-depth of 4.
       Because MagickQuantizeImage() was very slow.
       (Reported and Patched by hogenull. Thanks!)
+    - Not need url_decode in jreserved_tag
+      (Reported by Mr.Osanai thanks!)
 
  -- Atsushi Konno <konn@users.sourceforge.jp>  Thu, 14 Jul 2011 02:19:23 +0900
 
