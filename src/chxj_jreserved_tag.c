@@ -222,7 +222,7 @@ chxj_jreserved_tag_to_safe_for_query_string(request_rec *r, const char *query_st
       }
     }
     else {
-      tmp = apr_psprintf(pool, "%s=%s", chxj_jreserved_to_safe_tag(r, key, entryp), chxj_url_decode(pool, val));
+      tmp = apr_psprintf(pool, "%s=%s", chxj_jreserved_to_safe_tag(r, key, entryp), val);
       if (result) {
         if (xmlflag) {
           result = apr_pstrcat(pool, result, "&amp;" ,tmp, NULL);
