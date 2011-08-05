@@ -1,3 +1,18 @@
+libapache2-mod-chxj (0.13.5-1) unstable; urgency=low
+
+  * Fixed Bug.
+    - Using a small tree-depth of 4.
+      Because MagickQuantizeImage() was very slow.
+      (Reported and Patched by hogenull. Thanks!)
+    - Not need url_decode in jreserved_tag
+      (Reported by Mr.Osanai thanks!)
+  * Changed features.
+    - Use Cookie if Softbank XHTML terminal.
+      Because Softbank Cookie is very small size.
+      (Requested by Mr.Osanai thanks!)
+
+ -- Atsushi Konno <konn@users.sourceforge.jp>  Fri, 05 Aug 2011 23:22:20 +0900
+
 libapache2-mod-chxj (0.13.4-1) unstable; urgency=low
 
   * Fixed Bug.
