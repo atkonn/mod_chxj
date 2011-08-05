@@ -3,13 +3,15 @@ Credits
 
 ## Contributors
 
-*   coltware     - Patched a part of CSS converter and so on.
+*   coltware        - Patched a part of CSS converter and so on.
 
-*   namako       - Added new device data.
+*   namako          - Added new device data.
 
-*   OSAKANA Taro - Added new device data.
+*   OSAKANA Taro    - Added new device data.
 
 *   anonymous coder - [Fixed bug](http://sourceforge.jp/forum/forum.php?thread_id=21197&forum_id=6550)
+
+*   hogenull        - [Fixed bug](http://sourceforge.jp/ticket/browse.php?group_id=1608&tid=25883)
 
 
 ### Runtime dependencies
