@@ -12,6 +12,10 @@ libapache2-mod-chxj (0.14.2-1) unstable; urgency=low
     - Use Cookie if Softbank XHTML terminal.
       Because Softbank Cookie is very small size.
       (Requested by Mr.Osanai thanks!)
+    - NOP wap-input-format.
+      Because Softbank specification is completely stupid.
+      AND BOTHER!!
+      (Requested by Mr.Osanai thanks!)
 
  -- Atsushi Konno <konn@users.sourceforge.jp>  Thu, 14 Jul 2011 02:19:23 +0900
 
