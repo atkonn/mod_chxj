@@ -2568,22 +2568,26 @@ s_jxhtml_start_input_tag(void *pdoc, Node *node)
     W_V(attr_istyle);
     W_L("\"");
 
+#if 0
     char *vv = s_jxhtml_istyle_to_wap_input_format(doc->buf.pool,attr_istyle);
     W_L(" style=\"");
     W_L("-wap-input-format:");
     W_V(vv);
     W_L(";");
     W_L("\"");
+#endif
   }
   else if(attr_type && STRCASEEQ('p','P',"password",attr_type)) {
     W_L(" istyle=\"4\"");
 
+#if 0
     char *vv = s_jxhtml_istyle_to_wap_input_format(doc->buf.pool,"4");
     W_L(" style=\"");
     W_L("-wap-input-format:");
     W_V(vv);
     W_L(";");
     W_L("\"");
+#endif
   }
   /*--------------------------------------------------------------------------*/
   /* The figure is default for the password.                                  */
